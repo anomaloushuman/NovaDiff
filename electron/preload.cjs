@@ -11,6 +11,20 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("get-file-diff", leftRoot, rightRoot, relPath, kind),
   pickDirectory: () => ipcRenderer.invoke("pick-directory"),
   toggleFullscreen: () => ipcRenderer.invoke("toggle-fullscreen"),
+  startSummaryPrefetch: (payload) =>
+    ipcRenderer.invoke("start-summary-prefetch", payload),
+  stopSummaryPrefetch: () => ipcRenderer.invoke("stop-summary-prefetch"),
+  getPrefetchedSummary: (relPath) =>
+    ipcRenderer.invoke("get-prefetched-summary", relPath),
+  onSummaryPrefetchProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("summary-prefetch-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("summary-prefetch-progress", ch);
+    };
+  },
   llmSummarize: (payload) => ipcRenderer.invoke("llm-summarize", payload),
   llmAbortStream: () => ipcRenderer.invoke("llm-abort-stream"),
   /**

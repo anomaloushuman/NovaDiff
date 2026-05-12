@@ -20,6 +20,7 @@ interface InsightsColumnProps {
   fileSummaryLoading: boolean;
   fileSummaryError: string | null;
   onRequestFileSummary: () => void;
+  prefetchStatus?: string | null;
 }
 
 export function InsightsColumn({
@@ -37,6 +38,7 @@ export function InsightsColumn({
   fileSummaryLoading,
   fileSummaryError,
   onRequestFileSummary,
+  prefetchStatus,
 }: InsightsColumnProps) {
   const summaryBody =
     fileCount === 0
@@ -115,6 +117,9 @@ export function InsightsColumn({
             {fileSummaryError && (
               <p className="insights-alert">{fileSummaryError}</p>
             )}
+            {prefetchStatus ? (
+              <p className="insights-footnote">{prefetchStatus}</p>
+            ) : null}
             {fileSummary != null && (
               <div className="llm-summary-md-wrap insights-prose">
                 <LlmSummaryMarkdown source={fileSummary} />

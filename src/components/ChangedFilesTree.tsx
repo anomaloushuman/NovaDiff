@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useDeferredValue,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -93,11 +94,15 @@ export function ChangedFilesTree({
 }: ChangedFilesTreeProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<List>(null);
+  const deferredRows = useDeferredValue(rows);
   const [listWidth, setListWidth] = useState(260);
   const [listHeight, setListHeight] = useState(320);
   const [expandedDirs, setExpandedDirs] = useState<Set<string>>(() => new Set());
 
-  const root = useMemo(() => buildChangedFilesTreeRoot(rows), [rows]);
+  const root = useMemo(
+    () => buildChangedFilesTreeRoot(deferredRows),
+    [deferredRows],
+  );
   const flatRows = useMemo(
     () => flattenVisibleRows(root, expandedDirs),
     [root, expandedDirs],

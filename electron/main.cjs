@@ -11,6 +11,12 @@ const {
 } = require("electron");
 const { runCompareEngine } = require("./compare-runner.cjs");
 const { summarizeChange, summarizeChangeStream, probeProvider } = require("./llm.cjs");
+const {
+  startSummaryPrefetchWorker,
+  stopSummaryPrefetchWorker,
+  clearSummaryPrefetchCache,
+  getPrefetchedSummary,
+} = require("./prefetch-summaries.cjs");
 
 let mainWindow = null;
 
@@ -189,4 +195,38 @@ ipcMain.handle("llm-probe", async (_evt, payload) => {
     payload.baseUrl,
     payload.model,
   );
+});
+
+ipcMain.handle("start-summary-prefetch", (event, payload) => {
+  const wc = event.sender;
+  stopSummaryPrefetchWorker();
+  clearSummaryPrefetchCache();
+  void startSummaryPrefetchWorker({
+    appRoot: app.getAppPath(),
+    isPackaged: app.isPackaged,
+    webContents: wc,
+    leftRoot: payload.leftRoot,
+    rightRoot: payload.rightRoot,
+    leftLabel: payload.leftLabel,
+    rightLabel: payload.rightLabel,
+    changes: payload.changes,
+    llmSettings: payload.llmSettings,
+    limit: payload.limit,
+  }).catch((err) => {
+    wc.send("summary-prefetch-progress", {
+      state: "fatal",
+      message: err instanceof Error ? err.message : String(err),
+    });
+  });
+  return { ok: true };
+});
+
+ipcMain.handle("stop-summary-prefetch", () => {
+  stopSummaryPrefetchWorker();
+  clearSummaryPrefetchCache();
+  return { ok: true };
+});
+
+ipcMain.handle("get-prefetched-summary", (_evt, relPath) => {
+  return getPrefetchedSummary(relPath) ?? null;
 });

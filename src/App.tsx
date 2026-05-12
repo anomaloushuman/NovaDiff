@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { FileChange, FileDiffPayload } from "./app/types";
 import { buildDiffExcerpt } from "./app/diffExcerpt";
 import type { LlmSettings } from "./app/llmStorage";
@@ -78,6 +85,66 @@ export default function App() {
   const [fileSummaryLoading, setFileSummaryLoading] = useState(false);
   const [fileSummaryError, setFileSummaryError] = useState<string | null>(null);
   const [insightsWidth, setInsightsWidth] = useState(loadInsightsWidth);
+  const [prefetchStatus, setPrefetchStatus] = useState<string | null>(null);
+
+  const selectedPathRef = useRef<string | null>(null);
+  const fileSummaryLoadingRef = useRef(false);
+  selectedPathRef.current = selectedPath;
+  fileSummaryLoadingRef.current = fileSummaryLoading;
+
+  useEffect(() => {
+    const api = window.electronAPI;
+    if (!api?.onSummaryPrefetchProgress) {
+      return;
+    }
+    return api.onSummaryPrefetchProgress((msg) => {
+      if (!msg || typeof msg !== "object") {
+        return;
+      }
+      const state = msg.state;
+      if (state === "started") {
+        const jobs = typeof msg.jobs === "number" ? msg.jobs : 0;
+        const input =
+          typeof msg.inputChanges === "number" ? msg.inputChanges : 0;
+        const skipped =
+          typeof msg.skippedGitignore === "number" ? msg.skippedGitignore : 0;
+        const detail =
+          skipped > 0
+            ? `${input} compared, ${skipped} skipped (.gitignore)`
+            : `${input} changed`;
+        setPrefetchStatus(
+          `Auto-summarizing up to ${jobs} file(s) (${detail})…`,
+        );
+      } else if (state === "file-done") {
+        const idx = typeof msg.index === "number" ? msg.index : 0;
+        const tot = typeof msg.total === "number" ? msg.total : 0;
+        setPrefetchStatus(`Prefetch ${idx}/${tot}`);
+        const path = typeof msg.path === "string" ? msg.path : "";
+        if (
+          path &&
+          path === selectedPathRef.current &&
+          !fileSummaryLoadingRef.current
+        ) {
+          void api.getPrefetchedSummary?.(path).then((t) => {
+            if (
+              t &&
+              path === selectedPathRef.current &&
+              !fileSummaryLoadingRef.current
+            ) {
+              setFileSummary(t);
+              setFileSummaryError(null);
+            }
+          });
+        }
+      } else if (state === "finished") {
+        setPrefetchStatus(null);
+      } else if (state === "fatal") {
+        setPrefetchStatus(
+          typeof msg.message === "string" ? msg.message : "Prefetch failed",
+        );
+      }
+    });
+  }, []);
 
   const toggleFullscreen = useCallback(() => {
     void window.electronAPI?.toggleFullscreen().catch((e) => {
@@ -141,6 +208,7 @@ export default function App() {
       setError("Run the desktop app (npm run electron:dev) to compare folders.");
       return;
     }
+    void window.electronAPI.stopSummaryPrefetch?.();
     setError(null);
     setBusy(true);
     setCompared(false);
@@ -149,17 +217,34 @@ export default function App() {
     setDiffPayload(null);
     setFileSummary(null);
     setFileSummaryError(null);
+    setPrefetchStatus(null);
     try {
       const result = await window.electronAPI.compareFolders(
         left.trim(),
         right.trim(),
       );
-      setRows(result);
-      setCompared(true);
-      setRightTab("summary");
-      const first =
-        result.find((r) => r.kind === "modified") ?? result[0] ?? null;
-      setSelectedPath(first?.path ?? null);
+      const lt = baseName(left.trim()) || "Baseline";
+      const rt = baseName(right.trim()) || "Target";
+      startTransition(() => {
+        setRows(result);
+        setCompared(true);
+        setRightTab("summary");
+        const first =
+          result.find((r) => r.kind === "modified") ?? result[0] ?? null;
+        setSelectedPath(first?.path ?? null);
+      });
+      if (result.length > 0 && window.electronAPI.startSummaryPrefetch) {
+        void window.electronAPI
+          .startSummaryPrefetch({
+            leftRoot: left.trim(),
+            rightRoot: right.trim(),
+            leftLabel: lt,
+            rightLabel: rt,
+            changes: result,
+            llmSettings,
+          })
+          .catch(() => {});
+      }
     } catch (e) {
       setRows([]);
       setCompared(false);
@@ -167,7 +252,7 @@ export default function App() {
     } finally {
       setBusy(false);
     }
-  }, [left, right]);
+  }, [left, right, llmSettings]);
 
   useEffect(() => {
     if (!selectedPath || !left.trim() || !right.trim() || rows.length === 0) {
@@ -260,6 +345,30 @@ export default function App() {
     rows,
     selectedPath,
   ]);
+
+  useEffect(() => {
+    if (
+      !selectedPath ||
+      diffLoading ||
+      !diffPayload ||
+      fileSummaryLoading ||
+      !window.electronAPI?.getPrefetchedSummary
+    ) {
+      return;
+    }
+    let cancelled = false;
+    void window.electronAPI
+      .getPrefetchedSummary(selectedPath)
+      .then((text) => {
+        if (!cancelled && text) {
+          setFileSummary(text);
+          setFileSummaryError(null);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedPath, diffPayload, diffLoading, fileSummaryLoading]);
 
   return (
     <div className="app-shell">
@@ -371,6 +480,7 @@ export default function App() {
           fileSummaryLoading={fileSummaryLoading}
           fileSummaryError={fileSummaryError}
           onRequestFileSummary={() => void requestFileSummary()}
+          prefetchStatus={prefetchStatus}
         />
       </div>
     </div>
