@@ -23,7 +23,7 @@ The modern, open-source alternative to WinMerge, Meld, and Beyond Compare.
 ## Roadmap
 
 - [x] Core two-folder comparison engine
-- [ ] Local LLM support (Ollama / LM Studio)
+- [x] Local LLM support (Ollama / LM Studio) — per-file summaries (Settings + Summary tab)
 - [ ] Git integration (`git difftool --dir-diff`)
 - [ ] 3-way merge view
 - [ ] VS Code extension
@@ -31,16 +31,26 @@ The modern, open-source alternative to WinMerge, Meld, and Beyond Compare.
 
 ## Quick Start
 
+Prerequisites: [Node.js](https://nodejs.org/) (LTS) and [Rust](https://rustup.rs/) (stable).
+
 ```bash
-git clone https://github.com/yourusername/novadiff.git
-cd novadiff
+git clone https://github.com/yourusername/NovaDiff.git
+cd NovaDiff
 npm install
-npm run dev
+npm run electron:dev
 ```
+
+(`electron:dev` builds the Rust CLI once, then starts Vite + Electron.)
+
+For the Vite dev server only (no Electron shell): `npm run dev`.
+
+Release build: `npm run electron:build` (builds the `novadiff-cli` binary, then Vite + installers under `release/`).
+
 ## Tech Stack
 
-- Frontend: Tauri + React + TypeScript + shadcn/ui
-- Backend: Rust (high-performance diffing)
+- Shell: Electron + React + TypeScript
+- Comparison engine: Rust CLI (`novadiff-cli`, Rayon-parallel hashing) + Electron UI
+- Local review: Ollama (`/api/chat`) or LM Studio OpenAI-compatible (`/v1/chat/completions`); GPU/Metal via those servers
 - AI Layer: OpenAI / Groq / Anthropic or local models via Ollama
 - Diff & Parsing: Custom engine + Tree-sitter for semantic awareness
 
@@ -48,7 +58,7 @@ npm run dev
 Classic diff tools are outdated. NovaDiff brings intelligence and clarity to code reviews — helping you understand not just what changed, but why and how it matters.
 
 ## Contributing
-Contributions are welcome! Please see CONTRIBUTING.md for details.
+Contributions are welcome! Please see [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for details.
 
 ## License
 MIT License

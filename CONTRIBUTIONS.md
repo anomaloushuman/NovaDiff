@@ -24,19 +24,22 @@ git clone https://github.com/yourusername/novadiff.git
 cd novadiff
 ```
 # 2. Install dependencies
-``` npm install ```
+```bash
+npm install
+```
 
-# 3. Install Rust (if not already installed) Follow instructions at https://rustup.rs/
+# 3. Install Rust (stable) if needed: https://rustup.rs/
 
-# 4. Run in development mode
-```npm run tauri dev```
+# 4. Run the desktop app (builds Rust CLI, then Vite + Electron)
+```bash
+npm run electron:dev
+```
 
 # Project Structure
 novadiff/
-├── src/                    # React + TypeScript frontend
-├── src-tauri/              # Rust backend (Tauri)
-│   ├── src/
-│   └── Cargo.toml
+├── src/                    # React + TypeScript UI
+├── electron/               # Electron main + preload (spawns `novadiff-cli`)
+├── cli/                    # Rust `novadiff-cli` (folder scan + file diff)
 ├── public/
 └── docs/
 
@@ -66,11 +69,11 @@ Push to your fork and open a Pull Request.
 - Add comments for complex logic
 
 # Testing
-# Run frontend tests
+# Run tests
 ```npm test```
 
-# Run Rust tests
-```cd src-tauri && cargo test```
+# Run Rust CLI tests (if any)
+```cargo test --manifest-path cli/Cargo.toml```
 
 # AI / LLM Related Contributions
 When working on AI features:
