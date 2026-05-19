@@ -1,0 +1,38 @@
+{
+  "relPath": "src/components/LlmSettingsModal.tsx",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:55:25.995Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L66 / R66-67"
+    ],
+    "cited_changed_lines": [
+      "L66 removed: those apps (Metal on Mac).",
+      "R66 added: those apps (Metal on Mac). NovaDiff assumes a high-context local setup",
+      "R67 added: for large file summaries."
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function LlmSettingsModal (12-158)",
+      "right function LlmSettingsModal (12-159)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

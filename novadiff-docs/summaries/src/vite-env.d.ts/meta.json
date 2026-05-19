@@ -1,0 +1,67 @@
+{
+  "relPath": "src/vite-env.d.ts",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:45:22.281Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R22 added: export interface SummaryPrefetchPayload {",
+      "R32 added: export interface FileSummaryExportPayload {",
+      "R43 added: export interface FileSummaryMarkdownReadPayload {",
+      "R48 added: export interface SelectionSummaryExportPayload extends SelectionDocArtifactMeta {",
+      "R56 added: export interface SelectionSummaryMarkdownReadPayload {",
+      "R61 added: export interface NovadiffDocsWritePayload {"
+    ],
+    "changed_imports": [
+      "L3 removed: import type { FileChange, FileDiffPayload } from \"./app/types\";",
+      "L4 removed: import type { LlmSettings, LlmSummarizePayload } from \"./app/llmStorage\";",
+      "R3 added: import type {",
+      "R17 added: import type {"
+    ],
+    "changed_line_ranges": [
+      "L3-4 / R3-59",
+      "R61-92",
+      "R103-198"
+    ],
+    "cited_changed_lines": [
+      "L3 removed: import type { FileChange, FileDiffPayload } from \"./app/types\";",
+      "L4 removed: import type { LlmSettings, LlmSummarizePayload } from \"./app/llmStorage\";",
+      "R3 added: import type {",
+      "R4 added: CodeCityModel,",
+      "R5 added: CodebaseOutline,",
+      "R6 added: EvidenceBadge,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface ElectronAPI (93-214)",
+      "right interface NovadiffDocsWritePayload (61-84)",
+      "right interface FileSummaryExportPayload (32-42)",
+      "right interface SummaryPrefetchPayload (22-31)",
+      "right interface NovadiffDocsReadPayload (85-92)",
+      "right interface SelectionSummaryExportPayload (48-55)",
+      "right interface FileSummaryMarkdownReadPayload (43-47)",
+      "right interface SelectionSummaryMarkdownReadPayload (56-60)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

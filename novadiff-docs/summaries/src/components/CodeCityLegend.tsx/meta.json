@@ -1,0 +1,50 @@
+{
+  "relPath": "src/components/CodeCityLegend.tsx",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:49:35.812Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export function CodeCityLegend({"
+    ],
+    "changed_imports": [
+      "R1 added: import type { CodeCityRenderableBuilding } from \"../app/codeCityLayout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-121"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { CodeCityRenderableBuilding } from \"../app/codeCityLayout\";",
+      "R3 added: export function CodeCityLegend({",
+      "R4 added: selected,",
+      "R5 added: blameOverlay,",
+      "R6 added: rootSide,",
+      "R7 added: visibleBuildingCount,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function CodeCityLegend (3-121)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

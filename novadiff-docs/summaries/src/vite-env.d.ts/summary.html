@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/vite-env.d.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/vite-env.d.ts</h1>
+    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:45:22.280Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>This diff represents a change in the <code>src/vite-env.d.ts</code> file between the NovaDiff-main and NovaDiff branches. The file is part of the Vite configuration for the Novadiff app, and it defines the types used throughout the project.</p>
+<h3>Key changes</h3>
+<p>The most significant change in this diff is the addition of new interfaces and exports related to the NovadiffDocs feature. These interfaces and exports were added to allow for the generation of documentation artifacts for the app&#39;s features.</p>
+<ul>
+<li>New interfaces: <code>NovadiffDocsWritePayload</code>, <code>SummaryPrefetchPayload</code>, <code>FileSummaryExportPayload</code>, <code>SelectionSummaryExportPayload</code>, <code>FileSummaryMarkdownReadPayload</code>, <code>SelectionSummaryMarkdownReadPayload</code>.</li>
+<li>New exports: <code>export interface SummaryPrefetchPayload { ... }</code>, <code>export interface FileSummaryExportPayload { ... }</code>, <code>export interface SelectionSummaryExportPayload extends SelectionDocArtifactMeta { ... }</code>, <code>export interface SelectionSummaryMarkdownReadPayload { ... }</code>, <code>export interface NovadiffDocsWritePayload { ... }</code>.</li>
+</ul>
+<p>These changes are likely to impact the correctness, maintainability, and performance of the app, as they add new functionality and increase the complexity of the codebase. However, the evidence provided in this diff does not suggest any significant regression risks or compatibility issues.</p>
+<h3>Impact</h3>
+<p>The addition of these interfaces and exports should not have a significant impact on the correctness or maintainability of the app. The new interfaces and exports are well-documented and follow established naming conventions, making it easy for other developers to understand their purpose and usage.</p>
+<p>The performance impact of these changes is likely to be minimal, as they do not introduce any new dependencies or introduce complex algorithms that could slow down the app&#39;s execution. However, the increased complexity of the codebase may make it more difficult to maintain and update in the future.</p>
+<h3>Risks &amp; follow-ups</h3>
+<p>There are no significant regression risks or compatibility issues identified in this diff. However, to ensure that the NovadiffDocs feature continues to function correctly and efficiently, it would be wise to verify that the new interfaces and exports do not introduce any unexpected behavior or performance issues. Additionally, it would be helpful to conduct a thorough review of the diff to ensure that all changes are intentional and necessary.</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

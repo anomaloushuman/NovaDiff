@@ -1,0 +1,34 @@
+{
+  "relPath": "electron/preload.cjs",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:40:33.280Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R6",
+      "R15-59"
+    ],
+    "cited_changed_lines": [
+      "R6 added: const WINDOW_STATE = \"window-state-changed\";",
+      "R15 added: getWindowState: () => ipcRenderer.invoke(\"window-state\"),",
+      "R16 added: minimizeWindow: () => ipcRenderer.invoke(\"window-minimize\"),",
+      "R17 added: toggleMaximizeWindow: () => ipcRenderer.invoke(\"window-toggle-maximize\"),",
+      "R18 added: closeWindow: () => ipcRenderer.invoke(\"window-close\"),",
+      "R19 added: onWindowStateChanged: (cb) => {"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

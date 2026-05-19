@@ -1,0 +1,60 @@
+{
+  "relPath": "src/app/selectedDiffDocs.ts",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:02:25.983Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R205 added: export function isSelectableDiffRow(row: DiffRow): boolean {",
+      "R209 added: export function isChangedDiffRow(row: DiffRow): boolean {",
+      "R213 added: export interface SelectedDiffDocContext {",
+      "R227 added: export function buildSelectedDiffDocContext("
+    ],
+    "changed_imports": [
+      "R1 added: import type {"
+    ],
+    "changed_line_ranges": [
+      "R1-277"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type {",
+      "R2 added: DiffRow,",
+      "R3 added: DiffSelectionLineRange,",
+      "R4 added: DiffSelectionSymbolMatch,",
+      "R5 added: DiffSymbolSpan,",
+      "R6 added: FileDiffPayload,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildSelectedDiffDocContext (227-277)",
+      "right function buildLineRanges (81-114)",
+      "right function findBestEnclosingSymbol (145-171)",
+      "right function findBestSymbolForSide (119-144)",
+      "right function buildSelectionLabel (172-188)",
+      "right function rowsForWindow (65-80)",
+      "right function buildExcerpt (44-58)",
+      "right interface SelectedDiffDocContext (213-226)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

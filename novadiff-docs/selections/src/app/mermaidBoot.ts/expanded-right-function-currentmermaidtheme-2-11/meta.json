@@ -1,0 +1,28 @@
+{
+  "relPath": "src/app/mermaidBoot.ts",
+  "kind": "added",
+  "label": "function currentMermaidTheme",
+  "selectionKey": "expanded-right-function-currentmermaidtheme-2-11",
+  "requestedMode": "expanded",
+  "effectiveMode": "expanded",
+  "lineRanges": [
+    {
+      "startRow": 2,
+      "endRow": 11,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 3,
+      "rightEnd": 12
+    }
+  ],
+  "symbol": {
+    "end_line": 13,
+    "kind": "function",
+    "name": "currentMermaidTheme",
+    "start_line": 3,
+    "side": "right"
+  },
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:16:59.397Z"
+}

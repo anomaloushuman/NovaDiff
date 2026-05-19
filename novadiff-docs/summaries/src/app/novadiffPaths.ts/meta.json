@@ -1,0 +1,49 @@
+{
+  "relPath": "src/app/novadiffPaths.ts",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:01:40.324Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R2 added: export const NOVADIFF_DOCS_REL = \"novadiff-docs\";",
+      "R4 added: export function isNovadiffDocsReservedPath(rel: string | null | undefined): boolean {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-10"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /** Must match `NOVADIFF_DOCS_DIR` in `cli/src/main.rs`. */",
+      "R2 added: export const NOVADIFF_DOCS_REL = \"novadiff-docs\";",
+      "R4 added: export function isNovadiffDocsReservedPath(rel: string | null | undefined): boolean {",
+      "R5 added: if (rel == null || rel === \"\") {",
+      "R6 added: return false;",
+      "R7 added: }"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function isNovadiffDocsReservedPath (4-10)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

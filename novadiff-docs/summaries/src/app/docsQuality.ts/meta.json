@@ -1,0 +1,60 @@
+{
+  "relPath": "src/app/docsQuality.ts",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:59:40.597Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R32 added: export function relPathAnchorId(relPath: string): string {",
+      "R41 added: export function buildSummaryPromptContext(entries: SummaryIndexEntry[], limit = 10): string {",
+      "R61 added: export function buildRiskPromptContext(signals: RiskSignal[], limit = 14): string {",
+      "R75 added: export function deriveConfidenceBadges(args: {",
+      "R143 added: export function buildReleaseOverviewMarkdown(args: {"
+    ],
+    "changed_imports": [
+      "R1 added: import type {"
+    ],
+    "changed_line_ranges": [
+      "R1-247"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type {",
+      "R2 added: EvidenceBadge,",
+      "R3 added: FileChange,",
+      "R4 added: RiskSignal,",
+      "R5 added: SelectionIndexEntry,",
+      "R6 added: SummaryIndexEntry,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildReleaseOverviewMarkdown (143-247)",
+      "right function deriveConfidenceBadges (75-142)",
+      "right function buildSummaryPromptContext (41-60)",
+      "right function uniqStrings (9-23)",
+      "right function buildRiskPromptContext (61-74)",
+      "right function relPathAnchorId (32-40)",
+      "right function compactText (24-31)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

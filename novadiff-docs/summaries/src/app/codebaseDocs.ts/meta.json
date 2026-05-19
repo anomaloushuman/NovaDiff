@@ -1,0 +1,59 @@
+{
+  "relPath": "src/app/codebaseDocs.ts",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:57:45.068Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R48 added: export function buildCodebasePromptContext(",
+      "R95 added: export function buildCodebaseMetricsMarkdown(",
+      "R157 added: export function codebaseExtensionPieMermaid(outline: CodebaseOutline): string {",
+      "R169 added: export function codebaseDepthMermaid(outline: CodebaseOutline): string {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { CodebaseOutline } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-178"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { CodebaseOutline } from \"./types\";",
+      "R3 added: function sampleFilePaths(outline: CodebaseOutline, cap = 60): string[] {",
+      "R4 added: const files = Array.isArray(outline.files) ? outline.files : [];",
+      "R5 added: return files",
+      "R6 added: .map((file) => String(file.path ?? \"\").trim())",
+      "R7 added: .filter(Boolean)"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildCodebaseMetricsMarkdown (95-156)",
+      "right function buildCodebasePromptContext (48-94)",
+      "right function sampleSymbolLines (11-33)",
+      "right function depthHistogram (34-47)",
+      "right function codebaseExtensionPieMermaid (157-168)",
+      "right function codebaseDepthMermaid (169-178)",
+      "right function sampleFilePaths (3-10)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "relPath": "cli/Cargo.toml",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:30:27.434Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Dependency surface or package metadata changed.",
+        "key": "dependency-manifest",
+        "label": "Dependency manifest changed",
+        "tone": "warn"
+      },
+      {
+        "description": "Runtime configuration or environment behavior may shift.",
+        "key": "config",
+        "label": "Config-adjacent path",
+        "tone": "warn"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R12-13"
+    ],
+    "cited_changed_lines": [
+      "R12 added: regex = \"1\"",
+      "R13 added: ignore = \"0.4\""
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "dependency-manifest",
+      "config"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Reinstall or refresh dependencies, then run the primary build/test pipeline.",
+      "Validate startup/config loading with representative environment settings."
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "key": "summary-coverage-strong",
+    "label": "Strong summary coverage",
+    "tone": "good",
+    "description": "Most changed files have saved summaries available for grounding the narrative."
+  },
+  {
+    "key": "high-risk-signals",
+    "label": "High-risk signals present",
+    "tone": "warn",
+    "description": "At least one deterministic high-severity signal was detected in the compare."
+  },
+  {
+    "key": "selection-docs",
+    "label": "Focused selection docs available",
+    "tone": "good",
+    "description": "Reviewers saved line- or symbol-scoped documentation that can ground the broader report."
+  },
+  {
+    "key": "heuristic-scan",
+    "label": "Heuristic scan data",
+    "tone": "neutral",
+    "description": "Imports, calls, and symbol spans come from bounded heuristics rather than a full AST index."
+  }
+]

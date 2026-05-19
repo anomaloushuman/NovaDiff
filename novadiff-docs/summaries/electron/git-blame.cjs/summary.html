@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/git-blame.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/git-blame.cjs</h1>
+    <div class="meta">Kind: added · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:33:03.637Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>This diff represents a change in the <code>electron/git-blame.cjs</code> file between the <code>NovaDiff-main</code> and <code>NovaDiff</code> branches. The change introduces new functionality and modifies existing code.</p>
+<h3>Key changes</h3>
+<p>The following are some of the key changes made in this diff:</p>
+<ul>
+<li>Added a new function called <code>parseBlamePorcelain</code> to parse the output of the <code>git blame --line-porcelain</code> command.</li>
+<li>Modified the <code>blameFileOwnership</code> function to use the <code>parseBlamePorcelain</code> function to parse the output of the <code>git blame --line-porcelain</code> command.</li>
+<li>Added a new import statement to import the <code>spawnSync</code> function from the <code>node:child_process</code> module.</li>
+<li>Added a new variable called <code>blameCache</code> to store the parsed output of the <code>git blame --line-porcelain</code> command.</li>
+<li>Modified the <code>cacheKey</code> function to generate a unique cache key for each file based on the repository root and relative path.</li>
+</ul>
+<h3>Impact</h3>
+<p>The impact of these changes is that the <code>blameFileOwnership</code> function now has access to the parsed output of the <code>git blame --line-porcelain</code> command, which allows it to provide more accurate information about the ownership of lines in a file. This change also improves the performance of the <code>blameFileOwnership</code> function by reducing the number of times it needs to run the <code>git blame --line-porcelain</code> command.</p>
+<h3>Risks &amp; follow-ups</h3>
+<p>There are no obvious risks or issues with this diff. However, it is important to verify that the new functionality works as expected and that the performance improvements are noticeable. Additionally, it would be helpful to have a more thorough understanding of the impact of these changes on the overall stability and security of the system.</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

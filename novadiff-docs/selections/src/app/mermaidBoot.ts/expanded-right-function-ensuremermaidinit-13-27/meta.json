@@ -1,0 +1,28 @@
+{
+  "relPath": "src/app/mermaidBoot.ts",
+  "kind": "added",
+  "label": "function ensureMermaidInit",
+  "selectionKey": "expanded-right-function-ensuremermaidinit-13-27",
+  "requestedMode": "expanded",
+  "effectiveMode": "expanded",
+  "lineRanges": [
+    {
+      "startRow": 13,
+      "endRow": 27,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 14,
+      "rightEnd": 28
+    }
+  ],
+  "symbol": {
+    "end_line": 29,
+    "kind": "function",
+    "name": "ensureMermaidInit",
+    "start_line": 14,
+    "side": "right"
+  },
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:47:33.427Z"
+}

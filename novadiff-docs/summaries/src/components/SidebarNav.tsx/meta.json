@@ -1,0 +1,59 @@
+{
+  "relPath": "src/components/SidebarNav.tsx",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:56:23.523Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R15 added: export type WorkspacePage = \"compare\" | \"docs\";"
+    ],
+    "changed_imports": [
+      "R2 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R2-15",
+      "R19-20",
+      "R26-27",
+      "R30-31",
+      "R43-70",
+      "L29-31 / R77-84",
+      "R91-118",
+      "R120"
+    ],
+    "cited_changed_lines": [
+      "R2 added: import {",
+      "R3 added: BookOpen,",
+      "R4 added: Brain,",
+      "R5 added: ClipboardList,",
+      "R6 added: Columns2,",
+      "R7 added: FileText,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function SidebarNav (10-69)",
+      "right function SidebarNav (28-156)",
+      "right interface SidebarNavProps (17-27)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -63,7 +63,8 @@ export function LlmSettingsModal({
           File summaries call your machine over HTTP and are rendered as
           Markdown (GFM). Ollama defaults to port <code>11434</code>, LM Studio
           server usually <code>1234</code>. GPU acceleration is handled inside
-          those apps (Metal on Mac).
+          those apps (Metal on Mac). NovaDiff assumes a high-context local setup
+          for large file summaries.
         </p>
 
         <div className="llm-field">

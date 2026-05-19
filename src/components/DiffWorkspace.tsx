@@ -1,4 +1,18 @@
-import type { DiffRow, FileDiffPayload } from "../app/types";
+import type { MouseEvent } from "react";
+import type {
+  DiffRow,
+  FileDiffPayload,
+  SelectionDocMode,
+} from "../app/types";
+import {
+  ArrowLeftRight,
+  ChevronDown,
+  FileCode,
+  GitBranch,
+  GitCompareArrows,
+  Loader2,
+} from "lucide-react";
+import { LlmSummaryMarkdown } from "./LlmSummaryMarkdown";
 
 interface DiffWorkspaceProps {
   leftRoot: string;
@@ -7,6 +21,7 @@ interface DiffWorkspaceProps {
   onRight: (v: string) => void;
   onBrowseLeft: () => void;
   onBrowseRight: () => void;
+  onSwapRoots: () => void;
   onCompare: () => void;
   busy: boolean;
   error: string | null;
@@ -21,7 +36,21 @@ interface DiffWorkspaceProps {
   diffPayload: FileDiffPayload | null;
   diffLoading: boolean;
   diffError: string | null;
-  onToggleFullscreen?: () => void;
+  selectedDiffRows: number[];
+  selectionMode: SelectionDocMode;
+  onSelectionMode: (mode: SelectionDocMode) => void;
+  onSelectDiffRow: (
+    rowIndex: number,
+    modifiers: { shiftKey: boolean; toggleKey: boolean },
+  ) => void;
+  onClearDiffSelection: () => void;
+  onRequestSelectedDiffSummary: () => void;
+  selectedDiffDocLabel: string | null;
+  selectedDiffDocNote: string | null;
+  selectedDiffChangedCount: number;
+  selectedDiffSummary: string | null;
+  selectedDiffSummaryLoading: boolean;
+  selectedDiffSummaryError: string | null;
 }
 
 export function DiffWorkspace({
@@ -31,6 +60,7 @@ export function DiffWorkspace({
   onRight,
   onBrowseLeft,
   onBrowseRight,
+  onSwapRoots,
   onCompare,
   busy,
   error,
@@ -45,62 +75,119 @@ export function DiffWorkspace({
   diffPayload,
   diffLoading,
   diffError,
-  onToggleFullscreen,
+  selectedDiffRows,
+  selectionMode,
+  onSelectionMode,
+  onSelectDiffRow,
+  onClearDiffSelection,
+  onRequestSelectedDiffSummary,
+  selectedDiffDocLabel,
+  selectedDiffDocNote,
+  selectedDiffChangedCount,
+  selectedDiffSummary,
+  selectedDiffSummaryLoading,
+  selectedDiffSummaryError,
 }: DiffWorkspaceProps) {
+  const hasDiffSelection = selectedDiffRows.length > 0;
   return (
     <main className="workspace">
-      <div className="workspace-setup">
-        <div className="path-pair">
-          <label className="path-field">
-            <span className="path-field-label">Baseline (left)</span>
-            <div className="path-field-row">
-              <input
-                value={leftRoot}
-                onChange={(e) => onLeft(e.target.value)}
-                placeholder="/path/to/baseline"
-                spellCheck={false}
-              />
-              <button type="button" onClick={onBrowseLeft}>
-                Browse…
-              </button>
+      <div className="workspace-setup-strip">
+        <div className="workspace-setup">
+          <div className="path-selectors-group">
+            <div className="path-selectors-labels" aria-hidden>
+              <span className="path-field-label">
+                Base <span className="path-field-hint">tree</span>
+              </span>
+              <span className="path-field-label path-swap-label-filler">
+                Base <span className="path-field-hint">tree</span>
+              </span>
+              <span className="path-field-label">
+                Target <span className="path-field-hint">tree</span>
+              </span>
             </div>
-          </label>
-          <label className="path-field">
-            <span className="path-field-label">Target (right)</span>
-            <div className="path-field-row">
-              <input
-                value={rightRoot}
-                onChange={(e) => onRight(e.target.value)}
-                placeholder="/path/to/target"
-                spellCheck={false}
-              />
-              <button type="button" onClick={onBrowseRight}>
-                Browse…
+
+            <div className="path-selectors-combined">
+              <div className="path-selector-segment">
+                <span className="path-selector-lead-icon" aria-hidden>
+                  <GitBranch size={17} strokeWidth={2} />
+                </span>
+                <input
+                  id="novadiff-path-baseline"
+                  className="path-selector-input"
+                  aria-label="Base tree"
+                  value={leftRoot}
+                  onChange={(e) => onLeft(e.target.value)}
+                  placeholder="Select base…"
+                  spellCheck={false}
+                  autoComplete="off"
+                  title={leftRoot.trim() || undefined}
+                />
+                <button
+                  type="button"
+                  className="path-selector-chevron"
+                  onClick={() => void onBrowseLeft()}
+                  aria-label="Browse for baseline folder"
+                >
+                  <ChevronDown size={18} strokeWidth={2} aria-hidden />
+                </button>
+              </div>
+
+              <button
+                type="button"
+                className="path-swap-btn path-swap-btn-joined"
+                onClick={onSwapRoots}
+                disabled={busy}
+                title="Swap baseline and target folders"
+                aria-label="Swap baseline and target folders"
+              >
+                <ArrowLeftRight size={18} strokeWidth={2} aria-hidden />
               </button>
+
+              <div className="path-selector-segment">
+                <span className="path-selector-lead-icon" aria-hidden>
+                  <GitBranch size={17} strokeWidth={2} />
+                </span>
+                <input
+                  id="novadiff-path-target"
+                  className="path-selector-input"
+                  aria-label="Target right tree"
+                  value={rightRoot}
+                  onChange={(e) => onRight(e.target.value)}
+                  placeholder="Select target…"
+                  spellCheck={false}
+                  autoComplete="off"
+                  title={rightRoot.trim() || undefined}
+                />
+                <button
+                  type="button"
+                  className="path-selector-chevron"
+                  onClick={() => void onBrowseRight()}
+                  aria-label="Browse for target folder"
+                >
+                  <ChevronDown size={18} strokeWidth={2} aria-hidden />
+                </button>
+              </div>
             </div>
-          </label>
-        </div>
-        <div className="workspace-setup-actions">
-          {onToggleFullscreen && (
+          </div>
+
+          <div className="workspace-setup-actions">
             <button
               type="button"
-              className="btn-fullscreen"
-              onClick={onToggleFullscreen}
-              title="Native fullscreen (F11, ⌃⌘F on macOS, or View → Toggle Fullscreen)."
+              className="btn-primary compare-fab"
+              disabled={busy || !leftRoot.trim() || !rightRoot.trim()}
+              onClick={onCompare}
+              aria-label={busy ? "Comparing folders" : "Compare folders"}
+              data-tooltip={busy ? "Comparing..." : "Compare"}
             >
-              Fullscreen
+              {busy ? (
+                <Loader2 size={17} strokeWidth={2} className="spin-ic" aria-hidden />
+              ) : (
+                <GitCompareArrows size={17} strokeWidth={2} aria-hidden />
+              )}
             </button>
-          )}
-          <button
-            type="button"
-            className="btn-primary"
-            disabled={busy || !leftRoot.trim() || !rightRoot.trim()}
-            onClick={onCompare}
-          >
-            {busy ? "Comparing…" : "Compare folders"}
-          </button>
+          </div>
+          {error && <p className="workspace-error">{error}</p>}
         </div>
-        {error && <p className="workspace-error">{error}</p>}
       </div>
 
       {compared && fileCount === 0 && (
@@ -114,8 +201,8 @@ export function DiffWorkspace({
               <h1 className="workspace-heading">Comparing changes</h1>
               <div className="workspace-branches">
                 <span className="branch-pill">{leftTitle}</span>
-                <span className="branch-arrow" aria-hidden>
-                  ←
+                <span className="branch-arrow" aria-hidden title="Baseline → target">
+                  ⇄
                 </span>
                 <span className="branch-pill accent">{rightTitle}</span>
               </div>
@@ -133,12 +220,78 @@ export function DiffWorkspace({
 
           {selectedPath && (
             <div className="file-path-bar">
+              <FileCode size={16} strokeWidth={2} className="file-path-bar-icon" aria-hidden />
               <span className="file-path-label">File</span>
               <code className="file-path-value">{selectedPath}</code>
             </div>
           )}
 
           <div className="diff-panes">
+            {hasDiffSelection ? (
+              <div className="diff-selection-bar">
+                <div className="diff-selection-copy">
+                  <strong>{selectedDiffRows.length}</strong> row
+                  {selectedDiffRows.length === 1 ? "" : "s"} selected
+                  {selectedDiffChangedCount > 0
+                    ? ` · ${selectedDiffChangedCount} changed`
+                    : " · no changed rows"}
+                  {selectedDiffDocLabel ? (
+                    <>
+                      {" "}
+                      · <span className="diff-selection-label">{selectedDiffDocLabel}</span>
+                    </>
+                  ) : null}
+                </div>
+                <div className="diff-selection-actions">
+                  <div className="diff-selection-mode" role="group" aria-label="Selection mode">
+                    <button
+                      type="button"
+                      className={
+                        selectionMode === "exact"
+                          ? "diff-selection-mode-btn active"
+                          : "diff-selection-mode-btn"
+                      }
+                      onClick={() => onSelectionMode("exact")}
+                    >
+                      Exact selection
+                    </button>
+                    <button
+                      type="button"
+                      className={
+                        selectionMode === "expanded"
+                          ? "diff-selection-mode-btn active"
+                          : "diff-selection-mode-btn"
+                      }
+                      onClick={() => onSelectionMode("expanded")}
+                    >
+                      Expand to symbol
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    className="diff-selection-secondary"
+                    onClick={onClearDiffSelection}
+                    disabled={selectedDiffSummaryLoading}
+                  >
+                    Clear
+                  </button>
+                  <button
+                    type="button"
+                    className="diff-selection-primary"
+                    onClick={onRequestSelectedDiffSummary}
+                    disabled={selectedDiffSummaryLoading || selectedDiffChangedCount === 0}
+                  >
+                    {selectedDiffSummaryLoading ? "Documenting…" : "Document selection"}
+                  </button>
+                </div>
+                {selectedDiffDocNote ? (
+                  <p className="diff-selection-note">{selectedDiffDocNote}</p>
+                ) : null}
+                {selectedDiffSummaryError ? (
+                  <p className="diff-selection-error">{selectedDiffSummaryError}</p>
+                ) : null}
+              </div>
+            ) : null}
             <div className="diff-pane-head">
               <span>{leftTitle}</span>
               <span>{rightTitle}</span>
@@ -155,7 +308,18 @@ export function DiffWorkspace({
                 <table className="diff-table">
                   <tbody>
                     {diffPayload.rows.map((row, i) => (
-                      <DiffTableRow key={i} row={row} />
+                      <DiffTableRow
+                        key={row.row_id}
+                        row={row}
+                        selected={selectedDiffRows.includes(i)}
+                        selectable={!row.is_truncation_marker}
+                        onClick={(event) =>
+                          onSelectDiffRow(i, {
+                            shiftKey: event.shiftKey,
+                            toggleKey: event.metaKey || event.ctrlKey,
+                          })
+                        }
+                      />
                     ))}
                   </tbody>
                 </table>
@@ -165,6 +329,15 @@ export function DiffWorkspace({
               )}
             </div>
           </div>
+          {selectedDiffSummary ? (
+            <section className="selected-diff-doc-panel llm-summary-md-wrap">
+              <div className="selected-diff-doc-head">
+                <h2>Selected diff documentation</h2>
+                {selectedDiffDocLabel ? <span>{selectedDiffDocLabel}</span> : null}
+              </div>
+              <LlmSummaryMarkdown source={selectedDiffSummary} />
+            </section>
+          ) : null}
         </>
       )}
 
@@ -177,9 +350,25 @@ export function DiffWorkspace({
   );
 }
 
-function DiffTableRow({ row }: { row: DiffRow }) {
+function DiffTableRow({
+  row,
+  selected,
+  selectable,
+  onClick,
+}: {
+  row: DiffRow;
+  selected: boolean;
+  selectable: boolean;
+  onClick: (event: MouseEvent<HTMLTableRowElement>) => void;
+}) {
   return (
-    <tr>
+    <tr
+      className={
+        selected ? "diff-row diff-row-selected" : selectable ? "diff-row" : "diff-row muted"
+      }
+      onClick={selectable ? onClick : undefined}
+      aria-selected={selected || undefined}
+    >
       <td className="diff-gutter">{row.left_no ?? ""}</td>
       <td className={`diff-code ${row.left_style}`}>
         <pre>{row.left}</pre>

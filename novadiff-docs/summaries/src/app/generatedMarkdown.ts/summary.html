@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/generatedMarkdown.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/generatedMarkdown.ts</h1>
+    <div class="meta">Kind: added · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T07:00:13.081Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>This diff represents a folder comparison between two trees on disk, with the baseline being &quot;NovaDiff-main&quot; and the target being &quot;NovaDiff&quot;. The file in question is &quot;src/app/generatedMarkdown.ts&quot;, which has been modified.</p>
+<h3>Key changes</h3>
+<p>The most significant implementation change in this diff is the addition of several functions related to normalizing Markdown content, including <code>normalizeGeneratedMarkdown</code>, <code>promoteKnownHeadings</code>, <code>splitDenseParagraphs</code>, and <code>normalizeFenceChunk</code>. These functions are used to clean up and format Markdown content, particularly in the context of generating summaries from large codebases.</p>
+<p>Additionally, there are some changes to the <code>js-ts-source</code> file roles and path heuristics, as well as some modifications to the <code>right function</code> touching symbols.</p>
+<h3>Impact</h3>
+<p>The impact of these changes will be felt primarily in the areas of correctness, maintainability, performance, compatibility, and observability. By normalizing Markdown content and promoting known section headings, we can improve the readability and structure of generated summaries, making it easier for users to understand and navigate the information. Additionally, by splitting dense paragraphs and removing malformed code fences, we can reduce the risk of errors and improve the overall quality of the generated summaries.</p>
+<h3>Risks &amp; follow-ups</h3>
+<p>There is a potential risk that the changes made to the <code>normalizeGeneratedMarkdown</code> function could introduce bugs or regressions, particularly if they are not thoroughly tested. To mitigate this risk, we recommend running the JS/TS lint, test, and production build commands used by this repo to ensure that the changes do not break any existing functionality. We also recommend reviewing the diff carefully to ensure that all changes are intentional and well-tested.</p>
+<p>Overall, these changes aim to improve the quality and consistency of generated summaries, making them more useful and accessible for users.</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

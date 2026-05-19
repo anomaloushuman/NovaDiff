@@ -9,6 +9,7 @@ name = "novadiff-cli"
 path = "src/main.rs"
 
 [dependencies]
+regex = "1"
 ignore = "0.4"
 rayon = "1.10"
 serde = { version = "1", features = ["derive"] }

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/llm.cjs · function buildCommitMessagePrompt · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/llm.cjs · function buildCommitMessagePrompt</h1>
+    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Requested mode: expanded · Effective mode: expanded · Symbol: function buildCommitMessagePrompt · Generated: 2026-05-14T07:58:22.392Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>The selected region of the file diff represents a modification to the <code>buildCommitMessagePrompt</code> function in the <code>electron/llm.cjs</code> file. The function is used to generate commit messages for folder diffs between two directory trees. The modification involves adding a new line of code that sets the <code>ctx</code> variable to a trimmed slice of the <code>commitContext</code> string, with a maximum length of 12_000 characters. This change is likely intended to improve the performance of the function by reducing the amount of unnecessary data it processes.</p>
+<h3>Selected change</h3>
+<p>The selected change is a single line of code that sets the <code>ctx</code> variable to a trimmed slice of the <code>commitContext</code> string. The line is added after the existing code that sets the <code>leftLabel</code>, <code>rightLabel</code>, and <code>commitContext</code> variables. The addition of this line is likely intended to improve the performance of the function by reducing the amount of unnecessary data it processes.</p>
+<h3>Semantic context</h3>
+<p>The <code>buildCommitMessagePrompt</code> function is an important part of the NovaDiff application, as it generates commit messages for folder diffs between two directory trees. The modification to the function involves adding a new line of code that sets the <code>ctx</code> variable to a trimmed slice of the <code>commitContext</code> string, with a maximum length of 12_000 characters. This change is likely intended to improve the performance of the function by reducing the amount of unnecessary data it processes.</p>
+<h3>Risks &amp; follow-ups</h3>
+<p>There are no immediate risks associated with this change. However, it is possible that the addition of this line of code may have unintended consequences, such as affecting the functionality of the function in unexpected ways.</p>
+<p>It is recommended to thoroughly test the modified function and review the surrounding code to ensure that the change does not introduce any bugs or issues. Additionally, it may be helpful to consult with other developers who are familiar with the NovaDiff application to gain a deeper understanding of the context and potential impact of the change.</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

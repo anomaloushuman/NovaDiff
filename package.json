@@ -14,18 +14,23 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "lucide-react": "^0.511.0",
+    "marked": "^15.0.7",
+    "mermaid": "^11.15.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
     "react-window": "^1.8.11",
     "rehype-sanitize": "^6.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/react-window": "^1.8.8",
+    "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "^4.6.0",
     "concurrently": "^9.1.2",
     "electron": "^34.2.0",
@@ -46,7 +51,8 @@
       "dist/**/*",
       "electron/**/*",
       "package.json",
-      "nova-diff-icon.png"
+      "nova-diff-icon.png",
+      "node_modules/marked/**/*"
     ],
     "extraResources": [
       {

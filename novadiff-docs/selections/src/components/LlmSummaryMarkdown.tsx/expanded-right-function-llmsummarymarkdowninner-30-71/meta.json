@@ -1,0 +1,28 @@
+{
+  "relPath": "src/components/LlmSummaryMarkdown.tsx",
+  "kind": "modified",
+  "label": "function LlmSummaryMarkdownInner",
+  "selectionKey": "expanded-right-function-llmsummarymarkdowninner-30-71",
+  "requestedMode": "expanded",
+  "effectiveMode": "expanded",
+  "lineRanges": [
+    {
+      "startRow": 30,
+      "endRow": 71,
+      "leftStart": 11,
+      "leftEnd": 26,
+      "rightStart": 30,
+      "rightEnd": 71
+    }
+  ],
+  "symbol": {
+    "end_line": 80,
+    "kind": "function",
+    "name": "LlmSummaryMarkdownInner",
+    "start_line": 30,
+    "side": "right"
+  },
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:20:02.999Z"
+}

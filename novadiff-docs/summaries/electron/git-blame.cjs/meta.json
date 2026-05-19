@@ -1,0 +1,50 @@
+{
+  "relPath": "electron/git-blame.cjs",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:33:03.638Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const { spawnSync } = require(\"node:child_process\");"
+    ],
+    "changed_line_ranges": [
+      "R1-67"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const { spawnSync } = require(\"node:child_process\");",
+      "R5 added: /** @type {Map<string, { lineAuthors: string[]; owners: Array<{ author: string; lineCount: number; ratio: number }> }>} */",
+      "R6 added: const blameCache = new Map();",
+      "R8 added: function cacheKey(root, relPath) {",
+      "R9 added: return `${root}::${relPath}`;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function parseBlamePorcelain (12-40)",
+      "right function blameFileOwnership (41-67)",
+      "right function cacheKey (8-11)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

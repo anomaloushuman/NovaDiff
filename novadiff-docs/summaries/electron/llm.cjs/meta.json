@@ -1,0 +1,54 @@
+{
+  "relPath": "electron/llm.cjs",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:34:31.296Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R8-10",
+      "R25-120",
+      "R124-145",
+      "R192-193",
+      "R195-198",
+      "R213-214",
+      "R216-219",
+      "R228"
+    ],
+    "cited_changed_lines": [
+      "R8 added: const REPETITION_LINE_WINDOW_MAX = 6;",
+      "R9 added: const REPETITION_MIN_LINE_LEN = 24;",
+      "R10 added: const REPETITION_MIN_PARAGRAPH_LEN = 80;",
+      "R25 added: function normalizeRepeatUnit(text) {",
+      "R26 added: return String(text || \"\")",
+      "R27 added: .toLowerCase()"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function buildSummarizePrompt (164-218)",
+      "left function completeChat (257-321)",
+      "left function summarizeChangeStream (219-256)",
+      "left function summarizeChange (322-331)",
+      "left function streamLmStudioChat (100-163)",
+      "right function buildSelectionDocPrompt (461-544)",
+      "right function buildGroundedRevisionPrompt (619-679)",
+      "right function buildCodebaseDocPrompt (385-430)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

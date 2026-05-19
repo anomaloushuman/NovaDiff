@@ -1,0 +1,60 @@
+{
+  "relPath": "electron/novadiff-docs-pdf.cjs",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:38:52.584Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const os = require(\"node:os\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { pathToFileURL } = require(\"node:url\");",
+      "R7 added: const { BrowserWindow } = require(\"electron\");",
+      "R8 added: const { marked } = require(\"marked\");"
+    ],
+    "changed_line_ranges": [
+      "R1-401"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const os = require(\"node:os\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { pathToFileURL } = require(\"node:url\");",
+      "R7 added: const { BrowserWindow } = require(\"electron\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildMainPdfHtml (174-271)",
+      "right function htmlToPdfFile (337-383)",
+      "right function buildDiagramsPdfHtml (272-315)",
+      "right function bundleModeMeta (25-53)",
+      "right function renderDetectedProjects (117-141)",
+      "right function renderSymbolsTable (69-93)",
+      "right function renderCrossFileCallEdges (142-165)",
+      "right function renderImportEdgesTable (94-116)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

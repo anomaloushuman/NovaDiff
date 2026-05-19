@@ -1,0 +1,55 @@
+{
+  "relPath": "src/app/novadiffDocs.ts",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T07:01:19.942Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export const DOC_PREVIEW_PAGES = [",
+      "R11 added: export type DocPreviewPage = (typeof DOC_PREVIEW_PAGES)[number];",
+      "R13 added: export const NOVADIFF_DOC_BUNDLES: NovadiffDocsBundleKey[] = [",
+      "R19 added: export function bundleLabel(bundleKey: NovadiffDocsBundleKey): string {",
+      "R30 added: export function bundleShortDescription(bundleKey: NovadiffDocsBundleKey): string {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { NovadiffDocsBundleKey } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-39"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { NovadiffDocsBundleKey } from \"./types\";",
+      "R3 added: export const DOC_PREVIEW_PAGES = [",
+      "R4 added: \"index.html\",",
+      "R5 added: \"narrative.html\",",
+      "R6 added: \"metrics.html\",",
+      "R7 added: \"diagrams.html\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function bundleLabel (19-29)",
+      "right function bundleShortDescription (30-39)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

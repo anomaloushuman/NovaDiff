@@ -1,0 +1,40 @@
+{
+  "relPath": "src/App.css",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:43:06.590Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L3-16 / R3-44",
+      "L18 / R46",
+      "R54-101",
+      "R119",
+      "L45 / R122",
+      "R124",
+      "R127-280",
+      "R286"
+    ],
+    "cited_changed_lines": [
+      "L3 removed: --bg-deep: #0b0e14;",
+      "L4 removed: --bg: #0f1219;",
+      "L5 removed: --surface: #151922;",
+      "L6 removed: --surface-2: #1a1f2e;",
+      "L7 removed: --border: #2a3144;",
+      "L8 removed: --text: #e8ecf4;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

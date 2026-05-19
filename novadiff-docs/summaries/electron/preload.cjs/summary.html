@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/preload.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/preload.cjs</h1>
+    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:40:33.279Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>This diff represents a modification to the <code>electron/preload.cjs</code> file in the NovaDiff repository. The file is part of the Electron context bridge and exposes various IPC functions to the renderer process.</p>
+<h3>Key changes</h3>
+<p>The most significant change in this diff is the addition of new IPC functions for managing window state, such as minimizing, maximizing, and closing the window. These functions are exposed through the <code>electronAPI</code> object in the renderer process. Additionally, the diff includes changes to the <code>llmSummarizeStream</code> function, which now includes a handler for the <code>LLM_STREAM</code> event emitted by the LLM module.</p>
+<h3>Impact</h3>
+<p>The impact of these changes on correctness, maintainability, performance, compatibility, or observability is not immediately apparent. However, the addition of new IPC functions may introduce new opportunities for security vulnerabilities or other issues that need to be carefully reviewed and tested.</p>
+<h3>Risks &amp; follow-ups</h3>
+<p>Based on the evidence provided, there is no clear indication of any potential risks or issues with the changes made to the <code>electron/preload.cjs</code> file. However, it is important to verify that the new IPC functions do not introduce any security vulnerabilities or other issues that could negatively impact the overall stability or functionality of the application. As such, it would be advisable to run the JS/TS lint, test, and production build commands used by this repo to ensure that all tests pass and there are no unexpected issues.</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

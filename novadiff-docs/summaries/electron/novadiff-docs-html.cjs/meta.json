@@ -1,0 +1,58 @@
+{
+  "relPath": "electron/novadiff-docs-html.cjs",
+  "kind": "added",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:37:49.792Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { marked } = require(\"marked\");",
+      "R777 added: import mermaid from \"${MERMAID_ESM}\";"
+    ],
+    "changed_line_ranges": [
+      "R1-1286"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { marked } = require(\"marked\");",
+      "R7 added: marked.setOptions({ gfm: true, breaks: false });",
+      "R9 added: const NOVADIFF_DOCS = \"novadiff-docs\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function mermaidSection (290-757)",
+      "right function buildReleaseHtml (1001-1148)",
+      "right function readNovadiffDocsBundle (1174-1251)",
+      "right function bundleModeMeta (56-123)",
+      "right function normalizeMarkdownDocument (194-256)",
+      "right function buildEnhancementScript (774-825)",
+      "right function wrapPage (826-877)",
+      "right function buildIndexHtml (885-934)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

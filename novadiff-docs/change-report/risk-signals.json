@@ -1,0 +1,102 @@
+[
+  {
+    "advisory": null,
+    "category": "unsafe-rust",
+    "confidence": "high",
+    "evidence": [
+      "R1239 added: fn rust_added_unsafe_lines(payload: &FileDiffPayload) -> Vec<String> {",
+      "R1246 added: let matches = text.contains(\"unsafe\")",
+      "R1248 added: || text.contains(\"unsafe fn \");",
+      "R1363 added: let unsafe_lines = rust_added_unsafe_lines(&payload);",
+      "R1364 added: if !unsafe_lines.is_empty() {",
+      "R1367 added: \"unsafe-rust\","
+    ],
+    "id": "unsafe-rust:high:cli-src-main.rs",
+    "rel_path": "cli/src/main.rs",
+    "severity": "high",
+    "source": "heuristic",
+    "title": "Unsafe Rust detected in `cli/src/main.rs`"
+  },
+  {
+    "advisory": null,
+    "category": "config",
+    "confidence": "medium",
+    "evidence": [
+      "Configuration or environment behavior may change across deploy targets."
+    ],
+    "id": "config:medium:cli-Cargo.toml",
+    "rel_path": "cli/Cargo.toml",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Config-adjacent file touched: `cli/Cargo.toml`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Dependency manifest files can change install/build behavior.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:cli-Cargo.toml",
+    "rel_path": "cli/Cargo.toml",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Dependency manifest modified in `cli/Cargo.toml`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Dependency manifest files can change install/build behavior.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:package.json",
+    "rel_path": "package.json",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Dependency manifest modified in `package.json`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Resolved dependency versions may have changed.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:cli-Cargo.lock",
+    "rel_path": "cli/Cargo.lock",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Lockfile modified in `cli/Cargo.lock`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Resolved dependency versions may have changed.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:package-lock.json",
+    "rel_path": "package-lock.json",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Lockfile modified in `package-lock.json`"
+  },
+  {
+    "advisory": null,
+    "category": "tests",
+    "confidence": "medium",
+    "evidence": [
+      "Code changed outside test paths, so verification may rely on existing coverage only."
+    ],
+    "id": "tests:medium:workspace",
+    "rel_path": null,
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "No changed test files detected in this compare"
+  }
+]

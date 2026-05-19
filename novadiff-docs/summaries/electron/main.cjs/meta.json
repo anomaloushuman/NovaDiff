@@ -1,0 +1,63 @@
+{
+  "relPath": "electron/main.cjs",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:36:18.377Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R5 added: const { pathToFileURL } = require(\"node:url\");",
+      "R22 added: } = require(\"./prefetch-summaries.cjs\");",
+      "R23 added: const { writeNovadiffDocsBundle } = require(\"./novadiff-docs-writer.cjs\");",
+      "R24 added: const { generateNovadiffDocsPdf } = require(\"./novadiff-docs-pdf.cjs\");",
+      "R28 added: } = require(\"./novadiff-docs-html.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R3",
+      "R5",
+      "R13",
+      "R17-44",
+      "R51-81",
+      "R118-119",
+      "R133-142",
+      "R224-250"
+    ],
+    "cited_changed_lines": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R5 added: const { pathToFileURL } = require(\"node:url\");",
+      "R13 added: shell,",
+      "R17 added: const {",
+      "R18 added: startSummaryPrefetchWorker,",
+      "R19 added: stopSummaryPrefetchWorker,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function createWindow (110-511)",
+      "right function windowStatePayload (64-74)",
+      "right function getTargetWindow (54-63)",
+      "right function emitWindowState (75-81)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

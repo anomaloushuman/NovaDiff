@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/App.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/App.tsx</h1>
+    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:44:37.814Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>This PR introduces several significant changes to the <code>src/App.tsx</code> file, including the addition of a new <code>insightsWidth</code> state variable, which controls the width of the insights dock. The <code>loadInsightsWidth</code> function is also introduced, which loads the initial value for the <code>insightsWidth</code> state variable from local storage. Additionally, the <code>WindowChrome</code> component is introduced, which provides a customizable window chrome for the app.</p>
+<h3>Key Changes</h3>
+<ul>
+<li>The <code>leftTitle</code>, <code>rightTitle</code>, <code>rows</code>, <code>fileStats</code>, <code>llmSettings</code>, <code>docGenTrigger</code>, <code>workspaceDocAuto</code>, and <code>onWorkspaceDocAutoChange</code> props are now passed down to the <code>FileDiff</code> component.</li>
+<li>The <code>insightsWidth</code> state variable is introduced, which controls the width of the insights dock.</li>
+<li>The <code>setInsightsWidth</code> function is used to update the <code>insightsWidth</code> state variable based on user input.</li>
+<li>The <code>clampInsightsWidth</code> function is used to ensure that the <code>insightsWidth</code> state variable does not exceed the maximum allowed value.</li>
+<li>The <code>baseName</code> function is imported from the <code>app/utils</code> module and used to extract the base name of a file path.</li>
+<li>The <code>loadInsightsWidth</code> function is introduced, which loads the initial value for the <code>insightsWidth</code> state variable from local storage.</li>
+<li>The <code>WindowChrome</code> component is introduced, which provides a customizable window chrome for the app.</li>
+<li>The <code>fileSummary</code> prop is added to the <code>FileDiff</code> component, which displays a summary of the file&#39;s changes.</li>
+<li>The <code>fileSummaryLoading</code>, <code>fileSummaryError</code>, and <code>fileSummaryDisabledReason</code> props are introduced, which control the loading state, error handling, and disabled reason for the file summary.</li>
+<li>The <code>onRequestFileSummary</code> function is introduced, which requests the file summary data when it is needed.</li>
+<li>The <code>prefetchStatus</code> prop is added to the <code>FileDiff</code> component, which controls the prefetch status of the file diff.</li>
+</ul>
+<h3>Impact</h3>
+<p>The addition of the <code>insightsWidth</code> state variable and the <code>loadInsightsWidth</code> function allows users to customize the width of the insights dock. The introduction of the <code>WindowChrome</code> component provides a more customizable window chrome for the app. The addition of the <code>fileSummary</code> prop and the <code>onRequestFileSummary</code> function allows users to view a summary of the file&#39;s changes.</p>
+<h3>Risks &amp; Follow-ups</h3>
+<p>None</p>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

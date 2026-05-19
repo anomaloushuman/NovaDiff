@@ -1,3 +1,11 @@
+import type {
+  FileSummaryEvidence,
+  DiffSelectionLineRange,
+  DiffSelectionSymbolMatch,
+  RiskSignal,
+  SelectionDocMode,
+} from "./types";
+
 export type LlmProvider = "ollama" | "lmstudio";
 
 export interface LlmSettings {
@@ -15,6 +23,36 @@ export interface LlmSummarizePayload extends LlmSettings {
   lineDeletions?: number;
   truncated?: boolean;
   diffExcerpt?: string;
+  /** Main-process prefetch: multiple diff excerpts summarized sequentially. */
+  diffChunkList?: string[];
+  summaryEvidence?: FileSummaryEvidence;
+  riskSignals?: RiskSignal[];
+  /** Multi-part streaming / chunk prompts (0-based). */
+  summaryChunkIndex?: number;
+  summaryChunkTotal?: number;
+  priorFileSummaryTail?: string;
+  /** Whole-workspace documentation (uses `workspaceContext`, ignores per-file diff). */
+  workspaceDoc?: boolean;
+  workspaceContext?: string;
+  summaryContext?: string;
+  verificationContext?: string;
+  /** Full codebase documentation for one tree root. */
+  codebaseDoc?: boolean;
+  codebaseContext?: string;
+  codebasePerspective?: "baseline" | "target";
+  /** Git-style commit subject + body (uses `commitContext`, plain-text contract). */
+  commitMessage?: boolean;
+  commitContext?: string;
+  /** Selection-scoped documentation generated from chosen diff rows. */
+  selectionDoc?: boolean;
+  selectionModeRequested?: SelectionDocMode;
+  selectionModeEffective?: SelectionDocMode;
+  selectionLabel?: string;
+  selectedRowCount?: number;
+  selectedLineRanges?: DiffSelectionLineRange[];
+  selectedDiffExcerpt?: string;
+  focusDiffExcerpt?: string;
+  selectionSymbol?: DiffSelectionSymbolMatch | null;
 }
 
 const STORAGE_KEY = "novadiff_llm_settings_v1";

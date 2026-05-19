@@ -1,0 +1,43 @@
+{
+  "relPath": "src/components/ChangedFilesTree.tsx",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:49:12.261Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R3",
+      "R97",
+      "L100 / R102-105"
+    ],
+    "cited_changed_lines": [
+      "R3 added: useDeferredValue,",
+      "R97 added: const deferredRows = useDeferredValue(rows);",
+      "L100 removed: const root = useMemo(() => buildChangedFilesTreeRoot(rows), [rows]);",
+      "R102 added: const root = useMemo(",
+      "R103 added: () => buildChangedFilesTreeRoot(deferredRows),",
+      "R104 added: [deferredRows],"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function ChangedFilesTree (89-212)",
+      "right function ChangedFilesTree (90-217)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

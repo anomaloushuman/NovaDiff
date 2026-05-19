@@ -8,7 +8,8 @@
 
 const { runCompareEngine } = require("./compare-runner.cjs");
 const { summarizeChange } = require("./llm.cjs");
-const { buildDiffExcerpt } = require("./diff-excerpt.cjs");
+const { buildDiffExcerpt, buildDiffExcerptChunks } = require("./diff-excerpt.cjs");
+const { exportFileSummaryArtifacts } = require("./file-summary-export.cjs");
 
 /** @type {Map<string, string>} */
 const summaryByPath = new Map();
@@ -91,6 +92,10 @@ async function runSummaryPrefetchLoop(opts, signal) {
     typeof plan.input_changes === "number" ? plan.input_changes : changes.length;
   const skippedGi =
     typeof plan.skipped_gitignore === "number" ? plan.skipped_gitignore : 0;
+  const skippedNd =
+    typeof plan.skipped_novadiff_docs === "number" ? plan.skipped_novadiff_docs : 0;
+  const skippedNonText =
+    typeof plan.skipped_non_text === "number" ? plan.skipped_non_text : 0;
   const eligible =
     typeof plan.eligible_changes === "number"
       ? plan.eligible_changes
@@ -103,6 +108,8 @@ async function runSummaryPrefetchLoop(opts, signal) {
     jobs: jobs.length,
     inputChanges,
     skippedGitignore: skippedGi,
+    skippedNovadiffDocs: skippedNd,
+    skippedNonText,
     eligibleChanges: eligible,
   });
 
@@ -125,19 +132,55 @@ async function runSummaryPrefetchLoop(opts, signal) {
         },
         isPackaged,
       );
-      const excerpt = buildDiffExcerpt(diffPayload);
-      const text = await summarizeChange({
-        ...llmSettings,
-        relPath,
-        kind,
-        leftLabel,
-        rightLabel,
-        lineAdditions: diffPayload?.line_additions,
-        lineDeletions: diffPayload?.line_deletions,
-        truncated: diffPayload?.truncated,
-        diffExcerpt: excerpt,
-      });
+      const chunks = buildDiffExcerptChunks(diffPayload);
+      const payload =
+        chunks.length > 1
+          ? {
+              ...llmSettings,
+              relPath,
+              kind,
+              leftLabel,
+              rightLabel,
+              lineAdditions: diffPayload?.line_additions,
+              lineDeletions: diffPayload?.line_deletions,
+              truncated: diffPayload?.truncated,
+              diffChunkList: chunks,
+              summaryEvidence: diffPayload?.summary_evidence,
+            }
+          : {
+              ...llmSettings,
+              relPath,
+              kind,
+              leftLabel,
+              rightLabel,
+              lineAdditions: diffPayload?.line_additions,
+              lineDeletions: diffPayload?.line_deletions,
+              truncated: diffPayload?.truncated,
+              diffExcerpt: chunks[0] || buildDiffExcerpt(diffPayload, 24_000),
+              summaryEvidence: diffPayload?.summary_evidence,
+            };
+      const text = await summarizeChange(payload);
       summaryByPath.set(relPath, text);
+      const docRoot = String(rightRoot ?? "").trim();
+      if (docRoot) {
+        try {
+          await exportFileSummaryArtifacts({
+            targetRoot: docRoot,
+            relPath,
+            kind,
+            leftTitle: leftLabel,
+            rightTitle: rightLabel,
+            markdown: text,
+            summaryEvidence: diffPayload?.summary_evidence,
+          });
+        } catch (err) {
+          console.warn(
+            "[NovaDiff] per-file summary export failed:",
+            relPath,
+            err,
+          );
+        }
+      }
       webContents?.send("summary-prefetch-progress", {
         state: "file-done",
         path: relPath,
@@ -146,6 +189,16 @@ async function runSummaryPrefetchLoop(opts, signal) {
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
+      if (msg.includes("Binary or non-text file (skipped)")) {
+        webContents?.send("summary-prefetch-progress", {
+          state: "file-skipped",
+          path: relPath,
+          reason: "non-text",
+          index: i + 1,
+          total: jobs.length,
+        });
+        continue;
+      }
       webContents?.send("summary-prefetch-progress", {
         state: "file-error",
         path: relPath,

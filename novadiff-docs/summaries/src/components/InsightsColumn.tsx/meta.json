@@ -1,0 +1,58 @@
+{
+  "relPath": "src/components/InsightsColumn.tsx",
+  "kind": "modified",
+  "leftTitle": "NovaDiff-main",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-14T06:54:39.872Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
+      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";"
+    ],
+    "changed_line_ranges": [
+      "R3",
+      "R6",
+      "R23",
+      "R25",
+      "R27",
+      "R43",
+      "R45",
+      "R47"
+    ],
+    "cited_changed_lines": [
+      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
+      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";",
+      "R23 added: fileSummaryChunk?: { index: number; total: number } | null;",
+      "R25 added: fileSummaryDisabledReason?: string | null;",
+      "R27 added: prefetchStatus?: string | null;",
+      "R43 added: fileSummaryChunk,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function InsightsColumn (25-166)",
+      "right function InsightsColumn (30-269)",
+      "right interface InsightsColumnProps (10-29)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}
