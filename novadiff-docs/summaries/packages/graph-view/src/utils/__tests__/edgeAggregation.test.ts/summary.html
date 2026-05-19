@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/__tests__/edgeAggregation.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/__tests__/edgeAggregation.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:44:28.774Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <strong><code>packages/graph-view/src/utils/__tests__/edgeAggregation.test.ts</code></strong> has been added. It imports <code>vitest</code> helpers, the <code>aggregateContainerEdges</code> function, and type definitions from <code>@novadiff/graph-core/types</code>. A helper <code>ce</code> creates <code>GraphEdge</code> objects with default <code>type=&quot;calls&quot;</code> and <code>direction=&quot;forward&quot;</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports (lines 1‑3)</strong>```ts
+import { describe, it, expect } from &quot;vitest&quot;;
+import { aggregateContainerEdges } from &quot;../edgeAggregation&quot;;
+import type { GraphEdge, EdgeType } from &quot;@novadiff/graph-core/types&quot;;</li>
+</ul>
+<p>```- **Helper <code>ce</code> (lines 5‑11)** – constructs a <code>GraphEdge</code> with the specified source, target, and optional type.</p>
+<ul>
+<li><strong>Test suite (lines 13‑79)</strong>  <ul>
+<li>Empty input returns empty arrays (lines 14‑18).  </li>
+<li>Intra‑container edges are preserved (lines 20‑28).  </li>
+<li>Same‑direction inter‑container edges are merged into a single aggregated edge with correct <code>count</code> and <code>edgeTypes</code> (lines 30‑45).  </li>
+<li>Opposite directions produce separate aggregated edges (lines 47‑58).  </li>
+<li>Edges whose endpoints lack a container mapping are ignored (lines 60‑65).  </li>
+<li>Container IDs containing the separator character are handled correctly via length‑prefixing (lines 67‑78).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<p>The tests exercise the aggregation logic for a range of scenarios without altering any public API. No snapshots are used, so no fixture refresh is required.</p>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>If <code>aggregateContainerEdges</code> is modified, these tests may fail; run the suite after changes.  </li>
+<li>Verify that the new file passes the repository’s TypeScript and linting checks.  </li>
+<li>No snapshot drift concerns exist.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

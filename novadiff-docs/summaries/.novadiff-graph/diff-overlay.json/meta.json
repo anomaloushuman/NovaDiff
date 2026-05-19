@@ -1,0 +1,33 @@
+{
+  "relPath": ".novadiff-graph/diff-overlay.json",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:08:15.075Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-1139"
+    ],
+    "cited_changed_lines": [
+      "R1 added: {",
+      "R2 added: \"version\": \"1.0.0\",",
+      "R3 added: \"baseBranch\": \"novadiff-compare\",",
+      "R4 added: \"generatedAt\": \"2026-05-19T20:52:49.663Z\",",
+      "R5 added: \"changedFiles\": [",
+      "R6 added: \".gitignore\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

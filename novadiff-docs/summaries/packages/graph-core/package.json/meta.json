@@ -1,0 +1,41 @@
+{
+  "relPath": "packages/graph-core/package.json",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:21:26.887Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Dependency surface or package metadata changed.",
+        "key": "dependency-manifest",
+        "label": "Dependency manifest changed",
+        "tone": "warn"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-58"
+    ],
+    "cited_changed_lines": [
+      "R1 added: {",
+      "R2 added: \"name\": \"@novadiff/graph-core\",",
+      "R3 added: \"version\": \"0.1.0\",",
+      "R4 added: \"type\": \"module\",",
+      "R5 added: \"main\": \"dist/index.js\",",
+      "R6 added: \"types\": \"dist/index.d.ts\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "dependency-manifest"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Reinstall or refresh dependencies, then run the primary build/test pipeline.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

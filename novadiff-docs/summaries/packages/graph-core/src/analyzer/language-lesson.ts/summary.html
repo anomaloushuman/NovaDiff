@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/analyzer/language-lesson.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/analyzer/language-lesson.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:55:43.010Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/analyzer/language-lesson.ts</code> is added, exposing a public API for generating language‑specific lesson prompts, detecting concepts, and parsing LLM responses into a typed result.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>GraphNode</code>, <code>GraphEdge</code> from <code>../types.js</code> (R1) and <code>LanguageConfig</code> from <code>../languages/types.js</code> (R2).  </li>
+<li><strong><code>LanguageLessonResult</code> interface</strong> (lines 4‑7) defines <code>languageNotes: string</code> and <code>concepts: Array&lt;{name: string; explanation: string}&gt;</code> (R4‑R7).  </li>
+<li><strong>Base concept patterns</strong> (<code>BASE_CONCEPT_PATTERNS</code>, lines 13‑42) and <code>buildConceptPatterns</code> (lines 48‑63) merge language‑agnostic and language‑specific keywords.  </li>
+<li><strong><code>detectLanguageConcepts</code></strong> (lines 69‑92) scans node tags, summary, and <code>languageNotes</code> for pattern matches.  </li>
+<li><strong><code>getLanguageDisplayName</code></strong> (lines 99‑107) resolves a human‑readable name from <code>LanguageConfig</code> or capitalizes the language string.  </li>
+<li><strong><code>buildLanguageLessonPrompt</code></strong> (lines 112‑147) constructs an LLM prompt that includes node metadata, relationships, and detected concepts.  </li>
+<li><strong><code>extractJson</code></strong> (lines 160‑172) extracts a JSON block from an LLM response, handling markdown fences.  </li>
+<li><strong><code>parseLanguageLessonResponse</code></strong> (lines 178‑210) parses the response into <code>LanguageLessonResult</code>, returning defaults on failure.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a typed contract for lesson data, reducing downstream type errors.  </li>
+<li>Centralizes concept detection logic; new language configs can be added without modifying prompt logic.  </li>
+<li>Prompt construction is linear in node size; overhead is negligible for typical graph nodes (unknown from the available diff/scan evidence).</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>parseLanguageLessonResponse</code> silently defaults on parse errors; add unit tests to verify graceful handling of malformed JSON.  </li>
+<li>Accuracy of <code>detectLanguageConcepts</code> depends on correct merging of base and language‑specific patterns; verify overlap handling.  </li>
+<li>Prompt length may grow with many relationships; consider trimming or summarizing relationships if token limits are a concern.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+  "relPath": "packages/graph-view/src/store.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:37:07.805Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R12 added: export type Persona = \"non-technical\" | \"junior\" | \"experienced\";",
+      "R13 added: export type NavigationLevel = \"overview\" | \"layer-detail\";",
+      "R14 added: export type NodeType = \"file\" | \"function\" | \"class\" | \"module\" | \"concept\" | \"config\" | \"document\" | \"service\" | \"table\" | \"endpoi…",
+      "R15 added: export type Complexity = \"simple\" | \"moderate\" | \"complex\";",
+      "R16 added: export type EdgeCategory = \"structural\" | \"behavioral\" | \"data-flow\" | \"dependencies\" | \"semantic\" | \"infrastructure\" | \"domain\" | …",
+      "R17 added: export type ViewMode = \"structural\" | \"domain\" | \"knowledge\";"
+    ],
+    "changed_imports": [
+      "R1 added: import { create } from \"zustand\";",
+      "R2 added: import { SearchEngine } from \"@novadiff/graph-core/search\";",
+      "R3 added: import type { SearchResult } from \"@novadiff/graph-core/search\";",
+      "R4 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R5 added: import type {",
+      "R10 added: import type { ReactFlowInstance } from \"@xyflow/react\";"
+    ],
+    "changed_line_ranges": [
+      "R1-824"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { create } from \"zustand\";",
+      "R2 added: import { SearchEngine } from \"@novadiff/graph-core/search\";",
+      "R3 added: import type { SearchResult } from \"@novadiff/graph-core/search\";",
+      "R4 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R5 added: import type {",
+      "R6 added: GraphNode,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function layerResetIfChanged (274-824)",
+      "right interface DashboardStore (100-243)",
+      "right interface FilterState (20-73)",
+      "right function buildGraphIndexes (74-99)",
+      "right function navigateTourToLayer (250-273)",
+      "right function getSortedTour (244-249)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

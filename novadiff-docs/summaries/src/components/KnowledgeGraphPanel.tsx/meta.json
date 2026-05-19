@@ -1,0 +1,59 @@
+{
+  "relPath": "src/components/KnowledgeGraphPanel.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:14:21.567Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R26 added: export interface KnowledgeGraphPanelProps {",
+      "R117 added: export function KnowledgeGraphPanel({"
+    ],
+    "changed_imports": [
+      "R1 added: import {",
+      "R13 added: import { createPortal } from \"react-dom\";",
+      "R14 added: import type { FileChange } from \"../app/types\";",
+      "R15 added: import type { LlmSettings } from \"../app/llmStorage\";",
+      "R16 added: import type { DocWorkspaceMetrics } from \"../app/docWorkspaceMetrics\";",
+      "R17 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";"
+    ],
+    "changed_line_ranges": [
+      "R1-692"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import {",
+      "R2 added: Component,",
+      "R3 added: lazy,",
+      "R4 added: Suspense,",
+      "R5 added: useCallback,",
+      "R6 added: useEffect,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function KnowledgeGraphPanel (117-692)",
+      "right function buildAutoKey (70-116)",
+      "right interface KnowledgeGraphPanelProps (26-61)",
+      "right function parseProgressMessage (62-69)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

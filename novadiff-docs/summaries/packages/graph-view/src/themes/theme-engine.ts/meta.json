@@ -1,0 +1,56 @@
+{
+  "relPath": "packages/graph-view/src/themes/theme-engine.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:50:06.718Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export function hexToRgb(hex: string): string {",
+      "R34 added: export function applyTheme(",
+      "R72 added: export function clearTheme(target: HTMLElement, config: ThemeConfig): void {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { ThemeConfig } from \"./types.ts\";",
+      "R2 added: import { getAccent, getPreset } from \"./presets.ts\";"
+    ],
+    "changed_line_ranges": [
+      "R1-90"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { ThemeConfig } from \"./types.ts\";",
+      "R2 added: import { getAccent, getPreset } from \"./presets.ts\";",
+      "R4 added: export function hexToRgb(hex: string): string {",
+      "R5 added: const h = hex.replace(\"#\", \"\");",
+      "R6 added: const n = parseInt(h, 16);",
+      "R7 added: return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function applyTheme (34-71)",
+      "right function deriveFromAccent (10-33)",
+      "right function clearTheme (72-90)",
+      "right function hexToRgb (4-9)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/GraphView.tsx · Code explanation (L978-1313) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/GraphView.tsx · Code explanation (L978-1313)</h1>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T09:50:36.834Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>useLayerDetailGraph</code> builds the node and edge data that React‑Flow renders for the layer‑detail view. It pulls state from the dashboard store (selected node, search results, diff mode, etc.), computes expanded child nodes, container overlays, and then merges all this into a final <code>nodes</code> and <code>edges</code> array that includes visual flags for search hits, selection, tours, and diff status.</h3>
+<h3>How it works1. <strong>State extraction</strong> – several <code>useDashboardStore</code> calls pull IDs and flags.2. *<em>Expanded children</em></h3>
+<ul>
+<li>– <code>useMemo</code> iterates over <code>expandedContainers</code>, looks up cached child positions, and creates <code>Node</code> objects with <code>parentId: containerId</code> and <code>extent: &quot;parent&quot;</code>.3. *<em>Overlay maps</em></li>
+<li>– <code>searchHitsByContainer</code>, <code>diffContainers</code>, <code>focusContainerIds</code>, and <code>selectionContainerIds</code> are memoized sets/maps that map container IDs to hit counts or flags.4. *<em>Node composition</em></li>
+<li>– <code>nodes</code> is a memo that concatenates <code>topo.nodes</code> and <code>expandedChildNodes</code>. For each node it: - Skips portal nodes. - For container nodes, updates <code>data</code> with <code>isExpanded</code>, <code>hasSearchHits</code>, <code>searchHitCount</code>, <code>isDiffAffected</code>, and <code>isFocusedViaChild</code> only if any flag changed. - For regular nodes, sets <code>isHighlighted</code>, <code>searchScore</code>, <code>isSelected</code>, <code>isTourHighlighted</code>, <code>isNeighbor</code>, and <code>isSelectionFaded</code> based on the current selection and search results, again only creating a new object when a visual flag changes.5. *<em>Edge inflation</em></li>
+<li>– <code>expandedEdges</code> replaces aggregated container‑to‑container edges with the underlying file‑to‑file edges from <code>topo.filteredEdges</code>. It also injects intra‑container edges for expanded containers, deduplicating by a composite key.6. *<em>Final edges</em></li>
+<li>– <code>edges</code> merges <code>expandedEdges</code> with <code>topo.portalEdges</code> and applies selection styling if a node is selected.</li>
+</ul>
+<h3>Notes for reviewers- The hook relies heavily on memoization; verify that dependencies cover all used values.- The <code>expandedChildNodes</code> logic assumes <code>containerLayoutCache</code> contains <code>childPositions</code>; if the cache is missing a child, that child is silently omitted.- Edge inflation uses a <code>seen</code> set keyed by <code>&quot;src|tgt|type&quot;</code>; ensure this key is unique enough for all edge types.- The selection‑based edge styling section is incomplete in the snippet (<code>edge.source === selectedNo</code>); confirm the final implementation matches the intended logic.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

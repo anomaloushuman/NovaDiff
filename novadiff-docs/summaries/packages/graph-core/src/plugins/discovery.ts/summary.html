@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/plugins/discovery.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/plugins/discovery.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:36:15.418Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/plugins/discovery.ts</code> introduces a lightweight plugin configuration system. It exports <code>PluginEntry</code>, <code>PluginConfig</code>, a default configuration, and helper functions for parsing and serializing JSON configs.</p>
+<h3>Key changes</h3>
+<ul>
+<li><code>import { builtinLanguageConfigs }</code> (R1) pulls language metadata for default plugin generation.  </li>
+<li><code>export interface PluginEntry</code> (R3‑R7) defines a plugin entry with <code>name</code>, <code>enabled</code>, <code>languages</code>, and optional <code>options</code>.  </li>
+<li><code>export interface PluginConfig</code> (R10‑R12) aggregates an array of <code>PluginEntry</code>.  </li>
+<li><code>DEFAULT_PLUGIN_CONFIG</code> (R14‑R24) pre‑populates a <code>tree-sitter</code> plugin with all languages that support Tree‑Sitter, derived from <code>builtinLanguageConfigs</code>.  </li>
+<li><code>parsePluginConfig(jsonString)</code> (R30‑R60) parses a JSON string, validates that <code>plugins</code> is an array and each entry has a non‑empty <code>name</code>, a non‑empty <code>languages</code> array, and an optional boolean <code>enabled</code>. On any failure it returns a shallow copy of <code>DEFAULT_PLUGIN_CONFIG</code>.  </li>
+<li><code>serializePluginConfig(config)</code> (R66‑R68) returns a pretty‑printed JSON string of the config.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a single source of truth for plugin config shape.  </li>
+<li>Centralizes default config and parsing logic, reducing duplication.  </li>
+<li>Existing code that imports <code>PluginConfig</code> can use the new module without breaking other modules.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>parsePluginConfig</code> swallows all parse errors and silently falls back to defaults; callers should detect this case or add logging.  </li>
+<li><code>options</code> is optional and only type‑checked; stricter validation may be needed if required.  </li>
+<li>Default config construction filters and maps <code>builtinLanguageConfigs</code> on each import; monitor performance if the language set grows.  </li>
+<li>Ensure any module that consumes <code>PluginConfig</code> imports this file and updates type references accordingly.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/plugin-registry.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/plugin-registry.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:12:32.518Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/plugin-registry.test.ts</code> has been added.<br>It exercises the <code>PluginRegistry</code> API and the <code>registerAllParsers</code> helper, ensuring that plugins are registered, looked‑up, and cleaned up correctly, and that file‑type parsing works for a variety of minimal inputs.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑4): <code>vitest</code> helpers, <code>PluginRegistry</code>, <code>registerAllParsers</code>, and type imports from <code>../types.js</code>.  </li>
+<li><strong><code>createMockPlugin</code> helper</strong> (lines 13‑20) builds minimal <code>AnalyzerPlugin</code> objects for the tests.  </li>
+<li><strong>Registry tests</strong> (lines 22‑140) cover:  <ul>
+<li>registration, language/file lookup, and priority handling.  </li>
+<li><code>getSupportedLanguages</code>, <code>unregister</code>, and language‑map rebuild logic.  </li>
+<li>Delegation of <code>analyzeFile</code> and <code>resolveImports</code>, including a test for a plugin that omits <code>resolveImports</code>.</li>
+</ul>
+</li>
+<li><strong>Smoke test for <code>registerAllParsers</code></strong> (lines 197‑228) registers all parsers and verifies that each returns a non‑null <code>StructuralAnalysis</code> for a minimal content snippet.<br>The test iterates over 12 file types: <code>README.md</code>, <code>config.yaml</code>, <code>config.json</code>, <code>config.toml</code>, <code>.env</code>, <code>Dockerfile</code>, <code>schema.sql</code>, <code>schema.graphql</code>, <code>types.proto</code>, <code>main.tf</code>, <code>Makefile</code>, <code>script.sh</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: The tests expose edge cases in plugin lookup and lifecycle, tightening the observable contract for <code>PluginRegistry</code>.  </li>
+<li><strong>Maintainability</strong>: <code>createMockPlugin</code> centralizes mock creation, reducing duplication.  </li>
+<li><strong>Observability</strong>: Failure messages include file‑path context (e.g., <code>analyzeFile should return a result for ${filePath}</code>), aiding debugging.  </li>
+<li><strong>Performance</strong>: The smoke test runs ~12 iterations; negligible CI impact.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: Changes to <code>PluginRegistry</code> may cause many tests to fail; run the full suite after any implementation change.  </li>
+<li><strong>Optional <code>resolveImports</code> handling</strong>: Verify that non‑code plugins (e.g., the markdown plugin test) still return <code>null</code> for imports.  </li>
+<li><strong>Parser registration</strong>: Ensure <code>registerAllParsers</code> registers all parsers; inspect the test case list for omissions.  </li>
+<li><strong>Snapshot drift</strong>: No snapshots are used; if parser outputs change, update the structural‑analysis shape assertions accordingly.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

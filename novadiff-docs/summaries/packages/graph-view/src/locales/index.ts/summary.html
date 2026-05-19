@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/locales/index.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/locales/index.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:52:01.673Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-view/src/locales/index.ts</code> (lines R1‑R32) introduces a lightweight locale system for the graph‑view module. It imports JSON locale files, defines a <code>LocaleKey</code> union, exposes a <code>Locale</code> type, and provides helper functions to retrieve and resolve locales.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R5)```ts
+import en from &quot;./en&quot;;
+import zh from &quot;./zh&quot;;
+import zhTW from &quot;./zh-TW&quot;;
+import ja from &quot;./ja&quot;;
+import ko from &quot;./ko&quot;;</li>
+</ul>
+<p><code>- **Types** (R7‑R8)</code>ts
+export type LocaleKey = &quot;en&quot; | &quot;zh&quot; | &quot;zh-TW&quot; | &quot;ja&quot; | &quot;ko&quot;;
+  export type Locale = typeof en;
+<code>- **Locale map** (R10‑R16)</code>ts
+export const locales: Record&lt;LocaleKey, Locale&gt; = {
+    en,
+    zh,
+    &quot;zh-TW&quot;: zhTW,
+    ja,
+    ko,
+  };
+<code>- **Accessor** (R18‑R20)</code>ts
+export function getLocale(key: LocaleKey): Locale {
+    return locales[key] ?? locales.en;
+  }
+<code>- **Resolver** (R22‑R29)</code>ts
+export function resolveLocaleKey(lang: string | undefined): LocaleKey {
+    if (!lang) return &quot;en&quot;;
+    const normalized = lang.toLowerCase().replace(/[_\s]/g, &quot;-&quot;);
+    if (normalized === &quot;zh&quot; || normalized === &quot;chinese&quot; || normalized === &quot;zh-cn&quot;) return &quot;zh&quot;;
+    if (normalized === &quot;zh-tw&quot; || normalized === &quot;traditional-chinese&quot;) return &quot;zh-TW&quot;;
+    if (normalized === &quot;ja&quot; || normalized === &quot;japanese&quot;) return &quot;ja&quot;;
+    if (normalized === &quot;ko&quot; || normalized === &quot;korean&quot;) return &quot;ko&quot;;
+    return &quot;en&quot;;
+  }
+<code>- **Re‑exports** (R32)</code>ts
+export { en, zh, zhTW as &quot;zh-TW&quot;, ja, ko };</p>
+<pre><code class="language-###">
+  
+- Centralizes locale definitions and resolution logic, simplifying future language additions.  
+- Provides deterministic lookup with a clear fallback to `en`.  
+- No existing code is altered; consumers must import from the new path to use the locale system.
+
+### Risks &amp; follow‑ups  
+- **Missing locale files**: Verify that `en.json`, `zh.json`, `zh-TW.json`, `ja.json`, and `ko.json` exist and export valid objects.  
+- **Alias correctness**: Ensure that `zhTW as &quot;zh-TW&quot;` re‑export works for downstream consumers.  
+- **Resolver edge cases**: Add tests for uncommon language strings (e.g., `&quot;zh_cn&quot;`, `&quot;japanese&quot;`) to confirm mapping.  
+- **Type safety**: Run the TypeScript compiler to confirm that `LocaleKey` and `Locale` types are inferred correctly across the repo.
+</code></pre>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "relPath": "src/components/ui/WorkspaceStage.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:28:28.885Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export interface WorkspaceStageProps {",
+      "R9 added: export function WorkspaceStage({ pageKey, children }: WorkspaceStageProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { ReactNode } from \"react\";",
+      "R2 added: import { usePrefersReducedMotion } from \"../../app/usePrefersReducedMotion\";"
+    ],
+    "changed_line_ranges": [
+      "R1-22"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { ReactNode } from \"react\";",
+      "R2 added: import { usePrefersReducedMotion } from \"../../app/usePrefersReducedMotion\";",
+      "R4 added: export interface WorkspaceStageProps {",
+      "R5 added: pageKey: string;",
+      "R6 added: children: ReactNode;",
+      "R7 added: }"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function WorkspaceStage (9-22)",
+      "right interface WorkspaceStageProps (4-8)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

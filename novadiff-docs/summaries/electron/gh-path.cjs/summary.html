@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/gh-path.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/gh-path.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:10:58.111Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/gh-path.cjs</code> is added to resolve the GitHub CLI executable. It introduces <code>&quot;use strict&quot;</code> and imports <code>fssync</code>, <code>os</code>, <code>path</code>, and <code>spawnSync</code>. The module caches the resolved path in <code>cachedGhPath</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> added at lines 3‑6.  </li>
+<li><strong><code>extraPathDirs</code></strong> (lines 15‑31) returns common bin directories: Homebrew, user‑bin, and a Windows‑specific <code>GitHub CLI</code> path.  </li>
+<li><strong><code>augmentPathForCli</code></strong> (lines 38‑51) merges these dirs into the current <code>PATH</code>, deduplicating entries.  </li>
+<li><strong><code>ghCandidatePaths</code></strong> (lines 53‑60) lists typical <code>gh</code> locations.  </li>
+<li><strong><code>resolveViaLoginShell</code></strong> (lines 63‑90) runs <code>/bin/zsh</code> or <code>/bin/bash</code> with <code>-ilc</code>/<code>-lc</code> to locate <code>gh</code> on non‑Windows systems.  </li>
+<li><strong><code>verifyGh</code></strong> (lines 92‑98) executes <code>gh --version</code> to confirm the binary.  </li>
+<li><strong><code>resolveGhExecutable</code></strong> (lines 104‑138) orchestrates the search: checks cache, candidate paths, login shell, then <code>which</code>/<code>where</code>; caches the result and falls back to <code>&quot;gh&quot;</code> or <code>&quot;gh.exe&quot;</code>.  </li>
+<li><strong><code>clearGhCache</code></strong> (lines 140‑142) resets the cache.  </li>
+<li><strong><code>isGhInstalled</code></strong> (lines 144‑150) verifies installation status.  </li>
+<li><strong><code>ghInstallHint</code></strong> (lines 152‑160) returns platform‑specific install guidance.  </li>
+<li><strong><code>ghNotFoundError</code></strong> (lines 162‑164) creates an error containing the hint.  </li>
+<li><strong>Exports</strong> (lines 166‑173) expose the public API.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes gh resolution logic and caching, reducing repeated lookups.  </li>
+<li>Provides actionable install hints in error messages.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>augmentPathForCli</code> returns a new environment object; ensure it does not mutate the caller’s <code>process.env</code>.  </li>
+<li><code>resolveViaLoginShell</code> depends on <code>/bin/zsh</code> or <code>/bin/bash</code>; if neither exists, the fallback must still locate <code>gh</code>.  </li>
+<li>Cached path may become stale if <code>gh</code> is installed or removed during a session; <code>clearGhCache</code> should be invoked accordingly.  </li>
+<li>Add unit tests for helpers, especially <code>ghCandidatePaths</code> and <code>ghInstallHint</code>, to guard against future changes.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

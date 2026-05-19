@@ -12,7 +12,7 @@ import {
   GitCompareArrows,
   Loader2,
 } from "lucide-react";
-import { LlmSummaryMarkdown } from "./LlmSummaryMarkdown";
+import { SelectedDiffSummaryModal } from "./SelectedDiffSummaryModal";
 
 interface DiffWorkspaceProps {
   leftRoot: string;
@@ -24,6 +24,7 @@ interface DiffWorkspaceProps {
   onSwapRoots: () => void;
   onCompare: () => void;
   busy: boolean;
+  compareStatusMessage?: string | null;
   error: string | null;
   compared: boolean;
   leftTitle: string;
@@ -51,6 +52,8 @@ interface DiffWorkspaceProps {
   selectedDiffSummary: string | null;
   selectedDiffSummaryLoading: boolean;
   selectedDiffSummaryError: string | null;
+  selectedDiffSummaryModalOpen: boolean;
+  onCloseSelectedDiffSummaryModal: () => void;
 }
 
 export function DiffWorkspace({
@@ -63,6 +66,7 @@ export function DiffWorkspace({
   onSwapRoots,
   onCompare,
   busy,
+  compareStatusMessage,
   error,
   compared,
   leftTitle,
@@ -87,6 +91,8 @@ export function DiffWorkspace({
   selectedDiffSummary,
   selectedDiffSummaryLoading,
   selectedDiffSummaryError,
+  selectedDiffSummaryModalOpen,
+  onCloseSelectedDiffSummaryModal,
 }: DiffWorkspaceProps) {
   const hasDiffSelection = selectedDiffRows.length > 0;
   return (
@@ -189,6 +195,19 @@ export function DiffWorkspace({
           {error && <p className="workspace-error">{error}</p>}
         </div>
       </div>
+
+      {busy ? (
+        <div className="workspace-activity-banner doc-state-enter" role="status" aria-live="polite">
+          <Loader2 size={16} strokeWidth={2} className="spin-ic" aria-hidden />
+          <div className="workspace-activity-banner-text">
+            <strong>Comparing folders</strong>
+            <span>{compareStatusMessage ?? "Rust engine is scanning and hashing files…"}</span>
+          </div>
+          <div className="workspace-activity-track is-indeterminate" aria-hidden>
+            <div className="workspace-activity-fill" />
+          </div>
+        </div>
+      ) : null}
 
       {compared && fileCount === 0 && (
         <p className="workspace-note">No differences found between these folders.</p>
@@ -329,17 +348,17 @@ export function DiffWorkspace({
               )}
             </div>
           </div>
-          {selectedDiffSummary ? (
-            <section className="selected-diff-doc-panel llm-summary-md-wrap">
-              <div className="selected-diff-doc-head">
-                <h2>Selected diff documentation</h2>
-                {selectedDiffDocLabel ? <span>{selectedDiffDocLabel}</span> : null}
-              </div>
-              <LlmSummaryMarkdown source={selectedDiffSummary} />
-            </section>
-          ) : null}
         </>
       )}
+
+      <SelectedDiffSummaryModal
+        open={selectedDiffSummaryModalOpen}
+        label={selectedDiffDocLabel}
+        summary={selectedDiffSummary}
+        loading={selectedDiffSummaryLoading}
+        error={selectedDiffSummaryError}
+        onClose={onCloseSelectedDiffSummaryModal}
+      />
 
       {!compared && !busy && !error && (
         <div className="workspace-empty">

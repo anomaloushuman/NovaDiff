@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/launchSequence.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/launchSequence.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:04:12.736Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/app/launchSequence.ts</code> is a new module that exports constants and helper functions for tracking whether the app’s launch sequence has finished. The file adds lines 1‑8 (constants), line 10 (type), lines 12‑18 (<code>readLaunchSkipped</code>), and lines 20‑26 (<code>markLaunchComplete</code>).</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Constants</strong>  <ul>
+<li><code>LAUNCH_SESSION_KEY = &quot;novadiff-launch-done-v1&quot;</code> (R1) – key used in <code>sessionStorage</code>.  </li>
+<li><code>LAUNCH_HOLD_MS = 2400</code> (R4) – minimum display time on the finished boot screen.  </li>
+<li><code>LAUNCH_HOLD_SKIP_AFTER_MS = 900</code> (R6) – earliest point the user may skip the hold.  </li>
+<li><code>LAUNCH_EXIT_FADE_MS = 580</code> (R7) – fade‑out duration.  </li>
+<li><code>LAUNCH_REVEAL_MS = 1200</code> (R8) – reveal animation duration.</li>
+</ul>
+</li>
+<li><strong>Type</strong>  <ul>
+<li><code>LaunchPhase = &quot;boot&quot; | &quot;reveal&quot; | &quot;ready&quot;</code> (R10).</li>
+</ul>
+</li>
+<li><strong>Functions</strong>  <ul>
+<li><code>readLaunchSkipped()</code> (R12‑R18) reads the flag from <code>sessionStorage</code>, returning <code>true</code> if the key equals <code>&quot;1&quot;</code>. Errors are caught and <code>false</code> is returned.  </li>
+<li><code>markLaunchComplete()</code> (R20‑R26) writes <code>&quot;1&quot;</code> to <code>sessionStorage</code> under the key, with a silent catch for storage errors.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a single source of truth for launch completion that survives page reloads.  </li>
+<li>Centralizes timing constants, simplifying future adjustments.  </li>
+<li>Uses <code>sessionStorage</code>; if unavailable (e.g., in privacy‑mode browsers), the try/catch prevents crashes but silently ignores failures.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Storage availability</strong> – verify that <code>sessionStorage</code> is accessible in all target environments; consider a fallback if it is blocked.  </li>
+<li><strong>Silent error handling</strong> – the catch blocks swallow errors; adding diagnostics could surface hidden issues.  </li>
+<li><strong>Dead code</strong> – the module’s exports are not referenced elsewhere in the diff; ensure they are imported where needed.  </li>
+<li><strong>Testing</strong> – no unit tests cover this module; tests should confirm flag persistence and error handling.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

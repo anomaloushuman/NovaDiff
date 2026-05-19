@@ -1,0 +1,64 @@
+{
+  "relPath": "packages/graph-view/src/utils/elk-layout.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:00:13.577Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export interface ElkChild {",
+      "R16 added: export interface ElkEdge {",
+      "R22 added: export interface ElkInput {",
+      "R56 added: export function repairElkInput(",
+      "R214 added: export interface ElkLayoutOptions {",
+      "R218 added: export interface ElkLayoutResult {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R2 added: import { loadElk } from \"./elk-bundled\";",
+      "R3 added: import { NODE_WIDTH, NODE_HEIGHT } from \"./layout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-243"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R2 added: import { loadElk } from \"./elk-bundled\";",
+      "R3 added: import { NODE_WIDTH, NODE_HEIGHT } from \"./layout\";",
+      "R5 added: export interface ElkChild {",
+      "R6 added: id: string;",
+      "R7 added: width?: number;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function repairElkInput (56-213)",
+      "right function applyElkLayout (223-243)",
+      "right interface ElkInput (22-34)",
+      "right interface ElkChild (5-15)",
+      "right function makeIssue (44-51)",
+      "right interface ElkEdge (16-21)",
+      "right interface ElkLayoutResult (218-222)",
+      "right interface RepairResult (39-43)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

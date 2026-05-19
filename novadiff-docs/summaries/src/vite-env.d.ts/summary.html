@@ -26,23 +26,86 @@
 <body>
   <header class="top">
     <h1>src/vite-env.d.ts</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:45:22.280Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:21:59.533Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a change in the <code>src/vite-env.d.ts</code> file between the NovaDiff-main and NovaDiff branches. The file is part of the Vite configuration for the Novadiff app, and it defines the types used throughout the project.</p>
-<h3>Key changes</h3>
-<p>The most significant change in this diff is the addition of new interfaces and exports related to the NovadiffDocs feature. These interfaces and exports were added to allow for the generation of documentation artifacts for the app&#39;s features.</p>
+<p><code>src/vite-env.d.ts</code> now expands the Electron API surface and global window typings.  </p>
 <ul>
-<li>New interfaces: <code>NovadiffDocsWritePayload</code>, <code>SummaryPrefetchPayload</code>, <code>FileSummaryExportPayload</code>, <code>SelectionSummaryExportPayload</code>, <code>FileSummaryMarkdownReadPayload</code>, <code>SelectionSummaryMarkdownReadPayload</code>.</li>
-<li>New exports: <code>export interface SummaryPrefetchPayload { ... }</code>, <code>export interface FileSummaryExportPayload { ... }</code>, <code>export interface SelectionSummaryExportPayload extends SelectionDocArtifactMeta { ... }</code>, <code>export interface SelectionSummaryMarkdownReadPayload { ... }</code>, <code>export interface NovadiffDocsWritePayload { ... }</code>.</li>
+<li><p>New imports for Git‑related types are added (lines 21‑31).  </p>
+</li>
+<li><p>The <code>ElectronAPI</code> interface receives dozens of additional methods covering knowledge‑graph handling, Git tooling, GitHub integration, workspace management, and progress callbacks (changed ranges 207‑374).  </p>
+</li>
+<li><p>A global <code>Window</code> interface is declared to expose <code>electronAPI</code> (lines 378‑380).  </p>
+</li>
+<li><p>An <code>export {};</code> guard is appended to enforce module scope (line 383).</p>
+</li>
 </ul>
-<p>These changes are likely to impact the correctness, maintainability, and performance of the app, as they add new functionality and increase the complexity of the codebase. However, the evidence provided in this diff does not suggest any significant regression risks or compatibility issues.</p>
+<h3>Key changes</h3>
+<ul>
+<li><p>*<em>Imports</em></p>
+</li>
+<li><p>– <code>import type { GitRepoStatus, GitToolingStatus, GithubPullRequestSummary, GithubRepoSummary, LocalRepoMatch, PrCompareRoots, PublishExecutePayload, PublishExecuteResult, PublishPreview } from &quot;./app/gitTypes&quot;;</code> (lines 21‑31).  </p>
+</li>
+<li><p>*<em>API surface</em></p>
+</li>
+<li><p>– <code>ElectronAPI</code> now includes methods such as <code>buildKnowledgeGraph</code>, <code>readKnowledgeGraph</code>, <code>gitDetectTooling</code>, <code>gitRepoStatus</code>, <code>githubListRepos</code>, <code>workspaceCreate</code>, <code>workspaceSetActive</code>, <code>gitBlameAtRef</code>, and many others (see changed ranges 207‑374).  </p>
+</li>
+<li><p>*<em>Progress callbacks</em></p>
+</li>
+<li><p>– <code>onKnowledgeGraphProgress</code> and <code>onEngineProgress</code> are added to expose runtime progress.  </p>
+</li>
+<li><p>*<em>Global window</em></p>
+</li>
+<li><p>– <code>declare global { interface Window { electronAPI?: ElectronAPI; } }</code> (lines 378‑380).  </p>
+</li>
+<li><p>*<em>Export guard</em></p>
+</li>
+<li><p>– <code>export {};</code> (line 383).</p>
+</li>
+</ul>
 <h3>Impact</h3>
-<p>The addition of these interfaces and exports should not have a significant impact on the correctness or maintainability of the app. The new interfaces and exports are well-documented and follow established naming conventions, making it easy for other developers to understand their purpose and usage.</p>
-<p>The performance impact of these changes is likely to be minimal, as they do not introduce any new dependencies or introduce complex algorithms that could slow down the app&#39;s execution. However, the increased complexity of the codebase may make it more difficult to maintain and update in the future.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>There are no significant regression risks or compatibility issues identified in this diff. However, to ensure that the NovadiffDocs feature continues to function correctly and efficiently, it would be wise to verify that the new interfaces and exports do not introduce any unexpected behavior or performance issues. Additionally, it would be helpful to conduct a thorough review of the diff to ensure that all changes are intentional and necessary.</p>
+<ul>
+<li><p>*<em>Type safety</em></p>
+</li>
+<li><p>– TypeScript consumers now see a richer API; missing imports may cause compile errors if not updated.  </p>
+</li>
+<li><p>*<em>Runtime expectations</em></p>
+</li>
+<li><p>– Renderer calls to the new methods will throw <code>undefined</code> if the corresponding main‑process implementations are absent.  </p>
+</li>
+<li><p>*<em>Maintainability</em></p>
+</li>
+<li><p>– The interface now contains ~30 new members, increasing the surface that requires documentation, testing, and future refactoring.  </p>
+</li>
+<li><p>*<em>Compatibility</em></p>
+</li>
+<li><p>– Existing code that imports <code>ElectronAPI</code> will now see additional members; older Electron builds may not support all new methods, potentially breaking backward compatibility.  </p>
+</li>
+<li><p>*<em>Observability</em></p>
+</li>
+<li><p>– New progress callbacks provide hooks for UI feedback but require careful cleanup to avoid memory leaks.</p>
+</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><p>*<em>Unimplemented methods</em></p>
+</li>
+<li><p>– Verify that every new <code>ElectronAPI</code> member has a corresponding implementation in the main process; otherwise, renderer calls will fail.  </p>
+</li>
+<li><p>*<em>Type mismatches</em></p>
+</li>
+<li><p>– Ensure the imported Git types are correctly exported from <code>./app/gitTypes</code>; missing re‑exports will break compilation.  </p>
+</li>
+<li><p>*<em>Test coverage</em></p>
+</li>
+<li><p>– Add unit tests for the new API surface, especially for <code>buildKnowledgeGraph</code> and GitHub integration paths.  </p>
+</li>
+<li><p>*<em>Performance</em></p>
+</li>
+<li><p>– Monitor the overhead of the new progress callbacks; excessive event emission could degrade UI responsiveness.</p>
+</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

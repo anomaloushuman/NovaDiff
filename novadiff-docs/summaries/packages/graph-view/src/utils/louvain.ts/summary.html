@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/louvain.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/louvain.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:03:37.756Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new utility <code>packages/graph-view/src/utils/louvain.ts</code> introduces Louvain community detection for a subset of graph nodes and edges. It exports <code>detectCommunities</code>, which builds an undirected graph, runs <code>graphology-communities-louvain</code>, and returns a <code>Map&lt;string, number&gt;</code> of node‑to‑community assignments.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>New imports</strong>: <code>Graph</code> from <code>graphology</code>, <code>louvain</code> from <code>graphology-communities-louvain</code>, and <code>GraphEdge</code> type from <code>@novadiff/graph-core/types</code>.  </li>
+<li><strong><code>detectCommunities</code> implementation</strong>:  <ul>
+<li>Builds a graph with <code>new Graph({ type: &quot;undirected&quot;, multi: false })</code>.  </li>
+<li>Adds only nodes in <code>nodeIds</code> and edges whose endpoints are both in that set, filtering out self‑loops and duplicates.  </li>
+<li>Calls <code>louvain(g)</code> and maps the result to a <code>Map</code>.  </li>
+<li>Defensive reassignment: any <code>-1</code> sentinels are replaced with unique IDs beyond the current maximum.</li>
+</ul>
+</li>
+<li><strong>Export</strong>: The function is exported for external use.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Guarantees unique community IDs even if the underlying library omits nodes or returns <code>-1</code>.  </li>
+<li><strong>Performance</strong>: Graph construction and edge filtering add O(|E|) overhead; acceptable for moderate graph sizes but may impact large datasets.  </li>
+<li><strong>Maintainability</strong>: Centralizes community detection logic; future updates to <code>graphology-communities-louvain</code> can be isolated here.  </li>
+<li><strong>Compatibility</strong>: No changes to existing APIs; simply adds a new helper.  </li>
+<li><strong>Observability</strong>: No logging; consumers should handle the returned <code>Map</code> directly.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Library version drift</strong>: Verify that <code>graphology-communities-louvain</code> v2 still returns <code>Record&lt;string, number&gt;</code> and that the defensive logic remains necessary.  </li>
+<li><strong>Edge cases</strong>: Test with disconnected nodes, self‑loops, and duplicate edges to ensure the filtering logic behaves as intended.  </li>
+<li><strong>Performance regression</strong>: Benchmark on large node sets to confirm the graph construction cost is acceptable.  </li>
+<li><strong>Type safety</strong>: Ensure <code>GraphEdge</code> type aligns with the edges passed to <code>detectCommunities</code>; mismatches could cause runtime errors.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

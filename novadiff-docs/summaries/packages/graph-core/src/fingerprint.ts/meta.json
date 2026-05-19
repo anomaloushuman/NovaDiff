@@ -1,0 +1,66 @@
+{
+  "relPath": "packages/graph-core/src/fingerprint.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:39:39.861Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R9 added: export interface FunctionFingerprint {",
+      "R17 added: export interface ClassFingerprint {",
+      "R25 added: export interface ImportFingerprint {",
+      "R30 added: export interface FileFingerprint {",
+      "R41 added: export interface FingerprintStore {",
+      "R48 added: export type ChangeLevel = \"NONE\" | \"COSMETIC\" | \"STRUCTURAL\";"
+    ],
+    "changed_imports": [
+      "R1 added: import { createHash } from \"node:crypto\";",
+      "R2 added: import { readFileSync, existsSync } from \"node:fs\";",
+      "R3 added: import { join } from \"node:path\";",
+      "R4 added: import type { StructuralAnalysis } from \"./types.js\";",
+      "R5 added: import type { PluginRegistry } from \"./plugins/registry.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-385"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { createHash } from \"node:crypto\";",
+      "R2 added: import { readFileSync, existsSync } from \"node:fs\";",
+      "R3 added: import { join } from \"node:path\";",
+      "R4 added: import type { StructuralAnalysis } from \"./types.js\";",
+      "R5 added: import type { PluginRegistry } from \"./plugins/registry.js\";",
+      "R7 added: // ---- Fingerprint types ----"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function compareFingerprints (131-252)",
+      "right function analyzeChanges (297-385)",
+      "right function extractFileFingerprint (79-130)",
+      "right function buildFingerprintStore (253-296)",
+      "right interface ChangeAnalysis (56-69)",
+      "right interface FileFingerprint (30-40)",
+      "right function contentHash (70-78)",
+      "right interface FingerprintStore (41-49)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

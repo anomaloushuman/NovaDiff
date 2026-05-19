@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/ignore-generator.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/ignore-generator.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:08:38.348Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/ignore-generator.test.ts</code> (lines R1‑162) validates <code>generateStarterIgnoreFile</code>. It imports <code>vitest</code> helpers, the generator, and Node fs/path/os APIs, then creates a temporary project directory for each test.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R5): <code>vitest</code> functions, <code>generateStarterIgnoreFile</code>, <code>mkdirSync</code>, <code>rmSync</code>, <code>writeFileSync</code>, <code>join</code>, <code>tmpdir</code>.  </li>
+<li><strong>Setup/teardown</strong> (R7‑R17): <code>beforeEach</code> creates a unique temp dir via <code>tmpdir()</code> and <code>mkdirSync</code>; <code>afterEach</code> removes it with <code>rmSync</code>.  </li>
+<li><strong>Header tests</strong> (R19‑R24): assert that the output contains <code>.novadiffignore</code>, “same as .gitignore”, and “Built‑in defaults”.  </li>
+<li><strong>Suggestion logic</strong> (R26‑R57): verify all suggested patterns are commented out and that directory‑based suggestions (<code>__tests__</code>, <code>docs</code>, <code>test</code>, <code>tests</code>, <code>fixtures</code>, <code>examples</code>, <code>.storybook</code>, <code>migrations</code>, <code>scripts</code>) appear only when the directory exists.  </li>
+<li><strong>Generic test file suggestions</strong> (R84‑R89): always include <code>*.snap</code>, <code>*.test.*</code>, <code>*.spec.*</code>.  </li>
+<li><strong>.gitignore integration</strong> (R98‑R161): create <code>.gitignore</code> files with <code>writeFileSync</code>, check that non‑default patterns are prefixed with <code>#</code>, comments/blank lines are ignored, trailing‑slash normalization works, and the section is omitted when no <code>.gitignore</code> or all patterns are defaults.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Adds comprehensive guardrails for <code>generateStarterIgnoreFile</code>.  </li>
+<li>Expands coverage for directory suggestions and <code>.gitignore</code> parsing.  </li>
+<li>Tests perform filesystem writes; cleanup is handled in <code>afterEach</code>, but failures could leave temp dirs.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Temp dir uniqueness</strong>: <code>Date.now()</code> may collide under heavy parallel runs; consider <code>crypto.randomUUID()</code> if flaky.  </li>
+<li><strong>Cleanup reliability</strong>: ensure <code>afterEach</code> runs even on failures to avoid orphaned directories.  </li>
+<li><strong>Environment permissions</strong>: tests assume write access to the OS temp directory; verify in CI.  </li>
+<li><strong>API changes</strong>: if <code>generateStarterIgnoreFile</code> signature changes, these tests will fail; maintainers should update imports accordingly.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

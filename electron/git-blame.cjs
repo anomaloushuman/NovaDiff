@@ -2,12 +2,8 @@
 
 const { spawnSync } = require("node:child_process");
 
-/** @type {Map<string, { lineAuthors: string[]; owners: Array<{ author: string; lineCount: number; ratio: number }> }>} */
+/** @type {Map<string, object>} */
 const blameCache = new Map();
-
-function cacheKey(root, relPath) {
-  return `${root}::${relPath}`;
-}
 
 function parseBlamePorcelain(stdout) {
   const lines = String(stdout ?? "").split(/\r?\n/);
@@ -38,30 +34,50 @@ function parseBlamePorcelain(stdout) {
   return { lineAuthors, owners };
 }
 
-function blameFileOwnership(root, relPath) {
-  const repoRoot = String(root ?? "").trim();
+function blameFileAtRef(repoRoot, ref, relPath) {
+  const root = String(repoRoot ?? "").trim();
   const safeRelPath = String(relPath ?? "").trim();
-  if (!repoRoot || !safeRelPath) {
-    return { lineAuthors: [], owners: [] };
+  const gitRef = String(ref ?? "HEAD").trim() || "HEAD";
+  if (!root || !safeRelPath) {
+    return { lineAuthors: [], owners: [], ref: gitRef, relPath: safeRelPath, error: null };
   }
-  const key = cacheKey(repoRoot, safeRelPath);
+  const key = `${root}::${gitRef}::${safeRelPath}`;
   const cached = blameCache.get(key);
   if (cached) {
     return cached;
   }
-  const res = spawnSync("git", ["-C", repoRoot, "blame", "--line-porcelain", "--", safeRelPath], {
-    encoding: "utf8",
-    maxBuffer: 32 * 1024 * 1024,
-    windowsHide: true,
-  });
+  const res = spawnSync(
+    "git",
+    ["-C", root, "blame", gitRef, "--line-porcelain", "--", safeRelPath],
+    {
+      encoding: "utf8",
+      maxBuffer: 32 * 1024 * 1024,
+      windowsHide: true,
+    },
+  );
   if (res.error || res.status !== 0) {
-    const empty = { lineAuthors: [], owners: [] };
+    const empty = {
+      lineAuthors: [],
+      owners: [],
+      ref: gitRef,
+      relPath: safeRelPath,
+      error: (res.stderr || res.stdout || "").trim().slice(0, 300) || null,
+    };
     blameCache.set(key, empty);
     return empty;
   }
-  const parsed = parseBlamePorcelain(res.stdout);
+  const parsed = {
+    ...parseBlamePorcelain(res.stdout),
+    ref: gitRef,
+    relPath: safeRelPath,
+    error: null,
+  };
   blameCache.set(key, parsed);
   return parsed;
 }
 
-module.exports = { blameFileOwnership };
+function blameFileOwnership(root, relPath) {
+  return blameFileAtRef(root, "HEAD", relPath);
+}
+
+module.exports = { blameFileOwnership, blameFileAtRef, parseBlamePorcelain };

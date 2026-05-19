@@ -1,0 +1,50 @@
+{
+  "relPath": "packages/graph-view/src/hooks/useIsMobile.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:47:26.669Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export function useIsMobile(breakpoint: number = DEFAULT_BREAKPOINT): boolean {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useState } from \"react\";"
+    ],
+    "changed_line_ranges": [
+      "R1-21"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R3 added: const DEFAULT_BREAKPOINT = 768;",
+      "R5 added: export function useIsMobile(breakpoint: number = DEFAULT_BREAKPOINT): boolean {",
+      "R6 added: const query = `(max-width: ${breakpoint - 1}px)`;",
+      "R7 added: const [isMobile, setIsMobile] = useState<boolean>(() => {",
+      "R8 added: if (typeof window === \"undefined\") return false;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useIsMobile (5-21)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

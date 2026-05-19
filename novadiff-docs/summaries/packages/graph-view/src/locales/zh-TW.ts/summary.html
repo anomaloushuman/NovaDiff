@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/locales/zh-TW.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/locales/zh-TW.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:53:19.796Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new locale file <strong><code>packages/graph-view/src/locales/zh-TW.ts</code></strong> has been added.<br>It defines Traditional Chinese translations for the graph‑view UI, with an export of the locale object and a default export.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Export declaration</strong> – <code>export const zhTW = { … }</code> (added at line 1).  </li>
+<li><strong>Default export</strong> – <code>export default zhTW;</code> (added at line 272).  </li>
+<li><strong>Translation coverage</strong> – The object contains sections such as <code>common</code>, `project</li>
+</ul>
+<h3>Overview</h3>
+<p><code>, </code>nodeInfo<code>, </code>fileExplorer<code>, </code>filterPanel<code>, </code>personaSelector<code>, </code>sidebar<code>, </code>mobile<code>, </code>drawer<code>, </code>domainView<code>, </code>detailLevel<code>, </code>nodeTypeLabels<code>, </code>tokenGate<code>, </code>diffToggle<code>, </code>learnPanel<code>, </code>layer<code>, </code>breadcrumb<code>, </code>warningBanner<code>, </code>themePicker<code>, </code>codeViewer<code>, </code>customNode<code>, </code>ariaLabels<code>, </code>nodeTypeFilter<code>, </code>keyboardShortcuts<code>, </code>search<code>, </code>export<code>, </code>edgeLabels<code>, </code>pathFinder`.  </p>
+<ul>
+<li>No other files were modified; the diff consists solely of this new file.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Feature</strong> – Enables the graph‑view UI to be displayed in Traditional Chinese once the locale is registered.  </li>
+<li><strong>Integration</strong> – The locale must be added to the i18n registry; otherwise it will not appear as an option.  </li>
+<li><strong>Build</strong> – Adding a TypeScript file increases the bundle size by a few kilobytes (exact size unknown from the diff).  </li>
+<li><strong>Testing</strong> – Unit tests that load locales should include <code>zhTW</code> to verify that all keys are present.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing registration</strong> – If <code>zhTW</code> is not added to the locale registry, the UI will default to another language. (unknown from the available diff/scan evidence)  </li>
+<li><strong>Translation accuracy</strong> – Manual review of key strings (e.g., <code>noGraphLoaded</code>, <code>focus</code>, <code>edgeLabels</code>) is recommended to ensure correctness.  </li>
+<li><strong>Edge‑label consistency</strong> – The nested <code>imports</code>, <code>exports</code>, etc., must match existing edge‑label keys; a mismatch could break rendering. (unknown from the available diff/scan evidence)  </li>
+<li><strong>Build lint</strong> – Run <code>npm run lint</code> and <code>npm run build</code> to confirm the new file passes TypeScript checks. (unknown from the available diff/scan evidence)</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

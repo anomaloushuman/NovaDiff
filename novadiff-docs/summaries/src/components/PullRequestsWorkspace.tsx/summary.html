@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/PullRequestsWorkspace.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/PullRequestsWorkspace.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:15:35.966Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>PullRequestsWorkspace</code> component is added at <code>src/components/PullRequestsWorkspace.tsx</code> (lines 28‑324).<br>It provides a UI for browsing GitHub repositories, discovering local clones, and launching pull‑request comparisons in the NovaDiff desktop app.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑10): React hooks, Lucide icons, and types from <code>../app/gitTypes</code> (<code>GithubPullRequestSummary</code>, <code>GithubRepoSummary</code>, <code>GitToolingStatus</code>, <code>LocalRepoMatch</code>).  </li>
+<li><strong>Props interface</strong> (lines 17‑26): <code>PullRequestsWorkspaceProps</code> defines <code>onOpenCompare</code> and <code>onUseRepoAsTarget</code> callbacks.  </li>
+<li><strong>State</strong> (lines 33‑42): <code>tooling</code>, <code>repos</code>, <code>selectedRepo</code>, <code>localMatches</code>, <code>prs</code>, <code>loading</code>, <code>prsLoading</code>, <code>error</code>, <code>repoFilter</code>, <code>busyPr</code>.  </li>
+<li><strong>API calls</strong> (lines 46‑68, 74‑87, 89‑113, 115‑142): use <code>window.electronAPI</code> methods <code>gitDetectTooling</code>, <code>githubListRepos</code>, <code>gitMatchLocalRepo</code>, <code>githubListPrs</code>, <code>githubPrCompareRoots</code>.  </li>
+<li><strong>UI</strong> (lines 153‑324): header with refresh button, status cards, login prompt, repo list with search, PR list with compare buttons, and local‑clone actions.  </li>
+<li><strong>Error handling</strong>: descriptive messages set when API calls fail or prerequisites are missing.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Runtime dependency</strong>: the component requires all referenced <code>electronAPI</code> methods; missing ones will cause runtime errors.  </li>
+<li><strong>Large lists</strong>: the component renders full repo and PR arrays (<code>filteredRepos.map</code>, <code>prs.map</code>) without virtualization, which could affect responsiveness for many items.  </li>
+<li><strong>State updates</strong>: no cancellation logic for pending promises; long‑running API calls may update state after the component unmounts.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>API contract</strong>: verify that <code>window.electronAPI</code> exposes <code>gitDetectTooling</code>, <code>githubListRepos</code>, <code>gitMatchLocalRepo</code>, <code>githubListPrs</code>, and <code>githubPrCompareRoots</code>.  </li>
+<li><strong>Promise cleanup</strong>: consider adding abort logic to prevent state updates on unmounted components.  </li>
+<li><strong>Layout fit</strong>: the component uses flexbox panels; test on various screen sizes to ensure content remains visible.  </li>
+<li><strong>Testing</strong>: add unit tests for the callbacks and integration tests for the full workflow.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "relPath": "packages/graph-view/src/utils/__tests__/elk-layout.test.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:44:55.192Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import { applyElkLayout, repairElkInput, type ElkInput } from \"../elk-layout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-106"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import { applyElkLayout, repairElkInput, type ElkInput } from \"../elk-layout\";",
+      "R4 added: describe(\"repairElkInput\", () => {",
+      "R5 added: it(\"ensures node dimensions when missing\", () => {",
+      "R6 added: const input: ElkInput = {",
+      "R7 added: id: \"root\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

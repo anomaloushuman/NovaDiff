@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/layer-detector.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/layer-detector.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:10:17.027Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/layer-detector.test.ts</code> (lines R1‑188) was added to exercise the layer‑detection logic, prompt construction, response parsing, and LLM‑based layer assignment.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – <code>vitest</code> helpers and the four public functions from <code>../analyzer/layer-detector.js</code> were added (R1‑R6).  </li>
+<li><strong>Test helpers</strong> – <code>makeNode</code> and <code>makeGraph</code> construct minimal <code>KnowledgeGraph</code> objects for the tests (R10‑R32).  </li>
+<li><strong><code>detectLayers</code> tests</strong> – verify detection of “API Layer”, “Data Layer”, and “Core” layers, unique kebab‑case IDs, and that only nodes of type <code>file</code> are considered (R36‑R106).  </li>
+<li><strong><code>buildLayerDetectionPrompt</code> test</strong> – checks that file paths are included and the string “JSON” appears in the prompt (R109‑R119).  </li>
+<li><strong><code>parseLayerDetectionResponse</code> tests</strong> – cover plain JSON, JSON wrapped in markdown fences, and invalid inputs that should return <code>null</code> (R122‑R160).  </li>
+<li><strong><code>applyLLMLayers</code> test</strong> – ensures LLM‑provided layers are applied correctly and unmatched nodes fall into an “Other” layer (R163‑R188).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Coverage</strong> – The tests exercise all stages of the layer‑detection pipeline, reducing the risk of silent regressions.  </li>
+<li><strong>Maintainability</strong> – Centralized helper functions simplify future test additions.  </li>
+<li><strong>Observability</strong> – Failures will pinpoint the specific stage (e.g., prompt content or parsing logic) that broke.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Deterministic IDs</strong> – Tests rely on node IDs; changes to ID generation could cause flakiness.  </li>
+<li><strong>Prompt formatting</strong> – If <code>buildLayerDetectionPrompt</code> changes, the test may need updating.  </li>
+<li><strong>LLM contract</strong> – <code>applyLLMLayers</code> assumes a specific layer shape; future LLM responses must match this contract.  </li>
+<li><strong>Performance</strong> – Running these tests on very large graphs could increase execution time; monitor if graph size grows.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

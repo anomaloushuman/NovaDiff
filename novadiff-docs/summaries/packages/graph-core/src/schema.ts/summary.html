@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/schema.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/schema.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:42:08.647Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>packages/graph-core/src/schema.ts</code> file was added (+701 lines). It introduces Zod schemas for knowledge‑graph entities and a four‑tier validation pipeline.</p>
+<p>The change adds an import (<code>R1</code>), an <code>EdgeTypeSchema</code> enum (<code>R4</code>), and several alias maps (<code>R17</code>, <code>R78</code>, <code>R128</code>, <code>R139</code>). Functions <code>sanitizeGraph</code> (<code>R148</code>), <code>autoFixGraph</code> (<code>R196</code>), <code>normalizeGraph</code> (<code>R467</code>), and <code>validateGraph</code> (<code>R504</code>) implement sanitization, auto‑correction, alias resolution, and validation.</p>
+<p>Supporting helpers <code>buildInvalidCollectionIssue</code> (<code>R452</code>) and <code>buildErrors</code> (<code>R461</code>) aggregate diagnostics. Public interfaces <code>GraphIssue</code> (<code>R436</code>) and <code>ValidationResult</code> (<code>R443</code>) expose error information, and <code>KnowledgeGraphSchema</code> (<code>R426</code>) defines the full graph shape.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports &amp; enums</strong> – <code>import { z } from &quot;zod&quot;</code> (<code>R1</code>) and <code>EdgeTypeSchema</code> with 35 edge types (<code>R4</code>).  </li>
+<li><strong>Alias maps</strong> – <code>NODE_TYPE_ALIASES</code> (<code>R17</code>), <code>EDGE_TYPE_ALIASES</code> (<code>R78</code>), <code>COMPLEXITY_ALIASES</code> (<code>R128</code>), <code>DIRECTION_ALIASES</code> (<code>R139</code>).  </li>
+<li><strong>Sanitization</strong> – <code>sanitizeGraph</code> normalizes nulls, lower‑cases strings, and removes optional fields (<code>R148</code>).  </li>
+<li><strong>Auto‑fix</strong> – <code>autoFixGraph</code> supplies defaults for missing <code>type</code>, <code>complexity</code>, <code>tags</code>, <code>summary</code>, and coerces edge weights (<code>R196</code>).  </li>
+<li><strong>Normalization</strong> – <code>normalizeGraph</code> replaces aliased node/edge types with canonical ones (<code>R467</code>).  </li>
+<li><strong>Validation pipeline</strong> – <code>validateGraph</code> orchestrates sanitization, normalization, auto‑fix, collection checks, and schema validation for nodes, edges, layers, and tour steps (<code>R504</code>).  </li>
+<li><strong>Error handling</strong> – <code>buildInvalidCollectionIssue</code> and <code>buildErrors</code> aggregate fatal and non‑fatal issues (<code>R452</code>, <code>R461</code>).  </li>
+<li><strong>Exported interfaces</strong> – <code>GraphIssue</code>, <code>ValidationResult</code>, and the full <code>KnowledgeGraphSchema</code> are now public.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong> – Every graph component is validated against Zod; invalid collections trigger fatal errors.  </li>
+<li><strong>Observability</strong> – The <code>issues</code> array provides fine‑grained diagnostics for downstream consumers.  </li>
+<li><strong>Maintainability</strong> – Centralized schema definitions reduce duplication across the repo.  </li>
+<li><strong>Performance</strong> – Auto‑fix and normalization run on every validation; may add overhead for large graphs.  </li>
+<li><strong>Compatibility</strong> – Existing code importing <code>schema.ts</code> must reference the new exports; no breaking API changes within the module itself.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Test coverage</strong> – Ensure unit tests exercise all alias mappings and auto‑fix scenarios.  </li>
+<li><strong>Performance regression</strong> – Benchmark <code>validateGraph</code> on large datasets to confirm acceptable latency.  </li>
+<li><strong>Schema drift</strong> – If other packages rely on older node/edge type definitions, update imports accordingly.  </li>
+<li><strong>LLM integration</strong> – Verify that LLM‑generated graphs are correctly normalized; watch for edge cases where aliases conflict with canonical values.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-core/src/languages/framework-registry.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:40:47.473Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R9 added: export class FrameworkRegistry {"
+    ],
+    "changed_imports": [
+      "R1 added: import { FrameworkConfigSchema } from \"./types.js\";",
+      "R2 added: import type { FrameworkConfig } from \"./types.js\";",
+      "R3 added: import { builtinFrameworkConfigs } from \"./frameworks/index.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-86"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { FrameworkConfigSchema } from \"./types.js\";",
+      "R2 added: import type { FrameworkConfig } from \"./types.js\";",
+      "R3 added: import { builtinFrameworkConfigs } from \"./frameworks/index.js\";",
+      "R5 added: /**",
+      "R6 added: * Registry for framework configurations. Provides detection of frameworks",
+      "R7 added: * from manifest file contents and lookup by id or language."
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right class FrameworkRegistry (9-86)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

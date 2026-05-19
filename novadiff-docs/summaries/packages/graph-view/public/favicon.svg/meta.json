@@ -1,0 +1,31 @@
+{
+  "relPath": "packages/graph-view/public/favicon.svg",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:22:24.222Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-4"
+    ],
+    "cited_changed_lines": [
+      "R1 added: <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\">",
+      "R2 added: <rect width=\"32\" height=\"32\" rx=\"6\" fill=\"#0a0a0a\"/>",
+      "R3 added: <text x=\"16\" y=\"23\" font-family=\"Georgia, serif\" font-size=\"20\" fill=\"#d4a574\" text-anchor=\"middle\" font-weight=\"bold\">U</text>",
+      "R4 added: </svg>"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "relPath": "electron/github-service.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:14:23.488Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const { spawnSync } = require(\"node:child_process\");",
+      "R4 added: const { parseGithubSlugFromUrl } = require(\"./git-service.cjs\");",
+      "R9 added: } = require(\"./gh-path.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-224"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const { spawnSync } = require(\"node:child_process\");",
+      "R4 added: const { parseGithubSlugFromUrl } = require(\"./git-service.cjs\");",
+      "R5 added: const {",
+      "R6 added: augmentPathForCli,",
+      "R7 added: resolveGhExecutable,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function getAuthStatus (43-76)",
+      "right function listPullRequests (98-128)",
+      "right function listDetectedAccounts (179-202)",
+      "right function slugFromRepoRoot (203-224)",
+      "right function createPullRequest (142-162)",
+      "right function listRepos (77-97)",
+      "right function runGh (11-29)",
+      "right function getUserProfile (163-178)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

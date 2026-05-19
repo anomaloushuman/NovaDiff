@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/hooks/useKeyboardShortcuts.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/hooks/useKeyboardShortcuts.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:48:02.102Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <strong>packages/graph-view/src/hooks/useKeyboardShortcuts.ts</strong> introduces a keyboard‑shortcut system for the graph view.  </p>
+<ul>
+<li><strong>Interface</strong> <code>KeyboardShortcut</code> (lines 3‑12) defines optional modifier flags (<code>ctrlKey</code>, <code>shiftKey</code>, <code>altKey</code>, <code>metaKey</code>) and required fields (<code>key</code>, <code>description</code>, <code>action</code>, <code>category</code>).  </li>
+<li><strong>Hook</strong> <code>useKeyboardShortcuts</code> (lines 14‑51) registers a global <code>keydown</code> listener via <code>useEffect</code> (R1).  </li>
+<li><strong>Formatter</strong> <code>formatShortcutKey</code> (lines 52‑71) builds a human‑readable shortcut string.</li>
+</ul>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Interface</strong>: added optional modifier flags and required fields (diff lines R3‑R11).  </li>
+<li><strong>Hook</strong>:  <ul>
+<li>Uses <code>useEffect</code> to attach a listener (R1).  </li>
+<li>Skips shortcuts when the event target is an <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, or content‑editable element unless the key is <code>Escape</code> (lines 21‑27).  </li>
+<li>Matches shortcuts by key and modifier state, with a “not pressed” fallback (lines 29‑34).  </li>
+<li>Prevents default for shortcuts involving <code>Ctrl</code>, <code>Meta</code>, or <code>Alt</code> (lines 37‑40).  </li>
+<li>Executes <code>shortcut.action()</code> and breaks the loop (lines 41‑42).  </li>
+<li>Cleans up by removing the listener (lines 47‑48).</li>
+</ul>
+</li>
+<li><strong>Formatter</strong>:  <ul>
+<li>Detects macOS via <code>navigator.userAgentData</code> or <code>navigator.platform</code> (lines 55‑58).  </li>
+<li>Omits the Shift symbol for punctuation that inherently requires it (lines 63‑65).  </li>
+<li>Returns the joined string (lines 70‑71).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: listener now ignores typing contexts and respects modifier combinations, reducing accidental activation (inferred from logic).  </li>
+<li><strong>Maintainability</strong>: centralizes shortcut logic in a single file, simplifying future extensions.  </li>
+<li><strong>Performance</strong>: a single global listener per component mount; cleanup handled in the effect’s return.  </li>
+<li><strong>Observability</strong>: <code>formatShortcutKey</code> provides consistent UI labels for shortcut lists.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that the <code>keydown</code> listener does not interfere with existing global shortcuts elsewhere in the app (unknown from diff).  </li>
+<li>Ensure <code>navigator.userAgentData</code> fallback correctly detects macOS on all target browsers (unknown from diff).  </li>
+<li>Test that the <code>Escape</code> key still functions in input fields when shortcuts are disabled (unknown from diff).  </li>
+<li>Confirm that the new interface does not break existing consumers that may have relied on implicit modifier defaults (unknown from diff).</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

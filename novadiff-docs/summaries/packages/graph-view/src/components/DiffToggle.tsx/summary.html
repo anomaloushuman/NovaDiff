@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/DiffToggle.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/DiffToggle.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:19:12.989Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>DiffToggle</code> component is added under <code>packages/graph-view/src/components</code>. It introduces a UI button to toggle diff overlay visibility, leveraging the dashboard store and i18n context.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports added</strong>: <code>useDashboardStore</code> from <code>../store</code> and <code>useI18n</code> from <code>../contexts/I18nContext</code>.  </li>
+<li><strong>State hooks</strong>: <code>diffMode</code>, <code>toggleDiffMode</code>, <code>changedNodeIds</code>, and <code>affectedNodeIds</code> are extracted from the store.  </li>
+<li><strong>Computed flag</strong>: <code>hasDiff</code> checks if any nodes have changed (<code>changedNodeIds.size &gt; 0</code>).  </li>
+<li><strong>Button behavior</strong>:  <ul>
+<li><code>onClick</code> triggers <code>toggleDiffMode</code>.  </li>
+<li>Disabled when <code>!hasDiff</code>.  </li>
+<li>Dynamic classes and titles based on <code>diffMode</code> and <code>hasDiff</code>.</li>
+</ul>
+</li>
+<li><strong>Conditional rendering</strong>: When diff is active and data exists, a legend shows counts of changed and affected nodes with color indicators.  </li>
+<li><strong>Export</strong>: <code>export default function DiffToggle()</code> makes the component available for import elsewhere.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>UI</strong>: Adds a new toggle button; no existing components are modified.  </li>
+<li><strong>State</strong>: Requires <code>diffMode</code>, <code>toggleDiffMode</code>, <code>changedNodeIds</code>, and <code>affectedNodeIds</code> to exist in the dashboard store; otherwise runtime errors.  </li>
+<li><strong>Internationalization</strong>: Depends on <code>t.diffToggle.*</code> keys; missing keys will result in undefined strings.  </li>
+<li><strong>Styling</strong>: Uses CSS variables (<code>--color-diff-changed</code>, <code>--color-diff-affected</code>); missing variables may break appearance.  </li>
+<li><strong>Performance</strong>: Minimal; only a few store reads and a simple button render.</li>
+</ul>
+<h3>Risks &amp; follow-ups</h3>
+<ul>
+<li>Verify that the dashboard store exposes the required fields (<code>diffMode</code>, <code>toggleDiffMode</code>, <code>changedNodeIds</code>, <code>affectedNodeIds</code>).  </li>
+<li>Ensure i18n keys <code>diffToggle.hideOverlay</code>, <code>diffToggle.showOverlay</code>, <code>diffToggle.noData</code>, <code>diffToggle.changed</code>, and <code>diffToggle.affected</code> exist.  </li>
+<li>Confirm CSS variables for diff colors are defined in the theme; otherwise the legend will not display correctly.  </li>
+<li>Run unit tests for the new component to catch any missing dependencies or rendering issues.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "relPath": "packages/graph-core/src/change-classifier.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:38:35.405Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export interface UpdateDecision {",
+      "R21 added: export function classifyUpdate("
+    ],
+    "changed_imports": [
+      "R1 added: import { dirname } from \"node:path\";",
+      "R2 added: import type { ChangeAnalysis } from \"./fingerprint.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-143"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { dirname } from \"node:path\";",
+      "R2 added: import type { ChangeAnalysis } from \"./fingerprint.js\";",
+      "R4 added: export interface UpdateDecision {",
+      "R5 added: action: \"SKIP\" | \"PARTIAL_UPDATE\" | \"ARCHITECTURE_UPDATE\" | \"FULL_UPDATE\";",
+      "R6 added: filesToReanalyze: string[];",
+      "R7 added: rerunArchitecture: boolean;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function classifyUpdate (21-93)",
+      "right function detectDirectoryChanges (94-118)",
+      "right interface UpdateDecision (4-20)",
+      "right function summarizeChanges (129-143)",
+      "right function topDirectory (119-128)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

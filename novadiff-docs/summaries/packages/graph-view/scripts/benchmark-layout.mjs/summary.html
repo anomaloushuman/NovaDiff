@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/scripts/benchmark-layout.mjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/scripts/benchmark-layout.mjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:24:46.865Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new script <code>packages/graph-view/scripts/benchmark-layout.mjs</code> has been added to benchmark Stage 1 ELK layout performance.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>performance</code> from <code>node:perf_hooks</code> and <code>ELK</code> from <code>elkjs/lib/elk.bundled.js</code> (lines 16‑17).  </li>
+<li><strong>Constants</strong>: <code>DEFAULT_NODE_WIDTH</code> (280) and <code>DEFAULT_NODE_HEIGHT</code> (120) (lines 19‑21) to match <code>NODE_WIDTH/HEIGHT</code> in <code>src/utils/layout.ts</code>.  </li>
+<li><strong><code>fillDims</code></strong> (lines 30‑37): recursively assigns default dimensions to nodes missing width/height, mirroring the production repair pass.  </li>
+<li><strong><code>applyElkLayout</code></strong> (lines 40‑43): creates a repaired graph and runs <code>elk.layout</code>, exposing the same API as the production helper.  </li>
+<li><strong><code>makeGraph</code></strong> (lines 51‑66): synthesizes a container‑only graph with sparse edges; container count defaults to <code>Math.min(20, Math.ceil(nodeCount / 25))</code>.  </li>
+<li><strong><code>bench</code></strong> (lines 68‑75): measures elapsed time for a single layout run and logs the result.  </li>
+<li><strong>Execution</strong>: script immediately benchmarks 500, 1 000, and 3 000 nodes (lines 78‑80).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>No changes to runtime code; the script is isolated.  </li>
+<li>Keeps benchmark logic close to the layout implementation, reducing duplication.  </li>
+<li>Provides console output of Stage 1 layout times, aiding regression detection.  </li>
+<li>Requires Node ≥ 14 for <code>perf_hooks</code>; no browser impact.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that the bundled ELK version (<code>elkjs/lib/elk.bundled.js</code>) matches the production version; mismatches could skew results.  </li>
+<li>Ensure <code>DEFAULT_NODE_WIDTH/HEIGHT</code> stay in sync with <code>src/utils/layout.ts</code>; drift would invalidate the benchmark.  </li>
+<li>Confirm that <code>makeGraph</code> accurately reflects production container counts; otherwise, benchmark results may be misleading.  </li>
+<li>Run the script in CI to capture baseline timings before future layout changes.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

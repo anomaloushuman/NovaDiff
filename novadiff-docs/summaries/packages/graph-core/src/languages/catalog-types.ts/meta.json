@@ -1,0 +1,48 @@
+{
+  "relPath": "packages/graph-core/src/languages/catalog-types.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:40:10.188Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export interface LanguageCatalogEntry {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-7"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export interface LanguageCatalogEntry {",
+      "R2 added: id: string;",
+      "R3 added: displayName: string;",
+      "R4 added: extensions: string[];",
+      "R5 added: wasmsFile?: string;",
+      "R6 added: filenames?: string[];"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface LanguageCatalogEntry (1-7)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

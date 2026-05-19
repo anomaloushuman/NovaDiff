@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/search.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/search.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:42:45.520Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-core/src/search.ts</code> adds a lightweight full‑text search engine built on <strong>Fuse.js</strong>.<br>It exports three symbols:  </p>
+<ul>
+<li><code>SearchResult</code> (R4‑7) – `{ nodeId: string; score: number; /</li>
+</ul>
+<ul>
+<li>0 = perfect, 1 = worst */ }`</li>
+</ul>
+<ul>
+<li><code>SearchOptions</code> (R9‑12) – <code>{ types?: GraphNode[&quot;type&quot;][]; limit?: number; }</code>  </li>
+<li><code>SearchEngine</code> (R27‑65) – a class that indexes an array of <code>GraphNode</code> objects.</li>
+</ul>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>Fuse</code> and <code>IFuseOptions</code> from <em>fuse.js</em> (R1) and <code>GraphNode</code> from <code>./types.js</code> (R2).  </li>
+<li><strong>Fuse configuration</strong> (R14‑25): keys with weights, <code>threshold: 0.4</code>, <code>includeScore: true</code>, <code>ignoreLocation: true</code>, <code>useExtendedSearch: true</code>.  </li>
+<li><strong>SearchEngine</strong>:  <ul>
+<li><code>constructor(nodes)</code> stores the nodes and builds a Fuse index.  </li>
+<li><code>search(query, options?)</code> trims the query, turns space‑separated tokens into an OR‑style extended query (<code>&quot;a b&quot; → &quot;a | b&quot;</code>), runs Fuse, filters by <code>options.types</code> if supplied, limits to <code>options.limit</code> (default 50), and maps results to <code>SearchResult</code>.  </li>
+<li><code>updateNodes(nodes)</code> rebuilds the internal index.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: deterministic scoring (0–1) and filtering by type.  </li>
+<li><strong>Maintainability</strong>: all search logic resides in a single module; changes to <code>FUSE_OPTIONS</code> propagate automatically.  </li>
+<li><strong>Compatibility</strong>: introduces a runtime dependency on <code>fuse.js</code>; no existing public APIs are altered.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Dependency missing</strong>: ensure <code>fuse.js</code> is listed in <code>package.json</code> and bundled.  </li>
+<li><strong>Type mismatches</strong>: <code>GraphNode</code> must expose <code>id</code>, <code>type</code>, <code>name</code>, <code>tags</code>, <code>summary</code>, and <code>languageNotes</code> as used in the Fuse keys.  </li>
+<li><strong>Threshold tuning</strong>: the chosen <code>0.4</code> may affect recall; benchmark if needed.  </li>
+<li><strong>Extended search behavior</strong>: the OR logic could match unintended tokens; validate with edge‑case queries.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

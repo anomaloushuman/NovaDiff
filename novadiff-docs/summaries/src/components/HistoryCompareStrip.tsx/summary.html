@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/HistoryCompareStrip.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/HistoryCompareStrip.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:12:00.427Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>HistoryCompareStrip</code> is added in <code>src/components/HistoryCompareStrip.tsx</code> (lines 1‑212). It renders a header strip that lets the user pick a base commit, a head commit (or a live folder), and trigger a comparison.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑7):```ts
+import { ArrowLeftRight, ChevronDown, GitBranch, GitCompareArrows, Loader2 } from &quot;lucide-react&quot;;
+import type { WorkspaceCommitSnapshot } from &quot;../app/workspaceTypes&quot;;</li>
+</ul>
+<p>```- **Props interface** (lines 10‑27): <code>HistoryCompareStripProps</code> declares <code>commits</code>, <code>baseHash</code>, <code>headHash</code>, <code>useLiveHead</code>, <code>liveRepoRoot</code>, <code>busy</code>, <code>error</code>, <code>indexing</code>, and callbacks <code>onBaseHash</code>, <code>onHeadHash</code>, <code>onUseLiveHead</code>, <code>onLiveRepoRoot</code>, <code>onBrowseLiveRepo</code>, <code>onLiveRepoBlur</code>, <code>onSwap</code>, <code>onCompare</code>.  </p>
+<ul>
+<li><strong>Helper functions</strong> (lines 29‑40): <code>truncateSubject</code> trims and shortens a subject; <code>commitLabel</code> formats a commit label.  </li>
+<li><strong>Component</strong> (lines 41‑212): computes <code>base</code> and <code>head</code> from <code>commits</code>, determines <code>canCompare</code> based on <code>indexing</code>, <code>busy</code>, and <code>useLiveHead</code>; renders selectors, a live‑folder toggle, and a compare button that shows <code>Loader2</code> when <code>busy</code>. Exported with <code>export function HistoryCompareStrip</code>.</li>
+</ul>
+<h3>Impact</h3>
+<p>Adds a self‑contained UI element; no existing modules are modified. The component relies on the <code>commits</code> array and hash matching to populate selectors.</p>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>commits</code> must contain matching hashes; otherwise selectors show “Choose base/…”.  </li>
+<li>The <code>onCompare</code> callback must be wired to perform the comparison; otherwise the button is inert.  </li>
+<li>Verify that the live‑folder toggle correctly enables the input field and disables the head selector.  </li>
+<li>Confirm that <code>Loader2</code> and <code>GitCompareArrows</code> render correctly in the current theme.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

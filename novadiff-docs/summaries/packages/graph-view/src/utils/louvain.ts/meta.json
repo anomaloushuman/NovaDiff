@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/src/utils/louvain.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:03:37.756Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R17 added: export function detectCommunities("
+    ],
+    "changed_imports": [
+      "R1 added: import Graph from \"graphology\";",
+      "R2 added: import louvain from \"graphology-communities-louvain\";",
+      "R3 added: import type { GraphEdge } from \"@novadiff/graph-core/types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-47"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import Graph from \"graphology\";",
+      "R2 added: import louvain from \"graphology-communities-louvain\";",
+      "R3 added: import type { GraphEdge } from \"@novadiff/graph-core/types\";",
+      "R5 added: /**",
+      "R6 added: * Run Louvain community detection over the provided node set and the",
+      "R7 added: * subset of edges whose endpoints are both in the set. Returns a map of"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function detectCommunities (17-47)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

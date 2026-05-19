@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/BackgroundActivityContext.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/BackgroundActivityContext.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:02:43.987Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>src/app/BackgroundActivityContext.tsx</code> file introduces a React context for tracking background tasks, exposing a provider and two hooks.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: Adds <code>createContext</code>, <code>useCallback</code>, <code>useContext</code>, <code>useMemo</code>, <code>useState</code>, and <code>ReactNode</code> from <em>react</em> (lines 1‑6).  </li>
+<li><strong>Types</strong>: Declares <code>BackgroundActivityKind</code> enum‑like union (lines 10‑19) and <code>BackgroundActivity</code> interface (lines 22‑30).  </li>
+<li><strong>Context value</strong>: Defines <code>BackgroundActivityContextValue</code> (lines 37‑41) and creates the context (lines 44‑46).  </li>
+<li><strong>Provider</strong>: Implements <code>BackgroundActivityProvider</code> (lines 48‑95) with state, upsert, remove, and clear logic, sorting activities by <code>startedAt</code>.  </li>
+<li><strong>Hooks</strong>: Exposes <code>useBackgroundActivity</code> (lines 97‑103) that throws if used outside the provider, and <code>useBackgroundActivityOptional</code> (lines 106‑108) that returns <code>null</code> when no provider is present.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: The provider guarantees a sorted activity list; the optional hook prevents crashes in optional embed paths.  </li>
+<li><strong>Maintainability</strong>: Centralized activity state simplifies adding new activity kinds or UI components.  </li>
+<li><strong>Performance</strong>: Sorting on every upsert may be costly with many activities; current implementation is acceptable for typical use.  </li>
+<li><strong>Compatibility</strong>: No changes to existing modules; the new file is self‑contained and only adds exports.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Provider usage</strong>: Verify that all components consuming the hooks are wrapped by <code>BackgroundActivityProvider</code>.  </li>
+<li><strong>Null handling</strong>: <code>useBackgroundActivityOptional</code> may return <code>null</code>; callers must guard against it.  </li>
+<li><strong>Sorting overhead</strong>: Benchmark with high activity churn to ensure sorting does not become a bottleneck.  </li>
+<li><strong>Default values</strong>: The provider defaults <code>kind</code> to <code>&quot;other&quot;</code>; confirm this aligns with intended UX for unknown kinds.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

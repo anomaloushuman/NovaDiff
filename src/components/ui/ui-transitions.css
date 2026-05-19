@@ -1,0 +1,120 @@
+/* Shared overlay + view transition effects */
+
+.ui-overlay {
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+
+.ui-overlay.is-open {
+  opacity: 1;
+}
+
+.ui-overlay.is-closing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ui-overlay-panel {
+  opacity: 0;
+  transform: translateY(14px) scale(0.97);
+  filter: blur(4px);
+  transition:
+    opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.32s ease;
+}
+
+.ui-overlay-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+.ui-overlay-panel.is-closing {
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  filter: blur(3px);
+}
+
+.ui-view-enter {
+  animation: ui-view-enter 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.ui-view-fade {
+  animation: ui-view-fade 0.32s ease both;
+}
+
+.workspace-stage {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.workspace-stage-inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.insights-tab {
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+}
+
+.insights-tab:active:not(.active) {
+  transform: scale(0.98);
+}
+
+.insights-panel-enter {
+  animation: ui-view-fade 0.34s ease both;
+}
+
+@keyframes ui-view-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes ui-view-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-overlay,
+  .ui-overlay-panel,
+  .ui-view-enter,
+  .ui-view-fade,
+  .insights-panel-enter {
+    animation: none !important;
+    transition: opacity 0.15s ease !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .ui-overlay.is-open,
+  .ui-overlay-panel.is-open {
+    opacity: 1;
+  }
+}

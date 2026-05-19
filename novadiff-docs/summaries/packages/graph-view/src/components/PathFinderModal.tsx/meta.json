@@ -1,0 +1,51 @@
+{
+  "relPath": "packages/graph-view/src/components/PathFinderModal.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:31:19.644Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R9 added: export default function PathFinderModal({ isOpen, onClose }: PathFinderModalProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useDashboardStore } from \"../store\";"
+    ],
+    "changed_line_ranges": [
+      "R1-311"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useDashboardStore } from \"../store\";",
+      "R4 added: interface PathFinderModalProps {",
+      "R5 added: isOpen: boolean;",
+      "R6 added: onClose: () => void;",
+      "R7 added: }"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface PathFinderModalProps (4-311)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

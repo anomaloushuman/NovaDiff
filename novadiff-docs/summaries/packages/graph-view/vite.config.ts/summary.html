@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/vite.config.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/vite.config.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:20:54.197Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-view/vite.config.ts</code> (lines 1‑362) defines a Vite dev server that serves NovaDiff graph data, configuration, and source‑file content with strict security checks.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports &amp; token</strong> – <code>defineConfig</code>, <code>react</code>, <code>tailwindcss</code>, <code>path</code>, <code>fs</code>, <code>crypto</code> are added (R2‑7).<br><code>ACCESS_TOKEN</code> is generated from <code>NOVADIFF_GRAPH_ACCESS_TOKEN</code> or a random 16‑byte hex string (line 12).<br><code>MAX_SOURCE_FILE_BYTES</code> limits preview size (line 13).  </li>
+<li><strong>Graph utilities</strong> – <code>graphFileCandidates</code> (15‑22), <code>findGraphFile</code> (26‑27), <code>projectRootFromGraphFile</code> (30‑31), <code>normalizeGraphPath</code> (34‑52), and <code>graphFilePathSet</code> (55‑69) locate and validate graph files.  </li>
+<li><strong>Language detection</strong> – <code>detectLanguage</code> maps file extensions to language names (72‑101).  </li>
+<li><strong>Response helpers</strong> – <code>sendJson</code> and <code>rejectFileRequest</code> (104‑112).  </li>
+<li><strong>File‑content endpoint</strong> – <code>readSourceFile</code> (114‑176) validates relative paths, checks size, rejects binaries, and returns language via <code>detectLanguage</code>.  </li>
+<li><strong>Middleware</strong> – protects <code>/knowledge-graph.json</code>, <code>/domain-graph.json</code>, <code>/diff‑overlay.json</code>, <code>/meta.json</code>, <code>/config.json</code>, and <code>/file‑content.json</code> with the token (250‑268).<br><code>/file‑content.json</code> is served by <code>readSourceFile</code> (271‑273).  </li>
+<li><strong>Graph file sanitization</strong> – absolute paths in graph nodes are converted to project‑relative paths before sending (312‑333).  </li>
+<li><strong>Server config</strong> – binds to <code>127.0.0.1:5173</code>, opens the dashboard URL with the token (187‑191), and logs the URL once on startup (238‑244).  </li>
+<li><strong>Build</strong> – custom Rollup chunking for large dependencies (<code>react‑vendor</code>, <code>xyflow</code>, <code>elk</code>, <code>graphology</code>, <code>graph‑layout</code>, <code>markdown</code>) (204‑226).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Security</strong> – token enforcement and path validation prevent unauthorized access and path traversal (lines 250‑268, 114‑176).  </li>
+<li><strong>Privacy</strong> – sanitization of absolute paths avoids leaking the developer’s filesystem layout (lines 312‑333).  </li>
+<li><strong>Performance</strong> – early rejection of oversized or binary files keeps the server lightweight (lines 159‑165).  </li>
+<li><strong>Observability</strong> – the dashboard URL is logged once at startup (lines 238‑244).</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Token mismatch</strong> – verify that the printed token matches client requests (lines 238‑244).  </li>
+<li><strong>Graph file absence</strong> – 404 is returned if <code>knowledge-graph.json</code> is missing (lines 130‑133, 350‑354).  </li>
+<li><strong>Path sanitization edge cases</strong> – test nodes with absolute paths outside the project to confirm they are reduced to filenames (lines 328‑332).  </li>
+<li><strong>Binary file detection</strong> – confirm binary files return status 415 (lines 164‑165).</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

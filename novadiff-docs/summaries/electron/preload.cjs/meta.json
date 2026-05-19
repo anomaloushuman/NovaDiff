@@ -1,24 +1,24 @@
 {
   "relPath": "electron/preload.cjs",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:40:33.280Z",
+  "generatedAt": "2026-05-19T18:56:05.758Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R6",
-      "R15-59"
+      "R51-72",
+      "R118-178"
     ],
     "cited_changed_lines": [
-      "R6 added: const WINDOW_STATE = \"window-state-changed\";",
-      "R15 added: getWindowState: () => ipcRenderer.invoke(\"window-state\"),",
-      "R16 added: minimizeWindow: () => ipcRenderer.invoke(\"window-minimize\"),",
-      "R17 added: toggleMaximizeWindow: () => ipcRenderer.invoke(\"window-toggle-maximize\"),",
-      "R18 added: closeWindow: () => ipcRenderer.invoke(\"window-close\"),",
-      "R19 added: onWindowStateChanged: (cb) => {"
+      "R51 added: buildKnowledgeGraph: (payload) => ipcRenderer.invoke(\"knowledge-graph-build\", payload),",
+      "R52 added: readKnowledgeGraph: (payload) => ipcRenderer.invoke(\"knowledge-graph-read\", payload),",
+      "R53 added: readKnowledgeGraphFile: (payload) =>",
+      "R54 added: ipcRenderer.invoke(\"knowledge-graph-read-file\", payload),",
+      "R55 added: onKnowledgeGraphProgress: (cb) => {",
+      "R56 added: const ch = (_e, msg) => {"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -26,24 +26,34 @@
 <body>
   <header class="top">
     <h1>electron/git-blame.cjs</h1>
-    <div class="meta">Kind: added · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:33:03.637Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T17:31:41.503Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a change in the <code>electron/git-blame.cjs</code> file between the <code>NovaDiff-main</code> and <code>NovaDiff</code> branches. The change introduces new functionality and modifies existing code.</p>
+<p><code>electron/git-blame.cjs</code> now supports blaming arbitrary Git refs via a new helper <code>blameFileAtRef</code>. The cache key and error payload were expanded to include the ref, and the module exports were updated.</p>
 <h3>Key changes</h3>
-<p>The following are some of the key changes made in this diff:</p>
 <ul>
-<li>Added a new function called <code>parseBlamePorcelain</code> to parse the output of the <code>git blame --line-porcelain</code> command.</li>
-<li>Modified the <code>blameFileOwnership</code> function to use the <code>parseBlamePorcelain</code> function to parse the output of the <code>git blame --line-porcelain</code> command.</li>
-<li>Added a new import statement to import the <code>spawnSync</code> function from the <code>node:child_process</code> module.</li>
-<li>Added a new variable called <code>blameCache</code> to store the parsed output of the <code>git blame --line-porcelain</code> command.</li>
-<li>Modified the <code>cacheKey</code> function to generate a unique cache key for each file based on the repository root and relative path.</li>
+<li>Added <code>function blameFileAtRef(repoRoot, ref, relPath)</code> (lines 37‑78) that accepts a Git ref and returns <code>{ lineAuthors, owners, ref, relPath, error }</code>.  </li>
+<li><code>blameFileOwnership</code> (lines 79‑81) now delegates to <code>blameFileAtRef</code> with <code>&quot;HEAD&quot;</code>.  </li>
+<li>Removed <code>cacheKey</code> (lines 8‑11); cache key now <code>${root}::${gitRef}::${safeRelPath}</code> (line 44).  </li>
+<li><code>spawnSync</code> command now includes the ref argument before <code>--line-porcelain</code> (lines 50‑56).  </li>
+<li>Error objects now contain <code>ref</code>, <code>relPath</code>, and a trimmed <code>error</code> string (lines 59‑65).  </li>
+<li>Simplified type annotation for <code>blameCache</code> to <code>Map&lt;string, object&gt;</code> (line 5).  </li>
+<li>Updated exports to <code>{ blameFileOwnership, blameFileAtRef, parseBlamePorcelain }</code> (lines 79‑83).</li>
 </ul>
 <h3>Impact</h3>
-<p>The impact of these changes is that the <code>blameFileOwnership</code> function now has access to the parsed output of the <code>git blame --line-porcelain</code> command, which allows it to provide more accurate information about the ownership of lines in a file. This change also improves the performance of the <code>blameFileOwnership</code> function by reducing the number of times it needs to run the <code>git blame --line-porcelain</code> command.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>There are no obvious risks or issues with this diff. However, it is important to verify that the new functionality works as expected and that the performance improvements are noticeable. Additionally, it would be helpful to have a more thorough understanding of the impact of these changes on the overall stability and security of the system.</p>
+<ul>
+<li>Enables blame queries on any commit, improving historical analysis.  </li>
+<li>Cache now differentiates by ref, preventing stale data across branches.  </li>
+<li>Error payload exposes <code>ref</code> and <code>relPath</code>, aiding debugging.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Existing callers of <code>blameFileOwnership</code> remain functional, but any direct use of the old cache key format will break.  </li>
+<li>Including ref in the key may increase cache entries; monitor memory usage.  </li>
+<li>Callers must handle the new <code>error</code> field; update error‑logging logic if necessary.  </li>
+<li>Add unit tests for <code>blameFileAtRef</code> with non‑HEAD refs to confirm cache isolation and error payload.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

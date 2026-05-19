@@ -1,38 +1,29 @@
-Overview
---------
+### Overview
+The `electron/main.cjs` module has been refactored to replace synchronous engine calls with asynchronous ones, add progress reporting via IPC, and remove legacy handlers. The changes introduce new imports, helper functions, and async IPC handlers for knowledge‑graph and workspace operations.
 
-This diff represents a change to the `electron/main.cjs` file in the NovaDiff repository. The file is part of the Electron application's main process, which handles various aspects of the user interface and interoperability with other systems. This change involves adding several new imports and exports, as well as modifying existing ones, to support the generation of documentation bundles for the NovaDiff application.
+### Key changes
+- **Imports**  
+  - Added `const fssync = require("node:fs");` (R4).  
+  - Replaced legacy `runCompareEngine` with `runCompareEngine, runCompareEngineAsync` (R16).  
+  - Added `buildKnowledgeGraph` (R43), `git-service` (R51), and `github-service` (R59).  
+- **Progress helpers**  
+  - `sendEngineProgress(webContents, payload)` (R18‑R20).  
+  - `sendKnowledgeGraphProgress` and `sendWorkspaceHistoryProgress` emit progress events.  
+- **Async IPC handlers**  
+  - New handlers for knowledge‑graph build/read, git tooling detection, repo status, publish preview/execute, and docs read/open, all wired to the new progress callbacks.  
+- **Legacy removal**  
+  - Removed handlers such as `filter-changes-gitignore`, `codebase-outline`, and `risk-signals`.  
+- **Window creation**  
+  - Updated `createWindow` logic (ranges 110‑511 and 159‑565) to accommodate the new async flow.
 
-Key changes
-------------
+### Impact
+- Enables non‑blocking UI during heavy engine operations.  
+- Provides real‑time progress updates to renderer processes.  
+- Simplifies codebase by eliminating outdated handlers.  
+- Requires updated IPC listeners in the renderer to consume new events.
 
-The following are some of the key changes made to the file:
-
-* New imports:
-	+ `const fs = require("node:fs/promises");`
-	+ `const { pathToFileURL } = require("node:url");`
-	+ `const { writeNovadiffDocsBundle } = require("./novadiff-docs-writer.cjs");`
-	+ `const { generateNovadiffDocsPdf } = require("./novadiff-docs-pdf.cjs");`
-	+ `const { writeNovadiffDocsHtml } = require("./novadiff-docs-html.cjs");`
-* Changed imports:
-	+ `const { runCompareEngine } = require("./compare-runner.cjs");`
-	+ `const { summarizeChange, summarizeChangeStream, probeProvider } = require("./llm.cjs");`
-* New exports:
-	+ `const { writeNovadiffDocsBundle } = require("./novadiff-docs-writer.cjs");`
-	+ `const { generateNovadiffDocsPdf } = require("./novadiff-docs-pdf.cjs");`
-	+ `const { writeNovadiffDocsHtml } = require("./novadiff-docs-html.cjs");`
-* Modified lines:
-	+ `const fs = require("node:fs/promises");`
-	+ `const { pathToFileURL } = require("node:url");`
-	+ `const { runCompareEngine } = require("./compare-runner.cjs");`
-	+ `const { summarizeChange, summarizeChangeStream, probeProvider } = require("./llm.cjs");`
-
-Impact
--------
-
-The changes made to the file are likely to have a positive impact on the NovaDiff application's ability to generate documentation bundles for its users. The new imports and exports added support for generating PDF and HTML documentation bundles, which can be useful for users who prefer these formats over markdown or other formats. Additionally, the modified lines that call the `runCompareEngine` function and use the `summarizeChange` and `summarizeChangeStream` functions from the `llm.cjs` module are likely to improve the correctness and maintainability of the code.
-
-Risks & follow-ups
-------------------
-
-There is a risk that the changes made to the file may introduce bugs or compatibility issues with other systems. However, the evidence provided in the note suggests that the changes are likely to be safe and will not cause any significant problems. To verify this, it would be necessary to run the JS/TS lint, test, and production build commands used by this repo.
+### Risks & follow‑ups
+- **Compatibility**: Ensure all renderer IPC listeners are updated to handle the new progress events.  
+- **Testing**: Run lint, unit tests, and production build (`npm run lint`, `npm test`, `npm run build`) to confirm no regressions.  
+- **File system checks**: Verify `fssync` usage correctly handles synchronous file reads without blocking the main thread.  
+- **Deprecation**: Confirm that removed legacy handlers are no longer referenced elsewhere in the project.

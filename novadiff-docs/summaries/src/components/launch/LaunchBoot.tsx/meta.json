@@ -1,0 +1,56 @@
+{
+  "relPath": "src/components/launch/LaunchBoot.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:30:26.917Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R13 added: export interface LaunchBootProps {",
+      "R17 added: export function LaunchBoot({ onExitComplete }: LaunchBootProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useRef, useState } from \"react\";",
+      "R2 added: import appMark from \"../../../nova-diff-icon.png\";",
+      "R3 added: import {",
+      "R8 added: import { usePrefersReducedMotion } from \"../../app/usePrefersReducedMotion\";",
+      "R9 added: import { TypewriterText } from \"./TypewriterText\";"
+    ],
+    "changed_line_ranges": [
+      "R1-216"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useRef, useState } from \"react\";",
+      "R2 added: import appMark from \"../../../nova-diff-icon.png\";",
+      "R3 added: import {",
+      "R4 added: LAUNCH_EXIT_FADE_MS,",
+      "R5 added: LAUNCH_HOLD_MS,",
+      "R6 added: LAUNCH_HOLD_SKIP_AFTER_MS,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function LaunchBoot (17-216)",
+      "right interface LaunchBootProps (13-16)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

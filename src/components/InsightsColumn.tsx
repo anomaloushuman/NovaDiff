@@ -25,6 +25,7 @@ interface InsightsColumnProps {
   fileSummaryDisabledReason?: string | null;
   onRequestFileSummary: () => void;
   prefetchStatus?: string | null;
+  prefetchProgress?: { current: number; total: number } | null;
 }
 
 export function InsightsColumn({
@@ -45,6 +46,7 @@ export function InsightsColumn({
   fileSummaryDisabledReason,
   onRequestFileSummary,
   prefetchStatus,
+  prefetchProgress,
 }: InsightsColumnProps) {
   const summaryEvidence = diffPayload?.summary_evidence;
   const warnBadgeCount = (summaryEvidence?.badges ?? []).filter(
@@ -103,7 +105,7 @@ export function InsightsColumn({
       </div>
 
       {tab === "summary" ? (
-        <div className="insights-scroll">
+        <div key="summary" className="insights-scroll insights-panel-enter">
           <section className="insights-card">
             <h3 className="insights-card-title">Review summary</h3>
             <p className="insights-prose">{summaryBody}</p>
@@ -186,7 +188,28 @@ export function InsightsColumn({
               <p className="insights-alert">{fileSummaryError}</p>
             )}
             {prefetchStatus ? (
-              <p className="insights-footnote">{prefetchStatus}</p>
+              <div className="insights-prefetch-status doc-state-enter">
+                <p className="insights-footnote">{prefetchStatus}</p>
+                {prefetchProgress && prefetchProgress.total > 0 ? (
+                  <div className="insights-prefetch-track" aria-hidden>
+                    <div
+                      className="insights-prefetch-fill"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          Math.round(
+                            (prefetchProgress.current / prefetchProgress.total) * 100,
+                          ),
+                        )}%`,
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="insights-prefetch-track is-indeterminate" aria-hidden>
+                    <div className="insights-prefetch-fill" />
+                  </div>
+                )}
+              </div>
             ) : null}
             {fileSummary != null && (
               <div className="llm-summary-md-wrap insights-prose">
@@ -255,7 +278,7 @@ export function InsightsColumn({
           </section>
         </div>
       ) : (
-        <div className="insights-files">
+        <div key="files" className="insights-files insights-panel-enter">
           <ChangedFilesTree
             rows={rows}
             selectedPath={selectedPath}

@@ -1,0 +1,51 @@
+{
+  "relPath": "packages/graph-view/src/components/FlowFitOnResize.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:23:40.935Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export function FlowFitOnResize({ padding = 0.15 }: { padding?: number }) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useRef } from \"react\";",
+      "R2 added: import { useReactFlow } from \"@xyflow/react\";"
+    ],
+    "changed_line_ranges": [
+      "R1-40"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useRef } from \"react\";",
+      "R2 added: import { useReactFlow } from \"@xyflow/react\";",
+      "R4 added: /** Re-fit the viewport when the pane size changes (e.g. embedded in a tab that was hidden). */",
+      "R5 added: export function FlowFitOnResize({ padding = 0.15 }: { padding?: number }) {",
+      "R6 added: const { fitView } = useReactFlow();",
+      "R7 added: const fitRef = useRef(fitView);"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function FlowFitOnResize (5-40)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "relPath": "packages/graph-view/src/components/TokenGate.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:35:03.074Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R7 added: export default function TokenGate({ onTokenValid }: TokenGateProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useState } from \"react\";"
+    ],
+    "changed_line_ranges": [
+      "R1-79"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useState } from \"react\";",
+      "R3 added: interface TokenGateProps {",
+      "R4 added: onTokenValid: (token: string) => void;",
+      "R5 added: }",
+      "R7 added: export default function TokenGate({ onTokenValid }: TokenGateProps) {",
+      "R8 added: const [input, setInput] = useState(\"\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface TokenGateProps (3-79)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

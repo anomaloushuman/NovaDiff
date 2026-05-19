@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/themes/ThemeContext.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/themes/ThemeContext.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:48:36.147Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/themes/ThemeContext.tsx</code> introduces a React context for theme state, a <code>ThemeProvider</code> component, and a <code>useTheme</code> hook. The file adds local‑storage persistence, optional host scoping, and utilities for preset resolution.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R13) bring <code>HeadingFont, PresetId, ThemeConfig, ThemePreset</code> from <code>./types.ts</code>, <code>DEFAULT_THEME_CONFIG</code> from the same file, <code>getPreset</code> from <code>./presets.ts</code>, and <code>applyTheme, clearTheme</code> from <code>./theme-engine.ts</code>.  </li>
+<li><strong>Context API</strong>: <code>ThemeContext</code> is created at R25 with <code>createContext&lt;ThemeContextValue | null&gt;(null)</code> and exported via <code>ThemeProvider</code>.  </li>
+<li><strong>Persistence helpers</strong>: <code>loadFromLocalStorage</code> (R27‑40) reads a JSON string under key <code>&quot;ua-theme&quot;</code> (R15); <code>saveToLocalStorage</code> (R41‑47) writes the same key.  </li>
+<li><strong>Initial theme resolution</strong>: <code>resolveInitialTheme</code> (R49‑51) prefers local storage, then <code>metaTheme</code>, finally <code>DEFAULT_THEME_CONFIG</code>.  </li>
+<li><strong>Provider logic</strong> (<code>ThemeProvider</code> at R60‑135):  <ul>
+<li>State <code>config</code> initialized by <code>resolveInitialTheme</code>.  </li>
+<li><code>useEffect</code> (R68‑82) applies theme on mount and on config changes, optionally scoping to a host <code>&lt;div&gt;</code> when <code>scopeToHost</code> is true.  </li>
+<li>Second <code>useEffect</code> (R84‑94) clears host theme on unmount if scoped.  </li>
+<li>Third <code>useEffect</code> (R96‑101) updates config when an async <code>metaTheme</code> arrives and no local preference exists.  </li>
+<li><code>setPreset</code> (R103‑108), <code>setAccent</code> (R110‑112), and <code>setHeadingFont</code> (R114‑116) update config via <code>useCallback</code>.</li>
+</ul>
+</li>
+<li><strong>Hook</strong> (<code>useTheme</code> at R136‑140) consumes <code>ThemeContext</code> and throws if used outside a provider.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes theme logic and state, reducing duplication.  </li>
+<li>Local‑storage sync prevents stale themes across reloads.  </li>
+<li>Host scoping (when <code>scopeToHost</code> is true) confines CSS changes to a wrapper <code>&lt;div&gt;</code>, avoiding global thrashing.  </li>
+<li>Existing components that call <code>useTheme</code> continue to work; no API changes.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>loadFromLocalStorage</code> silently swallows parse errors (R36‑38); malformed data may be ignored.  </li>
+<li>If <code>scopeToHost</code> is true but the host <code>&lt;div&gt;</code> is missing, theme application fails silently (R70‑75).  </li>
+<li>The third <code>useEffect</code> (R96‑101) may override a user‑selected preset if <code>metaTheme</code> arrives after a local change; verify ordering.  </li>
+<li><code>clearTheme</code> runs only on unmount when scoped (R88‑92); confirm global themes persist correctly after provider removal.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

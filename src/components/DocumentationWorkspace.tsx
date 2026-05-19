@@ -35,7 +35,7 @@ import {
   type GitignorePromptMeta,
 } from "../app/docWorkspaceMetrics";
 import { bundleLabel, bundleShortDescription, DOC_PREVIEW_PAGES } from "../app/novadiffDocs";
-import { runMermaidNodes } from "../app/mermaidBoot";
+import { DocMermaidMount } from "./DocMermaidMount";
 import type { LlmSettings } from "../app/llmStorage";
 import { buildCodeCityLayout } from "../app/codeCityLayout";
 import {
@@ -47,6 +47,8 @@ import {
 } from "../app/docsQuality";
 import { CodeCityLegend } from "./CodeCityLegend";
 import { CodeCityView } from "./CodeCityView";
+import { KnowledgeGraphPanel } from "./KnowledgeGraphPanel";
+import { useBackgroundActivityActionsOptional } from "../app/BackgroundActivityContext";
 import { LlmSummaryMarkdown } from "./LlmSummaryMarkdown";
 
 const MAX_AUTO_FILES = 400;
@@ -104,6 +106,8 @@ export interface DocumentationWorkspaceProps {
   workspaceDocAuto: boolean;
   onWorkspaceDocAutoChange: (value: boolean) => void;
   onJumpToCompare: (path: string) => void;
+  onOpenInsightsDock?: () => void;
+  insightsDockOpen?: boolean;
 }
 
 export function DocumentationWorkspace({
@@ -119,7 +123,10 @@ export function DocumentationWorkspace({
   workspaceDocAuto,
   onWorkspaceDocAutoChange,
   onJumpToCompare,
+  onOpenInsightsDock,
+  insightsDockOpen = false,
 }: DocumentationWorkspaceProps) {
+  const { upsertActivity, removeActivity } = useBackgroundActivityActionsOptional() ?? {};
   const [asyncFiltered, setAsyncFiltered] = useState<FileChange[] | null>(null);
   const [gitignoreMeta, setGitignoreMeta] = useState<GitignorePromptMeta | null>(
     null,
@@ -609,10 +616,7 @@ export function DocumentationWorkspace({
   }, [cityVisible, compared, leftRoot, rightRoot, leftTitle, rightTitle, rows]);
 
   const metrics = useMemo(() => buildDocWorkspaceMetrics(docRows), [docRows]);
-  const pieHost = useRef<HTMLDivElement>(null);
-  const depthHost = useRef<HTMLDivElement>(null);
-  const importHost = useRef<HTMLDivElement>(null);
-  const callHost = useRef<HTMLDivElement>(null);
+  const metricsChartsLoading = docFilterLoading || !docFilterSettled;
 
   const pieDef = useMemo(() => changeKindPieMermaid(metrics), [metrics]);
   const depthDef = useMemo(() => depthBarMermaid(metrics), [metrics]);
@@ -628,36 +632,6 @@ export function DocumentationWorkspace({
       ? s
       : "flowchart TB\n  empty[No cross-file call graph yet]";
   }, [codebaseOutline]);
-  useEffect(() => {
-    const pieEl = pieHost.current;
-    const depthEl = depthHost.current;
-    const importEl = importHost.current;
-    const callEl = callHost.current;
-    if (!pieEl || !depthEl || !importEl || !callEl) {
-      return;
-    }
-    pieEl.replaceChildren();
-    depthEl.replaceChildren();
-    importEl.replaceChildren();
-    callEl.replaceChildren();
-    const p1 = document.createElement("pre");
-    p1.className = "mermaid";
-    p1.textContent = pieDef;
-    pieEl.appendChild(p1);
-    const p2 = document.createElement("pre");
-    p2.className = "mermaid";
-    p2.textContent = depthDef;
-    depthEl.appendChild(p2);
-    const p3 = document.createElement("pre");
-    p3.className = "mermaid";
-    p3.textContent = importDef;
-    importEl.appendChild(p3);
-    const p4 = document.createElement("pre");
-    p4.className = "mermaid";
-    p4.textContent = callDef;
-    callEl.appendChild(p4);
-    void runMermaidNodes([p1, p2, p3, p4]);
-  }, [pieDef, depthDef, importDef, callDef]);
 
   const [docMarkdown, setDocMarkdown] = useState<string | null>(null);
   const [docLoading, setDocLoading] = useState(false);
@@ -677,6 +651,61 @@ export function DocumentationWorkspace({
   const [selectedCityBuilding, setSelectedCityBuilding] = useState<ReturnType<
     typeof buildCodeCityLayout
   >["buildings"][number] | null>(null);
+  useEffect(() => {
+    if (docFilterLoading) {
+      upsertActivity?.({
+        id: "doc-filter",
+        kind: "filter",
+        label: "Applying compare filters",
+        detail: "Gitignore and novadiff-docs rules",
+        progress: null,
+      });
+    } else {
+      removeActivity?.("doc-filter");
+    }
+  }, [docFilterLoading, removeActivity, upsertActivity]);
+
+  useEffect(() => {
+    if (outlineLoading) {
+      upsertActivity?.({
+        id: "doc-outline",
+        kind: "outline",
+        label: "Scanning codebase outline",
+        detail: "Imports and cross-file heuristics",
+        progress: null,
+      });
+    } else {
+      removeActivity?.("doc-outline");
+    }
+  }, [outlineLoading, removeActivity, upsertActivity]);
+
+  useEffect(() => {
+    if (docLoading) {
+      upsertActivity?.({
+        id: "doc-gen",
+        kind: "docs",
+        label: "Generating documentation bundle",
+        detail: "Streaming AI narrative",
+        progress: null,
+      });
+    } else {
+      removeActivity?.("doc-gen");
+    }
+  }, [docLoading, removeActivity, upsertActivity]);
+
+  useEffect(() => {
+    if (cityLoading) {
+      upsertActivity?.({
+        id: "code-city",
+        kind: "city",
+        label: "Building 3D code city",
+        progress: null,
+      });
+    } else {
+      removeActivity?.("code-city");
+    }
+  }, [cityLoading, removeActivity, upsertActivity]);
+
   const cityLayout = useMemo(
     () =>
       buildCodeCityLayout(cityModel, {
@@ -1397,10 +1426,41 @@ export function DocumentationWorkspace({
             </span>
           </p>
         </div>
+        {onOpenInsightsDock && !insightsDockOpen ? (
+          <button
+            type="button"
+            className="doc-workspace-copy-btn doc-workspace-insights-reopen"
+            onClick={onOpenInsightsDock}
+          >
+            Show summary panel
+          </button>
+        ) : null}
       </header>
 
-      <section ref={citySectionRef} className="doc-workspace-panel">
-        <h2 className="doc-workspace-h2">Structural metrics</h2>
+      <KnowledgeGraphPanel
+        compared={compared}
+        leftRoot={leftRoot}
+        rightRoot={rightRoot}
+        leftTitle={leftTitle}
+        rightTitle={rightTitle}
+        docRows={docRows}
+        llmSettings={llmSettings}
+        metrics={metrics}
+        pieDef={pieDef}
+        depthDef={depthDef}
+        importDef={importDef}
+        callDef={callDef}
+        metricsChartsLoading={metricsChartsLoading}
+        outlineLoading={outlineLoading}
+      />
+
+      <details className="doc-workspace-panel doc-workspace-details-secondary">
+        <summary className="doc-workspace-h2 doc-workspace-details-summary">
+          Additional workspace panels (risk, summaries, bundles, code city)
+        </summary>
+
+      <section ref={citySectionRef} className="doc-workspace-panel doc-workspace-panel--nested">
+        <h2 className="doc-workspace-h2">Structural metrics (reference)</h2>
         <p className="doc-workspace-prose">
           Derived from the compare result (relative paths), using the same root-level
           ignore rules and <code>novadiff-docs/</code> reservation as summary prefetch
@@ -1415,24 +1475,48 @@ export function DocumentationWorkspace({
           </a>{" "}
           (without parsing source ASTs here).
         </p>
-        <div className="doc-workspace-grid">
-          <div className="doc-workspace-chart">
+        <div className="doc-workspace-grid doc-workspace-charts">
+          <div
+            className={`doc-workspace-chart doc-state-enter${metricsChartsLoading ? " is-loading" : ""}`}
+          >
             <h3 className="doc-workspace-h3">Change mix</h3>
-            <div ref={pieHost} className="doc-mermaid-mount" />
+            <DocMermaidMount
+              definition={pieDef}
+              loading={metricsChartsLoading}
+              loadingLabel="Computing change mix…"
+            />
           </div>
-          <div className="doc-workspace-chart">
+          <div
+            className={`doc-workspace-chart doc-state-enter${metricsChartsLoading ? " is-loading" : ""}`}
+          >
             <h3 className="doc-workspace-h3">Depth distribution</h3>
-            <div ref={depthHost} className="doc-mermaid-mount" />
+            <DocMermaidMount
+              definition={depthDef}
+              loading={metricsChartsLoading}
+              loadingLabel="Computing depth distribution…"
+            />
           </div>
         </div>
-        <div className="doc-workspace-grid" style={{ marginTop: 12 }}>
-          <div className="doc-workspace-chart">
+        <div className="doc-workspace-grid doc-workspace-charts" style={{ marginTop: 12 }}>
+          <div
+            className={`doc-workspace-chart doc-state-enter${outlineLoading ? " is-loading" : ""}`}
+          >
             <h3 className="doc-workspace-h3">Module imports (JS/TS)</h3>
-            <div ref={importHost} className="doc-mermaid-mount" />
+            <DocMermaidMount
+              definition={importDef}
+              loading={outlineLoading}
+              loadingLabel="Scanning target imports…"
+            />
           </div>
-          <div className="doc-workspace-chart">
+          <div
+            className={`doc-workspace-chart doc-state-enter${outlineLoading ? " is-loading" : ""}`}
+          >
             <h3 className="doc-workspace-h3">Cross-file calls (heuristic)</h3>
-            <div ref={callHost} className="doc-mermaid-mount" />
+            <DocMermaidMount
+              definition={callDef}
+              loading={outlineLoading}
+              loadingLabel="Building call graph…"
+            />
           </div>
         </div>
         <div className="doc-workspace-tables">
@@ -2106,7 +2190,7 @@ export function DocumentationWorkspace({
         ) : null}
       </section>
 
-      <section className="doc-workspace-panel">
+      <section className="doc-workspace-panel doc-workspace-panel--nested">
         <h2 className="doc-workspace-h2">3D code city</h2>
         <p className="doc-workspace-prose">
           The city lays out districts by top-level subsystem, files as blocks, and
@@ -2300,6 +2384,7 @@ export function DocumentationWorkspace({
           </div>
         ) : null}
       </section>
+      </details>
     </main>
   );
 }

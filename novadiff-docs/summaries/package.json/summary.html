@@ -26,23 +26,34 @@
 <body>
   <header class="top">
     <h1>package.json</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:28:02.676Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:04:04.221Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a folder comparison between two trees on disk, with NovaDiff-main as the baseline (left) and NovaDiff as the target (right). The file being compared is package.json. The change kind is modified, indicating that both sides exist but differ.</p>
+<p>The root <code>package.json</code> now declares a monorepo with two workspaces: <code>packages/graph-core</code> and <code>packages/graph-view</code> (added in lines 7‑10). Build and dev scripts delegate to these workspaces, and the Electron build config references the workspace outputs.</p>
 <h3>Key changes</h3>
-<p>The following changes were detected in the package.json file:</p>
 <ul>
-<li>Added dependencies: &quot;lucide-react&quot;: &quot;^0.511.0&quot;, &quot;marked&quot;: &quot;^15.0.7&quot;, &quot;mermaid&quot;: &quot;^11.15.0&quot;</li>
-<li>Removed dependency: &quot;remark-gfm&quot;: &quot;^4.0.1&quot;</li>
-<li>Changed dependency versions: &quot;react&quot;: &quot;^19.1.0&quot;, &quot;react-dom&quot;: &quot;^19.1.0&quot;, &quot;react-markdown&quot;: &quot;^10.1.0&quot;, &quot;react-window&quot;: &quot;^1.8.11&quot;, &quot;rehype-sanitize&quot;: &quot;^6.0.0&quot;, &quot;three&quot;: &quot;^0.184.0&quot;</li>
+<li><strong>Workspaces</strong>: <code>&quot;workspaces&quot;: [&quot;packages/graph-core&quot;,&quot;packages/graph-view&quot;]</code> (R7‑R10).  </li>
+<li><strong>Scripts</strong>: old <code>electron:dev</code> and <code>build</code> removed (L10‑L11). New workspace‑aware scripts added: <code>graph:core-build</code>, <code>graph:catalog:generate</code>, <code>graph:build</code>, and a new <code>electron:dev</code> that runs <code>graph:build</code> before the Electron dev server (R14‑R18).  </li>
+<li><strong>Dependencies</strong>: local package references added: <code>&quot;@novadiff/graph-core&quot;:&quot;file:packages/graph-core&quot;</code> and <code>&quot;@novadiff/graph-view&quot;:&quot;file:packages/graph-view&quot;</code> (R24‑R26). <code>three</code> restored to dependencies (R26 removed, R43‑R44 added).  </li>
+<li><strong>DevDependencies</strong>: <code>tailwindcss</code> added (R58).  </li>
+<li><strong>Electron build</strong>: <code>files</code> array expanded to include <code>packages/graph-core/dist/**/*</code> and <code>packages/graph-core/package.json</code> (R74‑R75). The exclusion <code>node_modules/marked/**/*</code> removed and replaced by a blanket <code>node_modules/**/*</code> (L55 removed, R78 added).  </li>
+<li><strong>extraResources</strong>: new block pointing to <code>cli/target/release</code> (R81‑R86).  </li>
+<li><strong>Targets</strong>: mac, win, linux targets set to <code>nsis</code> and <code>AppImage</code> (R90‑R98).</li>
 </ul>
-<p>These changes are significant because they introduce new dependencies and modify existing ones, which may impact the overall behavior of the application.</p>
 <h3>Impact</h3>
-<p>The impact of these changes is not immediately apparent, but it&#39;s essential to verify that the new dependencies do not introduce any compatibility issues or performance regressions. Additionally, the removal of &quot;remark-gfm&quot; may require additional testing to ensure that the application continues to function correctly.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>Based on the evidence provided, there is a risk of regression due to the change in dependency versions. To mitigate this risk, we should run the primary build/test pipeline to ensure that the new dependencies do not cause any issues. Additionally, we should verify that the removed dependency does not affect the application&#39;s functionality. Finally, we should consider updating the documentation to reflect the changes made to the package.json file.</p>
+<ul>
+<li>Workspace scripts must resolve correctly; failures will break Electron dev/build.  </li>
+<li>The broader <code>node_modules/**/*</code> inclusion may increase bundle size; verify packaging.  </li>
+<li>Local package references (<code>file:</code>) require <code>npm ci</code> to resolve properly.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Run <code>npm run graph:core-build</code> and <code>npm run graph:build</code> locally before building Electron.  </li>
+<li>Verify <code>npm ci</code> in root and each workspace resolves <code>file:</code> dependencies.  </li>
+<li>Test Electron builds on macOS, Windows, and Linux to confirm <code>extraResources</code> and target settings.  </li>
+<li>Check that the new <code>node_modules/**/*</code> inclusion does not package unnecessary files.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

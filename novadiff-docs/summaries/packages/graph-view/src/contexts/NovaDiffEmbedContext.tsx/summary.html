@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:46:51.133Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new context module <code>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx</code> is added to expose typed APIs for NovaDiff embeds.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – <code>createContext, useContext</code> from React added at line 1 (R1).  </li>
+<li><strong>Interfaces</strong> –  <ul>
+<li><code>NovaDiffSourceFile</code> (R3‑9) defines <code>path</code>, <code>language</code>, <code>content</code>, <code>sizeBytes</code>, <code>lineCount</code>.  </li>
+<li><code>ExplainCodeRequest</code> (R11‑17) specifies <code>filePath</code>, <code>startLine</code>, <code>endLine</code>, <code>snippet</code>, optional <code>symbolName</code>.  </li>
+<li><code>NovaDiffEmbedContextValue</code> (R19‑27) declares optional <code>readFile</code>, <code>embedMode</code>, and <code>explainCode</code>.</li>
+</ul>
+</li>
+<li><strong>Context</strong> – <code>NovaDiffEmbedContext</code> created with an empty default at line 30 (R30).  </li>
+<li><strong>Hook</strong> – <code>useNovaDiffEmbed</code> returns the context value (R32‑34).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a typed contract for embed consumers, improving compile‑time safety.  </li>
+<li>Introduces a new public API <code>useNovaDiffEmbed</code>; components must use this hook to access the context.  </li>
+<li>The default context is empty; consumers must guard against <code>undefined</code> properties, and missing providers can cause runtime errors.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Provider coverage</strong> – ensure all embed consumers are wrapped by a provider that supplies <code>readFile</code> and <code>explainCode</code>; otherwise the functions will be <code>undefined</code>.  </li>
+<li><strong>Runtime safety</strong> – consider defensive checks or default no‑op implementations to avoid crashes.  </li>
+<li><strong>Linting</strong> – run <code>npm run lint</code> to catch unused imports or type errors.  </li>
+<li><strong>Compatibility</strong> – update any stale imports of <code>NovaDiffEmbedContext</code> to use the new hook or context.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

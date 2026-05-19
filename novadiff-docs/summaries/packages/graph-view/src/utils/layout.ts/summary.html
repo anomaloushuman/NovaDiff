@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/layout.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/layout.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:01:59.702Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/utils/layout.ts</code> now contains three layout helpers: a lightweight Dagre layout, a d3‑force directed layout with optional community clustering, and ELK‑based utilities for converting nodes/edges to ELK input and merging ELK output back onto the original nodes. The file also defines default dimensions for nodes, clusters, and portal nodes.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – added <code>dagre</code> and d3‑force utilities (<code>forceSimulation</code>, <code>forceLink</code>, <code>forceManyBody</code>, <code>forceCenter</code>, <code>forceCollide</code>, <code>forceX</code>, <code>forceY</code>) plus type imports from <code>d3-force</code>, <code>@xyflow/react</code>, and local <code>elk-layout</code>.  </li>
+<li><strong>Constants</strong> – <code>NODE_WIDTH</code>, <code>NODE_HEIGHT</code>, <code>LAYER_CLUSTER_WIDTH</code>, <code>LAYER_CLUSTER_HEIGHT</code>, <code>PORTAL_NODE_WIDTH</code>, <code>PORTAL_NODE_HEIGHT</code> (lines 15‑20).  </li>
+<li><strong><code>applyDagreLayout</code></strong> – builds a Dagre graph, applies spacing heuristics, and returns positioned nodes/edges (lines 30‑79).  </li>
+<li><strong><code>applyForceLayout</code></strong> – constructs a d3‑force simulation, supports community clustering via <code>forceX/Y</code>, and synchronously ticks to convergence (lines 94‑189).  </li>
+<li><strong>ELK helpers</strong> –  <ul>
+<li><code>ELK_DEFAULT_LAYOUT_OPTIONS</code> (lines 195‑204).  </li>
+<li><code>nodesToElkInput</code> (lines 206‑228).  </li>
+<li><code>mergeElkPositions</code> (lines 231‑266).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong> – replaces ad‑hoc positioning logic; the new functions provide deterministic layouts for small graphs (Dagre) and knowledge graphs (force).  </li>
+<li><strong>Maintainability</strong> – centralizes sizing constants and layout logic, reducing duplication across the repo.  </li>
+<li><strong>Performance</strong> – force layout runs synchronously with a capped tick count; Dagre layout scales spacing for larger graphs.  </li>
+<li><strong>Compatibility</strong> – components importing layout utilities must reference the new API; no backward‑compatible aliases are provided.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ol>
+<li><strong>Regression in existing views</strong> – verify visual consistency with prior implementations.  </li>
+<li><strong>ELK integration</strong> – ensure <code>nodesToElkInput</code> correctly maps all required properties; test with complex container hierarchies.  </li>
+<li><strong>Community clustering</strong> – confirm that <code>communityMap</code> handling does not produce NaNs when a node lacks a community.  </li>
+<li><strong>Dependency resolution</strong> – <code>dagre</code> and <code>d3-force</code> must be present in <code>package.json</code>; run <code>npm install</code> and lint to catch missing peer dependencies.  </li>
+<li><strong>Test coverage</strong> – unknown from the available diff/scan evidence; additional tests for empty graphs and large node counts are recommended.</li>
+</ol>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

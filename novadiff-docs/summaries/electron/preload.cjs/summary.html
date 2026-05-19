@@ -26,17 +26,37 @@
 <body>
   <header class="top">
     <h1>electron/preload.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:40:33.279Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T18:56:05.758Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a modification to the <code>electron/preload.cjs</code> file in the NovaDiff repository. The file is part of the Electron context bridge and exposes various IPC functions to the renderer process.</p>
+<p>The <code>electron/preload.cjs</code> script now exposes additional IPC‑bound APIs for knowledge‑graph handling, engine progress, and extended Git/GitHub integration. No existing APIs were removed; the new functions are appended after the existing <code>onSummaryPrefetchProgress</code> block (see lines 51‑72 and 118‑178).</p>
 <h3>Key changes</h3>
-<p>The most significant change in this diff is the addition of new IPC functions for managing window state, such as minimizing, maximizing, and closing the window. These functions are exposed through the <code>electronAPI</code> object in the renderer process. Additionally, the diff includes changes to the <code>llmSummarizeStream</code> function, which now includes a handler for the <code>LLM_STREAM</code> event emitted by the LLM module.</p>
+<ul>
+<li><strong>Knowledge‑graph API</strong> (lines 51‑72):  <ul>
+<li><code>buildKnowledgeGraph</code>, <code>readKnowledgeGraph</code>, <code>readKnowledgeGraphFile</code> invoke <code>&quot;knowledge-graph-build&quot;</code>, <code>&quot;knowledge-graph-read&quot;</code>, <code>&quot;knowledge-graph-read-file&quot;</code>.  </li>
+<li><code>onKnowledgeGraphProgress</code> registers a listener on <code>&quot;knowledge-graph-progress&quot;</code> and returns a cleanup function.</li>
+</ul>
+</li>
+<li><strong>Engine progress</strong> (lines 64‑71): similar pattern for <code>&quot;engine-progress&quot;</code>.  </li>
+<li><strong>Git tooling</strong> (lines 118‑127): new helpers (<code>gitDetectTooling</code>, <code>gitRepoStatus</code>, <code>gitDiscoverRepos</code>, etc.) expose <code>&quot;git-detect-tooling&quot;</code>, <code>&quot;git-repo-status&quot;</code>, etc.  </li>
+<li><strong>GitHub integration</strong> (lines 147‑168): progress listeners for <code>&quot;github-gh-install-progress&quot;</code> and <code>&quot;github-auth-progress&quot;</code>.  </li>
+<li><strong>Workspace history</strong> (lines 170‑177): <code>onWorkspaceHistoryProgress</code> listens on <code>&quot;workspace-history-progress&quot;</code>.</li>
+</ul>
 <h3>Impact</h3>
-<p>The impact of these changes on correctness, maintainability, performance, compatibility, or observability is not immediately apparent. However, the addition of new IPC functions may introduce new opportunities for security vulnerabilities or other issues that need to be carefully reviewed and tested.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>Based on the evidence provided, there is no clear indication of any potential risks or issues with the changes made to the <code>electron/preload.cjs</code> file. However, it is important to verify that the new IPC functions do not introduce any security vulnerabilities or other issues that could negatively impact the overall stability or functionality of the application. As such, it would be advisable to run the JS/TS lint, test, and production build commands used by this repo to ensure that all tests pass and there are no unexpected issues.</p>
+<ul>
+<li><strong>Runtime correctness</strong>: Each new IPC channel requires a corresponding main‑process handler; missing handlers will trigger runtime errors.  </li>
+<li><strong>Memory safety</strong>: Every event listener returns a cleanup function; callers must invoke it to avoid leaks.  </li>
+<li><strong>Surface area</strong>: The API surface expands, so documentation and type definitions should be updated.  </li>
+<li><strong>Performance</strong>: Additional listeners add minimal IPC overhead; the impact is negligible for typical usage.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ol>
+<li><strong>Missing main‑process handlers</strong> – Verify that handlers for <code>&quot;knowledge-graph-build&quot;</code>, <code>&quot;git-detect-tooling&quot;</code>, etc., exist.  </li>
+<li><strong>Listener leaks</strong> – Ensure cleanup functions are called when components unmount.  </li>
+<li><strong>Name collisions</strong> – Confirm that new symbols (<code>onEngineProgress</code>, <code>onWorkspaceHistoryProgress</code>) do not shadow legacy ones.  </li>
+<li><strong>Test coverage</strong> – Add unit tests for the new preload functions to guard against IPC regressions.</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

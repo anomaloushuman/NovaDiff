@@ -1,0 +1,60 @@
+{
+  "relPath": "electron/github-auth-flow.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:13:41.506Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Authentication or access-control flows may be affected.",
+        "key": "auth-surface",
+        "label": "Auth-adjacent path",
+        "tone": "warn"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const { spawn } = require(\"node:child_process\");",
+      "R4 added: const { shell } = require(\"electron\");",
+      "R10 added: } = require(\"./gh-path.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-141"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const { spawn } = require(\"node:child_process\");",
+      "R4 added: const { shell } = require(\"electron\");",
+      "R5 added: const {",
+      "R6 added: augmentPathForCli,",
+      "R7 added: resolveGhExecutable,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "auth-surface",
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function startGithubDeviceAuth (38-141)",
+      "right function cancelGithubDeviceAuth (21-37)",
+      "right function stripAnsi (17-20)"
+    ],
+    "verification_hints": [
+      "Run focused authentication/session regression checks for the touched flows.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

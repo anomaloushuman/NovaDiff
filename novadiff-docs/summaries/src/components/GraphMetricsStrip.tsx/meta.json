@@ -1,0 +1,54 @@
+{
+  "relPath": "src/components/GraphMetricsStrip.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:11:17.169Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export interface GraphMetricsStripProps {",
+      "R17 added: export function GraphMetricsStrip({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useState } from \"react\";",
+      "R2 added: import type { DocWorkspaceMetrics } from \"../app/docWorkspaceMetrics\";",
+      "R3 added: import { DocMermaidMount } from \"./DocMermaidMount\";"
+    ],
+    "changed_line_ranges": [
+      "R1-134"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useState } from \"react\";",
+      "R2 added: import type { DocWorkspaceMetrics } from \"../app/docWorkspaceMetrics\";",
+      "R3 added: import { DocMermaidMount } from \"./DocMermaidMount\";",
+      "R5 added: export interface GraphMetricsStripProps {",
+      "R6 added: metrics: DocWorkspaceMetrics;",
+      "R7 added: pieDef: string;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function GraphMetricsStrip (17-134)",
+      "right interface GraphMetricsStripProps (5-16)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "relPath": "src/app/BackgroundActivityContext.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:02:43.987Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R10 added: export type BackgroundActivityKind =",
+      "R22 added: export interface BackgroundActivity {",
+      "R48 added: export function BackgroundActivityProvider({ children }: { children: ReactNode }) {",
+      "R97 added: export function useBackgroundActivity() {",
+      "R106 added: export function useBackgroundActivityOptional() {"
+    ],
+    "changed_imports": [
+      "R1 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-108"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import {",
+      "R2 added: createContext,",
+      "R3 added: useCallback,",
+      "R4 added: useContext,",
+      "R5 added: useMemo,",
+      "R6 added: useState,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function BackgroundActivityProvider (48-96)",
+      "right interface BackgroundActivity (22-36)",
+      "right interface BackgroundActivityContextValue (37-47)",
+      "right function useBackgroundActivity (97-105)",
+      "right function useBackgroundActivityOptional (106-108)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

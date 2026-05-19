@@ -26,27 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/InsightsColumn.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:54:39.871Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:13:25.388Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This is a folder diff between two trees on disk, with a focus on the <code>src/components/InsightsColumn.tsx</code> file. The change kind is modified, indicating that both sides exist but differ. The line changes are approximately +115/-12.</p>
+<p><code>InsightsColumn</code> now accepts a <code>prefetchProgress</code> prop and renders a visual progress bar instead of a plain text status. The component’s layout has been tweaked: the summary panel uses a keyed <code>div</code> with an enter animation class, and the file‑summary section no longer wraps its content in a generic scroll container.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Added imports for <code>isNovadiffDocsReservedPath</code>, <code>Check</code>, <code>LayoutList</code>, <code>Loader2</code>, and <code>Sparkles</code> from <code>lucide-react</code>.</li>
-<li>Added types for <code>FileChange</code>, <code>FileDiffPayload</code>, <code>LlmSettings</code>, and <code>InsightsColumnProps</code>.</li>
-<li>Modified the <code>InsightsColumn</code> function to include new props and changed import statements.</li>
-<li>Added a new section for generating summaries and displaying evidence anchors.</li>
+<li><strong>New prop</strong>: <code>prefetchProgress?: { current: number; total: number } | null</code> added to <code>InsightsColumnProps</code> (line 28).  </li>
+<li><strong>Summary panel</strong>: replaced <code>&lt;div className=&quot;insights-scroll&quot;&gt;</code> with <code>&lt;div key=&quot;summary&quot; className=&quot;insights-scroll insights-panel-enter&quot;&gt;</code> (lines 106‑108).  </li>
+<li><strong>Prefetch status UI</strong>: removed the plain <code>&lt;p&gt;</code> (line 189) and added a <code>&lt;div className=&quot;insights-prefetch-status doc-state-enter&quot;&gt;</code> containing a progress bar that shows either a determinate fill or an indeterminate track (lines 191‑212).  </li>
+<li><strong>File‑summary footnote</strong>: the reserved‑path warning and chunk hint logic remain unchanged; only the prefetch status rendering changed.  </li>
+<li><strong>Minor refactor</strong>: the <code>ChangedFilesTree</code> container now uses a keyed <code>div</code> with <code>insights-panel-enter</code> (lines 258‑261).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>This change adds new functionality for generating summaries and displaying evidence anchors, which may impact performance or compatibility with certain models.</li>
-<li>The added imports and types may introduce regression risk if not properly tested or documented.</li>
+<li><strong>UX</strong>: Users now see a visual indicator of prefetch progress, improving feedback during large diff operations.  </li>
+<li><strong>Maintainability</strong>: Adding the <code>prefetchProgress</code> prop centralizes progress handling; the component no longer relies on a global state for this UI.  </li>
+<li><strong>Performance</strong>: The progress bar uses CSS transitions; no new heavy computations are introduced.  </li>
+<li><strong>Compatibility</strong>: Existing callers must supply the new prop (or <code>null</code>) to avoid TypeScript errors; backward‑compatibility is preserved by making it optional.</li>
 </ul>
-<h3>Risks &amp; follow-ups</h3>
+<h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the new summary generation and display features work correctly with different models and input data.</li>
-<li>Ensure that the new types and imports are properly tested and documented to avoid future regressions.</li>
+<li><strong>Regression</strong>: Verify that components consuming <code>InsightsColumn</code> still compile after the prop change; run the TypeScript build.  </li>
+<li><strong>UI consistency</strong>: Ensure the new progress bar styles (<code>insights-prefetch-status</code>, <code>insights-prefetch-track</code>) are present in the CSS and that animations trigger correctly.  </li>
+<li><strong>Accessibility</strong>: The progress bar currently lacks ARIA attributes; consider adding <code>role=&quot;progressbar&quot;</code> and <code>aria-valuenow/aria-valuemin/aria-valuemax</code> for screen readers.  </li>
+<li><strong>Testing</strong>: Add unit tests to confirm that <code>prefetchProgress</code> renders the correct fill percentage and that the indeterminate state appears when <code>total</code> is zero or <code>null</code>.</li>
 </ul>
 </article>
   </main>

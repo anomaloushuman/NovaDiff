@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/Breadcrumb.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/Breadcrumb.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:16:06.755Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>Breadcrumb</code> component is added at <code>packages/graph-view/src/components/Breadcrumb.tsx</code> (lines R1‑R40). It reads navigation state from the global store and renders a breadcrumb UI that adapts to the current view (overview or layer detail).</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>  <ul>
+<li><code>useDashboardStore</code> from <code>../store</code> [R1]  </li>
+<li><code>useI18n</code> from <code>../contexts/I18nContext</code> [R2]</li>
+</ul>
+</li>
+<li><strong>Export</strong>  <ul>
+<li><code>export default function Breadcrumb()</code> [R4]</li>
+</ul>
+</li>
+<li><strong>State hooks</strong>  <ul>
+<li><code>navigationLevel</code>, <code>activeLayerId</code>, <code>graph</code>, `navigateTo</li>
+</ul>
+</li>
+</ul>
+<h3>Overview</h3>
+<p>` from the store [R5‑R8]  </p>
+<ul>
+<li><code>t</code> from the i18n context [R9]  </li>
+<li><strong>Rendering logic</strong>  <ul>
+<li>When <code>navigationLevel === &quot;overview&quot;</code> a pill shows `t.breadcrumb.project</li>
+</ul>
+</li>
+</ul>
+<h3>Overview</h3>
+<p>` [R15‑R18]  </p>
+<ul>
+<li>When <code>navigationLevel === &quot;layer-detail&quot;</code> a breadcrumb chain shows:  <ul>
+<li>Project button (calls `navigateTo</li>
+</ul>
+</li>
+</ul>
+<h3>Overview</h3>
+<p><code>) [R22‑R28]       - Separator </code>›<code>[R29]       - Active layer name or default</code>t.layer.defaultName<code>[R30‑R32]       - Escape‑back hint</code>t.breadcrumb.escBack` [R33‑R35]  </p>
+<ul>
+<li><strong>Styling</strong> – Tailwind classes for positioning, colors, and typography.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong> – The component expects the store to expose <code>navigationLevel</code>, <code>activeLayerId</code>, <code>graph</code>, and `navigateTo</li>
+</ul>
+<h3>Overview</h3>
+<p>`. If any are missing, the UI may render empty or throw errors.  </p>
+<ul>
+<li><strong>Maintainability</strong> – Adds a public component that should be documented and exported from the package index. Future changes to store keys or i18n keys must be reflected.  </li>
+<li><strong>Performance</strong> – Minimal; only a few store reads and a simple render tree.  </li>
+<li><strong>Compatibility</strong> – Requires the <code>I18nContext</code> provider and the <code>useDashboardStore</code> hook to be available in the consuming app.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Store contract</strong> – Verify that <code>useDashboardStore</code> provides the expected keys and that `navigateTo</li>
+</ul>
+<h3>Overview</h3>
+<p>` is a function.  </p>
+<ul>
+<li><strong>i18n keys</strong> – Ensure `t.breadcrumb.project</li>
+</ul>
+<h3>Overview</h3>
+<p><code>, </code>t.breadcrumb.project<code>, </code>t.layer.defaultName<code>, and </code>t.breadcrumb.escBack` exist; otherwise the UI will show empty strings.  </p>
+<ul>
+<li><strong>Graph safety</strong> – The code safely handles <code>graph</code> being <code>undefined</code>, but <code>graph?.layers</code> must be an array; otherwise <code>find</code> will error.  </li>
+<li><strong>Testing</strong> – Add unit tests for both navigation levels, mocking the store and i18n context.  </li>
+<li><strong>Export</strong> – Confirm the component is re‑exported from the package’s index file so it can be imported elsewhere.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

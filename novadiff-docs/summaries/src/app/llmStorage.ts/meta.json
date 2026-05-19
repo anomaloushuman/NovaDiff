@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/llmStorage.ts",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T07:00:40.296Z",
+  "generatedAt": "2026-05-19T19:04:45.292Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,36 +11,27 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R1 added: import type {"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-8",
-      "R26-55"
+      "R56-61"
     ],
     "cited_changed_lines": [
-      "R1 added: import type {",
-      "R2 added: FileSummaryEvidence,",
-      "R3 added: DiffSelectionLineRange,",
-      "R4 added: DiffSelectionSymbolMatch,",
-      "R5 added: RiskSignal,",
-      "R6 added: SelectionDocMode,"
+      "R56 added: /** Explain a source snippet from the knowledge-graph code viewer. */",
+      "R57 added: explainCode?: boolean;",
+      "R58 added: codeExcerpt?: string;",
+      "R59 added: lineStart?: number;",
+      "R60 added: lineEnd?: number;",
+      "R61 added: symbolName?: string;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface LlmSummarizePayload (17-59)"
+      "right interface LlmSummarizePayload (17-65)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

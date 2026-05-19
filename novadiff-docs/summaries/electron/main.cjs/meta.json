@@ -1,9 +1,9 @@
 {
   "relPath": "electron/main.cjs",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:36:18.377Z",
+  "generatedAt": "2026-05-19T21:17:00.602Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,40 +21,42 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "R3 added: const fs = require(\"node:fs/promises\");",
-      "R5 added: const { pathToFileURL } = require(\"node:url\");",
-      "R22 added: } = require(\"./prefetch-summaries.cjs\");",
-      "R23 added: const { writeNovadiffDocsBundle } = require(\"./novadiff-docs-writer.cjs\");",
-      "R24 added: const { generateNovadiffDocsPdf } = require(\"./novadiff-docs-pdf.cjs\");",
-      "R28 added: } = require(\"./novadiff-docs-html.cjs\");"
+      "R4 added: const fssync = require(\"node:fs\");",
+      "L15 removed: const { runCompareEngine } = require(\"./compare-runner.cjs\");",
+      "R16 added: const { runCompareEngine, runCompareEngineAsync } = require(\"./compare-runner.cjs\");",
+      "R43 added: const { buildKnowledgeGraph } = require(\"./knowledge-graph-runner.cjs\");",
+      "R51 added: } = require(\"./git-service.cjs\");",
+      "R59 added: } = require(\"./github-service.cjs\");"
     ],
     "changed_line_ranges": [
-      "R3",
-      "R5",
-      "R13",
-      "R17-44",
-      "R51-81",
-      "R118-119",
-      "R133-142",
-      "R224-250"
+      "R4",
+      "L15 / R16-22",
+      "R43-82",
+      "R84-85",
+      "L168 / R217",
+      "L170 / R219",
+      "R227",
+      "L376 / R426"
     ],
     "cited_changed_lines": [
-      "R3 added: const fs = require(\"node:fs/promises\");",
-      "R5 added: const { pathToFileURL } = require(\"node:url\");",
-      "R13 added: shell,",
-      "R17 added: const {",
-      "R18 added: startSummaryPrefetchWorker,",
-      "R19 added: stopSummaryPrefetchWorker,"
+      "R4 added: const fssync = require(\"node:fs\");",
+      "L15 removed: const { runCompareEngine } = require(\"./compare-runner.cjs\");",
+      "R16 added: const { runCompareEngine, runCompareEngineAsync } = require(\"./compare-runner.cjs\");",
+      "R18 added: function sendEngineProgress(webContents, payload) {",
+      "R19 added: if (webContents && !webContents.isDestroyed()) {",
+      "R20 added: webContents.send(\"engine-progress\", payload);"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function createWindow (110-511)",
-      "right function windowStatePayload (64-74)",
-      "right function getTargetWindow (54-63)",
-      "right function emitWindowState (75-81)"
+      "left function createWindow (110-511)",
+      "right function sendKnowledgeGraphProgress (566-800)",
+      "right function sendGithubAuthProgress (833-1058)",
+      "right function sendEngineProgress (18-102)",
+      "right function sendWorkspaceHistoryProgress (801-832)",
+      "right function createWindow (159-565)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

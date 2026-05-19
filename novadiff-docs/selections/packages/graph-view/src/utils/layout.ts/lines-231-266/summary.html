@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/layout.ts · Code explanation (L231-266) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/layout.ts · Code explanation (L231-266)</h1>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T09:52:26.866Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>mergeElkPositions</code> takes an array of graph nodes (<code>nodes</code>) and an <code>ElkInput</code> result (<code>positioned</code>) that contains layout coordinates from the ELK layout engine. It returns a new array of nodes where each node’s <code>position</code> (and optionally <code>width</code>/<code>height</code> for containers) is replaced with the coordinates supplied by ELK. If ELK did not provide a position for a node, the original node is returned unchanged, defaulting its <code>position</code> to <code>{x:0,y:0}</code> if missing.</h3>
+<h3>How it works1. <strong>Build a lookup map</strong></h3>
+<p>Each child from <code>positioned</code> is stored by its <code>id</code> with its coordinates and optional size.2. <strong>Map over the original nodes</strong>For each node, it looks up the ELK result. If found, it replaces the node’s <code>position</code> with the ELK coordinates and, for container nodes, copies back the <code>width</code>/<code>height</code> that ELK echoed. If not found, the node is left untouched except for ensuring a default position.</p>
+<h3>Notes for reviewers- The function mutates <strong>no</strong> input objects; it returns a new array with new node objects.- Width/height propagation is only applied when ELK supplies them (<code>merged.width != null</code>). This is intentional for container nodes to allow a subsequent tick‑driven re‑layout to resize the visible atom.- The default <code>{x:0,y:0}</code> fallback ensures nodes without ELK data still have a defined position, preventing rendering glitches.- The use of <code>positioned.children ?? []</code> guards against <code>children</code> being <code>undefined</code>.- No side effects beyond the returned array; the function is pure.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

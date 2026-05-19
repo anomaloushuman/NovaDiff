@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/vite.config.demo.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/vite.config.demo.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:20:08.337Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new Vite config file <code>packages/graph-view/vite.config.demo.ts</code> (lines R1‑49) is added to bootstrap the demo build. It sets a base path, resolves core modules, injects a demo‑mode flag, and configures chunk splitting and plugins.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R4):```ts
+import { defineConfig } from &quot;vite&quot;;
+import react from &quot;@vitejs/plugin-react&quot;;
+import tailwindcss from &quot;@tailwindcss/vite&quot;;
+import path from &quot;path&quot;;</li>
+</ul>
+<p>```- **Export** (R6): <code>export default defineConfig({ … })</code> with <code>base: &quot;/demo/&quot;</code> (R7).  </p>
+<ul>
+<li><strong>Module resolution</strong> (R9‑R15): <code>resolve.alias</code> maps<br><code>@novadiff/graph-core/schema</code> → <code>../core/dist/schema.js</code>,<br><code>@novadiff/graph-core/search</code> → <code>../core/dist/search.js</code>,<br><code>@novadiff/graph-core/types</code> → <code>../core/dist/types.js</code>.  </li>
+<li><strong>Environment flag</strong> (R17‑R19): <code>define: { &quot;import.meta.env.VITE_DEMO_MODE&quot;: JSON.stringify(&quot;true&quot;) }</code>.  </li>
+<li><strong>Chunking</strong> (R21‑R44): <code>build.rollupOptions.output.manualChunks</code> splits React, XYFlow, graph‑layout, and markdown‑related dependencies into separate vendor bundles.  </li>
+<li><strong>Plugins</strong> (R48): <code>plugins: [react(), tailwindcss()]</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Core modules are resolved to the compiled <code>dist/*.js</code> files, enabling the demo to import them directly.  </li>
+<li>The <code>VITE_DEMO_MODE</code> flag is available in <code>import.meta.env</code>, allowing demo‑specific code paths.  </li>
+<li>Manual chunking creates distinct vendor bundles for React, XYFlow, graph‑layout, and markdown dependencies.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>The paths <code>../core/dist/*.js</code> must exist after the core build; missing files will break the demo.  </li>
+<li>The regexes in <code>manualChunks</code> must match all intended modules; incorrect matches could leave dependencies in the main bundle.  </li>
+<li>Run <code>vite build --config packages/graph-view/vite.config.demo.ts</code> to verify the base path and env flag.  </li>
+<li>Ensure the <code>react</code> and <code>tailwindcss</code> plugins load without warnings on all target platforms.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

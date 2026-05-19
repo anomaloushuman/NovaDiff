@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/store.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/store.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:37:07.805Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>store.ts</code> file was added to <code>packages/graph-view/src</code>.<br>It introduces a Zustand store (<code>useDashboardStore</code>) that holds the entire graph‑view state, along with a set of exported types and helper functions.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports (lines 1‑10)</strong> – <code>create</code> from <code>zustand</code>, <code>SearchEngine</code>, <code>SearchResult</code>, <code>GraphIssue</code>, <code>GraphNode</code>, <code>KnowledgeGraph</code>, <code>TourStep</code>, and <code>ReactFlowInstance</code>.  </li>
+<li><strong>Exported types (lines 12‑17)</strong> – <code>Persona</code>, <code>NavigationLevel</code>, <code>NodeType</code>, <code>Complexity</code>, <code>EdgeCategory</code>, <code>ViewMode</code>, <code>DetailLevel</code>.  </li>
+<li><strong><code>DashboardStore</code> interface (lines 100‑243)</strong> – defines all state fields and action signatures.  </li>
+<li><strong>Helper functions</strong>  <ul>
+<li><code>buildGraphIndexes</code> (lines 74‑95) builds <code>nodesById</code>, <code>nodeIdToLayerId</code>, and <code>nodeIdToLayerIds</code>.  </li>
+<li><code>getSortedTour</code> (lines 244‑247) sorts tour steps.  </li>
+<li><code>navigateTourToLayer</code> (lines 250‑263) returns <code>{ navigationLevel, activeLayerId }</code> when a node ID is found.  </li>
+<li><code>layerResetIfChanged</code> (lines 274‑289) clears layout caches when <code>activeLayerId</code> changes.</li>
+</ul>
+</li>
+<li><strong>Store implementation (lines 291‑823)</strong> – wires all actions, initializes state, and updates indexes on <code>setGraph</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>State centralisation</strong> – all UI components now read/write through a single store, reducing duplication.  </li>
+<li><strong>Index consistency</strong> – <code>buildGraphIndexes</code> guarantees that navigation and filtering use the same node‑to‑layer maps.  </li>
+<li><strong>Cache hygiene</strong> – <code>layerResetIfChanged</code> ensures stale layout data is purged when the active layer changes.  </li>
+<li><strong>Performance</strong> – indexes are rebuilt on every <code>setGraph</code>; this is</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

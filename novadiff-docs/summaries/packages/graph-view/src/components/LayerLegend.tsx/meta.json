@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/components/LayerLegend.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:26:43.581Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export const LAYER_PALETTE = [",
+      "R15 added: export function getLayerColor(index: number) {",
+      "R19 added: export default function LayerLegend() {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";"
+    ],
+    "changed_line_ranges": [
+      "R1-72"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";",
+      "R4 added: // Shared layer color palette — used by LayerLegend, LayerClusterNode, PortalNode, and GraphView",
+      "R5 added: export const LAYER_PALETTE = [",
+      "R6 added: { bg: \"rgba(74, 124, 155, 0.12)\", border: \"rgba(74, 124, 155, 0.4)\", label: \"#4a7c9b\" }, // blue (API)",
+      "R7 added: { bg: \"rgba(90, 158, 111, 0.12)\", border: \"rgba(90, 158, 111, 0.4)\", label: \"#5a9e6f\" }, // green (Data)"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function getLayerColor (15-72)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

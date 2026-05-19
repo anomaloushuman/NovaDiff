@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "packages/graph-view/src/NovaDiffGraphExplorer.tsx", "packages/graph-view/src/index.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

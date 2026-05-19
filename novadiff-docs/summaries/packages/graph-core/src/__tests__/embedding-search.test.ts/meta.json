@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-core/src/__tests__/embedding-search.test.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:06:17.110Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import { SemanticSearchEngine, cosineSimilarity } from \"../embedding-search.js\";",
+      "R3 added: import type { GraphNode } from \"../types.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-92"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import { SemanticSearchEngine, cosineSimilarity } from \"../embedding-search.js\";",
+      "R3 added: import type { GraphNode } from \"../types.js\";",
+      "R5 added: const nodes: GraphNode[] = [",
+      "R6 added: { id: \"n1\", type: \"file\", name: \"auth.ts\", summary: \"Authentication module\", tags: [\"auth\"], complexity: \"moderate\" },",
+      "R7 added: { id: \"n2\", type: \"file\", name: \"db.ts\", summary: \"Database connection\", tags: [\"db\"], complexity: \"simple\" },"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

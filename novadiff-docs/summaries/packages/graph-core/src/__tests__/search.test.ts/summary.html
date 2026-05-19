@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/search.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/search.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:14:13.724Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/search.test.ts</code> (lines R1‑R158) validates the <code>SearchEngine</code> implementation. It defines a helper <code>makeNode</code>, a sample node set, and a suite of unit tests covering query handling, ranking, scoring, node updates, type filtering, and result limits.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports added</strong>: <code>vitest</code> helpers and <code>SearchEngine</code> from <code>../search.js</code> (R1‑R3).  </li>
+<li><strong><code>makeNode</code> helper</strong> (R5‑R10) constructs <code>GraphNode</code> objects with defaults.  </li>
+<li><strong>Sample node array</strong> (R13‑R57) includes diverse node types (file, class, function) and metadata (tags, summary).  </li>
+<li><strong>Test cases</strong> (R59‑R158) cover:  <ul>
+<li>Empty query handling (R60‑R64).  </li>
+<li>Exact and fuzzy name matching (R66‑R78).  </li>
+<li>Field‑wide search (summary, tags) (R80‑R94).  </li>
+<li>Ranking priority (R96‑R102).  </li>
+<li>Score bounds (R104‑R112).  </li>
+<li>Dynamic re‑indexing via <code>updateNodes</code> (R114‑R137).  </li>
+<li>Type‑based filtering (R139‑R151).  </li>
+<li>Result limiting (R153‑R157).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Provides high‑confidence coverage for core search logic; many tests will fail if the API or scoring logic changes.  </li>
+<li><strong>Maintainability</strong>: Centralizes test data in <code>makeNode</code>, easing future test additions.  </li>
+<li><strong>Compatibility</strong>: No API changes; purely test‑only, so runtime behavior remains unchanged.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: Tests will fail if <code>SearchEngine</code> API or scoring logic changes.  </li>
+<li><strong>Test flakiness</strong>: Fuzzy matching tests rely on internal scoring thresholds; confirm stability after algorithm tweaks.  </li>
+<li><strong>Coverage gaps</strong>: Tests focus on positive paths; consider adding edge cases for malformed input or large node sets (unknown from the available diff/scan evidence).  </li>
+<li><strong>Performance impact</strong>: unknown from the available diff/scan evidence.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

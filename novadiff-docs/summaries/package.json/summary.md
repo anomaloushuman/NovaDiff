@@ -1,17 +1,22 @@
 ### Overview
-This diff represents a folder comparison between two trees on disk, with NovaDiff-main as the baseline (left) and NovaDiff as the target (right). The file being compared is package.json. The change kind is modified, indicating that both sides exist but differ.
+The root `package.json` now declares a monorepo with two workspaces: `packages/graph-core` and `packages/graph-view` (added in lines 7‑10). Build and dev scripts delegate to these workspaces, and the Electron build config references the workspace outputs.
 
 ### Key changes
-The following changes were detected in the package.json file:
-
-* Added dependencies: "lucide-react": "^0.511.0", "marked": "^15.0.7", "mermaid": "^11.15.0"
-* Removed dependency: "remark-gfm": "^4.0.1"
-* Changed dependency versions: "react": "^19.1.0", "react-dom": "^19.1.0", "react-markdown": "^10.1.0", "react-window": "^1.8.11", "rehype-sanitize": "^6.0.0", "three": "^0.184.0"
-
-These changes are significant because they introduce new dependencies and modify existing ones, which may impact the overall behavior of the application.
+- **Workspaces**: `"workspaces": ["packages/graph-core","packages/graph-view"]` (R7‑R10).  
+- **Scripts**: old `electron:dev` and `build` removed (L10‑L11). New workspace‑aware scripts added: `graph:core-build`, `graph:catalog:generate`, `graph:build`, and a new `electron:dev` that runs `graph:build` before the Electron dev server (R14‑R18).  
+- **Dependencies**: local package references added: `"@novadiff/graph-core":"file:packages/graph-core"` and `"@novadiff/graph-view":"file:packages/graph-view"` (R24‑R26). `three` restored to dependencies (R26 removed, R43‑R44 added).  
+- **DevDependencies**: `tailwindcss` added (R58).  
+- **Electron build**: `files` array expanded to include `packages/graph-core/dist/**/*` and `packages/graph-core/package.json` (R74‑R75). The exclusion `node_modules/marked/**/*` removed and replaced by a blanket `node_modules/**/*` (L55 removed, R78 added).  
+- **extraResources**: new block pointing to `cli/target/release` (R81‑R86).  
+- **Targets**: mac, win, linux targets set to `nsis` and `AppImage` (R90‑R98).
 
 ### Impact
-The impact of these changes is not immediately apparent, but it's essential to verify that the new dependencies do not introduce any compatibility issues or performance regressions. Additionally, the removal of "remark-gfm" may require additional testing to ensure that the application continues to function correctly.
+- Workspace scripts must resolve correctly; failures will break Electron dev/build.  
+- The broader `node_modules/**/*` inclusion may increase bundle size; verify packaging.  
+- Local package references (`file:`) require `npm ci` to resolve properly.
 
-### Risks & follow-ups
-Based on the evidence provided, there is a risk of regression due to the change in dependency versions. To mitigate this risk, we should run the primary build/test pipeline to ensure that the new dependencies do not cause any issues. Additionally, we should verify that the removed dependency does not affect the application's functionality. Finally, we should consider updating the documentation to reflect the changes made to the package.json file.
+### Risks & follow‑ups
+- Run `npm run graph:core-build` and `npm run graph:build` locally before building Electron.  
+- Verify `npm ci` in root and each workspace resolves `file:` dependencies.  
+- Test Electron builds on macOS, Windows, and Linux to confirm `extraResources` and target settings.  
+- Check that the new `node_modules/**/*` inclusion does not package unnecessary files.

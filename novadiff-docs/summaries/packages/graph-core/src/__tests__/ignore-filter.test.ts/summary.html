@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/ignore-filter.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/ignore-filter.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:07:57.797Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test suite <code>packages/graph-core/src/__tests__/ignore-filter.test.ts</code> (lines R1‑R155) has been added. It exercises the <code>ignore-filter</code> module, validating default ignore patterns, the filter’s behavior without a user file, and its handling of <code>.novadiffignore</code> files in both the graph directory and the project root.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (<code>R1‑R5</code>): Vitest helpers, <code>createIgnoreFilter</code>, <code>DEFAULT_IGNORE_PATTERNS</code>, and Node fs/path/os utilities.  </li>
+<li><strong>Test setup</strong> (<code>R7‑R18</code>): Creates a temporary directory per test, writes a <code>.novadiff-graph</code> folder, and cleans up with <code>rmSync</code>.  </li>
+<li><strong>Default pattern checks</strong> (<code>R20‑R42</code>): Asserts that <code>DEFAULT_IGNORE_PATTERNS</code> contains <code>node_modules/</code>, <code>.git/</code>, <code>obj/</code>, <code>dist/</code>, <code>build/</code>, <code>out/</code>, <code>coverage/</code> and does not contain <code>bin/</code>.  </li>
+<li><strong>Filter behavior tests</strong> (<code>R45‑R86</code>): Verify that <code>createIgnoreFilter</code> ignores default patterns, lock files, binaries, generated files, and IDE directories.  </li>
+<li><strong>User ignore file tests</strong> (<code>R89‑R154</code>):  <ul>
+<li>Reads patterns from <code>/.novadiff-graph/.novadiffignore</code> and the project root.  </li>
+<li>Handles comments, blank lines, negation (<code>!dist/</code>), recursive <code>**/snapshots/</code>.  </li>
+<li>Merges both ignore files.</li>
+</ul>
+</li>
+<li><strong>Teardown</strong> (<code>R16‑R18</code>): Uses <code>rmSync(testDir, { recursive: true, force: true })</code> to ensure cleanup.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: The tests confirm that the ignore filter honors expected patterns and user overrides.  </li>
+<li><strong>Maintainability</strong>: Future changes to ignore logic or defaults will be caught by the suite.  </li>
+<li><strong>Observability</strong>: Failures surface immediately during test runs.  </li>
+<li><strong>Compatibility</strong>: No API changes; tests rely only on existing exports.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression if defaults change</strong>: Modifying <code>DEFAULT_IGNORE_PATTERNS</code> will cause failures; review intentional changes.  </li>
+<li><strong>Cleanup reliability</strong>: <code>rmSync</code> is invoked in <code>afterEach</code>; ensure it runs even on test failures to avoid stale state.  </li>
+<li><strong>Test environment</strong>: Verify Vitest is configured to run these tests; missing configuration could hide failures.  </li>
+<li><strong>Performance</strong>: The suite creates and deletes directories per test; monitor CI runtime for any slowdown.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

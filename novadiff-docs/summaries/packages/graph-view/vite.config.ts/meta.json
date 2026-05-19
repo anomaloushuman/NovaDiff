@@ -1,0 +1,70 @@
+{
+  "relPath": "packages/graph-view/vite.config.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:20:54.197Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Runtime configuration or environment behavior may shift.",
+        "key": "config",
+        "label": "Config-adjacent path",
+        "tone": "warn"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R179 added: export default defineConfig({"
+    ],
+    "changed_imports": [
+      "R2 added: import { defineConfig } from \"vite\";",
+      "R3 added: import react from \"@vitejs/plugin-react\";",
+      "R4 added: import tailwindcss from \"@tailwindcss/vite\";",
+      "R5 added: import path from \"path\";",
+      "R6 added: import fs from \"fs\";",
+      "R7 added: import crypto from \"crypto\";"
+    ],
+    "changed_line_ranges": [
+      "R1-362"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /// <reference types=\"vitest\" />",
+      "R2 added: import { defineConfig } from \"vite\";",
+      "R3 added: import react from \"@vitejs/plugin-react\";",
+      "R4 added: import tailwindcss from \"@tailwindcss/vite\";",
+      "R5 added: import path from \"path\";",
+      "R6 added: import fs from \"fs\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "config",
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function readSourceFile (114-362)",
+      "right function detectLanguage (72-103)",
+      "right function normalizeGraphPath (34-54)",
+      "right function graphFilePathSet (55-71)",
+      "right function graphFileCandidates (15-25)",
+      "right function sendJson (104-109)",
+      "right function findGraphFile (26-29)",
+      "right function projectRootFromGraphFile (30-33)"
+    ],
+    "verification_hints": [
+      "Validate startup/config loading with representative environment settings.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

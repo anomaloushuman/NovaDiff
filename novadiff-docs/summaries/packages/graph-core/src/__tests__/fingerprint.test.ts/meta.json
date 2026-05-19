@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-core/src/__tests__/fingerprint.test.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:06:57.883Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, it, expect, vi, beforeEach } from \"vitest\";",
+      "R2 added: import type { StructuralAnalysis } from \"../types.js\";",
+      "R3 added: import {",
+      "R18 added: import { readFileSync, existsSync } from \"node:fs\";"
+    ],
+    "changed_line_ranges": [
+      "R1-427"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, it, expect, vi, beforeEach } from \"vitest\";",
+      "R2 added: import type { StructuralAnalysis } from \"../types.js\";",
+      "R3 added: import {",
+      "R4 added: contentHash,",
+      "R5 added: extractFileFingerprint,",
+      "R6 added: compareFingerprints,"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

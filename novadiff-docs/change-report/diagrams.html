@@ -187,6 +187,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .content-main { min-width: 0; display: grid; gap: 18px; }
+  .content-side { min-width: 0; }
   .content-card,
   .toc-card,
   .viz-card,
@@ -209,6 +210,8 @@
     position: sticky;
     top: 170px;
     padding: 18px;
+    max-height: calc(100vh - 190px);
+    overflow: auto;
   }
   .toc-title {
     margin: 0 0 10px;
@@ -280,6 +283,7 @@
   .md {
     font-size: 1rem;
     color: var(--page-md-text);
+    overflow-wrap: anywhere;
   }
   .md > :first-child { margin-top: 0; }
   .md > :last-child { margin-bottom: 0; }
@@ -347,10 +351,12 @@
   }
   .md pre code { background: none; padding: 0; }
   .md table {
+    display: block;
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    overflow: hidden;
+    max-width: 100%;
+    overflow: auto;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.9rem;
@@ -446,7 +452,7 @@
   .release-link {
     font-weight: 700;
   }
-  @media (max-width: 1040px) {
+  @media (max-width: 1180px) {
     nav.page-nav { top: 132px; }
     main.content,
     main.content.no-toc {
@@ -472,7 +478,7 @@
         <h1>Diagrams</h1>
         <p class="top-subtitle">Interactive diagrams generated from the compare and the target-tree heuristic scan.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: NovaDiff-main</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-14T07:37:35.642Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 8e0dc031dcfc</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: </span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -484,165 +490,11 @@
   </nav>
   <main class="content">
     <div class="content-main">
-      <section class="viz-card"><h2 id="change-mix">Change mix</h2><pre class="mermaid">pie showData
-    title Change kinds
-    "Added" : 21
-    "Removed" : 0
-    "Modified" : 21</pre></section>
-<section class="viz-card"><h2 id="path-depth">Path depth</h2><pre class="mermaid">flowchart TB
-    d0["depth 1 (3)"]
-    d1["depth 2 (16)"]
-    d2["depth 3 (23)"]</pre></section>
-<section class="viz-card"><h2 id="module-import-graph-relative-imports">Module import graph (relative imports)</h2><pre class="mermaid">flowchart LR
-  electron_code_city_model_cjs["electron/code-city-model.cjs"] --> electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] --> electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] --> electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_writer_cjs["electron/novadiff-docs-writer.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_code_city_model_cjs["electron/code-city-model.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_llm_cjs["electron/llm.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_diff_excerpt_cjs["electron/diff-excerpt.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  src_App_tsx["src/App.tsx"] --> src_app_types_ts["src/app/types.ts"]
-  src_App_tsx["src/App.tsx"] --> src_app_diffExcerpt_ts["src/app/diffExcerpt.ts"]
-  src_App_tsx["src/App.tsx"] --> src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_App_tsx["src/App.tsx"] --> src_app_selectedDiffDocs_ts["src/app/selectedDiffDocs.ts"]
-  src_App_tsx["src/App.tsx"] --> src_components_DiffWorkspace_tsx["src/components/DiffWorkspace.tsx"]
-  src_App_tsx["src/App.tsx"] --> src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"]
-  src_App_tsx["src/App.tsx"] --> src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"]
-  src_App_tsx["src/App.tsx"] --> src_components_LlmSettingsModal_tsx["src/components/LlmSettingsModal.tsx"]
-  src_App_tsx["src/App.tsx"] --> src_components_SidebarNav_tsx["src/components/SidebarNav.tsx"]
-  src_App_tsx["src/App.tsx"] --> src_app_novadiffPaths_ts["src/app/novadiffPaths.ts"]
-  src_app_changedFilesTree_ts["src/app/changedFilesTree.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_codeCityLayout_ts["src/app/codeCityLayout.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_commitMessage_ts["src/app/commitMessage.ts"] --> src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_app_commitMessage_ts["src/app/commitMessage.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_diffExcerpt_ts["src/app/diffExcerpt.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_docsQuality_ts["src/app/docsQuality.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_llmStorage_ts["src/app/llmStorage.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_novadiffDocs_ts["src/app/novadiffDocs.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_app_selectedDiffDocs_ts["src/app/selectedDiffDocs.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"] --> src_app_types_ts["src/app/types.ts"]
-  src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"] --> src_app_changedFilesTree_ts["src/app/changedFilesTree.ts"]
-  src_components_CodeCityLegend_tsx["src/components/CodeCityLegend.tsx"] --> src_app_codeCityLayout_ts["src/app/codeCityLayout.ts"]
-  src_components_CodeCityView_tsx["src/components/CodeCityView.tsx"] --> src_app_codeCityLayout_ts["src/app/codeCityLayout.ts"]
-  src_components_DiffWorkspace_tsx["src/components/DiffWorkspace.tsx"] --> src_app_types_ts["src/app/types.ts"]
-  src_components_DiffWorkspace_tsx["src/components/DiffWorkspace.tsx"] --> src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_types_ts["src/app/types.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_commitMessage_ts["src/app/commitMessage.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_novadiffDocs_ts["src/app/novadiffDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_mermaidBoot_ts["src/app/mermaidBoot.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_codeCityLayout_ts["src/app/codeCityLayout.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_components_CodeCityLegend_tsx["src/components/CodeCityLegend.tsx"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_components_CodeCityView_tsx["src/components/CodeCityView.tsx"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] --> src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] --> src_app_types_ts["src/app/types.ts"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] --> src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] --> src_app_novadiffPaths_ts["src/app/novadiffPaths.ts"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] --> src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] --> src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"]
-  src_components_LlmSettingsModal_tsx["src/components/LlmSettingsModal.tsx"] --> src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"] --> src_app_generatedMarkdown_ts["src/app/generatedMarkdown.ts"]
-  src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"] --> src_app_mermaidBoot_ts["src/app/mermaidBoot.ts"]
-  src_components_SidebarNav_tsx["src/components/SidebarNav.tsx"] --> nova_diff_icon_png["nova-diff-icon.png"]
-  src_main_tsx["src/main.tsx"] --> src_App_tsx["src/App.tsx"]
-  src_vite_env_d_ts["src/vite-env.d.ts"] --> src_app_types_ts["src/app/types.ts"]
-  src_vite_env_d_ts["src/vite-env.d.ts"] --> src_app_llmStorage_ts["src/app/llmStorage.ts"]</pre></section>
-<section class="viz-card"><h2 id="cross-file-calls-heuristic">Cross-file calls (heuristic)</h2><pre class="mermaid">flowchart LR
-  electron_code_city_model_cjs["electron/code-city-model.cjs"] -->|blameFileOwnership| electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] -->|normalizeMarkdownDocument| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] -->|htmlToPdfFile| electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|runCompareEngine| electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|summarizeChange| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|summarizeChangeStream| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|probeProvider| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|stopSummaryPrefetchWorker| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|clearSummaryPrefetchCache| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|startSummaryPrefetchWorker| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getPrefetchedSummary| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|exportSelectionSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|buildCodeCityModelPayload| electron_code_city_model_cjs["electron/code-city-model.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsBundle| electron_novadiff_docs_writer_cjs["electron/novadiff-docs-writer.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsHtml| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|generateNovadiffDocsPdf| electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|refreshNovadiffDocsHtmlFromDisk| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"] -->|promoteKnownHeadings| src_app_generatedMarkdown_ts["src/app/generatedMarkdown.ts"]
-  electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"] -->|splitDenseParagraphs| src_app_generatedMarkdown_ts["src/app/generatedMarkdown.ts"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] -->|runCompareEngine| electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] -->|summarizeChange| electron_llm_cjs["electron/llm.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  src_App_tsx["src/App.tsx"] -->|loadLlmSettings| src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_App_tsx["src/App.tsx"] -->|buildSelectedDiffDocContext| src_app_selectedDiffDocs_ts["src/app/selectedDiffDocs.ts"]
-  src_App_tsx["src/App.tsx"] -->|isChangedDiffRow| src_app_selectedDiffDocs_ts["src/app/selectedDiffDocs.ts"]
-  src_App_tsx["src/App.tsx"] -->|isNovadiffDocsReservedPath| src_app_novadiffPaths_ts["src/app/novadiffPaths.ts"]
-  src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"] -->|buildChangedFilesTreeRoot| src_app_changedFilesTree_ts["src/app/changedFilesTree.ts"]
-  src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"] -->|flattenVisibleRows| src_app_changedFilesTree_ts["src/app/changedFilesTree.ts"]
-  src_components_ChangedFilesTree_tsx["src/components/ChangedFilesTree.tsx"] -->|ancestorDirPaths| src_app_changedFilesTree_ts["src/app/changedFilesTree.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildDocWorkspaceMetrics| src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|changeKindPieMermaid| src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|depthBarMermaid| src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|runMermaidNodes| src_app_mermaidBoot_ts["src/app/mermaidBoot.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildCodeCityLayout| src_app_codeCityLayout_ts["src/app/codeCityLayout.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildCommitMessageContext| src_app_commitMessage_ts["src/app/commitMessage.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|parseCommitMessageOutput| src_app_commitMessage_ts["src/app/commitMessage.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|deriveConfidenceBadges| src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildReleaseOverviewMarkdown| src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|bundleLabel| src_app_novadiffDocs_ts["src/app/novadiffDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildSummaryPromptContext| src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildRiskPromptContext| src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|metricsToPromptContext| src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildCodebasePromptContext| src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildCompareMetricsMarkdown| src_app_docWorkspaceMetrics_ts["src/app/docWorkspaceMetrics.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|buildCodebaseMetricsMarkdown| src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|codebaseExtensionPieMermaid| src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|codebaseDepthMermaid| src_app_codebaseDocs_ts["src/app/codebaseDocs.ts"]
-  src_components_DocumentationWorkspace_tsx["src/components/DocumentationWorkspace.tsx"] -->|relPathAnchorId| src_app_docsQuality_ts["src/app/docsQuality.ts"]
-  src_components_InsightsColumn_tsx["src/components/InsightsColumn.tsx"] -->|isNovadiffDocsReservedPath| src_app_novadiffPaths_ts["src/app/novadiffPaths.ts"]
-  src_components_LlmSettingsModal_tsx["src/components/LlmSettingsModal.tsx"] -->|saveLlmSettings| src_app_llmStorage_ts["src/app/llmStorage.ts"]
-  src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"] -->|runMermaidNodes| src_app_mermaidBoot_ts["src/app/mermaidBoot.ts"]
-  src_components_LlmSummaryMarkdown_tsx["src/components/LlmSummaryMarkdown.tsx"] -->|normalizeGeneratedMarkdown| src_app_generatedMarkdown_ts["src/app/generatedMarkdown.ts"]</pre></section>
-<section class="viz-card"><h2 id="types-classes-regex-sketch">Types / classes (regex sketch)</h2><pre class="mermaid">classDiagram
-  class ChangeKind
-  class ChangedFilesTree
-  class ChangedFilesTreeProps
-  class CodeCityFileNode
-  class CodeCityFilters
-  class CodeCityLayoutResult
-  class CodeCityLegend
-  class CodeCityModel
-  class CodeCityOwnershipSummary
-  class CodeCityRenderableBuilding
-  class CodeCityRenderableDistrict
-  class CodeCitySymbolNode
-  class CodeCityView
-  class CodebaseOutline
-  class DiffRow
-  class DiffSelectionLineRange
-  class DiffSelectionSymbolMatch
-  class DiffSymbolSpan
-  class DiffTableRow
-  class DiffWorkspace
-  class DiffWorkspaceProps
-  class DirNode
-  class DocWorkspaceMetrics
-  class DocumentationWorkspace</pre></section>
+      <section class="viz-card"><h2 id="change-mix">Change mix</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="path-depth">Path depth</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="module-import-graph-relative-imports">Module import graph (relative imports)</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="cross-file-calls-heuristic">Cross-file calls (heuristic)</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="types-classes-regex-sketch">Types / classes (regex sketch)</h2><p><em>(empty)</em></p></section>
     </div>
     <aside class="content-side"><section class="toc-card"><div class="toc-title">On this page</div><nav class="toc" data-toc></nav></section></aside>
   </main>

@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/scripts/benchmark-layout.mjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:24:46.865Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R16 added: import { performance } from \"node:perf_hooks\";",
+      "R17 added: import ELK from \"elkjs/lib/elk.bundled.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-80"
+    ],
+    "cited_changed_lines": [
+      "R1 added: // Stage 1 ELK layout perf benchmark.",
+      "R2 added: //",
+      "R3 added: // Mirrors `applyElkLayout` from `src/utils/elk-layout.ts` using `elkjs`",
+      "R4 added: // directly. The dashboard build is a Vite bundle (hashed chunks), so it has",
+      "R5 added: // no per-module `dist/utils/elk-layout.js` we can import. The Stage 1 hot",
+      "R6 added: // path is `elk.layout()` on a sized input, which we reproduce faithfully"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function makeGraph (51-67)",
+      "right function bench (68-80)",
+      "right function applyElkLayout (40-50)",
+      "right function fillDims (30-39)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

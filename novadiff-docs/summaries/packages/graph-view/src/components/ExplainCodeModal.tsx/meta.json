@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/components/ExplainCodeModal.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:20:49.697Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export interface ExplainCodeModalProps {",
+      "R15 added: export function ExplainCodeModal({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useRef } from \"react\";",
+      "R2 added: import ReactMarkdown from \"react-markdown\";"
+    ],
+    "changed_line_ranges": [
+      "R1-116"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useRef } from \"react\";",
+      "R2 added: import ReactMarkdown from \"react-markdown\";",
+      "R4 added: export interface ExplainCodeModalProps {",
+      "R5 added: open: boolean;",
+      "R6 added: title: string;",
+      "R7 added: subtitle?: string;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function ExplainCodeModal (15-116)",
+      "right interface ExplainCodeModalProps (4-14)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

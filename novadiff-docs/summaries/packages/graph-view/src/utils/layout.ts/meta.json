@@ -1,0 +1,63 @@
+{
+  "relPath": "packages/graph-view/src/utils/layout.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:01:59.702Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R15 added: export const NODE_WIDTH = 280;",
+      "R16 added: export const NODE_HEIGHT = 120;",
+      "R17 added: export const LAYER_CLUSTER_WIDTH = 320;",
+      "R18 added: export const LAYER_CLUSTER_HEIGHT = 180;",
+      "R19 added: export const PORTAL_NODE_WIDTH = 240;",
+      "R20 added: export const PORTAL_NODE_HEIGHT = 80;"
+    ],
+    "changed_imports": [
+      "R1 added: import dagre from \"@dagrejs/dagre\";",
+      "R2 added: import {",
+      "R11 added: import type { SimulationNodeDatum, SimulationLinkDatum } from \"d3-force\";",
+      "R12 added: import type { Node, Edge } from \"@xyflow/react\";",
+      "R13 added: import type { ElkInput } from \"./elk-layout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-266"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import dagre from \"@dagrejs/dagre\";",
+      "R2 added: import {",
+      "R3 added: forceSimulation,",
+      "R4 added: forceLink,",
+      "R5 added: forceManyBody,",
+      "R6 added: forceCenter,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function applyForceLayout (94-205)",
+      "right function applyDagreLayout (30-84)",
+      "right function mergeElkPositions (231-266)",
+      "right function nodesToElkInput (206-230)",
+      "right interface ForceNode (85-93)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

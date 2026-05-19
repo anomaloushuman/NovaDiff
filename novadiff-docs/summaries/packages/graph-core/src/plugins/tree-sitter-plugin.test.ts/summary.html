@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/plugins/tree-sitter-plugin.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/plugins/tree-sitter-plugin.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:37:20.817Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file, <code>packages/graph-core/src/plugins/tree-sitter-plugin.test.ts</code>, has been added. It imports <code>vitest</code> (<code>describe, it, expect, beforeAll</code>) and the <code>TreeSitterPlugin</code> implementation. The file contains 307 added lines that exercise the plugin’s parsing, import resolution, call‑graph extraction, and metadata.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – Lines 1‑2 show the added imports for <code>vitest</code> and <code>TreeSitterPlugin</code>.  </li>
+<li><strong><code>analyzeFile</code> tests</strong> – Lines 12‑186 cover extraction of functions, arrow functions, classes, imports, and exports for both TypeScript and JavaScript sources.  </li>
+<li><strong><code>resolveImports</code> test</strong> – Lines 238‑262 verify that relative imports are resolved to absolute paths and that external packages keep their original names.  </li>
+<li><strong><code>extractCallGraph</code> test</strong> – Lines 265‑294 confirm that function calls are linked correctly (<code>main → greet</code>, <code>greet → formatMessage</code>).  </li>
+<li><strong>Metadata tests</strong> – Lines 297‑305 assert that <code>plugin.name</code> is <code>&quot;tree-sitter&quot;</code> and that <code>plugin.languages</code> includes <code>&quot;typescript&quot;</code> and <code>&quot;javascript&quot;</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Adds ~307 lines of test code, raising coverage for the <code>TreeSitterPlugin</code>.  </li>
+<li>Provides concrete expectations for AST parsing, import resolution, call‑graph extraction, and metadata exposure.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong> – Any change to the public API of <code>TreeSitterPlugin</code> may break these tests; run the suite after refactors.  </li>
+<li><strong>Environment dependency</strong> – Tests rely on <code>vitest</code> and the compiled plugin; ensure the build pipeline includes these dependencies.  </li>
+<li><strong>Path resolution</strong> – The <code>resolveImports</code> test assumes a project layout rooted at <code>/project/src/index.ts</code>; verify that this path remains valid in all environments.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

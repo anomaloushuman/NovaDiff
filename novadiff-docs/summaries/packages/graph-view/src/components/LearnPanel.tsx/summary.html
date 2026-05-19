@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/LearnPanel.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/LearnPanel.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:27:19.116Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/components/LearnPanel.tsx</code> (added lines R1‑R230) introduces a new React component that renders a guided tour UI. It pulls tour data from the global dashboard store and uses the i18n context for all displayed strings.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – added at the top of the file (lines 1‑4):```ts
+import { useMemo } from &quot;react&quot;;
+import ReactMarkdown from &quot;react-markdown&quot;;
+import { useDashboardStore } from &quot;../store&quot;;
+import { useI18n } from &quot;../contexts/I18nContext&quot;;</li>
+</ul>
+<pre><code class="language--">- **State extraction** – selectors wired to the store (lines 7‑16): `graph`, `tourActive`, `currentTourStep`, `startTour`, `stopTour`, `setTourStep`, `nextTourStep`, `prevTourStep`, `selectNode`, and the i18n hook `t`.  
+- **Tour logic** – `useMemo` builds a sorted `tourSteps` array (lines 18‑21). Conditional rendering handles three states:  
+  1. No tour (`!hasTour`, lines 24‑36).  
+  2. Tour available but not started (`!tourActive`, lines 39‑74).  
+  3. Tour active (lines 77‑229).  
+- **Markdown rendering** – `ReactMarkdown` is configured with custom components for paragraphs, strong, code blocks, and lists (lines 121‑154).  
+- **UI elements** – progress bar, navigation dots, prev/next buttons, language lesson, and referenced component pills are rendered with Tailwind classes (lines 86‑228).
+
+### Impact
+
+  
+- The component centralizes tour state in the dashboard store, keeping state logic in one place.  
+- `useMemo` limits recomputation of the sorted steps array.  
+- All UI strings are sourced from the i18n context, enabling localization.  
+- No existing modules are modified; the new file is isolated.
+
+### Risks &amp; follow‑ups  
+- **Store contract** – it is unknown from the diff whether the store actually contains the keys (`graph.tour`, `tourActive`, etc.); missing keys could result in `undefined` values.  
+- **Markdown edge cases** – unknown from the diff whether `ReactMarkdown` will correctly render all expected syntax; test with code blocks and nested lists.  
+- **Localization** – unknown from the diff whether all `t.learnPanel.*` keys exist; missing translations will show empty strings.  
+- **Accessibility** – unknown from the diff whether additional ARIA attributes are needed beyond the existing `aria-label` on navigation dots.
+</code></pre>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

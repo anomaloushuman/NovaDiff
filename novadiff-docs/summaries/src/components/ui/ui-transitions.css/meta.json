@@ -1,0 +1,33 @@
+{
+  "relPath": "src/components/ui/ui-transitions.css",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:29:00.244Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-120"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /* Shared overlay + view transition effects */",
+      "R3 added: .ui-overlay {",
+      "R4 added: opacity: 0;",
+      "R5 added: transition: opacity 0.28s ease;",
+      "R6 added: }",
+      "R8 added: .ui-overlay.is-open {"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

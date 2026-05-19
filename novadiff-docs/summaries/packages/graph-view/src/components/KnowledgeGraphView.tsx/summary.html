@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/KnowledgeGraphView.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/KnowledgeGraphView.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:25:33.330Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>KnowledgeGraphView</code> component is added at <code>packages/graph-view/src/components/KnowledgeGraphView.tsx</code>. It renders a force‑directed graph with <code>@xyflow/react</code>, using custom node rendering, edge styling, and layout logic defined in the file.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑14): added React hooks (<code>useMemo</code>, <code>useCallback</code>) and all core <code>@xyflow/react</code> components (<code>ReactFlow</code>, <code>ReactFlowProvider</code>, <code>Background</code>, <code>BackgroundVariant</code>, <code>Controls</code>, <code>MiniMap</code>).  </li>
+<li><strong>Custom node support</strong> (lines 13‑14): imports <code>CustomNode</code> and its data type <code>CustomNodeData</code>.  </li>
+<li><strong>Layout utilities</strong> (lines 17‑18, 38‑96): brings in <code>applyForceLayout</code>, <code>NODE_WIDTH</code>, <code>NODE_HEIGHT</code> from <code>../utils/layout</code>; defines <code>getNodeDimensions</code> (lines 38‑45) and <code>computeLayout</code> (lines 52‑94).  </li>
+<li><strong>Graph filtering &amp; memoization</strong> (lines 97‑286): <code>KnowledgeGraphViewInner</code> uses <code>useDashboardStore</code> to access graph state, filters nodes by type, and memoizes layout and visual nodes/edges to avoid unnecessary recomputation.  </li>
+<li><strong>Edge styling</strong> (lines 24‑35, 199‑234): <code>EDGE_STYLES</code> maps edge types to CSS properties; edge rendering logic applies dynamic styles based on selection and focus.  </li>
+<li><strong>Provider wrapper</strong> (lines 288‑294): default export wraps the inner component in <code>ReactFlowProvider</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: node sizing (<code>getNodeDimensions</code>) and stable positions (<code>computeLayout</code>) are now defined.  </li>
+<li><strong>Performance</strong>: layout and node/edge construction are memoized; only graph or filter changes trigger recomputation.  </li>
+<li><strong>Maintainability</strong>: node/edge styling and layout logic are centralized; future changes can be made in one place.  </li>
+<li><strong>Compatibility</strong>: requires <code>@xyflow/react</code> CSS import (<code>@xyflow/react/dist/style.css</code>) and the <code>FlowFitOnResize</code> helper; ensure these dependencies are present.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Layout accuracy</strong>: verify that <code>applyForceLayout</code> produces expected positions; test with graphs of varying size.  </li>
+<li><strong>Edge style fallbacks</strong>: <code>EDGE_STYLES</code> defaults to <code>related</code> for unknown types; confirm all used edge types are covered.  </li>
+<li><strong>Store integration</strong>: confirm that <code>useDashboardStore</code> provides <code>graph</code>, <code>selectedNodeId</code>, etc., and that updates propagate correctly.  </li>
+<li><strong>CSS conflicts</strong>: the global <code>@xyflow/react</code> styles may clash with existing styles; run visual regression tests.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

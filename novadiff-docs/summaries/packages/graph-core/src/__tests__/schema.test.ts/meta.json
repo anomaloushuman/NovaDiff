@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-core/src/__tests__/schema.test.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:13:34.653Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import {",
+      "R10 added: import type { KnowledgeGraph } from \"../types.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-730"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, it, expect } from \"vitest\";",
+      "R2 added: import {",
+      "R3 added: validateGraph,",
+      "R4 added: normalizeGraph,",
+      "R5 added: sanitizeGraph,",
+      "R6 added: autoFixGraph,"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

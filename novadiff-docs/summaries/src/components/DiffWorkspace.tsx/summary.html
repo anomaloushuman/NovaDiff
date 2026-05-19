@@ -26,23 +26,34 @@
 <body>
   <header class="top">
     <h1>src/components/DiffWorkspace.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:51:19.660Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:08:21.910Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a change to the <code>DiffWorkspace</code> component in the NovaDiff app. The changes are primarily related to improving the user experience and adding new features.</p>
+<p><code>DiffWorkspace</code> now shows the selected‑diff documentation in a modal instead of an inline panel. The component’s props and rendering were extended to support this change.</p>
 <h3>Key changes</h3>
-<p>The following key changes were made:</p>
 <ul>
-<li>Added support for displaying a summary of the selected diff in a separate panel.</li>
-<li>Improved the layout and styling of the diff table.</li>
-<li>Added a new <code>onRequestSelectedDiffSummary</code> callback to request the summary of the selected diff.</li>
-<li>Changed the behavior of the <code>onSelectDiffRow</code> callback to allow selecting multiple rows with shift or meta keys.</li>
+<li><strong>Imports</strong> – <code>LlmSummaryMarkdown</code> was removed (L15) and <code>SelectedDiffSummaryModal</code> was added (R15).  </li>
+<li><strong>Props</strong> – <code>DiffWorkspaceProps</code> gained optional <code>compareStatusMessage?: string | null</code> (R27), <code>selectedDiffSummaryModalOpen: boolean</code> (R55), and <code>onCloseSelectedDiffSummaryModal: () =&gt; void</code> (R56).  </li>
+<li><strong>Signature</strong> – <code>DiffWorkspace</code> now accepts the new props (R59‑95).  </li>
+<li><strong>Activity banner</strong> – displays <code>compareStatusMessage</code> or a default string (R199‑211).  </li>
+<li><strong>Modal</strong> – <code>&lt;SelectedDiffSummaryModal&gt;</code> is rendered after the diff panes (R354‑362).  </li>
+<li><strong>Inline panel removed</strong> – the <code>&lt;section className=&quot;selected-diff-doc-panel&quot;&gt;</code> block was deleted (L332‑340).</li>
 </ul>
 <h3>Impact</h3>
-<p>The changes should improve the maintainability and performance of the codebase by reducing the complexity of the diff table and adding a new feature that provides valuable information to users.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>There is a risk that the new feature may not be well-received by some users, but this can be mitigated by providing clear documentation and testing it thoroughly before releasing it. It is also important to verify that the new feature does not introduce any regression issues.</p>
+<ul>
+<li>The summary is now presented in a modal, allowing larger content without cluttering the main view.  </li>
+<li>Callers must provide <code>selectedDiffSummaryModalOpen</code> and <code>onCloseSelectedDiffSummaryModal</code>; otherwise the modal never opens.  </li>
+<li><code>compareStatusMessage</code> gives clearer feedback during comparison, improving user awareness.  </li>
+<li>Existing props remain unchanged, so legacy code continues to work.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Modal state</strong> – Verify that callers manage <code>selectedDiffSummaryModalOpen</code> and the close callback.  </li>
+<li><strong>Layout</strong> – Ensure the modal does not obscure the diff panes on small screens; visual regression tests are recommended.  </li>
+<li><strong>Prop leakage</strong> – Confirm that <code>selectedDiffSummary</code> is no longer referenced elsewhere to avoid TypeScript errors.  </li>
+<li><strong>Performance</strong> – The modal is always rendered; monitor its cost when the summary is large.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

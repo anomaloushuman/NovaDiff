@@ -1,4 +1,6 @@
 import appMark from "../../nova-diff-icon.png";
+import { useLaunch } from "./launch/LaunchContext";
+import { TypewriterText } from "./launch/TypewriterText";
 import {
   BookOpen,
   Brain,
@@ -7,12 +9,13 @@ import {
   FileText,
   FolderGit2,
   GitPullRequest,
+  History,
   Lightbulb,
   Settings2,
   User,
 } from "lucide-react";
 
-export type WorkspacePage = "compare" | "docs";
+export type WorkspacePage = "compare" | "history" | "docs" | "prs" | "publish";
 
 interface SidebarNavProps {
   active: boolean;
@@ -20,6 +23,10 @@ interface SidebarNavProps {
   onWorkspacePage: (page: WorkspacePage) => void;
   leftFolderName: string;
   rightFolderName: string;
+  localOnlyMode?: boolean;
+  gitUser?: { login: string; name: string | null; avatarUrl: string | null } | null;
+  workspaceName?: string | null;
+  workspaceRepoLabel?: string | null;
   onOpenSettings?: () => void;
 }
 
@@ -31,16 +38,50 @@ export function SidebarNav({
   onWorkspacePage,
   leftFolderName,
   rightFolderName,
+  localOnlyMode,
+  gitUser,
+  workspaceName,
+  workspaceRepoLabel,
   onOpenSettings,
 }: SidebarNavProps) {
+  const gitLocked = Boolean(localOnlyMode);
+  const { brandReveal, skipSequence } = useLaunch();
+  const showLaunchBrand = brandReveal && !skipSequence;
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${showLaunchBrand ? " sidebar--launch" : ""}`}>
       <div className="sidebar-brand">
         <img className="sidebar-logo" src={appMark} alt="" width={36} height={36} />
         <div>
-          <div className="sidebar-title">NovaDiff</div>
-          <div className="sidebar-tagline">Smarter Diffs. Better Reviews.</div>
-          <div className="sidebar-product-line">AI-powered folder compare</div>
+          {showLaunchBrand ? (
+            <>
+              <div className="sidebar-title sidebar-title--type">
+                <TypewriterText text="NovaDiff" active speed={38} />
+              </div>
+              <div className="sidebar-tagline">
+                <TypewriterText
+                  text="Smarter Diffs. Better Reviews."
+                  active
+                  speed={19}
+                  delay={320}
+                />
+              </div>
+              <div className="sidebar-product-line">
+                <TypewriterText
+                  text="AI-powered folder compare"
+                  active
+                  speed={16}
+                  delay={1100}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="sidebar-title">NovaDiff</div>
+              <div className="sidebar-tagline">Smarter Diffs. Better Reviews.</div>
+              <div className="sidebar-product-line">AI-powered folder compare</div>
+            </>
+          )}
         </div>
       </div>
 
@@ -78,9 +119,10 @@ export function SidebarNav({
             <FolderGit2 size={18} strokeWidth={1.75} />
           </span>
           <span className="sidebar-repo-text">
-            <span className="sidebar-repo-name">Folder compare</span>
+            <span className="sidebar-repo-name">{workspaceName ?? "Workspace"}</span>
             <span className="sidebar-repo-branch">
-              {active ? `${leftFolderName} → ${rightFolderName}` : "Pick two folders"}
+              {workspaceRepoLabel ??
+                (active ? `${leftFolderName} → ${rightFolderName}` : "Pick two folders")}
             </span>
           </span>
         </div>
@@ -104,6 +146,16 @@ export function SidebarNav({
         </button>
         <button
           type="button"
+          className={`sidebar-link ${workspacePage === "history" ? "active" : ""}`}
+          disabled={gitLocked}
+          title={gitLocked ? "Requires GitHub sign-in (not available in local-only mode)" : undefined}
+          onClick={() => onWorkspacePage("history")}
+        >
+          <History {...ic} className="sidebar-link-icon" />
+          Git history compare
+        </button>
+        <button
+          type="button"
           className={`sidebar-link ${workspacePage === "docs" ? "active" : ""}`}
           disabled={!active}
           title={!active ? "Compare two folders first" : undefined}
@@ -116,13 +168,25 @@ export function SidebarNav({
           <BookOpen {...ic} className="sidebar-link-icon" />
           Documentation workspace
         </button>
-        <button type="button" className="sidebar-link" disabled title="Coming soon">
+        <button
+          type="button"
+          className={`sidebar-link ${workspacePage === "prs" ? "active" : ""}`}
+          disabled={gitLocked}
+          title={gitLocked ? "Requires GitHub sign-in (not available in local-only mode)" : undefined}
+          onClick={() => onWorkspacePage("prs")}
+        >
           <GitPullRequest {...ic} className="sidebar-link-icon" />
-          Pull Requests
+          Pull requests
         </button>
-        <button type="button" className="sidebar-link" disabled title="Coming soon">
+        <button
+          type="button"
+          className={`sidebar-link ${workspacePage === "publish" ? "active" : ""}`}
+          disabled={gitLocked}
+          title={gitLocked ? "Requires GitHub sign-in (not available in local-only mode)" : undefined}
+          onClick={() => onWorkspacePage("publish")}
+        >
           <ClipboardList {...ic} className="sidebar-link-icon" />
-          Reviews
+          Auto-commit
         </button>
         <button type="button" className="sidebar-link" disabled title="Coming soon">
           <Lightbulb {...ic} className="sidebar-link-icon" />
@@ -143,12 +207,30 @@ export function SidebarNav({
       <div className="sidebar-spacer" />
 
       <div className="sidebar-user">
-        <div className="sidebar-user-avatar" aria-hidden>
-          <User size={18} strokeWidth={1.75} />
-        </div>
+        {gitUser?.avatarUrl ? (
+          <img
+            className="sidebar-user-avatar-img"
+            src={gitUser.avatarUrl}
+            alt=""
+            width={36}
+            height={36}
+          />
+        ) : (
+          <div className="sidebar-user-avatar" aria-hidden>
+            <User size={18} strokeWidth={1.75} />
+          </div>
+        )}
         <div>
-          <div className="sidebar-user-name">Local</div>
-          <div className="sidebar-user-email">Offline compare</div>
+          <div className="sidebar-user-name">
+            {localOnlyMode ? "Local" : gitUser?.login ?? "Local"}
+          </div>
+          <div className="sidebar-user-email">
+            {localOnlyMode
+              ? "Offline folder compare"
+              : gitUser
+                ? (gitUser.name ?? "GitHub · signed in")
+                : "Offline compare"}
+          </div>
         </div>
       </div>
     </aside>

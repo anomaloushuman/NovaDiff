@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/App.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/App.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:33:07.407Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/App.tsx</code> is a new root component that orchestrates token handling, demo mode, data fetching, and the dashboard UI. It imports React hooks, validation utilities, and the dashboard store, and lazy‑loads heavy components.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R6): added React hooks, <code>validateGraph</code> and <code>GraphIssue</code> from <code>@novadiff/graph-core/schema</code>, <code>useDashboardStore</code>, and core view components (<code>GraphView</code>, <code>DomainGraphView</code>, etc.).  </li>
+<li><strong>Lazy loading</strong> (R28‑R34): <code>CodeViewer</code>, <code>LearnPanel</code>, <code>PathFinderModal</code>, and <code>KeyboardShortcutsHelp</code> are loaded with <code>React.lazy</code>.  </li>
+<li><strong>Demo mode</strong> (R36): <code>DEMO_MODE</code> flag controls URL resolution.  </li>
+<li><strong>URL resolution</strong> (R41‑R55): <code>dataUrl</code> returns env‑var URLs in demo mode or token‑appended paths otherwise.  </li>
+<li><strong>Token logic</strong> (R61‑R76): <code>resolveInitialToken</code> reads <code>token</code> from the query string or <code>sessionStorage</code>, clears the param, and persists the token.  </li>
+<li><strong>App component</strong> (R78‑R97): shows <code>TokenGate</code> until a token is available; in demo mode it bypasses the gate.  </li>
+<li><strong>Dashboard</strong> (R99‑R210): fetches <code>meta.json</code>, <code>config.json</code>, <code>knowledge-graph.json</code>, <code>diff-overlay.json</code>, and <code>domain-graph.json</code>; validates graphs with <code>validateGraph</code>; updates store view mode and error state.  </li>
+<li><strong>DashboardContent</strong> (R211‑R709): consumes store state, registers keyboard shortcuts via <code>useKeyboardShortcuts</code> (disabled in embed mode), renders header, sidebar, and graph views, and conditionally shows overlays.  </li>
+<li><strong>Export</strong> (R709): <code>export default App;</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralized data fetching simplifies future updates but ties the component to <code>@novadiff/graph-core</code>.  </li>
+<li>Multiple fetches on mount may increase network traffic; lazy loading reduces initial bundle size.  </li>
+<li>Error handling surfaces load and validation issues through banners.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>DEMO_MODE</code> must be correctly set in CI; otherwise URLs resolve incorrectly.  </li>
+<li><code>resolveInitialToken</code> clears the URL query param; verify it does not leave stale tokens.  </li>
+<li>Lazy‑loaded chunks (<code>CodeViewer</code>, <code>LearnPanel</code>, etc.) must be present in production builds; missing files could break the UI.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "relPath": "THIRD_PARTY_NOTICES.md",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:58:26.606Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-3"
+    ],
+    "cited_changed_lines": [
+      "R1 added: # Third-party notices",
+      "R3 added: NovaDiff's knowledge graph engine (`packages/graph-core`, `packages/graph-view`) incorporates MIT-licensed open-source components f…"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "docs"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

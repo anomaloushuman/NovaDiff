@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/EmbedGraphPanel.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/EmbedGraphPanel.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:33:36.089Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>EmbedGraphPanel</code> component is added in <strong>packages/graph-view/src/EmbedGraphPanel.tsx</strong> (lines 263‑279). It renders a lightweight overview graph with <code>@xyflow/react</code> and does not depend on the global Zustand store.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – React hooks (<code>useEffect</code>, <code>useMemo</code>, <code>useRef</code>, <code>useState</code>) and XYFlow utilities (<code>Background</code>, <code>Controls</code>, <code>MiniMap</code>, <code>ReactFlow</code>, etc.) are added (lines 5‑18).  </li>
+<li><strong>Utility</strong> – <code>buildNodesById</code> (lines 39‑46) builds a <code>Map&lt;string, GraphNode&gt;</code> for fast lookup.  </li>
+<li><strong>Layout logic</strong> – `use</li>
+</ul>
+<h3>Overview</h3>
+<p>LayoutForGraph<code>(lines 47‑154) constructs layer‑cluster nodes, aggregates edges, runs ELK layout asynchronously, and exposes</code>{ nodes, edges, layoutStatus }`.  </p>
+<ul>
+<li><strong>Viewport handling</strong> – <code>EmbedFitViewOnce</code> (lines 156‑184) calls <code>fitView</code> once after the flow is mounted to avoid infinite loops.  </li>
+<li><strong>Rendering</strong> – `Embed</li>
+</ul>
+<h3>Overview</h3>
+<p>Flow<code>(lines 186‑218) renders the flow with interactions disabled;</code>EmbedSizedFlowMount<code>(lines 220‑257) mounts the flow only when the host element has non‑zero dimensions, using a</code>ResizeObserver`.  </p>
+<ul>
+<li><strong>Public API</strong> – <code>EmbedGraphPanelProps</code> (lines 259‑261) and <code>EmbedGraphPanel</code> (lines 263‑279) expose the panel, showing a “Computing layout…” overlay while <code>layoutStatus</code> is <code>&quot;computing&quot;</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Self‑contained</strong> – no global state, reducing side‑effects.  </li>
+<li><strong>Asynchronous layout</strong> – ELK runs in a promise; the overlay prevents UI freezes.  </li>
+<li><strong>Clear separation</strong> – layout, sizing, and rendering are isolated in hooks and small components, easing future maintenance.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Layout accuracy</strong> – verify ELK output for complex graphs; visual regression tests are recommended.  </li>
+<li><strong>Resize handling</strong> – confirm <code>ResizeObserver</code> triggers re‑mount correctly across browsers.  </li>
+<li><strong>Edge cases</strong> – empty or single‑node graphs fall back to <code>EMPTY_OVERVIEW</code>; ensure no crashes.  </li>
+<li><strong>Styling</strong> – component relies on CSS variables (<code>--color-edge-dot</code>, <code>--glass-bg</code>); check they exist in all themes.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

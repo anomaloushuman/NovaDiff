@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/plugin-discovery.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/plugin-discovery.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:11:59.004Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/plugin-discovery.test.ts</code> (lines 1‑116) has been added to validate the plugin‑discovery utilities exported from <code>../plugins/discovery.js</code>. The tests exercise parsing, default configuration, and serialization logic.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑8):```ts
+import { describe, it, expect } from &quot;vitest&quot;;
+import {
+  parsePluginConfig,
+  serializePluginConfig,
+  type PluginConfig,
+  type PluginEntry,
+  DEFAULT_PLUGIN_CONFIG,
+} from &quot;../plugins/discovery.js&quot;;</li>
+</ul>
+<p>```- **Parsing tests** (lines 10‑72): verify that <code>parsePluginConfig</code>  </p>
+<ul>
+<li>parses valid JSON with multiple plugins,  </li>
+<li>falls back to <code>DEFAULT_PLUGIN_CONFIG</code> on invalid JSON, empty string, or a non‑array <code>plugins</code> field,  </li>
+<li>filters out entries missing required fields (<code>name</code>, <code>languages</code>), and  </li>
+<li>defaults <code>enabled</code> to <code>true</code> when omitted.</li>
+<li><strong>Default config test</strong> (lines 75‑81): ensures <code>DEFAULT_PLUGIN_CONFIG</code> contains a single enabled <code>tree-sitter</code> plugin.</li>
+<li><strong>Serialization tests</strong> (lines 83‑115): confirm that <code>serializePluginConfig</code> produces JSON containing <code>name</code>, <code>enabled</code>, <code>languages</code>, and correctly serializes an optional <code>options</code> field.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: The tests guarantee that the parsing and serialization functions handle edge cases and defaults as intended.  </li>
+<li><strong>Maintainability</strong>: Future refactors of the plugin‑discovery module will be caught early by this test suite.  </li>
+<li><strong>Observability</strong>: No runtime changes; tests run during CI.  </li>
+<li><strong>Compatibility</strong>: No public API changes; only test coverage is expanded.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: If <code>parsePluginConfig</code> or <code>serializePluginConfig</code> are altered, the tests may fail; run the full suite after any related refactor.  </li>
+<li><strong>Test fragility</strong>: Assertions rely on exact string containment (e.g., <code>&quot;name&quot;: &quot;tree-sitter&quot;</code>); if the serialization format changes, update the tests.  </li>
+<li><strong>Coverage gap</strong>: The current tests cover typical scenarios but not deeply nested <code>options</code> objects; consider adding such cases if needed.  </li>
+<li><strong>CI load</strong>: Adding a test file increases test count; monitor CI duration for any slowdown.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

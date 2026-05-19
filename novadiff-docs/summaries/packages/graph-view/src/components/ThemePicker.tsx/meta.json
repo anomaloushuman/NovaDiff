@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/components/ThemePicker.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:34:31.981Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R6 added: export function ThemePicker() {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useTheme, PRESETS } from \"../themes/index.ts\";",
+      "R3 added: import type { HeadingFont } from \"../themes/index.ts\";",
+      "R4 added: import { useI18n } from \"../contexts/I18nContext\";"
+    ],
+    "changed_line_ranges": [
+      "R1-180"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useTheme, PRESETS } from \"../themes/index.ts\";",
+      "R3 added: import type { HeadingFont } from \"../themes/index.ts\";",
+      "R4 added: import { useI18n } from \"../contexts/I18nContext\";",
+      "R6 added: export function ThemePicker() {",
+      "R7 added: const { config, preset, setPreset, setAccent, setHeadingFont } = useTheme();"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function ThemePicker (6-180)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

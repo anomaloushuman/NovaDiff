@@ -1,0 +1,55 @@
+{
+  "relPath": "electron/repo-discovery.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:18:32.783Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const os = require(\"node:os\");",
+      "R6 added: const { parseGithubSlugFromUrl, tryRunGit } = require(\"./git-service.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-166"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const os = require(\"node:os\");",
+      "R6 added: const { parseGithubSlugFromUrl, tryRunGit } = require(\"./git-service.cjs\");",
+      "R8 added: const SKIP_DIR_NAMES = new Set(["
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function scanForGitRepos (88-142)",
+      "right function homeSearchRoots (29-69)",
+      "right function readGitRemoteSlug (70-87)",
+      "right function discoverRepos (143-156)",
+      "right function matchRepoForGithubRepo (157-166)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

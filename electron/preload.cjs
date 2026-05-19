@@ -48,6 +48,28 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("read-novadiff-docs-file", payload),
   openNovadiffDocsInBrowser: (payload) =>
     ipcRenderer.invoke("open-novadiff-docs-in-browser", payload),
+  buildKnowledgeGraph: (payload) => ipcRenderer.invoke("knowledge-graph-build", payload),
+  readKnowledgeGraph: (payload) => ipcRenderer.invoke("knowledge-graph-read", payload),
+  readKnowledgeGraphFile: (payload) =>
+    ipcRenderer.invoke("knowledge-graph-read-file", payload),
+  onKnowledgeGraphProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("knowledge-graph-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("knowledge-graph-progress", ch);
+    };
+  },
+  onEngineProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("engine-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("engine-progress", ch);
+    };
+  },
   onSummaryPrefetchProgress: (cb) => {
     const ch = (_e, msg) => {
       cb(msg);
@@ -93,4 +115,65 @@ contextBridge.exposeInMainWorld("electronAPI", {
     });
   },
   llmProbe: (payload) => ipcRenderer.invoke("llm-probe", payload),
+  gitDetectTooling: () => ipcRenderer.invoke("git-detect-tooling"),
+  gitRepoStatus: (payload) => ipcRenderer.invoke("git-repo-status", payload),
+  gitDiscoverRepos: (payload) => ipcRenderer.invoke("git-discover-repos", payload),
+  gitMatchLocalRepo: (payload) => ipcRenderer.invoke("git-match-local-repo", payload),
+  githubListRepos: (payload) => ipcRenderer.invoke("github-list-repos", payload),
+  githubListPrs: (payload) => ipcRenderer.invoke("github-list-prs", payload),
+  githubPrCompareRoots: (payload) =>
+    ipcRenderer.invoke("github-pr-compare-roots", payload),
+  githubPrView: (payload) => ipcRenderer.invoke("github-pr-view", payload),
+  gitPublishPreview: (payload) => ipcRenderer.invoke("git-publish-preview", payload),
+  gitPublishExecute: (payload) => ipcRenderer.invoke("git-publish-execute", payload),
+  workspaceSessionLoad: () => ipcRenderer.invoke("workspace-session-load"),
+  workspaceSetGitUser: (user) => ipcRenderer.invoke("workspace-set-git-user", user),
+  workspaceCreate: (payload) => ipcRenderer.invoke("workspace-create", payload),
+  workspaceSetActive: (payload) => ipcRenderer.invoke("workspace-set-active", payload),
+  workspaceList: () => ipcRenderer.invoke("workspace-list"),
+  workspaceMatchLocal: (payload) => ipcRenderer.invoke("workspace-match-local", payload),
+  workspaceIndexHistory: (payload) => ipcRenderer.invoke("workspace-index-history", payload),
+  workspaceUpdateLiveRepo: (payload) =>
+    ipcRenderer.invoke("workspace-update-live-repo", payload),
+  gitBlameAtRef: (payload) => ipcRenderer.invoke("git-blame-at-ref", payload),
+  workspaceEnsureCommitSnapshot: (payload) =>
+    ipcRenderer.invoke("workspace-ensure-commit-snapshot", payload),
+  workspaceSnapshotListFiles: (payload) =>
+    ipcRenderer.invoke("workspace-snapshot-list-files", payload),
+  workspaceSnapshotReadFile: (payload) =>
+    ipcRenderer.invoke("workspace-snapshot-read-file", payload),
+  githubGhStatus: () => ipcRenderer.invoke("github-gh-status"),
+  githubGhInstall: () => ipcRenderer.invoke("github-gh-install"),
+  onGithubGhInstallProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("github-gh-install-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("github-gh-install-progress", ch);
+    };
+  },
+  workspaceSetLocalOnly: (payload) => ipcRenderer.invoke("workspace-set-local-only", payload),
+  githubDetectedUsers: () => ipcRenderer.invoke("github-detected-users"),
+  githubUserProfile: () => ipcRenderer.invoke("github-user-profile"),
+  githubStartAuth: () => ipcRenderer.invoke("github-start-auth"),
+  githubCancelAuth: () => ipcRenderer.invoke("github-cancel-auth"),
+  onGithubAuthProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("github-auth-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("github-auth-progress", ch);
+    };
+  },
+  onWorkspaceHistoryProgress: (cb) => {
+    const ch = (_e, msg) => {
+      cb(msg);
+    };
+    ipcRenderer.on("workspace-history-progress", ch);
+    return () => {
+      ipcRenderer.removeListener("workspace-history-progress", ch);
+    };
+  },
 });

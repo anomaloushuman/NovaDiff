@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/utils/layerStats.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:01:22.578Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export type Complexity = \"simple\" | \"moderate\" | \"complex\";",
+      "R5 added: export interface LayerStats {",
+      "R20 added: export function computeLayerStats("
+    ],
+    "changed_imports": [
+      "R1 added: import type { GraphNode, Layer } from \"@novadiff/graph-core/types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-39"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GraphNode, Layer } from \"@novadiff/graph-core/types\";",
+      "R3 added: export type Complexity = \"simple\" | \"moderate\" | \"complex\";",
+      "R5 added: export interface LayerStats {",
+      "R6 added: /** Number of layer.nodeIds that resolve to a node in the graph. */",
+      "R7 added: resolvedCount: number;",
+      "R8 added: /** Aggregate label for the cluster card; matches the prior 30% threshold. */"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function computeLayerStats (20-39)",
+      "right interface LayerStats (5-19)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

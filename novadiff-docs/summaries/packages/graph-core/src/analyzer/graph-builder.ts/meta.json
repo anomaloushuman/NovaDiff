@@ -1,0 +1,55 @@
+{
+  "relPath": "packages/graph-core/src/analyzer/graph-builder.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:55:02.047Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R60 added: export class GraphBuilder {"
+    ],
+    "changed_imports": [
+      "R1 added: import type {",
+      "R13 added: import { LanguageRegistry } from \"../languages/language-registry.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-337"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type {",
+      "R2 added: KnowledgeGraph,",
+      "R3 added: GraphNode,",
+      "R4 added: GraphEdge,",
+      "R5 added: StructuralAnalysis,",
+      "R6 added: DefinitionInfo,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right class GraphBuilder (60-337)",
+      "right interface NonCodeFileAnalysisMeta (30-59)",
+      "right interface FileMeta (15-20)",
+      "right interface FileAnalysisMeta (21-25)",
+      "right interface NonCodeFileMeta (26-29)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

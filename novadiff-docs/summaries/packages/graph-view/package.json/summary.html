@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/package.json · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/package.json</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:18:02.519Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<ul>
+<li>A new package <code>@novadiff/graph-view</code> was added under <code>packages/graph-view</code>.  </li>
+<li>The added file <code>packages/graph-view/package.json</code> contains 47 new lines (R1‑47).  </li>
+<li>It declares the package name, marks it <code>private</code>, sets version <code>0.1.0</code>, and uses <code>&quot;type&quot;: &quot;module&quot;</code>.</li>
+</ul>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Exports</strong> (lines 6‑9):  <ul>
+<li><code>&quot;.&quot;</code> → <code>./src/index.ts</code>  </li>
+<li><code>&quot;./styles.css&quot;</code> → <code>./src/index.css</code></li>
+</ul>
+</li>
+<li><strong>Scripts</strong> (lines 10‑16):  <ul>
+<li><code>dev</code>, <code>build</code>, <code>build:demo</code>, <code>preview</code>, <code>test</code>, <code>test:watch</code> – all invoke Vite, TypeScript, or Vitest.</li>
+</ul>
+</li>
+<li><strong>Dependencies</strong> (lines 18‑33): includes <code>@dagrejs/dagre</code>, <code>@novadiff/graph-core</code> (file:../graph-core), <code>@xyflow/react</code>, <code>d3-force</code>, <code>elkjs</code>, <code>graphology</code>, <code>graphology-communities-louvain</code>, <code>graphology-types</code>, <code>hast-util-to-jsx-runtime</code>, <code>prism-react-renderer</code>, <code>react</code>, <code>react-dom</code>, <code>react-markdown</code>, <code>zustand</code>.  </li>
+<li><strong>DevDependencies</strong> (lines 35‑46): Tailwind, TypeScript, Vite, Vitest, and related plugins.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The monorepo build must now resolve and compile <code>graph-view</code>.  </li>
+<li>Tests for this package use Vitest; coverage is enabled via <code>@vitest/coverage-v8</code>.  </li>
+<li>The local reference <code>file:../graph-core</code> creates a tight coupling; changes to <code>graph-core</code> may affect this package.  </li>
+<li>Importing <code>@novadiff/graph-view</code> will expose the TS entry point and CSS file as defined in the exports.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Dependency resolution</strong> – verify that <code>file:../graph-core</code> resolves in CI; missing symlinks could break installation.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 {
   "relPath": "electron/git-blame.cjs",
-  "kind": "added",
-  "leftTitle": "NovaDiff-main",
+  "kind": "modified",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:33:03.638Z",
+  "generatedAt": "2026-05-19T17:31:41.503Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,37 +11,37 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: const { spawnSync } = require(\"node:child_process\");"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-67"
+      "L5 / R5",
+      "L8-11",
+      "L41-42 / R37-38",
+      "L44-45 / R40-42",
+      "L47 / R44",
+      "L52-56 / R49-57",
+      "L58 / R59-65",
+      "L62 / R69-74"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const { spawnSync } = require(\"node:child_process\");",
-      "R5 added: /** @type {Map<string, { lineAuthors: string[]; owners: Array<{ author: string; lineCount: number; ratio: number }> }>} */",
-      "R6 added: const blameCache = new Map();",
-      "R8 added: function cacheKey(root, relPath) {",
-      "R9 added: return `${root}::${relPath}`;"
+      "L5 removed: /** @type {Map<string, { lineAuthors: string[]; owners: Array<{ author: string; lineCount: number; ratio: number }> }>} */",
+      "R5 added: /** @type {Map<string, object>} */",
+      "L8 removed: function cacheKey(root, relPath) {",
+      "L9 removed: return `${root}::${relPath}`;",
+      "L10 removed: }",
+      "L41 removed: function blameFileOwnership(root, relPath) {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function parseBlamePorcelain (12-40)",
-      "right function blameFileOwnership (41-67)",
-      "right function cacheKey (8-11)"
+      "left function blameFileOwnership (41-67)",
+      "left function cacheKey (8-11)",
+      "right function blameFileAtRef (37-78)",
+      "right function blameFileOwnership (79-83)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

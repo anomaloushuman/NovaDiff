@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/launch/TypewriterText.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/launch/TypewriterText.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:31:34.638Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component, <code>TypewriterText</code>, is added at <code>src/components/launch/TypewriterText.tsx</code>. It renders a typewriter‑style animation with an optional cursor, reduced‑motion support, and a completion callback.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React (lines 1‑2) and <code>usePrefersReducedMotion</code> from <code>../../app/usePrefersReducedMotion</code> (line 2).  </li>
+<li><strong>Props interface</strong> (<code>TypewriterTextProps</code>, lines 4‑15): <code>text</code>, optional <code>active</code>, <code>persist</code>, <code>speed</code>, <code>delay</code>, <code>className</code>, <code>showCursor</code>, and <code>onComplete</code>.  </li>
+<li><strong>Component</strong> (<code>export function TypewriterText</code>, lines 17‑99): sets defaults, tracks <code>visible</code> state, and uses refs for <code>onComplete</code>, completion status, and active state.  </li>
+<li><strong>Reduced‑motion handling</strong> (lines 52‑56): if <code>reduced</code> is true, the full text is shown immediately and <code>onComplete</code> is called.  </li>
+<li><strong>Typing logic</strong> (lines 59‑79): a <code>setTimeout</code> for <code>delay</code> starts a <code>setInterval</code> that increments <code>visible</code> by <code>speed</code> until the full text is displayed, then clears timers and triggers <code>onComplete</code>.  </li>
+<li><strong>Cleanup</strong> (lines 81‑86): cancels timers and resets <code>wasActiveRef</code>.  </li>
+<li><strong>Render</strong> (lines 91‑97): displays the current slice of text and, if <code>showCursor</code>, <code>active</code>, and not finished or reduced, shows a cursor element.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Introduces a reusable UI element; no existing API changes.  </li>
+<li>Adds a dependency on <code>usePrefersReducedMotion</code>; the hook must be exported and functional.  </li>
+<li>Adds hooks and timers; the performance impact is expected to be minimal.  </li>
+<li>Other components remain unaffected and can import <code>TypewriterText</code> directly.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Reduced‑motion detection</strong>: verify that <code>usePrefersReducedMotion</code> correctly reads the user preference; otherwise the animation may always run.  </li>
+<li><strong>Callback firing</strong>: confirm <code>onComplete</code> is invoked exactly once per full run; the ref logic should prevent duplicate calls.  </li>
+<li><strong>Active toggling</strong>: when <code>active</code> becomes false, the component resets unless <code>persist</code> is true and the text has already completed.  </li>
+<li><strong>Cursor logic</strong>: ensure cursor visibility respects <code>showCursor</code>, <code>active</code>, <code>reduced</code>, and completion state.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

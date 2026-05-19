@@ -1,0 +1,46 @@
+{
+  "relPath": "scripts/run-electron.cjs",
+  "kind": "modified",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:05:48.816Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R18 added: const { augmentPathForCli } = require(path.join(root, \"electron\", \"gh-path.cjs\"));"
+    ],
+    "changed_line_ranges": [
+      "L18 / R18-19"
+    ],
+    "cited_changed_lines": [
+      "L18 removed: const env = { ...process.env };",
+      "R18 added: const { augmentPathForCli } = require(path.join(root, \"electron\", \"gh-path.cjs\"));",
+      "R19 added: const env = augmentPathForCli({ ...process.env });"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function cleanEnv (17-22)",
+      "right function cleanEnv (17-23)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

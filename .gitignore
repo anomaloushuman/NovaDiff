@@ -30,3 +30,9 @@ cli/target
 release
 
 Bn
+
+# Optional legacy clone (not used by NovaDiff)
+understandanything/
+
+# Graph engine build output
+packages/graph-core/dist

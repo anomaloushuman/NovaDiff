@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/ignore-generator.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/ignore-generator.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:40:37.672Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/ignore-generator.ts</code> (added lines 1‑3) introduces a helper to generate a starter <code>.novadiffignore</code>. The exported function <code>generateStarterIgnoreFile(projectRoot: string)</code> (lines 61‑102) builds the file by collecting patterns from an existing <code>.gitignore</code>, detecting common directories, and suggesting generic test file patterns.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – added <code>existsSync</code>, <code>readFileSync</code> from <code>node:fs</code> (R1), <code>join</code> from <code>node:path</code> (R2), and <code>DEFAULT_IGNORE_PATTERNS</code> from <code>./ignore-filter.js</code> (R3).  </li>
+<li><strong>Constants</strong> – <code>HEADER</code> (R5‑7), <code>DETECTABLE_DIRS</code> (R15‑26), and <code>GENERIC_SUGGESTIONS</code> (R28‑32) define the file’s structure.  </li>
+<li><strong>Helper functions</strong> –  <ul>
+<li><code>parseGitignorePatterns(gitignorePath)</code> (lines 37‑44) reads a <code>.gitignore</code> and returns non‑comment, non‑blank lines.  </li>
+<li><code>isCoveredByDefaults(pattern)</code> (lines 50‑54) normalizes patterns and checks them against <code>DEFAULT_IGNORE_PATTERNS</code>.</li>
+</ul>
+</li>
+<li><strong>Exported API</strong> – <code>generateStarterIgnoreFile(projectRoot)</code> (lines 61‑102) orchestrates three sections:  <ol>
+<li>Patterns from <code>.gitignore</code> that are not already covered by defaults.  </li>
+<li>Detected directories from <code>DETECTABLE_DIRS</code>.  </li>
+<li>Generic test file patterns from <code>GENERIC_SUGGESTIONS</code>.<br>All suggestions are commented out (<code># pattern</code>) and the function returns the joined string.</li>
+</ol>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a deterministic starter ignore file, centralizing ignore logic.  </li>
+<li>Adds negligible runtime cost: a single read of <code>.gitignore</code> and a small directory scan.  </li>
+<li>No changes to existing public APIs; purely additive.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>DEFAULT_IGNORE_PATTERNS</strong> – verify that the import path resolves and the array contains the expected defaults.  </li>
+<li><strong>Path resolution</strong> – ensure <code>join(projectRoot, dir)</code> behaves correctly across OSes.  </li>
+<li><strong>Comment syntax</strong> – confirm downstream tooling respects the <code>#</code>‑prefixed suggestions.  </li>
+<li><strong>Test coverage</strong> – unit tests for <code>generateStarterIgnoreFile</code> would guard against regressions in pattern filtering and directory detection.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

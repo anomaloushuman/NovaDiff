@@ -1,0 +1,55 @@
+{
+  "relPath": "src/components/HistoryCompareStrip.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:12:00.427Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R10 added: export interface HistoryCompareStripProps {",
+      "R41 added: export function HistoryCompareStrip({"
+    ],
+    "changed_imports": [
+      "R1 added: import {",
+      "R8 added: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";"
+    ],
+    "changed_line_ranges": [
+      "R1-212"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import {",
+      "R2 added: ArrowLeftRight,",
+      "R3 added: ChevronDown,",
+      "R4 added: GitBranch,",
+      "R5 added: GitCompareArrows,",
+      "R6 added: Loader2,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function HistoryCompareStrip (41-212)",
+      "right interface HistoryCompareStripProps (10-28)",
+      "right function truncateSubject (29-36)",
+      "right function commitLabel (37-40)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

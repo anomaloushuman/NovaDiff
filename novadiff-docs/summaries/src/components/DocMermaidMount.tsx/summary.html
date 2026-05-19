@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/DocMermaidMount.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/DocMermaidMount.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:08:57.384Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new React component <code>DocMermaidMount</code> is added in <strong>src/components/DocMermaidMount.tsx</strong> (lines 1‑113). It renders Mermaid diagrams from a string definition and provides a loading skeleton, error handling, and a ready state that toggles visibility of the rendered SVG.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – added <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from <code>react</code> (R1) and <code>runMermaidNodes</code> from <code>../app/mermaidBoot</code> (R2).  </li>
+<li><strong>Types</strong> – declared <code>RenderPhase</code> union (<code>idle | waiting | rendering | ready | error</code>) (R4) and <code>DocMermaidMountProps</code> interface (R6‑R12) with <code>definition</code>, optional <code>loading</code>, <code>loadingLabel</code>, and <code>errorLabel</code>.  </li>
+<li><strong>Component logic</strong> –  <ul>
+<li>Uses <code>useRef</code> for the host <code>&lt;div&gt;</code> and a generation counter (<code>renderGenRef</code>) (R20‑R23).  </li>
+<li>Manages <code>phase</code> state (<code>idle</code>, <code>waiting</code>, <code>rendering</code>, <code>ready</code>, <code>error</code>) (R22).  </li>
+<li><code>useEffect</code> (R24‑R81) creates a <code>&lt;pre class=&quot;mermaid&quot;&gt;</code>, calls <code>runMermaidNodes</code>, updates <code>phase</code>, and cancels stale renders via a <code>cancelled</code> flag and generation check.  </li>
+<li>Rendering defers to <code>requestAnimationFrame</code> (R71‑R76) to ensure layout stability.  </li>
+<li>UI shows a skeleton while loading or rendering, an error message on failure, and the host div with conditional classes (<code>is-ready</code>, <code>is-busy</code>, <code>is-error</code>) (R83‑R111).</li>
+</ul>
+</li>
+<li><strong>Accessibility</strong> – skeleton has <code>aria-busy=&quot;true&quot;</code> and <code>aria-live=&quot;polite&quot;</code>; host div gets <code>aria-hidden</code> when busy (R96‑R110).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes Mermaid rendering logic, making future updates to <code>runMermaidNodes</code> or CSS easier.  </li>
+<li>Uses a generation counter to guard against race conditions when <code>definition</code> changes rapidly.  </li>
+<li>Defers rendering with <code>requestAnimationFrame</code>, reducing layout thrashing.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>runMermaidNodes</code> correctly processes the <code>&lt;pre&gt;</code> element and that Mermaid’s CSS is loaded.  </li>
+<li>Ensure CSS classes (<code>doc-mermaid-mount</code>, <code>doc-mermaid-skeleton</code>, etc.) exist and are scoped to avoid clashes.  </li>
+<li>Test cancellation logic by rapidly changing <code>definition</code> to confirm no stray SVGs or memory leaks.  </li>
+<li>Confirm correct phase transitions when <code>loading</code> is toggled mid‑render.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

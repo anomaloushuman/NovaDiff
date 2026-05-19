@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/SelectedDiffSummaryModal.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/SelectedDiffSummaryModal.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:16:03.483Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>SelectedDiffSummaryModal</code> is added at <code>src/components/SelectedDiffSummaryModal.tsx</code>. It renders a modal overlay that displays LLM‑generated documentation for a selected code range, with loading, error handling, and a close button.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑3):```ts
+import { X } from &quot;lucide-react&quot;;
+import { LlmSummaryMarkdown } from &quot;./LlmSummaryMarkdown&quot;;
+import { AnimatedOverlay } from &quot;./ui/AnimatedOverlay&quot;;</li>
+</ul>
+<p><code>- **Props interface** (`SelectedDiffSummaryModalProps`, lines 5‑12):</code>ts
+export interface SelectedDiffSummaryModalProps {
+    open: boolean;
+    label: string | null;
+    summary: string | null;
+    loading: boolean;
+    error: string | null;
+    onClose: () =&gt; void;
+  }
+```- **Component** (<code>SelectedDiffSummaryModal</code>, lines 14‑63): renders an <code>AnimatedOverlay</code> with custom classes, a header containing a title, optional kicker (<code>label</code>), and a close button using the <code>X</code> icon. The body shows an error paragraph if <code>error</code> is set, a loading spinner when <code>loading</code> is true and no trimmed <code>summary</code>, the <code>LlmSummaryMarkdown</code> component when <code>summary</code> exists, and a caret animation while streaming (<code>loading &amp;&amp; summary?.trim()</code>).</p>
+<h3>Impact</h3>
+<ul>
+<li><strong>UI</strong>: Provides a reusable modal for LLM summaries, giving users visual feedback during analysis.  </li>
+<li><strong>State handling</strong>: Centralizes loading, error, and summary rendering logic, reducing duplication.  </li>
+<li><strong>Accessibility</strong>: Uses <code>aria-label</code> on the close button and <code>aria-hidden</code> on decorative elements.  </li>
+<li><strong>Performance</strong>: Conditional rendering limits unnecessary DOM updates; the spinner appears only when needed.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing CSS</strong>: The classes <code>summary-modal-backdrop</code>, <code>summary-modal</code>, and related styles must exist; otherwise the overlay may break layout.  </li>
+<li><strong>Icon import</strong>: <code>lucide-react</code> must be installed and export <code>X</code>; a missing dependency will cause a build error.  </li>
+<li><strong>Markdown rendering</strong>: It is unknown from the diff whether <code>LlmSummaryMarkdown</code> sanitizes input; if not, XSS could be introduced.  </li>
+<li><strong>Prop validation</strong>: No runtime checks are present; passing undefined props may lead to unexpected UI states.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

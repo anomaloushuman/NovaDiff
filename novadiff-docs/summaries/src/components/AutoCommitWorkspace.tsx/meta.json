@@ -1,0 +1,58 @@
+{
+  "relPath": "src/components/AutoCommitWorkspace.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:06:57.951Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R12 added: export interface AutoCommitWorkspaceProps {",
+      "R25 added: export function AutoCommitWorkspace({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import { Check, GitBranch, Loader2, Upload } from \"lucide-react\";",
+      "R3 added: import type { LlmSettings } from \"../app/llmStorage\";",
+      "R4 added: import {",
+      "R8 added: import { buildDocWorkspaceMetrics } from \"../app/docWorkspaceMetrics\";",
+      "R9 added: import type { FileChange } from \"../app/types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-387"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import { Check, GitBranch, Loader2, Upload } from \"lucide-react\";",
+      "R3 added: import type { LlmSettings } from \"../app/llmStorage\";",
+      "R4 added: import {",
+      "R5 added: buildCommitMessageContext,",
+      "R6 added: parseCommitMessageOutput,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function AutoCommitWorkspace (25-382)",
+      "right interface AutoCommitWorkspaceProps (12-24)",
+      "right function pathBasename (383-387)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

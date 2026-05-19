@@ -1,0 +1,33 @@
+{
+  "relPath": "src/components/onboarding/onboarding.css",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:26:59.478Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-262"
+    ],
+    "cited_changed_lines": [
+      "R1 added: .onboarding-overlay {",
+      "R2 added: position: fixed;",
+      "R3 added: inset: 0;",
+      "R4 added: z-index: 12000;",
+      "R5 added: display: flex;",
+      "R6 added: align-items: center;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

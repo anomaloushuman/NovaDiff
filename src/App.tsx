@@ -12,13 +12,46 @@ import { buildDiffExcerpt, buildDiffExcerptChunks, FILE_SUMMARY_DIFF_CHUNK_CHARS
 import type { LlmSettings } from "./app/llmStorage";
 import { loadLlmSettings } from "./app/llmStorage";
 import { buildSelectedDiffDocContext, isChangedDiffRow } from "./app/selectedDiffDocs";
+import {
+  BackgroundActivityProvider,
+  useBackgroundActivity,
+  type BackgroundActivityKind,
+} from "./app/BackgroundActivityContext";
+import { BackgroundActivityBar } from "./components/BackgroundActivityBar";
 import { DiffWorkspace } from "./components/DiffWorkspace";
 import { DocumentationWorkspace } from "./components/DocumentationWorkspace";
 import { InsightsColumn } from "./components/InsightsColumn";
 import { LlmSettingsModal } from "./components/LlmSettingsModal";
-import { SidebarNav } from "./components/SidebarNav";
+import { AppLaunchShell } from "./components/launch/AppLaunchShell";
+import { readLaunchSkipped, type LaunchPhase } from "./app/launchSequence";
+import type {
+  GitHistoryCompareOptions,
+  GitUserProfile,
+  NovaWorkspace,
+  WorkspaceCommitSnapshot,
+  WorkspaceSessionState,
+} from "./app/workspaceTypes";
+import {
+  findWorkspace,
+  loadCachedGitUser,
+  resolveOnboardingGate,
+  saveCachedActiveWorkspaceId,
+  saveCachedGitUser,
+  saveCachedLocalOnly,
+  loadCachedLocalOnly,
+  type OnboardingGate,
+} from "./app/workspaceStorage";
+import { AutoCommitWorkspace } from "./components/AutoCommitWorkspace";
+import { GitHistoryWorkspace } from "./components/GitHistoryWorkspace";
+import { PullRequestsWorkspace } from "./components/PullRequestsWorkspace";
+import { WelcomeScreen } from "./components/onboarding/WelcomeScreen";
+import { WorkspaceHub } from "./components/onboarding/WorkspaceHub";
+import { SidebarNav, type WorkspacePage } from "./components/SidebarNav";
 import { isNovadiffDocsReservedPath } from "./app/novadiffPaths";
 import "./App.css";
+import "./components/onboarding/onboarding.css";
+import "./components/ui/ui-transitions.css";
+import { WorkspaceStage } from "./components/ui/WorkspaceStage";
 
 function isElectron(): boolean {
   return typeof window !== "undefined" && Boolean(window.electronAPI);
@@ -87,7 +120,8 @@ function loadInsightsWidth(): number {
   }
 }
 
-export default function App() {
+function AppMain() {
+  const { upsertActivity, removeActivity } = useBackgroundActivity();
   const [left, setLeft] = useState("");
   const [right, setRight] = useState("");
   const [rows, setRows] = useState<FileChange[]>([]);
@@ -117,11 +151,16 @@ export default function App() {
   const [selectedDiffSummaryError, setSelectedDiffSummaryError] = useState<string | null>(
     null,
   );
+  const [selectedDiffSummaryModalOpen, setSelectedDiffSummaryModalOpen] = useState(false);
   const [insightsWidth, setInsightsWidth] = useState(loadInsightsWidth);
   const [prefetchStatus, setPrefetchStatus] = useState<string | null>(null);
-  const [workspacePage, setWorkspacePage] = useState<"compare" | "docs">(
-    "compare",
-  );
+  const [prefetchProgress, setPrefetchProgress] = useState<{
+    current: number;
+    total: number;
+  } | null>(null);
+  const [compareEngineMessage, setCompareEngineMessage] = useState<string | null>(null);
+  const [workspacePage, setWorkspacePage] = useState<WorkspacePage>("compare");
+  const [docsInsightsOpen, setDocsInsightsOpen] = useState(false);
   const [workspaceDocAuto, setWorkspaceDocAuto] = useState(() => {
     try {
       return typeof localStorage !== "undefined" &&
@@ -136,6 +175,9 @@ export default function App() {
     isMaximized: false,
     isFullScreen: false,
   });
+  const [session, setSession] = useState<WorkspaceSessionState | null>(null);
+  const [sessionReady, setSessionReady] = useState(false);
+  const [launchPhase, setLaunchPhase] = useState<LaunchPhase>("boot");
 
   const setWorkspaceDocAutoPersist = useCallback((v: boolean) => {
     setWorkspaceDocAuto(v);
@@ -145,6 +187,12 @@ export default function App() {
       /* ignore */
     }
   }, []);
+
+  useEffect(() => {
+    if (workspacePage !== "docs") {
+      setDocsInsightsOpen(false);
+    }
+  }, [workspacePage]);
 
   const jumpToComparePath = useCallback((path: string) => {
     const relPath = String(path ?? "").trim();
@@ -159,6 +207,64 @@ export default function App() {
   const fileSummaryLoadingRef = useRef(false);
   selectedPathRef.current = selectedPath;
   fileSummaryLoadingRef.current = fileSummaryLoading;
+
+  useEffect(() => {
+    const api = window.electronAPI;
+    if (!api?.onEngineProgress) {
+      return;
+    }
+    return api.onEngineProgress((msg) => {
+      if (!msg || typeof msg !== "object") {
+        return;
+      }
+      const cmd = typeof msg.cmd === "string" ? msg.cmd : "engine";
+      const message = typeof msg.message === "string" ? msg.message : "Working…";
+      const phase = typeof msg.phase === "string" ? msg.phase : "running";
+      const id =
+        cmd === "compare-folders"
+          ? "compare"
+          : cmd === "codebase-outline"
+            ? "outline"
+            : cmd === "filter-changes-gitignore"
+              ? "filter"
+              : cmd === "risk-signals"
+                ? "risk"
+                : `engine:${cmd}`;
+      const kind =
+        cmd === "compare-folders"
+          ? "compare"
+          : cmd === "codebase-outline"
+            ? "outline"
+            : cmd === "filter-changes-gitignore"
+              ? "filter"
+              : "other";
+      const label =
+        cmd === "compare-folders"
+          ? "Comparing folders"
+          : cmd === "codebase-outline"
+            ? "Scanning codebase"
+            : cmd === "filter-changes-gitignore"
+              ? "Filtering changes"
+              : cmd === "risk-signals"
+                ? "Analyzing risk signals"
+                : "Running engine";
+      const progress =
+        phase === "parsing" ? 92 : phase === "done" ? 100 : phase === "spawn" ? 8 : null;
+      upsertActivity({
+        id,
+        kind: kind as BackgroundActivityKind,
+        label,
+        detail: message,
+        progress,
+      });
+      if (cmd === "compare-folders") {
+        setCompareEngineMessage(message);
+      }
+      if (phase === "done") {
+        window.setTimeout(() => removeActivity(id), 700);
+      }
+    });
+  }, [removeActivity, upsertActivity]);
 
   useEffect(() => {
     const api = window.electronAPI;
@@ -197,10 +303,26 @@ export default function App() {
         setPrefetchStatus(
           `Auto-summarizing up to ${jobs} file(s) (${detail})…`,
         );
+        setPrefetchProgress(jobs > 0 ? { current: 0, total: jobs } : null);
+        upsertActivity({
+          id: "prefetch",
+          kind: "prefetch",
+          label: "Prefetching file summaries",
+          detail: `Queued ${jobs} file(s) · ${detail}`,
+          progress: 0,
+        });
       } else if (state === "file-done") {
         const idx = typeof msg.index === "number" ? msg.index : 0;
         const tot = typeof msg.total === "number" ? msg.total : 0;
         setPrefetchStatus(`Prefetch ${idx}/${tot}`);
+        setPrefetchProgress(tot > 0 ? { current: idx, total: tot } : null);
+        upsertActivity({
+          id: "prefetch",
+          kind: "prefetch",
+          label: "Prefetching file summaries",
+          detail: `${idx}/${tot} complete`,
+          progress: tot > 0 ? (idx / tot) * 100 : null,
+        });
         const path = typeof msg.path === "string" ? msg.path : "";
         if (
           path &&
@@ -222,15 +344,20 @@ export default function App() {
         const idx = typeof msg.index === "number" ? msg.index : 0;
         const tot = typeof msg.total === "number" ? msg.total : 0;
         setPrefetchStatus(`Prefetch ${idx}/${tot} · skipped non-text file`);
+        setPrefetchProgress(tot > 0 ? { current: idx, total: tot } : null);
       } else if (state === "finished") {
         setPrefetchStatus(null);
+        setPrefetchProgress(null);
+        removeActivity("prefetch");
       } else if (state === "fatal") {
         setPrefetchStatus(
           typeof msg.message === "string" ? msg.message : "Prefetch failed",
         );
+        setPrefetchProgress(null);
+        removeActivity("prefetch");
       }
     });
-  }, []);
+  }, [removeActivity, upsertActivity]);
 
   const toggleFullscreen = useCallback(() => {
     void window.electronAPI?.toggleFullscreen().catch((e) => {
@@ -323,13 +450,22 @@ export default function App() {
     return { added, removed, modified, total: rows.length };
   }, [rows]);
 
-  const compare = useCallback(async () => {
+  const runCompare = useCallback(
+    async (leftPath: string, rightPath: string, opts?: { navigate?: boolean }) => {
     if (!window.electronAPI) {
       setError("Run the desktop app (npm run electron:dev) to compare folders.");
       return;
     }
+    const l = leftPath.trim();
+    const r = rightPath.trim();
+    if (!l || !r) {
+      setError("Pick baseline and target folders first.");
+      return;
+    }
     void window.electronAPI.stopSummaryPrefetch?.();
-    setWorkspacePage("compare");
+    if (opts?.navigate !== false) {
+      setWorkspacePage("compare");
+    }
     setError(null);
     setBusy(true);
     setCompared(false);
@@ -345,13 +481,19 @@ export default function App() {
     setSelectedDiffSummaryLoading(false);
     setSelectedDiffSummaryError(null);
     setPrefetchStatus(null);
+    setPrefetchProgress(null);
+    setCompareEngineMessage("Starting folder compare…");
+    upsertActivity({
+      id: "compare",
+      kind: "compare",
+      label: "Comparing folders",
+      detail: "Preparing Rust compare engine…",
+      progress: 5,
+    });
     try {
-      const result = await window.electronAPI.compareFolders(
-        left.trim(),
-        right.trim(),
-      );
-      const lt = baseName(left.trim()) || "Baseline";
-      const rt = baseName(right.trim()) || "Target";
+      const result = await window.electronAPI.compareFolders(l, r);
+      const lt = baseName(l) || "Baseline";
+      const rt = baseName(r) || "Target";
       startTransition(() => {
         setRows(result);
         setCompared(true);
@@ -363,8 +505,8 @@ export default function App() {
       if (result.length > 0 && window.electronAPI.startSummaryPrefetch) {
         void window.electronAPI
           .startSummaryPrefetch({
-            leftRoot: left.trim(),
-            rightRoot: right.trim(),
+            leftRoot: l,
+            rightRoot: r,
             leftLabel: lt,
             rightLabel: rt,
             changes: result,
@@ -388,8 +530,297 @@ export default function App() {
       setError(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(false);
+      setCompareEngineMessage(null);
+      removeActivity("compare");
     }
-  }, [left, right, llmSettings, workspaceDocAuto]);
+    },
+    [llmSettings, removeActivity, upsertActivity, workspaceDocAuto],
+  );
+
+  const compare = useCallback(() => {
+    void runCompare(left, right);
+  }, [runCompare, left, right]);
+
+  const openPrCompare = useCallback(
+    (payload: {
+      leftRoot: string;
+      rightRoot: string;
+      leftTitle: string;
+      rightTitle: string;
+    }) => {
+      setLeft(payload.leftRoot);
+      setRight(payload.rightRoot);
+      void runCompare(payload.leftRoot, payload.rightRoot);
+    },
+    [runCompare],
+  );
+
+  const useRepoAsTarget = useCallback((repoPath: string) => {
+    setRight(repoPath);
+    setWorkspacePage("compare");
+  }, []);
+
+  useEffect(() => {
+    if (!isElectron() || !window.electronAPI?.workspaceSessionLoad) {
+      const cached = loadCachedGitUser();
+      setSession({
+        gitUser: cached,
+        activeWorkspaceId: null,
+        workspaces: [],
+        localOnlyMode: loadCachedLocalOnly(),
+      });
+      setSessionReady(true);
+      return;
+    }
+    let cancelled = false;
+    void window.electronAPI.workspaceSessionLoad().then((s) => {
+      if (cancelled) {
+        return;
+      }
+      if (s.gitUser) {
+        saveCachedGitUser(s.gitUser);
+      }
+      setSession(s);
+      setSessionReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const activeWorkspace = useMemo(
+    () => findWorkspace(session?.workspaces ?? [], session?.activeWorkspaceId),
+    [session],
+  );
+
+  const onboardingGate: OnboardingGate | null = useMemo(() => {
+    if (!sessionReady) {
+      return null;
+    }
+    if (!isElectron()) {
+      return "app";
+    }
+    const skipBoot = launchPhase === "ready" || readLaunchSkipped();
+    return resolveOnboardingGate({
+      skipBoot,
+      localOnlyMode: Boolean(session?.localOnlyMode),
+      hasUser: Boolean(session?.gitUser),
+      hasActiveWorkspace: Boolean(activeWorkspace),
+    });
+  }, [sessionReady, launchPhase, session?.localOnlyMode, session?.gitUser, activeWorkspace]);
+
+  const showMainApp = onboardingGate === "app";
+  const localOnlyMode = Boolean(session?.localOnlyMode);
+
+  useEffect(() => {
+    if (!localOnlyMode) {
+      return;
+    }
+    if (workspacePage === "history" || workspacePage === "prs" || workspacePage === "publish") {
+      setWorkspacePage("compare");
+    }
+  }, [localOnlyMode, workspacePage]);
+
+  const applyWorkspacePaths = useCallback((ws: NovaWorkspace) => {
+    const commits = ws.commits ?? [];
+    if (commits.length >= 2) {
+      const head = commits[commits.length - 1];
+      const base = commits[commits.length - 2];
+      setLeft(base.snapshotPath);
+      setRight(head.snapshotPath);
+    } else {
+      setRight(ws.repoRoot);
+      setLeft(ws.repoRoot);
+    }
+  }, []);
+
+  const activateWorkspace = useCallback(
+    async (ws: NovaWorkspace, sessionFromServer?: WorkspaceSessionState | null) => {
+      saveCachedActiveWorkspaceId(ws.id);
+      saveCachedLocalOnly(false);
+      if (sessionFromServer) {
+        setSession(sessionFromServer);
+      } else if (window.electronAPI?.workspaceSetActive) {
+        const s = await window.electronAPI.workspaceSetActive({ workspaceId: ws.id });
+        setSession(s);
+      } else {
+        setSession((prev) => {
+          const base = prev ?? {
+            gitUser: null,
+            activeWorkspaceId: null,
+            workspaces: [],
+            localOnlyMode: false,
+          };
+          const workspaces = [...base.workspaces];
+          const idx = workspaces.findIndex((w) => w.id === ws.id);
+          if (idx >= 0) {
+            workspaces[idx] = ws;
+          } else {
+            workspaces.push(ws);
+          }
+          return { ...base, activeWorkspaceId: ws.id, workspaces, localOnlyMode: false };
+        });
+      }
+      applyWorkspacePaths(ws);
+    },
+    [applyWorkspacePaths],
+  );
+
+  const handleGitUserSelected = useCallback((user: GitUserProfile) => {
+    saveCachedGitUser(user);
+    saveCachedLocalOnly(false);
+    setSession((prev) => ({
+      gitUser: user,
+      activeWorkspaceId: prev?.activeWorkspaceId ?? null,
+      workspaces: prev?.workspaces ?? [],
+      localOnlyMode: false,
+    }));
+  }, []);
+
+  const handleLocalOnly = useCallback(async () => {
+    saveCachedLocalOnly(true);
+    if (window.electronAPI?.workspaceSetLocalOnly) {
+      const s = await window.electronAPI.workspaceSetLocalOnly({ enabled: true });
+      setSession(s);
+      return;
+    }
+    setSession({
+      gitUser: null,
+      activeWorkspaceId: null,
+      workspaces: [],
+      localOnlyMode: true,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!showMainApp || !isElectron() || !window.electronAPI?.onWorkspaceHistoryProgress) {
+      return;
+    }
+    return window.electronAPI.onWorkspaceHistoryProgress((msg) => {
+      if (msg.done) {
+        void window.electronAPI?.workspaceSessionLoad?.().then((s) => {
+          setSession(s);
+        });
+        return;
+      }
+      const workspaceId = typeof msg.workspaceId === "string" ? msg.workspaceId : null;
+      if (!workspaceId) {
+        return;
+      }
+      setSession((prev) => {
+        if (!prev) {
+          return prev;
+        }
+        const workspaces = prev.workspaces.map((w) => {
+          if (w.id !== workspaceId) {
+            return w;
+          }
+          return {
+            ...w,
+            historyStatus: "indexing" as const,
+            historyProgress: {
+              current: typeof msg.current === "number" ? msg.current : w.historyProgress?.current ?? 0,
+              total: typeof msg.total === "number" ? msg.total : w.historyProgress?.total ?? 0,
+              message: typeof msg.message === "string" ? msg.message : w.historyProgress?.message ?? "",
+            },
+          };
+        });
+        return { ...prev, workspaces };
+      });
+    });
+  }, [showMainApp]);
+
+  useEffect(() => {
+    if (!sessionReady || onboardingGate !== "app" || !activeWorkspace) {
+      return;
+    }
+    const commits = activeWorkspace.commits ?? [];
+    if (commits.length >= 2 && !left && !right) {
+      const head = commits[commits.length - 1];
+      const base = commits[commits.length - 2];
+      setLeft(base.snapshotPath);
+      setRight(head.snapshotPath);
+    } else if (!left && !right) {
+      setLeft(activeWorkspace.repoRoot);
+      setRight(activeWorkspace.repoRoot);
+    }
+  }, [sessionReady, onboardingGate, activeWorkspace, left, right]);
+
+  const ensureSnapshot = useCallback(
+    async (commit: WorkspaceCommitSnapshot) => {
+      if (!activeWorkspace?.id || !window.electronAPI?.workspaceEnsureCommitSnapshot) {
+        return commit.snapshotPath;
+      }
+      const result = await window.electronAPI.workspaceEnsureCommitSnapshot({
+        workspaceId: activeWorkspace.id,
+        hash: commit.hash,
+        snapshotPath: commit.snapshotPath,
+      });
+      return result.snapshotPath;
+    },
+    [activeWorkspace?.id],
+  );
+
+  const compareHistoryCommits = useCallback(
+    async (
+      base: WorkspaceCommitSnapshot,
+      head: WorkspaceCommitSnapshot | null,
+      options?: GitHistoryCompareOptions,
+    ) => {
+      setError(null);
+      try {
+        const leftPath = await ensureSnapshot(base);
+        let rightPath = "";
+        if (options?.useLiveHead && options.liveRepoRoot?.trim()) {
+          rightPath = options.liveRepoRoot.trim();
+        } else if (head) {
+          rightPath = await ensureSnapshot(head);
+        }
+        if (!rightPath) {
+          throw new Error("Select a head revision or enable live dev folder compare.");
+        }
+        setLeft(leftPath);
+        setRight(rightPath);
+        setWorkspacePage("compare");
+        await runCompare(leftPath, rightPath);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      }
+    },
+    [ensureSnapshot, runCompare],
+  );
+
+  const documentHistoryCommits = useCallback(
+    async (baseCommit: WorkspaceCommitSnapshot, headCommit: WorkspaceCommitSnapshot) => {
+      setError(null);
+      try {
+        const leftPath = await ensureSnapshot(baseCommit);
+        const rightPath = await ensureSnapshot(headCommit);
+        setLeft(leftPath);
+        setRight(rightPath);
+        setWorkspacePage("docs");
+        await runCompare(leftPath, rightPath);
+        setDocGenTrigger((n) => n + 1);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      }
+    },
+    [ensureSnapshot, runCompare],
+  );
+
+  const persistLiveDevRepo = useCallback(
+    async (liveDevRepoRoot: string) => {
+      if (!activeWorkspace?.id || !window.electronAPI?.workspaceUpdateLiveRepo) {
+        return;
+      }
+      const s = await window.electronAPI.workspaceUpdateLiveRepo({
+        workspaceId: activeWorkspace.id,
+        liveDevRepoRoot,
+      });
+      setSession(s);
+    },
+    [activeWorkspace?.id],
+  );
 
   useEffect(() => {
     if (!selectedPath || !left.trim() || !right.trim() || rows.length === 0) {
@@ -408,6 +839,13 @@ export default function App() {
     }
     let cancelled = false;
     setDiffLoading(true);
+    upsertActivity({
+      id: "diff",
+      kind: "diff",
+      label: "Loading file diff",
+      detail: selectedPath,
+      progress: null,
+    });
     setDiffError(null);
     setDiffPayload(null);
     setFileSummary(null);
@@ -433,13 +871,37 @@ export default function App() {
       .finally(() => {
         if (!cancelled) {
           setDiffLoading(false);
+          removeActivity("diff");
         }
       });
     return () => {
       cancelled = true;
+      removeActivity("diff");
       void window.electronAPI?.llmAbortStream?.();
     };
-  }, [selectedPath, left, right, rows]);
+  }, [removeActivity, selectedPath, left, right, rows, upsertActivity]);
+
+  useEffect(() => {
+    if (fileSummaryLoading) {
+      upsertActivity({
+        id: "file-summary",
+        kind: "llm",
+        label: "Generating file summary",
+        detail: selectedPath ?? undefined,
+        progress: fileSummaryChunk
+          ? ((fileSummaryChunk.index + 1) / fileSummaryChunk.total) * 100
+          : null,
+      });
+      return;
+    }
+    removeActivity("file-summary");
+  }, [
+    fileSummaryChunk,
+    fileSummaryLoading,
+    removeActivity,
+    selectedPath,
+    upsertActivity,
+  ]);
 
   const leftTitle = useMemo(() => baseName(left.trim()) || "Baseline", [left]);
   const rightTitle = useMemo(() => baseName(right.trim()) || "Target", [right]);
@@ -664,6 +1126,7 @@ export default function App() {
       return;
     }
     if (isNovadiffDocsReservedPath(selectedPath)) {
+      setSelectedDiffSummaryModalOpen(true);
       setSelectedDiffSummaryError(
         "Paths under novadiff-docs/ are reserved for generated documentation and are not summarized.",
       );
@@ -673,6 +1136,7 @@ export default function App() {
     if (!fc) {
       return;
     }
+    setSelectedDiffSummaryModalOpen(true);
     setSelectedDiffSummaryLoading(true);
     setSelectedDiffSummaryError(null);
     setSelectedDiffSummary("");
@@ -776,30 +1240,77 @@ export default function App() {
 
   return (
     <div className="app-root">
-      {isElectron() ? (
-        <WindowChrome
-          state={windowChrome}
-          onMinimize={() => void window.electronAPI?.minimizeWindow?.()}
-          onToggleMaximize={() => void window.electronAPI?.toggleMaximizeWindow?.()}
-          onToggleFullscreen={() => toggleFullscreen()}
-          onClose={() => void window.electronAPI?.closeWindow?.()}
-        />
+      <AppLaunchShell
+        onPhaseChange={setLaunchPhase}
+        chrome={
+          isElectron() ? (
+            <WindowChrome
+              state={windowChrome}
+              onMinimize={() => void window.electronAPI?.minimizeWindow?.()}
+              onToggleMaximize={() => void window.electronAPI?.toggleMaximizeWindow?.()}
+              onToggleFullscreen={() => toggleFullscreen()}
+              onClose={() => void window.electronAPI?.closeWindow?.()}
+            />
+          ) : null
+        }
+      >
+      {!showMainApp && onboardingGate === "welcome" ? (
+        <div className="onboarding-overlay">
+          <WelcomeScreen onComplete={handleGitUserSelected} onLocalOnly={() => void handleLocalOnly()} />
+        </div>
       ) : null}
-      <div className="app-shell">
+      {!showMainApp && onboardingGate === "hub" && session?.gitUser ? (
+        <div className="onboarding-overlay">
+          <WorkspaceHub
+            gitUser={session.gitUser}
+            workspaces={session.workspaces}
+            onSessionChange={(workspaces) => {
+              setSession((prev) => {
+                if (!prev) {
+                  return prev;
+                }
+                return {
+                  ...prev,
+                  workspaces,
+                };
+              });
+            }}
+            onOpenWorkspace={(ws, serverSession) => void activateWorkspace(ws, serverSession)}
+          />
+        </div>
+      ) : null}
+      {showMainApp ? (
+      <>
       <LlmSettingsModal
         open={settingsOpen}
         initial={llmSettings}
         onClose={() => setSettingsOpen(false)}
         onSaved={(s) => setLlmSettings(s)}
       />
-      <SidebarNav
-        active={compared && rows.length > 0}
-        workspacePage={workspacePage}
-        onWorkspacePage={setWorkspacePage}
-        leftFolderName={leftTitle}
-        rightFolderName={rightTitle}
-        onOpenSettings={() => setSettingsOpen(true)}
-      />
+      <div className="launch-panel launch-panel--side">
+        <SidebarNav
+          active={compared && rows.length > 0}
+          workspacePage={workspacePage}
+          onWorkspacePage={setWorkspacePage}
+          leftFolderName={leftTitle}
+          rightFolderName={rightTitle}
+          localOnlyMode={Boolean(session?.localOnlyMode)}
+          gitUser={session?.localOnlyMode ? null : session?.gitUser ?? null}
+          workspaceName={
+            session?.localOnlyMode ? "Folder compare" : activeWorkspace?.name ?? null
+          }
+          workspaceRepoLabel={
+            session?.localOnlyMode
+              ? "Local · pick two folders"
+              : activeWorkspace
+                ? activeWorkspace.githubSlug ?? baseName(activeWorkspace.repoRoot)
+                : null
+          }
+          onOpenSettings={() => setSettingsOpen(true)}
+        />
+      </div>
+      <div className="launch-panel launch-panel--main">
+        <WorkspaceStage pageKey={workspacePage}>
       {workspacePage === "compare" ? (
         <DiffWorkspace
           leftRoot={left}
@@ -825,6 +1336,7 @@ export default function App() {
           }}
           onCompare={() => void compare()}
           busy={busy}
+          compareStatusMessage={compareEngineMessage}
           error={error}
           compared={compared}
           leftTitle={leftTitle}
@@ -849,8 +1361,19 @@ export default function App() {
           selectedDiffSummary={selectedDiffSummary}
           selectedDiffSummaryLoading={selectedDiffSummaryLoading}
           selectedDiffSummaryError={selectedDiffSummaryError}
+          selectedDiffSummaryModalOpen={selectedDiffSummaryModalOpen}
+          onCloseSelectedDiffSummaryModal={() => setSelectedDiffSummaryModalOpen(false)}
         />
-      ) : (
+      ) : workspacePage === "history" && activeWorkspace ? (
+        <GitHistoryWorkspace
+          workspace={activeWorkspace}
+          busy={busy}
+          error={error}
+          onCompareCommits={compareHistoryCommits}
+          onDocumentCommit={documentHistoryCommits}
+          onLiveRepoPersist={persistLiveDevRepo}
+        />
+      ) : workspacePage === "docs" ? (
         <DocumentationWorkspace
           compared={compared}
           leftRoot={left}
@@ -864,8 +1387,31 @@ export default function App() {
           workspaceDocAuto={workspaceDocAuto}
           onWorkspaceDocAutoChange={setWorkspaceDocAutoPersist}
           onJumpToCompare={jumpToComparePath}
+          onOpenInsightsDock={() => setDocsInsightsOpen(true)}
+          insightsDockOpen={docsInsightsOpen}
+        />
+      ) : workspacePage === "prs" ? (
+        <PullRequestsWorkspace
+          suggestedRepoPath={right.trim() || left.trim()}
+          onOpenCompare={openPrCompare}
+          onUseRepoAsTarget={useRepoAsTarget}
+        />
+      ) : (
+        <AutoCommitWorkspace
+          suggestedRepoPath={right.trim() || left.trim()}
+          compared={compared}
+          compareRows={rows}
+          leftRoot={left}
+          rightRoot={right}
+          leftTitle={leftTitle}
+          rightTitle={rightTitle}
+          llmSettings={llmSettings}
         />
       )}
+        </WorkspaceStage>
+      </div>
+      {workspacePage !== "docs" || docsInsightsOpen ? (
+      <div className="launch-panel launch-panel--insights">
       <div className="insights-dock" style={{ width: insightsWidth }}>
         <div
           className="insights-resize-handle"
@@ -932,9 +1478,14 @@ export default function App() {
           fileSummaryDisabledReason={selectedPath ? fileSummaryBlockedReason : null}
           onRequestFileSummary={() => void requestFileSummary()}
           prefetchStatus={prefetchStatus}
+          prefetchProgress={prefetchProgress}
         />
       </div>
-    </div>
+      </div>
+      ) : null}
+      </>
+      ) : null}
+      </AppLaunchShell>
     </div>
   );
 }
@@ -1029,5 +1580,14 @@ function WindowChrome({
         <div className="window-chrome-spacer" aria-hidden />
       )}
     </header>
+  );
+}
+
+export default function App() {
+  return (
+    <BackgroundActivityProvider>
+      <AppMain />
+      <BackgroundActivityBar />
+    </BackgroundActivityProvider>
   );
 }

@@ -26,19 +26,29 @@
 <body>
   <header class="top">
     <h1>.gitignore</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:19:24.317Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:57:08.907Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a modification to the <code>.gitignore</code> file between the <code>NovaDiff-main</code> and <code>NovaDiff</code> branches. The file has been modified in both trees, with a total of 2 changes (added and removed) in the target tree.</p>
-<h3>Key Changes</h3>
-<p>The most significant change in this diff is the addition of a new line <code>Bn</code> at line 32. This line was not present in the baseline version of the file. Additionally, there are some minor modifications to existing lines, such as the removal of the <code>*.suo</code> pattern at line 20.</p>
+<p>The <code>.gitignore</code> file was modified to add ignore rules for legacy clone artifacts and graph‑engine build output. The changes appear in lines 34–38 of the file.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Line 34</strong> – added comment <code># Optional legacy clone (not used by NovaDiff)</code>.</li>
+<li><strong>Line 35</strong> – added pattern <code>understandanything/</code> to ignore that directory.</li>
+<li><strong>Line 37</strong> – added comment <code># Graph engine build output</code>.</li>
+<li><strong>Line 38</strong> – added pattern <code>packages/graph-core/dist</code> to ignore the build‑output directory.</li>
+</ul>
 <h3>Impact</h3>
-<p>The impact of these changes will depend on the specific use case and requirements of the project. However, it&#39;s worth noting that the addition of the <code>Bn</code> pattern may potentially cause issues with certain build processes or tools that rely on the <code>.gitignore</code> file. It&#39;s important to thoroughly test and verify any changes made to this file to ensure they do not have unintended consequences.</p>
-<h3>Risks &amp; Follow-ups</h3>
-<p>There is a risk that the addition of the <code>Bn</code> pattern could cause issues with certain build processes or tools that rely on the <code>.gitignore</code> file. To mitigate this risk, it would be advisable to thoroughly test and verify any changes made to this file to ensure they do not have unintended consequences. Additionally, it would be beneficial to review the nearest targeted tests and a quick manual smoke test for the touched area to ensure that the changes do not introduce any regressions.</p>
-<hr>
-<p>The draft Markdown has been rewritten as valid GitHub-flavored Markdown. The section headings have been preserved, and the overall purpose and structure of the document have been maintained. However, some unsupported claims have been removed or softened, and some generic filler has been deleted. The Markdown has been kept clean by using short paragraphs, flat bullets, and no outer fenced block. The total word count is within the recommended range of 180-350 words.</p>
+<ul>
+<li>Only affects version‑control behavior; no code or runtime changes are introduced.</li>
+<li>The added ignore patterns prevent accidental commits of the specified directories.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>understandanything/</code> and <code>packages/graph-core/dist</code> are not required by CI or deployment scripts; otherwise, missing files could cause failures.</li>
+<li>Update any scripts that previously expected these directories in the repository to generate them locally.</li>
+<li>Run a quick lint or <code>.gitignore</code> parser check to ensure the new comments do not interfere with tooling.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

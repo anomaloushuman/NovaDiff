@@ -1,11 +1,23 @@
-### Overview
-This diff represents a modification to the `electron/preload.cjs` file in the NovaDiff repository. The file is part of the Electron context bridge and exposes various IPC functions to the renderer process.
+### Overview  
+The `electron/preload.cjs` script now exposes additional IPC‑bound APIs for knowledge‑graph handling, engine progress, and extended Git/GitHub integration. No existing APIs were removed; the new functions are appended after the existing `onSummaryPrefetchProgress` block (see lines 51‑72 and 118‑178).
 
-### Key changes
-The most significant change in this diff is the addition of new IPC functions for managing window state, such as minimizing, maximizing, and closing the window. These functions are exposed through the `electronAPI` object in the renderer process. Additionally, the diff includes changes to the `llmSummarizeStream` function, which now includes a handler for the `LLM_STREAM` event emitted by the LLM module.
+### Key changes  
+- **Knowledge‑graph API** (lines 51‑72):  
+  - `buildKnowledgeGraph`, `readKnowledgeGraph`, `readKnowledgeGraphFile` invoke `"knowledge-graph-build"`, `"knowledge-graph-read"`, `"knowledge-graph-read-file"`.  
+  - `onKnowledgeGraphProgress` registers a listener on `"knowledge-graph-progress"` and returns a cleanup function.  
+- **Engine progress** (lines 64‑71): similar pattern for `"engine-progress"`.  
+- **Git tooling** (lines 118‑127): new helpers (`gitDetectTooling`, `gitRepoStatus`, `gitDiscoverRepos`, etc.) expose `"git-detect-tooling"`, `"git-repo-status"`, etc.  
+- **GitHub integration** (lines 147‑168): progress listeners for `"github-gh-install-progress"` and `"github-auth-progress"`.  
+- **Workspace history** (lines 170‑177): `onWorkspaceHistoryProgress` listens on `"workspace-history-progress"`.
 
-### Impact
-The impact of these changes on correctness, maintainability, performance, compatibility, or observability is not immediately apparent. However, the addition of new IPC functions may introduce new opportunities for security vulnerabilities or other issues that need to be carefully reviewed and tested.
+### Impact  
+- **Runtime correctness**: Each new IPC channel requires a corresponding main‑process handler; missing handlers will trigger runtime errors.  
+- **Memory safety**: Every event listener returns a cleanup function; callers must invoke it to avoid leaks.  
+- **Surface area**: The API surface expands, so documentation and type definitions should be updated.  
+- **Performance**: Additional listeners add minimal IPC overhead; the impact is negligible for typical usage.
 
-### Risks & follow-ups
-Based on the evidence provided, there is no clear indication of any potential risks or issues with the changes made to the `electron/preload.cjs` file. However, it is important to verify that the new IPC functions do not introduce any security vulnerabilities or other issues that could negatively impact the overall stability or functionality of the application. As such, it would be advisable to run the JS/TS lint, test, and production build commands used by this repo to ensure that all tests pass and there are no unexpected issues.
+### Risks & follow‑ups  
+1. **Missing main‑process handlers** – Verify that handlers for `"knowledge-graph-build"`, `"git-detect-tooling"`, etc., exist.  
+2. **Listener leaks** – Ensure cleanup functions are called when components unmount.  
+3. **Name collisions** – Confirm that new symbols (`onEngineProgress`, `onWorkspaceHistoryProgress`) do not shadow legacy ones.  
+4. **Test coverage** – Add unit tests for the new preload functions to guard against IPC regressions.

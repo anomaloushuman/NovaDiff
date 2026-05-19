@@ -1,0 +1,43 @@
+{
+  "relPath": "packages/graph-view/src/locales/zh-TW.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:53:19.796Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export const zhTW = {",
+      "R272 added: export default zhTW;"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-272"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export const zhTW = {",
+      "R2 added: common: {",
+      "R3 added: loading: \"載入專案...\",",
+      "R4 added: noGraphLoaded: \"未載入知識圖谱\",",
+      "R5 added: selectNode: \"選擇節點查看詳情\",",
+      "R6 added: back: \"返回\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

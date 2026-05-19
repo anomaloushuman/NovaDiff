@@ -187,6 +187,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .content-main { min-width: 0; display: grid; gap: 18px; }
+  .content-side { min-width: 0; }
   .content-card,
   .toc-card,
   .viz-card,
@@ -209,6 +210,8 @@
     position: sticky;
     top: 170px;
     padding: 18px;
+    max-height: calc(100vh - 190px);
+    overflow: auto;
   }
   .toc-title {
     margin: 0 0 10px;
@@ -280,6 +283,7 @@
   .md {
     font-size: 1rem;
     color: var(--page-md-text);
+    overflow-wrap: anywhere;
   }
   .md > :first-child { margin-top: 0; }
   .md > :last-child { margin-bottom: 0; }
@@ -347,10 +351,12 @@
   }
   .md pre code { background: none; padding: 0; }
   .md table {
+    display: block;
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    overflow: hidden;
+    max-width: 100%;
+    overflow: auto;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.9rem;
@@ -446,7 +452,7 @@
   .release-link {
     font-weight: 700;
   }
-  @media (max-width: 1040px) {
+  @media (max-width: 1180px) {
     nav.page-nav { top: 132px; }
     main.content,
     main.content.no-toc {
@@ -472,7 +478,7 @@
         <h1>Compare metrics</h1>
         <p class="top-subtitle">Quantitative signals for the compare, styled for quicker scanning and anchored navigation.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: NovaDiff-main</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-14T07:37:35.642Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 8e0dc031dcfc</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: </span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -484,74 +490,7 @@
   </nav>
   <main class="content">
     <div class="content-main">
-      <article class="content-card md"><h1 id="compare-metrics"><a class="heading-anchor" href="#compare-metrics" aria-label="Link to Compare metrics">#</a>Compare metrics</h1>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Count</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Added</td>
-<td>21</td>
-</tr>
-<tr>
-<td>Removed</td>
-<td>0</td>
-</tr>
-<tr>
-<td>Modified</td>
-<td>21</td>
-</tr>
-</tbody></table>
-<p><strong>Baseline:</strong> NovaDiff-main</p>
-<p><strong>Target:</strong> NovaDiff</p>
-<h2 id="changed-paths-sample-up-to-80"><a class="heading-anchor" href="#changed-paths-sample-up-to-80" aria-label="Link to Changed paths (sample, up to 80)">#</a>Changed paths (sample, up to 80)</h2>
-<ul>
-<li><strong>modified</strong> <code>.gitignore</code></li>
-<li><strong>modified</strong> <code>cli/Cargo.lock</code></li>
-<li><strong>modified</strong> <code>cli/Cargo.toml</code></li>
-<li><strong>modified</strong> <code>cli/src/main.rs</code></li>
-<li><strong>added</strong> <code>electron/code-city-model.cjs</code></li>
-<li><strong>added</strong> <code>electron/diff-excerpt.cjs</code></li>
-<li><strong>added</strong> <code>electron/file-summary-export.cjs</code></li>
-<li><strong>added</strong> <code>electron/git-blame.cjs</code></li>
-<li><strong>modified</strong> <code>electron/llm.cjs</code></li>
-<li><strong>modified</strong> <code>electron/main.cjs</code></li>
-<li><strong>added</strong> <code>electron/novadiff-docs-html.cjs</code></li>
-<li><strong>added</strong> <code>electron/novadiff-docs-pdf.cjs</code></li>
-<li><strong>added</strong> <code>electron/novadiff-docs-writer.cjs</code></li>
-<li><strong>added</strong> <code>electron/prefetch-summaries.cjs</code></li>
-<li><strong>modified</strong> <code>electron/preload.cjs</code></li>
-<li><strong>modified</strong> <code>package-lock.json</code></li>
-<li><strong>modified</strong> <code>package.json</code></li>
-<li><strong>modified</strong> <code>src/App.css</code></li>
-<li><strong>modified</strong> <code>src/App.tsx</code></li>
-<li><strong>added</strong> <code>src/app/codeCityLayout.ts</code></li>
-<li><strong>added</strong> <code>src/app/codebaseDocs.ts</code></li>
-<li><strong>added</strong> <code>src/app/commitMessage.ts</code></li>
-<li><strong>modified</strong> <code>src/app/diffExcerpt.ts</code></li>
-<li><strong>added</strong> <code>src/app/docWorkspaceMetrics.ts</code></li>
-<li><strong>added</strong> <code>src/app/docsQuality.ts</code></li>
-<li><strong>added</strong> <code>src/app/generatedMarkdown.ts</code></li>
-<li><strong>modified</strong> <code>src/app/llmStorage.ts</code></li>
-<li><strong>added</strong> <code>src/app/mermaidBoot.ts</code></li>
-<li><strong>added</strong> <code>src/app/novadiffDocs.ts</code></li>
-<li><strong>added</strong> <code>src/app/novadiffPaths.ts</code></li>
-<li><strong>added</strong> <code>src/app/selectedDiffDocs.ts</code></li>
-<li><strong>modified</strong> <code>src/app/types.ts</code></li>
-<li><strong>modified</strong> <code>src/components/ChangedFilesTree.tsx</code></li>
-<li><strong>added</strong> <code>src/components/CodeCityLegend.tsx</code></li>
-<li><strong>added</strong> <code>src/components/CodeCityView.tsx</code></li>
-<li><strong>modified</strong> <code>src/components/DiffWorkspace.tsx</code></li>
-<li><strong>added</strong> <code>src/components/DocumentationWorkspace.tsx</code></li>
-<li><strong>modified</strong> <code>src/components/InsightsColumn.tsx</code></li>
-<li><strong>modified</strong> <code>src/components/LlmSettingsModal.tsx</code></li>
-<li><strong>modified</strong> <code>src/components/LlmSummaryMarkdown.tsx</code></li>
-<li><strong>modified</strong> <code>src/components/SidebarNav.tsx</code></li>
-<li><strong>modified</strong> <code>src/vite-env.d.ts</code></li>
-</ul>
+      <article class="content-card md"><p>Auto-publish draft for 396 compared paths.</p>
 </article>
     </div>
     <aside class="content-side"><section class="toc-card"><div class="toc-title">On this page</div><nav class="toc" data-toc></nav></section></aside>

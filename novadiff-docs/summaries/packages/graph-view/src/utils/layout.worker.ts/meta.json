@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/src/utils/layout.worker.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:02:31.843Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export interface LayoutMessage {",
+      "R10 added: export interface LayoutResult {"
+    ],
+    "changed_imports": [
+      "R1 added: import dagre from \"@dagrejs/dagre\";"
+    ],
+    "changed_line_ranges": [
+      "R1-47"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import dagre from \"@dagrejs/dagre\";",
+      "R3 added: export interface LayoutMessage {",
+      "R4 added: requestId: number;",
+      "R5 added: nodes: Array<{ id: string; width: number; height: number }>;",
+      "R6 added: edges: Array<{ source: string; target: string }>;",
+      "R7 added: direction: \"TB\" | \"LR\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface LayoutResult (10-47)",
+      "right interface LayoutMessage (3-9)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

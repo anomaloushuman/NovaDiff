@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/src/components/WarningBanner.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:35:38.887Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R45 added: export default function WarningBanner({ issues }: WarningBannerProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useState, useCallback } from \"react\";",
+      "R2 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";"
+    ],
+    "changed_line_ranges": [
+      "R1-253"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useState, useCallback } from \"react\";",
+      "R2 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R4 added: interface WarningBannerProps {",
+      "R5 added: issues: GraphIssue[];",
+      "R6 added: }",
+      "R8 added: function buildCopyText(issues: GraphIssue[]): string {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildCopyText (8-253)",
+      "right interface WarningBannerProps (4-7)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

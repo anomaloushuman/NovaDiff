@@ -26,23 +26,34 @@
 <body>
   <header class="top">
     <h1>src/components/SidebarNav.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:56:23.523Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:16:45.433Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a modification to the <code>src/components/SidebarNav.tsx</code> file between the <code>NovaDiff-main</code> and <code>NovaDiff</code> branches. The file is responsible for rendering the sidebar navigation component in the NovaDiff app.</p>
+<p><code>SidebarNav.tsx</code> was refactored to add a richer workspace experience.<br>Key additions include a local‑only mode flag, expanded navigation targets, and a conditional brand‑reveal animation.</p>
 <h3>Key changes</h3>
-<p>The most significant changes in this diff are related to the addition of new features and improvements to existing ones. Some of the key changes include:</p>
 <ul>
-<li>Addition of a new type called <code>WorkspacePage</code>, which is used to represent the different workspace pages available in the app (compare, docs).</li>
-<li>Modification of the <code>SidebarNav</code> component to use the new <code>WorkspacePage</code> type and add support for displaying the current workspace page.</li>
-<li>Addition of new icons for the different workspace pages.</li>
-<li>Improvements to the layout and styling of the sidebar navigation component.</li>
+<li><strong>Imports</strong> – <code>useLaunch</code> and <code>TypewriterText</code> added at lines 2‑3.  </li>
+<li><strong>Props</strong> – <code>SidebarNavProps</code> now contains <code>localOnlyMode?</code>, <code>gitUser?</code>, <code>workspaceName?</code>, and <code>workspaceRepoLabel?</code> (lines 26‑29).  </li>
+<li><strong>WorkspacePage</strong> – type expanded to <code>&quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</code> (line 18).  </li>
+<li><strong>Brand reveal</strong> – <code>useLaunch</code> drives <code>showLaunchBrand</code>; when true, a typewriter animation renders the brand (lines 47‑50, 56‑77).  </li>
+<li><strong>Navigation</strong> – new buttons for <code>&quot;history&quot;</code>, <code>&quot;prs&quot;</code>, and <code>&quot;publish&quot;</code> added with Git‑locked logic; placeholder “Coming soon” buttons removed (lines 149‑156, 171‑179).  </li>
+<li><strong>User section</strong> – avatar now renders <code>gitUser.avatarUrl</code> if present, otherwise a fallback icon; name/email logic respects <code>localOnlyMode</code> (lines 210‑233).  </li>
+<li><strong>Removed</strong> – static brand title, tagline, product line (lines 41‑44), placeholder buttons (lines 119‑120, 123‑124, 127‑128), and static avatar (lines 146‑148).</li>
 </ul>
 <h3>Impact</h3>
-<p>The impact of these changes should be positive, as they add new features and improve the user experience of the sidebar navigation component. The ability to display the current workspace page will make it easier for users to navigate between different workspace pages. Additionally, the improved layout and styling of the sidebar navigation component should make it more visually appealing and user-friendly.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>There are no obvious risks associated with these changes, but it is important to verify that the new icons and layout are properly implemented and do not cause any issues with the app&#39;s functionality. Additionally, it would be useful to verify that the new <code>WorkspacePage</code> type and the ability to display the current workspace page are working correctly and do not cause any unexpected behavior.</p>
+<ul>
+<li>Callers must supply the new props or accept <code>undefined</code>; the expanded <code>WorkspacePage</code> may break type checks if not updated.  </li>
+<li>The brand animation mounts only when <code>showLaunchBrand</code> is true, adding negligible runtime cost.  </li>
+<li>Git‑dependent navigation items are disabled when <code>localOnlyMode</code> is true, preventing accidental use of unavailable features.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>useLaunch</code> correctly sets <code>brandReveal</code> and <code>skipSequence</code>; otherwise the brand will not appear.  </li>
+<li>Ensure <code>onWorkspacePage</code> handles the new <code>&quot;history&quot;</code>, <code>&quot;prs&quot;</code>, and <code>&quot;publish&quot;</code> values to avoid navigation failures.  </li>
+<li>Confirm that <code>gitLocked</code> logic correctly disables Git‑dependent buttons when <code>localOnlyMode</code> is true.  </li>
+<li>Run unit tests for components consuming <code>SidebarNav</code> to catch any missing prop errors.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

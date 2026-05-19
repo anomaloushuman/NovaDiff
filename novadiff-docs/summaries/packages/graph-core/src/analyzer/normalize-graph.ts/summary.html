@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/analyzer/normalize-graph.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/analyzer/normalize-graph.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:58:08.457Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-core/src/analyzer/normalize-graph.ts</code> adds a pre‑processing step that normalizes node IDs, numeric complexities, and edge references before the existing <code>sanitizeGraph/autoFixGraph/normalizeGraph</code> pipeline. The file introduces new helper functions and interfaces that operate on the raw graph batch output.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>ID normalization</strong> – <code>normalizeNodeId</code> (added at line 64) uses <code>stripToValidPrefix</code> (line 31) and <code>TYPE_TO_PREFIX</code> (line 8) to handle double‑prefixed IDs, project‑name prefixes, and bare paths.  </li>
+<li><strong>Complexity handling</strong> – <code>normalizeComplexity</code> (line 134) maps string aliases and numeric scales to <code>&quot;simple&quot; | &quot;moderate&quot; | &quot;complex&quot;</code> using <code>VALID_COMPLEXITIES</code> (line 113) and <code>COMPLEXITY_STRING_MAP</code> (line 115).  </li>
+<li><strong>Edge rewriting &amp; deduplication</strong> – <code>normalizeBatchOutput</code> (line 202) rewrites source/target IDs via an <code>idMap</code>, infers missing types with <code>inferTypeFromId</code> (line 185), and removes duplicate edges (lines 314‑318).  </li>
+<li><strong>Dangling edge reporting</strong> – New interfaces <code>DroppedEdge</code> (line 154) and <code>NormalizationStats</code> (line 161) capture dropped edges and statistics.  </li>
+<li><strong>Result structure</strong> – <code>NormalizeBatchResult</code> (line 169) exposes normalized nodes, edges, the ID map, and stats.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong> – Guarantees canonical <code>type:path</code> IDs and consistent complexity values before downstream processing.  </li>
+<li><strong>Maintainability</strong> – Centralizes normalization logic; downstream modules no longer need ad‑hoc fixes.  </li>
+<li><strong>Observability</strong> – <code>NormalizationStats</code> provides metrics for monitoring ID corrections and edge drops.  </li>
+<li><strong>Performance</strong> – Adds a single pass over nodes and edges; map lookups are O(1) and should not noticeably affect throughput.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression on existing IDs</strong> – Verify that previously valid IDs remain unchanged; test idempotence of <code>normalizeNodeId</code>.  </li>
+<li><strong>Double‑prefixed ID handling</strong> – Ensure IDs like <code>file:file:src/foo.ts</code> resolve correctly; test with varied malformed IDs.  </li>
+<li><strong>Compatibility</strong> – Confirm no other module imports the old <code>normalize-graph</code> path; update imports if necessary.  </li>
+<li><strong>Stat accuracy</strong> – Cross‑check <code>stats.idsFixed</code>, <code>stats.complexityFixed</code>, etc., against a known dataset.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

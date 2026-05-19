@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("node:fs/promises");
+const fssync = require("node:fs");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 const {
@@ -12,7 +13,13 @@ const {
   nativeImage,
   shell,
 } = require("electron");
-const { runCompareEngine } = require("./compare-runner.cjs");
+const { runCompareEngine, runCompareEngineAsync } = require("./compare-runner.cjs");
+
+function sendEngineProgress(webContents, payload) {
+  if (webContents && !webContents.isDestroyed()) {
+    webContents.send("engine-progress", payload);
+  }
+}
 const { summarizeChange, summarizeChangeStream, probeProvider } = require("./llm.cjs");
 const {
   startSummaryPrefetchWorker,
@@ -33,6 +40,48 @@ const {
   readSelectionSummaryMarkdowns,
 } = require("./file-summary-export.cjs");
 const { buildCodeCityModelPayload } = require("./code-city-model.cjs");
+const { buildKnowledgeGraph } = require("./knowledge-graph-runner.cjs");
+const {
+  detectGitTooling,
+  getRepoStatus,
+  isGitRepo,
+  preparePrCompareRoots,
+  cleanupNovadiffWorktrees,
+  parseGithubSlugFromUrl,
+} = require("./git-service.cjs");
+const {
+  getAuthStatus,
+  listRepos,
+  listPullRequests,
+  viewPullRequest,
+  getUserProfile,
+  listDetectedAccounts,
+} = require("./github-service.cjs");
+const { discoverRepos, matchRepoForGithubRepo } = require("./repo-discovery.cjs");
+const { previewPublish, executePublish } = require("./git-publish.cjs");
+const {
+  loadSession,
+  createWorkspace,
+  setActiveWorkspace,
+  setGitUser,
+  setLocalOnlyMode,
+  listWorkspaces,
+  getWorkspace,
+  updateWorkspaceLiveRepo,
+  workspacesRoot,
+} = require("./workspace-store.cjs");
+const { blameFileAtRef } = require("./git-blame.cjs");
+const { listSnapshotFiles, readSnapshotTextFile } = require("./workspace-files.cjs");
+const { indexWorkspaceHistory, ensureCommitSnapshot } = require("./workspace-history.cjs");
+const {
+  startGithubDeviceAuth,
+  cancelGithubDeviceAuth,
+} = require("./github-auth-flow.cjs");
+const { spawn } = require("node:child_process");
+const { augmentPathForCli } = require("./gh-path.cjs");
+const { getGhToolingStatus, installGh } = require("./gh-install.cjs");
+
+Object.assign(process.env, augmentPathForCli(process.env));
 
 const ALLOWED_NOVADIFF_HTML = new Set([
   "index.html",
@@ -165,9 +214,9 @@ app.on("window-all-closed", () => {
   }
 });
 
-ipcMain.handle("compare-folders", (_evt, left, right) => {
+ipcMain.handle("compare-folders", async (event, left, right) => {
   try {
-    return runCompareEngine(
+    return await runCompareEngineAsync(
       app.getAppPath(),
       {
         cmd: "compare-folders",
@@ -175,6 +224,7 @@ ipcMain.handle("compare-folders", (_evt, left, right) => {
         right,
       },
       app.isPackaged,
+      (progress) => sendEngineProgress(event.sender, progress),
     );
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
@@ -373,9 +423,9 @@ ipcMain.handle("read-selection-summary-markdowns", async (_evt, payload) => {
   }
 });
 
-ipcMain.handle("filter-changes-gitignore", (_evt, payload) => {
+ipcMain.handle("filter-changes-gitignore", async (event, payload) => {
   try {
-    return runCompareEngine(
+    return await runCompareEngineAsync(
       app.getAppPath(),
       {
         cmd: "filter-changes-gitignore",
@@ -384,27 +434,29 @@ ipcMain.handle("filter-changes-gitignore", (_evt, payload) => {
         rightRoot: payload.rightRoot,
       },
       app.isPackaged,
+      (progress) => sendEngineProgress(event.sender, progress),
     );
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
   }
 });
 
-ipcMain.handle("codebase-outline", (_evt, root) => {
+ipcMain.handle("codebase-outline", async (event, root) => {
   try {
-    return runCompareEngine(
+    return await runCompareEngineAsync(
       app.getAppPath(),
       { cmd: "codebase-outline", root },
       app.isPackaged,
+      (progress) => sendEngineProgress(event.sender, progress),
     );
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
   }
 });
 
-ipcMain.handle("risk-signals", (_evt, payload) => {
+ipcMain.handle("risk-signals", async (event, payload) => {
   try {
-    return runCompareEngine(
+    return await runCompareEngineAsync(
       app.getAppPath(),
       {
         cmd: "risk-signals",
@@ -413,6 +465,7 @@ ipcMain.handle("risk-signals", (_evt, payload) => {
         changes: Array.isArray(payload?.changes) ? payload.changes : [],
       },
       app.isPackaged,
+      (progress) => sendEngineProgress(event.sender, progress),
     );
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
@@ -508,4 +561,498 @@ ipcMain.handle("open-novadiff-docs-in-browser", async (_evt, payload) => {
   if (err) {
     throw new Error(err);
   }
+});
+
+function sendKnowledgeGraphProgress(event, payload) {
+  const wc = event?.sender;
+  if (!wc || wc.isDestroyed()) {
+    return;
+  }
+  if (typeof payload === "string") {
+    const parsed = payload.match(/(\d+)\s*\/\s*(\d+)/);
+    wc.send("knowledge-graph-progress", {
+      message: payload,
+      phase: "extract",
+      current: parsed ? Number(parsed[1]) : undefined,
+      total: parsed ? Number(parsed[2]) : undefined,
+    });
+    return;
+  }
+  wc.send("knowledge-graph-progress", payload ?? { message: "" });
+}
+
+ipcMain.handle("knowledge-graph-build", async (event, payload) => {
+  try {
+    const projectRoot = String(payload?.projectRoot ?? "").trim();
+    if (!projectRoot) {
+      throw new Error("Missing projectRoot");
+    }
+    const side = String(payload?.side ?? "target").trim();
+    const changes = Array.isArray(payload?.changes) ? payload.changes : [];
+    const leftTitle = String(payload?.leftTitle ?? "Baseline").trim();
+    const rightTitle = String(payload?.rightTitle ?? "Target").trim();
+    const projectLabel =
+      side === "baseline" ? leftTitle : side === "both" ? `${leftTitle} + ${rightTitle}` : rightTitle;
+    return await buildKnowledgeGraph({
+      appPath: app.getAppPath(),
+      projectRoot,
+      projectLabel,
+      changedPaths: changes,
+      onProgress: (message) => sendKnowledgeGraphProgress(event, message),
+    });
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("knowledge-graph-read", async (_evt, payload) => {
+  try {
+    const projectRoot = path.resolve(String(payload?.projectRoot ?? "").trim());
+    if (!projectRoot) {
+      throw new Error("Missing projectRoot");
+    }
+    const graphDir = path.join(projectRoot, ".novadiff-graph");
+    const graphPath = path.join(graphDir, "knowledge-graph.json");
+    if (!fssync.existsSync(graphPath)) {
+      return { ok: false, ready: false, reason: "not_built", projectRoot };
+    }
+    const graph = JSON.parse(fssync.readFileSync(graphPath, "utf8"));
+    if (Array.isArray(graph?.nodes)) {
+      for (const node of graph.nodes) {
+        if (typeof node.summary !== "string" || !String(node.summary).trim()) {
+          node.summary =
+            typeof node.name === "string" && node.name.trim()
+              ? node.name.trim()
+              : "Summary unavailable";
+        }
+      }
+    }
+    let diffOverlay = null;
+    const overlayPath = path.join(graphDir, "diff-overlay.json");
+    if (fssync.existsSync(overlayPath)) {
+      diffOverlay = JSON.parse(fssync.readFileSync(overlayPath, "utf8"));
+    }
+    return { ok: true, projectRoot, graph, diffOverlay };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("knowledge-graph-read-file", async (_evt, payload) => {
+  try {
+    const projectRoot = path.resolve(String(payload?.projectRoot ?? "").trim());
+    const relPath = String(payload?.relativePath ?? "").trim();
+    if (!projectRoot || !relPath) {
+      throw new Error("Missing projectRoot or relativePath");
+    }
+    const normalized = path.normalize(relPath).replace(/^(\.\.(\/|\\|$))+/, "");
+    if (normalized.startsWith("..") || path.isAbsolute(normalized)) {
+      throw new Error("Invalid path");
+    }
+    const abs = path.join(projectRoot, normalized);
+    if (!abs.startsWith(projectRoot)) {
+      throw new Error("Path escapes project root");
+    }
+    const content = fssync.readFileSync(abs, "utf8");
+    const ext = path.extname(abs).slice(1).toLowerCase();
+    const languageByExt = {
+      js: "javascript",
+      jsx: "jsx",
+      ts: "typescript",
+      tsx: "tsx",
+      py: "python",
+      go: "go",
+      rs: "rust",
+      java: "java",
+      md: "markdown",
+      json: "json",
+      yaml: "yaml",
+      yml: "yaml",
+      css: "css",
+      html: "markup",
+    };
+    const language = languageByExt[ext] ?? "text";
+    const sizeBytes = Buffer.byteLength(content, "utf8");
+    const lineCount = content.split("\n").length;
+    return {
+      path: normalized.split(path.sep).join("/"),
+      language,
+      content,
+      sizeBytes,
+      lineCount,
+    };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-detect-tooling", async () => {
+  try {
+    const git = detectGitTooling();
+    const gh = getAuthStatus();
+    return { git, gh };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-repo-status", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    if (!repoRoot) {
+      throw new Error("Missing repoRoot");
+    }
+    return getRepoStatus(repoRoot);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-discover-repos", async (_evt, payload) => {
+  try {
+    return discoverRepos(payload ?? {});
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-match-local-repo", async (_evt, payload) => {
+  try {
+    const owner = String(payload?.owner ?? "").trim();
+    const repo = String(payload?.repo ?? "").trim();
+    const extraRoots = Array.isArray(payload?.extraRoots) ? payload.extraRoots : [];
+    if (!owner || !repo) {
+      throw new Error("Missing owner or repo");
+    }
+    return matchRepoForGithubRepo(owner, repo, extraRoots);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-list-repos", async (_evt, payload) => {
+  try {
+    const limit = Number(payload?.limit ?? 50);
+    return listRepos(limit);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-list-prs", async (_evt, payload) => {
+  try {
+    const fullName = String(payload?.repository ?? "").trim();
+    const state = String(payload?.state ?? "open").trim();
+    const limit = Number(payload?.limit ?? 40);
+    if (!fullName) {
+      throw new Error("Missing repository (owner/repo)");
+    }
+    return listPullRequests(fullName, state, limit);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-pr-compare-roots", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    const baseRef = String(payload?.baseRef ?? "origin/main").trim();
+    const headRef = String(payload?.headRef ?? "HEAD").trim();
+    if (!repoRoot || !isGitRepo(repoRoot)) {
+      throw new Error("Valid git repoRoot required");
+    }
+    return preparePrCompareRoots(repoRoot, baseRef, headRef);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-pr-view", async (_evt, payload) => {
+  try {
+    const fullName = String(payload?.repository ?? "").trim();
+    const number = Number(payload?.number);
+    if (!fullName || !Number.isFinite(number)) {
+      throw new Error("Missing repository or PR number");
+    }
+    return viewPullRequest(fullName, number);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-publish-preview", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    return previewPublish(repoRoot, payload ?? {});
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-publish-execute", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    return await executePublish(repoRoot, payload ?? {});
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+function sendWorkspaceHistoryProgress(event, payload) {
+  const wc = event?.sender;
+  if (!wc || wc.isDestroyed()) {
+    return;
+  }
+  wc.send("workspace-history-progress", payload ?? {});
+}
+
+ipcMain.handle("workspace-session-load", async () => {
+  try {
+    return await loadSession(app.getPath("userData"));
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-detected-users", async () => {
+  try {
+    return listDetectedAccounts();
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-user-profile", async () => {
+  try {
+    return getUserProfile();
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+function sendGithubAuthProgress(event, payload) {
+  const wc = event?.sender;
+  if (!wc || wc.isDestroyed()) {
+    return;
+  }
+  wc.send("github-auth-progress", payload ?? {});
+}
+
+ipcMain.handle("github-gh-status", async () => {
+  try {
+    return getGhToolingStatus();
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-gh-install", async (event) => {
+  try {
+    const sendLog = (line) => {
+      const wc = event?.sender;
+      if (wc && !wc.isDestroyed()) {
+        wc.send("github-gh-install-progress", { line });
+      }
+    };
+    return await installGh(sendLog);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-set-local-only", async (_evt, payload) => {
+  try {
+    return await setLocalOnlyMode(app.getPath("userData"), Boolean(payload?.enabled));
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-start-auth", async (event) => {
+  try {
+    const result = await startGithubDeviceAuth((msg) => sendGithubAuthProgress(event, msg));
+    return { ok: true, ...result };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-cancel-auth", async () => {
+  cancelGithubDeviceAuth();
+  return { ok: true };
+});
+
+ipcMain.handle("workspace-set-git-user", async (_evt, user) => {
+  try {
+    return await setGitUser(app.getPath("userData"), user);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-create", async (_evt, payload) => {
+  try {
+    const userData = app.getPath("userData");
+    let repoRoot = String(payload?.repoRoot ?? "").trim();
+    const cloneUrl = String(payload?.cloneUrl ?? "").trim();
+    const name = String(payload?.name ?? "").trim();
+
+    if (cloneUrl && !repoRoot) {
+      const id = require("node:crypto").randomUUID();
+      const dest = path.join(workspacesRoot(userData), id, "repo");
+      await fsp.mkdir(path.dirname(dest), { recursive: true });
+      await new Promise((resolve, reject) => {
+        const child = spawn("git", ["clone", cloneUrl, dest], {
+          stdio: ["ignore", "pipe", "pipe"],
+        });
+        let err = "";
+        child.stderr.on("data", (c) => {
+          err += String(c);
+        });
+        child.on("close", (code) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new Error(err.trim() || `git clone failed (${code})`));
+          }
+        });
+        child.on("error", reject);
+      });
+      repoRoot = dest;
+    }
+
+    if (!repoRoot || !isGitRepo(repoRoot)) {
+      throw new Error("A valid git repository path is required");
+    }
+
+    let githubSlug = payload?.githubSlug ?? null;
+    if (!githubSlug) {
+      const st = getRepoStatus(repoRoot);
+      const parsed = parseGithubSlugFromUrl(st.remotes[0]?.url ?? "");
+      githubSlug = parsed ? `${parsed.owner}/${parsed.repo}` : null;
+    }
+
+    const { workspace, session } = await createWorkspace(userData, {
+      name: name || path.basename(repoRoot),
+      repoRoot,
+      githubSlug,
+    });
+
+    const progressWc = BrowserWindow.getAllWindows().map((w) => w.webContents).find((wc) => !wc.isDestroyed());
+    void indexWorkspaceHistory(userData, workspace.id, (msg) => {
+      if (progressWc) {
+        sendWorkspaceHistoryProgress({ sender: progressWc }, msg);
+      }
+    }).catch(async (err) => {
+      const w = await getWorkspace(userData, workspace.id);
+      if (w) {
+        w.historyStatus = "error";
+        w.historyError = err instanceof Error ? err.message : String(err);
+        await require("./workspace-store.cjs").upsertWorkspace(userData, w);
+      }
+    });
+
+    return { workspace, session };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-set-active", async (_evt, payload) => {
+  try {
+    const id = String(payload?.workspaceId ?? "").trim();
+    return await setActiveWorkspace(app.getPath("userData"), id);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-list", async () => {
+  try {
+    return await listWorkspaces(app.getPath("userData"));
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-match-local", async (_evt, payload) => {
+  try {
+    const owner = String(payload?.owner ?? "").trim();
+    const repo = String(payload?.repo ?? "").trim();
+    return matchRepoForGithubRepo(owner, repo, payload?.extraRoots ?? []);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-update-live-repo", async (_evt, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const liveDevRepoRoot = String(payload?.liveDevRepoRoot ?? "").trim();
+    return await updateWorkspaceLiveRepo(app.getPath("userData"), workspaceId, liveDevRepoRoot);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-blame-at-ref", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    const ref = String(payload?.ref ?? "HEAD").trim();
+    const relPath = String(payload?.relPath ?? "").trim();
+    if (!isGitRepo(repoRoot)) {
+      throw new Error("Not a git repository");
+    }
+    return blameFileAtRef(repoRoot, ref, relPath);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-snapshot-list-files", async (_evt, payload) => {
+  try {
+    const snapshotPath = String(payload?.snapshotPath ?? "").trim();
+    const files = await listSnapshotFiles(snapshotPath, { maxFiles: payload?.maxFiles ?? 2500 });
+    return { files };
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-ensure-commit-snapshot", async (_evt, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const hash = String(payload?.hash ?? "").trim();
+    const snapshotPath = String(payload?.snapshotPath ?? "").trim();
+    return await ensureCommitSnapshot(app.getPath("userData"), workspaceId, hash, snapshotPath);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-snapshot-read-file", async (_evt, payload) => {
+  try {
+    const snapshotPath = String(payload?.snapshotPath ?? "").trim();
+    const relPath = String(payload?.relPath ?? "").trim();
+    return await readSnapshotTextFile(snapshotPath, relPath);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-index-history", async (event, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const userData = app.getPath("userData");
+    const updated = await indexWorkspaceHistory(userData, workspaceId, (msg) =>
+      sendWorkspaceHistoryProgress(event, msg),
+    );
+    return updated;
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+app.on("before-quit", () => {
+  cleanupNovadiffWorktrees();
 });

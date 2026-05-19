@@ -1,0 +1,54 @@
+{
+  "relPath": "electron/graph/extract-structure.mjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:23:05.759Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R147 added: export function buildResult(file, totalLines, nonEmptyLines, analysis, callGraph, batchImportData) {"
+    ],
+    "changed_imports": [
+      "R19 added: import { createRequire } from 'node:module';",
+      "R20 added: import { dirname, resolve, join } from 'node:path';",
+      "R21 added: import { fileURLToPath, pathToFileURL } from 'node:url';",
+      "R22 added: import { readFileSync, writeFileSync } from 'node:fs';"
+    ],
+    "changed_line_ranges": [
+      "R1-321"
+    ],
+    "cited_changed_lines": [
+      "R1 added: #!/usr/bin/env node",
+      "R2 added: /**",
+      "R3 added: * extract-structure.mjs",
+      "R4 added: *",
+      "R5 added: * Deterministic structural extraction script for the file-analyzer agent.",
+      "R6 added: * Uses PluginRegistry (TreeSitterPlugin + non-code parsers) from @novadiff/graph-core"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildResult (147-321)",
+      "right function main (48-146)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

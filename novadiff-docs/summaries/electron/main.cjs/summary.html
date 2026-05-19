@@ -26,49 +26,51 @@
 <body>
   <header class="top">
     <h1>electron/main.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:36:18.376Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:17:00.602Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<hr>
-<p>This diff represents a change to the <code>electron/main.cjs</code> file in the NovaDiff repository. The file is part of the Electron application&#39;s main process, which handles various aspects of the user interface and interoperability with other systems. This change involves adding several new imports and exports, as well as modifying existing ones, to support the generation of documentation bundles for the NovaDiff application.</p>
+<p>The <code>electron/main.cjs</code> module has been refactored to replace synchronous engine calls with asynchronous ones, add progress reporting via IPC, and remove legacy handlers. The changes introduce new imports, helper functions, and async IPC handlers for knowledge‑graph and workspace operations.</p>
 <h3>Key changes</h3>
-<hr>
-<p>The following are some of the key changes made to the file:</p>
 <ul>
-<li>New imports:<ul>
-<li><code>const fs = require(&quot;node:fs/promises&quot;);</code></li>
-<li><code>const { pathToFileURL } = require(&quot;node:url&quot;);</code></li>
-<li><code>const { writeNovadiffDocsBundle } = require(&quot;./novadiff-docs-writer.cjs&quot;);</code></li>
-<li><code>const { generateNovadiffDocsPdf } = require(&quot;./novadiff-docs-pdf.cjs&quot;);</code></li>
-<li><code>const { writeNovadiffDocsHtml } = require(&quot;./novadiff-docs-html.cjs&quot;);</code></li>
+<li><strong>Imports</strong>  <ul>
+<li>Added <code>const fssync = require(&quot;node:fs&quot;);</code> (R4).  </li>
+<li>Replaced legacy <code>runCompareEngine</code> with <code>runCompareEngine, runCompareEngineAsync</code> (R16).  </li>
+<li>Added <code>buildKnowledgeGraph</code> (R43), <code>git-service</code> (R51), and <code>github-service</code> (R59).</li>
 </ul>
 </li>
-<li>Changed imports:<ul>
-<li><code>const { runCompareEngine } = require(&quot;./compare-runner.cjs&quot;);</code></li>
-<li><code>const { summarizeChange, summarizeChangeStream, probeProvider } = require(&quot;./llm.cjs&quot;);</code></li>
+<li><strong>Progress helpers</strong>  <ul>
+<li><code>sendEngineProgress(webContents, payload)</code> (R18‑R20).  </li>
+<li><code>sendKnowledgeGraphProgress</code> and <code>sendWorkspaceHistoryProgress</code> emit progress events.</li>
 </ul>
 </li>
-<li>New exports:<ul>
-<li><code>const { writeNovadiffDocsBundle } = require(&quot;./novadiff-docs-writer.cjs&quot;);</code></li>
-<li><code>const { generateNovadiffDocsPdf } = require(&quot;./novadiff-docs-pdf.cjs&quot;);</code></li>
-<li><code>const { writeNovadiffDocsHtml } = require(&quot;./novadiff-docs-html.cjs&quot;);</code></li>
+<li><strong>Async IPC handlers</strong>  <ul>
+<li>New handlers for knowledge‑graph build/read, git tooling detection, repo status, publish preview/execute, and docs read/open, all wired to the new progress callbacks.</li>
 </ul>
 </li>
-<li>Modified lines:<ul>
-<li><code>const fs = require(&quot;node:fs/promises&quot;);</code></li>
-<li><code>const { pathToFileURL } = require(&quot;node:url&quot;);</code></li>
-<li><code>const { runCompareEngine } = require(&quot;./compare-runner.cjs&quot;);</code></li>
-<li><code>const { summarizeChange, summarizeChangeStream, probeProvider } = require(&quot;./llm.cjs&quot;);</code></li>
+<li><strong>Legacy removal</strong>  <ul>
+<li>Removed handlers such as <code>filter-changes-gitignore</code>, <code>codebase-outline</code>, and <code>risk-signals</code>.</li>
+</ul>
+</li>
+<li><strong>Window creation</strong>  <ul>
+<li>Updated <code>createWindow</code> logic (ranges 110‑511 and 159‑565) to accommodate the new async flow.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
-<hr>
-<p>The changes made to the file are likely to have a positive impact on the NovaDiff application&#39;s ability to generate documentation bundles for its users. The new imports and exports added support for generating PDF and HTML documentation bundles, which can be useful for users who prefer these formats over markdown or other formats. Additionally, the modified lines that call the <code>runCompareEngine</code> function and use the <code>summarizeChange</code> and <code>summarizeChangeStream</code> functions from the <code>llm.cjs</code> module are likely to improve the correctness and maintainability of the code.</p>
-<h3>Risks &amp; follow-ups</h3>
-<hr>
-<p>There is a risk that the changes made to the file may introduce bugs or compatibility issues with other systems. However, the evidence provided in the note suggests that the changes are likely to be safe and will not cause any significant problems. To verify this, it would be necessary to run the JS/TS lint, test, and production build commands used by this repo.</p>
+<ul>
+<li>Enables non‑blocking UI during heavy engine operations.  </li>
+<li>Provides real‑time progress updates to renderer processes.  </li>
+<li>Simplifies codebase by eliminating outdated handlers.  </li>
+<li>Requires updated IPC listeners in the renderer to consume new events.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Compatibility</strong>: Ensure all renderer IPC listeners are updated to handle the new progress events.  </li>
+<li><strong>Testing</strong>: Run lint, unit tests, and production build (<code>npm run lint</code>, <code>npm test</code>, <code>npm run build</code>) to confirm no regressions.  </li>
+<li><strong>File system checks</strong>: Verify <code>fssync</code> usage correctly handles synchronous file reads without blocking the main thread.  </li>
+<li><strong>Deprecation</strong>: Confirm that removed legacy handlers are no longer referenced elsewhere in the project.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

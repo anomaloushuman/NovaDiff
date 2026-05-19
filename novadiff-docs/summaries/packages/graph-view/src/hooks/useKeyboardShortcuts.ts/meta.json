@@ -1,0 +1,54 @@
+{
+  "relPath": "packages/graph-view/src/hooks/useKeyboardShortcuts.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:48:02.102Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export interface KeyboardShortcut {",
+      "R14 added: export function useKeyboardShortcuts(",
+      "R52 added: export function formatShortcutKey(shortcut: KeyboardShortcut): string {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect } from \"react\";"
+    ],
+    "changed_line_ranges": [
+      "R1-71"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect } from \"react\";",
+      "R3 added: export interface KeyboardShortcut {",
+      "R4 added: key: string;",
+      "R5 added: ctrlKey?: boolean;",
+      "R6 added: shiftKey?: boolean;",
+      "R7 added: altKey?: boolean;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useKeyboardShortcuts (14-51)",
+      "right function formatShortcutKey (52-71)",
+      "right interface KeyboardShortcut (3-13)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

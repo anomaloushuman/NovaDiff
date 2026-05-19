@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/scripts/generate-alphabetical-catalog.mjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/scripts/generate-alphabetical-catalog.mjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:23:06.565Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new Node script <code>packages/graph-core/scripts/generate-alphabetical-catalog.mjs</code> (added lines R1‑323) reads <code>language-names.txt</code>, normalizes language names, resolves tree‑sitter WASM binaries and file extensions, and writes a sorted <code>alphabetical-catalog.generated.ts</code> module.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R6‑8): <code>readFileSync</code>, <code>writeFileSync</code> from <code>node:fs</code>; <code>dirname</code>, <code>join</code> from <code>node:path</code>; <code>fileURLToPath</code> from <code>node:url</code>; and a type import <code>LanguageCatalogEntry</code> from <code>./catalog-types.js</code> (R313).  </li>
+<li><strong>Constants</strong>: <code>WASMS_BY_KEY</code> and <code>EXT_BY_KEY</code> map language identifiers to WASM files and extensions.  </li>
+<li><strong>Normalization helpers</strong>:  <ul>
+<li><code>normalizeKey(name)</code> (lines 182‑214) trims and normalizes display names, mapping common aliases.  </li>
+<li><code>slugify(name, used)</code> (lines 217‑230) creates a URL‑friendly id, ensuring uniqueness via a <code>Set</code>.  </li>
+<li><code>resolveWasmsKey(normKey, id)</code> (lines 233‑260) selects the correct WASM key, using an alias table.  </li>
+<li><code>resolveExtensions(normKey, displayName)</code> (lines 263‑270) returns extensions, falling back to substring matching.</li>
+</ul>
+</li>
+<li><strong><code>claimExtensions(exts, wasmsFile)</code></strong> (lines 282‑290) guarantees each extension appears only once across all entries.  </li>
+<li><strong>Main loop</strong> (lines 293‑300) builds <code>{ id, displayName, extensions, wasmsFile }</code> objects, sorts them alphabetically, and writes the output file with a header comment and an exported <code>alphabeticalCatalogEntries</code> array (export added at R316).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The script must run before any build that imports <code>alphabetical-catalog.generated.ts</code>.  </li>
+<li>Unique ids and deduplicated extensions reduce potential runtime errors in language‑specific tooling.  </li>
+<li>Processing is linear in the number of language names; the added step is negligible compared to the overall build.  </li>
+<li>Console logs (lines 321‑323) report the total number of languages and how many have WASM support, aiding debugging.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>A missing or malformed <code>language-names.txt</code> will cause the script to crash; verify the file’s presence and format.  </li>
+<li>Errors in the alias table could map a language to an incorrect WASM or extension; run unit tests covering a representative set of languages.  </li>
+<li><code>slugify</code> uses a <code>Set</code>, but a future language with the same slug could silently overwrite; monitor the console output for duplicate id warnings.  </li>
+<li>Ensure the generated file is included in the TypeScript build and that consumers import the correct path.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

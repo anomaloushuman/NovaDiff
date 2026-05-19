@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/types.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/types.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:44:27.810Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/types.ts</code> (lines 1‑204) introduces a comprehensive type system for graph modeling, analysis metadata, and plugin contracts.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Node &amp; Edge types</strong> – <code>NodeType</code> (lines 1‑7) lists 21 node categories; <code>EdgeType</code> (lines 9‑19) lists 35 edge categories across structural, behavioral, data‑flow, and knowledge relations.  </li>
+<li><strong>Metadata interfaces</strong> – <code>KnowledgeMeta</code> (lines 21‑27) and <code>DomainMeta</code> (lines 29‑35) add optional fields for knowledge‑ and domain‑specific nodes.  </li>
+<li><strong>Graph core interfaces</strong> – <code>GraphNode</code> (lines 39‑53) and <code>GraphEdge</code> (lines 55‑63) model nodes and edges with attributes such as <code>layerId</code>, <code>complexity</code>, <code>direction</code>, and <code>weight</code>.  </li>
+<li><strong>Project &amp; analysis metadata</strong> – <code>ProjectMeta</code>, <code>KnowledgeGraph</code>, <code>ThemeConfig</code>, <code>AnalysisMeta</code>, and <code>ProjectConfig</code> (lines 82‑118) expose configuration and persistence structures.  </li>
+<li><strong>Structural analysis &amp; plugin contracts</strong> – <code>StructuralAnalysis</code> (lines 171‑183) defines analysis results; <code>AnalyzerPlugin</code> (lines 197‑204) specifies plugin APIs (<code>analyzeFile</code>, optional <code>resolveImports</code>, <code>extractCallGraph</code>, <code>extractReferences</code>).  </li>
+<li><strong>Supporting interfaces</strong> – <code>SectionInfo</code>, <code>DefinitionInfo</code>, <code>ServiceInfo</code>, <code>EndpointInfo</code>, <code>StepInfo</code>, <code>ResourceInfo</code>, <code>ReferenceResolution</code>, <code>ImportResolution</code>, and <code>CallGraphEntry</code> (lines 124‑196) provide detailed sub‑structures for non‑code entities.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Compile‑time</strong>: New exports expand the public surface; modules importing from <code>graph-core</code> must reference this file or adjust imports.  </li>
+<li><strong>Runtime</strong>: No executable code is added; the change is purely type‑level, so no performance or memory impact.  </li>
+<li><strong>Compatibility</strong>: As a new file, it does not break existing code, but consumers must ensure the file is included in the build (tsconfig, package exports).</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify <code>tsconfig.json</code> includes <code>packages/graph-core/src/types.ts</code> and that module resolution paths are correct.  </li>
+<li>Run the full test suite to confirm that no imports inadvertently shadow the new interfaces.  </li>
+<li>Ensure that the <code>AnalyzerPlugin</code> interface aligns with current plugin implementations; update any mismatched method signatures if necessary.  </li>
+<li>Update documentation and code comments to reflect the expanded type definitions, especially for plugin developers.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

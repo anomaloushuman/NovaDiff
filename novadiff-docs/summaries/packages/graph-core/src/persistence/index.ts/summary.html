@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/persistence/index.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/persistence/index.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:45:00.625Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new persistence module (<code>packages/graph-core/src/persistence/index.ts</code>) is added. It centralises file‑system helpers for knowledge graphs, metadata, fingerprints, and configuration. The module introduces path sanitisation, directory creation, and optional schema validation.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑5) bring in <code>fs</code>, <code>path</code>, type definitions, and <code>validateGraph</code>.  </li>
+<li><strong><code>ensureDir(projectRoot)</code></strong> (lines 13‑19) creates the <code>.novadiff-graph</code> directory if missing and returns its path.  </li>
+<li><strong><code>sanitiseFilePaths(graph, projectRoot)</code></strong> (lines 38‑66) converts absolute node paths to relative or filename‑only forms, preventing leakage of the developer’s directory layout.  </li>
+<li><strong><code>saveGraph</code> / <code>loadGraph</code></strong> (lines 69‑106) persist the graph as <code>knowledge-graph.json</code>. <code>loadGraph</code> optionally validates via <code>validateGraph</code>.  </li>
+<li><strong><code>saveMeta</code> / <code>loadMeta</code></strong> (lines 107‑116) handle <code>meta.json</code>.  </li>
+<li><strong><code>saveFingerprints</code> / <code>loadFingerprints</code></strong> (lines 118‑131) manage <code>fingerprints.json</code>.  </li>
+<li><strong><code>saveConfig</code> / <code>loadConfig</code></strong> (lines 135‑148) read/write <code>config.json</code> with a default <code>{ autoUpdate: false, outputLanguage: &quot;en&quot; }</code>.  </li>
+<li><strong><code>saveDomainGraph</code> / <code>loadDomainGraph</code></strong> (lines 152‑182) mirror graph persistence under <code>domain-graph.json</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Privacy</strong>: Sanitisation guarantees that no absolute paths are written to disk.  </li>
+<li><strong>Data integrity</strong>: Validation in <code>loadGraph</code>/<code>loadDomainGraph</code> throws on malformed data, preventing downstream errors.  </li>
+<li><strong>Maintainability</strong>: Centralised persistence logic replaces scattered file handling across the repo.  </li>
+<li><strong>Compatibility</strong>: Callers must import the new functions from this module; legacy imports may need updating.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Windows path handling</strong>: <code>isAbsolute</code> and <code>relative</code> may behave differently; run tests on Windows to confirm sanitisation.  </li>
+<li><strong>Error propagation</strong>: <code>loadGraph</code> throws on validation failure; callers should handle or catch this exception.  </li>
+<li><strong>Directory creation</strong>: <code>ensureDir</code> assumes <code>projectRoot</code> is writable; verify permissions in CI environments.  </li>
+<li><strong>Backward compatibility</strong>: If older code expected a different file layout, update imports accordingly and run integration tests.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

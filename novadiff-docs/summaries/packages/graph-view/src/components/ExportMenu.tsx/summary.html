@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/ExportMenu.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/ExportMenu.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:21:48.080Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>ExportMenu</code> component is added at <code>packages/graph-view/src/components/ExportMenu.tsx</code>.<br>It renders a button that toggles a dropdown with options to export the current graph as PNG, SVG, or JSON.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑5):  <ul>
+<li><code>useEffect</code>, <code>useRef</code> from React.  </li>
+<li><code>useDashboardStore</code> from <code>../store</code>.  </li>
+<li><code>useI18n</code> from <code>../contexts/I18nContext</code>.  </li>
+<li><code>KnowledgeGraph</code> type from <code>@novadiff/graph-core/types</code>.  </li>
+<li><code>filterNodes</code>, <code>filterEdges</code> from <code>../utils/filters</code>.</li>
+</ul>
+</li>
+<li><strong>Utility functions</strong> (lines 7‑20):  <ul>
+<li><code>escapeXml</code> sanitizes node labels.  </li>
+<li><code>downloadBlob</code> triggers a file download.</li>
+</ul>
+</li>
+<li><strong>Component state</strong> (lines 22‑30): pulls <code>graph</code>, <code>nodeIdToLayerIds</code>, <code>filters</code>, <code>exportMenuOpen</code>, <code>toggleExportMenu</code>, <code>reactFlowInstance</code>, and <code>persona</code> from the dashboard store.</li>
+<li><strong>Outside‑click handling</strong> (lines 35‑45): a <code>mousedown</code> listener closes the menu when clicking outside the container.</li>
+<li><strong>SVG generation</strong> (lines 47‑102): <code>buildCleanSvg</code> computes bounds, draws edges and nodes, and returns SVG markup with dimensions.</li>
+<li><strong>Export actions</strong> (lines 104‑216):  <ul>
+<li><code>exportPNG</code> renders the SVG to a canvas, converts it to a PNG blob, and downloads it.  </li>
+<li><code>exportSVG</code> downloads the raw SVG blob.  </li>
+<li><code>exportJSON</code> filters the graph by persona and filters, serializes it to JSON, and downloads it.</li>
+</ul>
+</li>
+<li><strong>UI</strong> (lines 218‑279): a button toggles the menu; each menu item calls the corresponding export function.</li>
+</ul>
+<h3>Impact</h3>
+<p>The component adds a user‑visible export feature to the graph view, enabling users to save visual or data representations of the graph.</p>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>No tests or lint failures are reported in the diff; potential runtime errors (e.g., missing <code>reactFlowInstance</code>) are handled with alerts, but edge‑case coverage is unknown from the available evidence.  </li>
+<li>Future work could add unit tests for the export logic and verify that the generated files match expected schemas.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

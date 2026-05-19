@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/languages/catalog-types.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/languages/catalog-types.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:40:10.188Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/languages/catalog-types.ts</code> has been added. It declares and exports the <code>LanguageCatalogEntry</code> interface, which defines the shape of catalog entries used for language support.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Exported interface</strong> <code>LanguageCatalogEntry</code> (lines 1‑7).  </li>
+<li>Required properties:  <ul>
+<li><code>id: string</code> – unique identifier.  </li>
+<li><code>displayName: string</code> – human‑readable name.  </li>
+<li><code>extensions: string[]</code> – list of file extensions.</li>
+</ul>
+</li>
+<li>Optional properties:  <ul>
+<li><code>wasmsFile?: string</code> – path to a WebAssembly module.  </li>
+<li><code>filenames?: string[]</code> – specific file names associated with the language.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The interface is now available to other modules via the export statement.  </li>
+<li>No JavaScript runtime code is added; the change is purely type‑level.  </li>
+<li>Linting will flag any unused imports of this interface.  </li>
+<li>The build output will include the new file; run <code>npm run build</code> to confirm inclusion.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Unused export</strong>: Verify that imports of <code>LanguageCatalogEntry</code> are actually used; otherwise, linting will report unused variables.  </li>
+<li><strong>Integration</strong>: Modules that consume catalog entries should import this interface to maintain type consistency.  </li>
+<li><strong>Test coverage</strong>: Unknown from the available diff/scan evidence whether tests need updating to construct <code>LanguageCatalogEntry</code> objects.  </li>
+<li><strong>Build consistency</strong>: Ensure the new file is compiled by running the repository’s build commands.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

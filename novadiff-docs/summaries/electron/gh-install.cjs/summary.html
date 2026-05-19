@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/gh-install.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/gh-install.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:10:14.979Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/gh-install.cjs</code> (lines 1‑196) adds runtime detection and optional installation of the GitHub CLI (<code>gh</code>). It replaces a manual install flow with platform‑specific logic.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>spawn</code> and <code>spawnSync</code> from <code>node:child_process</code> (R3‑R4) and <code>fssync</code> from <code>node:fs</code> (R4).  </li>
+<li><strong>Path helpers</strong>: <code>augmentPathForCli</code>, <code>resolveGhExecutable</code>, <code>isGhInstalled</code>, <code>clearGhCache</code> required from <code>./gh-path.cjs</code> (R5‑R10).  </li>
+<li><strong><code>resolveBrew</code></strong> (lines 15‑38) searches common Homebrew paths and falls back to <code>command -v brew</code>.  </li>
+<li><strong><code>getInstallPlan</code></strong> (lines 40‑79) returns an install strategy per OS: Homebrew on macOS, winget on Windows, or a manual hint on other platforms.  </li>
+<li><strong><code>readGhVersion</code></strong> (lines 81‑94) runs <code>gh --version</code> via <code>spawnSync</code> to report the installed version.  </li>
+<li><strong><code>getGhToolingStatus</code></strong> (lines 96‑110) aggregates installation status, path, version, and install plan.  </li>
+<li><strong><code>runInstallCommand</code></strong> (lines 116‑142) spawns the installer process, streams logs, and clears cache on completion.  </li>
+<li><strong><code>installGh</code></strong> (lines 148‑190) orchestrates the auto‑install flow, validates success, and returns <code>{ok, path, version}</code>.  </li>
+<li><strong>Exports</strong>: <code>GH_FEATURE_REASON</code>, <code>getGhToolingStatus</code>, <code>installGh</code> (lines 192‑196).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Adds detection of <code>gh</code> and an automated install path, reducing manual setup.  </li>
+<li>Centralizes CLI logic in one module; functions are small and testable.  </li>
+<li>Uses <code>spawnSync</code> for quick checks; installation uses async <code>spawn</code>, keeping UI responsive.  </li>
+<li>Explicitly supports macOS (Homebrew) and Windows (winget); Linux falls back to manual instructions.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><code>spawnSync</code> may block startup; verify timeout handling on slow systems.  </li>
+<li>Linux users still need manual install; ensure the manual hint is clear.  </li>
+<li><code>runInstallCommand</code> rejects on non‑zero exit; callers must handle this.  </li>
+<li><code>clearGhCache</code> must correctly reset any cached <code>gh</code> state; run integration tests after installation.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

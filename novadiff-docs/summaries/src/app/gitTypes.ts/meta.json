@@ -1,0 +1,60 @@
+{
+  "relPath": "src/app/gitTypes.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:03:40.736Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export interface GitToolingStatus {",
+      "R10 added: export interface GithubAuthStatus {",
+      "R19 added: export interface GithubRepoSummary {",
+      "R30 added: export interface GithubPullRequestSummary {",
+      "R43 added: export interface LocalRepoMatch {",
+      "R50 added: export interface GitBlameOwner {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-125"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export interface GitToolingStatus {",
+      "R2 added: git: {",
+      "R3 added: gitAvailable: boolean;",
+      "R4 added: gitVersion: string | null;",
+      "R5 added: gitError: string | null;",
+      "R6 added: };"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface GitRepoStatus (71-83)",
+      "right interface GithubPullRequestSummary (30-42)",
+      "right interface PublishExecutePayload (113-125)",
+      "right interface PublishPreview (91-103)",
+      "right interface GithubRepoSummary (19-29)",
+      "right interface GitToolingStatus (1-9)",
+      "right interface GithubAuthStatus (10-18)",
+      "right interface PublishExecuteResult (104-112)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

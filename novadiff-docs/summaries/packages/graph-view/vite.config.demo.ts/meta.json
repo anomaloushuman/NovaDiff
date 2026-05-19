@@ -1,0 +1,47 @@
+{
+  "relPath": "packages/graph-view/vite.config.demo.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:20:08.337Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R6 added: export default defineConfig({"
+    ],
+    "changed_imports": [
+      "R1 added: import { defineConfig } from \"vite\";",
+      "R2 added: import react from \"@vitejs/plugin-react\";",
+      "R3 added: import tailwindcss from \"@tailwindcss/vite\";",
+      "R4 added: import path from \"path\";"
+    ],
+    "changed_line_ranges": [
+      "R1-49"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { defineConfig } from \"vite\";",
+      "R2 added: import react from \"@vitejs/plugin-react\";",
+      "R3 added: import tailwindcss from \"@tailwindcss/vite\";",
+      "R4 added: import path from \"path\";",
+      "R6 added: export default defineConfig({",
+      "R7 added: base: \"/demo/\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

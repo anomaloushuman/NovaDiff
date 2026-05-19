@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/elk-layout.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/elk-layout.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:00:13.577Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new utility <code>packages/graph-view/src/utils/elk-layout.ts</code> adds ELK‑specific types and a repair pipeline that sanitizes graph input before layout. The file imports <code>GraphIssue</code> from <code>@novadiff/graph-core/schema</code>, <code>loadElk</code> from <code>./elk-bundled</code>, and default node dimensions from <code>./layout</code> (lines 1‑3).</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Types</strong> (<code>lines 5‑34</code>, <code>39‑43</code>, <code>214‑221</code>): <code>ElkChild</code>, <code>ElkEdge</code>, <code>ElkInput</code>, <code>RepairResult</code>, <code>ElkLayoutOptions</code>, <code>ElkLayoutResult</code>.  </li>
+<li><strong>Repair logic</strong> (<code>repairElkInput</code>, <code>lines 56‑213</code>):  <ul>
+<li>Fills missing <code>width</code>/<code>height</code> with defaults.  </li>
+<li>Deduplicates child IDs per parent.  </li>
+<li>Drops orphan children, orphan edges, and containment cycles.  </li>
+<li>Emits <code>GraphIssue</code> objects and may throw when <code>strict</code> is true.</li>
+</ul>
+</li>
+<li><strong>Layout wrapper</strong> (<code>applyElkLayout</code>, <code>lines 223‑243</code>):  <ul>
+<li>Calls <code>repairElkInput</code>, loads ELK via <code>loadElk</code>, runs <code>elk.layout</code>, and returns the positioned graph plus any issues.  </li>
+<li>On layout failure, returns a fatal <code>GraphIssue</code> unless <code>strict</code> is set.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Input is sanitized before ELK runs, reducing runtime errors.  </li>
+<li><strong>Observability</strong>: Issues are surfaced as <code>GraphIssue</code> objects, aiding debugging.  </li>
+<li><strong>Compatibility</strong>: Existing callers are unaffected; new functions are exported for optional use.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>loadElk</code> resolves correctly in all target environments; a missing bundle could silently fail.  </li>
+<li>Confirm that the <code>strict</code> flag propagates errors as intended.  </li>
+<li>Test edge cases: graphs with many duplicate IDs, deep containment cycles, and orphan references.  </li>
+<li>Monitor memory usage for large graphs; recursive traversal may be costly.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/workspace-store.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/workspace-store.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:20:21.010Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/workspace-store.cjs</code> is added to the Electron side of the repository. It implements a session and workspace persistence layer that replaces the previous ad‑hoc storage logic.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R3‑R6): <code>fssync</code>, <code>fsp</code>, <code>path</code>, <code>randomUUID</code> bring in Node‑core APIs for file I/O and UUID generation.  </li>
+<li><strong>Path helpers</strong> (R8‑R14): <code>sessionPath(userData)</code> and <code>workspacesRoot(userData)</code> compute the locations for the session JSON and workspace directories.  </li>
+<li><strong>JSON I/O</strong> (R16‑R31): <code>readJson</code> and <code>writeJson</code> use <code>fsp</code> to read/write JSON atomically via a temporary file.  </li>
+<li><strong>Session CRUD</strong> (R33‑R52): <code>loadSession</code> loads the session or falls back to defaults; <code>saveSession</code> writes it back.  </li>
+<li><strong>Workspace CRUD</strong> (R74‑R87, R89‑R100, R103‑R106): <code>upsertWorkspace</code>, <code>setActiveWorkspace</code>, <code>setGitUser</code>, <code>getWorkspace</code> manipulate the in‑memory session and persist changes.  </li>
+<li><strong>Live‑repo update</strong> (R108‑R126): <code>updateWorkspaceLiveRepo</code> validates the path, updates the workspace, writes <code>meta.json</code>, and returns the updated session.  </li>
+<li><strong>Workspace creation</strong> (R128‑R158): <code>createWorkspace</code> generates a UUID, resolves the repo root, creates data directories, writes <code>meta.json</code>, updates the session, and returns both objects.  </li>
+<li><strong>Exports</strong> (R161‑R173): All public functions are exported for use by the renderer and other Electron modules.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Atomic writes</strong> via a temporary file (<code>writeJson</code> uses <code>fsp.rename</code>).  </li>
+<li><strong>Fallback defaults</strong> in <code>loadSession</code> provide a safe initial state.  </li>
+<li><strong>Non‑blocking I/O</strong> with <code>fs/promises</code> and directory creation with <code>{ recursive: true }</code>.  </li>
+<li>*<em>Node 18+ requirement</em></li>
+</ul>
+<ul>
+<li>(<code>node:fs</code>, <code>node:crypto</code>).</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>loadSession</code> correctly handles missing or malformed files (fallback logic).  </li>
+<li>Test concurrent calls to <code>createWorkspace</code>/<code>updateWorkspaceLiveRepo</code> for race conditions.  </li>
+<li>Ensure <code>setLocalOnlyMode</code> clears <code>gitUser</code> and <code>activeWorkspaceId</code> as intended.  </li>
+<li>Run the full lint, test, and production build pipeline to catch any import or path resolution issues.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

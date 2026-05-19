@@ -1,9 +1,9 @@
 {
   "relPath": "cli/Cargo.toml",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:30:27.434Z",
+  "generatedAt": "2026-05-19T10:36:01.537Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,13 +21,8 @@
     ],
     "changed_exports": [],
     "changed_imports": [],
-    "changed_line_ranges": [
-      "R12-13"
-    ],
-    "cited_changed_lines": [
-      "R12 added: regex = \"1\"",
-      "R13 added: ignore = \"0.4\""
-    ],
+    "changed_line_ranges": [],
+    "cited_changed_lines": [],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."
     ],

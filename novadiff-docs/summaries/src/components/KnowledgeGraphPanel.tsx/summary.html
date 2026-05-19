@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/KnowledgeGraphPanel.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/KnowledgeGraphPanel.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:14:21.567Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>KnowledgeGraphPanel</code> component is added at <code>src/components/KnowledgeGraphPanel.tsx</code> (lines 1‑692). It provides a UI for building, viewing, and interacting with a knowledge graph.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports &amp; lazy loading</strong> – Lines 1‑17 add <code>createPortal</code>, <code>FileChange</code>, <code>LlmSettings</code>, <code>DocWorkspaceMetrics</code>, <code>isNovadiffDocsReservedPath</code>, and lazily import <code>NovaDiffGraphExplorer</code> (lines 22‑24).  </li>
+<li><strong>Props interface</strong> – Defined at lines 26‑41 (<code>KnowledgeGraphPanelProps</code>) with fields for comparison flags, root paths, titles, file changes, LLM settings, metrics, and UI flags.  </li>
+<li><strong>Utility functions</strong> – <code>parseProgressMessage</code> (lines 62‑68) extracts <code>current</code>/<code>total</code> from a string; <code>buildAutoKey</code> (lines 70‑76) creates a memoized key for caching.  </li>
+<li><strong>Error boundary</strong> – <code>GraphExplorerErrorBoundary</code> (lines 79‑115) catches explorer render errors and offers a retry button that resets the boundary.  </li>
+<li><strong>State &amp; effects</strong> – Lines 133‑147 hold state for build side, progress, stats, payload, viewer, fullscreen, and activity. <code>useEffect</code> hooks (lines 176‑206, 305‑334, 342‑358, 380‑393) manage progress listening, build lifecycle, fullscreen handling, and mounting.  </li>
+<li><strong>Build &amp; load logic</strong> – <code>runBuild</code> (lines 227‑303) triggers graph construction, uses <code>loadGraphFromDisk</code> (lines 208‑225) for caching, and updates <code>buildGenerationRef</code> to avoid stale updates.  </li>
+<li><strong>Viewer &amp; portal</strong> – <code>viewerShell</code> (lines 469‑532) renders the explorer; <code>createPortal</code> is used for fullscreen mode (lines 676‑679).  </li>
+<li><strong>UI elements</strong> – Toolbar buttons, progress card, stats grid, and status line are rendered conditionally based on state.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The component introduces many hooks and state variables, increasing render complexity.  </li>
+<li><code>buildGenerationRef</code> mitigates race conditions by ensuring only the latest build updates the UI.  </li>
+<li>Lazy loading and <code>requestIdleCallback</code> (lines 328‑332) defer heavy work until idle.  </li>
+<li>Background activity integration (<code>useBackgroundActivityOptional</code>, line 150) reports progress to the UI.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>@novadiff/graph-view</code> resolves in all target environments.  </li>
+<li>Ensure the <code>requestIdleCallback</code> fallback timer behaves correctly on browsers lacking the API.  </li>
+<li>Confirm that <code>createPortal</code> does not interfere with server‑side rendering or test setups.  </li>
+<li>Test that the error boundary’s retry button correctly resets the explorer state.  </li>
+<li>Validate that all <code>window.electronAPI</code> calls handle missing or malformed responses gracefully.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

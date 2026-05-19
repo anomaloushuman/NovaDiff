@@ -1,0 +1,62 @@
+{
+  "relPath": "src/app/workspaceStorage.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:05:47.694Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R7 added: export function loadCachedGitUser(): GitUserProfile | null {",
+      "R19 added: export function saveCachedGitUser(user: GitUserProfile): void {",
+      "R23 added: export function clearCachedGitUser(): void {",
+      "R27 added: export function loadCachedActiveWorkspaceId(): string | null {",
+      "R35 added: export function saveCachedActiveWorkspaceId(id: string | null): void {",
+      "R43 added: export type OnboardingGate = \"boot\" | \"welcome\" | \"hub\" | \"app\";"
+    ],
+    "changed_imports": [
+      "R1 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"./workspaceTypes\";"
+    ],
+    "changed_line_ranges": [
+      "R1-112"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"./workspaceTypes\";",
+      "R3 added: const USER_KEY = \"novadiff_git_user_v1\";",
+      "R4 added: const ACTIVE_WS_KEY = \"novadiff_active_workspace_v1\";",
+      "R5 added: const LOCAL_ONLY_KEY = \"novadiff_local_only_v1\";",
+      "R7 added: export function loadCachedGitUser(): GitUserProfile | null {",
+      "R8 added: try {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function resolveOnboardingGate (65-87)",
+      "right function mergeSession (88-103)",
+      "right function loadCachedGitUser (7-18)",
+      "right function saveCachedLocalOnly (53-64)",
+      "right function saveCachedActiveWorkspaceId (35-44)",
+      "right function findWorkspace (104-112)",
+      "right function loadCachedActiveWorkspaceId (27-34)",
+      "right function loadCachedLocalOnly (45-52)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

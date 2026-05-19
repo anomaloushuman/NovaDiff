@@ -1,0 +1,61 @@
+{
+  "relPath": "packages/graph-core/src/analyzer/language-lesson.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:55:43.010Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export interface LanguageLessonResult {",
+      "R69 added: export function detectLanguageConcepts(",
+      "R99 added: export function getLanguageDisplayName(",
+      "R112 added: export function buildLanguageLessonPrompt(",
+      "R178 added: export function parseLanguageLessonResponse("
+    ],
+    "changed_imports": [
+      "R1 added: import type { GraphNode, GraphEdge } from \"../types.js\";",
+      "R2 added: import type { LanguageConfig } from \"../languages/types.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-210"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GraphNode, GraphEdge } from \"../types.js\";",
+      "R2 added: import type { LanguageConfig } from \"../languages/types.js\";",
+      "R4 added: export interface LanguageLessonResult {",
+      "R5 added: languageNotes: string;",
+      "R6 added: concepts: Array<{ name: string; explanation: string }>;",
+      "R7 added: }"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildLanguageLessonPrompt (112-159)",
+      "right interface LanguageLessonResult (4-47)",
+      "right function parseLanguageLessonResponse (178-210)",
+      "right function detectLanguageConcepts (69-98)",
+      "right function buildConceptPatterns (48-68)",
+      "right function extractJson (160-177)",
+      "right function getLanguageDisplayName (99-111)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

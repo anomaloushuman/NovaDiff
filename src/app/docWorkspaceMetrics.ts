@@ -186,13 +186,19 @@ export function changeKindPieMermaid(metrics: DocWorkspaceMetrics): string {
 }
 
 export function depthBarMermaid(metrics: DocWorkspaceMetrics): string {
-  const rows = metrics.depthHistogram.slice(0, 14);
+  const rows = metrics.depthHistogram.slice(0, 12);
   if (rows.length === 0) {
-    return "flowchart LR\n  empty[No data]";
+    return "flowchart LR\n  empty[No path depth data]";
   }
-  const parts = rows.map((d, i) => {
-    const label = `depth ${d.depth} (${d.count})`;
-    return `    d${i}["${label.replace(/"/g, "'")}"]`;
-  });
-  return ["flowchart TB", ...parts].join("\n");
+  const labels = rows.map((d) => `d${d.depth}`);
+  const values = rows.map((d) => d.count);
+  const maxVal = Math.max(...values, 1);
+  const yMax = Math.max(maxVal, Math.ceil(maxVal * 1.15));
+  return [
+    "xychart-beta",
+    '    title "Path depth (segments)"',
+    `    x-axis [${labels.map((l) => `"${l}"`).join(", ")}]`,
+    `    y-axis "paths" 0 --> ${yMax}`,
+    `    bar [${values.join(", ")}]`,
+  ].join("\n");
 }

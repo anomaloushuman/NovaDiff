@@ -1,18 +1,26 @@
-### Overview
-This diff represents a change in the `src/vite-env.d.ts` file between the NovaDiff-main and NovaDiff branches. The file is part of the Vite configuration for the Novadiff app, and it defines the types used throughout the project.
+### Overview  
+`src/vite-env.d.ts` now expands the Electron API surface and global window typings.  
+* New imports for Git‑related types are added (lines 21‑31).  
+* The `ElectronAPI` interface receives dozens of additional methods covering knowledge‑graph handling, Git tooling, GitHub integration, workspace management, and progress callbacks (changed ranges 207‑374).  
+* A global `Window` interface is declared to expose `electronAPI` (lines 378‑380).  
+* An `export {};` guard is appended to enforce module scope (line 383).
 
-### Key changes
-The most significant change in this diff is the addition of new interfaces and exports related to the NovadiffDocs feature. These interfaces and exports were added to allow for the generation of documentation artifacts for the app's features.
+### Key changes  
+* **Imports** – `import type { GitRepoStatus, GitToolingStatus, GithubPullRequestSummary, GithubRepoSummary, LocalRepoMatch, PrCompareRoots, PublishExecutePayload, PublishExecuteResult, PublishPreview } from "./app/gitTypes";` (lines 21‑31).  
+* **API surface** – `ElectronAPI` now includes methods such as `buildKnowledgeGraph`, `readKnowledgeGraph`, `gitDetectTooling`, `gitRepoStatus`, `githubListRepos`, `workspaceCreate`, `workspaceSetActive`, `gitBlameAtRef`, and many others (see changed ranges 207‑374).  
+* **Progress callbacks** – `onKnowledgeGraphProgress` and `onEngineProgress` are added to expose runtime progress.  
+* **Global window** – `declare global { interface Window { electronAPI?: ElectronAPI; } }` (lines 378‑380).  
+* **Export guard** – `export {};` (line 383).
 
-* New interfaces: `NovadiffDocsWritePayload`, `SummaryPrefetchPayload`, `FileSummaryExportPayload`, `SelectionSummaryExportPayload`, `FileSummaryMarkdownReadPayload`, `SelectionSummaryMarkdownReadPayload`.
-* New exports: `export interface SummaryPrefetchPayload { ... }`, `export interface FileSummaryExportPayload { ... }`, `export interface SelectionSummaryExportPayload extends SelectionDocArtifactMeta { ... }`, `export interface SelectionSummaryMarkdownReadPayload { ... }`, `export interface NovadiffDocsWritePayload { ... }`.
+### Impact  
+* **Type safety** – TypeScript consumers now see a richer API; missing imports may cause compile errors if not updated.  
+* **Runtime expectations** – Renderer calls to the new methods will throw `undefined` if the corresponding main‑process implementations are absent.  
+* **Maintainability** – The interface now contains ~30 new members, increasing the surface that requires documentation, testing, and future refactoring.  
+* **Compatibility** – Existing code that imports `ElectronAPI` will now see additional members; older Electron builds may not support all new methods, potentially breaking backward compatibility.  
+* **Observability** – New progress callbacks provide hooks for UI feedback but require careful cleanup to avoid memory leaks.
 
-These changes are likely to impact the correctness, maintainability, and performance of the app, as they add new functionality and increase the complexity of the codebase. However, the evidence provided in this diff does not suggest any significant regression risks or compatibility issues.
-
-### Impact
-The addition of these interfaces and exports should not have a significant impact on the correctness or maintainability of the app. The new interfaces and exports are well-documented and follow established naming conventions, making it easy for other developers to understand their purpose and usage.
-
-The performance impact of these changes is likely to be minimal, as they do not introduce any new dependencies or introduce complex algorithms that could slow down the app's execution. However, the increased complexity of the codebase may make it more difficult to maintain and update in the future.
-
-### Risks & follow-ups
-There are no significant regression risks or compatibility issues identified in this diff. However, to ensure that the NovadiffDocs feature continues to function correctly and efficiently, it would be wise to verify that the new interfaces and exports do not introduce any unexpected behavior or performance issues. Additionally, it would be helpful to conduct a thorough review of the diff to ensure that all changes are intentional and necessary.
+### Risks & follow‑ups  
+* **Unimplemented methods** – Verify that every new `ElectronAPI` member has a corresponding implementation in the main process; otherwise, renderer calls will fail.  
+* **Type mismatches** – Ensure the imported Git types are correctly exported from `./app/gitTypes`; missing re‑exports will break compilation.  
+* **Test coverage** – Add unit tests for the new API surface, especially for `buildKnowledgeGraph` and GitHub integration paths.  
+* **Performance** – Monitor the overhead of the new progress callbacks; excessive event emission could degrade UI responsiveness.

@@ -1,0 +1,37 @@
+{
+  "relPath": "README.md",
+  "kind": "modified",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:57:54.461Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R22-23",
+      "L27 / R29",
+      "L34 / R36",
+      "R51-52",
+      "R70-71"
+    ],
+    "cited_changed_lines": [
+      "R22 added: - **Documentation workspace** with per-file AI summaries, risk signals, 3D code city, and a built-in **code knowledge graph** (Tree…",
+      "R23 added: - **Git & GitHub** — `gh` auth detection, local clone discovery (macOS / Windows / Linux), pull request list & compare, human-in-…",
+      "L27 removed: - [ ] Git integration (`git difftool --dir-diff`)",
+      "R29 added: - [x] Git integration (status, publish, PR compare via worktrees, GitHub CLI)",
+      "L34 removed: Prerequisites: [Node.js](https://nodejs.org/) (LTS) and [Rust](https://rustup.rs/) (stable).",
+      "R36 added: Prerequisites: [Node.js](https://nodejs.org/) (LTS), [Rust](https://rustup.rs/) (stable), [Git](https://git-scm.com/), and optional…"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "docs"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

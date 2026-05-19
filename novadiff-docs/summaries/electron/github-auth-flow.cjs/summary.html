@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/github-auth-flow.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/github-auth-flow.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:13:41.506Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/github-auth-flow.cjs</code> (lines 1‑141) implements a GitHub CLI device‑code authentication flow. It exports <code>startGithubDeviceAuth</code>, <code>cancelGithubDeviceAuth</code>, and the constant <code>VERIFICATION_URI</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports (lines 3‑10)</strong>:  <ul>
+<li><code>spawn</code> from <code>node:child_process</code>  </li>
+<li><code>shell</code> from <code>electron</code>  </li>
+<li><code>augmentPathForCli</code>, <code>resolveGhExecutable</code>, <code>isGhInstalled</code>, <code>ghNotFoundError</code> from <code>./gh-path.cjs</code></li>
+</ul>
+</li>
+<li><strong>Utility (lines 17‑20)</strong>: <code>stripAnsi</code> removes ANSI escape codes from CLI output.  </li>
+<li><strong>Cancellation (lines 21‑37)</strong>: <code>cancelGithubDeviceAuth</code> terminates any active <code>gh</code> child process (<code>child.kill(&quot;SIGTERM&quot;)</code> at line 26) and clears <code>activeLogin</code>.  </li>
+<li><strong>Auth flow (lines 38‑141)</strong>:  <ul>
+<li>Checks <code>gh</code> presence (<code>isGhInstalled()</code> at line 41).  </li>
+<li>Spawns <code>gh auth login</code> with device‑code flags (lines 51‑58).  </li>
+<li>Parses output for a 4‑segment code using <code>CODE_RE</code> (line 13).  </li>
+<li>Emits progress events (<code>code</code>, <code>complete</code>, <code>error</code>) via the supplied <code>emit</code> callback.  </li>
+<li>Opens the verification URL (<code>shell.openExternal(VERIFICATION_URI)</code> at line 95).  </li>
+<li>Handles a 90 s timeout (lines 73‑77) and child process errors (lines 106‑113).  </li>
+<li>On child close, emits <code>complete</code> or an error based on exit code (lines 115‑131).</li>
+</ul>
+</li>
+<li><strong>Exports (lines 137‑141)</strong>: <code>startGithubDeviceAuth</code>, <code>cancelGithubDeviceAuth</code>, <code>VERIFICATION_URI</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Provides a clear, event‑driven device‑auth path that relies on <code>gh</code> being installed.  </li>
+<li><strong>Maintainability</strong>: Centralizes CLI path handling and error messaging; future flag changes can be made in one place.  </li>
+<li><strong>Performance</strong>: Minor overhead from spawning a child process; timeout is 90 s.  </li>
+<li><strong>Compatibility</strong>: Requires Electron’s <code>shell</code> API; not usable in non‑Electron contexts.  </li>
+<li><strong>Observability</strong>: Emits detailed phases (<code>code</code>, <code>complete</code>, <code>error</code>) that can be logged or surfaced to the renderer.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: Run session‑regression tests targeting <code>startGithubDeviceAuth</code>.  </li>
+<li><strong>CLI availability</strong>: Verify <code>ghNotFoundError</code> surfaces correctly when <code>gh</code> is missing.  </li>
+<li><strong>Lint &amp; build</strong>: Execute <code>npm run lint</code>, <code>npm test</code>, and the production build to catch syntax or type issues.  </li>
+<li><strong>Shell integration</strong>: Confirm <code>shell.openExternal</code> opens the correct URL on all supported platforms.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/compare-runner.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/compare-runner.cjs</h1>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:09:31.844Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>electron/compare-runner.cjs</code> now includes a non‑blocking compare engine runner with progress reporting. The module exports were expanded to expose <code>runCompareEngineAsync</code>, and a helper <code>parseEngineStdout</code> was added. The import statement was updated to bring in <code>spawn</code> alongside <code>spawnSync</code> (L5).</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import update</strong> – <code>const { spawn, spawnSync } = require(&quot;node:child_process&quot;);</code> (L5).  </li>
+<li><strong>New helper</strong> – <code>parseEngineStdout(stdout)</code> validates output and parses JSON (L89‑98).  </li>
+<li><strong>Async runner</strong> – <code>runCompareEngineAsync(appRoot, message, isPackaged, onProgress)</code> spawns the engine, streams stdout/stderr, emits heartbeat progress, and parses results asynchronously (L104‑210).  </li>
+<li><strong>Exports</strong> – module now exports <code>runCompareEngine</code>, <code>runCompareEngineAsync</code>, and <code>resolveRustCli</code> (L212‑216).  </li>
+<li><strong>Removed</strong> – old <code>module.exports = { runCompareEngine, resolveRustCli };</code> (L89).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Responsiveness</strong> – UI stays responsive during long compare runs; progress events (<code>spawn</code>, <code>running</code>, <code>parsing</code>, <code>done</code>) are emitted.  </li>
+<li><strong>Error handling</strong> – <code>parseEngineStdout</code> throws early on empty or invalid output, improving diagnostics.  </li>
+<li><strong>Compatibility</strong> – Existing sync usage (<code>runCompareEngine</code>) remains unchanged; new async API requires callers to handle a Promise and optional <code>onProgress</code>.  </li>
+<li><strong>Performance</strong> – Heartbeat interval (450 ms) and byte‑count tracking may add minor overhead but provide useful feedback.  </li>
+<li><strong>Maintainability</strong> – Centralized stdout parsing reduces duplication; exports are clearer.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>API breakage</strong> – Code importing the old export shape may fail; update imports to the new object.  </li>
+<li><strong>Progress callback</strong> – <code>onProgress</code> is optional; callers should guard against <code>undefined</code>.  </li>
+<li><strong>Child process cleanup</strong> – Verify that <code>child</code> is terminated on error or timeout to avoid orphaned processes.  </li>
+<li><strong>Encoding assumptions</strong> – <code>stdout</code> is treated as UTF‑8; confirm that all engine outputs conform.  </li>
+<li><strong>Testing</strong> – Add unit tests for <code>runCompareEngineAsync</code> covering success, error, and progress emission.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/NodeTooltip.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/NodeTooltip.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:30:45.817Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>NodeTooltip.tsx</code> component is added to <code>packages/graph-view/src/components/</code>. It renders a floating tooltip that follows the mouse over a node, displaying node metadata, connection counts, and optional tags.</p>
+<h3>Key changes</h3>
+<ul>
+<li>Imports added: <code>useEffect</code>, <code>useState</code> from React and <code>CustomNodeData</code> from <code>./CustomNode</code> [R1‑2].</li>
+<li><code>NodeTooltipProps</code> interface defined with <code>data</code>, <code>nodeId</code>, <code>incomingCount</code>, <code>outgoingCount</code>, optional <code>tags</code> [R4‑9].</li>
+<li>Component exported as default function <code>NodeTooltip</code> [R12].</li>
+<li>State: <code>position</code> and <code>visible</code> via <code>useState</code> [R19‑20].</li>
+<li><code>useEffect</code> attaches <code>mouseenter</code>, <code>mouseleave</code>, <code>mousemove</code> listeners to <code>[data-id=&quot;${CSS.escape(nodeId)}&quot;]</code> and cleans them up on unmount [R22‑44].</li>
+<li>Tooltip rendered only when <code>visible</code> is true; positioned at `position.x</li>
+</ul>
+<ul>
+<li><p>16<code>, </code>position.y </p>
+</li>
+<li><p>16` [R46‑56].</p>
+</li>
+</ul>
+<ul>
+<li>Content includes node type, complexity, label, incoming/outgoing counts, total connections, summary (truncated to 120 chars), and up to three tags with a “+N” indicator for excess tags [R58‑120].</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Tooltip appears only on hover and follows mouse movement.</li>
+<li>Adds three event listeners per node; no external side effects.</li>
+<li>Requires that nodes rendered by React Flow expose a <code>data-id</code> attribute matching <code>nodeId</code>.</li>
+<li>Uses <code>CSS.escape</code>; behavior in browsers lacking support is unknown from the diff.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that every node has a matching <code>data-id</code>; otherwise the tooltip will not attach.</li>
+<li>Confirm that <code>CustomNodeData</code> contains the fields accessed (<code>nodeType</code>, <code>complexity</code>, <code>label</code>, <code>summary</code>).</li>
+<li>Test in environments without <code>CSS.escape</code> to ensure graceful degradation.</li>
+<li>Ensure the tooltip does not interfere with other mouse events or accessibility features.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -26,17 +26,30 @@
 <body>
   <header class="top">
     <h1>src/app/llmStorage.ts</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T07:00:40.296Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:04:45.292Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a change in the NovaDiff app&#39;s <code>src/app/llmStorage.ts</code> file between two trees on disk. The baseline is the &quot;NovaDiff-main&quot; tree, while the target is the &quot;NovaDiff&quot; tree. This file contains the logic for storing and retrieving LLM settings, which are used to configure the app&#39;s behavior.</p>
+<p>The <code>LlmSummarizePayload</code> interface in <code>src/app/llmStorage.ts</code> was extended with five optional properties to provide richer context for code‑snippet summarization. The changes appear in the diff at lines 56‑61 of the interface definition.</p>
 <h3>Key changes</h3>
-<p>The most significant implementation change in this diff is the addition of a new import statement at line 17, which imports the <code>FileSummaryEvidence</code> type from the <code>types</code> module. This type is used to store information about the summary evidence for a given file, which is used to generate the summary for that file. Additionally, the <code>LlmSummarizePayload</code> interface has been modified to include a new field, <code>summaryEvidence</code>, which is of type <code>FileSummaryEvidence</code>. This field is used to store the summary evidence for a given file.</p>
+<ul>
+<li><code>explainCode?: boolean</code> – flag to indicate that the LLM should explain a code snippet.  </li>
+<li><code>codeExcerpt?: string</code> – the snippet text.  </li>
+<li><code>lineStart?: number</code> and <code>lineEnd?: number</code> – the snippet’s line range.  </li>
+<li><code>symbolName?: string</code> – the symbol being summarized.<br>These additions are added after the existing <code>selectionSymbol</code> property.</li>
+</ul>
 <h3>Impact</h3>
-<p>The impact of these changes on correctness, maintainability, performance, compatibility, or observability is not immediately clear. However, the addition of the <code>FileSummaryEvidence</code> type and the modification of the <code>LlmSummarizePayload</code> interface suggest that the app&#39;s behavior may have changed in some way related to the storage and retrieval of LLM settings.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>Based on the evidence provided, there does not appear to be any significant risk associated with these changes. However, it is important to verify that the app continues to function correctly after these changes are made. Additionally, it would be useful to review the code surrounding the <code>FileSummaryEvidence</code> type and the <code>LlmSummarizePayload</code> interface to ensure that they are being used correctly and that no other unexpected changes have been made.</p>
+<ul>
+<li>Existing payloads remain valid; the new fields are optional, so no breaking changes.  </li>
+<li>Consumers can now include snippet context without modifying the interface contract.  </li>
+<li>No runtime errors are introduced by the change.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that serialization of <code>LlmSummarizePayload</code> to JSON omits undefined fields.  </li>
+<li>Update unit tests that validate payload shape to account for the optional properties.  </li>
+<li>Ensure that prompt‑generation logic handles <code>explainCode</code> and the snippet metadata correctly.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

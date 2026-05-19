@@ -1,0 +1,45 @@
+{
+  "relPath": "packages/graph-view/src/components/Breadcrumb.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:16:06.755Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export default function Breadcrumb() {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";"
+    ],
+    "changed_line_ranges": [
+      "R1-40"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";",
+      "R4 added: export default function Breadcrumb() {",
+      "R5 added: const navigationLevel = useDashboardStore((s) => s.navigationLevel);",
+      "R6 added: const activeLayerId = useDashboardStore((s) => s.activeLayerId);",
+      "R7 added: const graph = useDashboardStore((s) => s.graph);"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

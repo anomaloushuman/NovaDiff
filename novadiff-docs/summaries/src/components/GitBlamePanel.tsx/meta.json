@@ -1,0 +1,55 @@
+{
+  "relPath": "src/components/GitBlamePanel.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:10:15.839Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R6 added: export interface GitBlamePanelProps {",
+      "R12 added: export function GitBlamePanel({ repoRoot, commit, onClose }: GitBlamePanelProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import { FileText, Loader2, Search } from \"lucide-react\";",
+      "R3 added: import type { GitBlameAtRefResult } from \"../app/gitTypes\";",
+      "R4 added: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";"
+    ],
+    "changed_line_ranges": [
+      "R1-159"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import { FileText, Loader2, Search } from \"lucide-react\";",
+      "R3 added: import type { GitBlameAtRefResult } from \"../app/gitTypes\";",
+      "R4 added: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";",
+      "R6 added: export interface GitBlamePanelProps {",
+      "R7 added: repoRoot: string;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function GitBlamePanel (12-159)",
+      "right interface GitBlamePanelProps (6-11)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

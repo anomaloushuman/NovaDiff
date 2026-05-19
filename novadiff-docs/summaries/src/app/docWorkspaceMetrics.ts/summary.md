@@ -1,15 +1,20 @@
-### Overview
-This folder diff between two trees on disk represents a significant update to the NovaDiff app's core functionality. The changes primarily affect the `src/app/docWorkspaceMetrics.ts` file, which now includes new functions for generating metrics and building the compare metrics markdown. Additionally, the `buildDocWorkspaceMetrics` function has been updated to include more detailed information about the changed files, such as their extension counts and depth histogram.
+### Overview  
+The `depthBarMermaid` helper was refactored to replace the old flowchart bar graph with an XY chart. The change trims the displayed depth slice from 14 to 12 entries and updates the empty‑state message.
 
-### Key changes
-The following are some of the key changes in this diff:
+### Key changes  
+- **Slice size** – `metrics.depthHistogram.slice(0, 12)` (line 189) replaces the previous `slice(0, 14)`.  
+- **Empty‑state text** – `"No path depth data"` (line 191) replaces `"No data"`.  
+- **Graph type** – the function now returns an `xychart-beta` block (lines 197‑203) instead of a `flowchart TB` with bar nodes (lines 193‑197).  
+- **Label construction** – depth labels are generated via `labels = rows.map(d => \`d${d.depth}\`)` and `values = rows.map(d => d.count)` (lines 193‑196).  
+- **Y‑axis scaling** – `yMax` is computed as `Math.max(maxVal, Math.ceil(maxVal * 1.15))` (line 201) to give a 15 % headroom.
 
-* New functions for generating metrics and building the compare metrics markdown have been added to the `src/app/docWorkspaceMetrics.ts` file.
-* The `buildDocWorkspaceMetrics` function has been updated to include more detailed information about the changed files, such as their extension counts and depth histogram.
-* New interfaces and exported functions have been added to the `src/app/docWorkspaceMetrics.ts` file, including `ExtensionCount`, `DocWorkspaceMetrics`, `changeKindPieMermaid`, and `depthBarMermaid`.
+### Impact  
+- **Visual output**: Consumers of the Mermaid string will now see an XY chart instead of a bar graph, changing the appearance of depth histograms.  
+- **Performance**: Limiting to 12 rows reduces the amount of data rendered, slightly improving rendering speed.  
+- **Maintainability**: The new implementation is more declarative and removes manual node‑generation logic, easing future tweaks.
 
-### Impact
-This update should have a positive impact on the NovaDiff app's functionality, as it allows users to generate more detailed metrics and build more informative compare metrics markdown. Additionally, the new functions and interfaces added to the `src/app/docWorkspaceMetrics.ts` file will help maintain the codebase and ensure that it continues to function correctly over time.
-
-### Risks & follow-ups
-There are no known risks associated with this update, but it is important to verify that the changes do not introduce any bugs or compatibility issues. Additionally, it may be helpful to review the updated documentation for the `src/app/docWorkspaceMetrics.ts` file to ensure that it is accurate and up-to-date.
+### Risks & follow‑ups  
+- **Rendering failures**: Verify that the target environment’s Mermaid version supports `xychart-beta`; older renderers may not support it, potentially breaking dashboards.  
+- **Test regressions**: Existing unit tests that assert the exact Mermaid string will fail; update expectations or add conditional checks.  
+- **Documentation**: UI or docs may need to explain the new chart type and its interpretation.  
+- **Edge cases**: Ensure that when `metrics.depthHistogram` has fewer than 12 entries, the chart still renders correctly and the Y‑axis scaling behaves as intended.

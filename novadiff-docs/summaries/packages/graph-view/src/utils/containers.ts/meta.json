@@ -1,0 +1,59 @@
+{
+  "relPath": "packages/graph-view/src/utils/containers.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:59:12.955Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R7 added: export interface DerivedContainer {",
+      "R14 added: export interface DeriveResult {",
+      "R91 added: export function deriveContainers("
+    ],
+    "changed_imports": [
+      "R1 added: import type {",
+      "R5 added: import { detectCommunities } from \"./louvain\";"
+    ],
+    "changed_line_ranges": [
+      "R1-156"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type {",
+      "R2 added: GraphNode,",
+      "R3 added: GraphEdge,",
+      "R4 added: } from \"@novadiff/graph-core/types\";",
+      "R5 added: import { detectCommunities } from \"./louvain\";",
+      "R7 added: export interface DerivedContainer {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function deriveContainers (91-156)",
+      "right function groupByFolder (52-76)",
+      "right function commonPrefix (30-46)",
+      "right interface DeriveResult (14-29)",
+      "right function shouldFallbackToCommunity (77-90)",
+      "right interface DerivedContainer (7-13)",
+      "right function firstSegment (47-51)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

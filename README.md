@@ -19,19 +19,21 @@ The modern, open-source alternative to WinMerge, Meld, and Beyond Compare.
 - **Merge assistance** with intelligent conflict hints
 - **Ignore patterns**, `.gitignore` support, and custom rules
 - **Modern, dark-first UI** that feels native
+- **Documentation workspace** with per-file AI summaries, risk signals, 3D code city, and a built-in **code knowledge graph** (Tree-sitter structure extraction, interactive explorer, compare overlay)
+- **Git & GitHub** — `gh` auth detection, local clone discovery (macOS / Windows / Linux), pull request list & compare, human-in-the-loop **auto-commit** with optional push and PR creation
 
 ## Roadmap
 
 - [x] Core two-folder comparison engine
 - [x] Local LLM support (Ollama / LM Studio) — per-file summaries (Settings + Summary tab)
-- [ ] Git integration (`git difftool --dir-diff`)
+- [x] Git integration (status, publish, PR compare via worktrees, GitHub CLI)
 - [ ] 3-way merge view
 - [ ] VS Code extension
 - [ ] Self-hosted web version
 
 ## Quick Start
 
-Prerequisites: [Node.js](https://nodejs.org/) (LTS) and [Rust](https://rustup.rs/) (stable).
+Prerequisites: [Node.js](https://nodejs.org/) (LTS), [Rust](https://rustup.rs/) (stable), [Git](https://git-scm.com/), and optionally [GitHub CLI](https://cli.github.com/) (`gh auth login`) for pull requests and auto-publish.
 
 ```bash
 git clone https://github.com/yourusername/NovaDiff.git
@@ -45,6 +47,8 @@ npm run electron:dev
 For the Vite dev server only (no Electron shell): `npm run dev`.
 
 Release build: `npm run electron:build` (builds the `novadiff-cli` binary, then Vite + installers under `release/`).
+
+First graph build compiles the in-repo engine (`npm run graph:build` runs automatically before `npm run build` / `electron:dev`).
 
 ## Tech Stack
 
@@ -62,5 +66,7 @@ Contributions are welcome! Please see [CONTRIBUTIONS.md](CONTRIBUTIONS.md) for d
 
 ## License
 MIT License
+
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for open-source attributions.
 
 Made with ❤️ for developers who want faster and smarter code reviews.

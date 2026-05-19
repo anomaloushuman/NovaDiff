@@ -53,6 +53,12 @@ export interface LlmSummarizePayload extends LlmSettings {
   selectedDiffExcerpt?: string;
   focusDiffExcerpt?: string;
   selectionSymbol?: DiffSelectionSymbolMatch | null;
+  /** Explain a source snippet from the knowledge-graph code viewer. */
+  explainCode?: boolean;
+  codeExcerpt?: string;
+  lineStart?: number;
+  lineEnd?: number;
+  symbolName?: string;
 }
 
 const STORAGE_KEY = "novadiff_llm_settings_v1";

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/embedding-search.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/embedding-search.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:39:06.806Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/embedding-search.ts</code> adds a lightweight semantic search engine that operates on pre‑computed vector embeddings of graph nodes.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – <code>GraphNode</code> from <code>./types.js</code> and <code>SearchResult</code> from <code>./search.js</code> (lines 1‑2).  </li>
+<li><strong><code>SemanticSearchOptions</code></strong> (lines 4‑7) introduces optional <code>limit</code>, <code>threshold</code>, and <code>types</code>.  </li>
+<li><strong><code>cosineSimilarity</code></strong> (lines 14‑30) computes dot product and magnitudes, returning <code>0</code> when either vector has zero magnitude.  </li>
+<li><strong><code>SemanticSearchEngine</code></strong> (lines 37‑83) stores nodes and embeddings, and exposes <code>hasEmbeddings</code>, <code>addEmbedding</code>, <code>search</code>, and <code>updateNodes</code>.  </li>
+<li><strong>Search logic</strong> (lines 54‑78) filters by node type, applies a similarity threshold, scores as <code>1 – similarity</code>, sorts ascending, and slices to the requested limit.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Deterministic similarity scoring; zero‑magnitude vectors return <code>0</code>, avoiding NaNs.  </li>
+<li>Encapsulates search logic in a single class; the options interface centralizes configuration.  </li>
+<li>Performs a linear scan over all nodes; suitable for small graphs but may need optimization for larger datasets.  </li>
+<li>No changes to existing public APIs; the new module is isolated.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>No unit tests cover the new engine; run <code>npm test</code> to confirm no accidental breakage.  </li>
+<li>Linear search could become a bottleneck; benchmark against the current search implementation.  </li>
+<li>Embedding keys must match <code>node.id</code>; mismatches will silently skip nodes.  </li>
+<li>Build verification: run <code>npm run build</code> to confirm the new file is included.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

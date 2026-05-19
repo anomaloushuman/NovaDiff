@@ -1,0 +1,58 @@
+{
+  "relPath": "electron/workspace-store.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:20:21.011Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { randomUUID } = require(\"node:crypto\");"
+    ],
+    "changed_line_ranges": [
+      "R1-173"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { randomUUID } = require(\"node:crypto\");",
+      "R8 added: function sessionPath(userData) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function createWorkspace (128-173)",
+      "right function loadSession (33-53)",
+      "right function updateWorkspaceLiveRepo (108-127)",
+      "right function upsertWorkspace (74-88)",
+      "right function setLocalOnlyMode (54-64)",
+      "right function readJson (16-24)",
+      "right function writeJson (25-32)",
+      "right function setActiveWorkspace (89-95)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

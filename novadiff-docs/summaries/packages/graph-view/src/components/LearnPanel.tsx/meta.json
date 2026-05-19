@@ -1,0 +1,47 @@
+{
+  "relPath": "packages/graph-view/src/components/LearnPanel.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:27:19.116Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R6 added: export default function LearnPanel() {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useMemo } from \"react\";",
+      "R2 added: import ReactMarkdown from \"react-markdown\";",
+      "R3 added: import { useDashboardStore } from \"../store\";",
+      "R4 added: import { useI18n } from \"../contexts/I18nContext\";"
+    ],
+    "changed_line_ranges": [
+      "R1-230"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useMemo } from \"react\";",
+      "R2 added: import ReactMarkdown from \"react-markdown\";",
+      "R3 added: import { useDashboardStore } from \"../store\";",
+      "R4 added: import { useI18n } from \"../contexts/I18nContext\";",
+      "R6 added: export default function LearnPanel() {",
+      "R7 added: const graph = useDashboardStore((s) => s.graph);"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

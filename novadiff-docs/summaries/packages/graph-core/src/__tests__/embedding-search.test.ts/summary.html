@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/__tests__/embedding-search.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/__tests__/embedding-search.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:06:17.110Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>packages/graph-core/src/__tests__/embedding-search.test.ts</code> has been added.<br>The file imports <code>vitest</code> helpers (lines 1‑3), the <code>SemanticSearchEngine</code> and <code>cosineSimilarity</code> utilities (line 2), and the <code>GraphNode</code> type (line 3).<br>It defines an in‑memory <code>nodes</code> array (lines 5‑9) and an <code>embeddings</code> map (lines 12‑16) for three sample nodes.<br>The test suite (lines 18‑92) exercises the cosine similarity function and the search engine’s public API.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>vitest</code>, <code>SemanticSearchEngine</code>, <code>cosineSimilarity</code>, <code>GraphNode</code>.  </li>
+<li><strong>Test data</strong>: <code>nodes</code> array and <code>embeddings</code> map defined inline.  </li>
+<li><strong>Cosine similarity tests</strong>: identity, orthogonality, similarity threshold, zero‑vector handling.  </li>
+<li><strong>SemanticSearchEngine tests</strong>:  <ul>
+<li>Result ordering by similarity.  </li>
+<li><code>limit</code> and <code>threshold</code> options.  </li>
+<li>Type filtering (<code>types: [&quot;function&quot;]</code>).  </li>
+<li>Handling of missing embeddings.  </li>
+<li><code>hasEmbeddings</code> flag behavior.  </li>
+<li><code>addEmbedding</code> updates the index.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides unit coverage for core search logic, ensuring that changes to similarity calculations or filtering are detected during testing.  </li>
+<li>Centralizes test data; future updates to node structure or embeddings can be made in a single location.  </li>
+<li>No modifications to production code paths; the new file only adds tests.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Determinism</strong>: The tests rely on fixed embeddings; any change to <code>cosineSimilarity</code> must preserve the expected outputs.  </li>
+<li><strong>Coverage gaps</strong>: All public methods of <code>SemanticSearchEngine</code> are exercised, but edge cases such as an empty node list are not explicitly tested.  </li>
+<li><strong>CI integration</strong>: It is unknown from the diff whether the new tests are automatically included in the CI pipeline.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

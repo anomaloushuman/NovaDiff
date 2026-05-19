@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/index.html · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/index.html</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:17:08.422Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>packages/graph-view/index.html</code> file has been added (lines R1‑R19). It establishes a minimal HTML5 page that loads Google Fonts, mounts a React app, and links a favicon.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>File addition</strong>: <code>packages/graph-view/index.html</code> now exists.  </li>
+<li><strong>Meta tags</strong>: <code>charset=&quot;UTF-8&quot;</code>, <code>viewport=&quot;width=device-width, initial-scale=1.0&quot;</code>, and a favicon link to <code>/favicon.svg</code>.  </li>
+<li><strong>Font preconnects</strong>: <code>&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;</code> and <code>&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;</code>.  </li>
+<li><strong>Font stylesheet</strong>: loads <code>DM Serif Display</code>, <code>Inter</code>, and <code>JetBrains Mono</code> with <code>display=swap</code>.  </li>
+<li><strong>Root element</strong>: <code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code> for React rendering.  </li>
+<li><strong>Script entry</strong>: <code>&lt;script type=&quot;module&quot; src=&quot;/src/main.tsx&quot;&gt;&lt;/script&gt;</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a clean bootstrap for the graph‑view package.  </li>
+<li>Centralizes meta and script configuration, simplifying future edits.  </li>
+<li>Preconnects to Google Fonts may reduce font‑loading latency (common practice).</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Asset paths</strong>: Verify that <code>/favicon.svg</code> and <code>/src/main.tsx</code> resolve correctly in the deployed environment.  </li>
+<li><strong>Font availability</strong>: Ensure the specified families are accessible and that <code>display=swap</code> behaves as expected.  </li>
+<li><strong>Server routing</strong>: Confirm that the server serves this file for the <code>/graph-view</code> route and that no other route conflicts occur.  </li>
+<li><strong>Build pipeline</strong>: Check that the new file is included in the build artifacts and copied to the correct output directory.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "relPath": "electron/workspace-files.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:19:06.509Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");"
+    ],
+    "changed_line_ranges": [
+      "R1-85"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R7 added: const SKIP_DIRS = new Set([",
+      "R8 added: \".git\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function listSnapshotFiles (17-60)",
+      "right function readSnapshotTextFile (61-85)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

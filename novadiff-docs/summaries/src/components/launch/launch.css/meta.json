@@ -1,0 +1,33 @@
+{
+  "relPath": "src/components/launch/launch.css",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:32:24.746Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-531"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /* ——— TRON-inspired launch sequence ——— */",
+      "R3 added: .launch-boot {",
+      "R4 added: position: fixed;",
+      "R5 added: inset: 0;",
+      "R6 added: z-index: 10000;",
+      "R7 added: display: flex;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

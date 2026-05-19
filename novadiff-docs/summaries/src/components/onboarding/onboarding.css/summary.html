@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/onboarding/onboarding.css · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/onboarding/onboarding.css</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:26:59.478Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A brand‑new stylesheet <code>src/components/onboarding/onboarding.css</code> has been added to provide the visual foundation for the onboarding flow. It defines the overlay, welcome screens, user cards, device‑code blocks, and related UI elements.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Overlay styling</strong> – <code>.onboarding-overlay</code> now covers the viewport with <code>position: fixed; inset: 0; z-index: 12000;</code> and a backdrop blur.</li>
+<li><strong>Welcome screen layout</strong> – <code>.welcome-screen</code> and <code>.workspace-hub</code> share a centered container (<code>width: min(720px, 100%); margin: 0 auto;</code>).</li>
+<li><strong>User card interactions</strong> – <code>.welcome-user-card</code> gains hover and selected states, changing border color and background via <code>color-mix</code>.</li>
+<li><strong>Device‑code block</strong> – <code>.welcome-device-code-block</code> and <code>.welcome-device-code</code> provide a prominent, monospace‑styled code display.</li>
+<li><strong>Responsive grid</strong> – <code>.git-history-pickers</code> switches to a single column on screens ≤640 px.</li>
+<li><strong>Miscellaneous UI helpers</strong> – classes for avatars, buttons, and consent sections are added for consistency across onboarding steps.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>UI correctness</strong> – The new CSS will render the onboarding overlay and related components; missing imports could leave the UI unstyled.</li>
+<li><strong>Maintainability</strong> – Centralizing onboarding styles reduces duplication but increases the file size (~262 lines). Future style changes should target this file to avoid scattered overrides.</li>
+<li><strong>Performance</strong> – The overlay’s <code>backdrop-filter: blur(8px)</code> may impact rendering on low‑end devices; monitor frame rates during onboarding.</li>
+<li><strong>Compatibility</strong> – Uses modern CSS features (<code>color-mix</code>, <code>inset</code>) that may not be supported in older browsers; ensure polyfills or fallbacks if needed.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing CSS import</strong> – Verify that <code>onboarding.css</code> is imported in the onboarding component or global styles; otherwise the UI will appear unstyled.</li>
+<li><strong>Specificity clashes</strong> – Existing global styles might override these new classes; run visual regression tests to confirm appearance.</li>
+<li><strong>Backwards compatibility</strong> – Test on browsers that lack <code>color-mix</code> support; consider graceful degradation.</li>
+<li><strong>Performance regression</strong> – Profile the onboarding flow on target devices to ensure the backdrop blur does not cause jank.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

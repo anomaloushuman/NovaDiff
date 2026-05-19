@@ -1,0 +1,57 @@
+{
+  "relPath": "src/components/launch/AppLaunchShell.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:29:49.178Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R13 added: export interface AppLaunchShellProps {",
+      "R19 added: export function AppLaunchShell({ chrome, children, onPhaseChange }: AppLaunchShellProps) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import {",
+      "R8 added: import { usePrefersReducedMotion } from \"../../app/usePrefersReducedMotion\";",
+      "R9 added: import { LaunchProvider } from \"./LaunchContext\";",
+      "R10 added: import { LaunchBoot } from \"./LaunchBoot\";",
+      "R11 added: import \"./launch.css\";"
+    ],
+    "changed_line_ranges": [
+      "R1-76"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import {",
+      "R3 added: LAUNCH_REVEAL_MS,",
+      "R4 added: type LaunchPhase,",
+      "R5 added: markLaunchComplete,",
+      "R6 added: readLaunchSkipped,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function AppLaunchShell (19-76)",
+      "right interface AppLaunchShellProps (13-18)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "relPath": "packages/graph-view/src/utils/layout.ts",
+  "kind": "modified",
+  "label": "Code explanation (L231-266)",
+  "selectionKey": "lines-231-266",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 231,
+      "rightEnd": 266
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T09:52:26.866Z"
+}

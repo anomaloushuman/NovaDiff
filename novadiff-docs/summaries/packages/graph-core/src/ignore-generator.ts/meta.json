@@ -1,0 +1,54 @@
+{
+  "relPath": "packages/graph-core/src/ignore-generator.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:40:37.672Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R61 added: export function generateStarterIgnoreFile(projectRoot: string): string {"
+    ],
+    "changed_imports": [
+      "R1 added: import { existsSync, readFileSync } from \"node:fs\";",
+      "R2 added: import { join } from \"node:path\";",
+      "R3 added: import { DEFAULT_IGNORE_PATTERNS } from \"./ignore-filter.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-102"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { existsSync, readFileSync } from \"node:fs\";",
+      "R2 added: import { join } from \"node:path\";",
+      "R3 added: import { DEFAULT_IGNORE_PATTERNS } from \"./ignore-filter.js\";",
+      "R5 added: const HEADER = `# .novadiffignore — patterns for files/dirs to exclude from analysis",
+      "R6 added: # Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)",
+      "R7 added: # Lines below are suggestions — uncomment to activate."
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function generateStarterIgnoreFile (61-102)",
+      "right function parseGitignorePatterns (37-49)",
+      "right function isCoveredByDefaults (50-60)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

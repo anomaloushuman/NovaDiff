@@ -15,7 +15,8 @@ const electronPkg = path.join(root, "node_modules", "electron");
 const pathFile = path.join(electronPkg, "path.txt");
 
 function cleanEnv() {
-  const env = { ...process.env };
+  const { augmentPathForCli } = require(path.join(root, "electron", "gh-path.cjs"));
+  const env = augmentPathForCli({ ...process.env });
   delete env.ELECTRON_OVERRIDE_DIST_PATH;
   return env;
 }

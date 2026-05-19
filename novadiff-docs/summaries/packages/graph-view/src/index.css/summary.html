@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/index.css · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/index.css</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:35:00.972Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/index.css</code> is a new stylesheet (added 426 lines, range R1‑426). It imports Tailwind (<code>@import &quot;tailwindcss&quot;;</code> – line 1) and declares a custom <code>@theme</code> block (lines 3‑84) that defines dozens of CSS variables for colors, typography, and node‑type styles.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Tailwind import</strong> – line 1 pulls in the utility framework.  </li>
+<li><strong>Theme variables</strong> – the <code>@theme</code> block (lines 3‑84) introduces variables such as <code>--color-root</code>, <code>--color-surface</code>, <code>--color-accent</code>, <code>--glass-bg</code>, and many node‑type colors.  </li>
+<li><strong>Scoped base styles</strong> – selectors <code>.novadiff-graph-explorer-root, .novadiff-graph-theme-host</code> (lines 100‑109) set font, background, and color using the new variables.  </li>
+<li><strong>Noise overlay</strong> – a fixed pseudo‑element (<code>.noise-overlay::before</code>, lines 111‑122) adds a low‑opacity SVG noise texture, scoped to the explorer panel via <code>.novadiff-graph-embed.noise-overlay::before</code> (lines 125‑128).  </li>
+<li><strong>Glass utilities</strong> – <code>.glass</code> and <code>.glass-heavy</code> (lines 131‑144) use <code>backdrop-filter</code> for translucent panels.  </li>
+<li><strong>Custom scrollbar</strong> – WebKit and non‑WebKit styles (lines 237‑251) replace the default scrollbar with a thin, themed thumb.  </li>
+<li><strong>Animations</strong> – keyframes (<code>fadeSlideIn</code>, <code>slideUp</code>, <code>accentPulse</code>) and utility classes (<code>.animate-fade-slide-in</code>, <code>.animate-accent-pulse</code>) (lines 164‑205).  </li>
+<li><strong>Diff &amp; node glow</strong> – classes <code>.node-glow</code>, <code>.diff-changed-glow</code>, <code>.diff-affected-glow</code> (lines 208‑219) provide visual feedback for graph changes.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Styling consistency</strong> – all graph‑view UI now relies on the new CSS variables; hard‑coded colors elsewhere may need updating.  </li>
+<li><strong>Performance</strong> – the file is scoped; it should not affect global styles.  </li>
+<li><strong>Browser support</strong> – uses <code>backdrop-filter</code> and custom scrollbars; older browsers may lack support.  </li>
+<li><strong>Testing</strong> – unit tests that check CSS class presence or color values may need re‑running.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ol>
+<li><strong>Tailwind import failure</strong> – verify that <code>&quot;tailwindcss&quot;</code> resolves in the build pipeline.  </li>
+<li><strong>Variable leakage</strong> – ensure the <code>@theme</code> block does not override unrelated components; run a smoke test on a page without Graph View.  </li>
+<li><strong>Scrollbar compatibility</strong> – confirm the custom scrollbar does not interfere with other scrollable areas.  </li>
+<li><strong>Noise overlay interference</strong> – verify the overlay is correctly scoped to the explorer panel.</li>
+</ol>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

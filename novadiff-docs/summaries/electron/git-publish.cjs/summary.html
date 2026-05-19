@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/git-publish.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/git-publish.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:12:13.783Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/git-publish.cjs</code> is added. It exports three functions: <code>buildFullCommitMessage</code>, <code>previewPublish</code>, and <code>executePublish</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports (lines 3‑5)</strong>:```js
+const path = require(&quot;node:path&quot;);
+const { getRepoStatus, stageAll, commit, push, isGitRepo } = require(&quot;./git-service.cjs&quot;);
+const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require(&quot;./github-service.cjs&quot;);</li>
+</ul>
+<p>```- **<code>buildFullCommitMessage</code> (lines 7‑13)**: trims <code>subject</code> and <code>body</code>; returns <code>subject</code> alone if <code>body</code> is empty, otherwise inserts a blank line between them.</p>
+<ul>
+<li><strong><code>previewPublish</code> (lines 19‑42)</strong>: resolves <code>repoRoot</code>, verifies a Git repo, gathers status, GitHub auth, and slug, then returns an object containing <code>repoRoot</code>, <code>branch</code>, <code>upstream</code>, <code>ahead</code>, <code>behind</code>, <code>dirtyFiles</code>, <code>remotes</code>, <code>github</code>, <code>githubSlug</code>, and <code>canPush</code>.</li>
+<li><strong><code>executePublish</code> (lines 48‑101)</strong>: resolves <code>repoRoot</code>, <code>subject</code>, and <code>body</code>; validates the subject; stages all files, commits with the built message, optionally pushes to a remote, and optionally creates a PR via <code>gh</code>. It returns an object with <code>ok</code>, <code>commitHash</code>, <code>branch</code>, <code>pushed</code>, <code>pushRemote</code>, and <code>prUrl</code>.</li>
+<li><strong>Exports (lines 104‑108)</strong>: <code>module.exports = { previewPublish, executePublish, buildFullCommitMessage };</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a clear commit‑message builder and a publish workflow that respects <code>.gitignore</code> through <code>stageAll</code>.  </li>
+<li><code>previewPublish</code> offers a snapshot of the repository state, useful for debugging and CI checks.  </li>
+<li><code>executePublish</code> requires the GitHub CLI to be authenticated; it throws an error if <code>gh</code> is not logged in.  </li>
+<li>The default remote is <code>&quot;origin&quot;</code> unless overridden by <code>opts.remote</code>.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Authentication</strong>: <code>executePublish</code> throws if <code>gh</code> is not logged in; CI environments must run <code>gh auth login</code>.  </li>
+<li><strong>Remote default</strong>: The hard‑coded <code>&quot;origin&quot;</code> may not match all repository conventions; verify usage.  </li>
+<li><strong>Error handling</strong>: Only basic checks are performed; consider wrapping Git commands in <code>try/catch</code> to surface underlying errors.  </li>
+<li><strong>Side effects</strong>: The module stages all files and commits unconditionally; tests should confirm that this behavior aligns with user expectations.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

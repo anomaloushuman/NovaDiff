@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/containers.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/containers.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:59:12.955Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new utility module <code>packages/graph-view/src/utils/containers.ts</code> is added. It derives container metadata for graph nodes by grouping them either by folder structure or, when necessary, by community detection.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑5): <code>GraphNode</code>, <code>GraphEdge</code> from <code>@novadiff/graph-core/types</code> and <code>detectCommunities</code> from <code>./louvain</code>.  </li>
+<li><strong>Interfaces</strong> (lines 7‑12, 14‑17): <code>DerivedContainer</code> and <code>DeriveResult</code> expose container id, name, node ids, and strategy.  </li>
+<li><strong>Folder grouping</strong> (lines 52‑75): <code>groupByFolder</code> uses <code>commonPrefix</code> (lines 30‑45) and <code>firstSegment</code> (lines 47‑51) to bucket nodes by the first path segment after trimming the longest common prefix.  </li>
+<li><strong>Fallback decision</strong> (lines 77‑89): <code>shouldFallbackToCommunity</code> returns true when bucket count is below <code>MIN_BUCKET_COUNT</code> or any bucket exceeds <code>MAX_CONCENTRATION</code>.  </li>
+<li><strong>Derivation entry point</strong> (lines 91‑156): <code>deriveContainers</code> orchestrates grouping, optional community fallback, suppression of single‑child containers (when <code>nodes.length &gt;= MIN_NODES_FOR_SUPPRESSION</code>), and returns <code>{ containers, ungrouped }</code>.  </li>
+<li><strong>Constants</strong> (lines 19‑23): <code>MIN_BUCKET_COUNT</code>, <code>MAX_CONCENTRATION</code>, <code>MIN_NODES_FOR_SUPPRESSION</code>, <code>ROOT_BUCKET</code> control the heuristics.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Deterministic grouping</strong>: Nodes are consistently bucketed by folder or community.  </li>
+<li><strong>Optional community detection</strong>: Invoked only when <code>shouldFallbackToCommunity</code> deems folder grouping insufficient, reducing unnecessary analysis.  </li>
+<li><strong>Single‑child suppression</strong>: Containers with a single node are removed and the node is returned in <code>ungrouped</code>.  </li>
+<li><strong>Root bucket handling</strong>: Nodes without a <code>filePath</code> are placed in a special <code>ROOT_BUCKET</code> container.  </li>
+<li><strong>No API changes</strong>: Existing consumers can import the new module without altering existing code.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Community detection integration</strong>: The behavior of <code>detectCommunities</code> is not shown in the diff; verify that it returns <code>(nodeId, cid)</code> pairs as expected.  </li>
+<li><strong>Edge‑case handling</strong>: Ensure nodes lacking <code>filePath</code> are correctly routed to <code>ROOT_BUCKET</code> and that suppression respects <code>MIN_NODES_FOR_SUPPRESSION</code>.  </li>
+<li><strong>Threshold tuning</strong>: <code>MIN_BUCKET_COUNT</code> and <code>MAX_CONCENTRATION</code> may need adjustment for different graph sizes; monitor clustering quality.  </li>
+<li><strong>Performance regression</strong>: Benchmark <code>deriveContainers</code> on large graphs to confirm community fallback does not introduce significant overhead.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

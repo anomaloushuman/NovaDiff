@@ -1,0 +1,33 @@
+{
+  "relPath": "packages/graph-core/tsconfig.json",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:21:55.954Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-19"
+    ],
+    "cited_changed_lines": [
+      "R1 added: {",
+      "R2 added: \"compilerOptions\": {",
+      "R3 added: \"target\": \"ES2022\",",
+      "R4 added: \"module\": \"ESNext\",",
+      "R5 added: \"lib\": [\"ES2022\"],",
+      "R6 added: \"moduleResolution\": \"bundler\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

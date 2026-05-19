@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/docsQuality.ts · Code explanation (L1-248) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/docsQuality.ts · Code explanation (L1-248)</h1>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T10:03:38.560Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>docsQuality.ts</code> generates contextual prompts and a release‑overview markdown for a code‑diff report.- <code>buildSummaryPromptContext</code> formats up to10 <code>SummaryIndexEntry</code> objects into a concise list for LLM synthesis.- <code>buildRiskPromptContext</code> turns up to14 <code>RiskSignal</code> objects into a deterministic risk hint block.- <code>deriveConfidenceBadges</code> creates evidence‑badge objects based on file‑change coverage, risk severity, and selection docs.- `buildRelease</h3>
+<h3>Overview</h3>
+<p>Markdown` stitches together a full markdown document that lists changed files, risk tables, confidence badges, and summary snippets.</p>
+<h3>How it works1. <strong>Utility helpers</strong> - <code>uniqStrings</code> removes duplicates and limits string arrays. - <code>compactText</code> normalises whitespace and truncates to a max length, appending an ellipsis. - <code>relPathAnchorId</code> slugifies a relative path for anchor links.2. *<em>Context builders</em></h3>
+<ul>
+<li><ul>
+<li><code>buildSummaryPromptContext</code> slices the first <code>limit</code> entries, extracts badge labels, compacts markdown, and prefixes the list with a header. - <code>buildRiskPromptContext</code> slices the first <code>limit</code> signals, pulls up to3 evidence strings, and formats each with severity, confidence, and title.3. *<em>Badge derivation</em></li>
+</ul>
+</li>
+<li><ul>
+<li><code>deriveConfidenceBadges</code> calculates <code>summaryCoverage</code> as <code>summaries.length / rows.length</code>. - It pushes badges for coverage level, presence of high‑severity signals, any risk signals, and available selection docs. - A heuristic‑scan badge is always added.4. *<em>Markdown assembly</em></li>
+</ul>
+</li>
+<li><ul>
+<li>`buildRelease</li>
+</ul>
+</li>
+</ul>
+<h3>Overview</h3>
+<p>Markdown` groups risks by severity, limits top files, summaries, and selections, and builds tables and sections using the helper functions above. - The final string is a concatenated array of markdown lines.</p>
+<h3>Notes for reviewers- The code limits output sizes (<code>limit</code> parameters) to keep prompts concise.- Badge keys are unique; <code>push</code> guards against duplicates.- All string manipulations use <code>String(value ?? &quot;&quot;)</code> to avoid <code>undefined</code> errors.- The final markdown includes a hard‑coded advisory note about future enrichment.- No external dependencies are used; all logic is self‑contained.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

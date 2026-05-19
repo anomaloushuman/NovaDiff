@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/InsightsColumn.tsx",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:54:39.872Z",
+  "generatedAt": "2026-05-19T19:13:25.388Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,45 +11,33 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
-      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R3",
-      "R6",
-      "R23",
-      "R25",
-      "R27",
-      "R43",
-      "R45",
-      "R47"
+      "R28",
+      "R49",
+      "L106 / R108",
+      "L189 / R191-212",
+      "L258 / R281"
     ],
     "cited_changed_lines": [
-      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
-      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";",
-      "R23 added: fileSummaryChunk?: { index: number; total: number } | null;",
-      "R25 added: fileSummaryDisabledReason?: string | null;",
-      "R27 added: prefetchStatus?: string | null;",
-      "R43 added: fileSummaryChunk,"
+      "R28 added: prefetchProgress?: { current: number; total: number } | null;",
+      "R49 added: prefetchProgress,",
+      "L106 removed: <div className=\"insights-scroll\">",
+      "R108 added: <div key=\"summary\" className=\"insights-scroll insights-panel-enter\">",
+      "L189 removed: <p className=\"insights-footnote\">{prefetchStatus}</p>",
+      "R191 added: <div className=\"insights-prefetch-status doc-state-enter\">"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function InsightsColumn (25-166)",
-      "right function InsightsColumn (30-269)",
-      "right interface InsightsColumnProps (10-29)"
+      "left function InsightsColumn (30-269)",
+      "right function InsightsColumn (31-292)",
+      "right interface InsightsColumnProps (10-30)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

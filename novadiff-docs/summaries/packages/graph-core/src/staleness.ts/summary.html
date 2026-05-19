@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-core/src/staleness.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-core/src/staleness.ts</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:43:21.615Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-core/src/staleness.ts</code> adds utilities for detecting stale analysis results and merging incremental updates into a knowledge graph.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> – <code>execFileSync</code> from <code>child_process</code> (R1) and type imports for <code>KnowledgeGraph</code>, <code>GraphNode</code>, <code>GraphEdge</code> (R2).  </li>
+<li><strong>Interface</strong> – <code>StalenessResult</code> (R4‑R7) exposes <code>stale: boolean</code> and <code>changedFiles: string[]</code>.  </li>
+<li><strong><code>getChangedFiles</code></strong> (R13‑R28) runs <code>git diff &lt;lastCommitHash&gt;..HEAD --name-only</code> in <code>projectDir</code>, returning a trimmed list of changed file paths or an empty array if the command fails.  </li>
+<li><strong><code>isStale</code></strong> (R34‑R42) calls <code>getChangedFiles</code> and flags the graph as stale when any files changed.  </li>
+<li><strong><code>mergeGraphUpdate</code></strong> (R54‑R90)  <ol>
+<li>Builds a <code>Set</code> of changed file paths.  </li>
+<li>Removes nodes whose <code>filePath</code> matches a changed file (R63‑R68).  </li>
+<li>Filters edges whose source or target node was removed (R75‑R78).  </li>
+<li>Adds new nodes/edges and updates <code>project.gitCommitHash</code> and <code>project.analyzedAt</code> (R80‑R89).</li>
+</ol>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong> – Provides a deterministic way to check staleness; however, <code>getChangedFiles</code> silently returns an empty array on <code>git</code> errors, which may mask stale states.  </li>
+<li><strong>Maintainability</strong> – Centralizes graph‑update logic; future changes to node/edge removal rules can be made in one place.  </li>
+<li><strong>Performance</strong> – <code>execFileSync</code> blocks the event loop; for large repositories the diff operation may become a bottleneck.  </li>
+<li><strong>Compatibility</strong> – No existing files are modified; the module is additive and does not break current APIs.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ol>
+<li><strong>Git failure handling</strong> – Verify that <code>getChangedFiles</code> correctly reports errors and that <code>isStale</code> behaves as intended when <code>git</code> is unavailable.  </li>
+<li><strong>Node <code>filePath</code> undefined</strong> – Ensure all nodes in the graph have a <code>filePath</code>; otherwise, <code>mergeGraphUpdate</code> may leave stale nodes.  </li>
+<li><strong>Large graph memory usage</strong> – Benchmark <code>mergeGraphUpdate</code> on the largest expected graphs to confirm acceptable memory and CPU consumption.  </li>
+<li><strong>Integration</strong> – Confirm that callers now use <code>isStale</code>/<code>mergeGraphUpdate</code> instead of older manual merge logic, avoiding duplicate work.</li>
+</ol>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

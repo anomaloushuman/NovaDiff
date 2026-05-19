@@ -187,6 +187,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   .content-main { min-width: 0; display: grid; gap: 18px; }
+  .content-side { min-width: 0; }
   .content-card,
   .toc-card,
   .viz-card,
@@ -209,6 +210,8 @@
     position: sticky;
     top: 170px;
     padding: 18px;
+    max-height: calc(100vh - 190px);
+    overflow: auto;
   }
   .toc-title {
     margin: 0 0 10px;
@@ -280,6 +283,7 @@
   .md {
     font-size: 1rem;
     color: var(--page-md-text);
+    overflow-wrap: anywhere;
   }
   .md > :first-child { margin-top: 0; }
   .md > :last-child { margin-bottom: 0; }
@@ -347,10 +351,12 @@
   }
   .md pre code { background: none; padding: 0; }
   .md table {
+    display: block;
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    overflow: hidden;
+    max-width: 100%;
+    overflow: auto;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.9rem;
@@ -446,7 +452,7 @@
   .release-link {
     font-weight: 700;
   }
-  @media (max-width: 1040px) {
+  @media (max-width: 1180px) {
     nav.page-nav { top: 132px; }
     main.content,
     main.content.no-toc {
@@ -472,7 +478,7 @@
         <h1>Change report bundle</h1>
         <p class="top-subtitle">A polished overview of the generated bundle and the quickest paths into the report.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: NovaDiff-main</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-14T07:37:35.642Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 8e0dc031dcfc</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-19T21:13:55.779Z</span></div>
     </div>
   </header>
   <nav class="page-nav">

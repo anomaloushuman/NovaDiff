@@ -1,0 +1,52 @@
+{
+  "relPath": "electron/git-publish.cjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:12:13.784Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const path = require(\"node:path\");",
+      "R4 added: const { getRepoStatus, stageAll, commit, push, isGitRepo } = require(\"./git-service.cjs\");",
+      "R5 added: const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require(\"./github-service.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-108"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const path = require(\"node:path\");",
+      "R4 added: const { getRepoStatus, stageAll, commit, push, isGitRepo } = require(\"./git-service.cjs\");",
+      "R5 added: const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require(\"./github-service.cjs\");",
+      "R7 added: function buildFullCommitMessage(subject, body) {",
+      "R8 added: const s = String(subject ?? \"\").trim();"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function executePublish (48-108)",
+      "right function previewPublish (19-47)",
+      "right function buildFullCommitMessage (7-18)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

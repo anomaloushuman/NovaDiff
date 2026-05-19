@@ -26,27 +26,45 @@
 <body>
   <header class="top">
     <h1>src/components/LlmSettingsModal.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: NovaDiff-main · Target: NovaDiff · Generated: 2026-05-14T06:55:25.995Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T09:41:29.907Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>This diff represents a modification to the <code>src/components/LlmSettingsModal.tsx</code> file in the NovaDiff repository. The file is part of the app&#39;s UI layer and contains a React component that allows users to configure local LLM settings. The changes made to this file are significant because they introduce new functionality and fix bugs.</p>
+<p><code>src/components/LlmSettingsModal.tsx</code> now renders its modal through the <code>AnimatedOverlay</code> component instead of a custom backdrop <code>&lt;div&gt;</code>. The early‑return guard (<code>if (!open) { return null; }</code>) has been removed, so the component mounts regardless of the <code>open</code> prop and relies on <code>AnimatedOverlay</code> to show/hide the panel. Event handling for closing the modal has been shifted to the overlay’s <code>onClose</code> prop, and the backdrop and panel classes are now supplied via <code>backdropClassName</code> and <code>panelClassName</code>.</p>
 <h3>Key changes</h3>
-<p>The following changes were made to the file:</p>
 <ul>
-<li>Added a new function called <code>applyPreset</code> to allow users to quickly switch between Ollama and LM Studio providers.</li>
-<li>Modified the <code>onChange</code> handler for the base URL input field to trim whitespace before setting the value.</li>
-<li>Fixed a bug where the model name input field would not update when the user selected a different provider.</li>
-<li>Added a new <code>probe</code> state variable to display the result of a connection test.</li>
-<li>Changed the <code>onClick</code> handler for the &quot;Test connection&quot; button to perform a connection test and update the <code>probe</code> state variable accordingly.</li>
-<li>Added a new <code>onClick</code> handler for the &quot;Save&quot; button to save the updated LLM settings to local storage.</li>
+<li><strong>Import added</strong> (line 4): <code>import { AnimatedOverlay } from &quot;./ui/AnimatedOverlay&quot;</code>.  </li>
+<li><strong>Early‑return removed</strong> (lines 33‑35).  </li>
+<li><strong>Backdrop <code>&lt;div&gt;</code> removed</strong> (lines 49‑56).  </li>
+<li><strong>Panel <code>&lt;div&gt;</code> removed</strong> (line 58).  </li>
+<li><strong><code>AnimatedOverlay</code> usage</strong> (lines 46‑51):```tsx
+&lt;AnimatedOverlay
+  open={open}
+  onClose={onClose}
+  backdropClassName=&quot;llm-modal-backdrop&quot;
+  panelClassName=&quot;llm-modal&quot;
+  labelledBy=&quot;llm-modal-title&quot;<blockquote>
+</blockquote>
+</li>
+</ul>
+<p>```- **Button class names simplified**: removed <code>className=&quot;llm-btn ghost&quot;</code> and <code>className=&quot;llm-btn primary&quot;</code>; dynamic <code>className={provider === &quot;ollama&quot; ? &quot;active&quot; : &quot;&quot;}</code> now controls the provider buttons.  </p>
+<ul>
+<li><strong>Event handlers</strong>: <code>onMouseDown</code> click‑outside logic removed; closing is handled by <code>AnimatedOverlay</code>.</li>
 </ul>
 <h3>Impact</h3>
-<p>The changes made to this file have a significant impact on the app&#39;s functionality and user experience. The addition of the <code>applyPreset</code> function allows users to easily switch between Ollama and LM Studio providers, which can improve their productivity and reduce the likelihood of errors.</p>
-<p>The fix for the base URL input field ensures that the user&#39;s input is properly trimmed before being saved, which can help prevent issues with whitespace in the URL. The changes to the model name input field ensure that the user&#39;s selection is always up-to-date, even if they switch between providers.</p>
-<p>The addition of the <code>probe</code> state variable allows users to quickly verify the connection to the LLM server, which can help them troubleshoot any issues. Finally, the new <code>onClick</code> handlers for the &quot;Test connection&quot; and &quot;Save&quot; buttons provide a more streamlined user experience and reduce the likelihood of errors.</p>
-<h3>Risks &amp; follow-ups</h3>
-<p>The changes made to this file have a low risk of regression, as they are focused on improving the app&#39;s functionality and user experience. However, there is still a possibility that the changes could introduce new bugs or issues, so it is important to thoroughly test the app after the changes are merged. Additionally, the changes to the <code>applyPreset</code> function may require additional testing to ensure that it works correctly in all scenarios.</p>
+<ul>
+<li>The modal is always mounted, which may increase memory usage but keeps state intact when toggled.  </li>
+<li>Styling is largely preserved via the same <code>backdropClassName</code>/<code>panelClassName</code>, but the removal of explicit <code>&lt;div&gt;</code> wrappers could affect layout if CSS targets those elements.  </li>
+<li>Click‑outside closing behavior now depends on <code>AnimatedOverlay</code>; if that component does not propagate the event, the modal may not close as before.  </li>
+<li>Button styling changes may alter the visual appearance of the provider selector, cancel, test, and save actions.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Close‑on‑outside</strong>: Verify that <code>AnimatedOverlay</code> correctly closes the modal when clicking the backdrop.  </li>
+<li><strong>Styling regressions</strong>: Inspect the modal layout and button appearance to ensure the removed <code>&lt;div&gt;</code> wrappers and class names do not break the design.  </li>
+<li><strong>Mounting overhead</strong>: Monitor performance when the modal is frequently toggled; consider re‑introducing an early‑return if unnecessary renders become problematic.  </li>
+<li><strong>Accessibility</strong>: Confirm that the <code>labelledBy</code> prop and ARIA attributes still provide the expected screen‑reader support.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

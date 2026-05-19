@@ -1,0 +1,51 @@
+{
+  "relPath": "packages/graph-view/src/components/NodeTooltip.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:30:45.817Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R12 added: export default function NodeTooltip({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import type { CustomNodeData } from \"./CustomNode\";"
+    ],
+    "changed_line_ranges": [
+      "R1-124"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import type { CustomNodeData } from \"./CustomNode\";",
+      "R4 added: interface NodeTooltipProps {",
+      "R5 added: data: CustomNodeData;",
+      "R6 added: nodeId: string;",
+      "R7 added: incomingCount: number;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface NodeTooltipProps (4-124)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

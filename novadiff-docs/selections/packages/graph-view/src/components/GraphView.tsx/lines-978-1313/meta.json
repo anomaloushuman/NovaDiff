@@ -1,0 +1,22 @@
+{
+  "relPath": "packages/graph-view/src/components/GraphView.tsx",
+  "kind": "modified",
+  "label": "Code explanation (L978-1313)",
+  "selectionKey": "lines-978-1313",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 978,
+      "rightEnd": 1313
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T09:50:36.834Z"
+}

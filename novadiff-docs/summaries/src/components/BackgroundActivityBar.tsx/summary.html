@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/BackgroundActivityBar.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/BackgroundActivityBar.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:07:41.701Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>BackgroundActivityBar</code> is added to <code>src/components</code> (lines 15‑68). It renders a live status bar for background tasks, showing each task’s label, optional detail, elapsed time, and a progress bar that can be indeterminate.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑3): <code>useEffect</code>, <code>useState</code> from React; <code>useBackgroundActivity</code> from the context; <code>usePrefersReducedMotion</code> for accessibility.  </li>
+<li><strong>Utility</strong> (lines 5‑12): <code>formatElapsed(ms)</code> converts milliseconds to <code>Xs</code> or <code>Xm Ys</code>.  </li>
+<li><strong>State &amp; effect</strong> (lines 18‑26): <code>now</code> is updated every 500 ms via <code>setInterval</code>; the interval is cleared on unmount.  </li>
+<li><strong>Render logic</strong> (lines 32‑66):  <ul>
+<li>Returns <code>null</code> if <code>activities.length === 0</code>.  </li>
+<li>Maps <code>activities</code> to DOM nodes, using <code>activity.id</code> as key.  </li>
+<li>Displays <code>activity.label</code>, optional <code>activity.detail</code>, and elapsed time from <code>formatElapsed(now - activity.startedAt)</code>.  </li>
+<li>Shows a progress bar: if <code>activity.progress</code> is <code>null</code>, the bar is indeterminate (<code>is‑indeterminate</code>); otherwise it sets <code>width</code> to the rounded percentage.</li>
+</ul>
+</li>
+<li><strong>Accessibility</strong> (lines 33‑35): <code>role=&quot;status&quot;</code>, <code>aria-live=&quot;polite&quot;</code>, <code>aria-atomic=&quot;false&quot;</code>.  </li>
+<li><strong>Reduced motion</strong> (line 44): adds <code>is‑animated</code> to the pulse element unless <code>reduced</code> is true.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>UI</strong>: Provides visual feedback for background operations.  </li>
+<li><strong>Performance</strong>: The 500 ms interval is lightweight; renders only when activities change.  </li>
+<li><strong>Accessibility</strong>: Live region and reduced‑motion handling improve inclusivity.  </li>
+<li><strong>Maintainability</strong>: The component is self‑contained, with a clear utility function and minimal external dependencies.  </li>
+<li><strong>Compatibility</strong>: Requires <code>useBackgroundActivity</code> to supply <code>id</code>, <code>label</code>, <code>detail</code>, <code>startedAt</code>, and optional <code>progress</code>.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Memory leak</strong>: The cleanup in <code>useEffect</code> clears the interval, but verify in edge cases.  </li>
+<li><strong>CSS dependencies</strong>: Classes such as <code>background-activity-bar</code>, <code>is‑animated</code>, and <code>is‑indeterminate</code> must exist.  </li>
+<li><strong>Context contract</strong>: Ensure <code>useBackgroundActivity</code> returns the expected shape; mismatches will break rendering.  </li>
+<li><strong>Usage</strong>: The file is added but not yet imported elsewhere; add it to the app layout or test its presence in the component tree.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

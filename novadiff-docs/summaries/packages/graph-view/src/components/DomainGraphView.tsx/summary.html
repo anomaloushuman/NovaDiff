@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/components/DomainGraphView.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/components/DomainGraphView.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:20:19.533Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>Adds a <code>DomainGraphView.tsx</code> component that renders domain graphs with ReactFlow and an ELK layout. The component replaces a previous placeholder and introduces node types for domains, flows, and steps.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑24): React hooks, ReactFlow components, <code>Edge</code>/<code>Node</code> types, styles, node components (<code>DomainClusterNode</code>, <code>FlowNode</code>, <code>StepNode</code>), store hooks (<code>useDashboardStore</code>), i18n (<code>useI18n</code>), layout utilities (<code>mergeElkPositions</code>, <code>nodesToElkInput</code>, <code>applyElkLayout</code>), and graph types.  </li>
+<li><strong><code>BuiltGraph</code> interface</strong> (lines 36‑40) and helper <code>getDomainMeta</code> (lines 32‑34).  </li>
+<li>**`buildDomain</li>
+</ul>
+<h3>Overview</h3>
+<p>`** (lines 42‑89): creates domain‑cluster nodes and cross‑domain edges.  </p>
+<ul>
+<li><strong><code>buildDomainDetail</code></strong> (lines 91‑166): builds flow and step nodes, calculates ordering and counts, and produces edges between flows and steps.  </li>
+<li><strong><code>DomainGraphViewInner</code></strong> (lines 168‑272):  <ul>
+<li>Memoizes the structural graph (<code>built</code>) based on <code>domainGraph</code> and <code>activeDomainId</code>.  </li>
+<li>Runs an async ELK layout in a <code>useEffect</code>; cancellation logic prevents stale updates.  </li>
+<li>Stores layout issues via <code>useDashboardStore.getState().appendLayoutIssues</code>.  </li>
+<li>Renders <code>ReactFlow</code> with <code>nodeTypes</code>, controls, minimap, and background.</li>
+</ul>
+</li>
+<li><strong>Export</strong> (lines 275‑281): <code>DomainGraphView</code> wraps the inner component in <code>ReactFlowProvider</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Introduces a fully functional graph view; no API changes.  </li>
+<li>Requires <code>useDashboardStore</code> and <code>useI18n</code> to be initialized.  </li>
+<li>New node types (<code>domain-cluster</code>, <code>flow-node</code>, <code>step-node</code>) must have corresponding component implementations.  </li>
+<li>Layout computation is async; layout issues are surfaced through the store.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Cleanup</strong>: The effect’s cancellation logic is present, but its effectiveness on unmount is unknown from the diff.  </li>
+<li><strong>Performance</strong>: Impact of large graphs on render time is unknown from the available evidence.  </li>
+<li><strong>Position mapping</strong>: Correctness of <code>mergeElkPositions</code> mapping node IDs is unknown.  </li>
+<li><strong>Issue reporting</strong>: Whether <code>appendLayoutIssues</code> is wired to the UI is unknown from the diff.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

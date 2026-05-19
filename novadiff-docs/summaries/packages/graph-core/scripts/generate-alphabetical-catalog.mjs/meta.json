@@ -1,0 +1,57 @@
+{
+  "relPath": "packages/graph-core/scripts/generate-alphabetical-catalog.mjs",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:23:06.565Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R316 added: export const alphabeticalCatalogEntries: LanguageCatalogEntry[] = ["
+    ],
+    "changed_imports": [
+      "R6 added: import { readFileSync, writeFileSync } from \"node:fs\";",
+      "R7 added: import { dirname, join } from \"node:path\";",
+      "R8 added: import { fileURLToPath } from \"node:url\";",
+      "R313 added: import type { LanguageCatalogEntry } from \"./catalog-types.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-323"
+    ],
+    "cited_changed_lines": [
+      "R1 added: #!/usr/bin/env node",
+      "R2 added: /**",
+      "R3 added: * Generates alphabetical-catalog.generated.ts from language-names.txt",
+      "R4 added: * Run: node packages/graph-core/scripts/generate-alphabetical-catalog.mjs",
+      "R5 added: */",
+      "R6 added: import { readFileSync, writeFileSync } from \"node:fs\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function claimExtensions (282-323)",
+      "right function normalizeKey (182-216)",
+      "right function resolveWasmsKey (233-262)",
+      "right function resolveExtensions (263-281)",
+      "right function slugify (217-232)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

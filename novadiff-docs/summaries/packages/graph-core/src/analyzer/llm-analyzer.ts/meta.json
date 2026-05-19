@@ -1,0 +1,59 @@
+{
+  "relPath": "packages/graph-core/src/analyzer/llm-analyzer.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:57:27.922Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export interface LLMFileAnalysis {",
+      "R10 added: export interface LLMProjectSummary {",
+      "R19 added: export function buildFileAnalysisPrompt(",
+      "R48 added: export function buildProjectSummaryPrompt(",
+      "R102 added: export function parseFileAnalysisResponse(",
+      "R148 added: export function parseProjectSummaryResponse("
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-186"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export interface LLMFileAnalysis {",
+      "R2 added: fileSummary: string;",
+      "R3 added: tags: string[];",
+      "R4 added: complexity: \"simple\" | \"moderate\" | \"complex\";",
+      "R5 added: functionSummaries: Record<string, string>;",
+      "R6 added: classSummaries: Record<string, string>;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function parseFileAnalysisResponse (102-147)",
+      "right function parseProjectSummaryResponse (148-186)",
+      "right function buildProjectSummaryPrompt (48-80)",
+      "right function buildFileAnalysisPrompt (19-47)",
+      "right function extractJson (81-101)",
+      "right interface LLMFileAnalysis (1-9)",
+      "right interface LLMProjectSummary (10-18)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

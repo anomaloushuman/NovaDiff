@@ -1,0 +1,33 @@
+{
+  "relPath": "packages/graph-view/src/index.css",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:35:00.972Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-426"
+    ],
+    "cited_changed_lines": [
+      "R1 added: @import \"tailwindcss\";",
+      "R3 added: @theme {",
+      "R4 added: /* Base */",
+      "R5 added: --color-root: #0a0a0a;",
+      "R6 added: --color-surface: #111111;",
+      "R7 added: --color-elevated: #1a1a1a;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

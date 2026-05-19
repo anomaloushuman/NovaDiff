@@ -1,0 +1,32 @@
+{
+  "relPath": ".novadiff-graph/meta.json",
+  "kind": "modified",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:08:56.811Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L2 / R2",
+      "L5 / R5"
+    ],
+    "cited_changed_lines": [
+      "L2 removed: \"lastAnalyzedAt\": \"2026-05-19T10:55:49.944Z\",",
+      "R2 added: \"lastAnalyzedAt\": \"2026-05-19T20:52:49.662Z\",",
+      "L5 removed: \"analyzedFiles\": 58",
+      "R5 added: \"analyzedFiles\": 324"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

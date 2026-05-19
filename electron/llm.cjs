@@ -122,6 +122,9 @@ function lmStudioGenerationOptions(payload) {
  * Ollama: newline-delimited JSON, each with message.content delta.
  */
 function ollamaNumPredict(payload) {
+  if (payload?.explainCode) {
+    return 1400;
+  }
   if (payload?.selectionDoc) {
     return 1800;
   }
@@ -232,6 +235,9 @@ async function streamOllamaChat(url, body, webContents, signal) {
  * LM Studio / OpenAI-style SSE: lines `data: {...}` with choices[0].delta.content
  */
 function lmStudioMaxTokens(payload) {
+  if (payload?.explainCode) {
+    return 1400;
+  }
   if (payload?.selectionDoc) {
     return 1800;
   }
@@ -588,7 +594,38 @@ function renderSummaryEvidenceBlock(payload) {
   return `\n\nDeterministic evidence (authoritative grounding for this summary):\n${sections.join("\n")}`;
 }
 
+function buildExplainCodePrompt(payload) {
+  const relPath = String(payload?.relPath ?? "").trim();
+  const start = Number(payload?.lineStart ?? 0);
+  const end = Number(payload?.lineEnd ?? 0);
+  const symbol = String(payload?.symbolName ?? "").trim();
+  const excerpt = String(payload?.codeExcerpt ?? "").trim();
+  return `You are a staff engineer writing a short, accurate explanation of a code selection for teammates.
+
+File: ${relPath}
+Lines: ${start}-${end}${symbol ? `\nSymbol / focus: ${symbol}` : ""}
+
+Selected source:
+---
+${excerpt.slice(0, 12_000)}
+---
+
+Write **GitHub-flavored Markdown only** with exactly these headings:
+- \`### What it does\`
+- \`### How it works\`
+- \`### Notes for reviewers\`
+
+Rules:
+- Ground every claim in the snippet; say \`unknown from the snippet\` when unsure.
+- Prefer concrete identifiers, control flow, and side effects over generic praise.
+- No outer fenced code block wrapping the whole answer; inline code is fine.
+- Roughly 120-280 words total.`;
+}
+
 function buildGroundingContext(payload) {
+  if (payload?.explainCode) {
+    return buildExplainCodePrompt(payload);
+  }
   if (payload?.selectionDoc) {
     return buildSelectionDocPrompt(payload);
   }
@@ -710,6 +747,7 @@ Return only the revised Markdown.`;
 function shouldRunVerifier(payload) {
   return Boolean(
     !payload?.commitMessage &&
+      !payload?.explainCode &&
       (payload?.workspaceDoc ||
         payload?.codebaseDoc ||
         payload?.selectionDoc ||
@@ -889,6 +927,9 @@ Rules:
 function buildSummarizePrompt(payload) {
   if (payload.commitMessage && payload.commitContext) {
     return buildCommitMessagePrompt(payload);
+  }
+  if (payload.explainCode) {
+    return buildExplainCodePrompt(payload);
   }
   if (payload.selectionDoc) {
     return buildSelectionDocPrompt(payload);

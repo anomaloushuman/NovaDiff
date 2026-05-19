@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/ui/WorkspaceStage.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/ui/WorkspaceStage.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:28:28.885Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>WorkspaceStage</code> is added at <code>src/components/ui/WorkspaceStage.tsx</code> (lines 1‑22). It wraps page content and conditionally applies an enter animation based on the user’s reduced‑motion preference.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>ReactNode</code> from <code>&quot;react&quot;</code> (R1) and <code>usePrefersReducedMotion</code> from <code>&quot;../../app/usePrefersReducedMotion&quot;</code> (R2).  </li>
+<li><strong>Props interface</strong> <code>WorkspaceStageProps</code> (R4‑R7) with <code>pageKey: string</code> and <code>children: ReactNode</code>.  </li>
+<li><strong>Component</strong> <code>WorkspaceStage</code> (R9‑R22) that:<ul>
+<li>Calls <code>const reduced = usePrefersReducedMotion();</code> (R10).  </li>
+<li>Renders <code>&lt;div className=&quot;workspace-stage&quot;&gt;</code> containing an inner <code>&lt;div&gt;</code> keyed by <code>pageKey</code> with class <code>workspace-stage-inner</code> and, unless <code>reduced</code> is true, the additional class <code>ui-view-enter</code> (R14‑R17).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Additive</strong>: no existing files are modified; the component can be used independently.  </li>
+<li><strong>Runtime</strong>: adds one extra DOM node per render and a conditional class check; negligible performance cost.  </li>
+<li><strong>Dependencies</strong>: requires the <code>usePrefersReducedMotion</code> hook to be exported and the CSS class <code>.ui-view-enter</code> to be defined; missing either will affect animation or cause runtime errors.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Hook availability</strong>: confirm <code>usePrefersReducedMotion</code> is exported and works in all target environments; otherwise the build will fail.  </li>
+<li><strong>CSS presence</strong>: verify that <code>.ui-view-enter</code> is defined;</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

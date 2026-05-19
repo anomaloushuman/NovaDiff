@@ -1,16 +1,23 @@
-### Overview
-This diff represents a modification to the `src/components/SidebarNav.tsx` file between the `NovaDiff-main` and `NovaDiff` branches. The file is responsible for rendering the sidebar navigation component in the NovaDiff app.
+### Overview  
+`SidebarNav.tsx` was refactored to add a richer workspace experience.  
+Key additions include a local‑only mode flag, expanded navigation targets, and a conditional brand‑reveal animation.
 
-### Key changes
-The most significant changes in this diff are related to the addition of new features and improvements to existing ones. Some of the key changes include:
+### Key changes  
+- **Imports** – `useLaunch` and `TypewriterText` added at lines 2‑3.  
+- **Props** – `SidebarNavProps` now contains `localOnlyMode?`, `gitUser?`, `workspaceName?`, and `workspaceRepoLabel?` (lines 26‑29).  
+- **WorkspacePage** – type expanded to `"compare" | "history" | "docs" | "prs" | "publish"` (line 18).  
+- **Brand reveal** – `useLaunch` drives `showLaunchBrand`; when true, a typewriter animation renders the brand (lines 47‑50, 56‑77).  
+- **Navigation** – new buttons for `"history"`, `"prs"`, and `"publish"` added with Git‑locked logic; placeholder “Coming soon” buttons removed (lines 149‑156, 171‑179).  
+- **User section** – avatar now renders `gitUser.avatarUrl` if present, otherwise a fallback icon; name/email logic respects `localOnlyMode` (lines 210‑233).  
+- **Removed** – static brand title, tagline, product line (lines 41‑44), placeholder buttons (lines 119‑120, 123‑124, 127‑128), and static avatar (lines 146‑148).
 
-* Addition of a new type called `WorkspacePage`, which is used to represent the different workspace pages available in the app (compare, docs).
-* Modification of the `SidebarNav` component to use the new `WorkspacePage` type and add support for displaying the current workspace page.
-* Addition of new icons for the different workspace pages.
-* Improvements to the layout and styling of the sidebar navigation component.
+### Impact  
+- Callers must supply the new props or accept `undefined`; the expanded `WorkspacePage` may break type checks if not updated.  
+- The brand animation mounts only when `showLaunchBrand` is true, adding negligible runtime cost.  
+- Git‑dependent navigation items are disabled when `localOnlyMode` is true, preventing accidental use of unavailable features.
 
-### Impact
-The impact of these changes should be positive, as they add new features and improve the user experience of the sidebar navigation component. The ability to display the current workspace page will make it easier for users to navigate between different workspace pages. Additionally, the improved layout and styling of the sidebar navigation component should make it more visually appealing and user-friendly.
-
-### Risks & follow-ups
-There are no obvious risks associated with these changes, but it is important to verify that the new icons and layout are properly implemented and do not cause any issues with the app's functionality. Additionally, it would be useful to verify that the new `WorkspacePage` type and the ability to display the current workspace page are working correctly and do not cause any unexpected behavior.
+### Risks & follow‑ups  
+- Verify that `useLaunch` correctly sets `brandReveal` and `skipSequence`; otherwise the brand will not appear.  
+- Ensure `onWorkspacePage` handles the new `"history"`, `"prs"`, and `"publish"` values to avoid navigation failures.  
+- Confirm that `gitLocked` logic correctly disables Git‑dependent buttons when `localOnlyMode` is true.  
+- Run unit tests for components consuming `SidebarNav` to catch any missing prop errors.

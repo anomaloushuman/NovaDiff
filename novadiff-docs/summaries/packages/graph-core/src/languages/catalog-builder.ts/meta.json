@@ -1,0 +1,56 @@
+{
+  "relPath": "packages/graph-core/src/languages/catalog-builder.ts",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T20:39:42.093Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R12 added: export function catalogEntryToLanguageConfig(entry: LanguageCatalogEntry): LanguageConfig {",
+      "R29 added: export function buildAlphabeticalLanguageConfigs(): LanguageConfig[] {",
+      "R33 added: export function listAlphabeticalLanguages(): ReadonlyArray<{"
+    ],
+    "changed_imports": [
+      "R1 added: import type { LanguageConfig } from \"./types.js\";",
+      "R2 added: import type { LanguageCatalogEntry } from \"./catalog-types.js\";",
+      "R3 added: import { alphabeticalCatalogEntries } from \"./alphabetical-catalog.generated.js\";"
+    ],
+    "changed_line_ranges": [
+      "R1-45"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { LanguageConfig } from \"./types.js\";",
+      "R2 added: import type { LanguageCatalogEntry } from \"./catalog-types.js\";",
+      "R3 added: import { alphabeticalCatalogEntries } from \"./alphabetical-catalog.generated.js\";",
+      "R5 added: const EMPTY_FILE_PATTERNS = {",
+      "R6 added: entryPoints: [] as string[],",
+      "R7 added: barrels: [] as string[],"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function catalogEntryToLanguageConfig (12-28)",
+      "right function listAlphabeticalLanguages (33-45)",
+      "right function buildAlphabeticalLanguageConfigs (29-32)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

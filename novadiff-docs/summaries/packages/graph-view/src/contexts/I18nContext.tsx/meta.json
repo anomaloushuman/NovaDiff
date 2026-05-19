@@ -1,0 +1,54 @@
+{
+  "relPath": "packages/graph-view/src/contexts/I18nContext.tsx",
+  "kind": "added",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T19:46:15.076Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R12 added: export function useI18n(): I18nContextValue {",
+      "R20 added: export function I18nProvider({"
+    ],
+    "changed_imports": [
+      "R1 added: import { createContext, useContext, useMemo, type ReactNode } from \"react\";",
+      "R2 added: import { getLocale, resolveLocaleKey, type Locale, type LocaleKey } from \"../locales\";"
+    ],
+    "changed_line_ranges": [
+      "R1-44"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { createContext, useContext, useMemo, type ReactNode } from \"react\";",
+      "R2 added: import { getLocale, resolveLocaleKey, type Locale, type LocaleKey } from \"../locales\";",
+      "R4 added: interface I18nContextValue {",
+      "R5 added: locale: Locale;",
+      "R6 added: localeKey: LocaleKey;",
+      "R7 added: t: Locale;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function I18nProvider (20-44)",
+      "right function useI18n (12-19)",
+      "right interface I18nContextValue (4-11)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,18 +1,21 @@
 {
   "relPath": ".gitignore",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:19:24.317Z",
+  "generatedAt": "2026-05-19T20:57:08.907Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R31-32"
+      "R33-38"
     ],
     "cited_changed_lines": [
-      "R32 added: Bn"
+      "R34 added: # Optional legacy clone (not used by NovaDiff)",
+      "R35 added: understandanything/",
+      "R37 added: # Graph engine build output",
+      "R38 added: packages/graph-core/dist"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

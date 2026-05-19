@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/knowledge-graph-runner.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/knowledge-graph-runner.cjs</h1>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:15:03.843Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>electron/knowledge-graph-runner.cjs</code> file is added. It exposes three public APIs: <code>resolveRepoRoot</code>, <code>ensureGraphCoreBuilt</code>, and <code>buildKnowledgeGraph</code> (lines 515‑671). The module replaces an earlier ad‑hoc script by providing a deterministic pipeline that builds a knowledge graph for a given project root.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Exports</strong> – <code>resolveRepoRoot</code>, <code>ensureGraphCoreBuilt</code>, <code>buildKnowledgeGraph</code> (lines 515‑671).  </li>
+<li><strong>Node imports</strong> – <code>fs</code>, <code>fsp</code>, <code>path</code>, <code>os</code>, <code>spawn</code>, <code>pathToFileURL</code>, <code>createRequire</code> (lines 3‑9).  </li>
+<li><strong>Constants</strong> – <code>BATCH_SIZE</code>, <code>MAX_FILES</code>, <code>EXTRACT_TIMEOUT_MS</code> (lines 11‑14).  </li>
+<li><strong>File discovery</strong> – <code>walkProjectFiles</code> (lines 147‑185) filters directories in <code>SKIP_DIRS</code> and skips files &gt;512 KB.  </li>
+<li><strong>Language detection</strong> – <code>detectLanguage</code> (lines 187‑232) maps extensions to language IDs.  </li>
+<li><strong>Import resolution</strong> – <code>resolveRelativeImport</code> (lines 244‑279) and <code>buildBatchImportData</code> (lines 281‑303).  </li>
+<li><strong>Graph assembly</strong> – <code>mapStructuralAnalysis</code>, <code>buildFileMeta</code>, <code>buildLayersFromFiles</code>, <code>assignNodeLayers</code>, <code>buildDiffOverlay</code> (lines 344‑496).  </li>
+<li><strong>Git integration</strong> – <code>getGitHash</code> (lines 497‑504).  </li>
+<li><strong>Batch extraction</strong> – <code>runExtractStructureBatch</code> (lines 306‑342) writes a temporary JSON payload, runs <code>graph/extract-structure.mjs</code>, and parses the result.  </li>
+<li><strong>Progress reporting</strong> – optional <code>onProgress</code> callback is invoked during scanning, extraction, and assembly.  </li>
+<li><strong>Output</strong> – writes <code>knowledge-graph.json</code> and, if <code>changedPaths</code> are supplied, <code>diff-overlay.json</code> into <code>.novadiff-graph</code> (lines 631‑654).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Deterministic graph generation</strong> via Tree‑sitter; no LLM is involved.  </li>
+<li><strong>Memory safety</strong> – batch limits (<code>BATCH_SIZE</code>, <code>MAX_FILES</code>) prevent runaway usage.  </li>
+<li><strong>Modular design</strong> – functions have clear responsibilities, easing testing and maintenance.  </li>
+<li><strong>Electron compatibility</strong> – child processes are launched with <code>ELECTRON_RUN_AS_NODE</code> when needed (lines 54‑58).  </li>
+<li><strong>Observability</strong> – progress callbacks provide real‑time feedback during long scans.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing dependencies</strong> – <code>packages/graph-core</code> or <code>graph/extract-structure.mjs</code> must exist; otherwise <code>ensureGraphCoreBuilt</code> throws (lines 521‑524).  </li>
+<li><strong>Spawn behavior</strong> – verify that <code>spawn</code> with <code>ELECTRON_RUN_AS_NODE</code> works on all target platforms.  </li>
+<li><strong>Large projects</strong> – <code>MAX_FILES</code> may truncate analysis; confirm the limit is acceptable for typical repositories.  </li>
+<li><strong>Error handling</strong> – <code>runCommand</code> propagates raw stderr; callers should handle failures gracefully.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

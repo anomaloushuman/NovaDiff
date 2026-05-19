@@ -18,6 +18,17 @@ import type {
   LlmSettings,
   LlmSummarizePayload,
 } from "./app/llmStorage";
+import type {
+  GitRepoStatus,
+  GitToolingStatus,
+  GithubPullRequestSummary,
+  GithubRepoSummary,
+  LocalRepoMatch,
+  PrCompareRoots,
+  PublishExecutePayload,
+  PublishExecuteResult,
+  PublishPreview,
+} from "./app/gitTypes";
 
 export interface SummaryPrefetchPayload {
   leftRoot: string;
@@ -193,7 +204,54 @@ export interface ElectronAPI {
     targetRoot: string;
     bundleKey?: NovadiffDocsBundleKey;
   }) => Promise<void>;
+  buildKnowledgeGraph?: (payload: {
+    projectRoot: string;
+    side?: "baseline" | "target" | "both";
+    leftTitle?: string;
+    rightTitle?: string;
+    changes?: FileChange[];
+  }) => Promise<{
+    ok: boolean;
+    projectRoot: string;
+    graphPath: string;
+    nodeCount: number;
+    edgeCount: number;
+    fileCount: number;
+    hasDiffOverlay: boolean;
+  }>;
+  readKnowledgeGraph?: (payload: { projectRoot: string }) => Promise<{
+    ok: boolean;
+    ready?: boolean;
+    reason?: string;
+    projectRoot: string;
+    graph?: unknown;
+    diffOverlay?: {
+      changedNodeIds: string[];
+      affectedNodeIds: string[];
+    } | null;
+  }>;
+  readKnowledgeGraphFile?: (payload: {
+    projectRoot: string;
+    relativePath: string;
+  }) => Promise<{
+    path: string;
+    language: string;
+    content: string;
+    sizeBytes: number;
+    lineCount: number;
+  }>;
+  onKnowledgeGraphProgress?: (
+    cb: (msg: {
+      message?: string;
+      phase?: string;
+      current?: number;
+      total?: number;
+    }) => void,
+  ) => () => void;
   onSummaryPrefetchProgress: (
+    cb: (msg: Record<string, unknown>) => void,
+  ) => () => void;
+  onEngineProgress: (
     cb: (msg: Record<string, unknown>) => void,
   ) => () => void;
   llmSummarize: (payload: LlmSummarizePayload) => Promise<string>;
@@ -203,6 +261,117 @@ export interface ElectronAPI {
   ) => Promise<void>;
   llmAbortStream: () => Promise<void>;
   llmProbe: (payload: LlmSettings) => Promise<{ ok: boolean; reply?: string }>;
+  gitDetectTooling?: () => Promise<GitToolingStatus>;
+  gitRepoStatus?: (payload: { repoRoot: string }) => Promise<GitRepoStatus>;
+  gitDiscoverRepos?: (payload?: {
+    owner?: string;
+    repo?: string;
+    extraRoots?: string[];
+  }) => Promise<{ searchRoots: string[]; matches: LocalRepoMatch[]; scannedAt: string }>;
+  gitMatchLocalRepo?: (payload: {
+    owner: string;
+    repo: string;
+    extraRoots?: string[];
+  }) => Promise<LocalRepoMatch[]>;
+  githubListRepos?: (payload?: { limit?: number }) => Promise<GithubRepoSummary[]>;
+  githubListPrs?: (payload: {
+    repository: string;
+    state?: string;
+    limit?: number;
+  }) => Promise<GithubPullRequestSummary[]>;
+  githubPrCompareRoots?: (payload: {
+    repoRoot: string;
+    baseRef?: string;
+    headRef?: string;
+  }) => Promise<PrCompareRoots>;
+  githubPrView?: (payload: {
+    repository: string;
+    number: number;
+  }) => Promise<Record<string, unknown>>;
+  gitPublishPreview?: (payload: { repoRoot: string }) => Promise<PublishPreview>;
+  gitPublishExecute?: (payload: PublishExecutePayload) => Promise<PublishExecuteResult>;
+  workspaceSessionLoad?: () => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  workspaceSetGitUser?: (
+    user: import("./app/workspaceTypes").GitUserProfile,
+  ) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  workspaceCreate?: (payload: {
+    name?: string;
+    repoRoot?: string;
+    cloneUrl?: string;
+    githubSlug?: string;
+  }) => Promise<
+    | import("./app/workspaceTypes").NovaWorkspace
+    | {
+        workspace: import("./app/workspaceTypes").NovaWorkspace;
+        session: import("./app/workspaceTypes").WorkspaceSessionState;
+      }
+  >;
+  workspaceSetActive?: (payload: {
+    workspaceId: string;
+  }) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  workspaceList?: () => Promise<import("./app/workspaceTypes").NovaWorkspace[]>;
+  workspaceMatchLocal?: (payload: {
+    owner: string;
+    repo: string;
+    extraRoots?: string[];
+  }) => Promise<LocalRepoMatch[]>;
+  workspaceIndexHistory?: (payload: {
+    workspaceId: string;
+  }) => Promise<import("./app/workspaceTypes").NovaWorkspace>;
+  workspaceUpdateLiveRepo?: (payload: {
+    workspaceId: string;
+    liveDevRepoRoot: string;
+  }) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  gitBlameAtRef?: (payload: {
+    repoRoot: string;
+    ref: string;
+    relPath: string;
+  }) => Promise<import("./app/gitTypes").GitBlameAtRefResult>;
+  workspaceEnsureCommitSnapshot?: (payload: {
+    workspaceId: string;
+    hash: string;
+    snapshotPath: string;
+  }) => Promise<{ snapshotPath: string; ready: boolean }>;
+  workspaceSnapshotListFiles?: (payload: {
+    snapshotPath: string;
+    maxFiles?: number;
+  }) => Promise<{ files: string[] }>;
+  workspaceSnapshotReadFile?: (payload: {
+    snapshotPath: string;
+    relPath: string;
+  }) => Promise<{ content: string; truncated: boolean; size: number }>;
+  githubGhStatus?: () => Promise<import("./app/workspaceTypes").GhToolingStatus>;
+  githubGhInstall?: () => Promise<{ ok: boolean; path?: string; version?: string | null }>;
+  onGithubGhInstallProgress?: (cb: (msg: { line?: string }) => void) => () => void;
+  workspaceSetLocalOnly?: (payload: {
+    enabled: boolean;
+  }) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  githubDetectedUsers?: () => Promise<import("./app/workspaceTypes").GitUserProfile[]>;
+  githubUserProfile?: () => Promise<import("./app/workspaceTypes").GitUserProfile>;
+  githubStartAuth?: () => Promise<{
+    ok: boolean;
+    userCode?: string;
+    verificationUri?: string;
+  }>;
+  githubCancelAuth?: () => Promise<{ ok: boolean }>;
+  onGithubAuthProgress?: (
+    cb: (msg: {
+      phase: "code" | "complete" | "error";
+      userCode?: string;
+      verificationUri?: string;
+      message?: string;
+    }) => void,
+  ) => () => void;
+  onWorkspaceHistoryProgress?: (
+    cb: (msg: {
+      workspaceId?: string;
+      current?: number;
+      total?: number;
+      message?: string;
+      hash?: string;
+      done?: boolean;
+    }) => void,
+  ) => () => void;
 }
 
 declare global {

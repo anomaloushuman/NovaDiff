@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/LlmSettingsModal.tsx",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:55:25.995Z",
+  "generatedAt": "2026-05-19T09:41:29.907Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,25 +11,43 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "R4 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";"
+    ],
     "changed_line_ranges": [
-      "L66 / R66-67"
+      "R4",
+      "L32-35",
+      "L49-56 / R46-51",
+      "L58-68 / R53-61",
+      "L70-113 / R63-65",
+      "L116-117 / R68-69",
+      "L119 / R71",
+      "L123-139 / R75-76"
     ],
     "cited_changed_lines": [
-      "L66 removed: those apps (Metal on Mac).",
-      "R66 added: those apps (Metal on Mac). NovaDiff assumes a high-context local setup",
-      "R67 added: for large file summaries."
+      "R4 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";",
+      "L33 removed: if (!open) {",
+      "L34 removed: return null;",
+      "L35 removed: }",
+      "L49 removed: <div",
+      "L50 removed: className=\"llm-modal-backdrop\""
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function LlmSettingsModal (12-158)",
-      "right function LlmSettingsModal (12-159)"
+      "left function LlmSettingsModal (12-159)",
+      "right function LlmSettingsModal (13-149)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

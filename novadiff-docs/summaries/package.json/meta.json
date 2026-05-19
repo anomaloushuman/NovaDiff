@@ -1,9 +1,9 @@
 {
   "relPath": "package.json",
   "kind": "modified",
-  "leftTitle": "NovaDiff-main",
+  "leftTitle": "8e0dc031dcfc",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-14T06:28:02.676Z",
+  "generatedAt": "2026-05-19T21:04:04.221Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,18 +16,22 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R17-19",
-      "L22 / R25-26",
-      "R33",
-      "L49 / R54-55"
+      "R7-10",
+      "L10-11 / R14-18",
+      "R24-33",
+      "L26 / R43-44",
+      "R47-48",
+      "R58",
+      "R74-75",
+      "L55 / R78"
     ],
     "cited_changed_lines": [
-      "R17 added: \"lucide-react\": \"^0.511.0\",",
-      "R18 added: \"marked\": \"^15.0.7\",",
-      "R19 added: \"mermaid\": \"^11.15.0\",",
-      "L22 removed: \"remark-gfm\": \"^4.0.1\"",
-      "R25 added: \"remark-gfm\": \"^4.0.1\",",
-      "R26 added: \"three\": \"^0.184.0\""
+      "R7 added: \"workspaces\": [",
+      "R8 added: \"packages/graph-core\",",
+      "R9 added: \"packages/graph-view\"",
+      "R10 added: ],",
+      "L10 removed: \"electron:dev\": \"npm run rust:build && concurrently -k \\\"npm run dev\\\" \\\"wait-on http://127.0.0.1:1420 && node ./scripts/run-electr…",
+      "L11 removed: \"build\": \"tsc && vite build\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

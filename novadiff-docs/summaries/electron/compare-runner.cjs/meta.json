@@ -1,0 +1,52 @@
+{
+  "relPath": "electron/compare-runner.cjs",
+  "kind": "modified",
+  "leftTitle": "8e0dc031dcfc",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T21:09:31.844Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "L5 removed: const { spawnSync } = require(\"node:child_process\");",
+      "R5 added: const { spawn, spawnSync } = require(\"node:child_process\");"
+    ],
+    "changed_line_ranges": [
+      "L5 / R5",
+      "L89 / R89-216"
+    ],
+    "cited_changed_lines": [
+      "L5 removed: const { spawnSync } = require(\"node:child_process\");",
+      "R5 added: const { spawn, spawnSync } = require(\"node:child_process\");",
+      "L89 removed: module.exports = { runCompareEngine, resolveRustCli };",
+      "R89 added: function parseEngineStdout(stdout) {",
+      "R90 added: if (!stdout || !String(stdout).trim()) {",
+      "R91 added: throw new Error(\"Compare engine returned no output\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function runCompareEngine (54-89)",
+      "right function runCompareEngineAsync (104-216)",
+      "right function parseEngineStdout (89-103)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

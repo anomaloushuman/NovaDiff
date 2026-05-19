@@ -4,16 +4,33 @@
   "version": "0.1.0",
   "type": "module",
   "main": "electron/main.cjs",
+  "workspaces": [
+    "packages/graph-core",
+    "packages/graph-view"
+  ],
   "scripts": {
     "dev": "vite",
     "rust:build": "cargo build --release --manifest-path cli/Cargo.toml",
-    "electron:dev": "npm run rust:build && concurrently -k \"npm run dev\" \"wait-on http://127.0.0.1:1420 && node ./scripts/run-electron.cjs\"",
-    "build": "tsc && vite build",
+    "graph:core-build": "npm run build -w @novadiff/graph-core",
+    "graph:catalog:generate": "npm run catalog:generate -w @novadiff/graph-core",
+    "graph:build": "npm run graph:core-build",
+    "electron:dev": "npm run graph:build && npm run rust:build && concurrently -k \"npm run dev\" \"wait-on http://127.0.0.1:1420 && node ./scripts/run-electron.cjs\"",
+    "build": "npm run graph:build && tsc && vite build",
     "electron:build": "npm run rust:build && npm run build && electron-builder",
     "preview": "vite preview",
     "test": "vitest run"
   },
   "dependencies": {
+    "@dagrejs/dagre": "^2.0.4",
+    "@novadiff/graph-core": "file:packages/graph-core",
+    "@novadiff/graph-view": "file:packages/graph-view",
+    "@xyflow/react": "^12.0.0",
+    "d3-force": "^3.0.0",
+    "devlop": "^1.1.0",
+    "elkjs": "^0.9.3",
+    "graphology": "^0.25.4",
+    "graphology-communities-louvain": "^2.0.1",
+    "graphology-types": "^0.24.8",
     "lucide-react": "^0.511.0",
     "marked": "^15.0.7",
     "mermaid": "^11.15.0",
@@ -23,9 +40,12 @@
     "react-window": "^1.8.11",
     "rehype-sanitize": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "three": "^0.184.0"
+    "three": "^0.184.0",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@types/d3-force": "^3.0.10",
     "@types/node": "^22.15.21",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -35,6 +55,7 @@
     "concurrently": "^9.1.2",
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8",
+    "tailwindcss": "^4.0.0",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
     "vitest": "^3.2.4",
@@ -50,9 +71,11 @@
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "packages/graph-core/dist/**/*",
+      "packages/graph-core/package.json",
       "package.json",
       "nova-diff-icon.png",
-      "node_modules/marked/**/*"
+      "node_modules/**/*"
     ],
     "extraResources": [
       {
