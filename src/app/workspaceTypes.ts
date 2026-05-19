@@ -30,6 +30,15 @@ export interface NovaWorkspace {
   commits: WorkspaceCommitSnapshot[];
   /** Local checkout used for live dev vs indexed commit compare */
   liveDevRepoRoot?: string | null;
+  /** Restored UI state (paths stored here; never shown verbatim in the main app) */
+  uiState?: WorkspaceUiState | null;
+}
+
+export interface WorkspaceUiState {
+  workspacePage?: "compare" | "history" | "docs" | "prs" | "publish";
+  leftRoot?: string;
+  rightRoot?: string;
+  compared?: boolean;
 }
 
 export interface GitHistoryCompareOptions {

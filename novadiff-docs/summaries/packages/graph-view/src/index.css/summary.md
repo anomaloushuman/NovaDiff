@@ -1,24 +1,24 @@
 ### Overview  
-`packages/graph-view/src/index.css` is a new stylesheet (added 426 lines, range R1‑426). It imports Tailwind (`@import "tailwindcss";` – line 1) and declares a custom `@theme` block (lines 3‑84) that defines dozens of CSS variables for colors, typography, and node‑type styles.
+`packages/graph-view/src/index.css` now defines legacy gold color aliases, hides the noise‑grain overlay for NovaDiff embeds, and removes several React‑Flow styling rules that were previously applied only in the embedded context.
 
 ### Key changes  
-- **Tailwind import** – line 1 pulls in the utility framework.  
-- **Theme variables** – the `@theme` block (lines 3‑84) introduces variables such as `--color-root`, `--color-surface`, `--color-accent`, `--glass-bg`, and many node‑type colors.  
-- **Scoped base styles** – selectors `.novadiff-graph-explorer-root, .novadiff-graph-theme-host` (lines 100‑109) set font, background, and color using the new variables.  
-- **Noise overlay** – a fixed pseudo‑element (`.noise-overlay::before`, lines 111‑122) adds a low‑opacity SVG noise texture, scoped to the explorer panel via `.novadiff-graph-embed.noise-overlay::before` (lines 125‑128).  
-- **Glass utilities** – `.glass` and `.glass-heavy` (lines 131‑144) use `backdrop-filter` for translucent panels.  
-- **Custom scrollbar** – WebKit and non‑WebKit styles (lines 237‑251) replace the default scrollbar with a thin, themed thumb.  
-- **Animations** – keyframes (`fadeSlideIn`, `slideUp`, `accentPulse`) and utility classes (`.animate-fade-slide-in`, `.animate-accent-pulse`) (lines 164‑205).  
-- **Diff & node glow** – classes `.node-glow`, `.diff-changed-glow`, `.diff-affected-glow` (lines 208‑219) provide visual feedback for graph changes.
+- **Gold aliases** added at lines 15‑18:  
+  ```css
+  --color-gold: var(--color-accent);
+  --color-gold-dim: var(--color-accent-dim);
+  --color-gold-bright: var(--color-accent-bright);
+  ```  
+- **Noise overlay** for embeds is now hidden: the comment at line 125 is replaced by a new comment at line 130, and the `.novadiff-graph-embed.noise-overlay::before` block (lines 126‑128) is removed and replaced with `display: none` at line 132.  
+- **React‑Flow canvas overrides**: the comment at line 253 (“Override React Flow dark theme”) is removed, and a new comment at line 265 (“Override React Flow canvas”) is added.  
+- **Embedded‑specific React‑Flow styles** (background pattern, edges, node container, controls, minimap) are all removed (lines 270‑315).  
 
 ### Impact  
-- **Styling consistency** – all graph‑view UI now relies on the new CSS variables; hard‑coded colors elsewhere may need updating.  
-- **Performance** – the file is scoped; it should not affect global styles.  
-- **Browser support** – uses `backdrop-filter` and custom scrollbars; older browsers may lack support.  
-- **Testing** – unit tests that check CSS class presence or color values may need re‑running.
+- Embedded graphs no longer show film‑grain noise, matching the host’s clean surface.  
+- Removing unused React‑Flow rules for embeds reduces stylesheet size and selector conflicts.  
+- Gold aliases centralize color mapping, easing future theme updates.  
 
 ### Risks & follow‑ups  
-1. **Tailwind import failure** – verify that `"tailwindcss"` resolves in the build pipeline.  
-2. **Variable leakage** – ensure the `@theme` block does not override unrelated components; run a smoke test on a page without Graph View.  
-3. **Scrollbar compatibility** – confirm the custom scrollbar does not interfere with other scrollable areas.  
-4. **Noise overlay interference** – verify the overlay is correctly scoped to the explorer panel.
+- Verify that the hidden noise overlay does not break any legacy tests that expect the overlay in embedded mode.  
+- Ensure that removing React‑Flow edge/background styles does not affect edge visibility or interaction in the embedded explorer.  
+- Run the `graph-view` smoke test in NovaDiff to confirm that the new gold aliases render correctly.  
+- Check that the new comment for “Override React Flow canvas” does not conflict with future canvas‑specific overrides.

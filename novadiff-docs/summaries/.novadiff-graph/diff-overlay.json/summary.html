@@ -26,28 +26,30 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/diff-overlay.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:08:15.075Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:33:25.344Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new JSON artifact, <code>.novadiff-graph/diff-overlay.json</code>, has been added. It contains metadata and a list of changed files from the latest diff.</p>
+<p>The <code>diff-overlay.json</code> was regenerated on <strong>2026‑05‑19T22:18:08.136Z</strong> (R4), replacing the previous timestamp (L4). The overlay now contains a leaner set of files, focusing on core runtime and diff‑visualization modules while removing legacy language, persistence, and UI components.</p>
 <h3>Key changes</h3>
 <ul>
-<li>File creation: lines 1‑1139 add <code>{</code> to start the JSON object.  </li>
-<li>Metadata: lines 2‑4 add <code>&quot;version&quot;:&quot;1.0.0&quot;</code>, <code>&quot;baseBranch&quot;:&quot;novadiff-compare&quot;</code>, and <code>&quot;generatedAt&quot;:&quot;2026-05-19T20:52:49.663Z&quot;</code>.  </li>
-<li>Changed files: lines 5‑6 add <code>&quot;changedFiles&quot;:[ &quot;.gitignore&quot; ]</code>.  </li>
-<li>No executable logic is present; the file is purely data.</li>
+<li><strong>Timestamp</strong> – <code>generatedAt</code> updated to 2026‑05‑19T22:18:08.136Z (R4).  </li>
+<li><strong>File list</strong> – only core runtime modules (<code>electron</code>, <code>graph‑view</code>, <code>packages/graph‑core</code>) remain; test, config, build, and legacy UI files such as <code>README.md</code>, <code>THIRD_PARTY_NOTICES.md</code>, and <code>electron/compare-runner.cjs</code> were removed (L10‑22, L25‑26).  </li>
+<li><strong>Node pruning</strong> – <code>changedNodeIds</code> now contains only essential runtime functions; most function‑level nodes were dropped (L183‑184 / R14).  </li>
+<li><strong>Affected nodes</strong> – <code>affectedNodeIds</code> array is now empty, indicating no nodes are marked as affected by these removals (L187‑198).  </li>
+<li><strong>Build artifacts</strong> – files like <code>vite-env.d.ts</code>, <code>tsconfig.json</code>, and <code>vite.config.ts</code> were removed (L10‑22).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The artifact supplies data that can be consumed by the UI overlay component.  </li>
-<li>No code paths or runtime behavior are altered by this change.</li>
+<li><strong>Smaller overlay</strong> – fewer files and nodes reduce payload size.  </li>
+<li><strong>Focused feature set</strong> – the overlay tracks only core workspace and diff visualization, omitting legacy language support, persistence logic, and many UI components.  </li>
+<li><strong>Build configuration</strong> – removal of build artifacts requires updating build scripts to match the new structure.</li>
 </ul>
-<h3>Risks &amp; follow‑ups</h3>
+<h3>Risks &amp; follow-ups</h3>
 <ul>
-<li>The <code>&quot;changedFiles&quot;</code> array currently contains only <code>.gitignore</code>; future diffs should populate it with all changed files.  </li>
-<li>Verify that the UI correctly parses the JSON and displays the list of changed files.  </li>
-<li>Ensure the <code>&quot;version&quot;</code> field remains compatible with the NovaDiff schema.</li>
+<li><strong>Legacy functionality</strong> – removal of language, persistence, and UI modules may affect integrations that rely on those features.  </li>
+<li><strong>Placeholder handling</strong> – empty entries were inserted for removed files; verify that downstream tooling can handle these placeholders (unknown from the available diff).  </li>
+<li><strong>Testing</strong> – run targeted tests for the remaining runtime modules and perform a smoke test on the diff visualization to ensure no regressions.</li>
 </ul>
 </article>
   </main>

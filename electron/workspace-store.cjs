@@ -105,6 +105,25 @@ async function getWorkspace(userData, workspaceId) {
   return session.workspaces.find((w) => w.id === workspaceId) ?? null;
 }
 
+async function updateWorkspaceUiState(userData, workspaceId, uiState) {
+  const session = await loadSession(userData);
+  const idx = session.workspaces.findIndex((w) => w.id === workspaceId);
+  if (idx < 0) {
+    throw new Error("Workspace not found");
+  }
+  session.workspaces[idx].uiState = {
+    ...(session.workspaces[idx].uiState ?? {}),
+    ...uiState,
+  };
+  session.workspaces[idx].updatedAt = new Date().toISOString();
+  await saveSession(userData, session);
+  await writeJson(
+    path.join(session.workspaces[idx].dataDir, "meta.json"),
+    session.workspaces[idx],
+  );
+  return session;
+}
+
 async function updateWorkspaceLiveRepo(userData, workspaceId, liveDevRepoRoot) {
   const session = await loadSession(userData);
   const idx = session.workspaces.findIndex((w) => w.id === workspaceId);
@@ -169,5 +188,6 @@ module.exports = {
   getWorkspace,
   createWorkspace,
   updateWorkspaceLiveRepo,
+  updateWorkspaceUiState,
   workspacesRoot,
 };

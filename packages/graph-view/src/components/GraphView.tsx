@@ -5,6 +5,7 @@ import {
   useNodes,
   useNodesState,
   useEdgesState,
+  useNodesInitialized,
   useReactFlow,
   Background,
   BackgroundVariant,
@@ -33,6 +34,7 @@ import type {
 } from "@novadiff/graph-core/types";
 import { useTheme } from "../themes/index.ts";
 import { useNovaDiffEmbed } from "../contexts/NovaDiffEmbedContext.tsx";
+import { useEmbedAutoExpand } from "../hooks/useEmbedAutoExpand.ts";
 import {
   NODE_WIDTH,
   NODE_HEIGHT,
@@ -55,6 +57,7 @@ import {
 import { deriveContainers } from "../utils/containers";
 import type { DerivedContainer } from "../utils/containers";
 import { computeLayerStats } from "../utils/layerStats";
+import { resolveActiveLayer } from "../utils/activeLayer";
 
 const nodeTypes = {
   custom: CustomNode,
@@ -424,8 +427,10 @@ function useLayerDetailTopology(): LayerDetailTopology & {
   const built = useMemo(() => {
     if (!graph || !activeLayerId) return null;
 
-    const activeLayer = graph.layers.find((l) => l.id === activeLayerId);
-    if (!activeLayer) return null;
+    const activeLayer = resolveActiveLayer(graph, activeLayerId);
+    if (!activeLayer) {
+      return null;
+    }
 
     const layerNodeIds = new Set(activeLayer.nodeIds);
 
@@ -982,6 +987,7 @@ function buildCustomFlowNode(
  *     the underlying file→file edges from `topo.filteredEdges`.
  */
 function useLayerDetailGraph() {
+  const { embedMode = false } = useNovaDiffEmbed();
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
   const searchResults = useDashboardStore((s) => s.searchResults);
   const tourHighlightedNodeIds = useDashboardStore((s) => s.tourHighlightedNodeIds);
@@ -1026,6 +1032,7 @@ function useLayerDetailGraph() {
           parentId: containerId,
           extent: "parent",
           position: pos,
+          zIndex: 2,
         } as Node);
       }
     }
@@ -1158,6 +1165,11 @@ function useLayerDetailGraph() {
 
         return {
           ...node,
+          zIndex: isExpanded ? 0 : 1,
+          style: {
+            ...(typeof node.style === "object" && node.style ? node.style : {}),
+            zIndex: isExpanded ? 0 : 1,
+          },
           data: {
             ...data,
             isExpanded,
@@ -1224,6 +1236,59 @@ function useLayerDetailGraph() {
   const expandedEdges = useMemo<Edge[]>(() => {
     if (expandedContainers.size === 0) return topo.edges;
 
+    const layoutReady = (atomId: string) =>
+      !expandedContainers.has(atomId) || containerLayoutCache.has(atomId);
+
+    const embedLayoutsReady =
+      embedMode && expandedContainers.size > 0 && expandedChildNodes.length > 0;
+
+    // NovaDiff embed: wire edges directly between mounted nodes. Codebase
+    // graphs are almost entirely `contains` (file→class/function); do not
+    // filter those out or the map looks edgeless.
+    if (embedLayoutsReady) {
+      const renderedIds = new Set(expandedChildNodes.map((n) => n.id));
+      for (const n of topo.nodes) {
+        if (n.type !== "container" && n.type !== "portal") {
+          renderedIds.add(n.id);
+        }
+      }
+      const out: Edge[] = [];
+      const seen = new Set<string>();
+      for (const fe of topo.filteredEdges) {
+        if (!renderedIds.has(fe.source) || !renderedIds.has(fe.target)) {
+          continue;
+        }
+        const key = `${fe.source}|${fe.target}|${fe.type}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const isContains = fe.type === "contains";
+        out.push({
+          id: `embed-${key}`,
+          source: fe.source,
+          target: fe.target,
+          label: isContains ? undefined : fe.type,
+          zIndex: 1000,
+          style: isContains
+            ? {
+                stroke: "rgba(56, 217, 255, 0.38)",
+                strokeWidth: 1,
+                strokeDasharray: "3 4",
+              }
+            : {
+                stroke: "rgba(212, 165, 116, 0.55)",
+                strokeWidth: fe.type === "calls" ? 1.25 : 1.5,
+              },
+          labelStyle: isContains
+            ? undefined
+            : {
+                fill: "#a39787",
+                fontSize: 9,
+              },
+        });
+      }
+      return out;
+    }
+
     const out: Edge[] = [];
     const seen = new Set<string>();
     for (const e of topo.edges) {
@@ -1235,17 +1300,23 @@ function useLayerDetailGraph() {
         out.push(e);
         continue;
       }
+      if (!layoutReady(srcAtom) || !layoutReady(tgtAtom)) {
+        out.push(e);
+        continue;
+      }
       const matching = topo.filteredEdges.filter((fe) => {
         const fsc = topo.nodeToContainer.get(fe.source);
         const ftc = topo.nodeToContainer.get(fe.target);
         return fsc === srcAtom && ftc === tgtAtom;
       });
+      let inflated = 0;
       for (const m of matching) {
         const realSrc = srcExpanded ? m.source : srcAtom;
         const realTgt = tgtExpanded ? m.target : tgtAtom;
         const key = `${realSrc}|${realTgt}|${m.type}`;
         if (seen.has(key)) continue;
         seen.add(key);
+        inflated++;
         out.push({
           id: `inflated-${key}`,
           source: realSrc,
@@ -1255,12 +1326,14 @@ function useLayerDetailGraph() {
           labelStyle: { fill: "#a39787", fontSize: 10 },
         });
       }
+      if (inflated === 0) {
+        out.push(e);
+      }
     }
-    // Add intra-container edges for each expanded container so the user
-    // can see the wiring between sibling files inside an expanded folder.
     for (const e of topo.intraContainer) {
       const cid = topo.nodeToContainer.get(e.source);
       if (!cid || !expandedContainers.has(cid)) continue;
+      if (!containerLayoutCache.has(cid)) continue;
       const key = `intra|${e.source}|${e.target}|${e.type}`;
       if (seen.has(key)) continue;
       seen.add(key);
@@ -1276,10 +1349,14 @@ function useLayerDetailGraph() {
     return out;
   }, [
     topo.edges,
+    topo.nodes,
     topo.filteredEdges,
     topo.intraContainer,
     topo.nodeToContainer,
     expandedContainers,
+    containerLayoutCache,
+    embedMode,
+    expandedChildNodes,
   ]);
 
   const edges = useMemo(() => {
@@ -1288,19 +1365,52 @@ function useLayerDetailGraph() {
     const base = [...expandedEdges, ...topo.portalEdges];
     if (!selectedNodeId) return base;
 
+    const highlightStroke = embedMode
+      ? "rgba(56, 217, 255, 0.95)"
+      : "rgba(212, 165, 116, 0.85)";
+    const dimStroke = embedMode
+      ? "rgba(56, 217, 255, 0.1)"
+      : "rgba(212, 165, 116, 0.08)";
+
     // Apply selection-based edge styling on top of topology edges
     return base.map((edge) => {
-      const isSelectedEdge = edge.source === selectedNodeId || edge.target === selectedNodeId;
-      // Don't restyle diff-impacted or portal edges
-      if ((edge.style as Record<string, unknown>)?.strokeDasharray) return edge;
+      const isSelectedEdge =
+        edge.source === selectedNodeId || edge.target === selectedNodeId;
+      const priorStyle = (edge.style ?? {}) as Record<string, unknown>;
+      const dashPattern = priorStyle.strokeDasharray as string | undefined;
 
       if (isSelectedEdge) {
-        return { ...edge, animated: true, style: { stroke: "rgba(212,165,116,0.8)", strokeWidth: 2.5 }, labelStyle: { fill: "#d4a574", fontSize: 11, fontWeight: 600 } };
+        return {
+          ...edge,
+          animated: true,
+          style: {
+            ...priorStyle,
+            stroke: highlightStroke,
+            strokeWidth: 2.5,
+            strokeDasharray: undefined,
+          },
+          labelStyle: {
+            fill: embedMode ? "#7ee8ff" : "#d4a574",
+            fontSize: 11,
+            fontWeight: 600,
+          },
+        };
       }
-      // Fade unrelated edges
-      return { ...edge, animated: false, style: { stroke: "rgba(212,165,116,0.08)", strokeWidth: 1 }, labelStyle: { fill: "rgba(163,151,135,0.2)", fontSize: 10 } };
+
+      // Fade unrelated edges (keep hierarchy edges dashed when dimmed)
+      return {
+        ...edge,
+        animated: false,
+        style: {
+          ...priorStyle,
+          stroke: dimStroke,
+          strokeWidth: 1,
+          strokeDasharray: dashPattern ?? "3 4",
+        },
+        labelStyle: { fill: "rgba(163,151,135,0.2)", fontSize: 10 },
+      };
     });
-  }, [expandedEdges, topo.portalEdges, selectedNodeId]);
+  }, [expandedEdges, topo.portalEdges, selectedNodeId, embedMode]);
 
   // Expose container topology so the parent component can wire auto-expand
   // triggers (focus, tour, zoom) without having to re-derive containers.
@@ -1325,6 +1435,8 @@ export function GraphViewInner() {
   const navigationLevel = useDashboardStore((s) => s.navigationLevel);
   const activeLayerId = useDashboardStore((s) => s.activeLayerId);
   const selectNode = useDashboardStore((s) => s.selectNode);
+  const openCodeViewer = useDashboardStore((s) => s.openCodeViewer);
+  const closeCodeViewer = useDashboardStore((s) => s.closeCodeViewer);
   const drillIntoLayer = useDashboardStore((s) => s.drillIntoLayer);
   const focusNodeId = useDashboardStore((s) => s.focusNodeId);
   const setFocusNode = useDashboardStore((s) => s.setFocusNode);
@@ -1337,6 +1449,20 @@ export function GraphViewInner() {
   const tourFitPending = useDashboardStore((s) => s.tourFitPending);
   const { preset } = useTheme();
   const { embedMode = false } = useNovaDiffEmbed();
+
+  const graphFingerprint = useMemo(() => {
+    if (!graph) {
+      return undefined;
+    }
+    const p = graph.project;
+    return [
+      graph.version ?? "",
+      p?.name ?? "",
+      p?.gitCommitHash ?? "",
+      graph.nodes.length,
+      graph.edges.length,
+    ].join("|");
+  }, [graph]);
 
   const overviewGraph = useOverviewGraph();
   const detailGraph = useLayerDetailGraph();
@@ -1356,10 +1482,20 @@ export function GraphViewInner() {
       ? overviewGraph.layoutStatus === "ready"
       : layoutStatus === "ready";
 
+  const embedAutoExpanding = useEmbedAutoExpand({
+    navigationLevel,
+    activeLayerId,
+    layoutReady,
+    containerIds,
+    graphFingerprint,
+  });
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const { fitView, getViewport, setCenter } = useReactFlow();
+  const nodesInitialized = useNodesInitialized();
+  const flowEdges = embedMode && !nodesInitialized ? [] : edges;
 
   // Sync layout output into React Flow only when the layout hook produces a new
   // nodes/edges array. Do NOT compare positions — RF updates positions via
@@ -1401,12 +1537,16 @@ export function GraphViewInner() {
       return;
     }
     pendingFitRef.current = false;
+    // Embed auto-expand runs its own animated fit after containers open.
+    if (embedMode && navigationLevel === "layer-detail" && (containerIds?.length ?? 0) > 0) {
+      return;
+    }
     // One frame so React Flow has positioned the nodes before fit.
     const raf = requestAnimationFrame(() => {
       fitView({ duration: embedMode ? 200 : 400, padding: 0.2 });
     });
     return () => cancelAnimationFrame(raf);
-  }, [embedMode, fitView, initialNodes, layoutReady]);
+  }, [embedMode, fitView, initialNodes, layoutReady, navigationLevel, containerIds]);
 
   // Lock viewport onto a container the user just manually expanded so it
   // appears to expand in place rather than getting yanked off-screen by
@@ -1529,7 +1669,10 @@ export function GraphViewInner() {
   }, [onMove]);
 
   const onNodeClick = useCallback(
-    (_: React.MouseEvent, node: { id: string }) => {
+    (_: React.MouseEvent, node: { id: string; type?: string }) => {
+      if (node.type === "container") {
+        return;
+      }
       if (navigationLevel === "overview") {
         drillIntoLayer(node.id);
       } else if (node.id.startsWith("portal:")) {
@@ -1537,14 +1680,26 @@ export function GraphViewInner() {
         drillIntoLayer(targetLayerId);
       } else {
         selectNode(node.id);
+        if (embedMode && graph) {
+          const graphNode = graph.nodes.find((n) => n.id === node.id);
+          if (
+            graphNode?.filePath &&
+            (graphNode.type === "file" ||
+              graphNode.type === "function" ||
+              graphNode.type === "class")
+          ) {
+            openCodeViewer(node.id);
+          }
+        }
       }
     },
-    [navigationLevel, drillIntoLayer, selectNode],
+    [navigationLevel, drillIntoLayer, selectNode, embedMode, graph, openCodeViewer],
   );
 
   const onPaneClick = useCallback(() => {
     selectNode(null);
-  }, [selectNode]);
+    closeCodeViewer();
+  }, [selectNode, closeCodeViewer]);
 
   if (!graph) {
     return (
@@ -1570,7 +1725,7 @@ export function GraphViewInner() {
       )}
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={flowEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
@@ -1583,13 +1738,24 @@ export function GraphViewInner() {
         edgesFocusable={false}
         edgesReconnectable={false}
         elementsSelectable={false}
+        elevateEdgesOnSelect
+        defaultEdgeOptions={
+          embedMode
+            ? { zIndex: 1000, type: "smoothstep" as const }
+            : undefined
+        }
         fitView={!embedMode}
         fitViewOptions={{ minZoom: 0.01, padding: 0.1 }}
         minZoom={0.01}
         maxZoom={2}
         colorMode={preset.isDark ? "dark" : "light"}
       >
-        <Background variant={BackgroundVariant.Dots} color="var(--color-edge-dot)" gap={20} size={1} />
+        <Background
+          variant={embedMode ? BackgroundVariant.Lines : BackgroundVariant.Dots}
+          color="var(--color-edge-dot)"
+          gap={embedMode ? 28 : 20}
+          size={embedMode ? 0.4 : 1}
+        />
         <Controls />
         <MiniMap
           nodeColor="var(--color-elevated)"
@@ -1598,9 +1764,9 @@ export function GraphViewInner() {
         />
         {!embedMode ? <TourFitView /> : null}
         {!embedMode ? <SelectedNodeFitView /> : null}
-        {!embedMode ? <FlowFitOnResize padding={0.1} /> : null}
+        <FlowFitOnResize padding={0.1} />
       </ReactFlow>
-      {(layoutStatus === "computing" || tourFitPending) && (
+      {(layoutStatus === "computing" || tourFitPending || embedAutoExpanding) && (
         <div
           style={{
             position: "absolute",
@@ -1608,13 +1774,17 @@ export function GraphViewInner() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "rgba(10,10,10,0.5)",
+            background: "color-mix(in srgb, var(--color-root) 55%, transparent)",
             pointerEvents: "none",
             zIndex: 10,
           }}
         >
-          <span style={{ color: "#d4a574", fontSize: 14 }}>
-            {tourFitPending ? "Locating tour highlight…" : "Computing layout…"}
+          <span style={{ color: "var(--color-accent-bright)", fontSize: 14 }}>
+            {embedAutoExpanding
+              ? "Expanding modules…"
+              : tourFitPending
+                ? "Locating tour highlight…"
+                : "Computing layout…"}
           </span>
         </div>
       )}
@@ -1622,90 +1792,10 @@ export function GraphViewInner() {
   );
 }
 
-/** NovaDiff embed: overview-only React Flow mount (no node-sync / detail hooks). */
-function EmbedOverviewFlowMount({
-  nodes,
-  edges,
-}: {
-  nodes: Node[];
-  edges: Edge[];
-}) {
-  const { preset } = useTheme();
-  const [rfNodes, , onNodesChange] = useNodesState(nodes);
-  const [rfEdges, , onEdgesChange] = useEdgesState(edges);
-
-  return (
-    <ReactFlow
-      nodes={rfNodes}
-      edges={rfEdges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      nodeTypes={nodeTypes}
-      nodesDraggable={false}
-      nodesConnectable={false}
-      edgesFocusable={false}
-      edgesReconnectable={false}
-      elementsSelectable={false}
-      fitView
-      fitViewOptions={{ minZoom: 0.01, padding: 0.15 }}
-      minZoom={0.01}
-      maxZoom={2}
-      colorMode={preset.isDark ? "dark" : "light"}
-    >
-      <Background variant={BackgroundVariant.Dots} color="var(--color-edge-dot)" gap={20} size={1} />
-      <Controls />
-      <MiniMap
-        nodeColor="var(--color-elevated)"
-        maskColor="var(--glass-bg)"
-        className="!bg-surface !border !border-border-subtle"
-      />
-    </ReactFlow>
-  );
-}
-
-function EmbedOverviewGraph() {
-  const graph = useDashboardStore((s) => s.graph);
-  const { nodes, edges, layoutStatus } = useOverviewGraph();
-  const flowEpoch = useMemo(() => {
-    if (layoutStatus !== "ready" || nodes.length === 0) {
-      return "pending";
-    }
-    return nodes
-      .map((n) => `${n.id}@${Math.round(n.position.x)}:${Math.round(n.position.y)}`)
-      .join("|");
-  }, [layoutStatus, nodes]);
-
-  if (!graph) {
-    return (
-      <div className="h-full w-full flex items-center justify-center bg-root rounded-lg">
-        <p className="text-text-muted text-sm">No knowledge graph loaded</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="h-full w-full relative">
-      {layoutStatus === "computing" ? (
-        <div
-          className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-          style={{ background: "rgba(10,10,10,0.45)" }}
-        >
-          <span style={{ color: "#d4a574", fontSize: 14 }}>Computing layout…</span>
-        </div>
-      ) : null}
-      {flowEpoch !== "pending" ? (
-        <ReactFlowProvider key={flowEpoch}>
-          <EmbedOverviewFlowMount nodes={nodes} edges={edges} />
-        </ReactFlowProvider>
-      ) : null}
-    </div>
-  );
-}
-
 export default function GraphView() {
   const { embedMode = false } = useNovaDiffEmbed();
   if (embedMode) {
-    return <EmbedOverviewGraph />;
+    return <GraphViewInner />;
   }
   return (
     <ReactFlowProvider>

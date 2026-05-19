@@ -1,22 +1,19 @@
 ### Overview  
-A new onboarding component, `WorkspaceHub`, is added at `src/components/onboarding/WorkspaceHub.tsx`. It renders a UI for listing existing workspaces, creating new ones (local folder, clone URL, or GitHub repo), and opening an existing workspace.
+`WorkspaceHub` now accepts optional `activeWorkspaceId` and `onContinueLast` props (see `src/components/onboarding/WorkspaceHub.tsx` lines 9‑12). When both are supplied, a “Continue with {workspace name}” button is rendered above the workspace list (lines 177‑192). Local workspaces no longer show their repo path; the placeholder “Local repository” is used instead (line 214).
 
 ### Key changes  
-- **Exports** – `WorkspaceHubProps` (lines 6‑14) and `WorkspaceHub` component (lines 15‑285).  
-- **Imports** – React hooks, Lucide icons, and types from `workspaceTypes` and `gitTypes` (lines 1‑4).  
-- **State & callbacks** – `useState` for UI state, `useCallback` for `refreshList`, and `useEffect` hooks that subscribe to `window.electronAPI` events (lines 21‑53).  
-- **Workspace creation** – `createWorkspace` handles three modes (`local`, `clone`, `github`) and calls `window.electronAPI.workspaceCreate` (lines 81‑140).  
-- **Opening existing** – `openExisting` optionally calls `workspaceSetActive` (lines 144‑150).  
-- **UI** – Tabs for mode selection, inputs for name, path, URL, or GitHub repo, and a list of workspaces (lines 152‑285).
+- **Props API** – `WorkspaceHubProps` gains `activeWorkspaceId?: string | null` and `onContinueLast?: () => void`.  
+- **Component signature** updated to destructure the new props (lines 20‑23).  
+- **Continue button** – an IIFE finds the workspace matching `activeWorkspaceId` and renders a button wired to `onContinueLast`.  
+- **Workspace list display** – `ws.githubSlug ?? ws.repoRoot` replaced with `ws.githubSlug ?? "Local repository"`.
 
 ### Impact  
-- **Correctness** – relies on `window.electronAPI` methods (`workspaceList`, `workspaceCreate`, `workspaceSetActive`, `githubListRepos`, `onWorkspaceHistoryProgress`). Missing APIs will surface as user‑visible errors.  
-- **Maintainability** – centralizes onboarding logic; future changes to workspace creation can be made in one place.  
-- **Observability** – `historyMsg` and `error` UI elements expose progress and error states.  
-- **Compatibility** – no changes to existing components; the new file is isolated.
+- The continue button appears only when a matching workspace exists, preventing orphaned actions.  
+- Local repositories are now labeled consistently, improving readability.  
+- Existing callers remain unaffected; the new props are optional.
 
 ### Risks & follow‑ups  
-- **Electron API availability** – verify that all referenced API methods exist in every target environment.  
-- **GitHub repo resolution** – `resolveGithubClone` may return a remote URL; downstream logic must handle both local paths and HTTP URLs.  
-- **UI regressions** – test tab rendering, input behavior, and `Loader2` spinner across screen sizes.  
-- **Type safety** – ensure that `GitUserProfile`, `NovaWorkspace`, `WorkspaceSessionState`, and `GithubRepoSummary` are exported from their modules; otherwise TypeScript errors will appear.
+- **Regression** – Verify that `activeWorkspaceId` is correctly passed; missing IDs should not crash.  
+- **UI consistency** – Ensure the “Local repository” placeholder matches design tokens.  
+- **Accessibility** – The new button should have an accessible label; run accessibility checks.  
+- **Testing** – Add unit tests for the continue‑button rendering path and for the updated list item display.

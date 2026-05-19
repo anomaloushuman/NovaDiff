@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { BookOpen, Loader2, Search } from "lucide-react";
+import { BookOpen, Loader2, RefreshCw, Search } from "lucide-react";
 import type {
   GitHistoryCompareOptions,
   NovaWorkspace,
@@ -19,6 +19,7 @@ export interface GitHistoryWorkspaceProps {
   ) => void | Promise<void>;
   onDocumentCommit: (base: WorkspaceCommitSnapshot, head: WorkspaceCommitSnapshot) => void | Promise<void>;
   onLiveRepoPersist: (liveDevRepoRoot: string) => Promise<void>;
+  onRefreshHistory?: () => void | Promise<void>;
 }
 
 export function GitHistoryWorkspace({
@@ -28,6 +29,7 @@ export function GitHistoryWorkspace({
   onCompareCommits,
   onDocumentCommit,
   onLiveRepoPersist,
+  onRefreshHistory,
 }: GitHistoryWorkspaceProps) {
   const api = window.electronAPI;
   const commits = workspace.commits ?? [];
@@ -166,6 +168,17 @@ export function GitHistoryWorkspace({
         <section className="git-history-commits-panel">
           <div className="git-history-commits-head">
             <h2 className="git-history-section-title">Indexed commits ({sorted.length})</h2>
+            {onRefreshHistory ? (
+              <button
+                type="button"
+                className="doc-workspace-copy-btn"
+                disabled={indexing}
+                onClick={() => void onRefreshHistory()}
+              >
+                <RefreshCw size={14} aria-hidden />
+                Sync from git
+              </button>
+            ) : null}
             <label className="doc-workspace-search git-blame-search">
               <Search size={14} aria-hidden />
               <input

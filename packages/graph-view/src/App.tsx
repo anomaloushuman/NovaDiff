@@ -221,6 +221,8 @@ export function DashboardContent({
 }) {
   const graph = useDashboardStore((s) => s.graph);
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
+  const selectNode = useDashboardStore((s) => s.selectNode);
+  const closeCodeViewer = useDashboardStore((s) => s.closeCodeViewer);
   const tourActive = useDashboardStore((s) => s.tourActive);
   const persona = useDashboardStore((s) => s.persona);
   const codeViewerOpen = useDashboardStore((s) => s.codeViewerOpen);
@@ -393,6 +395,8 @@ export function DashboardContent({
     </>
   );
 
+  const showEmbedInspector = embedMode && Boolean(selectedNodeId);
+
   const sidebarContent = (
     <div className="h-full flex flex-col min-h-0">
       <div className="flex items-center gap-1 p-2 border-b border-border-subtle bg-surface shrink-0">
@@ -432,8 +436,8 @@ export function DashboardContent({
 
   return (
     <div
-      className={`flex flex-col bg-root text-text-primary noise-overlay ${
-        embedMode ? "novadiff-graph-embed h-full w-full min-h-0" : "h-screen w-screen"
+      className={`flex flex-col bg-root text-text-primary ${
+        embedMode ? "novadiff-graph-embed h-full w-full min-h-0" : "h-screen w-screen noise-overlay"
       }`}
     >
       {/* Header */}
@@ -616,7 +620,7 @@ export function DashboardContent({
       </header>
 
       {/* Search */}
-      {!embedMode ? <SearchBar /> : null}
+      <SearchBar />
 
       {/* Validation warning banner */}
       {visibleIssues.length > 0 && !loadError && (
@@ -648,16 +652,38 @@ export function DashboardContent({
           ) : null}
         </div>
 
-        {/* Right sidebar — hidden in NovaDiff embed to save space and avoid overlay bugs */}
+        {/* Right sidebar — standalone explorer */}
         {!embedMode ? (
           <aside className="w-[260px] md:w-[300px] lg:w-[360px] shrink-0 bg-surface border-l border-border-subtle overflow-auto">
             {sidebarContent}
           </aside>
         ) : null}
 
+        {showEmbedInspector ? (
+          <aside className="novadiff-graph-inspector shrink-0 bg-surface border-l border-border-subtle flex flex-col min-h-0">
+            <div className="novadiff-graph-inspector-head shrink-0">
+              <span className="novadiff-graph-inspector-title">Symbol details</span>
+              <button
+                type="button"
+                className="novadiff-graph-inspector-close"
+                onClick={() => {
+                  selectNode(null);
+                  closeCodeViewer();
+                }}
+                aria-label="Close inspector"
+              >
+                ×
+              </button>
+            </div>
+            <div className="flex-1 min-h-0 overflow-auto">
+              <NodeInfo />
+            </div>
+          </aside>
+        ) : null}
+
         {/* Code viewer slide-up overlay (collapsed state) */}
         {codeViewerOpen && !codeViewerExpanded && (
-          <div className="absolute bottom-0 left-0 right-0 h-[40vh] bg-surface border-t border-border-subtle animate-slide-up z-20 overflow-hidden">
+          <div className="absolute bottom-0 left-0 right-0 h-[40vh] bg-surface border-t border-border-subtle animate-slide-up z-30 overflow-hidden">
             <Suspense fallback={null}>
               <CodeViewer accessToken={accessToken} onExpand={expandCodeViewer} />
             </Suspense>
@@ -668,7 +694,7 @@ export function DashboardContent({
       {/* Expanded code viewer modal */}
       {codeViewerOpen && codeViewerExpanded && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 sm:p-6"
+          className="fixed inset-0 z-[60001] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 sm:p-6"
           onMouseDown={collapseCodeViewer}
         >
           <div

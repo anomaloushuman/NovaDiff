@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/onboarding/WorkspaceHub.tsx",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:26:03.313Z",
+  "generatedAt": "2026-05-19T22:45:43.941Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,42 +11,34 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R6 added: export interface WorkspaceHubProps {",
-      "R15 added: export function WorkspaceHub({"
-    ],
-    "changed_imports": [
-      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
-      "R2 added: import { FolderGit2, Loader2, Plus } from \"lucide-react\";",
-      "R3 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"../../app/workspaceTypes\";",
-      "R4 added: import type { GithubRepoSummary } from \"../../app/gitTypes\";"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-285"
+      "R9",
+      "R12",
+      "R20",
+      "R23",
+      "R177-194",
+      "L192 / R214"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
-      "R2 added: import { FolderGit2, Loader2, Plus } from \"lucide-react\";",
-      "R3 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"../../app/workspaceTypes\";",
-      "R4 added: import type { GithubRepoSummary } from \"../../app/gitTypes\";",
-      "R6 added: export interface WorkspaceHubProps {",
-      "R7 added: gitUser: GitUserProfile;"
+      "R9 added: activeWorkspaceId?: string | null;",
+      "R12 added: onContinueLast?: () => void;",
+      "R20 added: activeWorkspaceId,",
+      "R23 added: onContinueLast,",
+      "R177 added: {activeWorkspaceId && onContinueLast ? (",
+      "R178 added: (() => {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function WorkspaceHub (15-285)",
-      "right interface WorkspaceHubProps (6-14)"
+      "left function WorkspaceHub (15-285)",
+      "right function WorkspaceHub (17-307)",
+      "right interface WorkspaceHubProps (6-16)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

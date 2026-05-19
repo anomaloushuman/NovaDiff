@@ -26,33 +26,30 @@
 <body>
   <header class="top">
     <h1>src/components/onboarding/WorkspaceHub.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:26:03.313Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:45:43.941Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new onboarding component, <code>WorkspaceHub</code>, is added at <code>src/components/onboarding/WorkspaceHub.tsx</code>. It renders a UI for listing existing workspaces, creating new ones (local folder, clone URL, or GitHub repo), and opening an existing workspace.</p>
+<p><code>WorkspaceHub</code> now accepts optional <code>activeWorkspaceId</code> and <code>onContinueLast</code> props (see <code>src/components/onboarding/WorkspaceHub.tsx</code> lines 9‑12). When both are supplied, a “Continue with {workspace name}” button is rendered above the workspace list (lines 177‑192). Local workspaces no longer show their repo path; the placeholder “Local repository” is used instead (line 214).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Exports</strong> – <code>WorkspaceHubProps</code> (lines 6‑14) and <code>WorkspaceHub</code> component (lines 15‑285).  </li>
-<li><strong>Imports</strong> – React hooks, Lucide icons, and types from <code>workspaceTypes</code> and <code>gitTypes</code> (lines 1‑4).  </li>
-<li><strong>State &amp; callbacks</strong> – <code>useState</code> for UI state, <code>useCallback</code> for <code>refreshList</code>, and <code>useEffect</code> hooks that subscribe to <code>window.electronAPI</code> events (lines 21‑53).  </li>
-<li><strong>Workspace creation</strong> – <code>createWorkspace</code> handles three modes (<code>local</code>, <code>clone</code>, <code>github</code>) and calls <code>window.electronAPI.workspaceCreate</code> (lines 81‑140).  </li>
-<li><strong>Opening existing</strong> – <code>openExisting</code> optionally calls <code>workspaceSetActive</code> (lines 144‑150).  </li>
-<li><strong>UI</strong> – Tabs for mode selection, inputs for name, path, URL, or GitHub repo, and a list of workspaces (lines 152‑285).</li>
+<li><strong>Props API</strong> – <code>WorkspaceHubProps</code> gains <code>activeWorkspaceId?: string | null</code> and <code>onContinueLast?: () =&gt; void</code>.  </li>
+<li><strong>Component signature</strong> updated to destructure the new props (lines 20‑23).  </li>
+<li><strong>Continue button</strong> – an IIFE finds the workspace matching <code>activeWorkspaceId</code> and renders a button wired to <code>onContinueLast</code>.  </li>
+<li><strong>Workspace list display</strong> – <code>ws.githubSlug ?? ws.repoRoot</code> replaced with <code>ws.githubSlug ?? &quot;Local repository&quot;</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – relies on <code>window.electronAPI</code> methods (<code>workspaceList</code>, <code>workspaceCreate</code>, <code>workspaceSetActive</code>, <code>githubListRepos</code>, <code>onWorkspaceHistoryProgress</code>). Missing APIs will surface as user‑visible errors.  </li>
-<li><strong>Maintainability</strong> – centralizes onboarding logic; future changes to workspace creation can be made in one place.  </li>
-<li><strong>Observability</strong> – <code>historyMsg</code> and <code>error</code> UI elements expose progress and error states.  </li>
-<li><strong>Compatibility</strong> – no changes to existing components; the new file is isolated.</li>
+<li>The continue button appears only when a matching workspace exists, preventing orphaned actions.  </li>
+<li>Local repositories are now labeled consistently, improving readability.  </li>
+<li>Existing callers remain unaffected; the new props are optional.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Electron API availability</strong> – verify that all referenced API methods exist in every target environment.  </li>
-<li><strong>GitHub repo resolution</strong> – <code>resolveGithubClone</code> may return a remote URL; downstream logic must handle both local paths and HTTP URLs.  </li>
-<li><strong>UI regressions</strong> – test tab rendering, input behavior, and <code>Loader2</code> spinner across screen sizes.  </li>
-<li><strong>Type safety</strong> – ensure that <code>GitUserProfile</code>, <code>NovaWorkspace</code>, <code>WorkspaceSessionState</code>, and <code>GithubRepoSummary</code> are exported from their modules; otherwise TypeScript errors will appear.</li>
+<li><strong>Regression</strong> – Verify that <code>activeWorkspaceId</code> is correctly passed; missing IDs should not crash.  </li>
+<li><strong>UI consistency</strong> – Ensure the “Local repository” placeholder matches design tokens.  </li>
+<li><strong>Accessibility</strong> – The new button should have an accessible label; run accessibility checks.  </li>
+<li><strong>Testing</strong> – Add unit tests for the continue‑button rendering path and for the updated list item display.</li>
 </ul>
 </article>
   </main>

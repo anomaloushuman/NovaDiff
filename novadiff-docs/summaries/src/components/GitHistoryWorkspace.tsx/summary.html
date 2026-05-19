@@ -26,31 +26,29 @@
 <body>
   <header class="top">
     <h1>src/components/GitHistoryWorkspace.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:10:45.854Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:43:12.901Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>GitHistoryWorkspace</code> component is added at <code>src/components/GitHistoryWorkspace.tsx</code> (lines 1‑256). It provides a UI for browsing commit history, selecting base/head revisions, comparing commits, and viewing blame information.</p>
+<p><code>src/components/GitHistoryWorkspace.tsx</code> now accepts an optional <code>onRefreshHistory</code> callback and renders a “Sync from git” button when the prop is supplied. The component also imports the <code>RefreshCw</code> icon from <code>lucide-react</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – Lines 1‑9 add React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useMemo</code>, <code>useState</code>), Lucide icons (<code>BookOpen</code>, <code>Loader2</code>, <code>Search</code>), and types from <code>../app/workspaceTypes</code>.  </li>
-<li><strong>Props interface</strong> – Lines 11‑22 define <code>GitHistoryWorkspaceProps</code> with <code>workspace</code>, <code>busy</code>, <code>error</code>, and callbacks for compare, document commit, and live‑repo persistence.  </li>
-<li><strong>State &amp; effects</strong> – Lines 34‑41 initialize <code>baseHash</code>, <code>headHash</code>, <code>useLiveHead</code>, <code>liveRepoRoot</code>, <code>blameCommit</code>, and <code>commitQuery</code>. A <code>useEffect</code> (lines 43‑45) syncs <code>liveRepoRoot</code> with workspace changes.  </li>
-<li><strong>Commit handling</strong> – Lines 47‑57 sort commits by <code>authoredAt</code>, set default base/head to the last two commits, and derive a filtered list from <code>commitQuery</code> (lines 59‑71).  </li>
-<li><strong>UI rendering</strong> – Lines 125‑256 use <code>HistoryCompareStrip</code> and <code>GitBlamePanel</code>, display loading/error states, and render a searchable commit list with actions (Set base/head, Blame, Docs).  </li>
-<li><strong>Event handlers</strong> – Lines 80‑123 implement <code>browseLiveRepo</code>, <code>persistLiveRepo</code>, <code>swapRevisions</code>, and <code>runCompare</code>, coordinating with <code>window.electronAPI</code> and parent callbacks.</li>
+<li><strong>Import</strong> – line 2 added <code>RefreshCw</code> to the <code>lucide-react</code> import (diff: L2 removed, R2 added).  </li>
+<li><strong>Props interface</strong> – line 22 added <code>onRefreshHistory?: () =&gt; void | Promise&lt;void&gt;;</code> (R22).  </li>
+<li><strong>Component signature</strong> – line 32 added <code>onRefreshHistory</code> to the destructured props (R32).  </li>
+<li><strong>UI</strong> – lines 171‑181 added a conditional button that calls <code>onRefreshHistory</code>. The button is disabled while <code>indexing</code> is true and uses the <code>RefreshCw</code> icon (R171‑R181).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>API dependency</strong> – The component relies on <code>window.electronAPI.pickDirectory</code>; missing API will break live‑repo browsing (unknown from the available diff/scan evidence).  </li>
-<li><strong>Type safety</strong> – Uses <code>WorkspaceCommitSnapshot</code> and <code>GitHistoryCompareOptions</code>; ensure these types are exported correctly.  </li>
-<li><strong>Consumer changes</strong> – Existing consumers must provide the new callbacks or update type definitions.</li>
+<li>The new prop is optional; existing consumers are unaffected.  </li>
+<li>Provides a visible trigger for manual history sync.  </li>
+<li>No measurable performance change beyond a small conditional render.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>window.electronAPI.pickDirectory</code> and <code>onLiveRepoPersist</code> are defined in all target environments.  </li>
-<li>Confirm that <code>HistoryCompareStrip</code> correctly reflects <code>useLiveHead</code> and <code>liveRepoRoot</code> changes.  </li>
-<li>Test the component with large commit sets to ensure memoization of sorting and filtering is sufficient.</li>
+<li>Verify that the <code>RefreshCw</code> icon resolves correctly in the build (import added).  </li>
+<li>Confirm the button renders only when <code>onRefreshHistory</code> is passed and is disabled during indexing (test suite).  </li>
+<li>Update documentation to reflect the new optional prop and its purpose.</li>
 </ul>
 </article>
   </main>

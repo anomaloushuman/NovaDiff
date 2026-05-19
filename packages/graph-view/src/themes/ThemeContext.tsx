@@ -46,7 +46,13 @@ function saveToLocalStorage(config: ThemeConfig): void {
   }
 }
 
-function resolveInitialTheme(metaTheme?: ThemeConfig | null): ThemeConfig {
+function resolveInitialTheme(
+  metaTheme?: ThemeConfig | null,
+  scopeToHost?: boolean,
+): ThemeConfig {
+  if (scopeToHost) {
+    return metaTheme ?? DEFAULT_THEME_CONFIG;
+  }
   return loadFromLocalStorage() ?? metaTheme ?? DEFAULT_THEME_CONFIG;
 }
 
@@ -58,7 +64,9 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ metaTheme, scopeToHost = false, children }: ThemeProviderProps) {
-  const [config, setConfig] = useState<ThemeConfig>(() => resolveInitialTheme(metaTheme));
+  const [config, setConfig] = useState<ThemeConfig>(() =>
+    resolveInitialTheme(metaTheme, scopeToHost),
+  );
   const initialized = useRef(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const configRef = useRef(config);
@@ -75,7 +83,7 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
     } else {
       applyTheme(config);
     }
-    if (initialized.current) {
+    if (initialized.current && !scopeToHost) {
       saveToLocalStorage(config);
     }
     initialized.current = true;
@@ -95,10 +103,14 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
 
   // Update if metaTheme arrives later (async fetch) and no localStorage preference exists
   useEffect(() => {
+    if (scopeToHost && metaTheme) {
+      setConfig(metaTheme);
+      return;
+    }
     if (metaTheme && !loadFromLocalStorage()) {
       setConfig(metaTheme);
     }
-  }, [metaTheme]);
+  }, [metaTheme, scopeToHost]);
 
   const setPreset = useCallback((presetId: PresetId) => {
     setConfig((_prev) => {

@@ -26,37 +26,29 @@
 <body>
   <header class="top">
     <h1>electron/preload.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T18:56:05.758Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:36:27.031Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>electron/preload.cjs</code> script now exposes additional IPC‑bound APIs for knowledge‑graph handling, engine progress, and extended Git/GitHub integration. No existing APIs were removed; the new functions are appended after the existing <code>onSummaryPrefetchProgress</code> block (see lines 51‑72 and 118‑178).</p>
+<p>Added two IPC‑exposed functions to <code>electron/preload.cjs</code> at lines 136‑141: <code>workspaceRefreshHistory</code> and <code>workspaceUpdateUiState</code>. They forward a payload to the main process via <code>ipcRenderer.invoke</code> on the channels <code>&quot;workspace-refresh-history&quot;</code> and <code>&quot;workspace-update-ui-state&quot;</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Knowledge‑graph API</strong> (lines 51‑72):  <ul>
-<li><code>buildKnowledgeGraph</code>, <code>readKnowledgeGraph</code>, <code>readKnowledgeGraphFile</code> invoke <code>&quot;knowledge-graph-build&quot;</code>, <code>&quot;knowledge-graph-read&quot;</code>, <code>&quot;knowledge-graph-read-file&quot;</code>.  </li>
-<li><code>onKnowledgeGraphProgress</code> registers a listener on <code>&quot;knowledge-graph-progress&quot;</code> and returns a cleanup function.</li>
-</ul>
-</li>
-<li><strong>Engine progress</strong> (lines 64‑71): similar pattern for <code>&quot;engine-progress&quot;</code>.  </li>
-<li><strong>Git tooling</strong> (lines 118‑127): new helpers (<code>gitDetectTooling</code>, <code>gitRepoStatus</code>, <code>gitDiscoverRepos</code>, etc.) expose <code>&quot;git-detect-tooling&quot;</code>, <code>&quot;git-repo-status&quot;</code>, etc.  </li>
-<li><strong>GitHub integration</strong> (lines 147‑168): progress listeners for <code>&quot;github-gh-install-progress&quot;</code> and <code>&quot;github-auth-progress&quot;</code>.  </li>
-<li><strong>Workspace history</strong> (lines 170‑177): <code>onWorkspaceHistoryProgress</code> listens on <code>&quot;workspace-history-progress&quot;</code>.</li>
+<li>New API functions inserted at lines 136‑141 (diff lines R136‑R141).  </li>
+<li>Each function simply calls <code>ipcRenderer.invoke</code> with the corresponding channel and payload.  </li>
+<li>No other imports or logic were altered; the surrounding API surface remains unchanged.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Runtime correctness</strong>: Each new IPC channel requires a corresponding main‑process handler; missing handlers will trigger runtime errors.  </li>
-<li><strong>Memory safety</strong>: Every event listener returns a cleanup function; callers must invoke it to avoid leaks.  </li>
-<li><strong>Surface area</strong>: The API surface expands, so documentation and type definitions should be updated.  </li>
-<li><strong>Performance</strong>: Additional listeners add minimal IPC overhead; the impact is negligible for typical usage.</li>
+<li>Adds renderer‑side hooks for refreshing workspace history and updating UI state without affecting existing behavior.  </li>
+<li>No breaking changes; existing code continues to work.  </li>
+<li>The new functions follow the same pattern as other <code>workspace*</code> helpers, keeping the preload API consistent.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ol>
-<li><strong>Missing main‑process handlers</strong> – Verify that handlers for <code>&quot;knowledge-graph-build&quot;</code>, <code>&quot;git-detect-tooling&quot;</code>, etc., exist.  </li>
-<li><strong>Listener leaks</strong> – Ensure cleanup functions are called when components unmount.  </li>
-<li><strong>Name collisions</strong> – Confirm that new symbols (<code>onEngineProgress</code>, <code>onWorkspaceHistoryProgress</code>) do not shadow legacy ones.  </li>
-<li><strong>Test coverage</strong> – Add unit tests for the new preload functions to guard against IPC regressions.</li>
-</ol>
+<ul>
+<li><strong>Missing main‑process handlers</strong>: Verify that <code>&quot;workspace-refresh-history&quot;</code> and <code>&quot;workspace-update-ui-state&quot;</code> are implemented in the main process; otherwise calls will fail.  </li>
+<li><strong>Documentation</strong>: Update API docs and README to expose the new functions.  </li>
+<li><strong>Testing</strong>: Add unit/integration tests to confirm the new IPC calls reach the main process and return expected results.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

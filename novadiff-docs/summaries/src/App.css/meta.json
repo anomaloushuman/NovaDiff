@@ -1,0 +1,33 @@
+{
+  "relPath": "src/App.css",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T22:03:48.932Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R2638-2646"
+    ],
+    "cited_changed_lines": [
+      "R2638 added: .novadiff-graph-embed .embed-graph-dashboard-pane {",
+      "R2639 added: overflow: hidden;",
+      "R2640 added: }",
+      "R2642 added: .novadiff-graph-embed .embed-graph-dashboard-pane > .novadiff-graph-embed {",
+      "R2643 added: flex: 1 1 auto;",
+      "R2644 added: min-height: 0;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

@@ -1,21 +1,21 @@
-### Overview  
-A new `src/app/BackgroundActivityContext.tsx` file introduces a React context for tracking background tasks, exposing a provider and two hooks.
+### Overview
+A new file `src/app/BackgroundActivityContext.tsx` (lines 1‑166) introduces a React context for tracking background activities across the app.
 
-### Key changes  
-- **Imports**: Adds `createContext`, `useCallback`, `useContext`, `useMemo`, `useState`, and `ReactNode` from *react* (lines 1‑6).  
-- **Types**: Declares `BackgroundActivityKind` enum‑like union (lines 10‑19) and `BackgroundActivity` interface (lines 22‑30).  
-- **Context value**: Defines `BackgroundActivityContextValue` (lines 37‑41) and creates the context (lines 44‑46).  
-- **Provider**: Implements `BackgroundActivityProvider` (lines 48‑95) with state, upsert, remove, and clear logic, sorting activities by `startedAt`.  
-- **Hooks**: Exposes `useBackgroundActivity` (lines 97‑103) that throws if used outside the provider, and `useBackgroundActivityOptional` (lines 106‑108) that returns `null` when no provider is present.
+### Key changes
+- **Imports**: `createContext`, `useCallback`, `useContext`, `useMemo`, `useState`, `ReactNode` from React (R1‑6).  
+- **Types**: `BackgroundActivityKind` enum (R10‑19) and `BackgroundActivity` interface (R22‑30).  
+- **Helpers**: `sameActivity` comparison (R37‑45) and `UpsertPatch` type (R32‑35).  
+- **Contexts**: `BackgroundActivityContext` and `BackgroundActivityActionsContext` (R58‑64).  
+- **Provider**: `BackgroundActivityProvider` (R65‑138) manages an array of activities, exposes `upsertActivity`, `removeActivity`, `clearActivities`, and sorts by `startedAt` (R85‑96).  
+- **Hooks**: `useBackgroundActivity`, `useBackgroundActivityOptional`, `useBackgroundActivityActions`, `useBackgroundActivityActionsOptional` (R140‑166) with runtime checks (R141‑144, R155‑160).
 
-### Impact  
-- **Correctness**: The provider guarantees a sorted activity list; the optional hook prevents crashes in optional embed paths.  
-- **Maintainability**: Centralized activity state simplifies adding new activity kinds or UI components.  
-- **Performance**: Sorting on every upsert may be costly with many activities; current implementation is acceptable for typical use.  
-- **Compatibility**: No changes to existing modules; the new file is self‑contained and only adds exports.
+### Impact
+- Centralized activity state reduces duplication; optional hooks allow safe use when the provider may be absent.  
+- Runtime errors are thrown if hooks are used outside the provider (lines 141‑144, 155‑160).  
+- Activities are sorted on every upsert; the list is small, so re‑render cost is expected to be low.
 
-### Risks & follow‑ups  
-- **Provider usage**: Verify that all components consuming the hooks are wrapped by `BackgroundActivityProvider`.  
-- **Null handling**: `useBackgroundActivityOptional` may return `null`; callers must guard against it.  
-- **Sorting overhead**: Benchmark with high activity churn to ensure sorting does not become a bottleneck.  
-- **Default values**: The provider defaults `kind` to `"other"`; confirm this aligns with intended UX for unknown kinds.
+### Risks & follow‑ups
+- **Provider omission**: components using the hooks must be wrapped by `BackgroundActivityProvider`; otherwise errors will occur.  
+- **Sorting side‑effects**: verify that ordering by `startedAt` matches UI expectations during concurrent upserts.  
+- **Optional hooks**: confirm that `useBackgroundActivityOptional` and `useBackgroundActivityActionsOptional` return `null` when the provider is missing.  
+- Run `npm run lint`, `npm test`, and `npm run build` to ensure the new module compiles and passes tests.

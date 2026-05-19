@@ -1,0 +1,22 @@
+{
+  "relPath": "electron/prefetch-summaries.cjs",
+  "kind": "modified",
+  "label": "Code explanation (L35-37)",
+  "selectionKey": "lines-35-37",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 35,
+      "rightEnd": 37
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T23:16:10.385Z"
+}

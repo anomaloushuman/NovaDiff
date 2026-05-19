@@ -1,23 +1,30 @@
 {
   "relPath": ".novadiff-graph/diff-overlay.json",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:08:15.075Z",
+  "generatedAt": "2026-05-19T22:33:25.344Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-1139"
+      "L4 / R4",
+      "L6",
+      "L10-22",
+      "L25-26",
+      "L29-181",
+      "L183-184 / R14",
+      "L187-198",
+      "L200-222"
     ],
     "cited_changed_lines": [
-      "R1 added: {",
-      "R2 added: \"version\": \"1.0.0\",",
-      "R3 added: \"baseBranch\": \"novadiff-compare\",",
-      "R4 added: \"generatedAt\": \"2026-05-19T20:52:49.663Z\",",
-      "R5 added: \"changedFiles\": [",
-      "R6 added: \".gitignore\","
+      "L4 removed: \"generatedAt\": \"2026-05-19T20:52:49.663Z\",",
+      "R4 added: \"generatedAt\": \"2026-05-19T22:18:08.136Z\",",
+      "L6 removed: \".gitignore\",",
+      "L10 removed: \"README.md\",",
+      "L11 removed: \"THIRD_PARTY_NOTICES.md\",",
+      "L12 removed: \"electron/compare-runner.cjs\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

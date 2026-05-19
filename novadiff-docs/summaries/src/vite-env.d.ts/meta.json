@@ -1,9 +1,9 @@
 {
   "relPath": "src/vite-env.d.ts",
   "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:21:59.533Z",
+  "generatedAt": "2026-05-19T22:39:53.766Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,38 +11,28 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R21 added: import type {"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R21-31",
-      "R207-250",
-      "R254-256",
-      "R264-374"
+      "R321-324",
+      "R329-332"
     ],
     "cited_changed_lines": [
-      "R21 added: import type {",
-      "R22 added: GitRepoStatus,",
-      "R23 added: GitToolingStatus,",
-      "R24 added: GithubPullRequestSummary,",
-      "R25 added: GithubRepoSummary,",
-      "R26 added: LocalRepoMatch,"
+      "R321 added: workspaceRefreshHistory?: (payload: {",
+      "R322 added: workspaceId: string;",
+      "R323 added: fetchRemote?: boolean;",
+      "R324 added: }) => Promise<import(\"./app/workspaceTypes\").NovaWorkspace>;",
+      "R329 added: workspaceUpdateUiState?: (payload: {",
+      "R330 added: workspaceId: string;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface ElectronAPI (104-383)"
+      "right interface ElectronAPI (104-391)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

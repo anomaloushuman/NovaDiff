@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T22:48:01.969Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "L11 removed: import { EmbedGraphPanel } from \"./EmbedGraphPanel\";",
+      "R11 added: import { EmbedDashboardPanel } from \"./EmbedDashboardPanel\";"
+    ],
+    "changed_line_ranges": [
+      "L11 / R11",
+      "L61 / R61-69",
+      "L71 / R79",
+      "L101 / R109"
+    ],
+    "cited_changed_lines": [
+      "L11 removed: import { EmbedGraphPanel } from \"./EmbedGraphPanel\";",
+      "R11 added: import { EmbedDashboardPanel } from \"./EmbedDashboardPanel\";",
+      "L61 removed: store.navigateToOverview();",
+      "R61 added: const kind = (graph as KnowledgeGraph & { kind?: string }).kind;",
+      "R62 added: if (kind === \"knowledge\") {",
+      "R63 added: store.setViewMode(\"knowledge\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function NovaDiffGraphExplorerEmbed (36-105)",
+      "right function NovaDiffGraphExplorerEmbed (36-113)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

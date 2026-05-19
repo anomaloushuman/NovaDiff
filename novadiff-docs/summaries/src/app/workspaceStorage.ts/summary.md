@@ -1,23 +1,21 @@
 ### Overview  
-A new file `src/app/workspaceStorage.ts` (R1‑R112) introduces local‑storage helpers for Git user data, active workspace ID, and a local‑only mode flag. It also defines the `OnboardingGate` type and provides utilities for resolving the onboarding step, merging session state, and finding a workspace by ID.
+`src/app/workspaceStorage.ts` now adds two boolean options to `resolveOnboardingGate`: `launchAuthConfirmed` and `launchWorkspaceConfirmed` (added at lines 71‑74). The function signature still lists `hasUser` and `hasActiveWorkspace`, but the logic no longer references them. The gating now depends only on `skipBoot`, `localOnlyMode`, and the new flags.
 
 ### Key changes  
-- **Imports**: `GitUserProfile`, `NovaWorkspace`, `WorkspaceSessionState` from `./workspaceTypes` (R1).  
-- **Constants**: `USER_KEY`, `ACTIVE_WS_KEY`, `LOCAL_ONLY_KEY` (R3‑R5).  
-- **Git user helpers**: `loadCachedGitUser`, `saveCachedGitUser`, `clearCachedGitUser` (R7‑R25).  
-- **Active workspace helpers**: `loadCachedActiveWorkspaceId`, `saveCachedActiveWorkspaceId` (R27‑R41).  
-- **Local‑only mode helpers**: `loadCachedLocalOnly`, `saveCachedLocalOnly` (R45‑R63).  
-- **Onboarding**: `OnboardingGate` type and `resolveOnboardingGate` (R43‑R86).  
-- **Session utilities**: `mergeSession` (R88‑R102).  
-- **Workspace lookup**: `findWorkspace` (R104‑R112).
+- **New option fields** (`launchAuthConfirmed`, `launchWorkspaceConfirmed`) added with comments at R71‑R74.  
+- **Local‑only mode logic** updated at R81‑R82: if `!opts.launchWorkspaceConfirmed` return `"welcome"`.  
+- **Legacy gating removed**: blocks that returned `"welcome"` or `"hub"` based on `hasUser`/`hasActiveWorkspace` (originally lines 79‑91) are deleted.  
+- **Return path**: after the local‑only check, the function always returns `"app"` if no earlier return occurs.  
+- **Signature unchanged**: `hasUser` and `hasActiveWorkspace` remain in the parameter list but are unused.
 
 ### Impact  
-- **API surface**: Exposes a clear set of functions for caching and session handling; no existing modules are altered.  
-- **Error handling**: All storage accesses are wrapped in `try/catch` blocks that return safe defaults (e.g., `null` or `false`).  
-- **Performance**: Operations are synchronous and lightweight; localStorage is accessed only when needed.
+- The function now yields only `"boot"`, `"welcome"` (in local‑only mode), or `"app"`. The `"hub"` gate is no longer reachable.  
+- Callers that previously relied on `hasUser` or `hasActiveWorkspace` must now provide `launchAuthConfirmed` and `launchWorkspaceConfirmed` to control the flow.  
+- Existing telemetry or logs that referenced the removed gates should be reviewed.  
+- The change is O(1) and has negligible runtime impact.
 
 ### Risks & follow‑ups  
-- **Silent failures**: Catch blocks swallow errors; consider logging in development to surface storage issues.  
-- **Type alignment**: Verify that `GitUserProfile` and `WorkspaceSessionState` match the JSON structures stored; run TypeScript checks.  
-- **Onboarding logic**: Ensure `resolveOnboardingGate` prioritizes flags (`skipBoot`, `localOnlyMode`, `hasUser`, `hasActiveWorkspace`) as intended; unit tests are recommended.  
-- **Testing coverage**: Add tests for each helper to confirm correct serialization, error handling, and merge behavior.
+- **Regression in onboarding**: tests or UI paths expecting a `"hub"` gate may fail; run end‑to‑end tests to confirm the new flow.  
+- **Flag misuse**: if `launchAuthConfirmed` or `launchWorkspaceConfirmed` are not set correctly, users may skip the welcome screen unintentionally.  
+- **Legacy references**: search the codebase for `hasUser` and `hasActiveWorkspace` to ensure no remaining dependencies.  
+- **Documentation**: update any docs that mention the old gating logic.

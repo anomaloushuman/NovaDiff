@@ -2543,13 +2543,18 @@ body {
     0 0 0 1px color-mix(in srgb, var(--accent-2) 8%, transparent),
     0 12px 40px color-mix(in srgb, var(--bg-deep) 65%, transparent);
   /* Align embedded graph-view theme with NovaDiff palette */
-  --color-root: var(--bg);
+  --color-root: var(--bg-deep);
   --color-surface: var(--surface);
   --color-elevated: var(--surface-2);
   --color-panel: var(--surface-2);
   --color-accent: var(--accent);
   --color-accent-dim: color-mix(in srgb, var(--accent) 85%, var(--text));
   --color-accent-bright: var(--accent-2);
+  --color-gold: var(--accent-2);
+  --color-gold-dim: color-mix(in srgb, var(--accent-2) 80%, var(--muted));
+  --color-gold-bright: var(--accent-2);
+  --font-heading: var(--font-sans, "Inter", system-ui, sans-serif);
+  --font-serif: var(--font-sans, "Inter", system-ui, sans-serif);
   --color-text-primary: var(--text);
   --color-text-secondary: color-mix(in srgb, var(--muted) 55%, var(--text));
   --color-text-muted: var(--muted);
@@ -2635,6 +2640,15 @@ body {
   width: 100%;
 }
 
+.novadiff-graph-embed .embed-graph-dashboard-pane {
+  overflow: hidden;
+}
+
+.novadiff-graph-embed .embed-graph-dashboard-pane > .novadiff-graph-embed {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .novadiff-graph-embed .embed-graph-layout-overlay {
   position: absolute;
   inset: 0;
@@ -2643,9 +2657,81 @@ body {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  background: rgba(10, 10, 10, 0.45);
-  color: #d4a574;
+  background: color-mix(in srgb, var(--bg-deep) 72%, transparent);
+  color: var(--accent-2);
   font-size: 14px;
+}
+
+/* Embed chrome — match doc workspace panels (no film grain, NovaDiff accents) */
+.novadiff-graph-shell .novadiff-graph-embed.noise-overlay::before,
+.novadiff-graph-shell .novadiff-graph-embed .noise-overlay::before {
+  display: none;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed > header,
+.novadiff-graph-shell .novadiff-graph-embed header {
+  background: color-mix(in srgb, var(--surface-2) 88%, var(--bg-deep));
+  border-bottom-color: color-mix(in srgb, var(--border) 80%, var(--accent-2) 14%);
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+
+.novadiff-graph-shell .novadiff-graph-embed > header h1,
+.novadiff-graph-shell .novadiff-graph-embed header h1 {
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--text);
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .bg-elevated.rounded-lg {
+  background: color-mix(in srgb, var(--surface-2) 75%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, var(--accent-2) 10%);
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .bg-accent\/20 {
+  background: color-mix(in srgb, var(--accent-2) 16%, var(--surface-2)) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .text-accent {
+  color: var(--accent-2) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .border-gold\/30,
+.novadiff-graph-shell .novadiff-graph-embed .border-gold\/40 {
+  border-color: color-mix(in srgb, var(--accent-2) 32%, var(--border)) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .text-gold,
+.novadiff-graph-shell .novadiff-graph-embed .text-gold-bright {
+  color: var(--accent-2) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .hover\:text-gold-bright:hover {
+  color: var(--accent-2) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .bg-gold\/20 {
+  background: color-mix(in srgb, var(--accent-2) 14%, transparent) !important;
+}
+
+.novadiff-graph-shell .novadiff-graph-embed input[type="search"],
+.novadiff-graph-shell .novadiff-graph-embed input[type="text"] {
+  background: color-mix(in srgb, var(--surface) 82%, var(--bg-deep));
+  border-color: color-mix(in srgb, var(--border) 85%, var(--accent-2) 12%);
+  border-radius: 10px;
+  font-family: var(--font-sans, "Inter", system-ui, sans-serif);
+}
+
+.novadiff-graph-shell .novadiff-graph-embed input:focus {
+  border-color: color-mix(in srgb, var(--accent-2) 45%, var(--border));
+  outline: none;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-2) 22%, transparent);
+}
+
+.novadiff-graph-shell .novadiff-graph-embed .react-flow__pane {
+  background: var(--bg-deep);
 }
 
 .knowledge-graph-panel.has-viewer {
@@ -2755,8 +2841,43 @@ body {
   color: color-mix(in srgb, var(--muted) 70%, var(--accent-2));
 }
 
-.novadiff-graph-embed .noise-overlay::before {
-  opacity: 0.35;
+.novadiff-graph-inspector {
+  width: min(360px, 38vw);
+  min-width: 280px;
+  max-width: 420px;
+  z-index: 15;
+}
+
+.novadiff-graph-inspector-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 80%, var(--accent-2) 14%);
+  background: color-mix(in srgb, var(--surface-2) 90%, var(--bg-deep));
+}
+
+.novadiff-graph-inspector-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--muted) 70%, var(--accent-2));
+}
+
+.novadiff-graph-inspector-close {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.35rem;
+  line-height: 1;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.novadiff-graph-inspector-close:hover {
+  color: var(--text);
 }
 
 .novadiff-graph-load-error {

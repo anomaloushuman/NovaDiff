@@ -1,21 +1,25 @@
 ### Overview  
-A new component `HistoryCompareStrip` is added in `src/components/HistoryCompareStrip.tsx` (lines 1‑212). It renders a header strip that lets the user pick a base commit, a head commit (or a live folder), and trigger a comparison.
+`HistoryCompareStrip` now displays the live repository path in a read‑only field and uses `pathDisplayLabel` to format that path. The component no longer accepts user edits to the live repo root.
 
 ### Key changes  
-- **Imports** (lines 1‑7):  
-  ```ts
-  import { ArrowLeftRight, ChevronDown, GitBranch, GitCompareArrows, Loader2 } from "lucide-react";
-  import type { WorkspaceCommitSnapshot } from "../app/workspaceTypes";
-  ```
-- **Props interface** (lines 10‑27): `HistoryCompareStripProps` declares `commits`, `baseHash`, `headHash`, `useLiveHead`, `liveRepoRoot`, `busy`, `error`, `indexing`, and callbacks `onBaseHash`, `onHeadHash`, `onUseLiveHead`, `onLiveRepoRoot`, `onBrowseLiveRepo`, `onLiveRepoBlur`, `onSwap`, `onCompare`.  
-- **Helper functions** (lines 29‑40): `truncateSubject` trims and shortens a subject; `commitLabel` formats a commit label.  
-- **Component** (lines 41‑212): computes `base` and `head` from `commits`, determines `canCompare` based on `indexing`, `busy`, and `useLiveHead`; renders selectors, a live‑folder toggle, and a compare button that shows `Loader2` when `busy`. Exported with `export function HistoryCompareStrip`.
+- **Import added**: `import { pathDisplayLabel } from "../app/pathDisplay";` (line 9).  
+- **Prop renamed**: `onLiveRepoRoot` → `_onLiveRepoRoot` in the signature (lines 53‑54); the prop is no longer referenced.  
+- **Input updated**:  
+  - `value={pathDisplayLabel(liveRepoRoot)}` (lines 140‑141).  
+  - `readOnly` attribute added (line 141).  
+  - `onChange` handler removed (lines 139‑140).  
+  - Placeholder changed to `"Browse for live clone…"` (lines 142‑143).  
+  - `title` attribute removed (line 144).  
 
 ### Impact  
-Adds a self‑contained UI element; no existing modules are modified. The component relies on the `commits` array and hash matching to populate selectors.
+- **UI**: The live‑repo path is now immutable; users must click the browse button to change it.  
+- **API**: The component still declares an `_onLiveRepoRoot` prop but does not use it, which may confuse callers.  
+- **Formatting**: `pathDisplayLabel` ensures a consistent, user‑friendly display of the repo path.  
+- **Tests**: Any tests expecting the live‑repo input to be editable will need updating.  
+- **Lint**: The unused `_onLiveRepoRoot` may trigger a warning; consider removing it if no longer needed.
 
 ### Risks & follow‑ups  
-- `commits` must contain matching hashes; otherwise selectors show “Choose base/…”.  
-- The `onCompare` callback must be wired to perform the comparison; otherwise the button is inert.  
-- Verify that the live‑folder toggle correctly enables the input field and disables the head selector.  
-- Confirm that `Loader2` and `GitCompareArrows` render correctly in the current theme.
+- **Regression**: Callers that rely on `onLiveRepoRoot` being invoked will silently fail. Verify that such callbacks are no longer required.  
+- **Unused prop**: Decide whether to keep `_onLiveRepoRoot` for backward compatibility or remove it to avoid lint noise.  
+- **Localization**: The placeholder text change may need to be reflected in i18n resources.  
+- **Testing**: Update unit tests for `HistoryCompareStrip` to assert the read‑only behavior and new placeholder.

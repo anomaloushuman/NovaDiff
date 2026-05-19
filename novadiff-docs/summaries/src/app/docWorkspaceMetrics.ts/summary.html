@@ -26,34 +26,38 @@
 <body>
   <header class="top">
     <h1>src/app/docWorkspaceMetrics.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:03:11.653Z</div>
+    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:24:33.464Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>depthBarMermaid</code> helper was refactored to replace the old flowchart bar graph with an XY chart. The change trims the displayed depth slice from 14 to 12 entries and updates the empty‑state message.</p>
+<p><code>depthBarMermaid</code> in <strong>src/app/docWorkspaceMetrics.ts</strong> was refactored to replace the old bar‑graph logic with an XY‑style chart. The function now limits the depth slice to 12 levels and updates the empty‑data message.</p>
 <h3>Key changes</h3>
 <ul>
 <li><strong>Slice size</strong> – <code>metrics.depthHistogram.slice(0, 12)</code> (line 189) replaces the previous <code>slice(0, 14)</code>.  </li>
-<li><strong>Empty‑state text</strong> – <code>&quot;No path depth data&quot;</code> (line 191) replaces <code>&quot;No data&quot;</code>.  </li>
-<li><strong>Graph type</strong> – the function now returns an <code>xychart-beta</code> block (lines 197‑203) instead of a <code>flowchart TB</code> with bar nodes (lines 193‑197).  </li>
-<li><strong>Label construction</strong> – depth labels are generated via <code>labels = rows.map(d =&gt; \</code>d${d.depth}`)<code>and</code>values = rows.map(d =&gt; d.count)` (lines 193‑196).  </li>
-<li><strong>Y‑axis scaling</strong> – <code>yMax</code> is computed as `Math.max(maxVal, Math.ceil(maxVal</li>
+<li><strong>Empty case</strong> – returns <code>&quot;flowchart LR\n  empty[No path depth data]&quot;</code> (line 191).  </li>
+<li><strong>Chart type</strong> – the former <code>parts</code> array and <code>flowchart TB</code> block (lines 193‑197) were removed.  </li>
+<li><strong>Label/value extraction</strong> – <code>labels = rows.map(d =&gt; \</code>d${d.depth}`)<code>and</code>values = rows.map(d =&gt; d.count)` (lines 193‑196).  </li>
+<li><strong>Dynamic y‑axis</strong> – <code>yMax</code> is computed as `Math.max(maxVal, Math.ceil(maxVal</li>
 </ul>
 <ul>
-<li>1.15))` (line 201) to give a 15 % headroom.</li>
+<li>1.15))` (lines 196‑201).</li>
+</ul>
+<ul>
+<li><strong>Return</strong> – an array of strings joined with <code>\n</code> that defines an <code>xychart-beta</code> block (lines 197‑203).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Visual output</strong>: Consumers of the Mermaid string will now see an XY chart instead of a bar graph, changing the appearance of depth histograms.  </li>
-<li><strong>Performance</strong>: Limiting to 12 rows reduces the amount of data rendered, slightly improving rendering speed.  </li>
-<li><strong>Maintainability</strong>: The new implementation is more declarative and removes manual node‑generation logic, easing future tweaks.</li>
+<li><strong>Visual output</strong> – consumers will see an XY chart instead of a bar graph; rendering must support <code>xychart-beta</code>.  </li>
+<li><strong>Data coverage</strong> – only the first 12 depth levels are shown, which may hide deeper information but keeps the chart readable.  </li>
+<li><strong>Performance</strong> – the new logic is linear in the sliced array, similar to the old implementation.  </li>
+<li><strong>Maintainability</strong> – the code is now a single, explicit path with clear label/value extraction.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Rendering failures</strong>: Verify that the target environment’s Mermaid version supports <code>xychart-beta</code>; older renderers may not support it, potentially breaking dashboards.  </li>
-<li><strong>Test regressions</strong>: Existing unit tests that assert the exact Mermaid string will fail; update expectations or add conditional checks.  </li>
-<li><strong>Documentation</strong>: UI or docs may need to explain the new chart type and its interpretation.  </li>
-<li><strong>Edge cases</strong>: Ensure that when <code>metrics.depthHistogram</code> has fewer than 12 entries, the chart still renders correctly and the Y‑axis scaling behaves as intended.</li>
+<li><strong>Chart compatibility</strong> – unknown from the diff; verify that the target Mermaid renderer supports <code>xychart-beta</code>.  </li>
+<li><strong>Regression tests</strong> – snapshots or visual tests that asserted the old bar‑graph output will need updating.  </li>
+<li><strong>Documentation</strong> – update README or docs to note the new chart type and the reduced depth slice.  </li>
+<li><strong>Edge cases</strong> – confirm that fewer than 12 histogram entries still produce a valid chart and that the empty‑data message triggers correctly.</li>
 </ul>
 </article>
   </main>

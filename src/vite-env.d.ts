@@ -318,9 +318,17 @@ export interface ElectronAPI {
   workspaceIndexHistory?: (payload: {
     workspaceId: string;
   }) => Promise<import("./app/workspaceTypes").NovaWorkspace>;
+  workspaceRefreshHistory?: (payload: {
+    workspaceId: string;
+    fetchRemote?: boolean;
+  }) => Promise<import("./app/workspaceTypes").NovaWorkspace>;
   workspaceUpdateLiveRepo?: (payload: {
     workspaceId: string;
     liveDevRepoRoot: string;
+  }) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
+  workspaceUpdateUiState?: (payload: {
+    workspaceId: string;
+    uiState: import("./app/workspaceTypes").WorkspaceUiState;
   }) => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
   gitBlameAtRef?: (payload: {
     repoRoot: string;

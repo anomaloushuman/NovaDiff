@@ -8,7 +8,7 @@ import {
   type NovaDiffSourceFile,
 } from "./contexts/NovaDiffEmbedContext";
 import { I18nProvider } from "./contexts/I18nContext";
-import { EmbedGraphPanel } from "./EmbedGraphPanel";
+import { EmbedDashboardPanel } from "./EmbedDashboardPanel";
 
 export interface NovaDiffGraphExplorerEmbedProps {
   graph: KnowledgeGraph;
@@ -58,7 +58,15 @@ export function NovaDiffGraphExplorerEmbed({
     store.resetEmbedOverlays();
     store.clearLayoutIssues();
     store.setGraph(validation.data);
-    store.navigateToOverview();
+    const kind = (graph as KnowledgeGraph & { kind?: string }).kind;
+    if (kind === "knowledge") {
+      store.setViewMode("knowledge");
+      store.setIsKnowledgeGraph(true);
+    } else {
+      store.setViewMode("structural");
+      store.setIsKnowledgeGraph(false);
+      store.enterNovaDiffEmbedDepth();
+    }
   }, [graph, validation]);
 
   useEffect(() => {
@@ -68,7 +76,7 @@ export function NovaDiffGraphExplorerEmbed({
       store.stopTour();
       store.resetEmbedOverlays();
       store.clearLayoutIssues();
-      store.navigateToOverview();
+      store.enterNovaDiffEmbedDepth();
     };
   }, []);
 
@@ -98,7 +106,7 @@ export function NovaDiffGraphExplorerEmbed({
   return (
     <NovaDiffEmbedContext.Provider value={embedValue}>
       <I18nProvider language={outputLanguage}>
-        <EmbedGraphPanel />
+        <EmbedDashboardPanel graphIssues={validation.issues} />
       </I18nProvider>
     </NovaDiffEmbedContext.Provider>
   );

@@ -4,6 +4,7 @@ import type {
   FileDiffPayload,
   SelectionDocMode,
 } from "../app/types";
+import { pathDisplayLabel } from "../app/pathDisplay";
 import {
   ArrowLeftRight,
   ChevronDown,
@@ -59,8 +60,8 @@ interface DiffWorkspaceProps {
 export function DiffWorkspace({
   leftRoot,
   rightRoot,
-  onLeft,
-  onRight,
+  onLeft: _onLeft,
+  onRight: _onRight,
   onBrowseLeft,
   onBrowseRight,
   onSwapRoots,
@@ -121,12 +122,11 @@ export function DiffWorkspace({
                   id="novadiff-path-baseline"
                   className="path-selector-input"
                   aria-label="Base tree"
-                  value={leftRoot}
-                  onChange={(e) => onLeft(e.target.value)}
+                  value={pathDisplayLabel(leftRoot)}
+                  readOnly
                   placeholder="Select base…"
                   spellCheck={false}
                   autoComplete="off"
-                  title={leftRoot.trim() || undefined}
                 />
                 <button
                   type="button"
@@ -157,12 +157,11 @@ export function DiffWorkspace({
                   id="novadiff-path-target"
                   className="path-selector-input"
                   aria-label="Target right tree"
-                  value={rightRoot}
-                  onChange={(e) => onRight(e.target.value)}
+                  value={pathDisplayLabel(rightRoot)}
+                  readOnly
                   placeholder="Select target…"
                   spellCheck={false}
                   autoComplete="off"
-                  title={rightRoot.trim() || undefined}
                 />
                 <button
                   type="button"

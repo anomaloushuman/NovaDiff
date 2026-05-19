@@ -26,33 +26,38 @@
 <body>
   <header class="top">
     <h1>src/app/gitTypes.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:03:40.736Z</div>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:25:20.472Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/gitTypes.ts</code> has been added. It declares a set of TypeScript interfaces that describe Git tooling status, GitHub authentication, repository and pull‑request summaries, blame information, status files, and publish workflow data.</p>
+<p>A new file <code>src/app/gitTypes.ts</code> (added lines 1‑125) defines a set of TypeScript interfaces that model Git tooling status, GitHub authentication, repository and pull‑request summaries, local repo matching, blame analysis, file status, publishing previews, and execution payloads.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>GitToolingStatus</code></strong> (lines 1‑6) – captures Git availability, version, error, and GitHub auth status.  </li>
-<li><strong><code>GithubAuthStatus</code></strong> (lines 10‑17) – describes authentication state, user, host, scopes, and a message.  </li>
-<li><strong><code>GithubRepoSummary</code></strong> (lines 19‑28) – provides metadata for a GitHub repo (owner, name, URLs, default branch, fork flag, update time).  </li>
-<li><strong><code>GithubPullRequestSummary</code></strong> (lines 30‑41) – details a PR (number, title, state, refs, author, draft flag, repo).  </li>
-<li><strong><code>PublishPreview</code></strong>, <strong><code>PublishExecuteResult</code></strong>, <strong><code>PublishExecutePayload</code></strong> (lines 91‑125) – model the publish preview, execution result, and payload for the publish command.  </li>
-<li>Additional supporting interfaces (<code>LocalRepoMatch</code>, <code>GitBlameOwner</code>, <code>GitBlameAtRefResult</code>, <code>GitStatusFile</code>, <code>GitRepoStatus</code>, <code>PrCompareRoots</code>) are also introduced.</li>
+<li><code>GitToolingStatus</code> (lines 1‑6) – exposes Git availability, version, error, and a nested <code>GithubAuthStatus</code>.  </li>
+<li><code>GithubAuthStatus</code> (lines 10‑16) – flags for availability, login, user, hostname, scopes, and a message.  </li>
+<li><code>GithubRepoSummary</code> (lines 19‑27) – lightweight repo metadata.  </li>
+<li><code>GithubPullRequestSummary</code> (lines 30‑41) – PR metadata including number, title, state, refs, author, and draft flag.  </li>
+<li><code>LocalRepoMatch</code> (lines 43‑47) – path, name, slug, and remote URL.  </li>
+<li><code>GitBlameOwner</code> (lines 50‑54) – author, line count, ratio.  </li>
+<li><code>GitBlameAtRefResult</code> (lines 56‑62) – blame result structure.  </li>
+<li><code>GitStatusFile</code> (lines 64‑69) – file path, status, staged/unstaged flags.  </li>
+<li><code>GitRepoStatus</code> (lines 71‑82) – repo root, branch, head, upstream, sync counters, dirty flag, files, remotes, subdir.  </li>
+<li><code>PrCompareRoots</code> (lines 84‑88) – roots and refs for comparison.  </li>
+<li><code>PublishPreview</code> (lines 91‑102) – preview of a publish operation.  </li>
+<li><code>PublishExecuteResult</code> (lines 104‑111) – result of executing a publish.  </li>
+<li><code>PublishExecutePayload</code> (lines 113‑125) – payload for a publish request.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Compile‑time safety</strong>: Existing code that imports these interfaces will benefit from stricter type checking.  </li>
-<li><strong>API surface expansion</strong>: New interfaces may be referenced by other modules; missing imports will surface as TypeScript errors.  </li>
-<li><strong>Documentation</strong>: The added types serve as a single source of truth for Git‑related data structures, improving maintainability.  </li>
-<li><strong>No runtime changes</strong>: The file contains only type definitions, so the built JavaScript output is unaffected.</li>
+<li>Provides a unified type surface for all git‑related data, improving compile‑time type safety.  </li>
+<li>No runtime code is added; the change is purely declarative.  </li>
+<li>Existing modules can import these interfaces from <code>src/app/gitTypes.ts</code> for clearer contracts.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing imports</strong>: Verify that modules consuming these types import from <code>src/app/gitTypes.ts</code>.  </li>
-<li><strong>Property mismatches</strong>: Ensure that any existing objects conform to the new interface shapes (e.g., <code>GitToolingStatus.git.gitVersion</code> can be <code>null</code>).  </li>
-<li><strong>Build &amp; lint</strong>: Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to confirm no type errors.  </li>
-<li><strong>Documentation</strong>: Update any README or API docs that reference GitHub or Git status structures to reflect the new interfaces.</li>
+<li>Verify that imports reference the correct path (<code>src/app/gitTypes.ts</code>).  </li>
+<li>Ensure no name clashes with existing symbols in other modules.  </li>
+<li>Run the TypeScript compiler and the test suite to confirm no type errors arise from the new definitions.</li>
 </ul>
 </article>
   </main>

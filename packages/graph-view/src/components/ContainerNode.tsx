@@ -46,9 +46,11 @@ function ContainerNodeComponent({ data, width, height }: NodeProps<ContainerFlow
       style={{
         width,
         height,
-        background: "rgba(255,255,255,0.02)",
+        // Expanded: keep border frame but let child↔child edges show through.
+        background: data.isExpanded ? "transparent" : "rgba(255,255,255,0.02)",
         border: `${borderWidth}px solid ${borderColor}`,
         position: "relative",
+        pointerEvents: "auto",
       }}
       onClick={handleToggle}
       onKeyDown={(e) => {

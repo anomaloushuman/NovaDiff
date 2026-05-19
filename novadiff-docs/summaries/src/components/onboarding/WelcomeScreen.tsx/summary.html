@@ -26,32 +26,43 @@
 <body>
   <header class="top">
     <h1>src/components/onboarding/WelcomeScreen.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:25:28.271Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:44:41.506Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new onboarding screen is added at <code>src/components/onboarding/WelcomeScreen.tsx</code> (lines 1‑399). It guides users through GitHub CLI detection, installation, and authentication before proceeding to workspace setup.</p>
+<p>The <code>WelcomeScreen</code> component now accepts an optional <code>cachedGitUser</code> prop.  </p>
+<ul>
+<li><code>WelcomeScreenProps</code> gains <code>cachedGitUser?: GitUserProfile | null</code> (see <code>L6</code>).  </li>
+<li>The component signature changes to <code>WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly })</code> (<code>R11</code>).  </li>
+<li>The <code>refresh</code> callback now lists <code>cachedGitUser?.login</code> in its dependency array (<code>R67</code>).  </li>
+<li>After fetching users, the logic first checks if <code>cachedGitUser</code> matches a detected account and selects it; otherwise it falls back to the first user (<code>R56‑R58</code>).</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Component &amp; props</strong> – <code>WelcomeScreen</code> implements <code>WelcomeScreenProps</code> (R5‑R7) with callbacks <code>onComplete</code> (receives a <code>GitUserProfile</code>) and <code>onLocalOnly</code>.  </li>
-<li><strong>Imports</strong> – Added React hooks (R1), Lucide icons (R2), and types <code>GhToolingStatus</code>, <code>GitUserProfile</code> from <code>../../app/workspaceTypes</code> (R3).  </li>
-<li><strong>State &amp; effects</strong> – Uses <code>useState</code> for loading, error, auth, device code, installation log, and GitHub status; several <code>useEffect</code> hooks keep the UI in sync with <code>window.electronAPI</code> (R26‑R64, R76‑R104).  </li>
-<li><strong>Flows</strong> – Functions <code>installGh</code>, <code>startAuth</code>, <code>copyCode</code>, and <code>confirmUser</code> orchestrate CLI installation, OAuth device flow, clipboard handling, and final user confirmation (R106‑R188).  </li>
-<li><strong>Conditional rendering</strong> – UI sections for CLI detection, installation prompts, auth status, user list, and a local‑only fallback are displayed based on state flags (R193‑R398).</li>
+<li><strong>Prop addition</strong> – <code>cachedGitUser</code> added to <code>WelcomeScreenProps</code> (<code>L6</code>).  </li>
+<li><strong>Signature update</strong> – component now receives <code>{ cachedGitUser, onComplete, onLocalOnly }</code> (<code>R11</code>).  </li>
+<li><strong>Dependency update</strong> – <code>refresh</code> depends on <code>cachedGitUser?.login</code> (<code>R67</code>).  </li>
+<li><strong>Selection logic</strong> – auto‑select cached user if present (<code>R56‑R58</code>).  </li>
+<li><strong>UI changes</strong> –  <ul>
+<li>Removed the old “Continue as @login” button block (<code>L363‑L384</code>).  </li>
+<li>New continue button text shows “Use a different account” when a cached user exists, otherwise “Continue with GitHub” (<code>R397</code>).  </li>
+<li>Button disabled state now uses <code>selected</code> instead of <code>cachedGitUser</code> (<code>R388</code>).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Runtime dependency</strong> – All referenced <code>window.electronAPI</code> methods (<code>githubGhStatus</code>, <code>githubDetectedUsers</code>, etc.) must exist; missing methods will throw at runtime.  </li>
-<li><strong>Parent contract</strong> – Components that render <code>WelcomeScreen</code> must provide <code>onComplete</code> and <code>onLocalOnly</code> handlers.  </li>
-<li><strong>State updates</strong> – The component performs multiple state updates; re‑renders are expected but not quantified in the diff.</li>
+<li><strong>User experience</strong> – Cached accounts are pre‑selected, reducing friction.  </li>
+<li><strong>API contract</strong> – Callers must provide <code>cachedGitUser</code> or handle its absence; omitting it may lead to default <code>undefined</code> behavior.  </li>
+<li><strong>UI clarity</strong> – Button text and disabled state reflect the presence of a cached user.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>API availability</strong> – Verify that <code>window.electronAPI</code> exposes the required methods; otherwise the component will fail.  </li>
-<li><strong>Callback contract</strong> – Ensure <code>onComplete</code> receives a fully populated <code>GitUserProfile</code>; type mismatches could break downstream logic.  </li>
-<li><strong>Auth flow robustness</strong> – Test device code copy, clipboard fallback, and error handling paths (see <code>copyCode</code> implementation).  </li>
-<li><strong>UI correctness</strong> – Confirm that conditional sections render as intended for different <code>ghStatus</code> states and that accessibility attributes are present.</li>
-</ul>
+<ol>
+<li><strong>Missing prop</strong> – Verify that all imports of <code>WelcomeScreen</code> supply <code>cachedGitUser</code>; otherwise the component defaults to <code>undefined</code>.  </li>
+<li><strong>Selection edge case</strong> – Ensure that when <code>cachedGitUser</code> is not in the detected list, the fallback still selects the first user (<code>R58</code>).  </li>
+<li><strong>Dependency array</strong> – Confirm that adding <code>cachedGitUser?.login</code> to <code>refresh</code>’s deps triggers a refresh when the cached user changes (<code>R67</code>).  </li>
+<li><strong>UI regression</strong> – Run visual tests to validate the new button text and disabled state (<code>R397</code>, <code>R388</code>).</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

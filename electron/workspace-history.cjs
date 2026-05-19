@@ -3,7 +3,7 @@
 const fsp = require("node:fs/promises");
 const fssync = require("node:fs");
 const path = require("node:path");
-const { runGit } = require("./git-service.cjs");
+const { runGit, tryRunGit } = require("./git-service.cjs");
 
 function removeDirSafe(dir) {
   try {
@@ -182,9 +182,118 @@ async function indexWorkspaceHistory(userData, workspaceId, sendProgress) {
   return workspace;
 }
 
+/**
+ * Re-read git log (optional fetch), snapshot only new commits, keep existing snapshots.
+ */
+async function refreshWorkspaceHistory(userData, workspaceId, sendProgress, opts = {}) {
+  const workspace = await getWorkspace(userData, workspaceId);
+  if (!workspace) {
+    throw new Error("Workspace not found");
+  }
+  const repoRoot = workspace.repoRoot;
+  if (opts.fetchRemote !== false) {
+    tryRunGit(repoRoot, ["fetch", "--all", "--prune", "--tags"]);
+  }
+
+  const allCommits = listCommitsOldestFirst(repoRoot);
+  const total = allCommits.length;
+  const existingByHash = new Map(
+    (Array.isArray(workspace.commits) ? workspace.commits : []).map((c) => [c.hash, c]),
+  );
+
+  workspace.historyStatus = "indexing";
+  workspace.historyError = null;
+  workspace.historyProgress = { current: 0, total, message: "Refreshing history…" };
+  await upsertWorkspace(userData, workspace);
+  sendProgress?.({
+    workspaceId,
+    current: 0,
+    total,
+    message: "Refreshing history…",
+  });
+
+  const snapshots = [];
+  let previousSnap = null;
+  for (let i = 0; i < allCommits.length; i++) {
+    const c = allCommits[i];
+    const snapDir = path.join(workspace.dataDir, "snapshots", c.shortHash);
+    const docsDir = path.join(workspace.dataDir, "docs", c.shortHash);
+    const existing = existingByHash.get(c.hash);
+    const existingSnap =
+      existing?.snapshotPath && isUsableSnapshotDir(existing.snapshotPath)
+        ? existing.snapshotPath
+        : isUsableSnapshotDir(snapDir)
+          ? snapDir
+          : null;
+
+    const msg = existingSnap
+      ? `Commit ${i + 1}/${total}: ${c.shortHash} (cached)`
+      : `Snapshot ${i + 1}/${total}: ${c.shortHash}`;
+    sendProgress?.({
+      workspaceId,
+      current: i,
+      total,
+      message: msg,
+      hash: c.hash,
+    });
+    workspace.historyProgress = { current: i + 1, total, message: msg };
+    await upsertWorkspace(userData, workspace);
+
+    if (!existingSnap) {
+      await snapshotCommit(repoRoot, c.hash, snapDir);
+      await fsp.mkdir(docsDir, { recursive: true });
+      await fsp.writeFile(
+        path.join(docsDir, "commit-meta.json"),
+        `${JSON.stringify({ ...c, index: i, previousHash: previousSnap?.hash ?? null }, null, 2)}\n`,
+        "utf8",
+      );
+      if (previousSnap) {
+        await fsp.writeFile(
+          path.join(docsDir, "README.md"),
+          `# ${c.subject}\n\nCommit \`${c.shortHash}\` · ${c.authoredAt}\n\nDocumentation bundle for this revision (compare against parent snapshot in NovaDiff history view).\n`,
+          "utf8",
+        );
+      } else {
+        await fsp.writeFile(
+          path.join(docsDir, "README.md"),
+          `# ${c.subject}\n\nInitial commit \`${c.shortHash}\` · ${c.authoredAt}\n`,
+          "utf8",
+        );
+      }
+    }
+
+    const snapPath = existingSnap || snapDir;
+    snapshots.push({
+      hash: c.hash,
+      shortHash: c.shortHash,
+      subject: c.subject,
+      authoredAt: c.authoredAt,
+      snapshotPath: snapPath,
+      docsPath: existing?.docsPath ?? docsDir,
+      indexedAt: existing?.indexedAt ?? new Date().toISOString(),
+    });
+    previousSnap = { hash: c.hash, snapDir: snapPath };
+  }
+
+  workspace.commits = snapshots;
+  workspace.historyStatus = "ready";
+  workspace.historyProgress = { current: total, total, message: "History ready" };
+  workspace.updatedAt = new Date().toISOString();
+  await upsertWorkspace(userData, workspace);
+  sendProgress?.({
+    workspaceId,
+    current: total,
+    total,
+    message: "Complete",
+    done: true,
+  });
+  return workspace;
+}
+
 module.exports = {
   listCommitsOldestFirst,
   indexWorkspaceHistory,
+  refreshWorkspaceHistory,
   snapshotCommit,
   ensureCommitSnapshot,
   isUsableSnapshotDir,

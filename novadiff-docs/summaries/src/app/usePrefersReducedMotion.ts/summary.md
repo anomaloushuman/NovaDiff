@@ -1,22 +1,22 @@
-### Overview
-A new hook, `usePrefersReducedMotion`, is added to **src/app/usePrefersReducedMotion.ts** (lines 1‑19). It exposes the user’s reduced‑motion preference in a type‑safe, SSR‑friendly way.
+### Overview  
+A new React hook `usePrefersReducedMotion` was added in `src/app/usePrefersReducedMotion.ts`. It returns a boolean indicating whether the user prefers reduced motion and updates reactively.
 
-### Key changes
-- **Imports** `useEffect` and `useState` from `react` (line 1).  
-- **Exports** `function usePrefersReducedMotion(): boolean` (line 3).  
-- **State initialization** uses `useState(() => { … })` (lines 4‑8), guarding against `window` being undefined and falling back to `false`.  
-- **Media query** `window.matchMedia("(prefers-reduced-motion: reduce)")` determines the initial value.  
-- **Effect** sets up a `change` event listener on the media query (lines 11‑15) and cleans it up on unmount.  
-- **Return** the current `reduced` boolean (line 18).
+### Key changes  
+- New file `src/app/usePrefersReducedMotion.ts` (lines 1‑19 added).  
+- Imports `useEffect` and `useState` from React (R1).  
+- Exports `function usePrefersReducedMotion(): boolean` (R3).  
+- Initializes state with `useState(() => { … })` (R4‑8).  
+- SSR guard: `typeof window === "undefined" || !window.matchMedia` → `false` (R5‑6).  
+- Initial value from `window.matchMedia("(prefers-reduced-motion: reduce)").matches` (R8).  
+- `useEffect` adds a `"change"` listener on `mq` and updates state via `setReduced(mq.matches)` (R11‑15).  
+- Cleanup removes the listener on unmount (R15‑16).  
+- Hook returns the `reduced` state (R18‑19).
 
-### Impact
-- Provides a reusable, lightweight hook for accessibility‑aware components.  
-- Adds negligible runtime overhead; the listener is added once per component instance.  
-- SSR safe: defaults to `false` when `window` is undefined, preventing hydration mismatches.  
-- No new external dependencies; relies on native `matchMedia`.
+### Impact  
+- Provides a reusable, SSR‑safe hook for reduced‑motion preference.  
+- Adds a single event listener per mount; cleanup is handled.
 
-### Risks & follow‑ups
-- Verify that components using this hook render consistently on server and client to avoid hydration warnings.  
-- Test in browsers lacking `matchMedia` (e.g., IE11) to confirm the fallback to `false` behaves correctly.  
-- Ensure the `change` listener cleanup runs properly to avoid memory leaks in long‑lived components.  
-- Add unit tests covering initial state, listener updates, and the SSR guard.
+### Risks & follow‑ups  
+- Verify that the default `false` during SSR matches hydration expectations.  
+- Ensure `matchMedia` and `"change"` events are supported in target browsers; consider polyfills if needed.  
+- Confirm that `removeEventListener` is invoked correctly on unmount.

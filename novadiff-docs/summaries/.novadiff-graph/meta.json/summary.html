@@ -26,32 +26,31 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/meta.json</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:08:56.811Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:35:36.762Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>.novadiff-graph/meta.json</code> file was updated.  </p>
-<ul>
-<li><code>lastAnalyzedAt</code> changed from <code>2026‑05‑19T10:55:49.944Z</code> (L2) to <code>2026‑05‑19T20:52:49.662Z</code> (R2).  </li>
-<li><code>analyzedFiles</code> changed from <code>58</code> (L5) to <code>324</code> (R5).<br>All other keys, including <code>gitCommitHash</code> and <code>version</code>, remain unchanged.</li>
-</ul>
+<p>The <code>.novadiff-graph/meta.json</code> file was updated. The changes are in lines L2‑3 and L5 of the original file, replaced by new values in the same positions.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Timestamp</strong>: <code>lastAnalyzedAt</code> now records <code>2026‑05‑19T20:52:49.662Z</code>.  </li>
-<li><strong>File count</strong>: <code>analyzedFiles</code> increased to <code>324</code>.  </li>
-<li><strong>Schema</strong>: No other fields were modified.</li>
+<li><code>lastAnalyzedAt</code>: <code>2026-05-19T20:52:49.662Z</code> → <code>2026-05-19T22:32:24.542Z</code> (L2 removed, R2 added)  </li>
+<li><code>gitCommitHash</code>: <code>8e0dc031dcfc62a38f560a90bc881a8fd6655a51</code> → <code>46a8da0664d1dce2715e93ec6698cf67012b963f</code> (L3 removed, R3 added)  </li>
+<li><code>analyzedFiles</code>: <code>324</code> → <code>329</code> (L5 removed, R5 added)</li>
 </ul>
+<p>No other fields were modified.</p>
 <h3>Impact</h3>
 <ul>
-<li>The file is static metadata; no runtime behavior is affected.  </li>
-<li>Consumers that parse <code>meta.json</code> will see the new timestamp and file count.  </li>
-<li>Unknown from the available diff/scan evidence whether dashboards or alerts rely on these values.</li>
+<li><strong>Accuracy</strong> – metadata now reflects the latest analysis run.  </li>
+<li><strong>Observability</strong> – consumers of <code>meta.json</code> will see the updated timestamp and commit hash, aiding audit trails.  </li>
+<li><strong>Compatibility</strong> – the JSON schema is unchanged; existing parsers continue to work.  </li>
+<li><strong>Maintainability</strong> – the change is confined to a single file, minimizing downstream impact.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that any scripts or CI jobs that read <code>lastAnalyzedAt</code> handle the new value correctly.  </li>
-<li>Run unit tests that parse <code>meta.json</code> to ensure no regressions.  </li>
-<li>Perform a quick smoke test of the diff generation pipeline to confirm the updated metadata is reflected.</li>
+<li><strong>Test failures</strong> – any tests asserting the old values will fail; run the targeted test suite and adjust expectations.  </li>
+<li><strong>Hard‑coded assumptions</strong> – verify downstream services do not rely on the previous commit hash or file count.  </li>
+<li><strong>Parsing</strong> – ensure all consumers correctly parse the new ISO timestamp.  </li>
+<li><strong>Documentation</strong> – update any docs that reference the old metadata values.</li>
 </ul>
 </article>
   </main>

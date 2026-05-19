@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/themes/novadiffEmbed.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/themes/novadiffEmbed.ts</h1>
+    <div class="meta">Kind: added · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:52:40.303Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>packages/graph-view/src/themes/novadiffEmbed.ts</code> has been added. It defines a locked theme for NovaDiff documentation embeds.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import</strong>: <code>import type { ThemeConfig } from &quot;./types.ts&quot;;</code> (line 1).  </li>
+<li><strong>Export</strong>: <code>export const NOVADIFF_EMBED_THEME: ThemeConfig = {</code> (line 4).  </li>
+<li><strong>Properties</strong>:  <ul>
+<li><code>presetId: &quot;dark-ocean&quot;</code> (line 5)  </li>
+<li><code>accentId: &quot;purple&quot;</code> (line 6)  </li>
+<li><code>headingFont: &quot;sans&quot;</code> (line 7)</li>
+</ul>
+</li>
+<li><strong>Comment</strong>: “Locked theme for NovaDiff documentation embed (matches host App.css tokens).” (line 3).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a pre‑configured <code>ThemeConfig</code> that can be imported by embed components.  </li>
+<li>No new runtime logic is introduced; the file only declares a constant.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>./types.ts</code> resolves correctly in all build environments.  </li>
+<li>Ensure <code>NOVADIFF_EMBED_THEME</code> is referenced where intended (e.g., in embed components).  </li>
+<li>Run linting and TypeScript checks to confirm type correctness.  </li>
+<li>Consider adding a unit test to assert the theme’s properties match the expected token values.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

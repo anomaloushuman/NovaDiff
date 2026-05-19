@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/prefetch-summaries.cjs · Code explanation (L39-48) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/prefetch-summaries.cjs · Code explanation (L39-48)</h1>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T22:59:40.627Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>defaultPrefetchLimit</code> determines the maximum number of items that can be prefetched in the application. It reads the environment variable <code>NOVADIFF_PREFETCH_MAX</code>, validates it, and returns a bounded integer. If the variable is missing, empty, or invalid, it falls back to a hard‑coded default of <strong>200</strong>.</h3>
+<h3>How it works1. <code>const raw = process.env.NOVADIFF_PREFETCH_MAX;</code> grabs the raw string from the environment.2. The guard <code>if (raw != null &amp;&amp; String(raw).trim() !== &quot;&quot;)</code> ensures the value is neither <code>null</code>/<code>undefined</code> nor an empty/whitespace‑only string.3. <code>const n = Number(raw);</code> converts the string to a numeric value.4. <code>if (Number.isFinite(n) &amp;&amp; n &gt;=1)</code> checks that the conversion succeeded and the number is at least1.5. <code>return Math.min(5000, Math.floor(n));</code> caps the value at5000 and rounds it down to the nearest integer.6. If any check fails, the function returns the default <code>200</code>.</h3>
+<h3>Notes for reviewers- The function silently ignores non‑numeric or negative inputs; consider logging a warning for debugging.- The cap of5000 is hard‑coded; if this limit needs to be configurable, expose it via another env variable.- <code>Number(raw)</code> will produce <code>NaN</code> for malformed strings; the <code>Number.isFinite</code> guard correctly filters those cases.- The default of200 is returned only when the env var is absent or invalid; this behavior is explicit in the code.- No side effects beyond reading <code>process.env</code>; the function is pure and deterministic.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

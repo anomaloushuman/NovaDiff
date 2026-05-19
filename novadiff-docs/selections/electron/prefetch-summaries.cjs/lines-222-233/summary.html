@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/prefetch-summaries.cjs · Code explanation (L222-233) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/prefetch-summaries.cjs · Code explanation (L222-233)</h1>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T23:16:58.455Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>startSummaryPrefetchWorker</code> initiates a single background pre‑fetch loop for summary data.It first guarantees that any previously running worker is stopped (<code>stopSummaryPrefetchWorker</code>) and that stale cache entries are removed (<code>clearSummaryPrefetchCache</code>).A new <code>AbortController</code> is created, its reference stored in the module‑level variable <code>prefetchAbort</code>, and its <code>signal</code> is passed to <code>runSummaryPrefetchLoop</code>.The function returns the promise from <code>runSummaryPrefetchLoop</code>, but attaches a <code>finally</code> handler that clears <code>prefetchAbort</code> once the loop finishes or is aborted, provided no newer controller has replaced it.</h3>
+<h3>How it works1. <strong>Cleanup</strong> – <code>stopSummaryPrefetchWorker()</code> halts any existing loop; <code>clearSummaryPrefetchCache()</code> wipes cached summaries.2. *<em>Abort setup</em></h3>
+<ul>
+<li>– <code>const ac = new AbortController(); prefetchAbort = ac;</code> keeps a reference to the controller so other parts of the module can abort the loop.3. *<em>Execution</em></li>
+<li>– <code>runSummaryPrefetchLoop(opts, signal)</code> starts the asynchronous pre‑fetch cycle, using the controller’s <code>signal</code> to listen for abort requests.4. *<em>Finalization</em></li>
+<li>– The <code>finally</code> block runs after the loop resolves or rejects. It checks <code>prefetchAbort === ac</code> to avoid clearing the reference if a newer worker has already started, then sets <code>prefetchAbort</code> to <code>null</code>.</li>
+</ul>
+<h3>Notes for reviewers- The snippet assumes <code>stopSummaryPrefetchWorker</code>, <code>clearSummaryPrefetchCache</code>, and <code>runSummaryPrefetchLoop</code> are defined elsewhere; their side effects are not visible here.- <code>prefetchAbort</code> is a shared mutable state; ensure no race conditions arise if <code>startSummaryPrefetchWorker</code> is called concurrently.- The <code>finally</code> guard (<code>prefetchAbort === ac</code>) is crucial to prevent accidental nullification when a newer worker replaces the old one.- Unknown from the snippet: the exact behavior of <code>runSummaryPrefetchLoop</code> (e.g., how it uses the <code>signal</code>), and whether <code>stopSummaryPrefetchWorker</code> internally uses <code>prefetchAbort</code>.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -6,8 +6,10 @@ import type { GithubRepoSummary } from "../../app/gitTypes";
 export interface WorkspaceHubProps {
   gitUser: GitUserProfile;
   workspaces: NovaWorkspace[];
+  activeWorkspaceId?: string | null;
   onOpenWorkspace: (workspace: NovaWorkspace, session?: WorkspaceSessionState) => void;
   onSessionChange: (workspaces: NovaWorkspace[]) => void;
+  onContinueLast?: () => void;
 }
 
 type RepoMode = "local" | "clone" | "github";
@@ -15,8 +17,10 @@ type RepoMode = "local" | "clone" | "github";
 export function WorkspaceHub({
   gitUser,
   workspaces,
+  activeWorkspaceId,
   onOpenWorkspace,
   onSessionChange,
+  onContinueLast,
 }: WorkspaceHubProps) {
   const api = window.electronAPI;
   const [creating, setCreating] = useState(false);
@@ -170,6 +174,24 @@ export function WorkspaceHub({
         {historyMsg ? <p className="doc-workspace-muted">{historyMsg}</p> : null}
         {error ? <p className="doc-workspace-alert">{error}</p> : null}
 
+        {activeWorkspaceId && onContinueLast ? (
+          (() => {
+            const last = workspaces.find((w) => w.id === activeWorkspaceId);
+            if (!last) {
+              return null;
+            }
+            return (
+              <button
+                type="button"
+                className="doc-workspace-btn welcome-continue-btn"
+                onClick={onContinueLast}
+              >
+                Continue with {last.name}
+              </button>
+            );
+          })()
+        ) : null}
+
         <section className="doc-workspace-panel">
           <h2 className="doc-workspace-h2">Your workspaces</h2>
           {workspaces.length === 0 ? (
@@ -189,7 +211,7 @@ export function WorkspaceHub({
                     <span className="welcome-user-text">
                       <strong>{ws.name}</strong>
                       <span>
-                        {ws.githubSlug ?? ws.repoRoot} · {ws.historyStatus}
+                        {ws.githubSlug ?? "Local repository"} · {ws.historyStatus}
                         {ws.historyProgress
                           ? ` (${ws.historyProgress.current}/${ws.historyProgress.total})`
                           : ""}

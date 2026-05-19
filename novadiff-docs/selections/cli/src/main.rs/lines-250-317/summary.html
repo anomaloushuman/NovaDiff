@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>cli/src/main.rs · Code explanation (L250-317) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>cli/src/main.rs · Code explanation (L250-317)</h1>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T23:15:04.721Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>prefetch_summary_queue</code> builds a limited list of pre‑fetch jobs from a set of file changes.It first filters the changes by <code>.gitignore</code> rules, reserved “novadiff” documents, and non‑text files.After filtering, it computes a subtree weight for each path, sorts the eligible changes by depth, weight, and path, and then takes up to <code>limit</code> (but at least one) to create <code>PrefetchSummaryJob</code> entries.The function returns a <code>PrefetchSummaryQueueOut</code> that includes the queue, counts of input and skipped changes, and how many jobs were actually returned.</h3>
+<h3>How it works1. <strong>Initial counts</strong> – <code>input_changes</code> records the total number of changes.2. *<em>Gitignore filtering</em></h3>
+<ul>
+<li>– if <code>gitignore_roots</code> is provided, <code>filter_changes_for_prefetch_gitignore</code> is called; otherwise all changes are kept.3. *<em>Reserved docs filtering</em></li>
+<li>– <code>filter_out_novadiff_docs_changes</code> removes any “novadiff” documents.4. *<em>Non‑text filtering</em></li>
+<li>– again conditioned on <code>gitignore_roots</code>, <code>filter_out_non_text_changes</code> removes binary files.5. *<em>Weight calculation</em></li>
+<li>– <code>subtree_change_counts</code> tallies how many changes exist under each parent directory.6. *<em>Sorting</em></li>
+<li>– eligible changes are sorted by path depth, then by the weight of their parent subtree, and finally lexicographically.7. *<em>Queue construction</em></li>
+<li>– the first <code>cap</code> (max of <code>limit</code> and1) sorted changes are mapped to <code>PrefetchSummaryJob</code> structs, capturing the original path, kind, depth, and parent subtree weight.8. *<em>Return</em></li>
+<li>– a <code>PrefetchSummaryQueueOut</code> is assembled with all counts and the job queue.</li>
+</ul>
+<h3>Notes for reviewers- The use of <code>unwrap_or(&amp;0)</code> assumes every parent directory will have a weight entry; if <code>subtree_change_counts</code> can omit a key, this may silently default to zero.- <code>limit.max(1)</code> guarantees at least one job, even if no changes remain after filtering; confirm this is intended behavior.- Path normalization replaces backslashes with slashes; ensure this matches the rest of the codebase’s path handling.- The sorting logic prioritizes depth before weight; consider whether this ordering aligns with pre‑fetch performance goals.- The function returns counts of skipped items; verify that these metrics are used elsewhere for diagnostics.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

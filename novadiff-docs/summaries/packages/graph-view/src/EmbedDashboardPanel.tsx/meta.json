@@ -1,0 +1,58 @@
+{
+  "relPath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
+  "kind": "added",
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T22:47:21.829Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R64 added: export interface EmbedDashboardPanelProps {",
+      "R69 added: export function EmbedDashboardPanel({"
+    ],
+    "changed_imports": [
+      "R5 added: import { useEffect, useRef, useState } from \"react\";",
+      "R6 added: import { ReactFlowProvider } from \"@xyflow/react\";",
+      "R7 added: import \"@xyflow/react/dist/style.css\";",
+      "R8 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
+      "R9 added: import { DashboardContent } from \"./App\";",
+      "R10 added: import { useDashboardStore } from \"./store\";"
+    ],
+    "changed_line_ranges": [
+      "R1-95"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /**",
+      "R2 added: * NovaDiff documentation embed — full dashboard chrome + project-wide class depth.",
+      "R3 added: */",
+      "R5 added: import { useEffect, useRef, useState } from \"react\";",
+      "R6 added: import { ReactFlowProvider } from \"@xyflow/react\";",
+      "R7 added: import \"@xyflow/react/dist/style.css\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function EmbedSizedDashboard (16-63)",
+      "right function EmbedDashboardPanel (69-95)",
+      "right interface EmbedDashboardPanelProps (64-68)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

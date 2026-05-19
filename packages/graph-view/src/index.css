@@ -12,6 +12,11 @@
   --color-accent-dim: #c9a96e;
   --color-accent-bright: #e8c49a;
 
+  /* Legacy gold aliases (map to accent in components) */
+  --color-gold: var(--color-accent);
+  --color-gold-dim: var(--color-accent-dim);
+  --color-gold-bright: var(--color-accent-bright);
+
   /* Text */
   --color-text-primary: #f5f0eb;
   --color-text-secondary: #a39787;
@@ -122,10 +127,9 @@ html {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
-/* In NovaDiff embed, confine noise to the explorer panel (not the full window). */
+/* NovaDiff embed: no film-grain overlay (host provides clean surfaces). */
 .novadiff-graph-embed.noise-overlay::before {
-  position: absolute;
-  z-index: 1;
+  display: none;
 }
 
 /* Glass utility */
@@ -196,6 +200,14 @@ html {
   animation: fadeSlideIn 0.3s ease-out forwards;
 }
 
+.novadiff-graph-embed .react-flow__node.container {
+  transition:
+    width 0.45s ease,
+    height 0.45s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
 .animate-slide-up {
   animation: slideUp 0.3s ease-out forwards;
 }
@@ -250,9 +262,55 @@ html {
   background: var(--scrollbar-thumb-hover);
 }
 
-/* Override React Flow dark theme */
+/* Override React Flow canvas */
 .react-flow__background {
   background-color: var(--color-root) !important;
+}
+
+.novadiff-graph-embed .react-flow__background pattern circle,
+.novadiff-graph-embed .react-flow__background pattern line {
+  opacity: 0.55;
+}
+
+/* Edges above container panels so cross-folder lines stay visible */
+.novadiff-graph-embed .react-flow__edges {
+  z-index: 10;
+}
+
+.novadiff-graph-embed .react-flow__edge-path {
+  stroke-linecap: round;
+  stroke-width: 1.25;
+  stroke: rgba(56, 217, 255, 0.42);
+}
+
+.novadiff-graph-embed .react-flow__edge-text {
+  fill: var(--color-text-muted);
+}
+
+.novadiff-graph-embed .react-flow__node.container {
+  z-index: 2;
+}
+
+.novadiff-graph-embed .react-flow__controls {
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--color-root) 55%, transparent);
+}
+
+.novadiff-graph-embed .react-flow__controls-button {
+  background: var(--color-surface);
+  border-bottom-color: var(--color-border-subtle);
+  fill: var(--color-text-secondary);
+}
+
+.novadiff-graph-embed .react-flow__controls-button:hover {
+  background: var(--color-elevated);
+}
+
+.novadiff-graph-embed .react-flow__minimap {
+  border-radius: 10px;
+  border: 1px solid var(--color-border-subtle);
 }
 
 /* Light theme overrides */

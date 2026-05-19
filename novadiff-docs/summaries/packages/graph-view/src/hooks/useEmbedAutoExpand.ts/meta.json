@@ -1,0 +1,57 @@
+{
+  "relPath": "packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+  "kind": "added",
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T22:50:02.393Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R9 added: export interface EmbedAutoExpandInput {",
+      "R42 added: export function useEmbedAutoExpand(input: EmbedAutoExpandInput): boolean {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useReactFlow } from \"@xyflow/react\";",
+      "R3 added: import { useDashboardStore } from \"../store\";",
+      "R4 added: import { useNovaDiffEmbed } from \"../contexts/NovaDiffEmbedContext\";"
+    ],
+    "changed_line_ranges": [
+      "R1-129"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useRef, useState } from \"react\";",
+      "R2 added: import { useReactFlow } from \"@xyflow/react\";",
+      "R3 added: import { useDashboardStore } from \"../store\";",
+      "R4 added: import { useNovaDiffEmbed } from \"../contexts/NovaDiffEmbedContext\";",
+      "R6 added: const EXPAND_POLL_MS = 100;",
+      "R7 added: const EXPAND_TIMEOUT_MS = 120_000;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useEmbedAutoExpand (42-129)",
+      "right function waitForContainerLayouts (24-41)",
+      "right interface EmbedAutoExpandInput (9-16)",
+      "right function containersFullyLaidOut (17-23)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

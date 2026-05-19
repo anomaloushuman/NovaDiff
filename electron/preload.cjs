@@ -133,8 +133,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
   workspaceList: () => ipcRenderer.invoke("workspace-list"),
   workspaceMatchLocal: (payload) => ipcRenderer.invoke("workspace-match-local", payload),
   workspaceIndexHistory: (payload) => ipcRenderer.invoke("workspace-index-history", payload),
+  workspaceRefreshHistory: (payload) =>
+    ipcRenderer.invoke("workspace-refresh-history", payload),
   workspaceUpdateLiveRepo: (payload) =>
     ipcRenderer.invoke("workspace-update-live-repo", payload),
+  workspaceUpdateUiState: (payload) =>
+    ipcRenderer.invoke("workspace-update-ui-state", payload),
   gitBlameAtRef: (payload) => ipcRenderer.invoke("git-blame-at-ref", payload),
   workspaceEnsureCommitSnapshot: (payload) =>
     ipcRenderer.invoke("workspace-ensure-commit-snapshot", payload),

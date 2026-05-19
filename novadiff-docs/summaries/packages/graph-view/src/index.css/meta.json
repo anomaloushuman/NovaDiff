@@ -1,23 +1,28 @@
 {
   "relPath": "packages/graph-view/src/index.css",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:35:00.972Z",
+  "generatedAt": "2026-05-19T22:48:48.420Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-426"
+      "R15-19",
+      "L125 / R130",
+      "L127-128 / R132",
+      "R203-210",
+      "L253 / R265",
+      "R270-315"
     ],
     "cited_changed_lines": [
-      "R1 added: @import \"tailwindcss\";",
-      "R3 added: @theme {",
-      "R4 added: /* Base */",
-      "R5 added: --color-root: #0a0a0a;",
-      "R6 added: --color-surface: #111111;",
-      "R7 added: --color-elevated: #1a1a1a;"
+      "R15 added: /* Legacy gold aliases (map to accent in components) */",
+      "R16 added: --color-gold: var(--color-accent);",
+      "R17 added: --color-gold-dim: var(--color-accent-dim);",
+      "R18 added: --color-gold-bright: var(--color-accent-bright);",
+      "L125 removed: /* In NovaDiff embed, confine noise to the explorer panel (not the full window). */",
+      "R130 added: /* NovaDiff embed: no film-grain overlay (host provides clean surfaces). */"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -1,0 +1,22 @@
+{
+  "relPath": "cli/src/main.rs",
+  "kind": "modified",
+  "label": "Code explanation (L250-317)",
+  "selectionKey": "lines-250-317",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 250,
+      "rightEnd": 317
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "46a8da0664d1",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-19T23:15:04.721Z"
+}

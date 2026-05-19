@@ -26,32 +26,32 @@
 <body>
   <header class="top">
     <h1>src/app/BackgroundActivityContext.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:02:43.987Z</div>
+    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:24:01.767Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>src/app/BackgroundActivityContext.tsx</code> file introduces a React context for tracking background tasks, exposing a provider and two hooks.</p>
+<p>A new file <code>src/app/BackgroundActivityContext.tsx</code> (lines 1‑166) introduces a React context for tracking background activities across the app.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: Adds <code>createContext</code>, <code>useCallback</code>, <code>useContext</code>, <code>useMemo</code>, <code>useState</code>, and <code>ReactNode</code> from <em>react</em> (lines 1‑6).  </li>
-<li><strong>Types</strong>: Declares <code>BackgroundActivityKind</code> enum‑like union (lines 10‑19) and <code>BackgroundActivity</code> interface (lines 22‑30).  </li>
-<li><strong>Context value</strong>: Defines <code>BackgroundActivityContextValue</code> (lines 37‑41) and creates the context (lines 44‑46).  </li>
-<li><strong>Provider</strong>: Implements <code>BackgroundActivityProvider</code> (lines 48‑95) with state, upsert, remove, and clear logic, sorting activities by <code>startedAt</code>.  </li>
-<li><strong>Hooks</strong>: Exposes <code>useBackgroundActivity</code> (lines 97‑103) that throws if used outside the provider, and <code>useBackgroundActivityOptional</code> (lines 106‑108) that returns <code>null</code> when no provider is present.</li>
+<li><strong>Imports</strong>: <code>createContext</code>, <code>useCallback</code>, <code>useContext</code>, <code>useMemo</code>, <code>useState</code>, <code>ReactNode</code> from React (R1‑6).  </li>
+<li><strong>Types</strong>: <code>BackgroundActivityKind</code> enum (R10‑19) and <code>BackgroundActivity</code> interface (R22‑30).  </li>
+<li><strong>Helpers</strong>: <code>sameActivity</code> comparison (R37‑45) and <code>UpsertPatch</code> type (R32‑35).  </li>
+<li><strong>Contexts</strong>: <code>BackgroundActivityContext</code> and <code>BackgroundActivityActionsContext</code> (R58‑64).  </li>
+<li><strong>Provider</strong>: <code>BackgroundActivityProvider</code> (R65‑138) manages an array of activities, exposes <code>upsertActivity</code>, <code>removeActivity</code>, <code>clearActivities</code>, and sorts by <code>startedAt</code> (R85‑96).  </li>
+<li><strong>Hooks</strong>: <code>useBackgroundActivity</code>, <code>useBackgroundActivityOptional</code>, <code>useBackgroundActivityActions</code>, <code>useBackgroundActivityActionsOptional</code> (R140‑166) with runtime checks (R141‑144, R155‑160).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: The provider guarantees a sorted activity list; the optional hook prevents crashes in optional embed paths.  </li>
-<li><strong>Maintainability</strong>: Centralized activity state simplifies adding new activity kinds or UI components.  </li>
-<li><strong>Performance</strong>: Sorting on every upsert may be costly with many activities; current implementation is acceptable for typical use.  </li>
-<li><strong>Compatibility</strong>: No changes to existing modules; the new file is self‑contained and only adds exports.</li>
+<li>Centralized activity state reduces duplication; optional hooks allow safe use when the provider may be absent.  </li>
+<li>Runtime errors are thrown if hooks are used outside the provider (lines 141‑144, 155‑160).  </li>
+<li>Activities are sorted on every upsert; the list is small, so re‑render cost is expected to be low.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Provider usage</strong>: Verify that all components consuming the hooks are wrapped by <code>BackgroundActivityProvider</code>.  </li>
-<li><strong>Null handling</strong>: <code>useBackgroundActivityOptional</code> may return <code>null</code>; callers must guard against it.  </li>
-<li><strong>Sorting overhead</strong>: Benchmark with high activity churn to ensure sorting does not become a bottleneck.  </li>
-<li><strong>Default values</strong>: The provider defaults <code>kind</code> to <code>&quot;other&quot;</code>; confirm this aligns with intended UX for unknown kinds.</li>
+<li><strong>Provider omission</strong>: components using the hooks must be wrapped by <code>BackgroundActivityProvider</code>; otherwise errors will occur.  </li>
+<li><strong>Sorting side‑effects</strong>: verify that ordering by <code>startedAt</code> matches UI expectations during concurrent upserts.  </li>
+<li><strong>Optional hooks</strong>: confirm that <code>useBackgroundActivityOptional</code> and <code>useBackgroundActivityActionsOptional</code> return <code>null</code> when the provider is missing.  </li>
+<li>Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to ensure the new module compiles and passes tests.</li>
 </ul>
 </article>
   </main>

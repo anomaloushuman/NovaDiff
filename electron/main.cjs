@@ -68,11 +68,16 @@ const {
   listWorkspaces,
   getWorkspace,
   updateWorkspaceLiveRepo,
+  updateWorkspaceUiState,
   workspacesRoot,
 } = require("./workspace-store.cjs");
 const { blameFileAtRef } = require("./git-blame.cjs");
 const { listSnapshotFiles, readSnapshotTextFile } = require("./workspace-files.cjs");
-const { indexWorkspaceHistory, ensureCommitSnapshot } = require("./workspace-history.cjs");
+const {
+  indexWorkspaceHistory,
+  refreshWorkspaceHistory,
+  ensureCommitSnapshot,
+} = require("./workspace-history.cjs");
 const {
   startGithubDeviceAuth,
   cancelGithubDeviceAuth,
@@ -995,6 +1000,16 @@ ipcMain.handle("workspace-update-live-repo", async (_evt, payload) => {
   }
 });
 
+ipcMain.handle("workspace-update-ui-state", async (_evt, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const uiState = payload?.uiState ?? {};
+    return await updateWorkspaceUiState(app.getPath("userData"), workspaceId, uiState);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
 ipcMain.handle("git-blame-at-ref", async (_evt, payload) => {
   try {
     const repoRoot = String(payload?.repoRoot ?? "").trim();
@@ -1046,6 +1061,23 @@ ipcMain.handle("workspace-index-history", async (event, payload) => {
     const userData = app.getPath("userData");
     const updated = await indexWorkspaceHistory(userData, workspaceId, (msg) =>
       sendWorkspaceHistoryProgress(event, msg),
+    );
+    return updated;
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-refresh-history", async (event, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const fetchRemote = payload?.fetchRemote !== false;
+    const userData = app.getPath("userData");
+    const updated = await refreshWorkspaceHistory(
+      userData,
+      workspaceId,
+      (msg) => sendWorkspaceHistoryProgress(event, msg),
+      { fetchRemote },
     );
     return updated;
   } catch (e) {

@@ -1,19 +1,21 @@
 ### Overview  
-The `LlmSummarizePayload` interface in `src/app/llmStorage.ts` was extended with five optional properties to provide richer context for code‑snippet summarization. The changes appear in the diff at lines 56‑61 of the interface definition.
+`src/app/llmStorage.ts` extends the `LlmSummarizePayload` interface with five optional properties that provide richer context for LLM summarization. The additions appear at lines 56‑61 of the file.
 
 ### Key changes  
-- `explainCode?: boolean` – flag to indicate that the LLM should explain a code snippet.  
-- `codeExcerpt?: string` – the snippet text.  
-- `lineStart?: number` and `lineEnd?: number` – the snippet’s line range.  
-- `symbolName?: string` – the symbol being summarized.  
-These additions are added after the existing `selectionSymbol` property.
+- `explainCode?: boolean` – flag to request a code explanation.  
+- `codeExcerpt?: string` – raw code snippet.  
+- `lineStart?: number` – start line of the excerpt.  
+- `lineEnd?: number` – end line of the excerpt.  
+- `symbolName?: string` – name of the symbol to explain.  
+These fields are added after the existing `selectionSymbol` property in the interface.
 
 ### Impact  
-- Existing payloads remain valid; the new fields are optional, so no breaking changes.  
-- Consumers can now include snippet context without modifying the interface contract.  
-- No runtime errors are introduced by the change.
+- **Compatibility**: Existing payloads remain valid because the new fields are optional.  
+- **Functionality**: Callers can now supply additional context, potentially improving LLM responses.  
+- **Performance**: Adding optional properties does not alter runtime behavior.
 
 ### Risks & follow‑ups  
-- Verify that serialization of `LlmSummarizePayload` to JSON omits undefined fields.  
-- Update unit tests that validate payload shape to account for the optional properties.  
-- Ensure that prompt‑generation logic handles `explainCode` and the snippet metadata correctly.
+- Verify that modules importing `LlmSummarizePayload` compile after the change.  
+- Update any test fixtures or mocks that construct `LlmSummarizePayload` to include the new optional fields if desired.  
+- Ensure JSON serialization logic (e.g., `JSON.stringify`) handles the new fields without affecting existing output.  
+- Run `npm run lint`, `npm test`, and the production build to confirm no new warnings or errors.

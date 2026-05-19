@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/themes/ThemeContext.tsx",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:48:36.147Z",
+  "generatedAt": "2026-05-19T22:52:17.185Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,48 +11,34 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R60 added: export function ThemeProvider({ metaTheme, scopeToHost = false, children }: ThemeProviderProps) {",
-      "R136 added: export function useTheme(): ThemeContextValue {"
-    ],
-    "changed_imports": [
-      "R1 added: import {",
-      "R10 added: import type { HeadingFont, PresetId, ThemeConfig, ThemePreset } from \"./types.ts\";",
-      "R11 added: import { DEFAULT_THEME_CONFIG } from \"./types.ts\";",
-      "R12 added: import { getPreset } from \"./presets.ts\";",
-      "R13 added: import { applyTheme, clearTheme } from \"./theme-engine.ts\";"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-140"
+      "L49 / R49-55",
+      "L61 / R67-69",
+      "L78 / R86",
+      "R106-109",
+      "L101 / R113"
     ],
     "cited_changed_lines": [
-      "R1 added: import {",
-      "R2 added: createContext,",
-      "R3 added: useCallback,",
-      "R4 added: useContext,",
-      "R5 added: useEffect,",
-      "R6 added: useRef,"
+      "L49 removed: function resolveInitialTheme(metaTheme?: ThemeConfig | null): ThemeConfig {",
+      "R49 added: function resolveInitialTheme(",
+      "R50 added: metaTheme?: ThemeConfig | null,",
+      "R51 added: scopeToHost?: boolean,",
+      "R52 added: ): ThemeConfig {",
+      "R53 added: if (scopeToHost) {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function ThemeProvider (60-135)",
-      "right function loadFromLocalStorage (27-40)",
-      "right interface ThemeContextValue (17-26)",
-      "right function saveToLocalStorage (41-48)",
-      "right interface ThemeProviderProps (53-59)",
-      "right function useTheme (136-140)",
-      "right function resolveInitialTheme (49-52)"
+      "left function ThemeProvider (60-135)",
+      "left function resolveInitialTheme (49-52)",
+      "right function ThemeProvider (66-147)",
+      "right function resolveInitialTheme (49-58)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

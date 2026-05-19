@@ -1,1 +1,1 @@
-Auto-publish draft for 396 compared paths.
+Auto-publish draft for 133 compared paths.

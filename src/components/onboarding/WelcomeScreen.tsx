@@ -3,11 +3,12 @@ import { Copy, Download, ExternalLink, FolderOpen, Loader2, User } from "lucide-
 import type { GhToolingStatus, GitUserProfile } from "../../app/workspaceTypes";
 
 export interface WelcomeScreenProps {
+  cachedGitUser?: GitUserProfile | null;
   onComplete: (user: GitUserProfile) => void;
   onLocalOnly: () => void;
 }
 
-export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {
+export function WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly }: WelcomeScreenProps) {
   const api = window.electronAPI;
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<GitUserProfile[]>([]);
@@ -52,7 +53,9 @@ export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {
     try {
       const list = await api.githubDetectedUsers();
       setUsers(list);
-      if (list.length === 1) {
+      if (cachedGitUser && list.some((u) => u.login === cachedGitUser.login)) {
+        setSelected(cachedGitUser.login);
+      } else if (list.length === 1) {
         setSelected(list[0].login);
       }
     } catch (e) {
@@ -61,7 +64,7 @@ export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {
     } finally {
       setLoading(false);
     }
-  }, [api, ghStatus?.installed]);
+  }, [api, cachedGitUser?.login, ghStatus?.installed]);
 
   useEffect(() => {
     void loadGhStatus();
@@ -360,10 +363,28 @@ export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {
               ))}
             </ul>
 
-            {users.length > 0 ? (
+            {cachedGitUser && users.some((u) => u.login === cachedGitUser.login) ? (
               <button
                 type="button"
                 className="doc-workspace-btn welcome-continue-btn"
+                disabled={confirming}
+                onClick={() => {
+                  const u = users.find((x) => x.login === cachedGitUser.login);
+                  if (u) {
+                    void confirmUser(u);
+                  } else {
+                    void confirmUser(cachedGitUser);
+                  }
+                }}
+              >
+                {confirming ? <Loader2 size={16} className="spin-ic" aria-hidden /> : null}
+                Continue as @{cachedGitUser.login}
+              </button>
+            ) : null}
+            {users.length > 0 ? (
+              <button
+                type="button"
+                className="doc-workspace-copy-btn welcome-continue-alt"
                 disabled={!selected || confirming}
                 onClick={() => {
                   const u = users.find((x) => x.login === selected);
@@ -373,7 +394,7 @@ export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {
                 }}
               >
                 {confirming ? <Loader2 size={16} className="spin-ic" aria-hidden /> : null}
-                Continue with GitHub
+                {cachedGitUser ? "Use a different account" : "Continue with GitHub"}
               </button>
             ) : null}
           </>

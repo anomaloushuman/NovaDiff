@@ -8,6 +8,7 @@ import type {
   TourStep,
 } from "@novadiff/graph-core/types";
 import type { ReactFlowInstance } from "@xyflow/react";
+import { PROJECT_WIDE_LAYER_ID } from "./utils/activeLayer";
 
 export type Persona = "non-technical" | "junior" | "experienced";
 export type NavigationLevel = "overview" | "layer-detail";
@@ -162,6 +163,8 @@ interface DashboardStore {
   goBackNode: () => void;
   drillIntoLayer: (layerId: string) => void;
   navigateToOverview: () => void;
+  /** NovaDiff embed: open merged project view with class-level detail (all layers). */
+  enterNovaDiffEmbedDepth: () => void;
   setFocusNode: (nodeId: string | null) => void;
   setSearchQuery: (query: string) => void;
   setPersona: (persona: Persona) => void;
@@ -206,6 +209,8 @@ interface DashboardStore {
   expandedContainers: Set<string>;
   toggleContainer: (containerId: string) => void;
   expandContainer: (containerId: string) => void;
+  /** Expand many containers in one update (no viewport lock). Used for embed auto-expand. */
+  expandManyContainers: (containerIds: string[]) => void;
   collapseContainer: (containerId: string) => void;
   collapseAllContainers: () => void;
   /** Container the user just manually expanded; viewport should lock onto it. Cleared by GraphView once the lock is applied. */
@@ -522,6 +527,23 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
     });
   },
 
+  enterNovaDiffEmbedDepth: () =>
+    set({
+      navigationLevel: "layer-detail",
+      activeLayerId: PROJECT_WIDE_LAYER_ID,
+      detailLevel: "class",
+      showFunctionsInClassView: true,
+      selectedNodeId: null,
+      focusNodeId: null,
+      codeViewerOpen: false,
+      codeViewerNodeId: null,
+      codeViewerExpanded: false,
+      containerLayoutCache: new Map(),
+      containerSizeMemory: new Map(),
+      expandedContainers: new Set(),
+      pendingFocusContainer: null,
+    }),
+
   setFocusNode: (nodeId) =>
     set({
       focusNodeId: nodeId,
@@ -779,6 +801,19 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       const next = new Set(state.expandedContainers);
       next.add(containerId);
       return { expandedContainers: next };
+    }),
+  expandManyContainers: (containerIds) =>
+    set((state) => {
+      const next = new Set(state.expandedContainers);
+      let changed = false;
+      for (const id of containerIds) {
+        if (!next.has(id)) {
+          next.add(id);
+          changed = true;
+        }
+      }
+      if (!changed) return {};
+      return { expandedContainers: next, pendingFocusContainer: null };
     }),
   collapseContainer: (containerId) =>
     set((state) => {

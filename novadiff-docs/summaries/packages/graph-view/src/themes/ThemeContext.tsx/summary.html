@@ -26,40 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/themes/ThemeContext.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:48:36.147Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:52:17.185Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/themes/ThemeContext.tsx</code> introduces a React context for theme state, a <code>ThemeProvider</code> component, and a <code>useTheme</code> hook. The file adds local‑storage persistence, optional host scoping, and utilities for preset resolution.</p>
+<p>In <code>packages/graph-view/src/themes/ThemeContext.tsx</code>, the <code>ThemeProvider</code> API now accepts an optional <code>scopeToHost</code> flag. When true, theme tokens are applied only to a wrapper element instead of the global <code>document.documentElement</code>. The helper <code>resolveInitialTheme</code> was extended to accept this flag and skip the local‑storage lookup.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R13) bring <code>HeadingFont, PresetId, ThemeConfig, ThemePreset</code> from <code>./types.ts</code>, <code>DEFAULT_THEME_CONFIG</code> from the same file, <code>getPreset</code> from <code>./presets.ts</code>, and <code>applyTheme, clearTheme</code> from <code>./theme-engine.ts</code>.  </li>
-<li><strong>Context API</strong>: <code>ThemeContext</code> is created at R25 with <code>createContext&lt;ThemeContextValue | null&gt;(null)</code> and exported via <code>ThemeProvider</code>.  </li>
-<li><strong>Persistence helpers</strong>: <code>loadFromLocalStorage</code> (R27‑40) reads a JSON string under key <code>&quot;ua-theme&quot;</code> (R15); <code>saveToLocalStorage</code> (R41‑47) writes the same key.  </li>
-<li><strong>Initial theme resolution</strong>: <code>resolveInitialTheme</code> (R49‑51) prefers local storage, then <code>metaTheme</code>, finally <code>DEFAULT_THEME_CONFIG</code>.  </li>
-<li><strong>Provider logic</strong> (<code>ThemeProvider</code> at R60‑135):  <ul>
-<li>State <code>config</code> initialized by <code>resolveInitialTheme</code>.  </li>
-<li><code>useEffect</code> (R68‑82) applies theme on mount and on config changes, optionally scoping to a host <code>&lt;div&gt;</code> when <code>scopeToHost</code> is true.  </li>
-<li>Second <code>useEffect</code> (R84‑94) clears host theme on unmount if scoped.  </li>
-<li>Third <code>useEffect</code> (R96‑101) updates config when an async <code>metaTheme</code> arrives and no local preference exists.  </li>
-<li><code>setPreset</code> (R103‑108), <code>setAccent</code> (R110‑112), and <code>setHeadingFont</code> (R114‑116) update config via <code>useCallback</code>.</li>
-</ul>
-</li>
-<li><strong>Hook</strong> (<code>useTheme</code> at R136‑140) consumes <code>ThemeContext</code> and throws if used outside a provider.</li>
+<li><strong><code>resolveInitialTheme</code> (L49‑55)</strong> now takes <code>scopeToHost?: boolean</code>; if true it returns <code>metaTheme ?? DEFAULT_THEME_CONFIG</code> without reading local storage.  </li>
+<li><strong><code>ThemeProvider</code> signature (L60‑62)</strong> gains <code>scopeToHost?: boolean</code>; the initial state is created with <code>resolveInitialTheme(metaTheme, scopeToHost)</code>.  </li>
+<li><strong>Theme application (L67‑85)</strong> branches: <code>applyTheme(config, host)</code> when <code>scopeToHost</code> is true, otherwise <code>applyTheme(config)</code>.  </li>
+<li><strong>Local‑storage persistence (L86‑90)</strong> is skipped when <code>scopeToHost</code> is true (<code>initialized.current &amp;&amp; !scopeToHost</code>).  </li>
+<li><strong>Cleanup (L96‑102)</strong> clears the theme only on the host element when <code>scopeToHost</code> is true.  </li>
+<li><strong>Meta‑theme update (L106‑113)</strong> now updates the config immediately if <code>scopeToHost</code> and a <code>metaTheme</code> are present, and the effect dependency list includes <code>scopeToHost</code>.  </li>
+<li><strong>Wrapper element (L134‑140)</strong> is rendered only when <code>scopeToHost</code> is true, providing a <code>ref</code> (<code>hostRef</code>) for scoped styling.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes theme logic and state, reducing duplication.  </li>
-<li>Local‑storage sync prevents stale themes across reloads.  </li>
-<li>Host scoping (when <code>scopeToHost</code> is true) confines CSS changes to a wrapper <code>&lt;div&gt;</code>, avoiding global thrashing.  </li>
-<li>Existing components that call <code>useTheme</code> continue to work; no API changes.</li>
+<li><strong>Global CSS isolation</strong>: When <code>scopeToHost</code> is true, theme variables are confined to the wrapper, preventing accidental overrides of other parts of the app.  </li>
+<li><strong>Local‑storage behavior</strong>: Theme selections are not persisted while scoped; this is intentional per the new logic.  </li>
+<li><strong>Cleanup correctness</strong>: <code>clearTheme</code> is invoked only on the host element during unmount, avoiding stray CSS variables.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>loadFromLocalStorage</code> silently swallows parse errors (R36‑38); malformed data may be ignored.  </li>
-<li>If <code>scopeToHost</code> is true but the host <code>&lt;div&gt;</code> is missing, theme application fails silently (R70‑75).  </li>
-<li>The third <code>useEffect</code> (R96‑101) may override a user‑selected preset if <code>metaTheme</code> arrives after a local change; verify ordering.  </li>
-<li><code>clearTheme</code> runs only on unmount when scoped (R88‑92); confirm global themes persist correctly after provider removal.</li>
+<li><strong>Regression</strong>: Components that previously relied on global theme variables may break when <code>scopeToHost</code> is enabled; visual regression tests are recommended.  </li>
+<li><strong>Persistence loss</strong>: Confirm that non‑persistence of user‑selected themes while scoped is acceptable for the intended use case.  </li>
+<li><strong>Dependency validation</strong>: The updated <code>useEffect</code> dependencies (<code>[metaTheme, scopeToHost]</code>) should be reviewed to avoid stale closures or unnecessary re‑applications.</li>
 </ul>
 </article>
   </main>

@@ -16,8 +16,8 @@
     ],
     "frameworks": [],
     "description": "Deterministic NovaDiff knowledge graph (Tree-sitter structure, imports, and compare overlay).",
-    "analyzedAt": "2026-05-19T20:52:49.653Z",
-    "gitCommitHash": "8e0dc031dcfc62a38f560a90bc881a8fd6655a51"
+    "analyzedAt": "2026-05-19T22:44:50.121Z",
+    "gitCommitHash": "46a8da0664d1dce2715e93ec6698cf67012b963f"
   },
   "nodes": [
     {
@@ -3324,7 +3324,7 @@
       "type": "file",
       "name": "main.cjs",
       "filePath": "electron/main.cjs",
-      "summary": "main.cjs — 10 functions, 0 classes, 1058 lines",
+      "summary": "main.cjs — 10 functions, 0 classes, 1090 lines",
       "tags": [
         "javascript",
         "code"
@@ -3352,10 +3352,10 @@
       "name": "getTargetWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        103,
-        108
+        108,
+        113
       ],
-      "summary": "Function getTargetWindow (L103-108)",
+      "summary": "Function getTargetWindow (L108-113)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3366,10 +3366,10 @@
       "name": "windowStatePayload",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        113,
-        119
+        118,
+        124
       ],
-      "summary": "Function windowStatePayload (L113-119)",
+      "summary": "Function windowStatePayload (L118-124)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3380,10 +3380,10 @@
       "name": "emitWindowState",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        124,
-        129
+        129,
+        134
       ],
-      "summary": "Function emitWindowState (L124-129)",
+      "summary": "Function emitWindowState (L129-134)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3394,10 +3394,10 @@
       "name": "iconPath",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        131,
-        137
+        136,
+        142
       ],
-      "summary": "Function iconPath (L131-137)",
+      "summary": "Function iconPath (L136-142)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3408,10 +3408,10 @@
       "name": "buildMenu",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        139,
-        157
+        144,
+        162
       ],
-      "summary": "Function buildMenu (L139-157)",
+      "summary": "Function buildMenu (L144-162)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3422,10 +3422,10 @@
       "name": "createWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        159,
-        198
+        164,
+        203
       ],
-      "summary": "Function createWindow (L159-198)",
+      "summary": "Function createWindow (L164-203)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3436,10 +3436,10 @@
       "name": "sendKnowledgeGraphProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        566,
-        582
+        571,
+        587
       ],
-      "summary": "Function sendKnowledgeGraphProgress (L566-582)",
+      "summary": "Function sendKnowledgeGraphProgress (L571-587)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3450,10 +3450,10 @@
       "name": "sendWorkspaceHistoryProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        801,
-        807
+        806,
+        812
       ],
-      "summary": "Function sendWorkspaceHistoryProgress (L801-807)",
+      "summary": "Function sendWorkspaceHistoryProgress (L806-812)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3464,10 +3464,10 @@
       "name": "sendGithubAuthProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        833,
-        839
+        838,
+        844
       ],
-      "summary": "Function sendGithubAuthProgress (L833-839)",
+      "summary": "Function sendGithubAuthProgress (L838-844)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -4341,7 +4341,7 @@
       "type": "file",
       "name": "preload.cjs",
       "filePath": "electron/preload.cjs",
-      "summary": "preload.cjs — 0 functions, 0 classes, 179 lines",
+      "summary": "preload.cjs — 0 functions, 0 classes, 183 lines",
       "tags": [
         "javascript",
         "code"
@@ -4478,7 +4478,7 @@
       "type": "file",
       "name": "workspace-history.cjs",
       "filePath": "electron/workspace-history.cjs",
-      "summary": "workspace-history.cjs — 6 functions, 0 classes, 191 lines",
+      "summary": "workspace-history.cjs — 7 functions, 0 classes, 300 lines",
       "tags": [
         "javascript",
         "code"
@@ -4571,11 +4571,25 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "function:electron/workspace-history.cjs:refreshWorkspaceHistory",
+      "type": "function",
+      "name": "refreshWorkspaceHistory",
+      "filePath": "electron/workspace-history.cjs",
+      "lineRange": [
+        188,
+        291
+      ],
+      "summary": "Function refreshWorkspaceHistory (L188-291)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "file:electron/workspace-store.cjs",
       "type": "file",
       "name": "workspace-store.cjs",
       "filePath": "electron/workspace-store.cjs",
-      "summary": "workspace-store.cjs — 14 functions, 0 classes, 173 lines",
+      "summary": "workspace-store.cjs — 15 functions, 0 classes, 193 lines",
       "tags": [
         "javascript",
         "code"
@@ -4752,15 +4766,29 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "function:electron/workspace-store.cjs:updateWorkspaceUiState",
+      "type": "function",
+      "name": "updateWorkspaceUiState",
+      "filePath": "electron/workspace-store.cjs",
+      "lineRange": [
+        108,
+        125
+      ],
+      "summary": "Function updateWorkspaceUiState (L108-125)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "function:electron/workspace-store.cjs:updateWorkspaceLiveRepo",
       "type": "function",
       "name": "updateWorkspaceLiveRepo",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        108,
-        126
+        127,
+        145
       ],
-      "summary": "Function updateWorkspaceLiveRepo (L108-126)",
+      "summary": "Function updateWorkspaceLiveRepo (L127-145)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4771,10 +4799,10 @@
       "name": "createWorkspace",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        128,
-        159
+        147,
+        178
       ],
-      "summary": "Function createWorkspace (L128-159)",
+      "summary": "Function createWorkspace (L147-178)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -9277,7 +9305,7 @@
       "type": "file",
       "name": "Breadcrumb.tsx",
       "filePath": "packages/graph-view/src/components/Breadcrumb.tsx",
-      "summary": "Breadcrumb.tsx — 1 functions, 0 classes, 40 lines",
+      "summary": "Breadcrumb.tsx — 1 functions, 0 classes, 44 lines",
       "tags": [
         "typescript",
         "code"
@@ -9291,10 +9319,10 @@
       "name": "Breadcrumb",
       "filePath": "packages/graph-view/src/components/Breadcrumb.tsx",
       "lineRange": [
-        4,
-        40
+        5,
+        44
       ],
-      "summary": "Function Breadcrumb (L4-40)",
+      "summary": "Function Breadcrumb (L5-44)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -9373,7 +9401,7 @@
       "type": "file",
       "name": "ContainerNode.tsx",
       "filePath": "packages/graph-view/src/components/ContainerNode.tsx",
-      "summary": "ContainerNode.tsx — 1 functions, 0 classes, 101 lines",
+      "summary": "ContainerNode.tsx — 1 functions, 0 classes, 103 lines",
       "tags": [
         "typescript",
         "code"
@@ -9388,9 +9416,9 @@
       "filePath": "packages/graph-view/src/components/ContainerNode.tsx",
       "lineRange": [
         21,
-        96
+        98
       ],
-      "summary": "Function ContainerNodeComponent (L21-96)",
+      "summary": "Function ContainerNodeComponent (L21-98)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -9810,7 +9838,7 @@
       "type": "file",
       "name": "GraphView.tsx",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "summary": "GraphView.tsx — 10 functions, 0 classes, 1715 lines",
+      "summary": "GraphView.tsx — 8 functions, 0 classes, 1788 lines",
       "tags": [
         "typescript",
         "code"
@@ -9824,10 +9852,10 @@
       "name": "TourFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        97,
-        181
+        100,
+        184
       ],
-      "summary": "Function TourFitView (L97-181)",
+      "summary": "Function TourFitView (L100-184)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9838,10 +9866,10 @@
       "name": "SelectedNodeFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        184,
-        209
+        187,
+        212
       ],
-      "summary": "Function SelectedNodeFitView (L184-209)",
+      "summary": "Function SelectedNodeFitView (L187-212)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9852,10 +9880,10 @@
       "name": "useOverviewGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        215,
-        353
+        218,
+        356
       ],
-      "summary": "Function useOverviewGraph (L215-353)",
+      "summary": "Function useOverviewGraph (L218-356)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9866,10 +9894,10 @@
       "name": "useLayerDetailTopology",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        389,
-        926
+        392,
+        931
       ],
-      "summary": "Function useLayerDetailTopology (L389-926)",
+      "summary": "Function useLayerDetailTopology (L392-931)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9880,10 +9908,10 @@
       "name": "buildCustomFlowNode",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        934,
-        968
+        939,
+        973
       ],
-      "summary": "Function buildCustomFlowNode (L934-968)",
+      "summary": "Function buildCustomFlowNode (L939-973)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9894,10 +9922,10 @@
       "name": "useLayerDetailGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        984,
-        1319
+        989,
+        1429
       ],
-      "summary": "Function useLayerDetailGraph (L984-1319)",
+      "summary": "Function useLayerDetailGraph (L989-1429)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9908,38 +9936,10 @@
       "name": "GraphViewInner",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1323,
-        1623
+        1433,
+        1776
       ],
-      "summary": "Function GraphViewInner (L1323-1623)",
-      "tags": [],
-      "complexity": "complex",
-      "layerId": "layer:packages"
-    },
-    {
-      "id": "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewFlowMount",
-      "type": "function",
-      "name": "EmbedOverviewFlowMount",
-      "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "lineRange": [
-        1626,
-        1664
-      ],
-      "summary": "Function EmbedOverviewFlowMount (L1626-1664)",
-      "tags": [],
-      "complexity": "complex",
-      "layerId": "layer:packages"
-    },
-    {
-      "id": "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewGraph",
-      "type": "function",
-      "name": "EmbedOverviewGraph",
-      "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "lineRange": [
-        1666,
-        1703
-      ],
-      "summary": "Function EmbedOverviewGraph (L1666-1703)",
+      "summary": "Function GraphViewInner (L1433-1776)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9950,10 +9950,10 @@
       "name": "GraphView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1705,
-        1715
+        1778,
+        1788
       ],
-      "summary": "Function GraphView (L1705-1715)",
+      "summary": "Function GraphView (L1778-1788)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10666,86 +10666,85 @@
       "layerId": "layer:packages"
     },
     {
-      "id": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
+      "id": "file:packages/graph-view/src/EmbedDashboardPanel.tsx",
       "type": "file",
-      "name": "EmbedGraphPanel.tsx",
-      "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
-      "summary": "EmbedGraphPanel.tsx — 6 functions, 0 classes, 279 lines",
+      "name": "EmbedDashboardPanel.tsx",
+      "filePath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
+      "summary": "EmbedDashboardPanel.tsx — 2 functions, 0 classes, 95 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
-      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:buildNodesById",
+      "id": "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedSizedDashboard",
       "type": "function",
-      "name": "buildNodesById",
-      "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
+      "name": "EmbedSizedDashboard",
+      "filePath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
       "lineRange": [
-        39,
-        45
+        16,
+        62
       ],
-      "summary": "Function buildNodesById (L39-45)",
+      "summary": "Function EmbedSizedDashboard (L16-62)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
-      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:useOverviewLayoutForGraph",
+      "id": "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedDashboardPanel",
       "type": "function",
-      "name": "useOverviewLayoutForGraph",
-      "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
+      "name": "EmbedDashboardPanel",
+      "filePath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
       "lineRange": [
-        47,
-        154
+        69,
+        95
       ],
-      "summary": "Function useOverviewLayoutForGraph (L47-154)",
+      "summary": "Function EmbedDashboardPanel (L69-95)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
-      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedFitViewOnce",
-      "type": "function",
-      "name": "EmbedFitViewOnce",
+      "id": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
+      "type": "file",
+      "name": "EmbedGraphPanel.tsx",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
-      "lineRange": [
-        157,
-        184
+      "summary": "EmbedGraphPanel.tsx — 3 functions, 0 classes, 97 lines",
+      "tags": [
+        "typescript",
+        "code"
       ],
-      "summary": "Function EmbedFitViewOnce (L157-184)",
-      "tags": [],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
-      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedOverviewFlow",
+      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedEscapeToOverview",
       "type": "function",
-      "name": "EmbedOverviewFlow",
+      "name": "EmbedEscapeToOverview",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        186,
-        218
+        15,
+        30
       ],
-      "summary": "Function EmbedOverviewFlow (L186-218)",
+      "summary": "Function EmbedEscapeToOverview (L15-30)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
-      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedFlowMount",
+      "id": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedInteractiveGraph",
       "type": "function",
-      "name": "EmbedSizedFlowMount",
+      "name": "EmbedSizedInteractiveGraph",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        221,
-        257
+        32,
+        79
       ],
-      "summary": "Function EmbedSizedFlowMount (L221-257)",
+      "summary": "Function EmbedSizedInteractiveGraph (L32-79)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "simple",
       "layerId": "layer:packages"
     },
     {
@@ -10754,10 +10753,65 @@
       "name": "EmbedGraphPanel",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        263,
-        279
+        81,
+        97
       ],
-      "summary": "Function EmbedGraphPanel (L263-279)",
+      "summary": "Function EmbedGraphPanel (L81-97)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "type": "file",
+      "name": "useEmbedAutoExpand.ts",
+      "filePath": "packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "summary": "useEmbedAutoExpand.ts — 3 functions, 0 classes, 129 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:containersFullyLaidOut",
+      "type": "function",
+      "name": "containersFullyLaidOut",
+      "filePath": "packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "lineRange": [
+        17,
+        22
+      ],
+      "summary": "Function containersFullyLaidOut (L17-22)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:waitForContainerLayouts",
+      "type": "function",
+      "name": "waitForContainerLayouts",
+      "filePath": "packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "lineRange": [
+        24,
+        36
+      ],
+      "summary": "Function waitForContainerLayouts (L24-36)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:useEmbedAutoExpand",
+      "type": "function",
+      "name": "useEmbedAutoExpand",
+      "filePath": "packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "lineRange": [
+        42,
+        129
+      ],
+      "summary": "Function useEmbedAutoExpand (L42-129)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -10835,7 +10889,7 @@
       "type": "file",
       "name": "index.css",
       "filePath": "packages/graph-view/src/index.css",
-      "summary": "index.css — 0 functions, 0 classes, 426 lines",
+      "summary": "index.css — 0 functions, 0 classes, 484 lines",
       "tags": [
         "css",
         "code"
@@ -11035,11 +11089,25 @@
       "type": "file",
       "name": "NovaDiffGraphExplorerEmbed.tsx",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
-      "summary": "NovaDiffGraphExplorerEmbed.tsx — 1 functions, 0 classes, 52 lines",
+      "summary": "NovaDiffGraphExplorerEmbed.tsx — 2 functions, 0 classes, 113 lines",
       "tags": [
         "typescript",
         "code"
       ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx:graphFingerprint",
+      "type": "function",
+      "name": "graphFingerprint",
+      "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+      "lineRange": [
+        23,
+        33
+      ],
+      "summary": "Function graphFingerprint (L23-33)",
+      "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
     },
@@ -11049,10 +11117,10 @@
       "name": "NovaDiffGraphExplorerEmbed",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
       "lineRange": [
-        23,
-        52
+        36,
+        113
       ],
-      "summary": "Function NovaDiffGraphExplorerEmbed (L23-52)",
+      "summary": "Function NovaDiffGraphExplorerEmbed (L36-113)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -11062,7 +11130,7 @@
       "type": "file",
       "name": "store.ts",
       "filePath": "packages/graph-view/src/store.ts",
-      "summary": "store.ts — 4 functions, 0 classes, 824 lines",
+      "summary": "store.ts — 4 functions, 0 classes, 859 lines",
       "tags": [
         "typescript",
         "code"
@@ -11076,10 +11144,10 @@
       "name": "buildGraphIndexes",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        74,
-        95
+        75,
+        96
       ],
-      "summary": "Function buildGraphIndexes (L74-95)",
+      "summary": "Function buildGraphIndexes (L75-96)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11090,10 +11158,10 @@
       "name": "getSortedTour",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        244,
-        247
+        249,
+        252
       ],
-      "summary": "Function getSortedTour (L244-247)",
+      "summary": "Function getSortedTour (L249-252)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11104,10 +11172,10 @@
       "name": "navigateTourToLayer",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        250,
-        263
+        255,
+        268
       ],
-      "summary": "Function navigateTourToLayer (L250-263)",
+      "summary": "Function navigateTourToLayer (L255-268)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11118,10 +11186,10 @@
       "name": "layerResetIfChanged",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        274,
-        289
+        279,
+        294
       ],
-      "summary": "Function layerResetIfChanged (L274-289)",
+      "summary": "Function layerResetIfChanged (L279-294)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11132,6 +11200,19 @@
       "name": "index.ts",
       "filePath": "packages/graph-view/src/themes/index.ts",
       "summary": "index.ts — 0 functions, 0 classes, 5 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "file:packages/graph-view/src/themes/novadiffEmbed.ts",
+      "type": "file",
+      "name": "novadiffEmbed.ts",
+      "filePath": "packages/graph-view/src/themes/novadiffEmbed.ts",
+      "summary": "novadiffEmbed.ts — 0 functions, 0 classes, 8 lines",
       "tags": [
         "typescript",
         "code"
@@ -11254,7 +11335,7 @@
       "type": "file",
       "name": "ThemeContext.tsx",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
-      "summary": "ThemeContext.tsx — 5 functions, 0 classes, 140 lines",
+      "summary": "ThemeContext.tsx — 5 functions, 0 classes, 152 lines",
       "tags": [
         "typescript",
         "code"
@@ -11297,9 +11378,9 @@
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
         49,
-        51
+        57
       ],
-      "summary": "Function resolveInitialTheme (L49-51)",
+      "summary": "Function resolveInitialTheme (L49-57)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11310,10 +11391,10 @@
       "name": "ThemeProvider",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        60,
-        134
+        66,
+        146
       ],
-      "summary": "Function ThemeProvider (L60-134)",
+      "summary": "Function ThemeProvider (L66-146)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11324,10 +11405,10 @@
       "name": "useTheme",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        136,
-        140
+        148,
+        152
       ],
-      "summary": "Function useTheme (L136-140)",
+      "summary": "Function useTheme (L148-152)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11546,6 +11627,33 @@
         "typescript",
         "code"
       ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "file:packages/graph-view/src/utils/activeLayer.ts",
+      "type": "file",
+      "name": "activeLayer.ts",
+      "filePath": "packages/graph-view/src/utils/activeLayer.ts",
+      "summary": "activeLayer.ts — 1 functions, 0 classes, 44 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/activeLayer.ts:resolveActiveLayer",
+      "type": "function",
+      "name": "resolveActiveLayer",
+      "filePath": "packages/graph-view/src/utils/activeLayer.ts",
+      "lineRange": [
+        6,
+        44
+      ],
+      "summary": "Function resolveActiveLayer (L6-44)",
+      "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
     },
@@ -12292,7 +12400,7 @@
       "type": "file",
       "name": "App.css",
       "filePath": "src/App.css",
-      "summary": "App.css — 0 functions, 0 classes, 4184 lines",
+      "summary": "App.css — 0 functions, 0 classes, 4292 lines",
       "tags": [
         "css",
         "code"
@@ -12305,7 +12413,7 @@
       "type": "file",
       "name": "App.tsx",
       "filePath": "src/App.tsx",
-      "summary": "App.tsx — 9 functions, 0 classes, 1593 lines",
+      "summary": "App.tsx — 9 functions, 0 classes, 1679 lines",
       "tags": [
         "typescript",
         "code"
@@ -12404,9 +12512,9 @@
       "filePath": "src/App.tsx",
       "lineRange": [
         123,
-        1491
+        1577
       ],
-      "summary": "Function AppMain (L123-1491)",
+      "summary": "Function AppMain (L123-1577)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12417,10 +12525,10 @@
       "name": "WindowChrome",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1493,
-        1584
+        1579,
+        1670
       ],
-      "summary": "Function WindowChrome (L1493-1584)",
+      "summary": "Function WindowChrome (L1579-1670)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12431,10 +12539,10 @@
       "name": "App",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1586,
-        1593
+        1672,
+        1679
       ],
-      "summary": "Function App (L1586-1593)",
+      "summary": "Function App (L1672-1679)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -13587,6 +13695,33 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/app/pathDisplay.ts",
+      "type": "file",
+      "name": "pathDisplay.ts",
+      "filePath": "src/app/pathDisplay.ts",
+      "summary": "pathDisplay.ts — 1 functions, 0 classes, 15 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/pathDisplay.ts:pathDisplayLabel",
+      "type": "function",
+      "name": "pathDisplayLabel",
+      "filePath": "src/app/pathDisplay.ts",
+      "lineRange": [
+        2,
+        15
+      ],
+      "summary": "Function pathDisplayLabel (L2-15)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/app/selectedDiffDocs.ts",
       "type": "file",
       "name": "selectedDiffDocs.ts",
@@ -13882,7 +14017,7 @@
       "type": "file",
       "name": "workspaceStorage.ts",
       "filePath": "src/app/workspaceStorage.ts",
-      "summary": "workspaceStorage.ts — 10 functions, 0 classes, 112 lines",
+      "summary": "workspaceStorage.ts — 10 functions, 0 classes, 119 lines",
       "tags": [
         "typescript",
         "code"
@@ -13995,9 +14130,9 @@
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
         65,
-        86
+        93
       ],
-      "summary": "Function resolveOnboardingGate (L65-86)",
+      "summary": "Function resolveOnboardingGate (L65-93)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:src"
@@ -14008,10 +14143,10 @@
       "name": "mergeSession",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        88,
-        102
+        95,
+        109
       ],
-      "summary": "Function mergeSession (L88-102)",
+      "summary": "Function mergeSession (L95-109)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:src"
@@ -14022,10 +14157,10 @@
       "name": "findWorkspace",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        104,
-        112
+        111,
+        119
       ],
-      "summary": "Function findWorkspace (L104-112)",
+      "summary": "Function findWorkspace (L111-119)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:src"
@@ -14035,7 +14170,7 @@
       "type": "file",
       "name": "workspaceTypes.ts",
       "filePath": "src/app/workspaceTypes.ts",
-      "summary": "workspaceTypes.ts — 0 functions, 0 classes, 58 lines",
+      "summary": "workspaceTypes.ts — 0 functions, 0 classes, 67 lines",
       "tags": [
         "typescript",
         "code"
@@ -14252,12 +14387,12 @@
       "type": "file",
       "name": "DiffWorkspace.tsx",
       "filePath": "src/components/DiffWorkspace.tsx",
-      "summary": "DiffWorkspace.tsx — 2 functions, 0 classes, 401 lines",
+      "summary": "DiffWorkspace.tsx — 2 functions, 0 classes, 400 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "complex",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14266,12 +14401,12 @@
       "name": "DiffWorkspace",
       "filePath": "src/components/DiffWorkspace.tsx",
       "lineRange": [
-        59,
-        370
+        60,
+        369
       ],
-      "summary": "Function DiffWorkspace (L59-370)",
+      "summary": "Function DiffWorkspace (L60-369)",
       "tags": [],
-      "complexity": "complex",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14280,12 +14415,12 @@
       "name": "DiffTableRow",
       "filePath": "src/components/DiffWorkspace.tsx",
       "lineRange": [
-        372,
-        401
+        371,
+        400
       ],
-      "summary": "Function DiffTableRow (L372-401)",
+      "summary": "Function DiffTableRow (L371-400)",
       "tags": [],
-      "complexity": "complex",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14416,7 +14551,7 @@
       "type": "file",
       "name": "GitHistoryWorkspace.tsx",
       "filePath": "src/components/GitHistoryWorkspace.tsx",
-      "summary": "GitHistoryWorkspace.tsx — 1 functions, 0 classes, 256 lines",
+      "summary": "GitHistoryWorkspace.tsx — 1 functions, 0 classes, 269 lines",
       "tags": [
         "typescript",
         "code"
@@ -14430,10 +14565,10 @@
       "name": "GitHistoryWorkspace",
       "filePath": "src/components/GitHistoryWorkspace.tsx",
       "lineRange": [
-        24,
-        256
+        25,
+        269
       ],
-      "summary": "Function GitHistoryWorkspace (L24-256)",
+      "summary": "Function GitHistoryWorkspace (L25-269)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14484,10 +14619,10 @@
       "name": "truncateSubject",
       "filePath": "src/components/HistoryCompareStrip.tsx",
       "lineRange": [
-        29,
-        35
+        30,
+        36
       ],
-      "summary": "Function truncateSubject (L29-35)",
+      "summary": "Function truncateSubject (L30-36)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14498,10 +14633,10 @@
       "name": "commitLabel",
       "filePath": "src/components/HistoryCompareStrip.tsx",
       "lineRange": [
-        37,
-        39
+        38,
+        40
       ],
-      "summary": "Function commitLabel (L37-39)",
+      "summary": "Function commitLabel (L38-40)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14512,10 +14647,10 @@
       "name": "HistoryCompareStrip",
       "filePath": "src/components/HistoryCompareStrip.tsx",
       "lineRange": [
-        41,
+        42,
         212
       ],
-      "summary": "Function HistoryCompareStrip (L41-212)",
+      "summary": "Function HistoryCompareStrip (L42-212)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14851,12 +14986,12 @@
       "type": "file",
       "name": "WelcomeScreen.tsx",
       "filePath": "src/components/onboarding/WelcomeScreen.tsx",
-      "summary": "WelcomeScreen.tsx — 1 functions, 0 classes, 399 lines",
+      "summary": "WelcomeScreen.tsx — 1 functions, 0 classes, 420 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14865,12 +15000,12 @@
       "name": "WelcomeScreen",
       "filePath": "src/components/onboarding/WelcomeScreen.tsx",
       "lineRange": [
-        10,
-        399
+        11,
+        420
       ],
-      "summary": "Function WelcomeScreen (L10-399)",
+      "summary": "Function WelcomeScreen (L11-420)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14878,7 +15013,7 @@
       "type": "file",
       "name": "WorkspaceHub.tsx",
       "filePath": "src/components/onboarding/WorkspaceHub.tsx",
-      "summary": "WorkspaceHub.tsx — 1 functions, 0 classes, 285 lines",
+      "summary": "WorkspaceHub.tsx — 1 functions, 0 classes, 307 lines",
       "tags": [
         "typescript",
         "code"
@@ -14892,10 +15027,10 @@
       "name": "WorkspaceHub",
       "filePath": "src/components/onboarding/WorkspaceHub.tsx",
       "lineRange": [
-        15,
-        285
+        17,
+        307
       ],
-      "summary": "Function WorkspaceHub (L15-285)",
+      "summary": "Function WorkspaceHub (L17-307)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -15066,7 +15201,7 @@
       "type": "file",
       "name": "vite-env.d.ts",
       "filePath": "src/vite-env.d.ts",
-      "summary": "vite-env.d.ts — 0 functions, 0 classes, 383 lines",
+      "summary": "vite-env.d.ts — 0 functions, 0 classes, 391 lines",
       "tags": [
         "typescript",
         "code"
@@ -17248,6 +17383,13 @@
       "weight": 1
     },
     {
+      "source": "file:electron/workspace-history.cjs",
+      "target": "function:electron/workspace-history.cjs:refreshWorkspaceHistory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:electron/workspace-store.cjs",
       "target": "function:electron/workspace-store.cjs:sessionPath",
       "type": "contains",
@@ -17327,6 +17469,13 @@
     {
       "source": "file:electron/workspace-store.cjs",
       "target": "function:electron/workspace-store.cjs:getWorkspace",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/workspace-store.cjs",
+      "target": "function:electron/workspace-store.cjs:updateWorkspaceUiState",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -18817,20 +18966,6 @@
     },
     {
       "source": "file:packages/graph-view/src/components/GraphView.tsx",
-      "target": "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewFlowMount",
-      "type": "contains",
-      "direction": "forward",
-      "weight": 1
-    },
-    {
-      "source": "file:packages/graph-view/src/components/GraphView.tsx",
-      "target": "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewGraph",
-      "type": "contains",
-      "direction": "forward",
-      "weight": 1
-    },
-    {
-      "source": "file:packages/graph-view/src/components/GraphView.tsx",
       "target": "function:packages/graph-view/src/components/GraphView.tsx:GraphView",
       "type": "contains",
       "direction": "forward",
@@ -19054,36 +19189,29 @@
       "weight": 1
     },
     {
-      "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:buildNodesById",
+      "source": "file:packages/graph-view/src/EmbedDashboardPanel.tsx",
+      "target": "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedSizedDashboard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/EmbedDashboardPanel.tsx",
+      "target": "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedDashboardPanel",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:useOverviewLayoutForGraph",
+      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedEscapeToOverview",
       "type": "contains",
       "direction": "forward",
       "weight": 1
     },
     {
       "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedFitViewOnce",
-      "type": "contains",
-      "direction": "forward",
-      "weight": 1
-    },
-    {
-      "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedOverviewFlow",
-      "type": "contains",
-      "direction": "forward",
-      "weight": 1
-    },
-    {
-      "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedFlowMount",
+      "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedInteractiveGraph",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -19091,6 +19219,27 @@
     {
       "source": "file:packages/graph-view/src/EmbedGraphPanel.tsx",
       "target": "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedGraphPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "target": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:containersFullyLaidOut",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "target": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:waitForContainerLayouts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+      "target": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:useEmbedAutoExpand",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -19147,6 +19296,13 @@
     {
       "source": "file:packages/graph-view/src/NovaDiffGraphExplorer.tsx",
       "target": "function:packages/graph-view/src/NovaDiffGraphExplorer.tsx:NovaDiffGraphExplorerFull",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+      "target": "function:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx:graphFingerprint",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -19322,6 +19478,13 @@
     {
       "source": "file:packages/graph-view/src/utils/__tests__/layerStats.test.ts",
       "target": "function:packages/graph-view/src/utils/__tests__/layerStats.test.ts:indexById",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/activeLayer.ts",
+      "target": "function:packages/graph-view/src/utils/activeLayer.ts:resolveActiveLayer",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20118,6 +20281,13 @@
       "weight": 1
     },
     {
+      "source": "file:src/app/pathDisplay.ts",
+      "target": "function:src/app/pathDisplay.ts:pathDisplayLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/app/selectedDiffDocs.ts",
       "target": "function:src/app/selectedDiffDocs.ts:formatDiffRowLine",
       "type": "contains",
@@ -20619,7 +20789,7 @@
     {
       "id": "layer:packages",
       "name": "packages",
-      "description": "226 files in this area",
+      "description": "230 files in this area",
       "order": 0,
       "color": null,
       "nodeIds": [
@@ -20998,8 +21168,6 @@
         "function:packages/graph-view/src/components/GraphView.tsx:buildCustomFlowNode",
         "function:packages/graph-view/src/components/GraphView.tsx:useLayerDetailGraph",
         "function:packages/graph-view/src/components/GraphView.tsx:GraphViewInner",
-        "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewFlowMount",
-        "function:packages/graph-view/src/components/GraphView.tsx:EmbedOverviewGraph",
         "function:packages/graph-view/src/components/GraphView.tsx:GraphView",
         "file:packages/graph-view/src/components/KeyboardShortcutsHelp.tsx",
         "function:packages/graph-view/src/components/KeyboardShortcutsHelp.tsx:KeyboardShortcutsHelp",
@@ -21053,13 +21221,17 @@
         "function:packages/graph-view/src/contexts/I18nContext.tsx:I18nProvider",
         "file:packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx",
         "function:packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx:useNovaDiffEmbed",
+        "file:packages/graph-view/src/EmbedDashboardPanel.tsx",
+        "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedSizedDashboard",
+        "function:packages/graph-view/src/EmbedDashboardPanel.tsx:EmbedDashboardPanel",
         "file:packages/graph-view/src/EmbedGraphPanel.tsx",
-        "function:packages/graph-view/src/EmbedGraphPanel.tsx:buildNodesById",
-        "function:packages/graph-view/src/EmbedGraphPanel.tsx:useOverviewLayoutForGraph",
-        "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedFitViewOnce",
-        "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedOverviewFlow",
-        "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedFlowMount",
+        "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedEscapeToOverview",
+        "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedInteractiveGraph",
         "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedGraphPanel",
+        "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
+        "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:containersFullyLaidOut",
+        "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:waitForContainerLayouts",
+        "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:useEmbedAutoExpand",
         "file:packages/graph-view/src/hooks/useIsMobile.ts",
         "function:packages/graph-view/src/hooks/useIsMobile.ts:useIsMobile",
         "file:packages/graph-view/src/hooks/useKeyboardShortcuts.ts",
@@ -21081,6 +21253,7 @@
         "function:packages/graph-view/src/NovaDiffGraphExplorer.tsx:graphFingerprint",
         "function:packages/graph-view/src/NovaDiffGraphExplorer.tsx:NovaDiffGraphExplorerFull",
         "file:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+        "function:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx:graphFingerprint",
         "function:packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx:NovaDiffGraphExplorerEmbed",
         "file:packages/graph-view/src/store.ts",
         "function:packages/graph-view/src/store.ts:buildGraphIndexes",
@@ -21088,6 +21261,7 @@
         "function:packages/graph-view/src/store.ts:navigateTourToLayer",
         "function:packages/graph-view/src/store.ts:layerResetIfChanged",
         "file:packages/graph-view/src/themes/index.ts",
+        "file:packages/graph-view/src/themes/novadiffEmbed.ts",
         "file:packages/graph-view/src/themes/presets.ts",
         "function:packages/graph-view/src/themes/presets.ts:getPreset",
         "function:packages/graph-view/src/themes/presets.ts:getAccent",
@@ -21118,6 +21292,8 @@
         "function:packages/graph-view/src/utils/__tests__/layerStats.test.ts:layer",
         "function:packages/graph-view/src/utils/__tests__/layerStats.test.ts:indexById",
         "file:packages/graph-view/src/utils/__tests__/smoke.test.ts",
+        "file:packages/graph-view/src/utils/activeLayer.ts",
+        "function:packages/graph-view/src/utils/activeLayer.ts:resolveActiveLayer",
         "file:packages/graph-view/src/utils/containers.ts",
         "function:packages/graph-view/src/utils/containers.ts:commonPrefix",
         "function:packages/graph-view/src/utils/containers.ts:firstSegment",
@@ -21171,7 +21347,7 @@
     {
       "id": "layer:src",
       "name": "src",
-      "description": "55 files in this area",
+      "description": "56 files in this area",
       "order": 1,
       "color": null,
       "nodeIds": [
@@ -21269,6 +21445,8 @@
         "function:src/app/novadiffDocs.ts:bundleShortDescription",
         "file:src/app/novadiffPaths.ts",
         "function:src/app/novadiffPaths.ts:isNovadiffDocsReservedPath",
+        "file:src/app/pathDisplay.ts",
+        "function:src/app/pathDisplay.ts:pathDisplayLabel",
         "file:src/app/selectedDiffDocs.ts",
         "function:src/app/selectedDiffDocs.ts:formatDiffRowLine",
         "function:src/app/selectedDiffDocs.ts:compactIndices",
@@ -21634,6 +21812,7 @@
         "function:electron/workspace-history.cjs:snapshotCommit",
         "function:electron/workspace-history.cjs:ensureCommitSnapshot",
         "function:electron/workspace-history.cjs:indexWorkspaceHistory",
+        "function:electron/workspace-history.cjs:refreshWorkspaceHistory",
         "file:electron/workspace-store.cjs",
         "function:electron/workspace-store.cjs:sessionPath",
         "function:electron/workspace-store.cjs:workspacesRoot",
@@ -21647,6 +21826,7 @@
         "function:electron/workspace-store.cjs:setActiveWorkspace",
         "function:electron/workspace-store.cjs:setGitUser",
         "function:electron/workspace-store.cjs:getWorkspace",
+        "function:electron/workspace-store.cjs:updateWorkspaceUiState",
         "function:electron/workspace-store.cjs:updateWorkspaceLiveRepo",
         "function:electron/workspace-store.cjs:createWorkspace"
       ]

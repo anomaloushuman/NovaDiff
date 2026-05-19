@@ -1,20 +1,27 @@
 ### Overview  
-A new onboarding screen is added at `src/components/onboarding/WelcomeScreen.tsx` (lines 1‑399). It guides users through GitHub CLI detection, installation, and authentication before proceeding to workspace setup.
+The `WelcomeScreen` component now accepts an optional `cachedGitUser` prop.  
+- `WelcomeScreenProps` gains `cachedGitUser?: GitUserProfile | null` (see `L6`).  
+- The component signature changes to `WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly })` (`R11`).  
+- The `refresh` callback now lists `cachedGitUser?.login` in its dependency array (`R67`).  
+- After fetching users, the logic first checks if `cachedGitUser` matches a detected account and selects it; otherwise it falls back to the first user (`R56‑R58`).  
 
 ### Key changes  
-- **Component & props** – `WelcomeScreen` implements `WelcomeScreenProps` (R5‑R7) with callbacks `onComplete` (receives a `GitUserProfile`) and `onLocalOnly`.  
-- **Imports** – Added React hooks (R1), Lucide icons (R2), and types `GhToolingStatus`, `GitUserProfile` from `../../app/workspaceTypes` (R3).  
-- **State & effects** – Uses `useState` for loading, error, auth, device code, installation log, and GitHub status; several `useEffect` hooks keep the UI in sync with `window.electronAPI` (R26‑R64, R76‑R104).  
-- **Flows** – Functions `installGh`, `startAuth`, `copyCode`, and `confirmUser` orchestrate CLI installation, OAuth device flow, clipboard handling, and final user confirmation (R106‑R188).  
-- **Conditional rendering** – UI sections for CLI detection, installation prompts, auth status, user list, and a local‑only fallback are displayed based on state flags (R193‑R398).
+- **Prop addition** – `cachedGitUser` added to `WelcomeScreenProps` (`L6`).  
+- **Signature update** – component now receives `{ cachedGitUser, onComplete, onLocalOnly }` (`R11`).  
+- **Dependency update** – `refresh` depends on `cachedGitUser?.login` (`R67`).  
+- **Selection logic** – auto‑select cached user if present (`R56‑R58`).  
+- **UI changes** –  
+  - Removed the old “Continue as @login” button block (`L363‑L384`).  
+  - New continue button text shows “Use a different account” when a cached user exists, otherwise “Continue with GitHub” (`R397`).  
+  - Button disabled state now uses `selected` instead of `cachedGitUser` (`R388`).  
 
 ### Impact  
-- **Runtime dependency** – All referenced `window.electronAPI` methods (`githubGhStatus`, `githubDetectedUsers`, etc.) must exist; missing methods will throw at runtime.  
-- **Parent contract** – Components that render `WelcomeScreen` must provide `onComplete` and `onLocalOnly` handlers.  
-- **State updates** – The component performs multiple state updates; re‑renders are expected but not quantified in the diff.  
+- **User experience** – Cached accounts are pre‑selected, reducing friction.  
+- **API contract** – Callers must provide `cachedGitUser` or handle its absence; omitting it may lead to default `undefined` behavior.  
+- **UI clarity** – Button text and disabled state reflect the presence of a cached user.  
 
 ### Risks & follow‑ups  
-- **API availability** – Verify that `window.electronAPI` exposes the required methods; otherwise the component will fail.  
-- **Callback contract** – Ensure `onComplete` receives a fully populated `GitUserProfile`; type mismatches could break downstream logic.  
-- **Auth flow robustness** – Test device code copy, clipboard fallback, and error handling paths (see `copyCode` implementation).  
-- **UI correctness** – Confirm that conditional sections render as intended for different `ghStatus` states and that accessibility attributes are present.
+1. **Missing prop** – Verify that all imports of `WelcomeScreen` supply `cachedGitUser`; otherwise the component defaults to `undefined`.  
+2. **Selection edge case** – Ensure that when `cachedGitUser` is not in the detected list, the fallback still selects the first user (`R58`).  
+3. **Dependency array** – Confirm that adding `cachedGitUser?.login` to `refresh`’s deps triggers a refresh when the cached user changes (`R67`).  
+4. **UI regression** – Run visual tests to validate the new button text and disabled state (`R397`, `R388`).

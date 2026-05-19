@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/workspaceTypes.ts",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:06:14.626Z",
+  "generatedAt": "2026-05-19T22:41:46.097Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,36 +20,27 @@
       }
     ],
     "changed_exports": [
-      "R1 added: export interface GitUserProfile {",
-      "R9 added: export interface WorkspaceCommitSnapshot {",
-      "R19 added: export interface NovaWorkspace {",
-      "R35 added: export interface GitHistoryCompareOptions {",
-      "R40 added: export interface GhToolingStatus {",
-      "R53 added: export interface WorkspaceSessionState {"
+      "R37 added: export interface WorkspaceUiState {"
     ],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-58"
+      "R33-41"
     ],
     "cited_changed_lines": [
-      "R1 added: export interface GitUserProfile {",
-      "R2 added: login: string;",
-      "R3 added: name: string | null;",
-      "R4 added: avatarUrl: string | null;",
-      "R5 added: hostname: string;",
-      "R6 added: authenticatedAt: string;"
+      "R33 added: /** Restored UI state (paths stored here; never shown verbatim in the main app) */",
+      "R34 added: uiState?: WorkspaceUiState | null;",
+      "R35 added: }",
+      "R37 added: export interface WorkspaceUiState {",
+      "R38 added: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
+      "R39 added: leftRoot?: string;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface NovaWorkspace (19-34)",
-      "right interface GhToolingStatus (40-52)",
-      "right interface WorkspaceCommitSnapshot (9-18)",
-      "right interface GitUserProfile (1-8)",
-      "right interface WorkspaceSessionState (53-58)",
-      "right interface GitHistoryCompareOptions (35-39)"
+      "right interface WorkspaceUiState (37-43)",
+      "right interface NovaWorkspace (19-36)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

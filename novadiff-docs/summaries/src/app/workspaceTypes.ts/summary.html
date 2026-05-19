@@ -26,33 +26,36 @@
 <body>
   <header class="top">
     <h1>src/app/workspaceTypes.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:06:14.626Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:41:46.097Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/workspaceTypes.ts</code> is added to the repository. It contains only TypeScript interface declarations that model workspace state, commit snapshots, Git history options, and GitHub tooling status. No existing files are modified.</p>
+<p><code>src/app/workspaceTypes.ts</code> now exports a new <code>WorkspaceUiState</code> interface and adds an optional <code>uiState</code> property to <code>NovaWorkspace</code>. The comment at R33 notes that this UI state is restored and not shown verbatim in the main app.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>GitUserProfile</code></strong> (lines 1‑6): defines <code>login</code>, <code>name</code>, <code>avatarUrl</code>, <code>hostname</code>, and <code>authenticatedAt</code>.  </li>
-<li><strong><code>WorkspaceCommitSnapshot</code></strong> (lines 9‑17): describes a commit’s <code>hash</code>, <code>shortHash</code>, <code>subject</code>, <code>authoredAt</code>, <code>snapshotPath</code>, optional <code>docsPath</code>, and optional <code>indexedAt</code>.  </li>
-<li><strong><code>NovaWorkspace</code></strong> (lines 19‑33): models a workspace’s <code>id</code>, <code>name</code>, <code>repoRoot</code>, optional <code>githubSlug</code>, <code>dataDir</code>, timestamps, <code>historyStatus</code>, optional <code>historyError</code>, optional <code>historyProgress</code>, an array of <code>WorkspaceCommitSnapshot</code>, and an optional <code>liveDevRepoRoot</code>.  </li>
-<li><strong><code>GitHistoryCompareOptions</code></strong> (lines 35‑38): optional <code>useLiveHead</code> flag and optional <code>liveRepoRoot</code>.  </li>
-<li><strong><code>GhToolingStatus</code></strong> (lines 40‑51): indicates whether GitHub tooling is installed, its path, version, auto‑install capability, install method, command, label, manual URL, hint, and a reason string.  </li>
-<li><strong><code>WorkspaceSessionState</code></strong> (lines 53‑58): ties together the user profile, active workspace ID, list of <code>NovaWorkspace</code>, and a <code>localOnlyMode</code> flag.</li>
+<li><strong>Exported <code>WorkspaceUiState</code> (R37‑R41)</strong> – defines  <ul>
+<li><code>workspacePage?: &quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</code>  </li>
+<li><code>leftRoot?: string</code>  </li>
+<li><code>rightRoot?: string</code>  </li>
+<li><code>compared?: boolean</code></li>
+</ul>
+</li>
+<li><strong>Extended <code>NovaWorkspace</code> (R34)</strong> – <code>uiState?: WorkspaceUiState | null;</code>  </li>
+<li><strong>Documentation comment (R33)</strong> – indicates restoration of UI state.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Type safety</strong>: Consumers can import these interfaces to replace ad‑hoc shapes, reducing runtime type errors.  </li>
-<li><strong>Documentation</strong>: The interfaces serve as a living specification for the workspace domain, aiding onboarding and code reviews.  </li>
-<li><strong>No runtime changes</strong>: The file contains only type declarations; it does not affect compiled JavaScript output or performance.  </li>
-<li><strong>Future integration</strong>: Services that previously used implicit shapes will need to import these interfaces for consistency.</li>
+<li><strong>Serialization</strong> – any code that writes or reads <code>NovaWorkspace</code> must accommodate the optional <code>uiState</code> field.  </li>
+<li><strong>Type safety</strong> – consumers can now type‑check UI state via the exported interface.  </li>
+<li><strong>Backward compatibility</strong> – the field is optional, so existing workspace data remains valid.  </li>
+<li><strong>UI logic</strong> – components can read <code>workspacePage</code> and root paths directly from the workspace model.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing imports</strong>: Verify that modules expecting workspace shapes now import from <code>src/app/workspaceTypes.ts</code>.  </li>
-<li><strong>API surface expansion</strong>: External consumers relying on old implicit shapes may need to update type references.  </li>
-<li><strong>Documentation sync</strong>: Ensure README or API docs reflect the new interfaces.  </li>
-<li><strong>Linting</strong>: Run <code>tsc</code> and lint to confirm no unused imports or circular dependencies were introduced.</li>
+<li><strong>Data migration</strong> – ensure older workspace JSON files deserialize correctly when <code>uiState</code> is absent.  </li>
+<li><strong>Test coverage</strong> – update unit tests that construct <code>NovaWorkspace</code> objects to include or ignore <code>uiState</code>.  </li>
+<li><strong>Documentation</strong> – expose the new <code>WorkspaceUiState</code> interface in API docs.  </li>
+<li><strong>Linting &amp; build</strong> – run <code>tsc</code>, lint, and build to confirm no type errors introduced by the new export.</li>
 </ul>
 </article>
   </main>

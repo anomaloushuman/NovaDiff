@@ -1,22 +1,23 @@
 ### Overview  
-A new file `src/app/workspaceTypes.ts` is added to the repository. It contains only TypeScript interface declarations that model workspace state, commit snapshots, Git history options, and GitHub tooling status. No existing files are modified.
+`src/app/workspaceTypes.ts` now exports a new `WorkspaceUiState` interface and adds an optional `uiState` property to `NovaWorkspace`. The comment at R33 notes that this UI state is restored and not shown verbatim in the main app.
 
 ### Key changes  
-- **`GitUserProfile`** (lines 1‑6): defines `login`, `name`, `avatarUrl`, `hostname`, and `authenticatedAt`.  
-- **`WorkspaceCommitSnapshot`** (lines 9‑17): describes a commit’s `hash`, `shortHash`, `subject`, `authoredAt`, `snapshotPath`, optional `docsPath`, and optional `indexedAt`.  
-- **`NovaWorkspace`** (lines 19‑33): models a workspace’s `id`, `name`, `repoRoot`, optional `githubSlug`, `dataDir`, timestamps, `historyStatus`, optional `historyError`, optional `historyProgress`, an array of `WorkspaceCommitSnapshot`, and an optional `liveDevRepoRoot`.  
-- **`GitHistoryCompareOptions`** (lines 35‑38): optional `useLiveHead` flag and optional `liveRepoRoot`.  
-- **`GhToolingStatus`** (lines 40‑51): indicates whether GitHub tooling is installed, its path, version, auto‑install capability, install method, command, label, manual URL, hint, and a reason string.  
-- **`WorkspaceSessionState`** (lines 53‑58): ties together the user profile, active workspace ID, list of `NovaWorkspace`, and a `localOnlyMode` flag.
+- **Exported `WorkspaceUiState` (R37‑R41)** – defines  
+  - `workspacePage?: "compare" | "history" | "docs" | "prs" | "publish"`  
+  - `leftRoot?: string`  
+  - `rightRoot?: string`  
+  - `compared?: boolean`  
+- **Extended `NovaWorkspace` (R34)** – `uiState?: WorkspaceUiState | null;`  
+- **Documentation comment (R33)** – indicates restoration of UI state.
 
 ### Impact  
-- **Type safety**: Consumers can import these interfaces to replace ad‑hoc shapes, reducing runtime type errors.  
-- **Documentation**: The interfaces serve as a living specification for the workspace domain, aiding onboarding and code reviews.  
-- **No runtime changes**: The file contains only type declarations; it does not affect compiled JavaScript output or performance.  
-- **Future integration**: Services that previously used implicit shapes will need to import these interfaces for consistency.
+- **Serialization** – any code that writes or reads `NovaWorkspace` must accommodate the optional `uiState` field.  
+- **Type safety** – consumers can now type‑check UI state via the exported interface.  
+- **Backward compatibility** – the field is optional, so existing workspace data remains valid.  
+- **UI logic** – components can read `workspacePage` and root paths directly from the workspace model.
 
 ### Risks & follow‑ups  
-- **Missing imports**: Verify that modules expecting workspace shapes now import from `src/app/workspaceTypes.ts`.  
-- **API surface expansion**: External consumers relying on old implicit shapes may need to update type references.  
-- **Documentation sync**: Ensure README or API docs reflect the new interfaces.  
-- **Linting**: Run `tsc` and lint to confirm no unused imports or circular dependencies were introduced.
+- **Data migration** – ensure older workspace JSON files deserialize correctly when `uiState` is absent.  
+- **Test coverage** – update unit tests that construct `NovaWorkspace` objects to include or ignore `uiState`.  
+- **Documentation** – expose the new `WorkspaceUiState` interface in API docs.  
+- **Linting & build** – run `tsc`, lint, and build to confirm no type errors introduced by the new export.

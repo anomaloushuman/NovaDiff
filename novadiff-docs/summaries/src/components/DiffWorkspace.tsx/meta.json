@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/DiffWorkspace.tsx",
   "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:08:21.910Z",
+  "generatedAt": "2026-05-19T22:42:36.057Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,35 +21,31 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "L15 removed: import { LlmSummaryMarkdown } from \"./LlmSummaryMarkdown\";",
-      "R15 added: import { SelectedDiffSummaryModal } from \"./SelectedDiffSummaryModal\";"
+      "R7 added: import { pathDisplayLabel } from \"../app/pathDisplay\";"
     ],
     "changed_line_ranges": [
-      "L15 / R15",
-      "R27",
-      "R55-56",
-      "R69",
-      "R94-95",
-      "R199-211",
-      "L332-340",
-      "R354-362"
+      "R7",
+      "L62-63 / R63-64",
+      "L124-125 / R125-126",
+      "L129",
+      "L160-161 / R160-161",
+      "L165"
     ],
     "cited_changed_lines": [
-      "L15 removed: import { LlmSummaryMarkdown } from \"./LlmSummaryMarkdown\";",
-      "R15 added: import { SelectedDiffSummaryModal } from \"./SelectedDiffSummaryModal\";",
-      "R27 added: compareStatusMessage?: string | null;",
-      "R55 added: selectedDiffSummaryModalOpen: boolean;",
-      "R56 added: onCloseSelectedDiffSummaryModal: () => void;",
-      "R69 added: compareStatusMessage,"
+      "R7 added: import { pathDisplayLabel } from \"../app/pathDisplay\";",
+      "L62 removed: onLeft,",
+      "L63 removed: onRight,",
+      "R63 added: onLeft: _onLeft,",
+      "R64 added: onRight: _onRight,",
+      "L124 removed: value={leftRoot}"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function DiffWorkspace (56-352)",
-      "right function DiffWorkspace (59-371)",
-      "right interface DiffWorkspaceProps (17-58)"
+      "left function DiffWorkspace (59-371)",
+      "right function DiffWorkspace (60-370)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

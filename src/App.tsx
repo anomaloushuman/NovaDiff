@@ -178,6 +178,8 @@ function AppMain() {
   const [session, setSession] = useState<WorkspaceSessionState | null>(null);
   const [sessionReady, setSessionReady] = useState(false);
   const [launchPhase, setLaunchPhase] = useState<LaunchPhase>("boot");
+  const [launchAuthConfirmed, setLaunchAuthConfirmed] = useState(false);
+  const [launchWorkspaceConfirmed, setLaunchWorkspaceConfirmed] = useState(false);
 
   const setWorkspaceDocAutoPersist = useCallback((v: boolean) => {
     setWorkspaceDocAuto(v);
@@ -606,8 +608,18 @@ function AppMain() {
       localOnlyMode: Boolean(session?.localOnlyMode),
       hasUser: Boolean(session?.gitUser),
       hasActiveWorkspace: Boolean(activeWorkspace),
+      launchAuthConfirmed,
+      launchWorkspaceConfirmed,
     });
-  }, [sessionReady, launchPhase, session?.localOnlyMode, session?.gitUser, activeWorkspace]);
+  }, [
+    sessionReady,
+    launchPhase,
+    session?.localOnlyMode,
+    session?.gitUser,
+    activeWorkspace,
+    launchAuthConfirmed,
+    launchWorkspaceConfirmed,
+  ]);
 
   const showMainApp = onboardingGate === "app";
   const localOnlyMode = Boolean(session?.localOnlyMode);
@@ -622,6 +634,19 @@ function AppMain() {
   }, [localOnlyMode, workspacePage]);
 
   const applyWorkspacePaths = useCallback((ws: NovaWorkspace) => {
+    const ui = ws.uiState;
+    if (ui?.leftRoot) {
+      setLeft(ui.leftRoot);
+    }
+    if (ui?.rightRoot) {
+      setRight(ui.rightRoot);
+    }
+    if (ui?.workspacePage) {
+      setWorkspacePage(ui.workspacePage);
+    }
+    if (ui?.leftRoot && ui?.rightRoot) {
+      return;
+    }
     const commits = ws.commits ?? [];
     if (commits.length >= 2) {
       const head = commits[commits.length - 1];
@@ -662,6 +687,7 @@ function AppMain() {
         });
       }
       applyWorkspacePaths(ws);
+      setLaunchWorkspaceConfirmed(true);
     },
     [applyWorkspacePaths],
   );
@@ -669,6 +695,7 @@ function AppMain() {
   const handleGitUserSelected = useCallback((user: GitUserProfile) => {
     saveCachedGitUser(user);
     saveCachedLocalOnly(false);
+    setLaunchAuthConfirmed(true);
     setSession((prev) => ({
       gitUser: user,
       activeWorkspaceId: prev?.activeWorkspaceId ?? null,
@@ -678,6 +705,8 @@ function AppMain() {
   }, []);
 
   const handleLocalOnly = useCallback(async () => {
+    setLaunchAuthConfirmed(true);
+    setLaunchWorkspaceConfirmed(true);
     saveCachedLocalOnly(true);
     if (window.electronAPI?.workspaceSetLocalOnly) {
       const s = await window.electronAPI.workspaceSetLocalOnly({ enabled: true });
@@ -729,6 +758,51 @@ function AppMain() {
       });
     });
   }, [showMainApp]);
+
+  const refreshWorkspaceHistory = useCallback(async () => {
+    const api = window.electronAPI;
+    const wsId = activeWorkspace?.id;
+    if (!api?.workspaceRefreshHistory || !wsId) {
+      return;
+    }
+    await api.workspaceRefreshHistory({ workspaceId: wsId, fetchRemote: true });
+    const s = await api.workspaceSessionLoad?.();
+    if (s) {
+      setSession(s);
+    }
+  }, [activeWorkspace?.id]);
+
+  useEffect(() => {
+    if (!showMainApp || !activeWorkspace?.id) {
+      return;
+    }
+    void refreshWorkspaceHistory();
+  }, [showMainApp, activeWorkspace?.id, refreshWorkspaceHistory]);
+
+  useEffect(() => {
+    if (!showMainApp || !activeWorkspace?.id || !window.electronAPI?.workspaceUpdateUiState) {
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      void window.electronAPI?.workspaceUpdateUiState?.({
+        workspaceId: activeWorkspace.id,
+        uiState: {
+          workspacePage,
+          leftRoot: left,
+          rightRoot: right,
+          compared,
+        },
+      });
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [
+    showMainApp,
+    activeWorkspace?.id,
+    workspacePage,
+    left,
+    right,
+    compared,
+  ]);
 
   useEffect(() => {
     if (!sessionReady || onboardingGate !== "app" || !activeWorkspace) {
@@ -1256,7 +1330,11 @@ function AppMain() {
       >
       {!showMainApp && onboardingGate === "welcome" ? (
         <div className="onboarding-overlay">
-          <WelcomeScreen onComplete={handleGitUserSelected} onLocalOnly={() => void handleLocalOnly()} />
+          <WelcomeScreen
+            cachedGitUser={session?.gitUser ?? loadCachedGitUser()}
+            onComplete={handleGitUserSelected}
+            onLocalOnly={() => void handleLocalOnly()}
+          />
         </div>
       ) : null}
       {!showMainApp && onboardingGate === "hub" && session?.gitUser ? (
@@ -1275,7 +1353,14 @@ function AppMain() {
                 };
               });
             }}
+            activeWorkspaceId={session.activeWorkspaceId}
             onOpenWorkspace={(ws, serverSession) => void activateWorkspace(ws, serverSession)}
+            onContinueLast={() => {
+              const ws = findWorkspace(session.workspaces, session.activeWorkspaceId);
+              if (ws) {
+                void activateWorkspace(ws);
+              }
+            }}
           />
         </div>
       ) : null}
@@ -1372,6 +1457,7 @@ function AppMain() {
           onCompareCommits={compareHistoryCommits}
           onDocumentCommit={documentHistoryCommits}
           onLiveRepoPersist={persistLiveDevRepo}
+          onRefreshHistory={refreshWorkspaceHistory}
         />
       ) : workspacePage === "docs" ? (
         <DocumentationWorkspace

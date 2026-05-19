@@ -6,6 +6,7 @@ import {
   Loader2,
 } from "lucide-react";
 import type { WorkspaceCommitSnapshot } from "../app/workspaceTypes";
+import { pathDisplayLabel } from "../app/pathDisplay";
 
 export interface HistoryCompareStripProps {
   commits: WorkspaceCommitSnapshot[];
@@ -50,7 +51,7 @@ export function HistoryCompareStrip({
   onBaseHash,
   onHeadHash,
   onUseLiveHead,
-  onLiveRepoRoot,
+  onLiveRepoRoot: _onLiveRepoRoot,
   onBrowseLiveRepo,
   onLiveRepoBlur,
   onSwap,
@@ -136,12 +137,11 @@ export function HistoryCompareStrip({
                       id="git-history-live"
                       className="path-selector-input"
                       aria-label="Live dev repository"
-                      value={liveRepoRoot}
-                      onChange={(e) => onLiveRepoRoot(e.target.value)}
+                      value={pathDisplayLabel(liveRepoRoot)}
+                      readOnly
                       onBlur={() => onLiveRepoBlur?.()}
-                      placeholder="Path to local git clone…"
+                      placeholder="Browse for live clone…"
                       spellCheck={false}
-                      title={liveRepoRoot.trim() || undefined}
                     />
                     <button
                       type="button"

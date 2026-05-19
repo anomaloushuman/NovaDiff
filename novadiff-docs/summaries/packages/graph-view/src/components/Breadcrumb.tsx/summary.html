@@ -26,75 +26,37 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/Breadcrumb.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:16:06.755Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:51:22.239Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>Breadcrumb</code> component is added at <code>packages/graph-view/src/components/Breadcrumb.tsx</code> (lines R1‑R40). It reads navigation state from the global store and renders a breadcrumb UI that adapts to the current view (overview or layer detail).</p>
+<p>The <code>Breadcrumb</code> component in <code>packages/graph-view/src/components/Breadcrumb.tsx</code> has been updated to centralize active‑layer resolution and add a navigation path for the NovaDiff embed depth. The inline lookup for the active layer has been replaced with a helper, and the click logic now distinguishes project‑wide layers.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>  <ul>
-<li><code>useDashboardStore</code> from <code>../store</code> [R1]  </li>
-<li><code>useI18n</code> from <code>../contexts/I18nContext</code> [R2]</li>
+<li><strong>Import added</strong> (<code>R3</code>): <code>import { PROJECT_WIDE_LAYER_ID, resolveActiveLayer } from &quot;../utils/activeLayer&quot;;</code>  </li>
+<li><strong>New state</strong> (<code>R10</code>): <code>const enterNovaDiffEmbedDepth = useDashboardStore((s) =&gt; s.enterNovaDiffEmbedDepth);</code>  </li>
+<li><strong>Active layer logic</strong> (<code>R13‑15</code>):```ts
+const activeLayer = graph &amp;&amp; activeLayerId ? resolveActiveLayer(graph, activeLayerId) : null;
+const isProjectWide = activeLayerId === PROJECT_WIDE_LAYER_ID;</li>
 </ul>
-</li>
-<li><strong>Export</strong>  <ul>
-<li><code>export default function Breadcrumb()</code> [R4]</li>
-</ul>
-</li>
-<li><strong>State hooks</strong>  <ul>
-<li><code>navigationLevel</code>, <code>activeLayerId</code>, <code>graph</code>, `navigateTo</li>
-</ul>
-</li>
-</ul>
-<h3>Overview</h3>
-<p>` from the store [R5‑R8]  </p>
+<p>```The previous lookup (<code>L11</code>) was removed.  </p>
 <ul>
-<li><code>t</code> from the i18n context [R9]  </li>
-<li><strong>Rendering logic</strong>  <ul>
-<li>When <code>navigationLevel === &quot;overview&quot;</code> a pill shows `t.breadcrumb.project</li>
-</ul>
-</li>
-</ul>
-<h3>Overview</h3>
-<p>` [R15‑R18]  </p>
-<ul>
-<li>When <code>navigationLevel === &quot;layer-detail&quot;</code> a breadcrumb chain shows:  <ul>
-<li>Project button (calls `navigateTo</li>
-</ul>
-</li>
-</ul>
-<h3>Overview</h3>
-<p><code>) [R22‑R28]       - Separator </code>›<code>[R29]       - Active layer name or default</code>t.layer.defaultName<code>[R30‑R32]       - Escape‑back hint</code>t.breadcrumb.escBack` [R33‑R35]  </p>
-<ul>
-<li><strong>Styling</strong> – Tailwind classes for positioning, colors, and typography.</li>
+<li><strong>Button click</strong> (<code>R28</code>): <code>onClick={() =&gt; (isProjectWide ? navigateToOverview() : enterNovaDiffEmbedDepth())}</code> – the old <code>onClick={navigateToOverview}</code> (<code>L24</code>) was removed.  </li>
+<li><strong>Display text</strong> (<code>R35</code>): shows <code>&quot;All layers · Classes&quot;</code> when <code>isProjectWide</code>, otherwise the layer name (<code>activeLayer?.name ?? t.layer.defaultName</code>).  </li>
+<li><strong>Removed</strong>: the old <code>activeLayer</code> lookup and its JSX usage (<code>L11</code>, <code>L31</code>).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – The component expects the store to expose <code>navigationLevel</code>, <code>activeLayerId</code>, <code>graph</code>, and `navigateTo</li>
-</ul>
-<h3>Overview</h3>
-<p>`. If any are missing, the UI may render empty or throw errors.  </p>
-<ul>
-<li><strong>Maintainability</strong> – Adds a public component that should be documented and exported from the package index. Future changes to store keys or i18n keys must be reflected.  </li>
-<li><strong>Performance</strong> – Minimal; only a few store reads and a simple render tree.  </li>
-<li><strong>Compatibility</strong> – Requires the <code>I18nContext</code> provider and the <code>useDashboardStore</code> hook to be available in the consuming app.</li>
+<li><strong>Consistency</strong>: Active‑layer resolution is now handled by a single helper, reducing the risk of stale graph lookups.  </li>
+<li><strong>Maintainability</strong>: Logic is moved out of the component, simplifying future changes.  </li>
+<li><strong>UI behavior</strong>: The breadcrumb now displays a distinct label for project‑wide layers and routes correctly to the overview or NovaDiff embed depth.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Store contract</strong> – Verify that <code>useDashboardStore</code> provides the expected keys and that `navigateTo</li>
-</ul>
-<h3>Overview</h3>
-<p>` is a function.  </p>
-<ul>
-<li><strong>i18n keys</strong> – Ensure `t.breadcrumb.project</li>
-</ul>
-<h3>Overview</h3>
-<p><code>, </code>t.breadcrumb.project<code>, </code>t.layer.defaultName<code>, and </code>t.breadcrumb.escBack` exist; otherwise the UI will show empty strings.  </p>
-<ul>
-<li><strong>Graph safety</strong> – The code safely handles <code>graph</code> being <code>undefined</code>, but <code>graph?.layers</code> must be an array; otherwise <code>find</code> will error.  </li>
-<li><strong>Testing</strong> – Add unit tests for both navigation levels, mocking the store and i18n context.  </li>
-<li><strong>Export</strong> – Confirm the component is re‑exported from the package’s index file so it can be imported elsewhere.</li>
+<li>Verify that <code>resolveActiveLayer</code> correctly handles <code>undefined</code> graphs and returns <code>null</code> when appropriate.  </li>
+<li>Ensure <code>PROJECT_WIDE_LAYER_ID</code> matches the value used elsewhere in the application.  </li>
+<li>Confirm that <code>enterNovaDiffEmbedDepth</code> exists in the dashboard store and behaves as expected.  </li>
+<li>Run UI tests to check that the <code>&quot;All layers · Classes&quot;</code> label appears only for project‑wide layers.</li>
 </ul>
 </article>
   </main>

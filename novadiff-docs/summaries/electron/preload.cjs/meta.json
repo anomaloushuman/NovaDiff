@@ -1,24 +1,22 @@
 {
   "relPath": "electron/preload.cjs",
   "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T18:56:05.758Z",
+  "generatedAt": "2026-05-19T22:36:27.031Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R51-72",
-      "R118-178"
+      "R136-137",
+      "R140-141"
     ],
     "cited_changed_lines": [
-      "R51 added: buildKnowledgeGraph: (payload) => ipcRenderer.invoke(\"knowledge-graph-build\", payload),",
-      "R52 added: readKnowledgeGraph: (payload) => ipcRenderer.invoke(\"knowledge-graph-read\", payload),",
-      "R53 added: readKnowledgeGraphFile: (payload) =>",
-      "R54 added: ipcRenderer.invoke(\"knowledge-graph-read-file\", payload),",
-      "R55 added: onKnowledgeGraphProgress: (cb) => {",
-      "R56 added: const ch = (_e, msg) => {"
+      "R136 added: workspaceRefreshHistory: (payload) =>",
+      "R137 added: ipcRenderer.invoke(\"workspace-refresh-history\", payload),",
+      "R140 added: workspaceUpdateUiState: (payload) =>",
+      "R141 added: ipcRenderer.invoke(\"workspace-update-ui-state\", payload),"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -68,18 +68,25 @@ export function resolveOnboardingGate(
     localOnlyMode: boolean;
     hasUser: boolean;
     hasActiveWorkspace: boolean;
+    /** Set true after user confirms identity on this launch (welcome screen). */
+    launchAuthConfirmed: boolean;
+    /** Set true after user picks or continues a workspace on this launch. */
+    launchWorkspaceConfirmed: boolean;
   },
 ): OnboardingGate {
   if (!opts.skipBoot) {
     return "boot";
   }
   if (opts.localOnlyMode) {
+    if (!opts.launchWorkspaceConfirmed) {
+      return "welcome";
+    }
     return "app";
   }
-  if (!opts.hasUser) {
+  if (!opts.launchAuthConfirmed) {
     return "welcome";
   }
-  if (!opts.hasActiveWorkspace) {
+  if (!opts.launchWorkspaceConfirmed) {
     return "hub";
   }
   return "app";

@@ -1,22 +1,23 @@
 ### Overview  
-`DiffWorkspace` now shows the selected‑diff documentation in a modal instead of an inline panel. The component’s props and rendering were extended to support this change.
+`DiffWorkspace` now displays the selected folder paths in a read‑only, formatted form and no longer accepts user edits. The component internally renames the `onLeft`/`onRight` callbacks to `_onLeft`/`_onRight` and removes the `title` attributes that previously showed the raw paths.
 
 ### Key changes  
-- **Imports** – `LlmSummaryMarkdown` was removed (L15) and `SelectedDiffSummaryModal` was added (R15).  
-- **Props** – `DiffWorkspaceProps` gained optional `compareStatusMessage?: string | null` (R27), `selectedDiffSummaryModalOpen: boolean` (R55), and `onCloseSelectedDiffSummaryModal: () => void` (R56).  
-- **Signature** – `DiffWorkspace` now accepts the new props (R59‑95).  
-- **Activity banner** – displays `compareStatusMessage` or a default string (R199‑211).  
-- **Modal** – `<SelectedDiffSummaryModal>` is rendered after the diff panes (R354‑362).  
-- **Inline panel removed** – the `<section className="selected-diff-doc-panel">` block was deleted (L332‑340).
+- **Import added**: `pathDisplayLabel` from `../app/pathDisplay` (line 7).  
+- **Prop destructuring**: `onLeft` and `onRight` are captured as `_onLeft`/`_onRight` (lines 63‑64).  
+- **Input values**: `value={pathDisplayLabel(leftRoot)}` and `value={pathDisplayLabel(rightRoot)}` replace the raw `leftRoot`/`rightRoot` (lines 125‑126, 160‑161).  
+- **Read‑only inputs**: `readOnly` flag added to both path selectors (lines 126, 161).  
+- **Removed handlers**: `onChange` callbacks and `title` attributes are gone (lines 124‑129, 160‑165).  
+- **External API unchanged**: `DiffWorkspaceProps` still exposes `onLeft`/`onRight`; the component forwards them via the renamed internal variables.
 
 ### Impact  
-- The summary is now presented in a modal, allowing larger content without cluttering the main view.  
-- Callers must provide `selectedDiffSummaryModalOpen` and `onCloseSelectedDiffSummaryModal`; otherwise the modal never opens.  
-- `compareStatusMessage` gives clearer feedback during comparison, improving user awareness.  
-- Existing props remain unchanged, so legacy code continues to work.
+- **UI behavior**: Users can no longer edit the path fields; they must use the browse buttons.  
+- **Accessibility**: Removing `title` attributes may reduce tooltip help, but the formatted label is now clearer.  
+- **Maintainability**: Centralizing path formatting in `pathDisplayLabel` reduces duplication and eases future styling changes.  
+- **Performance**: Minor; the component now performs a single formatting call per render instead of handling change events.  
+- **Compatibility**: Existing callers remain unaffected because the public prop names are unchanged.
 
 ### Risks & follow‑ups  
-- **Modal state** – Verify that callers manage `selectedDiffSummaryModalOpen` and the close callback.  
-- **Layout** – Ensure the modal does not obscure the diff panes on small screens; visual regression tests are recommended.  
-- **Prop leakage** – Confirm that `selectedDiffSummary` is no longer referenced elsewhere to avoid TypeScript errors.  
-- **Performance** – The modal is always rendered; monitor its cost when the summary is large.
+- **Regression**: Verify that the browse buttons still correctly update the parent state via `_onLeft`/`_onRight`.  
+- **Accessibility**: Ensure screen readers still announce the path values; consider adding `aria-label` if needed.  
+- **Testing**: Update unit tests that previously expected editable inputs or `title` attributes.  
+- **Documentation**: Update any docs or README sections that mention editable path fields.

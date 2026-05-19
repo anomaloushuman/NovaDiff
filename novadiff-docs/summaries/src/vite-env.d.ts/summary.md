@@ -1,26 +1,22 @@
 ### Overview  
-`src/vite-env.d.ts` now expands the Electron API surface and global window typings.  
-* New imports for Git‑related types are added (lines 21‑31).  
-* The `ElectronAPI` interface receives dozens of additional methods covering knowledge‑graph handling, Git tooling, GitHub integration, workspace management, and progress callbacks (changed ranges 207‑374).  
-* A global `Window` interface is declared to expose `electronAPI` (lines 378‑380).  
-* An `export {};` guard is appended to enforce module scope (line 383).
+`src/vite-env.d.ts` now declares two additional Electron API methods:  
+- **`workspaceRefreshHistory`** (added lines 321‑324)  
+- **`workspaceUpdateUiState`** (added lines 329‑332)  
+
+These augment the existing `ElectronAPI` interface without removing any prior members.
 
 ### Key changes  
-* **Imports** – `import type { GitRepoStatus, GitToolingStatus, GithubPullRequestSummary, GithubRepoSummary, LocalRepoMatch, PrCompareRoots, PublishExecutePayload, PublishExecuteResult, PublishPreview } from "./app/gitTypes";` (lines 21‑31).  
-* **API surface** – `ElectronAPI` now includes methods such as `buildKnowledgeGraph`, `readKnowledgeGraph`, `gitDetectTooling`, `gitRepoStatus`, `githubListRepos`, `workspaceCreate`, `workspaceSetActive`, `gitBlameAtRef`, and many others (see changed ranges 207‑374).  
-* **Progress callbacks** – `onKnowledgeGraphProgress` and `onEngineProgress` are added to expose runtime progress.  
-* **Global window** – `declare global { interface Window { electronAPI?: ElectronAPI; } }` (lines 378‑380).  
-* **Export guard** – `export {};` (line 383).
+- `workspaceRefreshHistory(payload: {workspaceId: string; fetchRemote?: boolean}) → Promise<NovaWorkspace>`  
+- `workspaceUpdateUiState(payload: {workspaceId: string; uiState: WorkspaceUiState}) → Promise<WorkspaceSessionState>`  
+
+Both signatures are new; the rest of the interface remains unchanged (see diff lines R321‑324 and R329‑332).
 
 ### Impact  
-* **Type safety** – TypeScript consumers now see a richer API; missing imports may cause compile errors if not updated.  
-* **Runtime expectations** – Renderer calls to the new methods will throw `undefined` if the corresponding main‑process implementations are absent.  
-* **Maintainability** – The interface now contains ~30 new members, increasing the surface that requires documentation, testing, and future refactoring.  
-* **Compatibility** – Existing code that imports `ElectronAPI` will now see additional members; older Electron builds may not support all new methods, potentially breaking backward compatibility.  
-* **Observability** – New progress callbacks provide hooks for UI feedback but require careful cleanup to avoid memory leaks.
+- **Renderer side**: components can now invoke `window.electronAPI.workspaceRefreshHistory` or `workspaceUpdateUiState` to trigger a history refresh or update UI state.  
+- **Type safety**: TypeScript consumers receive compile‑time checks for the new payload shapes.  
+- **No breaking changes**: existing API contracts are preserved; the additions are purely additive.
 
 ### Risks & follow‑ups  
-* **Unimplemented methods** – Verify that every new `ElectronAPI` member has a corresponding implementation in the main process; otherwise, renderer calls will fail.  
-* **Type mismatches** – Ensure the imported Git types are correctly exported from `./app/gitTypes`; missing re‑exports will break compilation.  
-* **Test coverage** – Add unit tests for the new API surface, especially for `buildKnowledgeGraph` and GitHub integration paths.  
-* **Performance** – Monitor the overhead of the new progress callbacks; excessive event emission could degrade UI responsiveness.
+- **Main‑process implementation**: the main process must expose matching handlers; otherwise calls will fail at runtime (unknown from the available diff/scan evidence).  
+- **Testing**: add unit/integration tests covering the new API paths.  
+- **Documentation**: update API docs to list the new methods and their payloads.

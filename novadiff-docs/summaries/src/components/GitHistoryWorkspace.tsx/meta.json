@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/GitHistoryWorkspace.tsx",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:10:45.854Z",
+  "generatedAt": "2026-05-19T22:43:12.901Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,35 +19,32 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R11 added: export interface GitHistoryWorkspaceProps {",
-      "R24 added: export function GitHistoryWorkspace({"
-    ],
+    "changed_exports": [],
     "changed_imports": [
-      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
-      "R2 added: import { BookOpen, Loader2, Search } from \"lucide-react\";",
-      "R3 added: import type {",
-      "R8 added: import { GitBlamePanel } from \"./GitBlamePanel\";",
-      "R9 added: import { HistoryCompareStrip } from \"./HistoryCompareStrip\";"
+      "L2 removed: import { BookOpen, Loader2, Search } from \"lucide-react\";",
+      "R2 added: import { BookOpen, Loader2, RefreshCw, Search } from \"lucide-react\";"
     ],
     "changed_line_ranges": [
-      "R1-256"
+      "L2 / R2",
+      "R22",
+      "R32",
+      "R171-181"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
-      "R2 added: import { BookOpen, Loader2, Search } from \"lucide-react\";",
-      "R3 added: import type {",
-      "R4 added: GitHistoryCompareOptions,",
-      "R5 added: NovaWorkspace,",
-      "R6 added: WorkspaceCommitSnapshot,"
+      "L2 removed: import { BookOpen, Loader2, Search } from \"lucide-react\";",
+      "R2 added: import { BookOpen, Loader2, RefreshCw, Search } from \"lucide-react\";",
+      "R22 added: onRefreshHistory?: () => void | Promise<void>;",
+      "R32 added: onRefreshHistory,",
+      "R171 added: {onRefreshHistory ? (",
+      "R172 added: <button"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function GitHistoryWorkspace (24-256)",
-      "right interface GitHistoryWorkspaceProps (11-23)"
+      "right function GitHistoryWorkspace (25-269)",
+      "right interface GitHistoryWorkspaceProps (11-24)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

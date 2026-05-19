@@ -26,38 +26,38 @@
 <body>
   <header class="top">
     <h1>electron/workspace-store.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:20:21.010Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:38:32.561Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/workspace-store.cjs</code> is added to the Electron side of the repository. It implements a session and workspace persistence layer that replaces the previous ad‑hoc storage logic.</p>
+<p>A new helper <code>updateWorkspaceUiState</code> was added to <code>electron/workspace-store.cjs</code>. It updates a workspace’s UI state, persists the change to the workspace’s <code>meta.json</code>, and returns the updated session.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R3‑R6): <code>fssync</code>, <code>fsp</code>, <code>path</code>, <code>randomUUID</code> bring in Node‑core APIs for file I/O and UUID generation.  </li>
-<li><strong>Path helpers</strong> (R8‑R14): <code>sessionPath(userData)</code> and <code>workspacesRoot(userData)</code> compute the locations for the session JSON and workspace directories.  </li>
-<li><strong>JSON I/O</strong> (R16‑R31): <code>readJson</code> and <code>writeJson</code> use <code>fsp</code> to read/write JSON atomically via a temporary file.  </li>
-<li><strong>Session CRUD</strong> (R33‑R52): <code>loadSession</code> loads the session or falls back to defaults; <code>saveSession</code> writes it back.  </li>
-<li><strong>Workspace CRUD</strong> (R74‑R87, R89‑R100, R103‑R106): <code>upsertWorkspace</code>, <code>setActiveWorkspace</code>, <code>setGitUser</code>, <code>getWorkspace</code> manipulate the in‑memory session and persist changes.  </li>
-<li><strong>Live‑repo update</strong> (R108‑R126): <code>updateWorkspaceLiveRepo</code> validates the path, updates the workspace, writes <code>meta.json</code>, and returns the updated session.  </li>
-<li><strong>Workspace creation</strong> (R128‑R158): <code>createWorkspace</code> generates a UUID, resolves the repo root, creates data directories, writes <code>meta.json</code>, updates the session, and returns both objects.  </li>
-<li><strong>Exports</strong> (R161‑R173): All public functions are exported for use by the renderer and other Electron modules.</li>
+<li><strong>New function</strong> <code>updateWorkspaceUiState(userData, workspaceId, uiState)</code> (lines 108‑126).  <ul>
+<li>Loads the session (<code>await loadSession(userData)</code> – R109).  </li>
+<li>Finds the workspace by ID (<code>findIndex</code> – R110).  </li>
+<li>Throws <code>new Error(&quot;Workspace not found&quot;)</code> if missing (R111‑112).  </li>
+<li>Merges existing <code>uiState</code> with the supplied payload (R114‑116).  </li>
+<li>Updates <code>updatedAt</code> and writes the workspace back to <code>meta.json</code> (<code>writeJson(path.join(session.workspaces[idx].dataDir, &quot;meta.json&quot;), session.workspaces[idx])</code> – R120‑123).  </li>
+<li>Returns the session (R124‑125).</li>
+</ul>
+</li>
+<li><strong>Export update</strong>: <code>updateWorkspaceUiState</code> is now part of <code>module.exports</code> (line 191).  </li>
+<li>No other logic changes; functions such as <code>createWorkspace</code> and <code>updateWorkspaceLiveRepo</code> remain unchanged.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Atomic writes</strong> via a temporary file (<code>writeJson</code> uses <code>fsp.rename</code>).  </li>
-<li><strong>Fallback defaults</strong> in <code>loadSession</code> provide a safe initial state.  </li>
-<li><strong>Non‑blocking I/O</strong> with <code>fs/promises</code> and directory creation with <code>{ recursive: true }</code>.  </li>
-<li>*<em>Node 18+ requirement</em></li>
-</ul>
-<ul>
-<li>(<code>node:fs</code>, <code>node:crypto</code>).</li>
+<li><strong>Correctness</strong>: Guarantees UI state persistence and timestamping; throws a clear error when the workspace ID is invalid.  </li>
+<li><strong>Maintainability</strong>: Centralizes UI state handling, reducing duplication.  </li>
+<li><strong>Performance</strong>: Adds one <code>writeJson</code> call per UI update; overhead is negligible for typical usage.  </li>
+<li><strong>Compatibility</strong>: No breaking changes; the new export is additive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>loadSession</code> correctly handles missing or malformed files (fallback logic).  </li>
-<li>Test concurrent calls to <code>createWorkspace</code>/<code>updateWorkspaceLiveRepo</code> for race conditions.  </li>
-<li>Ensure <code>setLocalOnlyMode</code> clears <code>gitUser</code> and <code>activeWorkspaceId</code> as intended.  </li>
-<li>Run the full lint, test, and production build pipeline to catch any import or path resolution issues.</li>
+<li><strong>Regression</strong>: Verify that callers still work after the export change; run the full test suite.  </li>
+<li><strong>Data integrity</strong>: Ensure <code>writeJson</code> merges <code>uiState</code> without overwriting unrelated fields in <code>meta.json</code>.  </li>
+<li><strong>Concurrency</strong>: Multiple simultaneous UI updates will race; the last write wins. Consider locking if needed.  </li>
+<li><strong>Documentation</strong>: Update public docs or type definitions to expose <code>updateWorkspaceUiState</code>.</li>
 </ul>
 </article>
   </main>

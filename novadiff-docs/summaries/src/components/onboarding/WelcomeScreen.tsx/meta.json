@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/onboarding/WelcomeScreen.tsx",
-  "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "modified",
+  "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:25:28.271Z",
+  "generatedAt": "2026-05-19T22:44:41.506Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,32 +20,35 @@
       }
     ],
     "changed_exports": [
-      "R5 added: export interface WelcomeScreenProps {",
-      "R10 added: export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {"
+      "L10 removed: export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {",
+      "R11 added: export function WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly }: WelcomeScreenProps) {"
     ],
-    "changed_imports": [
-      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
-      "R2 added: import { Copy, Download, ExternalLink, FolderOpen, Loader2, User } from \"lucide-react\";",
-      "R3 added: import type { GhToolingStatus, GitUserProfile } from \"../../app/workspaceTypes\";"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-399"
+      "R6",
+      "L10 / R11",
+      "L55 / R56-58",
+      "L64 / R67",
+      "L363 / R366",
+      "R370-387",
+      "L376 / R397"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
-      "R2 added: import { Copy, Download, ExternalLink, FolderOpen, Loader2, User } from \"lucide-react\";",
-      "R3 added: import type { GhToolingStatus, GitUserProfile } from \"../../app/workspaceTypes\";",
-      "R5 added: export interface WelcomeScreenProps {",
-      "R6 added: onComplete: (user: GitUserProfile) => void;",
-      "R7 added: onLocalOnly: () => void;"
+      "R6 added: cachedGitUser?: GitUserProfile | null;",
+      "L10 removed: export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {",
+      "R11 added: export function WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly }: WelcomeScreenProps) {",
+      "L55 removed: if (list.length === 1) {",
+      "R56 added: if (cachedGitUser && list.some((u) => u.login === cachedGitUser.login)) {",
+      "R57 added: setSelected(cachedGitUser.login);"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function WelcomeScreen (10-399)",
-      "right interface WelcomeScreenProps (5-9)"
+      "left function WelcomeScreen (10-399)",
+      "right function WelcomeScreen (11-420)",
+      "right interface WelcomeScreenProps (5-10)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."
