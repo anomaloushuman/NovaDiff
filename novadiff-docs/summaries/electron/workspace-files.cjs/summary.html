@@ -26,43 +26,42 @@
 <body>
   <header class="top">
     <h1>electron/workspace-files.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:19:06.509Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:32:24.468Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new CommonJS module <code>electron/workspace-files.cjs</code> (lines 1‑85) exposes utilities for snapshot files used by the Electron renderer.</p>
+<p>A new CommonJS module <code>electron/workspace-files.cjs</code> (R1‑85) adds snapshot‑file utilities for the Electron renderer. It exports two async functions: <code>listSnapshotFiles</code> and <code>readSnapshotTextFile</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R3‑R5): <code>fssync</code>, <code>fsp</code>, and <code>path</code> are required for synchronous existence checks, async I/O, and path resolution.  </li>
-<li><strong><code>SKIP_DIRS</code></strong> (R7‑R15): a <code>Set</code> containing <code>.git</code>, <code>node_modules</code>, <code>dist</code>, <code>build</code>, <code>target</code>, <code>.novadiff-graph</code>, and <code>snapshots</code> that the walker ignores.  </li>
-<li><strong><code>listSnapshotFiles(snapshotRoot, opts = {})</code></strong> (R17‑R60):  <ul>
-<li>Resolves <code>snapshotRoot</code> (R18).  </li>
-<li>Uses <code>opts.maxFiles</code> (default 2500, R19).  </li>
-<li>Recursively walks the directory tree (R25‑R55), skipping hidden entries except <code>.env</code> (R39‑R42) and directories in <code>SKIP_DIRS</code> (R47‑R49).  </li>
-<li>Returns a sorted array of relative paths (R58).</li>
+<li><strong>Imports</strong> (R3‑R5): <code>node:fs</code>, <code>node:fs/promises</code>, and <code>node:path</code> are required for file system access and path resolution.  </li>
+<li><strong>SKIP_DIRS</strong> (R7‑R14): Directories such as <code>.git</code>, <code>node_modules</code>, <code>dist</code>, <code>build</code>, <code>target</code>, <code>.novadiff-graph</code>, and <code>snapshots</code> are excluded from traversal.  </li>
+<li><strong><code>listSnapshotFiles</code></strong> (R17‑R58):  <ul>
+<li>Resolves the root with <code>path.resolve</code> (R18).  </li>
+<li>Limits to <code>maxFiles</code> (default 2500) (R19).  </li>
+<li>Recursively walks the tree, skipping hidden files except <code>.env</code> (R39‑R42) and directories in <code>SKIP_DIRS</code> (R47‑R49).  </li>
+<li>Returns a sorted array of relative paths with forward slashes (R58).</li>
 </ul>
 </li>
-<li><strong><code>readSnapshotTextFile(snapshotRoot, relPath, maxBytes = 512 KB)</code></strong> (R61‑R80):  <ul>
-<li>Validates <code>snapshotRoot</code> and <code>relPath</code> (R64‑R70).  </li>
-<li>Reads the file asynchronously (R71).  </li>
-<li>If the file exceeds <code>maxBytes</code>, returns the first <code>maxBytes</code> bytes, sets <code>truncated: true</code>, and reports the full size (R73‑R77).  </li>
-<li>Otherwise returns the full content with <code>truncated: false</code> (R79).</li>
+<li><strong><code>readSnapshotTextFile</code></strong> (R61‑R80):  <ul>
+<li>Validates <code>snapshotRoot</code> and <code>relPath</code>, rejecting paths containing <code>..</code> (R64‑R70).  </li>
+<li>Reads the file via <code>fsp.readFile</code> (R71).  </li>
+<li>Truncates content to <code>maxBytes</code> (default 512 KB) and reports <code>truncated</code> and <code>size</code> (R72‑R79).</li>
 </ul>
 </li>
-<li><strong>Exports</strong> (R82‑R85): both functions are exported via <code>module.exports</code>.</li>
+<li><strong>Exports</strong> (R82‑R85): Both functions are exported.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Path safety</strong>: validation prevents directory traversal (R64‑R70).  </li>
-<li><strong>Memory guard</strong>: large files are truncated to 512 KB (R73‑R77).  </li>
-<li><strong>Centralization</strong>: snapshot file logic is now in a single module, reducing duplication.</li>
+<li><strong>Correctness</strong>: Path validation prevents directory traversal.  </li>
+<li><strong>Safety</strong>: Truncation to <code>maxBytes</code> limits memory usage.  </li>
+<li><strong>Convenience</strong>: Centralized snapshot utilities reduce duplication across the repo.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Directory skipping</strong>: verify that nested <code>.git</code> and <code>node_modules</code> directories are correctly ignored.  </li>
-<li><strong>Path validation</strong>: test inputs with <code>..</code> or absolute paths to ensure the error is thrown.  </li>
-<li><strong>Truncation threshold</strong>: confirm 512 KB suits the intended use cases; adjust if larger files are common.  </li>
-<li><strong>Edge cases</strong>: add tests for empty roots, non‑existent files, and files exactly at the <code>maxBytes</code> limit.</li>
+<li><strong>Large directories</strong>: Verify that the <code>maxFiles</code> cap and async walk do not block the event loop.  </li>
+<li><strong>Hidden file handling</strong>: Ensure <code>.env</code> files remain accessible while other dotfiles are skipped.  </li>
+<li><strong>Path traversal</strong>: Test edge cases where <code>relPath</code> contains encoded <code>..</code> sequences.  </li>
+<li><strong>Truncation logic</strong>: Confirm that <code>maxBytes</code> truncation correctly reports <code>size</code> and <code>truncated</code> flags.</li>
 </ul>
 </article>
   </main>

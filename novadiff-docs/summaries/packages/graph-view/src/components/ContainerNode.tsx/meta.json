@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/components/ContainerNode.tsx",
   "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T20:17:44.616Z",
+  "generatedAt": "2026-05-20T06:04:11.524Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -22,7 +22,7 @@
     "changed_exports": [
       "R5 added: export interface ContainerNodeData extends Record<string, unknown> {",
       "R19 added: export type ContainerFlowNode = Node<ContainerNodeData, \"container\">;",
-      "R101 added: export default ContainerNode;"
+      "R103 added: export default ContainerNode;"
     ],
     "changed_imports": [
       "R1 added: import { memo } from \"react\";",
@@ -30,7 +30,7 @@
       "R3 added: import { getLayerColor } from \"./LayerLegend\";"
     ],
     "changed_line_ranges": [
-      "R1-101"
+      "R1-103"
     ],
     "cited_changed_lines": [
       "R1 added: import { memo } from \"react\";",
@@ -45,7 +45,7 @@
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function ContainerNodeComponent (21-101)",
+      "right function ContainerNodeComponent (21-103)",
       "right interface ContainerNodeData (5-20)"
     ],
     "verification_hints": [

@@ -1,9 +1,9 @@
 {
   "relPath": "electron/workspace-store.cjs",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:38:32.561Z",
+  "generatedAt": "2026-05-20T04:33:45.931Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,29 +11,45 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { randomUUID } = require(\"node:crypto\");"
+    ],
     "changed_line_ranges": [
-      "R108-126",
-      "R191"
+      "R1-193"
     ],
     "cited_changed_lines": [
-      "R108 added: async function updateWorkspaceUiState(userData, workspaceId, uiState) {",
-      "R109 added: const session = await loadSession(userData);",
-      "R110 added: const idx = session.workspaces.findIndex((w) => w.id === workspaceId);",
-      "R111 added: if (idx < 0) {",
-      "R112 added: throw new Error(\"Workspace not found\");",
-      "R113 added: }"
+      "R1 added: \"use strict\";",
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const fsp = require(\"node:fs/promises\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { randomUUID } = require(\"node:crypto\");",
+      "R8 added: function sessionPath(userData) {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
+      "right function createWorkspace (147-193)",
+      "right function loadSession (33-53)",
+      "right function updateWorkspaceLiveRepo (127-146)",
       "right function updateWorkspaceUiState (108-126)",
-      "right function createWorkspace (147-193)"
+      "right function upsertWorkspace (74-88)",
+      "right function setLocalOnlyMode (54-64)",
+      "right function readJson (16-24)",
+      "right function writeJson (25-32)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

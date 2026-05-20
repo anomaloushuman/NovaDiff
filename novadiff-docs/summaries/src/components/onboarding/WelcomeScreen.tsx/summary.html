@@ -26,43 +26,37 @@
 <body>
   <header class="top">
     <h1>src/components/onboarding/WelcomeScreen.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:44:41.506Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:09:29.737Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>WelcomeScreen</code> component now accepts an optional <code>cachedGitUser</code> prop.  </p>
-<ul>
-<li><code>WelcomeScreenProps</code> gains <code>cachedGitUser?: GitUserProfile | null</code> (see <code>L6</code>).  </li>
-<li>The component signature changes to <code>WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly })</code> (<code>R11</code>).  </li>
-<li>The <code>refresh</code> callback now lists <code>cachedGitUser?.login</code> in its dependency array (<code>R67</code>).  </li>
-<li>After fetching users, the logic first checks if <code>cachedGitUser</code> matches a detected account and selects it; otherwise it falls back to the first user (<code>R56‑R58</code>).</li>
-</ul>
+<p>A new onboarding screen component <code>WelcomeScreen</code> has been added to <code>src/components/onboarding/WelcomeScreen.tsx</code>. It introduces a full GitHub integration flow with CLI detection, device‑code authentication, and a local‑only fallback.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Prop addition</strong> – <code>cachedGitUser</code> added to <code>WelcomeScreenProps</code> (<code>L6</code>).  </li>
-<li><strong>Signature update</strong> – component now receives <code>{ cachedGitUser, onComplete, onLocalOnly }</code> (<code>R11</code>).  </li>
-<li><strong>Dependency update</strong> – <code>refresh</code> depends on <code>cachedGitUser?.login</code> (<code>R67</code>).  </li>
-<li><strong>Selection logic</strong> – auto‑select cached user if present (<code>R56‑R58</code>).  </li>
-<li><strong>UI changes</strong> –  <ul>
-<li>Removed the old “Continue as @login” button block (<code>L363‑L384</code>).  </li>
-<li>New continue button text shows “Use a different account” when a cached user exists, otherwise “Continue with GitHub” (<code>R397</code>).  </li>
-<li>Button disabled state now uses <code>selected</code> instead of <code>cachedGitUser</code> (<code>R388</code>).</li>
+<li><strong>Imports</strong>: React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useState</code>) and lucide‑react icons (<code>Copy</code>, <code>Download</code>, <code>ExternalLink</code>, <code>FolderOpen</code>, <code>Loader2</code>, <code>User</code>) are added at the top of the file.</li>
+<li><strong>Props interface</strong> (<code>WelcomeScreenProps</code>, lines 5‑10): defines optional <code>cachedGitUser</code>, and callbacks <code>onComplete</code> and <code>onLocalOnly</code>.</li>
+<li><strong>Component implementation</strong> (<code>WelcomeScreen</code>, lines 11‑420):<ul>
+<li>State variables for loading, users, errors, selected user, auth flow, GitHub CLI status, install logs, etc.</li>
+<li><code>useCallback</code> helpers for <code>loadGhStatus</code>, <code>refresh</code>, <code>installGh</code>, <code>startAuth</code>, <code>copyCode</code>, <code>confirmUser</code>.</li>
+<li><code>useEffect</code> hooks to load GitHub status, refresh user list, and subscribe to auth/install progress events.</li>
+<li>Render logic for CLI detection, sign‑in flow, device‑code copy, user list, and a local‑only button.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>User experience</strong> – Cached accounts are pre‑selected, reducing friction.  </li>
-<li><strong>API contract</strong> – Callers must provide <code>cachedGitUser</code> or handle its absence; omitting it may lead to default <code>undefined</code> behavior.  </li>
-<li><strong>UI clarity</strong> – Button text and disabled state reflect the presence of a cached user.</li>
+<li><strong>API dependencies</strong>: Relies on <code>window.electronAPI</code> methods (<code>githubGhStatus</code>, <code>githubDetectedUsers</code>, <code>githubGhInstall</code>, <code>githubStartAuth</code>, etc.). Missing or changed APIs will break the component.</li>
+<li><strong>Performance</strong>: Frequent state updates during auth/install progress may affect rendering; monitor for unnecessary re‑renders.</li>
+<li><strong>Accessibility &amp; styling</strong>: New UI elements use <code>aria-hidden</code> and custom classes; ensure they integrate with existing design system.</li>
+<li><strong>Testing</strong>: Requires new unit and integration tests for the component and its API interactions.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ol>
-<li><strong>Missing prop</strong> – Verify that all imports of <code>WelcomeScreen</code> supply <code>cachedGitUser</code>; otherwise the component defaults to <code>undefined</code>.  </li>
-<li><strong>Selection edge case</strong> – Ensure that when <code>cachedGitUser</code> is not in the detected list, the fallback still selects the first user (<code>R58</code>).  </li>
-<li><strong>Dependency array</strong> – Confirm that adding <code>cachedGitUser?.login</code> to <code>refresh</code>’s deps triggers a refresh when the cached user changes (<code>R67</code>).  </li>
-<li><strong>UI regression</strong> – Run visual tests to validate the new button text and disabled state (<code>R397</code>, <code>R388</code>).</li>
-</ol>
+<ul>
+<li><strong>API availability</strong>: Confirm that all <code>window.electronAPI</code> methods exist and match the expected signatures.</li>
+<li><strong>Event listener cleanup</strong>: <code>useEffect</code> returns callbacks from <code>api.onGithubAuthProgress</code> and <code>api.onGithubGhInstallProgress</code>; verify they are unsubscribed on unmount to avoid memory leaks.</li>
+<li><strong>Error handling</strong>: The component surfaces raw error messages; ensure they are user‑friendly and do not expose sensitive data.</li>
+<li><strong>UI regressions</strong>: Run visual regression tests to verify that the new onboarding screen does not interfere with existing onboarding flows or layout.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

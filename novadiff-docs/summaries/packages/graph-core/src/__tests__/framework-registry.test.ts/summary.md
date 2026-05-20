@@ -1,25 +1,19 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/framework-registry.test.ts` has been added.  
-The file contains imports (R1‑R4) and a suite of tests covering registration, lookup, detection, default registry creation, and immutability (R6‑R123).
+A new test file `packages/graph-core/src/__tests__/framework-registry.test.ts` (lines 1‑123) has been added. It imports `vitest` helpers and the `FrameworkRegistry`, `djangoConfig`, and `reactConfig` symbols (R1‑R4) and contains tests for registration, lookup, detection, and default‑registry behavior.
 
 ### Key changes  
-- **Imports added**  
-  - `vitest` helpers (R1)  
-  - `FrameworkRegistry` (R2)  
-  - `djangoConfig` and `reactConfig` (R3‑R4)  
-- **CRUD tests** (R6‑R11) verify `register`, `getById`, and `getForLanguage`.  
-- **Detection logic tests** (R13‑R82) exercise `detectFrameworks` against `requirements.txt`, `package.json`, case‑insensitivity, no‑match, empty manifests, duplicate detection, and cross‑language support.  
-- **Default registry tests** (R84‑R122) confirm `FrameworkRegistry.createDefault()` registers 10 built‑in frameworks and exposes them across multiple languages.  
-- **Immutability check** (R100‑R106) ensures `getForLanguage` returns a copy, not the internal array.
+- **Imports**: lines 1‑4 add `vitest` and framework config imports (R1‑R4).  
+- **Registration tests**: lines 6‑11 verify that a framework can be registered and retrieved by ID, and that duplicate registrations are ignored (R6‑R10, R93‑R97).  
+- **Language lookup**: lines 13‑20 test `getForLanguage` for known and unknown languages, and that the returned array is a copy (R13‑R20, R100‑R106).  
+- **Detection**: lines 28‑71 cover detection from `requirements.txt` and `package.json`, case‑insensitivity, duplicate avoidance, and empty manifests (R28‑R71).  
+- **Cross‑language & defaults**: lines 84‑98 test that `createDefault` registers all built‑in frameworks (10 total, R109‑R111) and that frameworks are available for multiple languages (Python, TypeScript, Java, Ruby, Go) (R114‑R120).
 
 ### Impact  
-- **Correctness**: The tests enforce expected behavior of registration, lookup, and detection logic.  
-- **Coverage**: Adds unit coverage for edge cases such as duplicate entries and empty inputs.  
-- **Maintainability**: Future changes to `FrameworkRegistry` must satisfy these tests, providing a safety net for refactors.  
-- **Observability**: Failures will pinpoint specific methods (e.g., `detectFrameworks`, `createDefault`) that deviate from expectations.
+- Provides automated verification of `FrameworkRegistry` logic, reducing regressions when the registry implementation changes.  
+- Ensures that default configuration remains consistent (10 frameworks, multi‑language support).  
+- Test failures will surface during CI, aiding quick identification of registry issues.
 
 ### Risks & follow‑ups  
-- **API drift**: If `FrameworkRegistry`’s public API changes (e.g., method signatures), the tests will fail; review recent refactors.  
-- **Detection logic changes**: Modifying heuristics could break `detectFrameworks` tests; ensure new patterns are reflected in expectations.  
-- **Default config count**: The test expects exactly 10 built‑in frameworks; adding or removing defaults will require updating the assertion.  
-- **Immutability contract**: If the implementation changes to return a reference instead of a copy, the immutability test will fail; verify that `getForLanguage` still returns a new array.
+- **Test flakiness**: detection tests rely on hard‑coded manifest strings; if external data changes, tests may fail (unknown from the available diff/scan evidence).  
+- **Future framework additions**: adding new frameworks will require updating the `createDefault` test to reflect the new count and language mappings.  
+- **Linting/build**: run `npm run lint`, `npm run test`, and `npm run build` to confirm the new file does not introduce style or compilation errors.

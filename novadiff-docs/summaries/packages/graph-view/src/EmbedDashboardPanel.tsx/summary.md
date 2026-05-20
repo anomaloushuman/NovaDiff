@@ -1,19 +1,20 @@
-### Overview
-Adds a new embeddable dashboard panel component (`EmbedDashboardPanel`) with full chrome and project‑wide class depth to `packages/graph-view/src`.
+### Overview  
+A new file `packages/graph-view/src/EmbedDashboardPanel.tsx` adds an embed dashboard panel. It imports React hooks, `ReactFlowProvider`, Flow CSS, `GraphIssue` type, `DashboardContent`, `useDashboardStore`, `ThemeProvider`, and `NOVADIFF_EMBED_THEME`. The panel renders dashboard content inside a resizable container.
 
-### Key changes
-- **Imports**: React hooks, `ReactFlowProvider`, `@xyflow/react` CSS, `GraphIssue` type, `DashboardContent`, `useDashboardStore`, `ThemeProvider`, and `NOVADIFF_EMBED_THEME`.
-- **`FlowDimensions` type** and **`EmbedSizedDashboard`** component that uses a `ResizeObserver` to set the pane’s width/height.
-- **`EmbedDashboardPanelProps`** interface exposing optional `accessToken` and `graphIssues`.
-- **`EmbedDashboardPanel`** pulls `graph` from the store, wraps content in `ThemeProvider` with `NOVADIFF_EMBED_THEME`, and conditionally renders the sized dashboard or a “Preparing graph…” overlay.
-- Default values: `accessToken="__novadiff__"` and `graphIssues=[]`.
+### Key changes  
+- **Imports (R5‑R10)**: added `useEffect`, `useRef`, `useState` from React; `ReactFlowProvider` from `@xyflow/react`; Flow CSS; `GraphIssue` type; `DashboardContent`; `useDashboardStore`; `ThemeProvider`; `NOVADIFF_EMBED_THEME`.  
+- **`EmbedSizedDashboard` (R16‑R63)**: new component that measures its host div with a `ResizeObserver` and passes `width`/`height` to `ReactFlowProvider`.  
+- **`EmbedDashboardPanelProps` (R64‑R68)**: interface exposing optional `accessToken` and `graphIssues`.  
+- **`EmbedDashboardPanel` (R69‑R95)**: uses `useDashboardStore` to get `graph`; wraps content in `ThemeProvider`; conditionally renders `EmbedSizedDashboard` with `DashboardContent` or a loading overlay.
 
-### Impact
-- Global CSS import `@xyflow/react/dist/style.css` may interfere with existing styles.
-- `ResizeObserver` usage could affect performance or require a polyfill on older browsers.
-- The placeholder `accessToken` must be overridden for authenticated usage; otherwise requests may fail or expose data.
-- Component depends on `useDashboardStore`; it will error if rendered outside the store provider.
-- New public surface requires documentation and tests to cover its API and rendering behavior.
+### Impact  
+- **Bundle size**: includes `@xyflow/react` and its CSS.  
+- **Performance**: `ResizeObserver` may trigger frequent updates; dimensions are memoized.  
+- **Styling**: Flow CSS import is required; missing it will break layout.  
+- **API surface**: new component and props must be imported from the new file.
 
-### Risks & follow‑ups
-- **Style conflicts
+### Risks & follow‑ups  
+- Verify `@xyflow/react` is a dependency and its CSS is bundled.  
+- Ensure `useDashboardStore` provides a `graph` before rendering; otherwise the overlay may flicker.  
+- Test the component with `NOVADIFF_EMBED_THEME` in light and dark modes.  
+- Confirm `ro.disconnect()` runs on unmount to avoid memory leaks.

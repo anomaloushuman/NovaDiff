@@ -1,25 +1,30 @@
 ### Overview  
-A new file `packages/graph-core/src/ignore-generator.ts` (added lines 1‑3) introduces a helper to generate a starter `.novadiffignore`. The exported function `generateStarterIgnoreFile(projectRoot: string)` (lines 61‑102) builds the file by collecting patterns from an existing `.gitignore`, detecting common directories, and suggesting generic test file patterns.
+A new file `packages/graph-core/src/ignore-generator.ts` (lines 1‑102) adds a helper that builds a starter `.novadiffignore`. It pulls patterns from an existing `.gitignore`, detects common directories, and lists generic test‑file globs, all commented out for optional activation.
 
 ### Key changes  
-- **Imports** – added `existsSync`, `readFileSync` from `node:fs` (R1), `join` from `node:path` (R2), and `DEFAULT_IGNORE_PATTERNS` from `./ignore-filter.js` (R3).  
-- **Constants** – `HEADER` (R5‑7), `DETECTABLE_DIRS` (R15‑26), and `GENERIC_SUGGESTIONS` (R28‑32) define the file’s structure.  
-- **Helper functions** –  
-  - `parseGitignorePatterns(gitignorePath)` (lines 37‑44) reads a `.gitignore` and returns non‑comment, non‑blank lines.  
-  - `isCoveredByDefaults(pattern)` (lines 50‑54) normalizes patterns and checks them against `DEFAULT_IGNORE_PATTERNS`.  
-- **Exported API** – `generateStarterIgnoreFile(projectRoot)` (lines 61‑102) orchestrates three sections:  
-  1. Patterns from `.gitignore` that are not already covered by defaults.  
-  2. Detected directories from `DETECTABLE_DIRS`.  
-  3. Generic test file patterns from `GENERIC_SUGGESTIONS`.  
-  All suggestions are commented out (`# pattern`) and the function returns the joined string.
+- **Imports** (R1‑R3):  
+  ```ts
+  import { existsSync, readFileSync } from "node:fs";
+  import { join } from "node:path";
+  import { DEFAULT_IGNORE_PATTERNS } from "./ignore-filter.js";
+  ```
+- **Constants** (R5‑R13, R15‑R26, R28‑R32):  
+  - `HEADER` – explanatory comment block.  
+  - `DETECTABLE_DIRS` – array of common test/fixture directories.  
+  - `GENERIC_SUGGESTIONS` – glob patterns for test files.
+- **Helpers** (R37‑R44, R50‑R54):  
+  - `parseGitignorePatterns(gitignorePath)` – returns non‑comment, non‑blank patterns.  
+  - `isCoveredByDefaults(pattern)` – checks if a pattern is already in `DEFAULT_IGNORE_PATTERNS` (normalizes trailing slashes).
+- **Exported API** (R61‑R102):  
+  `generateStarterIgnoreFile(projectRoot)` concatenates sections for `.gitignore` patterns, detected directories, and generic test patterns, returning the file content.
 
 ### Impact  
-- Provides a deterministic starter ignore file, centralizing ignore logic.  
-- Adds negligible runtime cost: a single read of `.gitignore` and a small directory scan.  
-- No changes to existing public APIs; purely additive.
+- Provides a deterministic starter ignore file that respects existing defaults and the project’s structure.  
+- Centralizes ignore‑generation logic; future tweaks can be made in one place.  
+- Reads only the `.gitignore` and checks a small set of directories, so runtime overhead is minimal.
 
 ### Risks & follow‑ups  
-- **DEFAULT_IGNORE_PATTERNS** – verify that the import path resolves and the array contains the expected defaults.  
-- **Path resolution** – ensure `join(projectRoot, dir)` behaves correctly across OSes.  
-- **Comment syntax** – confirm downstream tooling respects the `#`‑prefixed suggestions.  
-- **Test coverage** – unit tests for `generateStarterIgnoreFile` would guard against regressions in pattern filtering and directory detection.
+- **Default coverage**: `isCoveredByDefaults` normalizes trailing slashes; verify that all default patterns are correctly matched to avoid duplicates.  
+- **Path resolution**: `join(projectRoot, dir)` must work on both Windows and POSIX; test with mixed‑case directories.  
+- **Documentation**: expose `generateStarterIgnoreFile` in user docs if intended for public use.  
+- **Testing**: add unit tests for `parseGitignorePatterns` and `generateStarterIgnoreFile` to cover edge cases (empty `.gitignore`, nested directories).

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/CodeCityView.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/CodeCityView.tsx</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:52:04.928Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/components/CodeCityView.tsx</code> (added) implements a 3‑D view of code cities with Three.js. It replaces the previous placeholder and exposes a React component that renders the city, handles user interaction, and cleans up on unmount.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑3): <code>useEffect</code>, <code>useRef</code> from React; <code>three</code> core; <code>OrbitControls</code> from <code>three/examples/jsm/controls/OrbitControls.js</code>.  </li>
+<li><strong>Type imports</strong> (lines 5‑6): <code>CodeCityLayoutResult</code>, <code>CodeCityRenderableBuilding</code> from <code>../app/codeCityLayout</code>.  </li>
+<li><strong><code>attachSelectable</code> helper</strong> (lines 9‑14): recursively assigns <code>object.userData.building</code> to every child of a building group, enabling hit‑testing.  </li>
+<li><strong><code>CodeCityView</code> component</strong> (lines 16‑263):  <ul>
+<li>Builds a Three.js scene, camera, renderer, ambient and directional lights, a grid helper, and meshes for districts and buildings.  </li>
+<li>Uses <code>OrbitControls</code> for navigation and a <code>Raycaster</code> to detect clicks on building meshes, calling the supplied <code>onSelect</code>.  </li>
+<li>Observes the container with <code>ResizeObserver</code> to keep camera aspect and renderer size in sync.  </li>
+<li>Disposes all Three.js objects and removes event listeners on unmount.</li>
+</ul>
+</li>
+<li><strong>UI fallback</strong> (lines 218‑225): shows a friendly message when <code>layout.buildings</code> is empty.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a fully interactive 3‑D rendering of the city layout.  </li>
+<li>Centralizes Three.js setup in a single component, keeping mesh‑tagging logic isolated via <code>attachSelectable</code>.  </li>
+<li>Uses <code>requestAnimationFrame</code> for continuous rendering and <code>OrbitControls</code> damping for smooth navigation.  </li>
+<li>No new global state or external APIs are introduced.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Memory leaks</strong>: <code>dispose()</code> is called on renderer, controls, and scene, but <code>attachSelectable</code> may leave references; verify cleanup.  </li>
+<li><strong>Resize handling</strong>: <code>ResizeObserver</code> is used; test across browsers, especially on very small or large containers.  </li>
+<li><strong>Raycaster precision</strong>: nested meshes rely on <code>userData.building</code>; confirm that deeply nested buildings are correctly detected.  </li>
+<li><strong>Compatibility</strong>: importing from <code>three/examples/jsm/...</code> may fail in older bundlers; run the production build to confirm.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

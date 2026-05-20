@@ -1,21 +1,22 @@
 ### Overview  
-A new file `packages/graph-core/package.json` (added at line 1–58) introduces the `@novadiff/graph-core` npm package. The manifest declares ESM support (`"type":"module"`) and points to compiled outputs (`"main":"dist/index.js"`, `"types":"dist/index.d.ts"`).
+A new `package.json` was added at `packages/graph-core/package.json` (diff range R1‑58).  
+It defines a TypeScript‑based library with an ES‑module entry point and a detailed exports map.
 
 ### Key changes  
-- **Package metadata** – `name`, `version`, `type`, `main`, `types` (lines 1–6).  
-- **Exports map** – entries for `"./search"`, `"./types"`, `"./schema"`, `"./languages"` with corresponding `.d.ts` and `.js` paths (lines 7–27).  
-- **Scripts** – `build` (`tsc`), `catalog:generate` (node script), `test` (`vitest run`) (lines 29–33).  
-- **DevDependencies** – TypeScript `^5.7.0`, Vitest `^3.1.0`, coverage plugin, Node type definitions (lines 34–39).  
-- **Dependencies** – `fuse.js`, `ignore`, a suite of `tree-sitter-*` parsers, `web-tree-sitter`, `yaml`, `zod` (lines 40–56).
+- **Metadata** – `name`, `version`, `type`, `main`, and `types` are set (lines 1‑6).  
+- **Exports map** – explicit entries for `./search`, `./types`, `./schema`, and `./languages` (lines 7‑27).  
+- **Scripts** – `build`, `catalog:generate`, and `test` commands are declared (lines 29‑33).  
+- **DevDependencies** – TypeScript, Vitest, and coverage tooling (lines 34‑39).  
+- **Runtime dependencies** – a suite of `tree-sitter-*` parsers, `web-tree-sitter`, `yaml`, and `zod` (lines 40‑56).  
 
 ### Impact  
-- **Build & test** – Running `npm install`, `npm run build`, and `npm run test` is required to confirm compilation and unit tests (deterministic verification hint).  
-- **ESM behavior** – The `type: module` flag may affect import syntax for consumers.  
-- **Dependency footprint** – The added parsers and `web-tree-sitter` increase install size and potential bundle size.  
-- **TypeScript integration** – Exported `.d.ts` files provide type definitions for consumers.
+- **Build** – `tsc` will emit `dist/index.js` and type declarations, enabling consumers to import the package as an ES module.  
+- **Testing** – `vitest run` will execute unit tests; coverage tooling is configured.  
+- **Dependency graph** – the added `tree-sitter-*` packages increase bundle size and may affect runtime performance.  
+- **Export consistency** – the explicit `exports` field ensures consumers receive the correct entry points, reducing import errors.
 
 ### Risks & follow‑ups  
-- **Export correctness** – Unknown from the available diff/scan evidence; verify that each `"./<module>"` export resolves correctly (e.g., via `npm pack`).  
-- **Test coverage** – Unknown; run `npm run test` and inspect coverage thresholds.  
-- **Dependency conflicts** – Unknown; check compatibility of the new `tree-sitter-*` versions with other projects.  
-- **Node version compatibility** – Unknown; ensure ESM configuration works on target Node LTS releases.
+- **Build failures** – verify that `tsc` compiles without errors and that all `dist/*.d.ts` files are generated.  
+- **Test coverage** – run `vitest` to confirm all tests pass; check coverage thresholds.  
+- **Dependency conflicts** – ensure the new `tree-sitter` versions are compatible with existing tooling.  
+- **Export mapping** – double‑check that the `exports` entries correctly point to the built files; missing paths could break imports.

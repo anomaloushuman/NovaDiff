@@ -26,39 +26,42 @@
 <body>
   <header class="top">
     <h1>electron/repo-discovery.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:18:32.783Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:31:41.653Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/repo-discovery.cjs</code> is added to provide repository‑discovery utilities for the Electron app, replacing previous ad‑hoc logic.</p>
+<p><code>electron/repo-discovery.cjs</code> is a new module that discovers local Git repositories, extracts remote slugs, and exposes a discovery API for the Electron front‑end.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (diff lines 3‑6): <code>node:fs</code>, <code>node:path</code>, <code>node:os</code>, and local helpers <code>parseGithubSlugFromUrl</code>, <code>tryRunGit</code>.  </li>
-<li><strong>Constants</strong> (lines 8‑27): <code>SKIP_DIR_NAMES</code> set, <code>MAX_REPOS = 120</code>, <code>MAX_DEPTH = 4</code>.  </li>
-<li><strong><code>homeSearchRoots()</code></strong> (lines 29‑68): builds candidate paths from the user’s home directory, adds platform‑specific ones, deduplicates, and returns only existing directories.  </li>
-<li><strong><code>readGitRemoteSlug(repoRoot)</code></strong> (lines 70‑86): runs <code>git remote -v</code>, parses each line, and returns a slug object (<code>owner</code>, <code>repo</code>, <code>remote</code>, <code>url</code>) or <code>null</code>.  </li>
-<li><strong><code>scanForGitRepos(roots, opts)</code></strong> (lines 88‑141): recursively walks each root up to <code>MAX_DEPTH</code>, stops after <code>MAX_REPOS</code> matches, skips ignored or hidden directories, and collects repo metadata (<code>path</code>, <code>name</code>, <code>slug</code>, <code>remoteUrl</code>).  </li>
-<li><strong><code>discoverRepos(payload)</code></strong> (lines 143‑155): merges home roots with optional <code>extraRoots</code>, filters by target owner/repo, and returns <code>{ searchRoots, matches, scannedAt }</code>.  </li>
-<li><strong><code>matchRepoForGithubRepo(owner, repo, extraRoots)</code></strong> (lines 157‑159): thin wrapper around <code>discoverRepos</code>.  </li>
-<li><strong>Exports</strong> (lines 161‑166): <code>homeSearchRoots</code>, <code>discoverRepos</code>, <code>matchRepoForGithubRepo</code>, <code>readGitRemoteSlug</code>.</li>
+<li><strong>Imports</strong> (lines 1‑6):```js
+const fssync = require(&quot;node:fs&quot;);
+const path   = require(&quot;node:path&quot;);
+const os     = require(&quot;node:os&quot;);
+const { parseGithubSlugFromUrl, tryRunGit } = require(&quot;./git-service.cjs&quot;);</li>
 </ul>
-<h3>Impact</h3>
-<ul>
-<li>Deterministic deduplication via a <code>seen</code> set; hidden/ignored directories are skipped; a target slug filter is applied (lines 92‑120).  </li>
-<li>All discovery logic is centralized; constants centralize limits (lines 26‑27).  </li>
-<li>Synchronous <code>fs</code> calls are bounded by <code>MAX_DEPTH</code>/<code>MAX_REPOS</code> (lines 95‑97, 96‑97).  </li>
-<li>Uses Node 18</li>
-</ul>
-<ul>
-<li><code>node:</code> import specifiers; may not work on older Electron/Node builds (diff lines 3‑6).</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Regression</strong>: verify handling of permission errors and non‑existent directories on Windows, Linux, macOS (lines 100‑104, 106‑110).  </li>
-<li><strong>Compatibility</strong>: test <code>node:</code> imports against the target Electron runtime; provide a fallback if necessary (diff lines 3‑6).  </li>
-<li><strong>Performance</strong>: benchmark startup time on machines with many nested repos; consider async alternatives if blocking becomes an issue (unknown from the available diff/scan evidence).  </li>
-<li><strong>Security</strong>: synchronous file system access blocks the renderer thread; confirm acceptability for the app’s UX (unknown from the available diff/scan evidence).</li>
-</ul>
+<pre><code class="language--">  `SKIP_DIR_NAMES` set, `MAX_REPOS = 120`, `MAX_DEPTH = 4`.  
+- **`homeSearchRoots()`** (lines 29‑68): builds a platform‑aware list of candidate home directories, deduplicates, and validates existence.  
+- **`readGitRemoteSlug(repoRoot)`** (lines 70‑86): runs `git remote -v`, parses the first fetch URL, and returns `{owner, repo, remote, url}` or `null`.  
+- **`scanForGitRepos(roots, opts)`** (lines 88‑141): recursively walks each root up to `MAX_DEPTH`, skips `SKIP_DIR_NAMES` and dot‑folders, collects up to `MAX_REPOS` repos, optionally filtering by `targetSlug`.  
+- **`discoverRepos(payload)`** (lines 143‑155): merges home roots with any `extraRoots`, invokes `scanForGitRepos`, and returns `{searchRoots, matches, scannedAt}`.  
+- **`matchRepoForGithubRepo(owner, repo, extraRoots)`** (lines 157‑158): convenience wrapper that returns only the matched repos.  
+- **Exports** (lines 161‑166): exposes `homeSearchRoots`, `discoverRepos`, `matchRepoForGithubRepo`, and `readGitRemoteSlug`.
+
+### Impact
+
+  
+- Centralizes discovery logic; future changes can be made in one place.  
+- Scans up to 120 repos with a depth limit of 4, returning a `scannedAt` timestamp for observability.  
+- Uses Node 18
+
++ `node:` imports, which may not be available in older Electron builds.
+
+### Risks &amp; follow‑ups  
+- **Scan performance**: scanning large directories may block the UI; consider async or worker‑thread implementation if needed.  
+- **Missing `git`**: `tryRunGit` should handle environments without Git; add unit tests for this scenario.  
+- **Duplicate roots**: `homeSearchRoots` deduplicates via a `seen` set, but `extraRoots` may still introduce duplicates; confirm no double‑counting in `discoverRepos`.  
+- **Cross‑platform path handling**: test on Windows, macOS, and Linux to ensure `path.join` and `path.resolve` produce correct results, especially for Windows drive letters.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

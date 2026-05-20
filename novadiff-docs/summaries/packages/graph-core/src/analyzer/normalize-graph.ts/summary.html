@@ -26,32 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/normalize-graph.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:58:08.457Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:44:07.858Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-core/src/analyzer/normalize-graph.ts</code> adds a pre‑processing step that normalizes node IDs, numeric complexities, and edge references before the existing <code>sanitizeGraph/autoFixGraph/normalizeGraph</code> pipeline. The file introduces new helper functions and interfaces that operate on the raw graph batch output.</p>
+<p><code>packages/graph-core/src/analyzer/normalize-graph.ts</code> adds a set of utilities for normalizing graph data. The file introduces new functions, constants, and interfaces that operate on node IDs, complexity values, and batch‑output structures.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>ID normalization</strong> – <code>normalizeNodeId</code> (added at line 64) uses <code>stripToValidPrefix</code> (line 31) and <code>TYPE_TO_PREFIX</code> (line 8) to handle double‑prefixed IDs, project‑name prefixes, and bare paths.  </li>
-<li><strong>Complexity handling</strong> – <code>normalizeComplexity</code> (line 134) maps string aliases and numeric scales to <code>&quot;simple&quot; | &quot;moderate&quot; | &quot;complex&quot;</code> using <code>VALID_COMPLEXITIES</code> (line 113) and <code>COMPLEXITY_STRING_MAP</code> (line 115).  </li>
-<li><strong>Edge rewriting &amp; deduplication</strong> – <code>normalizeBatchOutput</code> (line 202) rewrites source/target IDs via an <code>idMap</code>, infers missing types with <code>inferTypeFromId</code> (line 185), and removes duplicate edges (lines 314‑318).  </li>
-<li><strong>Dangling edge reporting</strong> – New interfaces <code>DroppedEdge</code> (line 154) and <code>NormalizationStats</code> (line 161) capture dropped edges and statistics.  </li>
-<li><strong>Result structure</strong> – <code>NormalizeBatchResult</code> (line 169) exposes normalized nodes, edges, the ID map, and stats.</li>
+<li><strong><code>normalizeNodeId</code></strong> – lines 64‑110: normalizes IDs to <code>type:path</code>, handling double prefixes, project‑name prefixes, and bare paths.  </li>
+<li><strong><code>normalizeComplexity</code></strong> – lines 134‑152: maps string aliases and numeric scales to <code>&quot;simple&quot; | &quot;moderate&quot; | &quot;complex&quot;</code>.  </li>
+<li><strong><code>normalizeBatchOutput</code></strong> – lines 202‑329: processes raw nodes/edges, fixes IDs, normalizes complexity, rewrites edge references, deduplicates nodes/edges, drops dangling edges, and returns a <code>NormalizeBatchResult</code>.  </li>
+<li><strong>Interfaces</strong> – <code>DroppedEdge</code> (lines 154‑158), <code>NormalizationStats</code> (lines 161‑166), <code>NormalizeBatchResult</code> (lines 169‑173) provide structured output and metrics.  </li>
+<li><strong>Helper constants</strong> – <code>VALID_PREFIXES</code>, <code>TYPE_TO_PREFIX</code>, <code>VALID_COMPLEXITIES</code>, <code>COMPLEXITY_STRING_MAP</code>, <code>PREFIX_TO_TYPE</code> support the logic.  </li>
+<li><strong><code>inferTypeFromId</code></strong> – lines 184‑192: derives a node type from an ID prefix, used during edge rewriting.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – Guarantees canonical <code>type:path</code> IDs and consistent complexity values before downstream processing.  </li>
-<li><strong>Maintainability</strong> – Centralizes normalization logic; downstream modules no longer need ad‑hoc fixes.  </li>
-<li><strong>Observability</strong> – <code>NormalizationStats</code> provides metrics for monitoring ID corrections and edge drops.  </li>
-<li><strong>Performance</strong> – Adds a single pass over nodes and edges; map lookups are O(1) and should not noticeably affect throughput.</li>
+<li><strong>Correctness</strong>: guarantees canonical IDs and complexity values before upstream pipelines, reducing downstream errors.  </li>
+<li><strong>Observability</strong>: <code>NormalizationStats</code> exposes counts of fixed IDs, complexity corrections, rewritten edges, and dropped edges.  </li>
+<li><strong>Maintainability</strong>: centralizes normalization logic; future changes to ID/complexity rules can be made in one place.  </li>
+<li><strong>Performance</strong>: operations use <code>Map</code>/<code>Set</code> lookups, yielding linear‑time processing over nodes and edges.  </li>
+<li><strong>Compatibility</strong>: adds new exports but does not alter existing APIs; other modules can import these utilities without breaking changes.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression on existing IDs</strong> – Verify that previously valid IDs remain unchanged; test idempotence of <code>normalizeNodeId</code>.  </li>
-<li><strong>Double‑prefixed ID handling</strong> – Ensure IDs like <code>file:file:src/foo.ts</code> resolve correctly; test with varied malformed IDs.  </li>
-<li><strong>Compatibility</strong> – Confirm no other module imports the old <code>normalize-graph</code> path; update imports if necessary.  </li>
-<li><strong>Stat accuracy</strong> – Cross‑check <code>stats.idsFixed</code>, <code>stats.complexityFixed</code>, etc., against a known dataset.</li>
+<li><strong>Regression in ID handling</strong>: verify that legacy double‑prefixed IDs are still resolved correctly.  </li>
+<li><strong>Edge deduplication</strong>: ensure that deduplication does not drop legitimate parallel edges; run integration tests on graphs with intentional duplicates.  </li>
+<li><strong>Stats accuracy</strong>: cross‑check <code>NormalizationStats</code> against manual counts on sample datasets.  </li>
+<li><strong>Cross‑module interactions</strong>: confirm that downstream consumers of <code>normalizeBatchOutput</code> correctly handle the new <code>idMap</code> and <code>stats</code> fields.</li>
 </ul>
 </article>
   </main>

@@ -26,32 +26,34 @@
 <body>
   <header class="top">
     <h1>electron/github-service.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:14:23.488Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:25:24.629Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new CommonJS module <code>electron/github-service.cjs</code> (lines 1‑224) wraps the GitHub CLI (<code>gh</code>). It exposes helper functions for authentication status, repository and PR listing, PR creation, and account detection.</p>
+<p>A new module <code>electron/github-service.cjs</code> is added. It wraps the GitHub CLI (<code>gh</code>) and exposes functions for authentication status, repository and pull‑request listing, PR creation, and account detection.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – added <code>spawnSync</code> from <code>node:child_process</code> (R3), <code>parseGithubSlugFromUrl</code> from <code>./git-service.cjs</code> (R4), and <code>augmentPathForCli</code>, <code>resolveGhExecutable</code>, <code>ghNotFoundError</code> from <code>./gh-path.cjs</code> (R9).  </li>
-<li><strong>Command execution</strong> – <code>runGh</code> (lines 11‑27) runs <code>gh</code> synchronously with a timeout; <code>tryRunGh</code> (lines 30‑36) wraps it in a try/catch.  </li>
-<li><strong>Auth helpers</strong> – <code>getAuthStatus</code> (lines 43‑74) checks <code>gh auth status</code>; <code>getUserProfile</code> (lines 163‑176) fetches the authenticated user via <code>gh api user</code>; <code>listDetectedAccounts</code> (lines 179‑200) returns the profile or a fallback.  </li>
-<li><strong>Repository/PR utilities</strong> – <code>listRepos</code> (lines 77‑95), <code>listPullRequests</code> (lines 98‑126), <code>viewPullRequest</code> (lines 129‑139), and <code>createPullRequest</code> (lines 142‑160) invoke <code>gh</code> commands and parse JSON.  </li>
-<li><strong>Slug extraction</strong> – <code>slugFromRepoRoot</code> (lines 203‑210) parses remote URLs to derive owner/repo and remote name.  </li>
-<li><strong>Exports</strong> – all public functions are exported via <code>module.exports</code> (lines 213‑224).</li>
+<li><strong>Imports added</strong> (diff lines R3‑R9):<br><code>spawnSync</code> from <code>node:child_process</code>, <code>parseGithubSlugFromUrl</code> from <code>./git-service.cjs</code>, and <code>augmentPathForCli</code>, <code>resolveGhExecutable</code>, <code>ghNotFoundError</code> from <code>./gh-path.cjs</code>.  </li>
+<li><strong>CLI helpers</strong> (lines 11‑29): <code>runGh</code> executes a command via <code>spawnSync</code>; <code>tryRunGh</code> wraps it in a try/catch.  </li>
+<li><strong>Auth &amp; user</strong> (lines 43‑76, 163‑177): <code>getAuthStatus</code>, <code>getUserProfile</code>.  </li>
+<li><strong>Repository &amp; PR utilities</strong> (lines 77‑128, 129‑161): <code>listRepos</code>, <code>listPullRequests</code>, <code>viewPullRequest</code>, <code>createPullRequest</code>.  </li>
+<li><strong>Account detection</strong> (lines 179‑200): <code>listDetectedAccounts</code>.  </li>
+<li><strong>Slug extraction</strong> (lines 203‑210): <code>slugFromRepoRoot</code>.  </li>
+<li><strong>Exports</strong> (lines 213‑224): all functions are exported via <code>module.exports</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Requires the <code>gh</code> CLI; missing executables trigger <code>ghNotFoundError</code>.  </li>
-<li>Uses <code>spawnSync</code>, so long <code>gh</code> operations block the event loop.  </li>
-<li>Errors from <code>gh</code> are surfaced as JavaScript <code>Error</code> objects, enabling consistent handling in the Electron app.</li>
+<li>Provides runtime checks for CLI availability and authentication state, reducing silent failures.  </li>
+<li>Centralizes all <code>gh</code> interactions, simplifying future flag or command changes.  </li>
+<li>Each call spawns a new process (<code>spawnSync</code>), which may add overhead for bulk operations but is acceptable for UI‑driven actions.  </li>
+<li>Requires the <code>gh</code> executable; when missing, functions return informative messages (e.g., <code>getAuthStatus</code>).</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing <code>gh</code></strong> – confirm graceful handling of <code>ghNotFoundError</code> and user guidance.  </li>
-<li><strong>Performance</strong> – monitor blocking behavior when listing many repos or PRs; consider async alternatives if needed.  </li>
-<li><strong>API changes</strong> – <code>gh</code> output format may change; ensure JSON parsing remains robust.  </li>
-<li><strong>Security</strong> – <code>createPullRequest</code> builds command arguments from user input; verify proper sanitization to avoid injection.</li>
+<li><strong>Missing tests</strong>: No unit tests cover the new module; add tests for <code>getAuthStatus</code> and <code>listRepos</code>.  </li>
+<li><strong>Error handling</strong>: <code>runGh</code> throws generic errors; ensure callers handle them gracefully.  </li>
+<li><strong>Platform differences</strong>: <code>spawnSync</code> and CLI path resolution may behave differently on Windows; verify across all target OSes.  </li>
+<li><strong>Security</strong>: <code>createPullRequest</code> builds CLI arguments from user input; review for potential injection vulnerabilities.</li>
 </ul>
 </article>
   </main>

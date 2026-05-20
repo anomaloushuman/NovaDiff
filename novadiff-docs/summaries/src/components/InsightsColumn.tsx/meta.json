@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/InsightsColumn.tsx",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:13:25.388Z",
+  "generatedAt": "2026-05-20T04:56:31.485Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,33 +11,44 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
-    "changed_exports": [],
-    "changed_imports": [],
+    "changed_exports": [
+      "R31 added: export function InsightsColumn({"
+    ],
+    "changed_imports": [
+      "R1 added: import type { FileChange, FileDiffPayload } from \"../app/types\";",
+      "R2 added: import type { LlmSettings } from \"../app/llmStorage\";",
+      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
+      "R4 added: import { LlmSummaryMarkdown } from \"./LlmSummaryMarkdown\";",
+      "R5 added: import { ChangedFilesTree } from \"./ChangedFilesTree\";",
+      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";"
+    ],
     "changed_line_ranges": [
-      "R28",
-      "R49",
-      "L106 / R108",
-      "L189 / R191-212",
-      "L258 / R281"
+      "R1-308"
     ],
     "cited_changed_lines": [
-      "R28 added: prefetchProgress?: { current: number; total: number } | null;",
-      "R49 added: prefetchProgress,",
-      "L106 removed: <div className=\"insights-scroll\">",
-      "R108 added: <div key=\"summary\" className=\"insights-scroll insights-panel-enter\">",
-      "L189 removed: <p className=\"insights-footnote\">{prefetchStatus}</p>",
-      "R191 added: <div className=\"insights-prefetch-status doc-state-enter\">"
+      "R1 added: import type { FileChange, FileDiffPayload } from \"../app/types\";",
+      "R2 added: import type { LlmSettings } from \"../app/llmStorage\";",
+      "R3 added: import { isNovadiffDocsReservedPath } from \"../app/novadiffPaths\";",
+      "R4 added: import { LlmSummaryMarkdown } from \"./LlmSummaryMarkdown\";",
+      "R5 added: import { ChangedFilesTree } from \"./ChangedFilesTree\";",
+      "R6 added: import { Check, LayoutList, Loader2, Sparkles } from \"lucide-react\";"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function InsightsColumn (30-269)",
       "right function InsightsColumn (31-292)",
-      "right interface InsightsColumnProps (10-30)"
+      "right interface InsightsColumnProps (10-30)",
+      "right function MetricPill (293-308)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

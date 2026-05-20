@@ -26,37 +26,52 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/filters.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:00:45.092Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:47:35.854Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/utils/filters.ts</code> now exports three helpers:  </p>
-<ul>
-<li><code>filterNodes</code> (lines 19‑56)  </li>
-<li><code>filterEdges</code> (lines 57‑76)  </li>
-<li>internal <code>getEdgeCategory</code> (lines 81‑88).</li>
-</ul>
-<p>The file adds imports for <code>GraphNode</code>, <code>GraphEdge</code>, <code>FilterState</code>, <code>NodeType</code>, <code>Complexity</code>, <code>EdgeCategory</code>, and <code>EDGE_CATEGORY_MAP</code> (lines 1‑3).</p>
+<p><code>packages/graph-view/src/utils/filters.ts</code> introduces typed filtering utilities for graph nodes and edges. The module replaces ad‑hoc logic with reusable functions that operate on pre‑computed indices.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>filterNodes</code></strong> receives a pre‑computed <code>nodeIdToLayerIds: Map&lt;string, Set&lt;string&gt;&gt;</code>.<br><em>Layer checks run in O(1)</em> by looking up the set of layer IDs for each node and testing membership against <code>filters.layerIds</code>. This replaces the previous O(N × L × K) loop that used <code>layer.nodeIds.includes</code>.  </li>
-<li><strong><code>filterEdges</code></strong> keeps edges only if both endpoints are visible (<code>visibleNodeIds.has</code>) and if the edge’s category (determined by <code>getEdgeCategory</code>) is present in <code>filters.edgeCategories</code>.  </li>
-<li><strong><code>getEdgeCategory</code></strong> iterates over <code>EDGE_CATEGORY_MAP</code> to map an edge type to its category, returning <code>null</code> for unknown types.</li>
+<li><strong>Imports</strong> (lines 1‑3):```ts
+import type { GraphNode, GraphEdge } from &quot;@novadiff/graph-core/types&quot;;
+import type { FilterState, NodeType, Complexity, EdgeCategory } from &quot;../store&quot;;
+import { EDGE_CATEGORY_MAP } from &quot;../store&quot;;</li>
 </ul>
-<p>All functions are fully typed and documented with JSDoc comments.</p>
+<p>```- <strong><code>filterNodes</code></strong> (lines 19‑52):  </p>
+<ul>
+<li><p>Filters by <code>nodeTypes</code> and <code>complexities</code>.  </p>
+</li>
+<li><p>Uses <code>nodeIdToLayerIds: Map&lt;string, Set&lt;string&gt;&gt;</code> for O(1) layer membership checks, matching the “any‑layer‑wins” semantics described in the comment.</p>
+</li>
+</ul>
+<ul>
+<li><strong><code>filterEdges</code></strong> (lines 57‑76):</li>
+</ul>
+<ul>
+<li><p>Keeps only edges whose <code>source</code> and <code>target</code> are in <code>visibleNodeIds</code>.  </p>
+</li>
+<li><p>Filters by edge category via <code>getEdgeCategory</code>.</p>
+</li>
+</ul>
+<ul>
+<li><strong><code>getEdgeCategory</code></strong> (lines 81‑88):</li>
+</ul>
+<ul>
+<li>Looks up an edge’s category in <code>EDGE_CATEGORY_MAP</code>; returns <code>null</code> if the type is unknown.</li>
+</ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Performance</strong>: Constant‑time layer membership checks reduce export time for large graphs (#102).  </li>
-<li><strong>Correctness</strong>: Maintains “any‑layer‑wins” semantics; nodes belonging to any selected layer are kept.  </li>
-<li><strong>Maintainability</strong>: Centralizes filtering logic, simplifying future extensions.  </li>
-<li><strong>Observability</strong>: Functions are pure; no new runtime side‑effects.</li>
+<li><strong>Performance</strong>: The comment in <code>filterNodes</code> notes that the new O(1) layer lookup removes the former O(N × L × K) cost that dominated export time on large graphs (#102).  </li>
+<li><strong>Correctness</strong>: Explicit type checks prevent accidental inclusion of unsupported node types or complexities.  </li>
+<li><strong>Maintainability</strong>: Centralized filtering logic simplifies future extensions (e.g., new node/edge attributes).</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>filterNodes</code> drops a node if <code>nodeIdToLayerIds</code> lacks an entry for its ID. Ensure the map is populated before use.  </li>
-<li><code>filterEdges</code> allows edges with unknown types to pass the category filter because <code>getEdgeCategory</code> returns <code>null</code>. Verify that <code>EDGE_CATEGORY_MAP</code> covers all edge types.  </li>
-<li>Update any components that previously relied on legacy filtering logic to import and invoke these new helpers.  </li>
-<li>Add unit tests for edge cases (nodes with no layers, edges with unknown types) to confirm deterministic behavior.</li>
+<li><strong>Edge category coverage</strong>: <code>getEdgeCategory</code> returns <code>null</code> for unknown types, causing <code>filterEdges</code> to drop those edges. Verify that <code>EDGE_CATEGORY_MAP</code> contains all used edge types.  </li>
+<li><strong>Layer index consistency</strong>: <code>nodeIdToLayerIds</code> must be correctly populated in the store; stale indices could misfilter nodes.  </li>
+<li><strong>Compatibility</strong>: Confirm that existing consumers still receive the same node/edge sets after the refactor (unknown from the diff).  </li>
+<li><strong>Testing</strong>: Add unit tests for <code>filterNodes</code> and <code>filterEdges</code> covering cases such as no layers selected, multi‑layer nodes, and unknown categories.</li>
 </ul>
 </article>
   </main>

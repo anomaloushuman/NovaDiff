@@ -26,31 +26,34 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/meta.json</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:35:36.762Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:17:36.797Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>.novadiff-graph/meta.json</code> file was updated. The changes are in lines L2‑3 and L5 of the original file, replaced by new values in the same positions.</p>
+<p>A new file, <code>.novadiff-graph/meta.json</code>, has been added to the repository. It contains a flat JSON object with metadata about the current diff‑graph snapshot.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>lastAnalyzedAt</code>: <code>2026-05-19T20:52:49.662Z</code> → <code>2026-05-19T22:32:24.542Z</code> (L2 removed, R2 added)  </li>
-<li><code>gitCommitHash</code>: <code>8e0dc031dcfc62a38f560a90bc881a8fd6655a51</code> → <code>46a8da0664d1dce2715e93ec6698cf67012b963f</code> (L3 removed, R3 added)  </li>
-<li><code>analyzedFiles</code>: <code>324</code> → <code>329</code> (L5 removed, R5 added)</li>
+<li><strong>File addition</strong>: <code>.novadiff-graph/meta.json</code> (lines 1‑6).  </li>
+<li><strong>Metadata fields</strong>:  <ul>
+<li><code>lastAnalyzedAt</code>: <code>2026-05-20T01:19:05.928Z</code> (line 2).  </li>
+<li><code>gitCommitHash</code>: <code>6c333f6cf037bf75318c26081cae3324fdb89c64</code> (line 3).  </li>
+<li><code>version</code>: <code>1.0.0</code> (line 4).  </li>
+<li><code>analyzedFiles</code>: <code>329</code> (line 5).</li>
 </ul>
-<p>No other fields were modified.</p>
+</li>
+</ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Accuracy</strong> – metadata now reflects the latest analysis run.  </li>
-<li><strong>Observability</strong> – consumers of <code>meta.json</code> will see the updated timestamp and commit hash, aiding audit trails.  </li>
-<li><strong>Compatibility</strong> – the JSON schema is unchanged; existing parsers continue to work.  </li>
-<li><strong>Maintainability</strong> – the change is confined to a single file, minimizing downstream impact.</li>
+<li><strong>Observability</strong>: The timestamp and commit hash allow tools to report when the graph was last updated and which commit it represents.  </li>
+<li><strong>Versioning</strong>: The <code>version</code> field provides a simple schema version that can be checked by consumers.  </li>
+<li><strong>Data integrity</strong>: The commit hash ties the metadata to a specific repository state, aiding reproducibility.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Test failures</strong> – any tests asserting the old values will fail; run the targeted test suite and adjust expectations.  </li>
-<li><strong>Hard‑coded assumptions</strong> – verify downstream services do not rely on the previous commit hash or file count.  </li>
-<li><strong>Parsing</strong> – ensure all consumers correctly parse the new ISO timestamp.  </li>
-<li><strong>Documentation</strong> – update any docs that reference the old metadata values.</li>
+<li><strong>Missing file handling</strong>: Verify that consumers of the graph handle the absence of <code>meta.json</code> gracefully.  </li>
+<li><strong>Timestamp format</strong>: Ensure downstream consumers parse the ISO‑8601 timestamp correctly.  </li>
+<li><strong>Commit hash consistency</strong>: Confirm that the hash matches the current HEAD of the repository.  </li>
+<li><strong>File size</strong>: The file is tiny, but check that adding it does not trigger any size limits in CI or packaging scripts.</li>
 </ul>
 </article>
   </main>

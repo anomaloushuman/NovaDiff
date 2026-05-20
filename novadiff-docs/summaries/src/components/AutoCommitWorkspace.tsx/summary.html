@@ -26,39 +26,35 @@
 <body>
   <header class="top">
     <h1>src/components/AutoCommitWorkspace.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:06:57.951Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:50:01.559Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new React component, <strong><code>AutoCommitWorkspace</code></strong>, is added to <code>src/components/AutoCommitWorkspace.tsx</code>. It renders a UI that lets a user generate an AI‑summarized commit message, review it, and optionally publish the commit and open a pull request. The component relies on Electron APIs exposed via <code>window.electronAPI</code> and an LLM summarizer.</p>
+<p>A new file <code>src/components/AutoCommitWorkspace.tsx</code> (lines 1‑387) introduces a React component that combines Git status, LLM‑generated commit messages, optional documentation bundles, and GitHub PR creation into a single UI.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑9): added React hooks, Lucide icons, and types/functions from <code>commitMessage</code>, <code>docWorkspaceMetrics</code>, <code>llmStorage</code>, and <code>types</code>.  </li>
-<li><strong>Props interface</strong> (<code>AutoCommitWorkspaceProps</code>, lines 12‑21): defines <code>suggestedRepoPath</code>, <code>compared</code>, <code>compareRows</code>, root paths, titles, and <code>llmSettings</code>.  </li>
-<li><strong>Component implementation</strong> (<code>AutoCommitWorkspace</code>, lines 25‑381):  <ul>
-<li>State for repo status, preview, draft content, loading flags, and UI step.  </li>
-<li>Callbacks: <code>refreshRepo</code>, <code>generateDraft</code>, <code>executePublish</code>, and <code>browseRepo</code>.  </li>
-<li>Uses <code>window.electronAPI</code> for git status, publish preview, LLM summarization, and publish execution.  </li>
-<li>Renders sections for repository status, draft generation, review, and publish, with conditional UI based on <code>step</code>.</li>
+<li><strong>Imports</strong> (lines 1‑9): React hooks, Lucide icons, and app modules (<code>commitMessage</code>, <code>docWorkspaceMetrics</code>, <code>llmStorage</code>, <code>types</code>, <code>gitTypes</code>).  </li>
+<li><strong>Props interface</strong> <code>AutoCommitWorkspaceProps</code> (lines 12‑21) declares <code>suggestedRepoPath</code>, <code>compared</code>, <code>compareRows</code>, <code>leftRoot</code>, <code>rightRoot</code>, <code>leftTitle</code>, <code>rightTitle</code>, and <code>llmSettings</code>.  </li>
+<li><strong>Component</strong> <code>AutoCommitWorkspace</code> (lines 25‑381) manages state for repo root, Git status, preview, draft generation, publishing, and UI step (<code>draft</code>, <code>review</code>, <code>done</code>). It uses <code>window.electronAPI</code> methods:  <ul>
+<li><code>refreshRepo</code> calls <code>api.gitRepoStatus</code> (line 67) and <code>api.gitPublishPreview</code> (line 70).  </li>
+<li><code>generateDraft</code> calls <code>api.llmSummarize</code> (line 112) and optionally <code>api.writeNovadiffDocs</code> (line 129).  </li>
+<li><code>executePublish</code> calls <code>api.gitPublishExecute</code> (line 168).</li>
 </ul>
 </li>
-<li><strong>Helper function</strong> <code>pathBasename</code> (lines 383‑387) extracts the repo name from a path.  </li>
-<li><strong>UI elements</strong>: Buttons, inputs, and icons (<code>Upload</code>, <code>Check</code>, <code>GitBranch</code>, <code>Loader2</code>) tied to the new state logic.</li>
+<li><strong>Helper</strong> <code>pathBasename</code> (lines 383‑387) extracts the last segment of a path for labeling.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds an end‑to‑end auto‑commit workflow; bundle size grows slightly due to new imports.  </li>
-<li>Requires the Electron API surface (<code>gitRepoStatus</code>, <code>gitPublishPreview</code>, <code>llmSummarize</code>, <code>gitPublishExecute</code>, <code>writeNovadiffDocs</code>, <code>pickDirectory</code>) to be present; missing methods will cause runtime errors.  </li>
-<li><code>buildDocWorkspaceMetrics</code> runs on every <code>compareRows</code> change; large diffs may affect responsiveness.  </li>
-<li>New CSS classes (<code>git-workspace</code>, <code>doc-workspace-panel</code>, etc.) must exist for proper layout.</li>
+<li>Adds runtime dependencies on <code>window.electronAPI</code>; missing any of the referenced APIs will surface as runtime errors.  </li>
+<li>Heavy work (LLM summarization, metric calculation) runs inside callbacks; if these operations block the event loop, the UI may freeze until completion.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>API availability</strong>: Verify that <code>window.electronAPI</code> exposes all required methods; otherwise the component will fail at runtime.  </li>
-<li><strong>Type consistency</strong>: Ensure imported types (<code>LlmSettings</code>, <code>FileChange</code>, <code>GitRepoStatus</code>, <code>PublishPreview</code>) match the actual API contracts.  </li>
-<li><strong>Metric computation</strong>: Benchmark <code>buildDocWorkspaceMetrics</code> for large <code>compareRows</code> to confirm acceptable performance.  </li>
-<li><strong>UI correctness</strong>: Test conditional rendering for each <code>step</code> value and confirm that the UI behaves correctly on various screen sizes.</li>
-</ul>
+<ol>
+<li><strong>API availability</strong> – Verify that <code>gitRepoStatus</code>, <code>gitPublishPreview</code>, <code>llmSummarize</code>, <code>writeNovadiffDocs</code>, and <code>gitPublishExecute</code> exist on <code>window.electronAPI</code>.  </li>
+<li><strong>Type mismatches</strong> – Ensure <code>GitRepoStatus</code>, <code>PublishPreview</code>, and <code>FileChange</code> types match the actual API responses.  </li>
+<li><strong>LLM failure</strong> – <code>parseCommitMessageOutput</code> (imported from <code>commitMessage</code>) may throw; confirm graceful error handling.  </li>
+<li><strong>UI blocking</strong> – Monitor for freezes during draft generation; consider adding a spinner or off‑loading heavy work.</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

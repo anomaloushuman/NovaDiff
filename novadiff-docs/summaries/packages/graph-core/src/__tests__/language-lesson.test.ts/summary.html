@@ -26,33 +26,33 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/language-lesson.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:09:16.777Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:56:14.289Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/language-lesson.test.ts</code> (lines R1‑R157) was added to exercise the language‑lesson analyzer.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/language-lesson.test.ts</code> (lines 1‑157) has been added. It imports Vitest helpers, the analyzer functions (<code>buildLanguageLessonPrompt</code>, <code>parseLanguageLessonResponse</code>, <code>detectLanguageConcepts</code>), the <code>GraphNode</code>/<code>GraphEdge</code> types, and the TypeScript language config. Sample graph data (<code>sampleNode</code>, <code>sampleEdges</code>) is defined to exercise the utilities.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Imports added at the top of the file (lines 1‑8): <code>vitest</code> helpers, <code>buildLanguageLessonPrompt</code>, <code>parseLanguageLessonResponse</code>, <code>detectLanguageConcepts</code> from <code>../analyzer/language-lesson.js</code>, type imports for <code>GraphNode</code>/<code>GraphEdge</code>, and <code>typescriptConfig</code> from <code>../languages/configs/typescript.js</code>.  </li>
-<li>Sample graph data defined (lines 10‑35): a <code>sampleNode</code> (function <code>verifyToken</code>) and <code>sampleEdges</code> describing <code>reads_from</code> and <code>calls</code> relationships.  </li>
-<li>Test suites (lines 38‑157) cover:  <ul>
-<li><code>buildLanguageLessonPrompt</code>: verifies inclusion of node name, summary, target language, relationship context, and a request for JSON output.  </li>
-<li><code>parseLanguageLessonResponse</code>: tests parsing of a plain JSON string, extraction from a fenced code block, and graceful handling of an empty string.  </li>
-<li><code>detectLanguageConcepts</code>: checks detection of async patterns, middleware patterns, and that no concepts are returned for a plain file node.</li>
-</ul>
-</li>
+<li><strong>File added</strong>: <code>packages/graph-core/src/__tests__/language-lesson.test.ts</code>.  </li>
+<li><strong>Imports</strong>: Lines 1‑8 bring in Vitest, the analyzer exports, type definitions, and the TypeScript config.  </li>
+<li><strong>Sample data</strong>: Lines 10‑36 create a realistic node and edge set.  </li>
+<li><strong>Prompt tests</strong> (lines 38‑77): Verify that <code>buildLanguageLessonPrompt</code> includes the node name, summary, target language, relationship context, and requests JSON output.  </li>
+<li><strong>Response parsing tests</strong> (lines 79‑120): Confirm that <code>parseLanguageLessonResponse</code> correctly parses raw JSON, extracts JSON from code blocks, and returns an empty result for invalid input.  </li>
+<li><strong>Concept detection tests</strong> (lines 122‑156): Ensure <code>detectLanguageConcepts</code> identifies async patterns, middleware patterns, and returns an empty array when no concepts are present.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds unit coverage for the analyzer utilities, enabling regression detection when prompt formatting or response parsing logic changes.  </li>
-<li>Keeps test data and expectations in a single file, simplifying future updates to the analyzer.</li>
+<li><strong>Coverage</strong>: Adds unit tests for prompt construction, response parsing, and concept detection, helping catch regressions early.  </li>
+<li><strong>Maintainability</strong>: Future changes to the analyzer functions will be validated against these tests, reducing silent failures.  </li>
+<li><strong>Observability</strong>: Test failures will surface missing or incorrect exports, import paths, or configuration changes.  </li>
+<li><strong>Performance</strong>: Tests are lightweight; no measurable impact on build times.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Test flakiness</strong>: JSON parsing must remain deterministic; run tests locally to confirm stability.  </li>
-<li><strong>Formatting changes</strong>: If prompt generation logic changes, test expectations may need updating (<code>vitest --update</code>).  </li>
-<li><strong>Linting</strong>: Ensure the new file passes the repository’s TypeScript and ESLint checks (<code>tsc</code>, <code>eslint</code>).  </li>
-<li><strong>Coverage gaps</strong>: Unknown from the available diff/scan evidence; consider adding more scenarios if coverage is low.</li>
+<li><strong>Import errors</strong>: If <code>../analyzer/language-lesson.js</code> or <code>../languages/configs/typescript.js</code> do not export the expected symbols, tests will fail.  </li>
+<li><strong>Snapshot drift</strong>: Prompt formatting changes may require test updates; run tests locally to confirm.  </li>
+<li><strong>Edge case coverage</strong>: Tests cover typical scenarios but not all edge cases (e.g., large graphs); consider expanding coverage if needed.  </li>
+<li><strong>Type mismatches</strong>: Ensure <code>GraphNode</code> and <code>GraphEdge</code> types align with the sample data; mismatches will cause type errors during test compilation.</li>
 </ul>
 </article>
   </main>

@@ -1,23 +1,22 @@
-### Overview  
-`SidebarNav.tsx` was refactored to add a richer workspace experience.  
-Key additions include a local‑only mode flag, expanded navigation targets, and a conditional brand‑reveal animation.
+### Overview
+A new `SidebarNav` component is added at `src/components/SidebarNav.tsx` (lines 1‑238). It renders a navigation sidebar that reacts to launch state, local‑only mode, and GitHub user data.
 
-### Key changes  
-- **Imports** – `useLaunch` and `TypewriterText` added at lines 2‑3.  
-- **Props** – `SidebarNavProps` now contains `localOnlyMode?`, `gitUser?`, `workspaceName?`, and `workspaceRepoLabel?` (lines 26‑29).  
-- **WorkspacePage** – type expanded to `"compare" | "history" | "docs" | "prs" | "publish"` (line 18).  
-- **Brand reveal** – `useLaunch` drives `showLaunchBrand`; when true, a typewriter animation renders the brand (lines 47‑50, 56‑77).  
-- **Navigation** – new buttons for `"history"`, `"prs"`, and `"publish"` added with Git‑locked logic; placeholder “Coming soon” buttons removed (lines 149‑156, 171‑179).  
-- **User section** – avatar now renders `gitUser.avatarUrl` if present, otherwise a fallback icon; name/email logic respects `localOnlyMode` (lines 210‑233).  
-- **Removed** – static brand title, tagline, product line (lines 41‑44), placeholder buttons (lines 119‑120, 123‑124, 127‑128), and static avatar (lines 146‑148).
+### Key changes
+- **Imports**: `appMark` image, `useLaunch` hook, `TypewriterText`, and several `lucide-react` icons (e.g., `BookOpen`, `Brain`, `Columns2`) are added at lines 1‑16.  
+- **Exported type**: `WorkspacePage = "compare" | "history" | "docs" | "prs" | "publish"` (line 18).  
+- **Props interface**: `SidebarNavProps` defined lines 20‑31; component signature at line 35.  
+- **Launch branding**: `useLaunch` provides `brandReveal` and `skipSequence` (line 48); a typewriter animation is rendered conditionally (lines 47‑79).  
+- **Navigation links**: buttons (lines 133‑190) use `workspacePage` to set an active class and disable themselves when `active` is false or `gitLocked` (derived from `localOnlyMode`).  
+- **User avatar**: shows `gitUser.avatarUrl` if present, otherwise a default icon (lines 210‑222).  
+- **Settings button**: enabled only when `onOpenSettings` is supplied (lines 196‑204).
 
-### Impact  
-- Callers must supply the new props or accept `undefined`; the expanded `WorkspacePage` may break type checks if not updated.  
-- The brand animation mounts only when `showLaunchBrand` is true, adding negligible runtime cost.  
-- Git‑dependent navigation items are disabled when `localOnlyMode` is true, preventing accidental use of unavailable features.
+### Impact
+- The sidebar now displays a launch brand animation and disables Git‑dependent actions when `localOnlyMode` is true, altering user flow.  
+- Parent components must provide `workspacePage`, `onWorkspacePage`, and optionally `onOpenSettings`; missing props will break rendering.  
+- Adding an image and several icon imports increases the client bundle, but tree‑shaking will remove unused icons.
 
-### Risks & follow‑ups  
-- Verify that `useLaunch` correctly sets `brandReveal` and `skipSequence`; otherwise the brand will not appear.  
-- Ensure `onWorkspacePage` handles the new `"history"`, `"prs"`, and `"publish"` values to avoid navigation failures.  
-- Confirm that `gitLocked` logic correctly disables Git‑dependent buttons when `localOnlyMode` is true.  
-- Run unit tests for components consuming `SidebarNav` to catch any missing prop errors.
+### Risks & follow‑ups
+- **`useLaunch` contract**: if its API changes, the brand reveal logic may fail; verify `brandReveal` and `skipSequence`.  
+- **Local‑only mode gating**: test scenarios where `localOnlyMode` is true to confirm button disabling.  
+- **Icon imports**: any missing or renamed lucide icons will cause build errors; run `npm run build` to confirm.  
+- **`onOpenSettings`**: ensure a handler is passed or the UI degrades gracefully.

@@ -26,38 +26,44 @@
 <body>
   <header class="top">
     <h1>src/app/launchSequence.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:26:05.980Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:44:01.603Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/launchSequence.ts</code> (added) introduces launch‑related constants, a <code>LaunchPhase</code> type, and two helper functions that persist launch state in <code>sessionStorage</code>.</p>
+<p><code>src/app/launchSequence.ts</code> is a new module that centralizes launch‑flow constants and helper functions. It exposes a skip flag stored in <code>sessionStorage</code> and a <code>LaunchPhase</code> type for the boot, reveal, and ready stages.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Exports</strong> (R1‑8, R10):  <ul>
-<li><code>LAUNCH_SESSION_KEY</code>, <code>LAUNCH_HOLD_MS</code>, <code>LAUNCH_HOLD_SKIP_AFTER_MS</code>, <code>LAUNCH_EXIT_FADE_MS</code>, <code>LAUNCH_REVEAL_MS</code> (lines R1‑8).  </li>
-<li><code>LaunchPhase</code> type (line R10).  </li>
-<li><code>readLaunchSkipped()</code> and <code>markLaunchComplete()</code> (lines R12‑26).</li>
+<li><strong>Constants</strong>  <ul>
+<li><code>LAUNCH_SESSION_KEY</code> (R1) = <code>&quot;novadiff-launch-done-v1&quot;</code> – identifies the skip flag.  </li>
+<li><code>LAUNCH_HOLD_MS</code> (R4) = 2400 ms – minimum time on the finished boot screen.  </li>
+<li><code>LAUNCH_HOLD_SKIP_AFTER_MS</code> (R6) = 900 ms – earliest moment the user can skip the hold.  </li>
+<li><code>LAUNCH_EXIT_FADE_MS</code> (R7) = 580 ms – fade duration when exiting the launch screen.  </li>
+<li><code>LAUNCH_REVEAL_MS</code> (R8) = 1200 ms – reveal animation duration.</li>
 </ul>
 </li>
-<li><strong>Behavior</strong> (R12‑26):  <ul>
-<li><code>readLaunchSkipped()</code> returns <code>true</code> when <code>sessionStorage.getItem(LAUNCH_SESSION_KEY) === &quot;1&quot;</code>, otherwise <code>false</code>.  </li>
-<li><code>markLaunchComplete()</code> stores <code>&quot;1&quot;</code> under <code>LAUNCH_SESSION_KEY</code>.  </li>
-<li>Both functions wrap storage access in <code>try/catch</code> to avoid errors if <code>sessionStorage</code> is unavailable.</li>
+<li><strong>Type</strong>  <ul>
+<li><code>LaunchPhase</code> (R10) – <code>&quot;boot&quot; | &quot;reveal&quot; | &quot;ready&quot;</code>.</li>
+</ul>
+</li>
+<li><strong>Functions</strong>  <ul>
+<li><code>readLaunchSkipped()</code> (R12‑R18) reads the flag from <code>sessionStorage</code>, returning <code>false</code> on error.  </li>
+<li><code>markLaunchComplete()</code> (R20‑R26) writes <code>&quot;1&quot;</code> to <code>sessionStorage</code>, wrapped in a try/catch.</li>
 </ul>
 </li>
 </ul>
+<p>All symbols are exported for use by other parts of the application.</p>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes launch constants and state logic, simplifying future updates.  </li>
-<li>Adds minimal runtime cost: only simple <code>sessionStorage</code> reads/writes.  </li>
-<li>Functions are safe in environments without <code>sessionStorage</code> (e.g., SSR) due to error handling.</li>
+<li>Centralizes launch‑related logic, reducing duplication across UI components.  </li>
+<li>Safe access to <code>sessionStorage</code> prevents crashes on browsers that may throw.  </li>
+<li>Timing constants can be tuned without modifying UI code.  </li>
+<li>No external dependencies are introduced.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Unknown from the available diff/scan evidence whether all target browsers expose <code>sessionStorage</code>; fallback behavior is acceptable.  </li>
-<li>Verify that existing launch flow imports this module and uses the exported constants consistently.  </li>
-<li>Run lint, test, and production build pipelines to confirm the new file compiles without errors.  </li>
-<li>Update internal documentation to expose the new API.</li>
+<li><strong>SessionStorage availability</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>Race conditions</strong>: unknown from the available diff/scan evidence.  </li>
+<li>Unit tests for <code>readLaunchSkipped()</code> and <code>markLaunchComplete()</code> are recommended to cover error paths.</li>
 </ul>
 </article>
   </main>

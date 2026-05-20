@@ -26,32 +26,36 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/layer-detector.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:10:17.027Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:57:20.265Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/layer-detector.test.ts</code> (lines R1‑188) was added to exercise the layer‑detection logic, prompt construction, response parsing, and LLM‑based layer assignment.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/layer-detector.test.ts</code> (added lines R1‑188) validates the layer‑detection logic in the graph core module.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>vitest</code> helpers and the four public functions from <code>../analyzer/layer-detector.js</code> were added (R1‑R6).  </li>
-<li><strong>Test helpers</strong> – <code>makeNode</code> and <code>makeGraph</code> construct minimal <code>KnowledgeGraph</code> objects for the tests (R10‑R32).  </li>
-<li><strong><code>detectLayers</code> tests</strong> – verify detection of “API Layer”, “Data Layer”, and “Core” layers, unique kebab‑case IDs, and that only nodes of type <code>file</code> are considered (R36‑R106).  </li>
-<li><strong><code>buildLayerDetectionPrompt</code> test</strong> – checks that file paths are included and the string “JSON” appears in the prompt (R109‑R119).  </li>
-<li><strong><code>parseLayerDetectionResponse</code> tests</strong> – cover plain JSON, JSON wrapped in markdown fences, and invalid inputs that should return <code>null</code> (R122‑R160).  </li>
-<li><strong><code>applyLLMLayers</code> test</strong> – ensures LLM‑provided layers are applied correctly and unmatched nodes fall into an “Other” layer (R163‑R188).</li>
+<li>Added imports from <code>vitest</code> and the layer‑detector API (<code>detectLayers</code>, <code>buildLayerDetectionPrompt</code>, <code>parseLayerDetectionResponse</code>, <code>applyLLMLayers</code>) plus type imports from <code>../types.js</code> (lines R1‑R8).  </li>
+<li>Introduced helper constructors <code>makeNode</code> and <code>makeGraph</code> to build minimal <code>KnowledgeGraph</code> objects for tests.  </li>
+<li>Test cases cover:  <ul>
+<li><code>detectLayers</code> identifies <strong>API</strong>, <strong>Data</strong>, and <strong>Core</strong> layers based on file paths (e.g., <code>src/routes/</code>, <code>src/models/</code>).  </li>
+<li>Layer IDs start with <code>layer:</code> and are unique (lines 86‑92).  </li>
+<li>Only nodes of type <code>file</code> are included; function and class nodes are ignored (lines 95‑106).  </li>
+<li><code>buildLayerDetectionPrompt</code> includes file paths and references JSON (lines 110‑118).  </li>
+<li><code>parseLayerDetectionResponse</code> handles plain JSON, markdown‑wrapped JSON, and returns <code>null</code> for invalid input (lines 122‑160).  </li>
+<li><code>applyLLMLayers</code> assigns nodes to LLM‑provided layers and places unmatched nodes in an <strong>Other</strong> layer (lines 163‑187).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Coverage</strong> – The tests exercise all stages of the layer‑detection pipeline, reducing the risk of silent regressions.  </li>
-<li><strong>Maintainability</strong> – Centralized helper functions simplify future test additions.  </li>
-<li><strong>Observability</strong> – Failures will pinpoint the specific stage (e.g., prompt content or parsing logic) that broke.</li>
+<li>Adds ~188 lines of test code, providing concrete coverage for typical project structures.  </li>
+<li>Centralizes test helpers for reuse in future tests.  </li>
+<li>No snapshots are used; all assertions are direct.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Deterministic IDs</strong> – Tests rely on node IDs; changes to ID generation could cause flakiness.  </li>
-<li><strong>Prompt formatting</strong> – If <code>buildLayerDetectionPrompt</code> changes, the test may need updating.  </li>
-<li><strong>LLM contract</strong> – <code>applyLLMLayers</code> assumes a specific layer shape; future LLM responses must match this contract.  </li>
-<li><strong>Performance</strong> – Running these tests on very large graphs could increase execution time; monitor if graph size grows.</li>
+<li>If layer‑detection logic or regex patterns change, tests may fail; review failures and adjust expectations.  </li>
+<li>The ID uniqueness test depends on the <code>layer:</code> prefix; any change to ID generation must be reflected.  </li>
+<li>Tests are lightweight but should be monitored if graph size grows; consider parameterizing with larger graphs if needed.</li>
 </ul>
 </article>
   </main>

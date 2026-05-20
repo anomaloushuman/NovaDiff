@@ -26,39 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/elk-layout.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:00:13.577Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:47:01.970Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new utility <code>packages/graph-view/src/utils/elk-layout.ts</code> adds ELK‑specific types and a repair pipeline that sanitizes graph input before layout. The file imports <code>GraphIssue</code> from <code>@novadiff/graph-core/schema</code>, <code>loadElk</code> from <code>./elk-bundled</code>, and default node dimensions from <code>./layout</code> (lines 1‑3).</p>
+<p>A new utility module <code>packages/graph-view/src/utils/elk-layout.ts</code> adds ELK‑specific types and two public helpers: <code>repairElkInput</code> and <code>applyElkLayout</code>. It centralizes input validation, auto‑correction, and layout execution for the graph view.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Types</strong> (<code>lines 5‑34</code>, <code>39‑43</code>, <code>214‑221</code>): <code>ElkChild</code>, <code>ElkEdge</code>, <code>ElkInput</code>, <code>RepairResult</code>, <code>ElkLayoutOptions</code>, <code>ElkLayoutResult</code>.  </li>
-<li><strong>Repair logic</strong> (<code>repairElkInput</code>, <code>lines 56‑213</code>):  <ul>
-<li>Fills missing <code>width</code>/<code>height</code> with defaults.  </li>
-<li>Deduplicates child IDs per parent.  </li>
-<li>Drops orphan children, orphan edges, and containment cycles.  </li>
-<li>Emits <code>GraphIssue</code> objects and may throw when <code>strict</code> is true.</li>
+<li><strong>Imports</strong> added at lines 1‑3: <code>GraphIssue</code>, <code>loadElk</code>, and <code>NODE_WIDTH/HEIGHT</code>.  </li>
+<li><strong>New interfaces</strong> defined at lines 5‑34, 16‑21, 22‑27, 39‑43, 214‑216, 218‑221.  </li>
+<li><strong><code>repairElkInput</code></strong> (lines 56‑213) performs:  <ul>
+<li>Fills missing node dimensions with <code>DEFAULT_NODE_WIDTH/HEIGHT</code>.  </li>
+<li>Deduplicates node IDs per parent.  </li>
+<li>Removes orphan children and edges.  </li>
+<li>Detects and strips containment cycles.  </li>
+<li>Emits <code>GraphIssue</code> objects and may throw when <code>opts.strict</code> is true.</li>
 </ul>
 </li>
-<li><strong>Layout wrapper</strong> (<code>applyElkLayout</code>, <code>lines 223‑243</code>):  <ul>
-<li>Calls <code>repairElkInput</code>, loads ELK via <code>loadElk</code>, runs <code>elk.layout</code>, and returns the positioned graph plus any issues.  </li>
-<li>On layout failure, returns a fatal <code>GraphIssue</code> unless <code>strict</code> is set.</li>
-</ul>
-</li>
+<li><strong><code>applyElkLayout</code></strong> (lines 223‑243) loads ELK asynchronously, runs layout on the repaired input, and returns an <code>ElkLayoutResult</code>. On failure it returns a minimal positioned graph and a fatal issue unless <code>opts.strict</code> is true.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Input is sanitized before ELK runs, reducing runtime errors.  </li>
-<li><strong>Observability</strong>: Issues are surfaced as <code>GraphIssue</code> objects, aiding debugging.  </li>
-<li><strong>Compatibility</strong>: Existing callers are unaffected; new functions are exported for optional use.</li>
+<li>Guarantees ELK receives well‑formed input, reducing runtime layout errors.  </li>
+<li>The <code>issues</code> array provides diagnostics for downstream consumers.  </li>
+<li>Centralizes ELK logic; callers now import a single module instead of scattered helpers.  </li>
+<li>No existing API is altered; the module is additive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>loadElk</code> resolves correctly in all target environments; a missing bundle could silently fail.  </li>
-<li>Confirm that the <code>strict</code> flag propagates errors as intended.  </li>
-<li>Test edge cases: graphs with many duplicate IDs, deep containment cycles, and orphan references.  </li>
-<li>Monitor memory usage for large graphs; recursive traversal may be costly.</li>
+<li><code>loadElk</code> must resolve correctly in all environments; a missing bundle could fail silently.  </li>
+<li><code>strict</code> flag behavior: errors propagate only when <code>opts.strict</code> is true.  </li>
+<li>Default dimensions (<code>NODE_WIDTH/HEIGHT</code>) must stay in sync with the layout module to avoid visual inconsistencies.  </li>
+<li><code>applyElkLayout</code> should handle large graphs without stack overflows during recursive traversal.</li>
 </ul>
 </article>
   </main>

@@ -1,27 +1,23 @@
-### Overview  
-The `WelcomeScreen` component now accepts an optional `cachedGitUser` prop.  
-- `WelcomeScreenProps` gains `cachedGitUser?: GitUserProfile | null` (see `L6`).  
-- The component signature changes to `WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly })` (`R11`).  
-- The `refresh` callback now lists `cachedGitUser?.login` in its dependency array (`R67`).  
-- After fetching users, the logic first checks if `cachedGitUser` matches a detected account and selects it; otherwise it falls back to the first user (`R56‑R58`).  
+### Overview
+A new onboarding screen component `WelcomeScreen` has been added to `src/components/onboarding/WelcomeScreen.tsx`. It introduces a full GitHub integration flow with CLI detection, device‑code authentication, and a local‑only fallback.
 
-### Key changes  
-- **Prop addition** – `cachedGitUser` added to `WelcomeScreenProps` (`L6`).  
-- **Signature update** – component now receives `{ cachedGitUser, onComplete, onLocalOnly }` (`R11`).  
-- **Dependency update** – `refresh` depends on `cachedGitUser?.login` (`R67`).  
-- **Selection logic** – auto‑select cached user if present (`R56‑R58`).  
-- **UI changes** –  
-  - Removed the old “Continue as @login” button block (`L363‑L384`).  
-  - New continue button text shows “Use a different account” when a cached user exists, otherwise “Continue with GitHub” (`R397`).  
-  - Button disabled state now uses `selected` instead of `cachedGitUser` (`R388`).  
+### Key changes
+- **Imports**: React hooks (`useCallback`, `useEffect`, `useState`) and lucide‑react icons (`Copy`, `Download`, `ExternalLink`, `FolderOpen`, `Loader2`, `User`) are added at the top of the file.
+- **Props interface** (`WelcomeScreenProps`, lines 5‑10): defines optional `cachedGitUser`, and callbacks `onComplete` and `onLocalOnly`.
+- **Component implementation** (`WelcomeScreen`, lines 11‑420):
+  - State variables for loading, users, errors, selected user, auth flow, GitHub CLI status, install logs, etc.
+  - `useCallback` helpers for `loadGhStatus`, `refresh`, `installGh`, `startAuth`, `copyCode`, `confirmUser`.
+  - `useEffect` hooks to load GitHub status, refresh user list, and subscribe to auth/install progress events.
+  - Render logic for CLI detection, sign‑in flow, device‑code copy, user list, and a local‑only button.
 
-### Impact  
-- **User experience** – Cached accounts are pre‑selected, reducing friction.  
-- **API contract** – Callers must provide `cachedGitUser` or handle its absence; omitting it may lead to default `undefined` behavior.  
-- **UI clarity** – Button text and disabled state reflect the presence of a cached user.  
+### Impact
+- **API dependencies**: Relies on `window.electronAPI` methods (`githubGhStatus`, `githubDetectedUsers`, `githubGhInstall`, `githubStartAuth`, etc.). Missing or changed APIs will break the component.
+- **Performance**: Frequent state updates during auth/install progress may affect rendering; monitor for unnecessary re‑renders.
+- **Accessibility & styling**: New UI elements use `aria-hidden` and custom classes; ensure they integrate with existing design system.
+- **Testing**: Requires new unit and integration tests for the component and its API interactions.
 
-### Risks & follow‑ups  
-1. **Missing prop** – Verify that all imports of `WelcomeScreen` supply `cachedGitUser`; otherwise the component defaults to `undefined`.  
-2. **Selection edge case** – Ensure that when `cachedGitUser` is not in the detected list, the fallback still selects the first user (`R58`).  
-3. **Dependency array** – Confirm that adding `cachedGitUser?.login` to `refresh`’s deps triggers a refresh when the cached user changes (`R67`).  
-4. **UI regression** – Run visual tests to validate the new button text and disabled state (`R397`, `R388`).
+### Risks & follow‑ups
+- **API availability**: Confirm that all `window.electronAPI` methods exist and match the expected signatures.
+- **Event listener cleanup**: `useEffect` returns callbacks from `api.onGithubAuthProgress` and `api.onGithubGhInstallProgress`; verify they are unsubscribed on unmount to avoid memory leaks.
+- **Error handling**: The component surfaces raw error messages; ensure they are user‑friendly and do not expose sensitive data.
+- **UI regressions**: Run visual regression tests to verify that the new onboarding screen does not interfere with existing onboarding flows or layout.

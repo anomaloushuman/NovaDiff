@@ -26,30 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/layout.worker.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:02:31.843Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:49:20.289Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new worker script <code>packages/graph-view/src/utils/layout.worker.ts</code> is added to compute graph layouts on a background thread using the <code>@dagrejs/dagre</code> library.</p>
+<p>A new worker module <code>packages/graph-view/src/utils/layout.worker.ts</code> is added to perform graph layout calculations using the <code>@dagrejs/dagre</code> library. It defines the public contract through <code>LayoutMessage</code> (lines 3‑7) and <code>LayoutResult</code> (lines 10‑12) and exposes a message handler that receives node/edge data, runs Dagre, and posts back node positions.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Import <code>dagre</code> (line 1).  </li>
-<li>Export interfaces <code>LayoutMessage</code> (lines 3‑7) and <code>LayoutResult</code> (lines 10‑12).  </li>
-<li><code>self.onmessage</code> handler (line 15) parses a <code>LayoutMessage</code>, builds a <code>dagre.graphlib.Graph</code>, configures layout options (<code>rankdir</code>, <code>nodesep</code>, etc.), runs <code>dagre.layout(g)</code>, and posts back a <code>LayoutResult</code> (line 46).  </li>
-<li>Node positions are offset by half their width/height (lines 38‑43).</li>
+<li><strong>Import</strong> <code>dagre</code> (R1).  </li>
+<li><strong>Exported interfaces</strong> <code>LayoutMessage</code> (R3‑R7) and <code>LayoutResult</code> (R10‑R12).  </li>
+<li><strong>Message handler</strong> (<code>self.onmessage</code>, R15‑R47) parses <code>LayoutMessage</code>, builds a Dagre graph, configures layout options (<code>rankdir</code>, <code>nodesep</code>, etc.), runs <code>dagre.layout</code>, and constructs a <code>positions</code> map.  </li>
+<li><strong>Result posting</strong> (<code>self.postMessage</code>, R46) sends back a <code>LayoutResult</code> object, using <code>satisfies LayoutResult</code> for type safety.  </li>
+<li>The worker is self‑contained; no external state is referenced.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes layout logic in a dedicated worker, reducing coupling in UI components.  </li>
-<li>Offloads layout calculations from the main thread; each message rebuilds the entire graph, which may be costly for very large graphs.  </li>
-<li>Adds runtime dependency on <code>@dagrejs/dagre</code>; ensure it is bundled for the target environment.</li>
+<li><strong>Deterministic layout</strong>: given the same node dimensions and edge list, the worker produces the same positions.  </li>
+<li><strong>Performance</strong>: layout is performed in a Web Worker, preventing UI thread blocking for large graphs.  </li>
+<li><strong>Explicit API</strong>: exported interfaces make the worker’s contract clear and testable.  </li>
+<li><strong>Dependency</strong>: requires <code>@dagrejs/dagre</code>; ensure it is listed in <code>package.json</code> and bundled correctly.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the build pipeline emits the worker file and that target browsers support <code>Worker</code>.  </li>
-<li>Callers must send <code>LayoutMessage</code> objects matching the defined shape; mismatches could produce incorrect positions.  </li>
-<li>Confirm that the installed <code>@dagrejs/dagre</code> version matches the API used (e.g., <code>graphlib.Graph</code> constructor).  </li>
-<li>Unknown from the available diff/scan evidence whether this change introduces performance regressions; benchmark if needed.</li>
+<li><strong>Dependency version</strong>: verify that the installed <code>@dagrejs/dagre</code> version matches the API used (<code>graphlib.Graph</code>).  </li>
+<li><strong>Worker registration</strong>: confirm that consuming code correctly instantiates this worker and handles its <code>onmessage</code> responses.  </li>
+<li><strong>Edge cases</strong>: test with empty node/edge arrays to ensure no runtime errors.  </li>
+<li><strong>Type safety</strong>: ensure that the <code>satisfies LayoutResult</code> check passes in all build configurations; adjust TS settings if necessary.</li>
 </ul>
 </article>
   </main>

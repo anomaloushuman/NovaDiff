@@ -1,17 +1,20 @@
 ### Overview  
-Added two IPC‑exposed functions to `electron/preload.cjs` at lines 136‑141: `workspaceRefreshHistory` and `workspaceUpdateUiState`. They forward a payload to the main process via `ipcRenderer.invoke` on the channels `"workspace-refresh-history"` and `"workspace-update-ui-state"`.
+A new file `electron/preload.cjs` (lines 1‑183) is added. It imports `contextBridge` and `ipcRenderer` from Electron and exposes a global `electronAPI` object to the renderer via `contextBridge.exposeInMainWorld`.
 
 ### Key changes  
-- New API functions inserted at lines 136‑141 (diff lines R136‑R141).  
-- Each function simply calls `ipcRenderer.invoke` with the corresponding channel and payload.  
-- No other imports or logic were altered; the surrounding API surface remains unchanged.
+- **API surface** – `electronAPI` now contains many `ipcRenderer.invoke` wrappers (e.g., `compareFolders`, `getFileDiff`, `pickDirectory`, `gitRepoStatus`, `workspaceCreate`, `llmSummarize`, etc.) as shown in the added lines 9‑52, 58‑71, 73‑80, 82‑84, 88‑116, 117‑120, 122‑128, 130‑140, 142‑149, 151‑158, 160‑172, 174‑181.  
+- **Event listeners** – Added helpers such as `onWindowStateChanged`, `onKnowledgeGraphProgress`, `onEngineProgress`, `onSummaryPrefetchProgress`, `onGithubGhInstallProgress`, `onGithubAuthProgress`, `onWorkspaceHistoryProgress` (lines 19‑27, 55‑62, 64‑71, 73‑80, 151‑158, 165‑172, 174‑181) that register IPC listeners and return cleanup callbacks.  
+- **Constants** – Introduced `LLM_STREAM` and `WINDOW_STATE` tokens (lines 5‑6).  
+- **LLM streaming** – Implemented `llmSummarizeStream` (lines 88‑116) that aborts any previous stream, listens on `LLM_STREAM`, and streams accumulated text via a callback.  
+- **Context isolation** – Uses `require("electron")` and `contextBridge` to safely expose APIs.
 
 ### Impact  
-- Adds renderer‑side hooks for refreshing workspace history and updating UI state without affecting existing behavior.  
-- No breaking changes; existing code continues to work.  
-- The new functions follow the same pattern as other `workspace*` helpers, keeping the preload API consistent.
+- **Renderer access** – Front‑end code can call backend features directly; corresponding main‑process handlers must exist.  
+- **Preload linkage** – The script must be referenced in `webPreferences.preload` for all renderer windows; tests should verify this configuration.  
+- **Security** – Exposing many APIs requires strict context isolation and input validation to prevent misuse.  
 
 ### Risks & follow‑ups  
-- **Missing main‑process handlers**: Verify that `"workspace-refresh-history"` and `"workspace-update-ui-state"` are implemented in the main process; otherwise calls will fail.  
-- **Documentation**: Update API docs and README to expose the new functions.  
-- **Testing**: Add unit/integration tests to confirm the new IPC calls reach the main process and return expected results.
+- **Missing handlers** – If any invoked channel lacks a main‑process handler, renderer calls will fail; run integration tests to confirm all handlers exist.  
+- **Listener leaks** – Ensure cleanup callbacks returned by the `on…` helpers are invoked; otherwise listeners may accumulate.  
+- **Performance** – Unknown from the available diff/scan evidence; monitor IPC traffic for large file diffs or LLM streams.  
+- **Compatibility** – Existing renderer code that does not expect `electronAPI` should handle its absence gracefully; add defensive checks if needed.

@@ -1,26 +1,21 @@
 ### Overview  
-A new module `electron/git-publish.cjs` is added. It exports three functions: `buildFullCommitMessage`, `previewPublish`, and `executePublish`.
+`electron/git-publish.cjs` adds publish‑related utilities to the Electron app. It exports three functions—`buildFullCommitMessage`, `previewPublish`, and `executePublish`—and imports Git and GitHub helpers from `git-service.cjs` and `github-service.cjs` (see R3–R5).
 
 ### Key changes  
-- **Imports (lines 3‑5)**:  
-  ```js
-  const path = require("node:path");
-  const { getRepoStatus, stageAll, commit, push, isGitRepo } = require("./git-service.cjs");
-  const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require("./github-service.cjs");
-  ```
-- **`buildFullCommitMessage` (lines 7‑13)**: trims `subject` and `body`; returns `subject` alone if `body` is empty, otherwise inserts a blank line between them.
-- **`previewPublish` (lines 19‑42)**: resolves `repoRoot`, verifies a Git repo, gathers status, GitHub auth, and slug, then returns an object containing `repoRoot`, `branch`, `upstream`, `ahead`, `behind`, `dirtyFiles`, `remotes`, `github`, `githubSlug`, and `canPush`.
-- **`executePublish` (lines 48‑101)**: resolves `repoRoot`, `subject`, and `body`; validates the subject; stages all files, commits with the built message, optionally pushes to a remote, and optionally creates a PR via `gh`. It returns an object with `ok`, `commitHash`, `branch`, `pushed`, `pushRemote`, and `prUrl`.
-- **Exports (lines 104‑108)**: `module.exports = { previewPublish, executePublish, buildFullCommitMessage };`.
+- **Imports** (R3–R5): `path`, `git-service` functions (`getRepoStatus`, `stageAll`, `commit`, `push`, `isGitRepo`), and `github-service` helpers (`createPullRequest`, `getAuthStatus`, `slugFromRepoRoot`).  
+- **`buildFullCommitMessage`** (R7–R13): Trims `subject` and `body`; returns `subject` alone if `body` is empty, otherwise inserts a blank line between them.  
+- **`previewPublish`** (R19–R42): Resolves `repoRoot`, verifies it is a Git repo, collects status, auth, and slug data, and returns a preview object containing repo details, branch, upstream, dirty files, remotes, GitHub auth status, and a flag indicating if a push is possible.  
+- **`executePublish`** (R48–R101): Validates inputs, stages all changes (`stageAll`), commits with the built message, optionally pushes to a remote, and optionally creates a PR via the GitHub CLI. The returned result includes `commitHash`, `branch`, `pushed`, `pushRemote`, and `prUrl`.  
+- **Exports** (R104–R108): All three functions are exported.
 
 ### Impact  
-- Provides a clear commit‑message builder and a publish workflow that respects `.gitignore` through `stageAll`.  
-- `previewPublish` offers a snapshot of the repository state, useful for debugging and CI checks.  
-- `executePublish` requires the GitHub CLI to be authenticated; it throws an error if `gh` is not logged in.  
-- The default remote is `"origin"` unless overridden by `opts.remote`.
+- **Correctness**: Provides a clear commit‑message builder and a publish workflow that respects `.gitignore`.  
+- **Maintainability**: Centralizes publish logic; changes to Git or GitHub interactions can be made in the service modules.  
+- **Performance**: `stageAll` may be costly on large repos; caching or incremental staging could be considered.  
+- **Compatibility**: Requires a Git repo; PR creation requires a logged‑in `gh` CLI; errors are thrown explicitly.
 
 ### Risks & follow‑ups  
-- **Authentication**: `executePublish` throws if `gh` is not logged in; CI environments must run `gh auth login`.  
-- **Remote default**: The hard‑coded `"origin"` may not match all repository conventions; verify usage.  
-- **Error handling**: Only basic checks are performed; consider wrapping Git commands in `try/catch` to surface underlying errors.  
-- **Side effects**: The module stages all files and commits unconditionally; tests should confirm that this behavior aligns with user expectations.
+- Verify that `buildFullCommitMessage` omits the newline when the body is empty (tests for empty body).  
+- Ensure `previewPublish` throws the expected error for non‑Git directories.  
+- Test `executePublish` with `push` and `createPullRequest` flags separately to confirm error handling for missing remotes or unauthenticated GitHub sessions.  
+- Confirm that the returned `result` object contains accurate `branch`, `pushed`, and `prUrl` fields across different repo states.

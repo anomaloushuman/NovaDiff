@@ -1,23 +1,29 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/domain-types.test.ts` (lines 1‑141) was added. It imports `vitest`, `validateGraph` from `../schema.js`, and the `KnowledgeGraph` type from `../types.js`.
+A new test file `packages/graph-core/src/__tests__/domain-types.test.ts` (lines 1‑141) was added to exercise the `validateGraph` schema validator against a concrete domain graph. The file imports `vitest` helpers, the `validateGraph` function from `../schema.js`, and the `KnowledgeGraph` type from `../types.js`.
 
 ### Key changes  
-- **Sample graph** (`domainGraph`, lines 5‑62) contains 3 nodes (`domain`, `flow`, `step`) and 2 edges (`contains_flow`, `flow_step`).  
-- **Tests** (lines 67‑141) verify:  
-  - node/edge counts (lines 68‑73)  
-  - correct edge types (lines 76‑85)  
-  - handling of a `cross_domain` edge added to a cloned graph (lines 88‑108)  
-  - normalization of node type aliases (`business_*` → canonical) (lines 110‑120)  
-  - normalization of edge type aliases (`has_flow`, `next_step` → canonical) (lines 122‑130)  
-  - preservation of the `domainMeta` field on the flow node (lines 132‑140).
+- **Imports added** (lines 1‑3):  
+  ```ts
+  import { describe, it, expect } from "vitest";
+  import { validateGraph } from "../schema.js";
+  import type { KnowledgeGraph } from "../types.js";
+  ```
+- **Sample graph** (lines 5‑65): a `KnowledgeGraph` constant named `domainGraph` containing three nodes (`domain`, `flow`, `step`) and two edges (`contains_flow`, `flow_step`).  
+- **Test cases** (lines 67‑141):  
+  - Validate overall graph structure and node/edge counts.  
+  - Verify specific edge types (`contains_flow`, `flow_step`).  
+  - Add a `cross_domain` edge and confirm validation still succeeds.  
+  - Test normalization of aliased node types (`business_domain`, `business_flow`, `business_step`).  
+  - Test normalization of aliased edge types (`has_flow`, `next_step`).  
+  - Ensure `domainMeta` on flow nodes is preserved after validation.
 
 ### Impact  
-- Provides a concrete, validated graph example for the `validateGraph` schema.  
-- No production code changes; only tests.  
-- Any failure will surface in CI, preventing regressions in graph validation logic.
+- Provides a concrete, runnable example of a valid `KnowledgeGraph`.  
+- Increases test coverage for node and edge type normalization logic.  
+- Serves as a regression guard for future changes to the schema or validator.
 
 ### Risks & follow‑ups  
-- **Schema drift**: if the graph schema evolves, these tests may fail; run `npm test` after schema changes.  
-- **Alias handling**: ensure `validateGraph` continues to map `business_*` and `has_flow`/`next_step` to canonical types; otherwise normalization tests fail.  
-- **Cross‑domain support**: verify that the `cross_domain` edge type remains valid in the schema.  
-- **Linting/build**: run `npm run lint` and `npm run build` to confirm the new test file passes style and compilation checks.
+- **Schema drift**: if the `KnowledgeGraph` schema changes, the test may need updating; run `vitest` after any schema refactor.  
+- **Edge‑case regressions**: adding new edge types or node aliases may break the current expectations; consider extending the test suite.  
+- **Performance**: the test uses `structuredClone`; monitor CI timing to ensure it remains lightweight.  
+- **Output format changes**: the test asserts specific properties of the validation result; any change to `validateGraph` output could cause failures.

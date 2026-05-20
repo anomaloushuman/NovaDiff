@@ -26,39 +26,39 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/ExplainCodeModal.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:20:49.697Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:07:18.537Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>ExplainCodeModal</code> component is added at<br><code>packages/graph-view/src/components/ExplainCodeModal.tsx</code> (lines R1‑116).<br>It renders a modal dialog that shows explanatory Markdown text, a loading indicator, error messages, and an optional saved hint.</p>
+<p>A new component, <code>ExplainCodeModal</code>, has been added to <code>packages/graph-view/src/components/ExplainCodeModal.tsx</code>. It renders a modal dialog that displays explanatory Markdown and handles loading, errors, and keyboard shortcuts.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>useEffect</code>, <code>useRef</code> from React and <code>ReactMarkdown</code> from <code>react‑markdown</code> are added (R1‑R2).  </li>
-<li><strong>Props interface</strong> – <code>ExplainCodeModalProps</code> (R4‑R13) defines <code>open</code>, <code>title</code>, <code>subtitle?</code>, <code>text</code>, <code>loading</code>, <code>error</code>, <code>savedHint?</code>, and <code>onClose</code>.  </li>
-<li><strong>Component logic</strong> –  <ul>
-<li><code>bodyRef</code> (R25) auto‑scrolls to the bottom when <code>open</code> and <code>loading</code> are true (R27‑R36).  </li>
-<li>A global <code>keydown</code> listener closes the modal on <code>Escape</code> when not loading (R38‑R49).  </li>
-<li>Conditional rendering: returns <code>null</code> when <code>!open</code>; otherwise renders backdrop, header, body, and footer (R51‑R114).  </li>
-<li>Body displays an error paragraph, Markdown via <code>&lt;ReactMarkdown&gt;{text}&lt;/ReactMarkdown&gt;</code>, a streaming caret when <code>loading</code>, or a placeholder (R88‑R100).  </li>
-<li>Footer shows <code>savedHint</code> and a “Done” button disabled while loading (R103‑R111).</li>
+<li><strong>Imports</strong> (lines 1‑2): <code>useEffect</code>, <code>useRef</code> from <code>react</code>; <code>ReactMarkdown</code> from <code>react-markdown</code>.  </li>
+<li><strong>Props interface</strong> (lines 4‑13): <code>open</code>, <code>title</code>, optional <code>subtitle</code>, <code>text</code>, <code>loading</code>, <code>error</code>, optional <code>savedHint</code>, <code>onClose</code>.  </li>
+<li><strong>Component function</strong> (lines 15‑116):  <ul>
+<li>Two <code>useEffect</code> hooks:  <ul>
+<li>Scrolls body to bottom when <code>open &amp;&amp; loading</code> changes (lines 27‑36).  </li>
+<li>Listens for <code>Escape</code> to trigger <code>onClose</code> when not loading (lines 38‑49).</li>
 </ul>
 </li>
-<li><strong>Accessibility</strong> – backdrop has <code>role=&quot;dialog&quot;</code>, <code>aria-modal=&quot;true&quot;</code>, and <code>aria-labelledby=&quot;explain-code-title&quot;</code> (R57‑R60).</li>
+<li>Conditional rendering: returns <code>null</code> if <code>open</code> is false (lines 51‑53).  </li>
+<li>Renders backdrop, header, body (Markdown via <code>ReactMarkdown</code> at line 91), error message, loading placeholder, and a “Done” button that reflects streaming state (lines 110‑111).  </li>
+<li>Accessibility attributes: <code>role=&quot;dialog&quot;</code>, <code>aria-modal=&quot;true&quot;</code>, <code>aria-labelledby=&quot;explain-code-title&quot;</code> on the backdrop (lines 57‑60).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Self‑contained</strong> – no existing components are modified.  </li>
-<li><strong>Typed API</strong> – all props are explicitly typed.  </li>
-<li><strong>Performance</strong> – two lightweight <code>useEffect</code> hooks; scroll logic runs only when needed.  </li>
-<li><strong>Bundle size</strong> – introduces <code>react-markdown</code>; ensure it is listed in <code>package.json</code>.  </li>
-<li><strong>User feedback</strong> – loading indicator and error messages are visible.</li>
+<li>Fully typed; no runtime errors expected if props are supplied correctly.  </li>
+<li>Encapsulated logic; future changes to scrolling or keyboard handling can be isolated.  </li>
+<li>Minimal overhead: two <code>useEffect</code> hooks and a single <code>ref</code>.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Dependency</strong> – verify <code>react-markdown</code> and its types are installed.  </li>
-<li><strong>CSS classes</strong> – confirm that classes such as <code>novadiff-explain-modal-backdrop</code> exist; otherwise styling will fail.  </li>
-<li><strong>Event cleanup</strong> – the <code>keydown</code> listener is removed on unmount (R48); confirm no leaks.  </li>
-<li><strong>Accessibility</strong> – test focus trapping and that <code>aria-labelledby</code> correctly references the title.</li>
+<li><strong>Missing CSS</strong>: classes <code>novadiff-explain-modal-*</code> must exist to style the modal.  </li>
+<li><strong>Dependency</strong>: <code>react-markdown</code> must be installed and compatible with the current React version.  </li>
+<li><strong>Event listener cleanup</strong>: <code>keydown</code> listener is removed on unmount (line 48); verify no leaks.  </li>
+<li><strong>Accessibility audit</strong>: run an a11y scan to confirm dialog behavior for screen readers.</li>
 </ul>
 </article>
   </main>

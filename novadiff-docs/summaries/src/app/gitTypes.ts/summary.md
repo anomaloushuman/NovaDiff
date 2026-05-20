@@ -1,27 +1,32 @@
-### Overview
-A new file `src/app/gitTypes.ts` (added lines 1‑125) defines a set of TypeScript interfaces that model Git tooling status, GitHub authentication, repository and pull‑request summaries, local repo matching, blame analysis, file status, publishing previews, and execution payloads.
+### Overview  
+A new file `src/app/gitTypes.ts` has been added. It declares a set of TypeScript interfaces that model Git tooling status, GitHub authentication, repository and pull‑request summaries, local repo matching, blame information, status files, and publish‑related payloads and results.
 
-### Key changes
-- `GitToolingStatus` (lines 1‑6) – exposes Git availability, version, error, and a nested `GithubAuthStatus`.  
-- `GithubAuthStatus` (lines 10‑16) – flags for availability, login, user, hostname, scopes, and a message.  
-- `GithubRepoSummary` (lines 19‑27) – lightweight repo metadata.  
-- `GithubPullRequestSummary` (lines 30‑41) – PR metadata including number, title, state, refs, author, and draft flag.  
-- `LocalRepoMatch` (lines 43‑47) – path, name, slug, and remote URL.  
-- `GitBlameOwner` (lines 50‑54) – author, line count, ratio.  
-- `GitBlameAtRefResult` (lines 56‑62) – blame result structure.  
-- `GitStatusFile` (lines 64‑69) – file path, status, staged/unstaged flags.  
-- `GitRepoStatus` (lines 71‑82) – repo root, branch, head, upstream, sync counters, dirty flag, files, remotes, subdir.  
-- `PrCompareRoots` (lines 84‑88) – roots and refs for comparison.  
-- `PublishPreview` (lines 91‑102) – preview of a publish operation.  
-- `PublishExecuteResult` (lines 104‑111) – result of executing a publish.  
-- `PublishExecutePayload` (lines 113‑125) – payload for a publish request.
+### Key changes  
+- **GitToolingStatus** – lines 1‑6 (R1‑R6)  
+  ```ts
+  export interface GitToolingStatus {
+    git: { gitAvailable: boolean; gitVersion: string | null; gitError: string | null; };
+    gh: GithubAuthStatus;
+  }
+  ```
+- **GithubAuthStatus** – lines 10‑17 (R10‑R17)  
+- **GithubRepoSummary** – lines 19‑28 (R19‑R28)  
+- **GithubPullRequestSummary** – lines 30‑41 (R30‑R41)  
+- **LocalRepoMatch** – lines 43‑47 (R43‑R47)  
+- **GitBlameOwner** – lines 50‑54 (R50‑R54)  
+- **GitStatusFile** – lines 64‑68 (R64‑R68)  
+- **GitRepoStatus** – lines 71‑82 (R71‑R82)  
+- **PrCompareRoots** – lines 84‑89 (R84‑R89)  
+- **PublishPreview** – lines 91‑102 (R91‑R102)  
+- **PublishExecuteResult** – lines 104‑110 (R104‑R110)  
+- **PublishExecutePayload** – lines 113‑125 (R113‑R125)
 
-### Impact
-- Provides a unified type surface for all git‑related data, improving compile‑time type safety.  
-- No runtime code is added; the change is purely declarative.  
-- Existing modules can import these interfaces from `src/app/gitTypes.ts` for clearer contracts.
+### Impact  
+- **Type safety** – modules that consume Git or GitHub data can import these interfaces, providing compile‑time guarantees about the shape of the data.  
+- **Documentation** – the interfaces serve as living documentation for the data structures used throughout the application.  
+- **Runtime** – the change adds only type declarations; no executable code is introduced, so existing JavaScript behavior is unaffected.
 
-### Risks & follow‑ups
-- Verify that imports reference the correct path (`src/app/gitTypes.ts`).  
-- Ensure no name clashes with existing symbols in other modules.  
-- Run the TypeScript compiler and the test suite to confirm no type errors arise from the new definitions.
+### Risks & follow‑ups  
+- **Import consistency** – verify that modules import the correct path (`src/app/gitTypes`) and that no duplicate definitions exist.  
+- **Build pipeline** – run `npm run lint`, `npm test`, and `npm run build` to ensure the new file does not introduce type errors.  
+- **Documentation** – update any README or developer docs that reference GitHub or Git data structures to point to these new interfaces.

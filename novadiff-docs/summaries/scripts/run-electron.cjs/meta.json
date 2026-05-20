@@ -1,9 +1,9 @@
 {
   "relPath": "scripts/run-electron.cjs",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:05:48.816Z",
+  "generatedAt": "2026-05-20T04:12:27.032Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,22 +21,28 @@
     ],
     "changed_exports": [],
     "changed_imports": [
+      "R9 added: const fs = require(\"node:fs\");",
+      "R10 added: const path = require(\"node:path\");",
+      "R11 added: const { spawn } = require(\"node:child_process\");",
       "R18 added: const { augmentPathForCli } = require(path.join(root, \"electron\", \"gh-path.cjs\"));"
     ],
     "changed_line_ranges": [
-      "L18 / R18-19"
+      "R1-66"
     ],
     "cited_changed_lines": [
-      "L18 removed: const env = { ...process.env };",
-      "R18 added: const { augmentPathForCli } = require(path.join(root, \"electron\", \"gh-path.cjs\"));",
-      "R19 added: const env = augmentPathForCli({ ...process.env });"
+      "R1 added: \"use strict\";",
+      "R3 added: /**",
+      "R4 added: * Dev launcher: spawns the Electron *binary* from this repo’s",
+      "R5 added: * `node_modules/electron/dist/` only. Does not use `electron/cli.js` (which",
+      "R6 added: * loads `index.js` and can honor `ELECTRON_OVERRIDE_DIST_PATH`, pointing at",
+      "R7 added: * another project’s broken `Electron.app` / asar)."
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function cleanEnv (17-22)",
+      "right function resolveElectronBinary (24-66)",
       "right function cleanEnv (17-23)"
     ],
     "verification_hints": [

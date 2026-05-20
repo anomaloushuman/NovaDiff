@@ -26,37 +26,35 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/change-classifier.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:04:10.436Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:50:36.133Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/change-classifier.test.ts</code> (lines 1‑183) was added. It imports <code>vitest</code> helpers, <code>classifyUpdate</code>, and the <code>ChangeAnalysis</code> type, and defines a <code>makeAnalysis</code> helper (R5‑13) that builds a <code>ChangeAnalysis</code> object with empty arrays by default.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/change-classifier.test.ts</code> (lines 1‑183) was added to exercise the <code>classifyUpdate</code> decision logic.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>vitest</code> functions, <code>classifyUpdate</code>, and <code>ChangeAnalysis</code> (R1‑R3).  </li>
-<li><strong>Helper</strong>: <code>makeAnalysis(overrides?)</code> returns a <code>ChangeAnalysis</code> with default empty arrays and merges any overrides (R5‑R13).  </li>
-<li><strong>Test cases</strong> (R17‑R183) exercise the decision logic of <code>classifyUpdate</code>:<ul>
-<li>SKIP when all files are unchanged or only cosmetic (R18‑R40).  </li>
-<li>PARTIAL_UPDATE for a few structural changes plus new files (R42‑R57).  </li>
-<li>ARCHITECTURE_UPDATE when &gt;10 structural files, new/deleted directories, or &gt;50 % of the project is structurally changed (R59‑R96, R124‑R135, R137‑R147).  </li>
-<li>FULL_UPDATE for &gt;30 structural files or &gt;50 % of the project (R124‑R135, R137‑R147).  </li>
-<li><code>filesToReanalyze</code> includes structural and new files but excludes deleted ones (R149‑R162).  </li>
-<li>Empty analysis yields SKIP with a “No changes detected” reason (R164‑R170).  </li>
-<li>Deleted files count toward the structural total (R172‑R182).</li>
+<li><strong>Imports</strong> – <code>vitest</code> helpers, <code>classifyUpdate</code>, and the <code>ChangeAnalysis</code> type are imported at lines 1‑3.  </li>
+<li><strong>Helper</strong> – <code>makeAnalysis</code> (lines 5‑14) builds a <code>ChangeAnalysis</code> object with default empty arrays, allowing concise test setups.  </li>
+<li><strong>Test cases</strong> – The suite (lines 17‑183) covers all decision paths:<ul>
+<li><code>SKIP</code> when all files are unchanged (lines 18‑28) or cosmetic‑only (lines 31‑40).  </li>
+<li><code>PARTIAL_UPDATE</code> for a few structural changes plus new files (lines 42‑57).  </li>
+<li><code>ARCHITECTURE_UPDATE</code> when &gt;10 structural files (lines 59‑70), new/deleted directories (lines 72‑96), or when deleted files raise the structural count (lines 172‑182).  </li>
+<li><code>FULL_UPDATE</code> when &gt;30 structural files (lines 124‑135) or &gt;50 % of the project is structurally changed (lines 137‑147).  </li>
+<li>File‑to‑reanalyze logic ensures new and structural files are included while deleted files are excluded (lines 149‑162).  </li>
+<li>Edge cases: empty analysis (lines 164‑170) and counting deleted files toward structural totals (lines 172‑182).</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds explicit unit tests for all decision branches of <code>classifyUpdate</code>.  </li>
-<li>The helper keeps test code concise; changes to the <code>ChangeAnalysis</code> shape require minimal updates.  </li>
-<li>Test failures will pinpoint the specific decision path that diverges from the expected behavior.</li>
+<li><strong>Correctness</strong> – the tests assert the expected actions for each threshold boundary, providing immediate feedback if the logic changes.  </li>
+<li><strong>Maintainability</strong> – the <code>makeAnalysis</code> helper reduces duplication and keeps the test code focused on behavior.  </li>
+<li><strong>Observability</strong> – failures surface directly in the test suite, making regressions easy to spot.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Threshold values (10‑file, 30‑file, 50 %) are hard‑coded in the tests; if the implementation changes, the tests will fail.  </li>
-<li>The logic that determines whether a new file is in a genuinely new directory relies on the <code>allKnownFiles</code> list; ensure this list remains accurate.  </li>
-<li>No performance regressions are expected, but additional scenarios could increase CI runtime.</li>
+<li><strong>Threshold drift</strong> – if the thresholds in <code>classifyUpdate</code> are modified, the corresponding tests will fail; review and adjust expectations accordingly.  </li>
+<li><strong>Test discovery</strong> – ensure <code>vitest</code> is configured to locate the new test file.</li>
 </ul>
 </article>
   </main>

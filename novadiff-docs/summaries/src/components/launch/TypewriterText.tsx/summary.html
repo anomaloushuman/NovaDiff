@@ -26,34 +26,41 @@
 <body>
   <header class="top">
     <h1>src/components/launch/TypewriterText.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:31:34.638Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:15:09.559Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component, <code>TypewriterText</code>, is added at <code>src/components/launch/TypewriterText.tsx</code>. It renders a typewriter‑style animation with an optional cursor, reduced‑motion support, and a completion callback.</p>
+<p>A new component <code>src/components/launch/TypewriterText.tsx</code> implements a typewriter animation that respects the user’s reduced‑motion preference.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React (lines 1‑2) and <code>usePrefersReducedMotion</code> from <code>../../app/usePrefersReducedMotion</code> (line 2).  </li>
-<li><strong>Props interface</strong> (<code>TypewriterTextProps</code>, lines 4‑15): <code>text</code>, optional <code>active</code>, <code>persist</code>, <code>speed</code>, <code>delay</code>, <code>className</code>, <code>showCursor</code>, and <code>onComplete</code>.  </li>
-<li><strong>Component</strong> (<code>export function TypewriterText</code>, lines 17‑99): sets defaults, tracks <code>visible</code> state, and uses refs for <code>onComplete</code>, completion status, and active state.  </li>
-<li><strong>Reduced‑motion handling</strong> (lines 52‑56): if <code>reduced</code> is true, the full text is shown immediately and <code>onComplete</code> is called.  </li>
-<li><strong>Typing logic</strong> (lines 59‑79): a <code>setTimeout</code> for <code>delay</code> starts a <code>setInterval</code> that increments <code>visible</code> by <code>speed</code> until the full text is displayed, then clears timers and triggers <code>onComplete</code>.  </li>
-<li><strong>Cleanup</strong> (lines 81‑86): cancels timers and resets <code>wasActiveRef</code>.  </li>
-<li><strong>Render</strong> (lines 91‑97): displays the current slice of text and, if <code>showCursor</code>, <code>active</code>, and not finished or reduced, shows a cursor element.</li>
+<li><strong>Imports</strong> (R1‑R2): <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React and <code>usePrefersReducedMotion</code> from <code>../../app/usePrefersReducedMotion</code>.  </li>
+<li><strong>Props interface</strong> (<code>TypewriterTextProps</code>, R4‑R15):  <ul>
+<li><code>text: string</code> – required.  </li>
+<li>Optional <code>active</code>, <code>persist</code>, <code>speed</code>, <code>delay</code>, <code>className</code>, <code>showCursor</code>, <code>onComplete</code>.  </li>
+<li><code>persist</code> defaults to <code>true</code>; <code>speed</code> defaults to <code>22 ms</code>; <code>delay</code> defaults to <code>0</code>; <code>showCursor</code> defaults to <code>true</code>.</li>
+</ul>
+</li>
+<li><strong>Component</strong> (<code>TypewriterText</code>, R17‑R99):  <ul>
+<li>Uses refs (<code>onCompleteRef</code>, <code>completedRef</code>, <code>wasActiveRef</code>) to avoid stale closures.  </li>
+<li>When <code>active</code> is false, resets visibility unless <code>persist</code> is true and the animation has finished.  </li>
+<li>If the user prefers reduced motion (<code>reduced</code>), the full text is shown immediately and <code>onComplete</code> is called.  </li>
+<li>Otherwise, a <code>setTimeout</code>/<code>setInterval</code> loop reveals characters at <code>speed</code> ms per character, clearing timers on cleanup.  </li>
+<li>Renders a <code>&lt;span&gt;</code> containing the visible slice of <code>text</code> and, if typing is in progress, a cursor element (<code>typewriter-cursor</code>).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Introduces a reusable UI element; no existing API changes.  </li>
-<li>Adds a dependency on <code>usePrefersReducedMotion</code>; the hook must be exported and functional.  </li>
-<li>Adds hooks and timers; the performance impact is expected to be minimal.  </li>
-<li>Other components remain unaffected and can import <code>TypewriterText</code> directly.</li>
+<li>Adds a self‑contained typewriter effect with optional persistence and completion callback.  </li>
+<li>Requires React 16.8+ for hooks and the <code>usePrefersReducedMotion</code> hook.  </li>
+<li>No global state or external dependencies beyond React.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Reduced‑motion detection</strong>: verify that <code>usePrefersReducedMotion</code> correctly reads the user preference; otherwise the animation may always run.  </li>
-<li><strong>Callback firing</strong>: confirm <code>onComplete</code> is invoked exactly once per full run; the ref logic should prevent duplicate calls.  </li>
-<li><strong>Active toggling</strong>: when <code>active</code> becomes false, the component resets unless <code>persist</code> is true and the text has already completed.  </li>
-<li><strong>Cursor logic</strong>: ensure cursor visibility respects <code>showCursor</code>, <code>active</code>, <code>reduced</code>, and completion state.</li>
+<li>Verify that <code>usePrefersReducedMotion</code> correctly detects system settings; test both reduced and normal modes.  </li>
+<li>Ensure cleanup logic (<code>cancelled</code>, <code>clearTimeout</code>, <code>clearInterval</code>) prevents leaks when <code>active</code> toggles rapidly.  </li>
+<li>Confirm that <code>persist</code> keeps the text visible after completion when <code>active</code> becomes false.  </li>
+<li>Test cursor rendering logic with <code>showCursor</code>, <code>active</code>, <code>reduced</code>, and <code>done</code> flags to avoid flicker.</li>
 </ul>
 </article>
   </main>

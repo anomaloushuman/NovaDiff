@@ -26,32 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/package.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:21:26.887Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:04:47.391Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/package.json</code> (added at line 1–58) introduces the <code>@novadiff/graph-core</code> npm package. The manifest declares ESM support (<code>&quot;type&quot;:&quot;module&quot;</code>) and points to compiled outputs (<code>&quot;main&quot;:&quot;dist/index.js&quot;</code>, <code>&quot;types&quot;:&quot;dist/index.d.ts&quot;</code>).</p>
+<p>A new <code>package.json</code> was added at <code>packages/graph-core/package.json</code> (diff range R1‑58).<br>It defines a TypeScript‑based library with an ES‑module entry point and a detailed exports map.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Package metadata</strong> – <code>name</code>, <code>version</code>, <code>type</code>, <code>main</code>, <code>types</code> (lines 1–6).  </li>
-<li><strong>Exports map</strong> – entries for <code>&quot;./search&quot;</code>, <code>&quot;./types&quot;</code>, <code>&quot;./schema&quot;</code>, <code>&quot;./languages&quot;</code> with corresponding <code>.d.ts</code> and <code>.js</code> paths (lines 7–27).  </li>
-<li><strong>Scripts</strong> – <code>build</code> (<code>tsc</code>), <code>catalog:generate</code> (node script), <code>test</code> (<code>vitest run</code>) (lines 29–33).  </li>
-<li><strong>DevDependencies</strong> – TypeScript <code>^5.7.0</code>, Vitest <code>^3.1.0</code>, coverage plugin, Node type definitions (lines 34–39).  </li>
-<li><strong>Dependencies</strong> – <code>fuse.js</code>, <code>ignore</code>, a suite of <code>tree-sitter-*</code> parsers, <code>web-tree-sitter</code>, <code>yaml</code>, <code>zod</code> (lines 40–56).</li>
+<li><strong>Metadata</strong> – <code>name</code>, <code>version</code>, <code>type</code>, <code>main</code>, and <code>types</code> are set (lines 1‑6).  </li>
+<li><strong>Exports map</strong> – explicit entries for <code>./search</code>, <code>./types</code>, <code>./schema</code>, and <code>./languages</code> (lines 7‑27).  </li>
+<li><strong>Scripts</strong> – <code>build</code>, <code>catalog:generate</code>, and <code>test</code> commands are declared (lines 29‑33).  </li>
+<li><strong>DevDependencies</strong> – TypeScript, Vitest, and coverage tooling (lines 34‑39).  </li>
+<li><strong>Runtime dependencies</strong> – a suite of <code>tree-sitter-*</code> parsers, <code>web-tree-sitter</code>, <code>yaml</code>, and <code>zod</code> (lines 40‑56).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Build &amp; test</strong> – Running <code>npm install</code>, <code>npm run build</code>, and <code>npm run test</code> is required to confirm compilation and unit tests (deterministic verification hint).  </li>
-<li><strong>ESM behavior</strong> – The <code>type: module</code> flag may affect import syntax for consumers.  </li>
-<li><strong>Dependency footprint</strong> – The added parsers and <code>web-tree-sitter</code> increase install size and potential bundle size.  </li>
-<li><strong>TypeScript integration</strong> – Exported <code>.d.ts</code> files provide type definitions for consumers.</li>
+<li><strong>Build</strong> – <code>tsc</code> will emit <code>dist/index.js</code> and type declarations, enabling consumers to import the package as an ES module.  </li>
+<li><strong>Testing</strong> – <code>vitest run</code> will execute unit tests; coverage tooling is configured.  </li>
+<li><strong>Dependency graph</strong> – the added <code>tree-sitter-*</code> packages increase bundle size and may affect runtime performance.  </li>
+<li><strong>Export consistency</strong> – the explicit <code>exports</code> field ensures consumers receive the correct entry points, reducing import errors.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Export correctness</strong> – Unknown from the available diff/scan evidence; verify that each <code>&quot;./&lt;module&gt;&quot;</code> export resolves correctly (e.g., via <code>npm pack</code>).  </li>
-<li><strong>Test coverage</strong> – Unknown; run <code>npm run test</code> and inspect coverage thresholds.  </li>
-<li><strong>Dependency conflicts</strong> – Unknown; check compatibility of the new <code>tree-sitter-*</code> versions with other projects.  </li>
-<li><strong>Node version compatibility</strong> – Unknown; ensure ESM configuration works on target Node LTS releases.</li>
+<li><strong>Build failures</strong> – verify that <code>tsc</code> compiles without errors and that all <code>dist/*.d.ts</code> files are generated.  </li>
+<li><strong>Test coverage</strong> – run <code>vitest</code> to confirm all tests pass; check coverage thresholds.  </li>
+<li><strong>Dependency conflicts</strong> – ensure the new <code>tree-sitter</code> versions are compatible with existing tooling.  </li>
+<li><strong>Export mapping</strong> – double‑check that the <code>exports</code> entries correctly point to the built files; missing paths could break imports.</li>
 </ul>
 </article>
   </main>

@@ -26,34 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/DiffWorkspace.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:42:36.057Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:52:36.223Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>DiffWorkspace</code> now displays the selected folder paths in a read‑only, formatted form and no longer accepts user edits. The component internally renames the <code>onLeft</code>/<code>onRight</code> callbacks to <code>_onLeft</code>/<code>_onRight</code> and removes the <code>title</code> attributes that previously showed the raw paths.</p>
+<p>A new <code>DiffWorkspace</code> component is added in <code>src/components/DiffWorkspace.tsx</code>.<br>It renders a full diff UI, handles selection of diff rows, and shows a modal for documenting the selected rows.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import added</strong>: <code>pathDisplayLabel</code> from <code>../app/pathDisplay</code> (line 7).  </li>
-<li><strong>Prop destructuring</strong>: <code>onLeft</code> and <code>onRight</code> are captured as <code>_onLeft</code>/<code>_onRight</code> (lines 63‑64).  </li>
-<li><strong>Input values</strong>: <code>value={pathDisplayLabel(leftRoot)}</code> and <code>value={pathDisplayLabel(rightRoot)}</code> replace the raw <code>leftRoot</code>/<code>rightRoot</code> (lines 125‑126, 160‑161).  </li>
-<li><strong>Read‑only inputs</strong>: <code>readOnly</code> flag added to both path selectors (lines 126, 161).  </li>
-<li><strong>Removed handlers</strong>: <code>onChange</code> callbacks and <code>title</code> attributes are gone (lines 124‑129, 160‑165).  </li>
-<li><strong>External API unchanged</strong>: <code>DiffWorkspaceProps</code> still exposes <code>onLeft</code>/<code>onRight</code>; the component forwards them via the renamed internal variables.</li>
+<li><strong>Imports</strong> (lines 1‑16) add <code>MouseEvent</code> from <code>react</code>, types <code>DiffRow</code>, <code>FileDiffPayload</code>, <code>SelectionDocMode</code> from <code>../app/types</code>, the helper <code>pathDisplayLabel</code> from <code>../app/pathDisplay</code>, icons from <code>lucide-react</code>, and the modal component <code>SelectedDiffSummaryModal</code>.  </li>
+<li><strong><code>DiffWorkspaceProps</code> interface</strong> (lines 18‑58) lists all props required by the workspace, including callbacks for browsing, swapping, comparing, and selection logic.  </li>
+<li><strong><code>DiffWorkspace</code> function</strong> (lines 60‑370) builds the UI: path selectors, compare button, busy/compare status banner, file statistics, selected‑path bar, diff panes, and the diff table rendered with <code>DiffTableRow</code>.  </li>
+<li><strong><code>DiffTableRow</code> helper</strong> (lines 371‑400) renders a single diff row, applies styles, and handles click selection.  </li>
+<li><strong>Modal integration</strong> (lines 353‑360) mounts <code>SelectedDiffSummaryModal</code> with props for open state, label, summary, loading, error, and close handler.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>UI behavior</strong>: Users can no longer edit the path fields; they must use the browse buttons.  </li>
-<li><strong>Accessibility</strong>: Removing <code>title</code> attributes may reduce tooltip help, but the formatted label is now clearer.  </li>
-<li><strong>Maintainability</strong>: Centralizing path formatting in <code>pathDisplayLabel</code> reduces duplication and eases future styling changes.  </li>
-<li><strong>Performance</strong>: Minor; the component now performs a single formatting call per render instead of handling change events.  </li>
-<li><strong>Compatibility</strong>: Existing callers remain unaffected because the public prop names are unchanged.</li>
+<li>The component must be wired into the app’s routing or parent component; missing props will cause runtime errors.  </li>
+<li>It centralizes diff‑related UI logic, making future changes to selection or modal behavior easier to maintain.  </li>
+<li>Rendering many diff rows may affect scroll performance; consider virtualization if tests show slowdown.  </li>
+<li>The component depends on existing exports: <code>SelectedDiffSummaryModal</code> and the types from <code>../app/types</code>.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong>: Verify that the browse buttons still correctly update the parent state via <code>_onLeft</code>/<code>_onRight</code>.  </li>
-<li><strong>Accessibility</strong>: Ensure screen readers still announce the path values; consider adding <code>aria-label</code> if needed.  </li>
-<li><strong>Testing</strong>: Update unit tests that previously expected editable inputs or <code>title</code> attributes.  </li>
-<li><strong>Documentation</strong>: Update any docs or README sections that mention editable path fields.</li>
+<li><strong>Import failures</strong>: Verify that <code>../app/types</code> exports <code>DiffRow</code>, <code>FileDiffPayload</code>, and <code>SelectionDocMode</code>.  </li>
+<li><strong>Modal contract</strong>: Ensure <code>SelectedDiffSummaryModal</code> accepts the props used; mismatches will break the modal.  </li>
+<li><strong>Event handling</strong>: <code>onSelectDiffRow</code> expects a <code>MouseEvent</code>; callers must pass the correct event type.  </li>
+<li><strong>Styling</strong>: CSS classes such as <code>diff-row-selected</code> and <code>diff-row-muted</code> must be defined; otherwise rows will appear unstyled.</li>
 </ul>
 </article>
   </main>

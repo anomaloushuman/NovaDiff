@@ -26,48 +26,33 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/language-registry.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:09:48.168Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:56:42.781Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/language-registry.test.ts</code> (lines R1‑198) was added to exercise the <code>LanguageRegistry</code> implementation and its schema enforcement.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/language-registry.test.ts</code> (lines 1‑198) was added to exercise the <code>LanguageRegistry</code> implementation.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> added at the top of the test file:  <ul>
-<li><code>vitest</code> helpers (<code>describe</code>, <code>it</code>, <code>expect</code>) – R1.  </li>
-<li><code>LanguageRegistry</code> – R2.  </li>
-<li><code>StrictLanguageConfigSchema</code> – R3.  </li>
-<li>Sample configs (<code>typescriptConfig</code>, <code>pythonConfig</code>) – R4‑R5.</li>
+<li><strong>Imports (lines 1‑5)</strong>:```ts
+import { describe, it, expect } from &quot;vitest&quot;;
+import { LanguageRegistry } from &quot;../languages/language-registry.js&quot;;
+import { StrictLanguageConfigSchema } from &quot;../languages/types.js&quot;;
+import { typescriptConfig } from &quot;../languages/configs/typescript.js&quot;;
+import { pythonConfig } from &quot;../languages/configs/python.js&quot;;</li>
 </ul>
-</li>
-<li><strong>Registry behavior tests</strong>:  <ul>
-<li>Registering a config and retrieving it by ID, extension, or file path.  </li>
-<li>Null returns for unknown extensions or files lacking extensions.  </li>
-<li><code>getAllLanguages()</code> returns the full set of registered configs.</li>
-</ul>
-</li>
-<li><strong>Default registry tests</strong> (<code>LanguageRegistry.createDefault()</code>):  <ul>
-<li>Confirms 40 built‑in configs are registered (line 53‑56).  </li>
-<li>Verifies mapping for common extensions (<code>.ts</code>, <code>.py</code>, <code>.go</code>, etc.) (lines 60‑74).  </li>
-<li>Checks that no extension is mapped to more than one config (lines 78‑85).  </li>
-<li>Ensures every config contains at least one concept (lines 89‑92).</li>
-</ul>
-</li>
-<li><strong>Non‑code language detection</strong>: tests for README, YAML, JSON, Dockerfile, Makefile, <code>.env</code> variants, and filename‑based configs (lines 98‑131).  </li>
-<li><strong>Schema validation tests</strong>: use <code>StrictLanguageConfigSchema.safeParse</code> to reject configs lacking extensions or filenames and accept valid combinations (lines 149‑196).</li>
+<p>```- **Basic registry tests (lines 7‑27)**: verify <code>register</code>, <code>getById</code>, <code>getByExtension</code>, <code>getForFile</code>, and <code>getAllLanguages</code>.</p>
+<ul>
+<li><strong><code>createDefault</code> tests (lines 51‑87)</strong>: confirm 40 built‑in configs, correct extension mapping, no duplicate extensions, and that each config has at least one concept.</li>
+<li><strong>Non‑code language detection (lines 96‑146)</strong>: test file‑extension and filename‑based detection for Dockerfile, Makefile, <code>.env</code>, and other common non‑code files.</li>
+<li><strong>Schema validation (lines 148‑198)</strong>: ensure <code>StrictLanguageConfigSchema</code> rejects configs lacking extensions or filenames and accepts valid ones.</li>
 </ul>
 <h3>Impact</h3>
-<ul>
-<li>Provides concrete assertions for registry lookup logic and default configuration coverage.  </li>
-<li>Detects regressions in extension mapping, duplicate mappings, and concept presence.  </li>
-<li>Validates that the schema enforces the presence of at least one extension or filename.</li>
-</ul>
+<p>The added tests provide concrete coverage for registry operations and schema enforcement. Any future change to <code>LanguageRegistry</code> or language config definitions will be caught by these tests.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Fragility</strong>: Tests depend on the exact list of 40 built‑in configs; adding or removing configs will require test updates.  </li>
-<li><strong>Performance</strong>: <code>createDefault()</code> is exercised; significant slowdowns in registry construction would surface here.  </li>
-<li><strong>Schema drift</strong>: If <code>StrictLanguageConfigSchema</code> changes, the validation tests may need adjustment.  </li>
-<li><strong>Regression</strong>: Run the full test suite after any registry refactor to ensure no unintended behavior changes.</li>
+<li>Modifying <code>LanguageRegistry</code> or language config definitions may break the tests; run the full suite after changes.  </li>
+<li>If language configs evolve, expectations in the tests may need updating.  </li>
+<li>The duplicate‑extension test will flag any new config that re‑uses an existing extension.</li>
 </ul>
 </article>
   </main>

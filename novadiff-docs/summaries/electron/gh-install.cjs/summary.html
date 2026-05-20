@@ -26,36 +26,36 @@
 <body>
   <header class="top">
     <h1>electron/gh-install.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:10:14.979Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:21:09.086Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/gh-install.cjs</code> (lines 1‑196) adds runtime detection and optional installation of the GitHub CLI (<code>gh</code>). It replaces a manual install flow with platform‑specific logic.</p>
+<p>A new module <code>electron/gh-install.cjs</code> (lines 1‑196) is added to the Electron build. It implements runtime detection, installation, and status reporting for the GitHub CLI (<code>gh</code>) on macOS, Windows, and Linux.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>spawn</code> and <code>spawnSync</code> from <code>node:child_process</code> (R3‑R4) and <code>fssync</code> from <code>node:fs</code> (R4).  </li>
-<li><strong>Path helpers</strong>: <code>augmentPathForCli</code>, <code>resolveGhExecutable</code>, <code>isGhInstalled</code>, <code>clearGhCache</code> required from <code>./gh-path.cjs</code> (R5‑R10).  </li>
-<li><strong><code>resolveBrew</code></strong> (lines 15‑38) searches common Homebrew paths and falls back to <code>command -v brew</code>.  </li>
-<li><strong><code>getInstallPlan</code></strong> (lines 40‑79) returns an install strategy per OS: Homebrew on macOS, winget on Windows, or a manual hint on other platforms.  </li>
-<li><strong><code>readGhVersion</code></strong> (lines 81‑94) runs <code>gh --version</code> via <code>spawnSync</code> to report the installed version.  </li>
-<li><strong><code>getGhToolingStatus</code></strong> (lines 96‑110) aggregates installation status, path, version, and install plan.  </li>
-<li><strong><code>runInstallCommand</code></strong> (lines 116‑142) spawns the installer process, streams logs, and clears cache on completion.  </li>
-<li><strong><code>installGh</code></strong> (lines 148‑190) orchestrates the auto‑install flow, validates success, and returns <code>{ok, path, version}</code>.  </li>
-<li><strong>Exports</strong>: <code>GH_FEATURE_REASON</code>, <code>getGhToolingStatus</code>, <code>installGh</code> (lines 192‑196).</li>
+<li><strong>Imports</strong> – <code>spawn</code>/<code>spawnSync</code> from <code>node:child_process</code> and <code>fssync</code> from <code>node:fs</code> are added (R3, R4, R24, R85).  </li>
+<li><strong><code>resolveBrew()</code></strong> (lines 15‑38) checks known Homebrew paths or runs <code>command -v brew</code>.  </li>
+<li><strong><code>getInstallPlan()</code></strong> (lines 40‑79) returns an object with <code>canAutoInstall</code>, <code>method</code>, <code>command</code>, and URLs, tailored per platform.  </li>
+<li><strong><code>readGhVersion()</code></strong> (lines 81‑94) runs <code>gh --version</code> via <code>spawnSync</code> to capture the installed version.  </li>
+<li><strong><code>getGhToolingStatus()</code></strong> (lines 96‑110) aggregates installation status, path, version, and plan details.  </li>
+<li><strong><code>runInstallCommand()</code></strong> (lines 116‑142) spawns the install command, streams output to an optional logger, and clears the gh cache on completion.  </li>
+<li><strong><code>installGh()</code></strong> (lines 148‑190) orchestrates the installation flow, validates success, and returns the installed path and version.  </li>
+<li><strong>Exports</strong> (lines 192‑196) expose <code>GH_FEATURE_REASON</code>, <code>getGhToolingStatus</code>, and <code>installGh</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds detection of <code>gh</code> and an automated install path, reducing manual setup.  </li>
-<li>Centralizes CLI logic in one module; functions are small and testable.  </li>
-<li>Uses <code>spawnSync</code> for quick checks; installation uses async <code>spawn</code>, keeping UI responsive.  </li>
-<li>Explicitly supports macOS (Homebrew) and Windows (winget); Linux falls back to manual instructions.</li>
+<li><strong>Deterministic checks</strong> – <code>spawnSync</code> is used for quick existence and version queries, reducing nondeterminism.  </li>
+<li><strong>Centralized logic</strong> – All CLI tooling concerns live in one module; adding a new platform only requires extending <code>getInstallPlan()</code>.  </li>
+<li><strong>Responsive UI</strong> – <code>runInstallCommand()</code> is async, keeping the Electron UI responsive during installs.  </li>
+<li><strong>Explicit URLs</strong> – Manual install hints point to <code>https://cli.github.com/</code> and platform‑specific resources.  </li>
+<li><strong>Logging</strong> – Optional <code>onLog</code> streams install output, aiding debugging.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>spawnSync</code> may block startup; verify timeout handling on slow systems.  </li>
-<li>Linux users still need manual install; ensure the manual hint is clear.  </li>
-<li><code>runInstallCommand</code> rejects on non‑zero exit; callers must handle this.  </li>
-<li><code>clearGhCache</code> must correctly reset any cached <code>gh</code> state; run integration tests after installation.</li>
+<li><strong>Homebrew detection</strong> – <code>resolveBrew()</code> relies on known paths and <code>command -v brew</code>; verify it finds Homebrew on all supported macOS variants.  </li>
+<li><strong>Cache invalidation</strong> – <code>clearGhCache()</code> is called before and after installs; missing it could leave stale state.  </li>
+<li><strong>Permission handling</strong> – Homebrew or winget installs may require elevated privileges; test error paths.  </li>
+<li><strong>Linux support</strong> – No auto‑install is offered; confirm <code>isGhInstalled()</code> correctly reports absence.</li>
 </ul>
 </article>
   </main>

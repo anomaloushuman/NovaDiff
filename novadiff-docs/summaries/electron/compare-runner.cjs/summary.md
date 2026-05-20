@@ -1,23 +1,28 @@
 ### Overview  
-`electron/compare-runner.cjs` now includes a non‑blocking compare engine runner with progress reporting. The module exports were expanded to expose `runCompareEngineAsync`, and a helper `parseEngineStdout` was added. The import statement was updated to bring in `spawn` alongside `spawnSync` (L5).
+A new file `electron/compare-runner.cjs` (added lines 1‑216) introduces a module that wraps a Rust‑based compare engine. It discovers the binary, sanitises the environment, and offers both synchronous and asynchronous execution paths.
 
 ### Key changes  
-- **Import update** – `const { spawn, spawnSync } = require("node:child_process");` (L5).  
-- **New helper** – `parseEngineStdout(stdout)` validates output and parses JSON (L89‑98).  
-- **Async runner** – `runCompareEngineAsync(appRoot, message, isPackaged, onProgress)` spawns the engine, streams stdout/stderr, emits heartbeat progress, and parses results asynchronously (L104‑210).  
-- **Exports** – module now exports `runCompareEngine`, `runCompareEngineAsync`, and `resolveRustCli` (L212‑216).  
-- **Removed** – old `module.exports = { runCompareEngine, resolveRustCli };` (L89).
+- **Imports** (added lines 3‑5):  
+  ```js
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const { spawn, spawnSync } = require("node:child_process");
+  ```
+- **`cliExecutableName()`** (lines 7‑8): returns `"novadiff-cli"` or `"novadiff-cli.exe"` based on `process.platform`.
+- **`resolveRustCli(appRoot, isPackaged)`** (lines 15‑39): searches for the binary in `process.env.NOVADIFF_CLI`, packaged resources, and dev build directories, returning the path or `null`.
+- **`cleanEnv()`** (lines 42‑46): clones `process.env` and removes `ELECTRON_OVERRIDE_DIST_PATH` and `ELECTRON_RUN_AS_NODE`.
+- **`runCompareEngine()`** (lines 54‑87): spawns the binary synchronously with `spawnSync`, checks exit status, parses JSON output, and throws detailed errors.
+- **`parseEngineStdout(stdout)`** (lines 89‑97): safely parses stdout into JSON, throwing on failure.
+- **`runCompareEngineAsync()`** (lines 104‑209): spawns the binary asynchronously, streams stdout/stderr, emits heartbeat progress events every 450 ms, and resolves with parsed JSON or rejects on error.
+- **Exports** (lines 212‑216): `runCompareEngine`, `runCompareEngineAsync`, `resolveRustCli`.
 
 ### Impact  
-- **Responsiveness** – UI stays responsive during long compare runs; progress events (`spawn`, `running`, `parsing`, `done`) are emitted.  
-- **Error handling** – `parseEngineStdout` throws early on empty or invalid output, improving diagnostics.  
-- **Compatibility** – Existing sync usage (`runCompareEngine`) remains unchanged; new async API requires callers to handle a Promise and optional `onProgress`.  
-- **Performance** – Heartbeat interval (450 ms) and byte‑count tracking may add minor overhead but provide useful feedback.  
-- **Maintainability** – Centralized stdout parsing reduces duplication; exports are clearer.
+- **Robustness**: Centralised binary resolution and error handling reduce the chance of silent failures.  
+- **Responsiveness**: The async wrapper keeps Electron IPC responsive while the engine runs.  
+- **Cross‑platform**: Handles Windows (`.exe`) and POSIX binaries, and supports both packaged and development builds.
 
 ### Risks & follow‑ups  
-- **API breakage** – Code importing the old export shape may fail; update imports to the new object.  
-- **Progress callback** – `onProgress` is optional; callers should guard against `undefined`.  
-- **Child process cleanup** – Verify that `child` is terminated on error or timeout to avoid orphaned processes.  
-- **Encoding assumptions** – `stdout` is treated as UTF‑8; confirm that all engine outputs conform.  
-- **Testing** – Add unit tests for `runCompareEngineAsync` covering success, error, and progress emission.
+- **Binary discovery**: Verify `resolveRustCli` locates the correct binary in all target environments (dev, packaged, CI).  
+- **Environment sanitisation**: Ensure `cleanEnv` does not strip variables required by the Rust binary.  
+- **Async progress**: Test that `onProgress` callbacks receive accurate `bytesReceived` and elapsed time, especially for large payloads.  
+- **Error paths**: Confirm that all thrown errors surface correctly in the UI; stack traces are informative.

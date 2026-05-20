@@ -1,25 +1,24 @@
 ### Overview  
-`packages/graph-core/src/search.ts` adds a lightweight full‑text search engine built on **Fuse.js**.  
-It exports three symbols:  
-- `SearchResult` (R4‑7) – `{ nodeId: string; score: number; /* 0 = perfect, 1 = worst */ }`  
-- `SearchOptions` (R9‑12) – `{ types?: GraphNode["type"][]; limit?: number; }`  
-- `SearchEngine` (R27‑65) – a class that indexes an array of `GraphNode` objects.
+A new `search.ts` module is added under `packages/graph-core/src`. It introduces a lightweight full‑text search layer powered by **Fuse.js** for `GraphNode` objects.
 
 ### Key changes  
-- **Imports**: `Fuse` and `IFuseOptions` from *fuse.js* (R1) and `GraphNode` from `./types.js` (R2).  
-- **Fuse configuration** (R14‑25): keys with weights, `threshold: 0.4`, `includeScore: true`, `ignoreLocation: true`, `useExtendedSearch: true`.  
-- **SearchEngine**:  
-  - `constructor(nodes)` stores the nodes and builds a Fuse index.  
-  - `search(query, options?)` trims the query, turns space‑separated tokens into an OR‑style extended query (`"a b" → "a | b"`), runs Fuse, filters by `options.types` if supplied, limits to `options.limit` (default 50), and maps results to `SearchResult`.  
+- **Imports** (R1‑R2): `Fuse` and `IFuseOptions` from *fuse.js* and `GraphNode` from `./types.js`.  
+- **Interfaces** (R4‑R7, R9‑R12):  
+  - `SearchResult` exposes `nodeId` and `score` (0 = perfect match, 1 = worst).  
+  - `SearchOptions` allows optional `types` filtering and a `limit`.  
+- **Fuse configuration** (R14‑R25): `FUSE_OPTIONS` sets key weights, threshold, and enables extended search.  
+- **`SearchEngine` class** (R27‑R65):  
+  - Stores `nodes` and a `Fuse` instance.  
+  - `search(query, options?)` trims the query, joins tokens with `|` for OR matching, runs Fuse, filters by `types`, limits results, and maps to `SearchResult`.  
   - `updateNodes(nodes)` rebuilds the internal index.
 
 ### Impact  
-- **Correctness**: deterministic scoring (0–1) and filtering by type.  
-- **Maintainability**: all search logic resides in a single module; changes to `FUSE_OPTIONS` propagate automatically.  
-- **Compatibility**: introduces a runtime dependency on `fuse.js`; no existing public APIs are altered.
+- **Functionality**: Provides a public search API for graph nodes, enabling UI search bars and tooling.  
+- **Compatibility**: Requires adding *fuse.js* to dependencies; no breaking changes to existing modules.  
+- **Observability**: No new logs; results are deterministic based on Fuse scoring.
 
 ### Risks & follow‑ups  
-- **Dependency missing**: ensure `fuse.js` is listed in `package.json` and bundled.  
-- **Type mismatches**: `GraphNode` must expose `id`, `type`, `name`, `tags`, `summary`, and `languageNotes` as used in the Fuse keys.  
-- **Threshold tuning**: the chosen `0.4` may affect recall; benchmark if needed.  
-- **Extended search behavior**: the OR logic could match unintended tokens; validate with edge‑case queries.
+- **Dependency version**: Ensure *fuse.js* is pinned to a compatible major version.  
+- **Score interpretation**: `score` is inverted (0 = perfect); confirm consumers handle this convention.  
+- **Type safety**: `GraphNode["type"]` filtering assumes `type` exists; verify all node shapes meet this contract.  
+- **Performance regression**: unknown from the available diff/scan evidence; benchmark search on the largest graph to confirm acceptable latency and memory usage.

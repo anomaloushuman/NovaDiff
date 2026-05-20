@@ -26,33 +26,56 @@
 <body>
   <header class="top">
     <h1>vite.config.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:05:14.631Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:11:23.370Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The Vite configuration was updated to add Tailwind CSS support, introduce module path aliases, refine server watch exclusions, and extend dependency pre‑bundling.</p>
+<p>A new <code>vite.config.ts</code> (lines 1‑49) bootstraps the NovaDiff dev server. It imports Vite helpers, React and Tailwind plugins, and sets up path resolution, aliases, server options, and dependency optimization.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Added <code>import path from &quot;node:path&quot;</code> (R1) and <code>import tailwindcss from &quot;@tailwindcss/vite&quot;</code> (R4).  </li>
-<li>Declared <code>const repoRoot = path.resolve(__dirname)</code> (R6) for relative alias resolution.  </li>
-<li>Updated <code>plugins</code> to <code>[react(), tailwindcss()]</code> (R10), replacing the previous <code>[react()]</code> (removed at line 6).  </li>
-<li>Introduced <code>resolve.alias</code> mapping <code>@novadiff/graph-core</code> and <code>@novadiff/graph-view</code> to their source directories (R13‑18).  </li>
-<li>Expanded <code>server.watch.ignored</code> to exclude <code>**/electron/**</code>, <code>**/release/**</code>, <code>**/packages/graph-core/dist/**</code>, <code>**/novadiff-docs/**</code>, <code>**/.novadiff-graph/**</code>, <code>**/cli/target/**</code>, and the two <code>repoRoot</code> paths (R24‑35).  </li>
-<li>Added <code>optimizeDeps.include</code> with <code>@xyflow/react</code>, <code>zustand</code>, <code>d3-force</code>, <code>@dagrejs/dagre</code>, <code>graphology</code>, and <code>elkjs/lib/elk.bundled.js</code>, plus <code>needsInterop: [&quot;elkjs&quot;]</code> (R38‑48).</li>
+<li><strong>Imports</strong>  <ul>
+<li><code>import path from &quot;node:path&quot;;</code> (R1)  </li>
+<li><code>import { defineConfig } from &quot;vite&quot;;</code> (R2)  </li>
+<li><code>import react from &quot;@vitejs/plugin-react&quot;;</code> (R3)  </li>
+<li><code>import tailwindcss from &quot;@tailwindcss/vite&quot;;</code> (R4)</li>
+</ul>
+</li>
+<li><strong>Root resolution</strong>  <ul>
+<li><code>const repoRoot = path.resolve(__dirname);</code> (R6) – used for watch‑ignore paths.</li>
+</ul>
+</li>
+<li><strong>Export</strong>  <ul>
+<li><code>export default defineConfig(() =&gt; ({ … }))</code> (R9) – Vite configuration.</li>
+</ul>
+</li>
+<li><strong>Aliases</strong>  <ul>
+<li><code>@novadiff/graph-core</code> → <code>packages/graph-core/src</code> (R15)  </li>
+<li><code>@novadiff/graph-view</code> → <code>packages/graph-view/src</code> (R16)</li>
+</ul>
+</li>
+<li><strong>Server</strong>  <ul>
+<li><code>port: 1420</code>, <code>strictPort: true</code>, <code>host: &quot;127.0.0.1&quot;</code> (R20‑22)  </li>
+<li>Extensive <code>watch.ignored</code> patterns (R26‑35) to avoid reloads on generated artifacts.</li>
+</ul>
+</li>
+<li><strong>OptimizeDeps</strong>  <ul>
+<li>Pre‑bundles <code>@xyflow/react</code>, <code>zustand</code>, <code>d3-force</code>, <code>@dagrejs/dagre</code>, <code>graphology</code>, <code>elkjs/lib/elk.bundled.js</code> (R39‑46)  </li>
+<li>Marks <code>elkjs</code> for interop (R47).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Tailwind CSS plugin is now part of the dev and build pipeline.  </li>
-<li>Aliases provide direct imports from <code>packages/graph-core/src</code> and <code>packages/graph-view/src</code>.  </li>
-<li>Additional ignored patterns reduce the likelihood of full reloads triggered by generated artifacts.  </li>
-<li>Explicitly pre‑bundled dependencies may improve HMR and dev server startup times.</li>
+<li><strong>Developer experience</strong> – <code>clearScreen: false</code> keeps console logs visible; <code>strictPort</code> prevents silent port fallback.  </li>
+<li><strong>Performance</strong> – <code>optimizeDeps</code> speeds up dev builds by pre‑bundling heavy libraries.  </li>
+<li><strong>Observability</strong> – Watch‑ignore list reduces unnecessary reloads, keeping the dev server responsive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>repoRoot</code> resolves correctly on Windows; path separators may affect alias targets.  </li>
-<li>Ensure a compatible <code>tailwind.config.js</code> exists for the new plugin.  </li>
-<li>Confirm that the expanded <code>ignored</code> patterns do not suppress necessary reloads for dynamic content.  </li>
-<li>Run a full production build to check for duplicate bundles or runtime errors introduced by the new <code>optimizeDeps</code> entries.</li>
+<li>Verify that <code>repoRoot</code> resolves correctly on all CI environments; failing to do so may break ignored paths.  </li>
+<li>Ensure port 1420 is available; otherwise Vite will error due to <code>strictPort: true</code>.  </li>
+<li>Confirm that the alias paths match the actual package locations; mismatches will cause import failures.  </li>
+<li>Test that the <code>optimizeDeps</code> list covers all runtime dependencies; missing entries could lead to slower hot‑reloads.</li>
 </ul>
 </article>
   </main>

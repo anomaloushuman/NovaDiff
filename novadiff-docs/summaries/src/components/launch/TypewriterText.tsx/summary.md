@@ -1,23 +1,26 @@
-### Overview
-A new component, `TypewriterText`, is added at `src/components/launch/TypewriterText.tsx`. It renders a typewriter‑style animation with an optional cursor, reduced‑motion support, and a completion callback.
+### Overview  
+A new component `src/components/launch/TypewriterText.tsx` implements a typewriter animation that respects the user’s reduced‑motion preference.
 
-### Key changes
-- **Imports**: `useEffect`, `useRef`, `useState` from React (lines 1‑2) and `usePrefersReducedMotion` from `../../app/usePrefersReducedMotion` (line 2).  
-- **Props interface** (`TypewriterTextProps`, lines 4‑15): `text`, optional `active`, `persist`, `speed`, `delay`, `className`, `showCursor`, and `onComplete`.  
-- **Component** (`export function TypewriterText`, lines 17‑99): sets defaults, tracks `visible` state, and uses refs for `onComplete`, completion status, and active state.  
-- **Reduced‑motion handling** (lines 52‑56): if `reduced` is true, the full text is shown immediately and `onComplete` is called.  
-- **Typing logic** (lines 59‑79): a `setTimeout` for `delay` starts a `setInterval` that increments `visible` by `speed` until the full text is displayed, then clears timers and triggers `onComplete`.  
-- **Cleanup** (lines 81‑86): cancels timers and resets `wasActiveRef`.  
-- **Render** (lines 91‑97): displays the current slice of text and, if `showCursor`, `active`, and not finished or reduced, shows a cursor element.
+### Key changes  
+- **Imports** (R1‑R2): `useEffect`, `useRef`, `useState` from React and `usePrefersReducedMotion` from `../../app/usePrefersReducedMotion`.  
+- **Props interface** (`TypewriterTextProps`, R4‑R15):  
+  - `text: string` – required.  
+  - Optional `active`, `persist`, `speed`, `delay`, `className`, `showCursor`, `onComplete`.  
+  - `persist` defaults to `true`; `speed` defaults to `22 ms`; `delay` defaults to `0`; `showCursor` defaults to `true`.  
+- **Component** (`TypewriterText`, R17‑R99):  
+  - Uses refs (`onCompleteRef`, `completedRef`, `wasActiveRef`) to avoid stale closures.  
+  - When `active` is false, resets visibility unless `persist` is true and the animation has finished.  
+  - If the user prefers reduced motion (`reduced`), the full text is shown immediately and `onComplete` is called.  
+  - Otherwise, a `setTimeout`/`setInterval` loop reveals characters at `speed` ms per character, clearing timers on cleanup.  
+  - Renders a `<span>` containing the visible slice of `text` and, if typing is in progress, a cursor element (`typewriter-cursor`).
 
-### Impact
-- Introduces a reusable UI element; no existing API changes.  
-- Adds a dependency on `usePrefersReducedMotion`; the hook must be exported and functional.  
-- Adds hooks and timers; the performance impact is expected to be minimal.  
-- Other components remain unaffected and can import `TypewriterText` directly.
+### Impact  
+- Adds a self‑contained typewriter effect with optional persistence and completion callback.  
+- Requires React 16.8+ for hooks and the `usePrefersReducedMotion` hook.  
+- No global state or external dependencies beyond React.
 
-### Risks & follow‑ups
-- **Reduced‑motion detection**: verify that `usePrefersReducedMotion` correctly reads the user preference; otherwise the animation may always run.  
-- **Callback firing**: confirm `onComplete` is invoked exactly once per full run; the ref logic should prevent duplicate calls.  
-- **Active toggling**: when `active` becomes false, the component resets unless `persist` is true and the text has already completed.  
-- **Cursor logic**: ensure cursor visibility respects `showCursor`, `active`, `reduced`, and completion state.
+### Risks & follow‑ups  
+- Verify that `usePrefersReducedMotion` correctly detects system settings; test both reduced and normal modes.  
+- Ensure cleanup logic (`cancelled`, `clearTimeout`, `clearInterval`) prevents leaks when `active` toggles rapidly.  
+- Confirm that `persist` keeps the text visible after completion when `active` becomes false.  
+- Test cursor rendering logic with `showCursor`, `active`, `reduced`, and `done` flags to avoid flicker.

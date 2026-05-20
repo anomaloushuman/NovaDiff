@@ -26,35 +26,29 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:46:51.133Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:32:21.496Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new context module <code>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx</code> is added to expose typed APIs for NovaDiff embeds.</p>
+<p>A new file <code>packages/graph-view/src/contexts/NovaDiffEmbedContext.tsx</code> has been added. It introduces a React context that exposes NovaDiff embed functionality to the graph‑view package.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>createContext, useContext</code> from React added at line 1 (R1).  </li>
-<li><strong>Interfaces</strong> –  <ul>
-<li><code>NovaDiffSourceFile</code> (R3‑9) defines <code>path</code>, <code>language</code>, <code>content</code>, <code>sizeBytes</code>, <code>lineCount</code>.  </li>
-<li><code>ExplainCodeRequest</code> (R11‑17) specifies <code>filePath</code>, <code>startLine</code>, <code>endLine</code>, <code>snippet</code>, optional <code>symbolName</code>.  </li>
-<li><code>NovaDiffEmbedContextValue</code> (R19‑27) declares optional <code>readFile</code>, <code>embedMode</code>, and <code>explainCode</code>.</li>
+<li><strong>Imports</strong> – <code>createContext</code> and <code>useContext</code> from React are imported (line 1).  </li>
+<li><strong><code>NovaDiffSourceFile</code></strong> (lines 3‑9) declares file metadata: <code>path</code>, <code>language</code>, <code>content</code>, <code>sizeBytes</code>, <code>lineCount</code>.  </li>
+<li><strong><code>ExplainCodeRequest</code></strong> (lines 11‑17) defines the payload for LLM‑based code explanations.  </li>
+<li><strong><code>NovaDiffEmbedContextValue</code></strong> (lines 19‑27) lists optional members: <code>readFile</code>, <code>embedMode</code>, and <code>explainCode</code>.  </li>
+<li><strong>Context creation</strong> – <code>NovaDiffEmbedContext</code> is created with a default empty object (line 30).  </li>
+<li><strong>Hook</strong> – <code>useNovaDiffEmbed</code> (lines 32‑34) returns <code>useContext(NovaDiffEmbedContext)</code>.</li>
 </ul>
-</li>
-<li><strong>Context</strong> – <code>NovaDiffEmbedContext</code> created with an empty default at line 30 (R30).  </li>
-<li><strong>Hook</strong> – <code>useNovaDiffEmbed</code> returns the context value (R32‑34).</li>
-</ul>
+<p>No other files were modified; the change is purely additive.</p>
 <h3>Impact</h3>
-<ul>
-<li>Provides a typed contract for embed consumers, improving compile‑time safety.  </li>
-<li>Introduces a new public API <code>useNovaDiffEmbed</code>; components must use this hook to access the context.  </li>
-<li>The default context is empty; consumers must guard against <code>undefined</code> properties, and missing providers can cause runtime errors.</li>
-</ul>
+<p>The new context provides a public API for embedding NovaDiff features. Because the default value is <code>{}</code>, any consumer that does not wrap its component tree with <code>NovaDiffEmbedContext.Provider</code> will receive <code>undefined</code> for the optional members. This can lead to runtime errors if callers attempt to invoke <code>readFile</code> or <code>explainCode</code> without checking for existence.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Provider coverage</strong> – ensure all embed consumers are wrapped by a provider that supplies <code>readFile</code> and <code>explainCode</code>; otherwise the functions will be <code>undefined</code>.  </li>
-<li><strong>Runtime safety</strong> – consider defensive checks or default no‑op implementations to avoid crashes.  </li>
-<li><strong>Linting</strong> – run <code>npm run lint</code> to catch unused imports or type errors.  </li>
-<li><strong>Compatibility</strong> – update any stale imports of <code>NovaDiffEmbedContext</code> to use the new hook or context.</li>
+<li><strong>Provider requirement</strong> – The diff does not show any existing consumers; verify that components using <code>useNovaDiffEmbed</code> are wrapped in a provider to avoid <code>undefined</code> values.  </li>
+<li><strong>Runtime safety</strong> – Guard against <code>undefined</code> callbacks; consider adding defensive checks or default no‑op implementations.  </li>
+<li><strong>Type coverage</strong> – The empty default satisfies the TypeScript type but may mask missing properties during development; run linting to confirm no required fields are omitted.  </li>
+<li><strong>Testing</strong> – Add unit tests that supply a provider and assert that <code>readFile</code> and <code>explainCode</code> are called correctly.</li>
 </ul>
 </article>
   </main>

@@ -26,39 +26,37 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/tsconfig.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:21:55.954Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:05:24.353Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>tsconfig.json</code> file was added at <code>packages/graph-core/tsconfig.json</code> (lines 1‑19). It defines the TypeScript build configuration for the <code>graph-core</code> package.</p>
+<p>A new <code>tsconfig.json</code> file was added to <code>packages/graph-core</code> (lines 1‑19). It configures TypeScript to compile the package with modern ECMAScript features and strict type‑checking.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File added</strong>: <code>packages/graph-core/tsconfig.json</code> (R1‑19).  </li>
-<li><strong>Compiler options</strong> (R2‑R6):  <ul>
-<li><code>target: &quot;ES2022&quot;</code>  </li>
-<li><code>module: &quot;ESNext&quot;</code>  </li>
-<li><code>lib: [&quot;ES2022&quot;]</code>  </li>
-<li><code>moduleResolution: &quot;bundler&quot;</code></li>
-</ul>
-</li>
-<li><strong>Strictness flags</strong> (R7‑R10): <code>strict</code>, <code>esModuleInterop</code>, <code>skipLibCheck</code>, <code>forceConsistentCasingInFileNames</code>.  </li>
-<li><strong>Output settings</strong> (R15‑R16): <code>outDir: &quot;dist&quot;</code>, <code>rootDir: &quot;src&quot;</code>.  </li>
-<li><strong>Declarations &amp; maps</strong> (R12‑R14): <code>declaration</code>, <code>declarationMap</code>, <code>sourceMap</code>.  </li>
-<li><strong>Includes</strong> (R18): <code>include: [&quot;src&quot;]</code>.</li>
+<li><strong>File added</strong>: <code>packages/graph-core/tsconfig.json</code> (lines 1‑19).  </li>
+<li><strong>Target &amp; module</strong>: <code>target: &quot;ES2022&quot;</code> and <code>module: &quot;ESNext&quot;</code> enable native ES2022 syntax and modern module handling.  </li>
+<li><strong>Library</strong>: <code>lib: [&quot;ES2022&quot;]</code> limits globals to the ES2022 API set.  </li>
+<li><strong>Resolution</strong>: <code>moduleResolution: &quot;bundler&quot;</code> aligns with the build system’s bundler strategy.  </li>
+<li><strong>Strictness</strong>: <code>strict: true</code>, <code>esModuleInterop: true</code>, <code>skipLibCheck: true</code>, <code>forceConsistentCasingInFileNames: true</code> enforce robust type safety.  </li>
+<li><strong>Output</strong>: <code>outDir: &quot;dist&quot;</code>, <code>rootDir: &quot;src&quot;</code> set the build output structure.  </li>
+<li><strong>Declarations</strong>: <code>declaration: true</code>, <code>declarationMap: true</code> generate <code>.d.ts</code> files for consumers.  </li>
+<li><strong>JSON support</strong>: <code>resolveJsonModule: true</code> allows importing JSON modules.  </li>
+<li><strong>Source maps</strong>: <code>sourceMap: true</code> aids debugging.  </li>
+<li><strong>Include</strong>: <code>include: [&quot;src&quot;]</code> limits compilation to source files.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The package now compiles independently, isolating its TypeScript settings from the workspace.  </li>
-<li>Modern JavaScript features are enabled (<code>ES2022</code> target, <code>ESNext</code> module).  </li>
-<li>Strict type‑checking and declaration generation may surface previously hidden type errors.  </li>
-<li>Compile time could increase due to stricter checks and map generation.</li>
+<li><strong>Build pipeline</strong>: The new config will be used by <code>tsc</code> when compiling <code>graph-core</code>; unknown from the available diff/scan evidence whether the build script references it.  </li>
+<li><strong>Runtime compatibility</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>Type safety</strong>: strict mode and declaration generation are enabled, which may surface type errors in existing code.  </li>
+<li><strong>Module resolution</strong>: <code>moduleResolution</code> set to <code>bundler</code> may affect how external modules are resolved; verify that third‑party imports still resolve correctly.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Compatibility</strong>: Verify that downstream consumers can handle <code>ES2022</code> output and <code>ESNext</code> modules.  </li>
-<li><strong>Type regressions</strong>: Run the package’s unit tests and a quick smoke test to catch any new errors introduced by <code>strict: true</code>.  </li>
-<li><strong>Bundler behavior</strong>: Ensure that <code>moduleResolution: &quot;bundler&quot;</code> works with the existing bundler configuration (e.g., Rollup, Webpack).  </li>
-<li><strong>Documentation</strong>: Update any build‑related docs to reference the new <code>tsconfig.json</code>.</li>
+<li><strong>Build failures</strong>: run <code>npm run build:graph-core</code> to confirm the new tsconfig compiles without errors.  </li>
+<li><strong>Test coverage</strong>: execute the package’s unit tests to catch any runtime regressions due to the ES2022 target.  </li>
+<li><strong>Compatibility</strong>: verify that downstream projects consuming <code>graph-core</code> can handle the new module format and ES2022 features.  </li>
+<li><strong>Documentation</strong>: update any build or developer docs that reference the previous TypeScript configuration.</li>
 </ul>
 </article>
   </main>

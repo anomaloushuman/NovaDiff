@@ -26,33 +26,30 @@
 <body>
   <header class="top">
     <h1>src/vite-env.d.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:39:53.766Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:36:22.688Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/vite-env.d.ts</code> now declares two additional Electron API methods:  </p>
-<ul>
-<li><strong><code>workspaceRefreshHistory</code></strong> (added lines 321‑324)  </li>
-<li><strong><code>workspaceUpdateUiState</code></strong> (added lines 329‑332)</li>
-</ul>
-<p>These augment the existing <code>ElectronAPI</code> interface without removing any prior members.</p>
+<p>A new <code>src/vite-env.d.ts</code> file (added at line 1) declares TypeScript typings for the Electron API and several payload interfaces used across the project.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>workspaceRefreshHistory(payload: {workspaceId: string; fetchRemote?: boolean}) → Promise&lt;NovaWorkspace&gt;</code>  </li>
-<li><code>workspaceUpdateUiState(payload: {workspaceId: string; uiState: WorkspaceUiState}) → Promise&lt;WorkspaceSessionState&gt;</code></li>
+<li><strong>Imports</strong> – type definitions are pulled from <code>./app/types</code>, <code>./app/llmStorage</code>, and <code>./app/gitTypes</code> (diff lines 3‑16).  </li>
+<li><strong>Payload interfaces</strong> – added <code>SummaryPrefetchPayload</code>, <code>FileSummaryExportPayload</code>, <code>FileSummaryMarkdownReadPayload</code>, <code>SelectionSummaryExportPayload</code>, <code>SelectionSummaryMarkdownReadPayload</code>, <code>NovadiffDocsWritePayload</code>, and <code>NovadiffDocsReadPayload</code> (lines 33‑104).  </li>
+<li><strong>ElectronAPI interface</strong> – declares a comprehensive set of methods for folder comparison, file diffing, window control, summary prefetching, artifact persistence, codebase scanning, LLM interactions, Git tooling, workspace management, and more (lines 104‑383).  </li>
+<li><strong>Global augmentation</strong> – extends <code>Window</code> with an optional <code>electronAPI</code> property (lines 385‑388).  </li>
+<li><strong>Module export</strong> – exports an empty object to satisfy module resolution (line 391).</li>
 </ul>
-<p>Both signatures are new; the rest of the interface remains unchanged (see diff lines R321‑324 and R329‑332).</p>
 <h3>Impact</h3>
 <ul>
-<li><strong>Renderer side</strong>: components can now invoke <code>window.electronAPI.workspaceRefreshHistory</code> or <code>workspaceUpdateUiState</code> to trigger a history refresh or update UI state.  </li>
-<li><strong>Type safety</strong>: TypeScript consumers receive compile‑time checks for the new payload shapes.  </li>
-<li><strong>No breaking changes</strong>: existing API contracts are preserved; the additions are purely additive.</li>
+<li><strong>Type safety</strong> – compile‑time checks and IDE autocompletion for all Electron API calls are now available.  </li>
+<li><strong>Consistency</strong> – payload shapes are centralized, reducing duplication.  </li>
+<li><strong>Consumer updates</strong> – modules that use <code>electronAPI</code> must import the new types and adjust method calls to match the declared signatures.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Main‑process implementation</strong>: the main process must expose matching handlers; otherwise calls will fail at runtime (unknown from the available diff/scan evidence).  </li>
-<li><strong>Testing</strong>: add unit/integration tests covering the new API paths.  </li>
-<li><strong>Documentation</strong>: update API docs to list the new methods and their payloads.</li>
+<li><strong>Signature mismatches</strong> – verify that the runtime Electron implementation matches the declared <code>ElectronAPI</code> methods; mismatches will surface at runtime.  </li>
+<li><strong>Global conflicts</strong> – ensure no other global declarations clash with the added <code>Window</code> augmentation.  </li>
+<li><strong>Testing</strong> – run the full test suite and the TypeScript compiler to confirm no new type errors or runtime failures.</li>
 </ul>
 </article>
   </main>

@@ -1,20 +1,20 @@
 ### Overview  
-A new `src/components/GitBlamePanel.tsx` component is added. It renders a file list from a workspace snapshot, loads Git blame for a selected file, and displays line‑by‑line author attribution.
+A new React component `GitBlamePanel` is added at `src/components/GitBlamePanel.tsx` (lines 1‑159). It renders a panel that lists files from a workspace snapshot, fetches Git blame for a selected file, and displays line‑by‑line author attribution.
 
 ### Key changes  
-- **Imports**: added React hooks, `lucide-react` icons, and type imports from `../app/gitTypes` and `../app/workspaceTypes` (R1‑R4).  
-- **Props interface**: `GitBlamePanelProps` declares `repoRoot: string`, `commit: WorkspaceCommitSnapshot`, and `onClose: () => void` (R6‑R9).  
-- **Component logic**: uses `window.electronAPI` to call `workspaceSnapshotListFiles`, `gitBlameAtRef`, and `workspaceSnapshotReadFile` (lines 13‑70).  
-- **State & effects**: manages file list, search query, selected path, blame data, file content, loading flags, and error state (lines 14‑21, 23‑34, 44‑70).  
-- **UI**: renders a searchable file list, loading indicators, blame owners, error messages, and a preformatted blame view with author badges (lines 74‑158).
+- **Imports** (R1‑R4): React hooks (`useCallback`, `useEffect`, `useMemo`, `useState`), icons (`FileText`, `Loader2`, `Search`), and types `GitBlameAtRefResult` and `WorkspaceCommitSnapshot`.  
+- **Props interface** (R6‑R10): `repoRoot: string`, `commit: WorkspaceCommitSnapshot`, `onClose: () => void`.  
+- **Component** (R12): Uses `window.electronAPI` to call  
+  - `workspaceSnapshotListFiles` in a `useEffect` (lines 23‑34) to populate `files`.  
+  - `gitBlameAtRef` and `workspaceSnapshotReadFile` in `loadBlame` (lines 44‑70) to fetch blame and file content concurrently.  
+- **UI**: searchable file list with loading spinner (lines 90‑118), blame view showing owners, error messages, and a preformatted code block with line numbers, author badges, and code (lines 121‑155). Close button triggers `onClose` (lines 81‑83).
 
 ### Impact  
-- Requires the Electron main process to expose `workspaceSnapshotListFiles`, `gitBlameAtRef`, and `workspaceSnapshotReadFile`; otherwise the component fails silently.  
-- Loads all snapshot files on mount; filtering is capped at 200 results, so large snapshots may affect initial load time.  
-- No new logs are added; the UI provides visual feedback for loading and errors.
+- The component depends on `window.electronAPI` methods; missing or mis‑typed API names will surface at runtime.  
+- Rendering large files may strain the browser; the diff does not indicate any safeguards.  
+- CSS classes (`git-blame-panel`, `git-blame-layout`, etc.) are added; potential clashes with existing styles are unknown from the diff.
 
 ### Risks & follow‑ups  
-- **API availability**: verify that the main process implements the required methods (unknown from the available diff/scan evidence).  
-- **Large repos**: test snapshots > 10 k files to ensure the UI remains responsive (unknown from the available diff/scan evidence).  
-- **Type safety**: ensure `commit.snapshotPath`, `commit.hash`, and `commit.shortHash` are defined; otherwise the component may crash (unknown from the available diff/scan evidence).  
-- **Image filtering**: the `.png/.jpg` exclusion logic may miss other binary assets; confirm coverage (unknown from the available diff/scan evidence).
+- Verify that `workspaceSnapshotListFiles`, `gitBlameAtRef`, and `workspaceSnapshotReadFile` exist and return the expected shapes.  
+- Test with large snapshots to ensure `fileContent.split(/\r?\n/)` and rendering do not crash.  
+- Confirm that the close button is keyboard‑accessible and that icons with `aria-hidden` do not impede screen readers.

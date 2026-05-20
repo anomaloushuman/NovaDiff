@@ -1,21 +1,23 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/layer-detector.test.ts` (lines R1‑188) was added to exercise the layer‑detection logic, prompt construction, response parsing, and LLM‑based layer assignment.
+A new test file `packages/graph-core/src/__tests__/layer-detector.test.ts` (added lines R1‑188) validates the layer‑detection logic in the graph core module.
 
 ### Key changes  
-- **Imports** – `vitest` helpers and the four public functions from `../analyzer/layer-detector.js` were added (R1‑R6).  
-- **Test helpers** – `makeNode` and `makeGraph` construct minimal `KnowledgeGraph` objects for the tests (R10‑R32).  
-- **`detectLayers` tests** – verify detection of “API Layer”, “Data Layer”, and “Core” layers, unique kebab‑case IDs, and that only nodes of type `file` are considered (R36‑R106).  
-- **`buildLayerDetectionPrompt` test** – checks that file paths are included and the string “JSON” appears in the prompt (R109‑R119).  
-- **`parseLayerDetectionResponse` tests** – cover plain JSON, JSON wrapped in markdown fences, and invalid inputs that should return `null` (R122‑R160).  
-- **`applyLLMLayers` test** – ensures LLM‑provided layers are applied correctly and unmatched nodes fall into an “Other” layer (R163‑R188).
+- Added imports from `vitest` and the layer‑detector API (`detectLayers`, `buildLayerDetectionPrompt`, `parseLayerDetectionResponse`, `applyLLMLayers`) plus type imports from `../types.js` (lines R1‑R8).  
+- Introduced helper constructors `makeNode` and `makeGraph` to build minimal `KnowledgeGraph` objects for tests.  
+- Test cases cover:  
+  - `detectLayers` identifies **API**, **Data**, and **Core** layers based on file paths (e.g., `src/routes/`, `src/models/`).  
+  - Layer IDs start with `layer:` and are unique (lines 86‑92).  
+  - Only nodes of type `file` are included; function and class nodes are ignored (lines 95‑106).  
+  - `buildLayerDetectionPrompt` includes file paths and references JSON (lines 110‑118).  
+  - `parseLayerDetectionResponse` handles plain JSON, markdown‑wrapped JSON, and returns `null` for invalid input (lines 122‑160).  
+  - `applyLLMLayers` assigns nodes to LLM‑provided layers and places unmatched nodes in an **Other** layer (lines 163‑187).
 
 ### Impact  
-- **Coverage** – The tests exercise all stages of the layer‑detection pipeline, reducing the risk of silent regressions.  
-- **Maintainability** – Centralized helper functions simplify future test additions.  
-- **Observability** – Failures will pinpoint the specific stage (e.g., prompt content or parsing logic) that broke.
+- Adds ~188 lines of test code, providing concrete coverage for typical project structures.  
+- Centralizes test helpers for reuse in future tests.  
+- No snapshots are used; all assertions are direct.
 
 ### Risks & follow‑ups  
-- **Deterministic IDs** – Tests rely on node IDs; changes to ID generation could cause flakiness.  
-- **Prompt formatting** – If `buildLayerDetectionPrompt` changes, the test may need updating.  
-- **LLM contract** – `applyLLMLayers` assumes a specific layer shape; future LLM responses must match this contract.  
-- **Performance** – Running these tests on very large graphs could increase execution time; monitor if graph size grows.
+- If layer‑detection logic or regex patterns change, tests may fail; review failures and adjust expectations.  
+- The ID uniqueness test depends on the `layer:` prefix; any change to ID generation must be reflected.  
+- Tests are lightweight but should be monitored if graph size grows; consider parameterizing with larger graphs if needed.

@@ -26,31 +26,33 @@
 <body>
   <header class="top">
     <h1>src/components/GitBlamePanel.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:10:15.839Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:54:23.271Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>src/components/GitBlamePanel.tsx</code> component is added. It renders a file list from a workspace snapshot, loads Git blame for a selected file, and displays line‑by‑line author attribution.</p>
+<p>A new React component <code>GitBlamePanel</code> is added at <code>src/components/GitBlamePanel.tsx</code> (lines 1‑159). It renders a panel that lists files from a workspace snapshot, fetches Git blame for a selected file, and displays line‑by‑line author attribution.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: added React hooks, <code>lucide-react</code> icons, and type imports from <code>../app/gitTypes</code> and <code>../app/workspaceTypes</code> (R1‑R4).  </li>
-<li><strong>Props interface</strong>: <code>GitBlamePanelProps</code> declares <code>repoRoot: string</code>, <code>commit: WorkspaceCommitSnapshot</code>, and <code>onClose: () =&gt; void</code> (R6‑R9).  </li>
-<li><strong>Component logic</strong>: uses <code>window.electronAPI</code> to call <code>workspaceSnapshotListFiles</code>, <code>gitBlameAtRef</code>, and <code>workspaceSnapshotReadFile</code> (lines 13‑70).  </li>
-<li><strong>State &amp; effects</strong>: manages file list, search query, selected path, blame data, file content, loading flags, and error state (lines 14‑21, 23‑34, 44‑70).  </li>
-<li><strong>UI</strong>: renders a searchable file list, loading indicators, blame owners, error messages, and a preformatted blame view with author badges (lines 74‑158).</li>
+<li><strong>Imports</strong> (R1‑R4): React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useMemo</code>, <code>useState</code>), icons (<code>FileText</code>, <code>Loader2</code>, <code>Search</code>), and types <code>GitBlameAtRefResult</code> and <code>WorkspaceCommitSnapshot</code>.  </li>
+<li><strong>Props interface</strong> (R6‑R10): <code>repoRoot: string</code>, <code>commit: WorkspaceCommitSnapshot</code>, <code>onClose: () =&gt; void</code>.  </li>
+<li><strong>Component</strong> (R12): Uses <code>window.electronAPI</code> to call  <ul>
+<li><code>workspaceSnapshotListFiles</code> in a <code>useEffect</code> (lines 23‑34) to populate <code>files</code>.  </li>
+<li><code>gitBlameAtRef</code> and <code>workspaceSnapshotReadFile</code> in <code>loadBlame</code> (lines 44‑70) to fetch blame and file content concurrently.</li>
+</ul>
+</li>
+<li><strong>UI</strong>: searchable file list with loading spinner (lines 90‑118), blame view showing owners, error messages, and a preformatted code block with line numbers, author badges, and code (lines 121‑155). Close button triggers <code>onClose</code> (lines 81‑83).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Requires the Electron main process to expose <code>workspaceSnapshotListFiles</code>, <code>gitBlameAtRef</code>, and <code>workspaceSnapshotReadFile</code>; otherwise the component fails silently.  </li>
-<li>Loads all snapshot files on mount; filtering is capped at 200 results, so large snapshots may affect initial load time.  </li>
-<li>No new logs are added; the UI provides visual feedback for loading and errors.</li>
+<li>The component depends on <code>window.electronAPI</code> methods; missing or mis‑typed API names will surface at runtime.  </li>
+<li>Rendering large files may strain the browser; the diff does not indicate any safeguards.  </li>
+<li>CSS classes (<code>git-blame-panel</code>, <code>git-blame-layout</code>, etc.) are added; potential clashes with existing styles are unknown from the diff.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>API availability</strong>: verify that the main process implements the required methods (unknown from the available diff/scan evidence).  </li>
-<li><strong>Large repos</strong>: test snapshots &gt; 10 k files to ensure the UI remains responsive (unknown from the available diff/scan evidence).  </li>
-<li><strong>Type safety</strong>: ensure <code>commit.snapshotPath</code>, <code>commit.hash</code>, and <code>commit.shortHash</code> are defined; otherwise the component may crash (unknown from the available diff/scan evidence).  </li>
-<li><strong>Image filtering</strong>: the <code>.png/.jpg</code> exclusion logic may miss other binary assets; confirm coverage (unknown from the available diff/scan evidence).</li>
+<li>Verify that <code>workspaceSnapshotListFiles</code>, <code>gitBlameAtRef</code>, and <code>workspaceSnapshotReadFile</code> exist and return the expected shapes.  </li>
+<li>Test with large snapshots to ensure <code>fileContent.split(/\r?\n/)</code> and rendering do not crash.  </li>
+<li>Confirm that the close button is keyboard‑accessible and that icons with <code>aria-hidden</code> do not impede screen readers.</li>
 </ul>
 </article>
   </main>

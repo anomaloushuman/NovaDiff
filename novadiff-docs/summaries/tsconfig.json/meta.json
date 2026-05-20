@@ -1,19 +1,23 @@
 {
   "relPath": "tsconfig.json",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:04:30.504Z",
+  "generatedAt": "2026-05-20T04:10:17.203Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L23 / R23"
+      "R1-25"
     ],
     "cited_changed_lines": [
-      "L23 removed: \"include\": [\"src\"],",
-      "R23 added: \"include\": [\"src\", \"packages/graph-view/src/NovaDiffGraphExplorer.tsx\", \"packages/graph-view/src/index.ts\"],"
+      "R1 added: {",
+      "R2 added: \"compilerOptions\": {",
+      "R3 added: \"target\": \"ES2020\",",
+      "R4 added: \"useDefineForClassFields\": true,",
+      "R5 added: \"lib\": [\"ES2020\", \"DOM\", \"DOM.Iterable\"],",
+      "R6 added: \"module\": \"ESNext\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

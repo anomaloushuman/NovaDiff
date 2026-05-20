@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/components/Breadcrumb.tsx",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:51:22.240Z",
+  "generatedAt": "2026-05-20T06:02:38.485Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -13,24 +13,24 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [],
+    "changed_exports": [
+      "R5 added: export default function Breadcrumb() {"
+    ],
     "changed_imports": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";",
       "R3 added: import { PROJECT_WIDE_LAYER_ID, resolveActiveLayer } from \"../utils/activeLayer\";"
     ],
     "changed_line_ranges": [
-      "R3",
-      "R10",
-      "L11 / R13-15",
-      "L24 / R28",
-      "L31 / R35"
+      "R1-44"
     ],
     "cited_changed_lines": [
+      "R1 added: import { useDashboardStore } from \"../store\";",
+      "R2 added: import { useI18n } from \"../contexts/I18nContext\";",
       "R3 added: import { PROJECT_WIDE_LAYER_ID, resolveActiveLayer } from \"../utils/activeLayer\";",
-      "R10 added: const enterNovaDiffEmbedDepth = useDashboardStore((s) => s.enterNovaDiffEmbedDepth);",
-      "L11 removed: const activeLayer = graph?.layers.find((l) => l.id === activeLayerId);",
-      "R13 added: const activeLayer =",
-      "R14 added: graph && activeLayerId ? resolveActiveLayer(graph, activeLayerId) : null;",
-      "R15 added: const isProjectWide = activeLayerId === PROJECT_WIDE_LAYER_ID;"
+      "R5 added: export default function Breadcrumb() {",
+      "R6 added: const navigationLevel = useDashboardStore((s) => s.navigationLevel);",
+      "R7 added: const activeLayerId = useDashboardStore((s) => s.activeLayerId);"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -26,32 +26,54 @@
 <body>
   <header class="top">
     <h1>src/components/PullRequestsWorkspace.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:15:35.966Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:59:33.339Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>PullRequestsWorkspace</code> component is added at <code>src/components/PullRequestsWorkspace.tsx</code> (lines 28‑324).<br>It provides a UI for browsing GitHub repositories, discovering local clones, and launching pull‑request comparisons in the NovaDiff desktop app.</p>
+<p>A new component <code>PullRequestsWorkspace</code> is added at <strong>src/components/PullRequestsWorkspace.tsx</strong> (lines 1‑324). It renders a UI for browsing GitHub repositories, matching local clones, and launching pull‑request comparisons in the NovaDiff desktop app.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑10): React hooks, Lucide icons, and types from <code>../app/gitTypes</code> (<code>GithubPullRequestSummary</code>, <code>GithubRepoSummary</code>, <code>GitToolingStatus</code>, <code>LocalRepoMatch</code>).  </li>
-<li><strong>Props interface</strong> (lines 17‑26): <code>PullRequestsWorkspaceProps</code> defines <code>onOpenCompare</code> and <code>onUseRepoAsTarget</code> callbacks.  </li>
-<li><strong>State</strong> (lines 33‑42): <code>tooling</code>, <code>repos</code>, <code>selectedRepo</code>, <code>localMatches</code>, <code>prs</code>, <code>loading</code>, <code>prsLoading</code>, <code>error</code>, <code>repoFilter</code>, <code>busyPr</code>.  </li>
-<li><strong>API calls</strong> (lines 46‑68, 74‑87, 89‑113, 115‑142): use <code>window.electronAPI</code> methods <code>gitDetectTooling</code>, <code>githubListRepos</code>, <code>gitMatchLocalRepo</code>, <code>githubListPrs</code>, <code>githubPrCompareRoots</code>.  </li>
-<li><strong>UI</strong> (lines 153‑324): header with refresh button, status cards, login prompt, repo list with search, PR list with compare buttons, and local‑clone actions.  </li>
-<li><strong>Error handling</strong>: descriptive messages set when API calls fail or prerequisites are missing.</li>
+<li><strong>Imports</strong>  <ul>
+<li>React hooks added at <strong>R1</strong>: <code>useCallback</code>, <code>useEffect</code>, <code>useState</code>.  </li>
+<li>Lucide icons added at <strong>R2‑9</strong>: <code>ExternalLink</code>, <code>FolderGit2</code>, <code>GitPullRequest</code>, <code>Loader2</code>, <code>RefreshCw</code>, <code>Search</code>.  </li>
+<li>Type imports from <code>../app/gitTypes</code> added at <strong>R10‑15</strong>: <code>GithubPullRequestSummary</code>, <code>GithubRepoSummary</code>, <code>GitToolingStatus</code>, <code>LocalRepoMatch</code>.</li>
+</ul>
+</li>
+<li><strong>Props interface</strong> (<code>PullRequestsWorkspaceProps</code>) defined at *<em>R17‑26</em></li>
+</ul>
+<ul>
+<li>with <code>suggestedRepoPath</code>, <code>onOpenCompare</code>, <code>onUseRepoAsTarget</code>.</li>
+</ul>
+<ul>
+<li><strong>Component state</strong> (R33‑42): tooling status, repo list, selected repo, local matches, PRs, loading flags, error, repo filter, busy PR.  </li>
+<li><strong>Callbacks</strong>  <ul>
+<li><code>refreshTooling</code> (R46‑68) queries <code>window.electronAPI.gitDetectTooling</code> and, if logged in, <code>githubListRepos</code>.  </li>
+<li><code>resolveLocal</code> (R74‑87) calls <code>gitMatchLocalRepo</code>.  </li>
+<li><code>selectRepo</code> (R89‑112) loads PRs via <code>githubListPrs</code> and local matches.  </li>
+<li><code>openPrCompare</code> (R115‑142) invokes <code>githubPrCompareRoots</code> and triggers <code>onOpenCompare</code>.</li>
+</ul>
+</li>
+<li><strong>UI</strong>  <ul>
+<li>Header with refresh button (R165‑178).  </li>
+<li>Status cards (R185‑197).  </li>
+<li>Error display (R200).  </li>
+<li>Repository list with search (R215‑242).  </li>
+<li>PR panel showing local matches and compare button (R245‑319).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Runtime dependency</strong>: the component requires all referenced <code>electronAPI</code> methods; missing ones will cause runtime errors.  </li>
-<li><strong>Large lists</strong>: the component renders full repo and PR arrays (<code>filteredRepos.map</code>, <code>prs.map</code>) without virtualization, which could affect responsiveness for many items.  </li>
-<li><strong>State updates</strong>: no cancellation logic for pending promises; long‑running API calls may update state after the component unmounts.</li>
+<li>The component depends on <code>window.electronAPI</code>; missing methods will surface as runtime errors.  </li>
+<li>Centralizes PR‑workspace logic, making future refactors easier.  </li>
+<li>Rendering large repo or PR lists may cause many re‑renders; pagination or memoization could improve performance.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>API contract</strong>: verify that <code>window.electronAPI</code> exposes <code>gitDetectTooling</code>, <code>githubListRepos</code>, <code>gitMatchLocalRepo</code>, <code>githubListPrs</code>, and <code>githubPrCompareRoots</code>.  </li>
-<li><strong>Promise cleanup</strong>: consider adding abort logic to prevent state updates on unmounted components.  </li>
-<li><strong>Layout fit</strong>: the component uses flexbox panels; test on various screen sizes to ensure content remains visible.  </li>
-<li><strong>Testing</strong>: add unit tests for the callbacks and integration tests for the full workflow.</li>
+<li><strong>Electron API availability</strong>: confirm that <code>gitDetectTooling</code>, <code>githubListRepos</code>, <code>githubListPrs</code>, <code>gitMatchLocalRepo</code>, and <code>githubPrCompareRoots</code> exist and return the expected shapes.  </li>
+<li><strong>Type safety</strong>: ensure imported types match actual API responses to avoid runtime failures.  </li>
+<li><strong>UI responsiveness</strong>: test with large data sets to verify no layout thrashing.  </li>
+<li><strong>Accessibility</strong>: icons use <code>aria-hidden</code>; verify that interactive elements remain accessible to screen readers.</li>
 </ul>
 </article>
   </main>

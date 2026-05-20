@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/novadiff-docs-pdf.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/novadiff-docs-pdf.cjs</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:28:54.130Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/novadiff-docs-pdf.cjs</code> is added. It generates PDF documentation and diagram packs for NovaDiff bundles by rendering HTML in a hidden Electron <code>BrowserWindow</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 3‑8): <code>fs/promises</code>, <code>os</code>, <code>path</code>, <code>url</code>, <code>electron</code>, <code>marked</code>.  </li>
+<li><strong>Metadata helper</strong> <code>bundleModeMeta(bundle)</code> (lines 25‑53) centralises labels, narrative titles, and diagram titles for baseline, target, and change‑report bundles.  </li>
+<li><strong>Table renderers</strong> (<code>renderDetectedProjects</code>, <code>renderSymbolsTable</code>, <code>renderImportEdgesTable</code>, <code>renderCrossFileCallEdges</code>) (lines 69‑165) build HTML tables from outline data.  </li>
+<li><strong>HTML builders</strong>  <ul>
+<li><code>buildMainPdfHtml(bundle)</code> (lines 174‑271) creates a full‑page HTML document: Markdown parsed with <code>marked</code>, Mermaid blocks, a JSON excerpt, and the tables above.  </li>
+<li><code>buildDiagramsPdfHtml(bundle)</code> (lines 272‑314) produces a compact page with only Mermaid diagrams.</li>
+</ul>
+</li>
+<li><strong>PDF conversion</strong> <code>htmlToPdfFile(html, outPdfPath, opts)</code> (lines 337‑378) writes a temporary HTML file, loads it in a hidden <code>BrowserWindow</code>, waits for <code>window.__PDF_READY</code>, then prints to PDF.  </li>
+<li><strong>Orchestration</strong> <code>generateNovadiffDocsPdf(bundle, _appRoot)</code> (lines 384‑399) validates <code>bundle.targetRoot</code>, builds output paths, and calls the two PDF generators.  </li>
+<li><strong>Exports</strong> (line 401): <code>{ generateNovadiffDocsPdf, htmlToPdfFile }</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>PDF output mirrors the HTML view but requires Electron and network access for the Mermaid CDN; offline builds may fail.  </li>
+<li>Rendering each PDF launches a headless browser window, which can be slow for large bundles.  </li>
+<li>Temporary directories are cleaned in a <code>finally</code> block, but the cleanup must be verified under error conditions.  </li>
+<li>No retry logic is present; errors are logged to the console.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Electron dependency</strong>: Ensure the runtime includes Electron and the <code>BrowserWindow</code> API matches the used version.  </li>
+<li><strong>Network dependency</strong>: The Mermaid CDN URL (<code>https://cdn.jsdelivr.net/...</code>) must be reachable; consider bundling a local copy for offline builds.  </li>
+<li><strong>Temp‑file cleanup</strong>: Verify that the <code>finally</code> block reliably removes the temporary directory even on errors.  </li>
+<li><strong>Security</strong>: <code>nodeIntegration</code> is disabled and <code>contextIsolation</code> is enabled, but <code>webSecurity</code> is turned off; review if this is acceptable.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

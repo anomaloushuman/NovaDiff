@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/HistoryCompareStrip.tsx",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:44:05.894Z",
+  "generatedAt": "2026-05-20T04:56:00.210Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,32 +19,35 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [],
+    "changed_exports": [
+      "R11 added: export interface HistoryCompareStripProps {",
+      "R42 added: export function HistoryCompareStrip({"
+    ],
     "changed_imports": [
+      "R1 added: import {",
+      "R8 added: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";",
       "R9 added: import { pathDisplayLabel } from \"../app/pathDisplay\";"
     ],
     "changed_line_ranges": [
-      "R9",
-      "L53 / R54",
-      "L139-140 / R140-141",
-      "L142 / R143",
-      "L144"
+      "R1-212"
     ],
     "cited_changed_lines": [
-      "R9 added: import { pathDisplayLabel } from \"../app/pathDisplay\";",
-      "L53 removed: onLiveRepoRoot,",
-      "R54 added: onLiveRepoRoot: _onLiveRepoRoot,",
-      "L139 removed: value={liveRepoRoot}",
-      "L140 removed: onChange={(e) => onLiveRepoRoot(e.target.value)}",
-      "R140 added: value={pathDisplayLabel(liveRepoRoot)}"
+      "R1 added: import {",
+      "R2 added: ArrowLeftRight,",
+      "R3 added: ChevronDown,",
+      "R4 added: GitBranch,",
+      "R5 added: GitCompareArrows,",
+      "R6 added: Loader2,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function HistoryCompareStrip (41-212)",
-      "right function HistoryCompareStrip (42-212)"
+      "right function HistoryCompareStrip (42-212)",
+      "right interface HistoryCompareStripProps (11-29)",
+      "right function truncateSubject (30-37)",
+      "right function commitLabel (38-41)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

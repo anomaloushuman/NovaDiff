@@ -26,31 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/locales/zh.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:53:45.746Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:37:02.010Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new locale file <code>packages/graph-view/src/locales/zh.ts</code> has been added.<br>It declares <code>export const zh = { … }</code> (lines 1‑270) and exports the object as the module’s default (<code>export default zh;</code> at line 272).  </p>
+<p>A new file <code>packages/graph-view/src/locales/zh.ts</code> has been added.<br>It contains a complete Chinese translation bundle for the graph‑view component, added in lines 1‑272 of the file.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File addition</strong>: <code>packages/graph-view/src/locales/zh.ts</code> now exists.  </li>
-<li><strong>Exported constant</strong>: <code>zh</code> contains ~270 key/value pairs for UI strings (common, projectOverview, nodeInfo, etc.).  </li>
-<li><strong>Default export</strong>: <code>export default zh;</code> (line 272).  </li>
-<li><strong>No other files modified</strong>.</li>
+<li><strong>Locale module</strong>: <code>export const zh = { … }</code> (lines 1‑270) defines all UI strings in Chinese.  </li>
+<li><strong>Default export</strong>: <code>export default zh;</code> (line 272) makes the bundle consumable by the i18n loader.  </li>
+<li><strong>Coverage</strong>: 272 key/value pairs covering common UI, project overview, node info, file explorer, filters, persona selector, sidebar, mobile, drawer, domain view, detail level, node type labels, token gate, diff toggle, learn panel, layer, breadcrumb, warning banner, theme picker, code viewer, custom node, aria labels, node type filter, keyboard shortcuts, search, export, edge labels, path finder, and more.  </li>
+<li><strong>Additive change</strong>: No existing files were modified.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Internationalization</strong>: Provides Chinese translations for the graph‑view UI.  </li>
-<li><strong>Build size</strong>: Adds a small JSON‑like data block; impact is negligible.  </li>
-<li><strong>Testing</strong>: Existing locale imports will resolve to this file; tests should verify that all keys render correctly.  </li>
-<li><strong>Documentation</strong>: No README or docs were updated.</li>
+<li><strong>Feature</strong>: Enables Chinese language support throughout the graph‑view UI.  </li>
+<li><strong>Build</strong>: The new file will be compiled and bundled automatically; no extra build steps are required.  </li>
+<li><strong>Runtime</strong>: No breaking changes; existing locales remain untouched.  </li>
+<li><strong>Testing</strong>: Tests that assert locale keys may need to include <code>zh</code>.  </li>
+<li><strong>Documentation</strong>: Any docs listing available locales should be updated to mention <code>zh</code>.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import usage</strong>: Verify components import the locale correctly (<code>import zh from &#39;./locales/zh&#39;</code>).  </li>
-<li><strong>Key consistency</strong>: Ensure no duplicate or misspelled keys that could break rendering.  </li>
-<li><strong>Fallback behavior</strong>: Confirm the app falls back to English when a key is missing in <code>zh</code>.  </li>
-<li><strong>Build pipeline</strong>: Run lint, tests, and production build to catch syntax or export issues.</li>
+<li><strong>Import</strong>: Verify that the i18n loader imports <code>zh.ts</code> (e.g., via an index file).  </li>
+<li><strong>Key consistency</strong>: Ensure all translation keys used in the UI are present in <code>zh</code>; missing keys will fall back to defaults.  </li>
+<li><strong>Test coverage</strong>: Add or update tests to confirm that the <code>zh</code> bundle loads correctly and that UI components render Chinese strings.  </li>
+<li><strong>Localization pipeline</strong>: Confirm that this new bundle is included in the deployment pipeline.</li>
 </ul>
 </article>
   </main>

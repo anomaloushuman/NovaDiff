@@ -26,33 +26,36 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/language-lesson.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:55:43.010Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:41:40.017Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/analyzer/language-lesson.ts</code> is added, exposing a public API for generating language‑specific lesson prompts, detecting concepts, and parsing LLM responses into a typed result.</p>
+<p><code>packages/graph-core/src/analyzer/language-lesson.ts</code> is a new module that adds a lightweight LLM‑driven lesson generator for graph nodes. It introduces a <code>LanguageLessonResult</code> interface, utilities for detecting language concepts, prompt construction, and helpers for extracting and parsing JSON from LLM responses.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>GraphNode</code>, <code>GraphEdge</code> from <code>../types.js</code> (R1) and <code>LanguageConfig</code> from <code>../languages/types.js</code> (R2).  </li>
-<li><strong><code>LanguageLessonResult</code> interface</strong> (lines 4‑7) defines <code>languageNotes: string</code> and <code>concepts: Array&lt;{name: string; explanation: string}&gt;</code> (R4‑R7).  </li>
-<li><strong>Base concept patterns</strong> (<code>BASE_CONCEPT_PATTERNS</code>, lines 13‑42) and <code>buildConceptPatterns</code> (lines 48‑63) merge language‑agnostic and language‑specific keywords.  </li>
-<li><strong><code>detectLanguageConcepts</code></strong> (lines 69‑92) scans node tags, summary, and <code>languageNotes</code> for pattern matches.  </li>
-<li><strong><code>getLanguageDisplayName</code></strong> (lines 99‑107) resolves a human‑readable name from <code>LanguageConfig</code> or capitalizes the language string.  </li>
-<li><strong><code>buildLanguageLessonPrompt</code></strong> (lines 112‑147) constructs an LLM prompt that includes node metadata, relationships, and detected concepts.  </li>
-<li><strong><code>extractJson</code></strong> (lines 160‑172) extracts a JSON block from an LLM response, handling markdown fences.  </li>
-<li><strong><code>parseLanguageLessonResponse</code></strong> (lines 178‑210) parses the response into <code>LanguageLessonResult</code>, returning defaults on failure.</li>
+<li><strong>Imports (lines 1‑2):</strong> <code>GraphNode</code>, <code>GraphEdge</code>, and <code>LanguageConfig</code> types are pulled into the analyzer module.  </li>
+<li><strong><code>LanguageLessonResult</code> (lines 4‑7):</strong> Declares <code>languageNotes: string</code> and <code>concepts: Array&lt;{ name: string; explanation: string }&gt;</code> for the lesson output.  </li>
+<li><strong>Base concept patterns (lines 13‑42):</strong> A static map of common language concepts that is merged with language‑specific concepts from <code>LanguageConfig</code>.  </li>
+<li><strong><code>buildConceptPatterns</code> (lines 48‑63):</strong> Merges base patterns with optional <code>langConfig.concepts</code>, ensuring each concept has a keyword list.  </li>
+<li><strong><code>detectLanguageConcepts</code> (lines 69‑92):</strong> Scans a node’s tags, summary, and <code>languageNotes</code> for keywords, returning matched concept names.  </li>
+<li><strong><code>getLanguageDisplayName</code> (lines 99‑107):</strong> Returns a user‑friendly language name, falling back to capitalization.  </li>
+<li><strong><code>buildLanguageLessonPrompt</code> (lines 112‑155):</strong> Builds a prompt that asks an LLM to produce a lesson, including node metadata, relationships, and detected concepts.  </li>
+<li><strong><code>extractJson</code> (lines 160‑172):</strong> Strips markdown fences or extracts the first JSON object from an LLM response.  </li>
+<li><strong><code>parseLanguageLessonResponse</code> (lines 178‑210):</strong> Safely parses the LLM output into a <code>LanguageLessonResult</code>, providing defaults on failure.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a typed contract for lesson data, reducing downstream type errors.  </li>
-<li>Centralizes concept detection logic; new language configs can be added without modifying prompt logic.  </li>
-<li>Prompt construction is linear in node size; overhead is negligible for typical graph nodes (unknown from the available diff/scan evidence).</li>
+<li><strong>Correctness:</strong> Adds deterministic concept detection and robust JSON extraction, reducing parsing errors.  </li>
+<li><strong>Maintainability:</strong> Centralizes language‑specific logic; new concepts can be added via <code>LanguageConfig</code>.  </li>
+<li><strong>Performance:</strong> Linear scans over node text; negligible overhead for typical graph sizes.  </li>
+<li><strong>Compatibility:</strong> No API changes to existing modules; the file is purely additive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>parseLanguageLessonResponse</code> silently defaults on parse errors; add unit tests to verify graceful handling of malformed JSON.  </li>
-<li>Accuracy of <code>detectLanguageConcepts</code> depends on correct merging of base and language‑specific patterns; verify overlap handling.  </li>
-<li>Prompt length may grow with many relationships; consider trimming or summarizing relationships if token limits are a concern.</li>
+<li><strong><code>LanguageConfig</code> availability:</strong> Verify that the type is exported from <code>../languages/types.js</code> and that consumers provide it when needed.  </li>
+<li><strong>Prompt length:</strong> Unknown from the available diff/scan evidence whether the generated prompt stays within LLM token limits for large graphs.  </li>
+<li><strong>JSON extraction edge cases:</strong> Unknown; add unit tests for responses with nested code blocks or malformed JSON.  </li>
+<li><strong>Integration testing:</strong> Unknown; confirm that downstream consumers correctly handle the new <code>LanguageLessonResult</code> shape.</li>
 </ul>
 </article>
   </main>

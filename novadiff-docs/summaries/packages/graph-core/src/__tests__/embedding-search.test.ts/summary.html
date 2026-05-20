@@ -26,37 +26,36 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/embedding-search.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:06:17.110Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:53:01.586Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/embedding-search.test.ts</code> has been added.<br>The file imports <code>vitest</code> helpers (lines 1‑3), the <code>SemanticSearchEngine</code> and <code>cosineSimilarity</code> utilities (line 2), and the <code>GraphNode</code> type (line 3).<br>It defines an in‑memory <code>nodes</code> array (lines 5‑9) and an <code>embeddings</code> map (lines 12‑16) for three sample nodes.<br>The test suite (lines 18‑92) exercises the cosine similarity function and the search engine’s public API.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/embedding-search.test.ts</code> (lines 1‑92) has been added. It validates the <code>cosineSimilarity</code> helper and the <code>SemanticSearchEngine</code> class.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>vitest</code>, <code>SemanticSearchEngine</code>, <code>cosineSimilarity</code>, <code>GraphNode</code>.  </li>
-<li><strong>Test data</strong>: <code>nodes</code> array and <code>embeddings</code> map defined inline.  </li>
-<li><strong>Cosine similarity tests</strong>: identity, orthogonality, similarity threshold, zero‑vector handling.  </li>
-<li><strong>SemanticSearchEngine tests</strong>:  <ul>
+<li><strong>Imports</strong> (R1‑R3): <code>vitest</code> helpers, <code>SemanticSearchEngine</code>, <code>cosineSimilarity</code>, and the <code>GraphNode</code> type.  </li>
+<li><strong>Test data</strong> (R5‑R7): a mock <code>nodes</code> array of three <code>GraphNode</code> objects and a 4‑dimensional <code>embeddings</code> map.  </li>
+<li><strong>Unit tests</strong> for <code>cosineSimilarity</code> covering identical, orthogonal, similar, and zero‑vector cases.  </li>
+<li><strong>Comprehensive tests</strong> for <code>SemanticSearchEngine</code>:  <ul>
 <li>Result ordering by similarity.  </li>
 <li><code>limit</code> and <code>threshold</code> options.  </li>
-<li>Type filtering (<code>types: [&quot;function&quot;]</code>).  </li>
+<li><code>types</code> filtering.  </li>
 <li>Handling of missing embeddings.  </li>
-<li><code>hasEmbeddings</code> flag behavior.  </li>
-<li><code>addEmbedding</code> updates the index.</li>
+<li><code>hasEmbeddings</code> and <code>addEmbedding</code> behavior.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides unit coverage for core search logic, ensuring that changes to similarity calculations or filtering are detected during testing.  </li>
-<li>Centralizes test data; future updates to node structure or embeddings can be made in a single location.  </li>
-<li>No modifications to production code paths; the new file only adds tests.</li>
+<li>Adds coverage for embedding utilities; no production code is modified, so runtime behavior is unchanged.  </li>
+<li>Provides concrete test scenarios that can serve as a reference for future changes to the search engine or similarity function.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Determinism</strong>: The tests rely on fixed embeddings; any change to <code>cosineSimilarity</code> must preserve the expected outputs.  </li>
-<li><strong>Coverage gaps</strong>: All public methods of <code>SemanticSearchEngine</code> are exercised, but edge cases such as an empty node list are not explicitly tested.  </li>
-<li><strong>CI integration</strong>: It is unknown from the diff whether the new tests are automatically included in the CI pipeline.</li>
+<li>If <code>SemanticSearchEngine</code> does not implement the <code>types</code> filter or <code>threshold</code> logic as expected, the tests will fail; verify the implementation matches the test expectations.  </li>
+<li>Ensure the relative import <code>../embedding-search.js</code> resolves correctly in the test environment.  </li>
+<li>The test embeddings are 4‑dimensional; confirm this matches the dimensionality used in production (unknown from the available diff/scan evidence).  </li>
+<li>Run the full test suite to confirm no flakiness is introduced.</li>
 </ul>
 </article>
   </main>

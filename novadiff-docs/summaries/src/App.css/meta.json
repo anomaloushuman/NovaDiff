@@ -1,23 +1,23 @@
 {
   "relPath": "src/App.css",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:03:48.932Z",
+  "generatedAt": "2026-05-20T04:34:59.269Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R2638-2646"
+      "R1-4331"
     ],
     "cited_changed_lines": [
-      "R2638 added: .novadiff-graph-embed .embed-graph-dashboard-pane {",
-      "R2639 added: overflow: hidden;",
-      "R2640 added: }",
-      "R2642 added: .novadiff-graph-embed .embed-graph-dashboard-pane > .novadiff-graph-embed {",
-      "R2643 added: flex: 1 1 auto;",
-      "R2644 added: min-height: 0;"
+      "R1 added: :root {",
+      "R2 added: color-scheme: dark;",
+      "R3 added: --bg-deep: #05070c;",
+      "R4 added: --bg: #0a0d12;",
+      "R5 added: --surface: #0e1219;",
+      "R6 added: --surface-2: #121826;"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

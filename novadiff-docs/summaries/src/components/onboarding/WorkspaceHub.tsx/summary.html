@@ -26,30 +26,34 @@
 <body>
   <header class="top">
     <h1>src/components/onboarding/WorkspaceHub.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:45:43.941Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:09:58.706Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>WorkspaceHub</code> now accepts optional <code>activeWorkspaceId</code> and <code>onContinueLast</code> props (see <code>src/components/onboarding/WorkspaceHub.tsx</code> lines 9‑12). When both are supplied, a “Continue with {workspace name}” button is rendered above the workspace list (lines 177‑192). Local workspaces no longer show their repo path; the placeholder “Local repository” is used instead (line 214).</p>
+<p>A new <code>WorkspaceHub</code> component is added at <code>src/components/onboarding/WorkspaceHub.tsx</code> (lines 17‑307). It renders a UI for listing, creating, and opening workspaces and uses the Electron API (<code>window.electronAPI</code>) for workspace and GitHub operations.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Props API</strong> – <code>WorkspaceHubProps</code> gains <code>activeWorkspaceId?: string | null</code> and <code>onContinueLast?: () =&gt; void</code>.  </li>
-<li><strong>Component signature</strong> updated to destructure the new props (lines 20‑23).  </li>
-<li><strong>Continue button</strong> – an IIFE finds the workspace matching <code>activeWorkspaceId</code> and renders a button wired to <code>onContinueLast</code>.  </li>
-<li><strong>Workspace list display</strong> – <code>ws.githubSlug ?? ws.repoRoot</code> replaced with <code>ws.githubSlug ?? &quot;Local repository&quot;</code>.</li>
+<li><strong>Imports</strong> – added React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useState</code>) and icons (<code>FolderGit2</code>, <code>Loader2</code>, <code>Plus</code>)【R1‑R3】.  </li>
+<li><strong>Types</strong> – declared <code>WorkspaceHubProps</code> (lines 6‑13) and <code>RepoMode</code> enum (line 15).  </li>
+<li><strong>Component</strong> – <code>WorkspaceHub</code> (lines 17‑307) now manages local state for workspace creation, error handling, and mode selection.  </li>
+<li><strong>API interactions</strong> – uses <code>window.electronAPI</code> for <code>workspaceList</code>, <code>workspaceCreate</code>, <code>workspaceSetActive</code>, <code>githubListRepos</code>, <code>workspaceMatchLocal</code>, and <code>onWorkspaceHistoryProgress</code>.  </li>
+<li><strong>UI</strong> – renders a workspace list, mode tabs, input fields, and a create button with a loading indicator.  </li>
+<li><strong>Logic</strong> – <code>createWorkspace</code> handles three modes (<code>local</code>, <code>clone</code>, <code>github</code>) with validation and payload construction; <code>openExisting</code> activates a workspace via <code>workspaceSetActive</code>.  </li>
+<li><strong>Side‑effects</strong> – <code>useEffect</code> hooks refresh the workspace list on history progress and fetch GitHub repos when mode is <code>github</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The continue button appears only when a matching workspace exists, preventing orphaned actions.  </li>
-<li>Local repositories are now labeled consistently, improving readability.  </li>
-<li>Existing callers remain unaffected; the new props are optional.</li>
+<li><strong>Runtime dependency</strong> – the component requires the Electron API; absence of any method will cause runtime errors.  </li>
+<li><strong>Centralization</strong> – workspace UI logic is now in a single component, simplifying future maintenance.  </li>
+<li><strong>Performance</strong> – asynchronous calls to <code>githubListRepos</code> and <code>workspaceList</code> may introduce UI lag if the API is slow.  </li>
+<li><strong>User feedback</strong> – <code>historyMsg</code> and <code>error</code> states provide visible messages; no additional logging is added.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong> – Verify that <code>activeWorkspaceId</code> is correctly passed; missing IDs should not crash.  </li>
-<li><strong>UI consistency</strong> – Ensure the “Local repository” placeholder matches design tokens.  </li>
-<li><strong>Accessibility</strong> – The new button should have an accessible label; run accessibility checks.  </li>
-<li><strong>Testing</strong> – Add unit tests for the continue‑button rendering path and for the updated list item display.</li>
+<li><strong>API availability</strong> – confirm that all referenced Electron API methods exist in the current desktop build; the diff does not show their implementation.  </li>
+<li><strong>Type alignment</strong> – ensure <code>NovaWorkspace</code> and <code>WorkspaceSessionState</code> match the API responses; mismatches could break <code>onOpenWorkspace</code>.  </li>
+<li><strong>Error messages</strong> – verify that the error strings shown to users are clear and do not expose internal details.  </li>
+<li><strong>Large GitHub lists</strong> – monitor the size of <code>ghRepos</code>; consider pagination or debouncing if the list grows large.</li>
 </ul>
 </article>
   </main>

@@ -26,28 +26,31 @@
 <body>
   <header class="top">
     <h1>electron/preload.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:36:27.031Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:31:04.198Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Added two IPC‑exposed functions to <code>electron/preload.cjs</code> at lines 136‑141: <code>workspaceRefreshHistory</code> and <code>workspaceUpdateUiState</code>. They forward a payload to the main process via <code>ipcRenderer.invoke</code> on the channels <code>&quot;workspace-refresh-history&quot;</code> and <code>&quot;workspace-update-ui-state&quot;</code>.</p>
+<p>A new file <code>electron/preload.cjs</code> (lines 1‑183) is added. It imports <code>contextBridge</code> and <code>ipcRenderer</code> from Electron and exposes a global <code>electronAPI</code> object to the renderer via <code>contextBridge.exposeInMainWorld</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li>New API functions inserted at lines 136‑141 (diff lines R136‑R141).  </li>
-<li>Each function simply calls <code>ipcRenderer.invoke</code> with the corresponding channel and payload.  </li>
-<li>No other imports or logic were altered; the surrounding API surface remains unchanged.</li>
+<li><strong>API surface</strong> – <code>electronAPI</code> now contains many <code>ipcRenderer.invoke</code> wrappers (e.g., <code>compareFolders</code>, <code>getFileDiff</code>, <code>pickDirectory</code>, <code>gitRepoStatus</code>, <code>workspaceCreate</code>, <code>llmSummarize</code>, etc.) as shown in the added lines 9‑52, 58‑71, 73‑80, 82‑84, 88‑116, 117‑120, 122‑128, 130‑140, 142‑149, 151‑158, 160‑172, 174‑181.  </li>
+<li><strong>Event listeners</strong> – Added helpers such as <code>onWindowStateChanged</code>, <code>onKnowledgeGraphProgress</code>, <code>onEngineProgress</code>, <code>onSummaryPrefetchProgress</code>, <code>onGithubGhInstallProgress</code>, <code>onGithubAuthProgress</code>, <code>onWorkspaceHistoryProgress</code> (lines 19‑27, 55‑62, 64‑71, 73‑80, 151‑158, 165‑172, 174‑181) that register IPC listeners and return cleanup callbacks.  </li>
+<li><strong>Constants</strong> – Introduced <code>LLM_STREAM</code> and <code>WINDOW_STATE</code> tokens (lines 5‑6).  </li>
+<li><strong>LLM streaming</strong> – Implemented <code>llmSummarizeStream</code> (lines 88‑116) that aborts any previous stream, listens on <code>LLM_STREAM</code>, and streams accumulated text via a callback.  </li>
+<li><strong>Context isolation</strong> – Uses <code>require(&quot;electron&quot;)</code> and <code>contextBridge</code> to safely expose APIs.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds renderer‑side hooks for refreshing workspace history and updating UI state without affecting existing behavior.  </li>
-<li>No breaking changes; existing code continues to work.  </li>
-<li>The new functions follow the same pattern as other <code>workspace*</code> helpers, keeping the preload API consistent.</li>
+<li><strong>Renderer access</strong> – Front‑end code can call backend features directly; corresponding main‑process handlers must exist.  </li>
+<li><strong>Preload linkage</strong> – The script must be referenced in <code>webPreferences.preload</code> for all renderer windows; tests should verify this configuration.  </li>
+<li><strong>Security</strong> – Exposing many APIs requires strict context isolation and input validation to prevent misuse.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing main‑process handlers</strong>: Verify that <code>&quot;workspace-refresh-history&quot;</code> and <code>&quot;workspace-update-ui-state&quot;</code> are implemented in the main process; otherwise calls will fail.  </li>
-<li><strong>Documentation</strong>: Update API docs and README to expose the new functions.  </li>
-<li><strong>Testing</strong>: Add unit/integration tests to confirm the new IPC calls reach the main process and return expected results.</li>
+<li><strong>Missing handlers</strong> – If any invoked channel lacks a main‑process handler, renderer calls will fail; run integration tests to confirm all handlers exist.  </li>
+<li><strong>Listener leaks</strong> – Ensure cleanup callbacks returned by the <code>on…</code> helpers are invoked; otherwise listeners may accumulate.  </li>
+<li><strong>Performance</strong> – Unknown from the available diff/scan evidence; monitor IPC traffic for large file diffs or LLM streams.  </li>
+<li><strong>Compatibility</strong> – Existing renderer code that does not expect <code>electronAPI</code> should handle its absence gracefully; add defensive checks if needed.</li>
 </ul>
 </article>
   </main>

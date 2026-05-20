@@ -1,22 +1,23 @@
 ### Overview
-The root `package.json` now declares a monorepo with two workspaces: `packages/graph-core` and `packages/graph-view` (added in lines 7‑10). Build and dev scripts delegate to these workspaces, and the Electron build config references the workspace outputs.
+A new `package.json` (added at the repository root, lines R1‑R100) establishes the NovaDiff monorepo. It declares workspaces, build scripts, dependencies, and an Electron build configuration.
 
 ### Key changes
-- **Workspaces**: `"workspaces": ["packages/graph-core","packages/graph-view"]` (R7‑R10).  
-- **Scripts**: old `electron:dev` and `build` removed (L10‑L11). New workspace‑aware scripts added: `graph:core-build`, `graph:catalog:generate`, `graph:build`, and a new `electron:dev` that runs `graph:build` before the Electron dev server (R14‑R18).  
-- **Dependencies**: local package references added: `"@novadiff/graph-core":"file:packages/graph-core"` and `"@novadiff/graph-view":"file:packages/graph-view"` (R24‑R26). `three` restored to dependencies (R26 removed, R43‑R44 added).  
-- **DevDependencies**: `tailwindcss` added (R58).  
-- **Electron build**: `files` array expanded to include `packages/graph-core/dist/**/*` and `packages/graph-core/package.json` (R74‑R75). The exclusion `node_modules/marked/**/*` removed and replaced by a blanket `node_modules/**/*` (L55 removed, R78 added).  
-- **extraResources**: new block pointing to `cli/target/release` (R81‑R86).  
-- **Targets**: mac, win, linux targets set to `nsis` and `AppImage` (R90‑R98).
+- **Workspaces** – `packages/graph-core` and `packages/graph-view` are added (lines R7‑R10).  
+- **Scripts** – New commands (`dev`, `rust:build`, `graph:core-build`, `graph:catalog:generate`, `graph:build`, `electron:dev`, `build`, `electron:build`, `preview`, `test`) appear in lines R12‑R21.  
+- **Dependencies** – Core libraries (`@dagrejs/dagre`, `@xyflow/react`, `d3-force`, `graphology`, etc.) and workspace references (`@novadiff/graph-core`, `@novadiff/graph-view`) are listed (lines R23‑R44).  
+- **DevDependencies** – Electron tooling (`electron`, `electron-builder`), Vite, TypeScript, Tailwind, and concurrency utilities are added (lines R46‑R62).  
+- **Electron build config** – The `build` section (lines R64‑R99) specifies `appId`, `productName`, `icon`, output directories, included files, extra resources, and platform targets (`mac`, `win`, `linux`).  
+- **Module type** – `"type": "module"` and `"main": "electron/main.cjs"` set the entry point for the Electron main process (lines R5‑R6).
 
 ### Impact
-- Workspace scripts must resolve correctly; failures will break Electron dev/build.  
-- The broader `node_modules/**/*` inclusion may increase bundle size; verify packaging.  
-- Local package references (`file:`) require `npm ci` to resolve properly.
+- **Build pipeline** – `npm run build` orchestrates graph build, TypeScript compilation, and Vite bundling before Electron packaging.  
+- **Workspace resolution** – Local package references (`file:`) require `npm install` to hoist dependencies correctly.  
+- **Electron packaging** – `electron-builder` will generate installers for the specified platforms; missing assets (e.g., `nova-diff-icon.png`) will break packaging.  
+- **Testing** – `vitest` is now a devDependency; existing test suites must run under the new workspace context.  
+- **CLI integration** – `rust:build` points to `cli/Cargo.toml`; ensure the Rust target is available before Electron dev.
 
 ### Risks & follow‑ups
-- Run `npm run graph:core-build` and `npm run graph:build` locally before building Electron.  
-- Verify `npm ci` in root and each workspace resolves `file:` dependencies.  
-- Test Electron builds on macOS, Windows, and Linux to confirm `extraResources` and target settings.  
-- Check that the new `node_modules/**/*` inclusion does not package unnecessary files.
+- **Dependency resolution** – Verify that workspace packages resolve without conflicts; run `npm install` and `npm dedupe`.  
+- **Electron dev** – Test `npm run electron:dev` locally; confirm that the Vite dev server and Electron process start without errors.  
+- **Build artifacts** – Ensure `electron-builder` produces installers for all target platforms; check `build.files` paths.  
+- **CI pipeline** – Update CI scripts to include `npm run build` and `npm run test`; confirm that the new `vitest` configuration passes.

@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/docWorkspaceMetrics.ts",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:24:33.464Z",
+  "generatedAt": "2026-05-20T04:41:43.744Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,30 +11,49 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
-    "changed_exports": [],
-    "changed_imports": [],
+    "changed_exports": [
+      "R3 added: export interface ExtensionCount {",
+      "R8 added: export interface DocWorkspaceMetrics {",
+      "R37 added: export function buildDocWorkspaceMetrics(rows: FileChange[]): DocWorkspaceMetrics {",
+      "R88 added: export interface GitignorePromptMeta {",
+      "R93 added: export function metricsToPromptContext(",
+      "R146 added: export function buildCompareMetricsMarkdown("
+    ],
+    "changed_imports": [
+      "R1 added: import type { ChangeKind, FileChange } from \"./types\";"
+    ],
     "changed_line_ranges": [
-      "L189 / R189",
-      "L191 / R191",
-      "L193-197 / R193-203"
+      "R1-204"
     ],
     "cited_changed_lines": [
-      "L189 removed: const rows = metrics.depthHistogram.slice(0, 14);",
-      "R189 added: const rows = metrics.depthHistogram.slice(0, 12);",
-      "L191 removed: return \"flowchart LR\\n empty[No data]\";",
-      "R191 added: return \"flowchart LR\\n empty[No path depth data]\";",
-      "L193 removed: const parts = rows.map((d, i) => {",
-      "L194 removed: const label = `depth ${d.depth} (${d.count})`;"
+      "R1 added: import type { ChangeKind, FileChange } from \"./types\";",
+      "R3 added: export interface ExtensionCount {",
+      "R4 added: ext: string;",
+      "R5 added: count: number;",
+      "R6 added: }",
+      "R8 added: export interface DocWorkspaceMetrics {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function depthBarMermaid (188-198)",
-      "right function depthBarMermaid (188-204)"
+      "right function metricsToPromptContext (93-145)",
+      "right function buildDocWorkspaceMetrics (37-87)",
+      "right function buildCompareMetricsMarkdown (146-174)",
+      "right function depthBarMermaid (188-204)",
+      "right function changeKindPieMermaid (175-187)",
+      "right interface DocWorkspaceMetrics (8-20)",
+      "right function fileExtension (21-30)",
+      "right function firstSegment (31-36)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

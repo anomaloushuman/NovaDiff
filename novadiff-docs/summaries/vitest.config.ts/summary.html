@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>vitest.config.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>vitest.config.ts</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:11:46.775Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>vitest.config.ts</code> has been added. It defines a minimal Vitest configuration that targets Node‑environment tests.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import</strong> (line 1): <code>import { defineConfig } from &quot;vitest/config&quot;;</code> (R1 added).  </li>
+<li><strong>Export default</strong> (lines 3‑8): <code>export default defineConfig({ … });</code> (R3 added).  </li>
+<li><strong>Test options</strong> (R4‑R7):  <ul>
+<li><code>environment: &quot;node&quot;</code> (R5 added).  </li>
+<li><code>include: [&quot;tests/**/*.test.ts&quot;]</code> (R6 added).</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The configuration will cause Vitest to run all <code>*.test.ts</code> files under the <code>tests/</code> directory using a Node environment.  </li>
+<li>It is isolated from existing build or lint setups.  </li>
+<li>Running tests requires the <code>vitest</code> package (and its TypeScript support) to be present in <code>devDependencies</code>.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing dependency</strong>: Verify that <code>vitest</code> is listed in <code>devDependencies</code>; otherwise add it.  </li>
+<li><strong>Path resolution</strong>: Ensure that test files match the glob pattern <code>tests/**/*.test.ts</code>; adjust if tests live elsewhere.  </li>
+<li><strong>Environment mismatch</strong>: Tests that rely on browser APIs will fail under the Node environment; consider a separate config or test adjustments.  </li>
+<li><strong>Build pipeline</strong>: Confirm that CI scripts invoke Vitest (e.g., <code>vitest run</code>) so the new config is used.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

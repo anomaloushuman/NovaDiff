@@ -26,34 +26,35 @@
 <body>
   <header class="top">
     <h1>src/App.css</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:03:48.932Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:34:59.269Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>src/App.css</code> file now includes three new CSS rules (lines R2638‑R2644) that target the NovaDiff graph‑embed component inside the dashboard pane.</p>
+<p>The <code>src/App.css</code> file now contains a new <code>:root</code> block that sets <code>color-scheme: dark</code> and defines several CSS custom properties for a dark theme. The change adds 4 331 lines (range R1‑4331) and introduces the following variables:</p>
+<ul>
+<li><code>--bg-deep: #05070c</code></li>
+<li><code>--bg: #0a0d12</code></li>
+<li><code>--surface: #0e1219</code></li>
+<li><code>--surface-2: #121826</code></li>
+</ul>
+<p>No named symbol spans were detected for this file with the current heuristic scanner.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>R2638‑R2640</code>:```css
-.novadiff-graph-embed .embed-graph-dashboard-pane {
-overflow: hidden;
-}</li>
+<li>Added <code>:root { color-scheme: dark; }</code> to enforce dark mode system‑wide.</li>
+<li>Introduced the four dark‑theme custom properties listed above.</li>
+<li>The change expands the stylesheet by 4 331 lines, adding global styles and component selectors that reference these variables.</li>
 </ul>
-<p><code>- `R2642‑R2644`:</code>css
-.novadiff-graph-embed .embed-graph-dashboard-pane &gt; .novadiff-graph-embed {
-      flex: 1 1 auto;
-      min-height: 0;
-  }
-```These additions are confined to the last ~9 lines of <code>src/App.css</code>.</p>
 <h3>Impact</h3>
 <ul>
-<li>The <code>overflow: hidden</code> rule clips any content that would otherwise overflow the dashboard pane, which should prevent unintended scrollbars.  </li>
-<li>The <code>flex: 1 1 auto; min-height: 0;</code> rules allow the embedded graph to grow and shrink within the pane, improving responsiveness.</li>
+<li>Provides a single source of truth for dark‑theme colors, simplifying future theme updates.</li>
+<li>Enables system‑wide dark‑mode support via <code>color-scheme: dark</code>.</li>
+<li>Consistent palette across UI components improves visual cohesion.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>overflow: hidden</code> does not unintentionally hide required content in other contexts.  </li>
-<li>Run the nearest targeted tests and perform a quick manual smoke test on the graph‑embed area.  </li>
-<li>Monitor for unintended interactions with other flex containers that might share the same class names.</li>
+<li><strong>Override conflicts</strong>: Verify that component‑specific styles do not unintentionally override the new variables.</li>
+<li><strong>Performance</strong>: The large number of added rules may affect rendering on low‑end devices; benchmark as needed.</li>
+<li><strong>Testing</strong>: Run targeted tests covering dark‑mode rendering and perform a quick manual smoke test on key UI areas such as the sidebar, workspace, and modal components.</li>
 </ul>
 </article>
   </main>

@@ -1,21 +1,21 @@
 ### Overview  
-The `.novadiff-graph/meta.json` file was updated. The changes are in lines L2‑3 and L5 of the original file, replaced by new values in the same positions.
+A new file, `.novadiff-graph/meta.json`, has been added to the repository. It contains a flat JSON object with metadata about the current diff‑graph snapshot.
 
 ### Key changes  
-- `lastAnalyzedAt`: `2026-05-19T20:52:49.662Z` → `2026-05-19T22:32:24.542Z` (L2 removed, R2 added)  
-- `gitCommitHash`: `8e0dc031dcfc62a38f560a90bc881a8fd6655a51` → `46a8da0664d1dce2715e93ec6698cf67012b963f` (L3 removed, R3 added)  
-- `analyzedFiles`: `324` → `329` (L5 removed, R5 added)  
-
-No other fields were modified.
+- **File addition**: `.novadiff-graph/meta.json` (lines 1‑6).  
+- **Metadata fields**:  
+  - `lastAnalyzedAt`: `2026-05-20T01:19:05.928Z` (line 2).  
+  - `gitCommitHash`: `6c333f6cf037bf75318c26081cae3324fdb89c64` (line 3).  
+  - `version`: `1.0.0` (line 4).  
+  - `analyzedFiles`: `329` (line 5).  
 
 ### Impact  
-- **Accuracy** – metadata now reflects the latest analysis run.  
-- **Observability** – consumers of `meta.json` will see the updated timestamp and commit hash, aiding audit trails.  
-- **Compatibility** – the JSON schema is unchanged; existing parsers continue to work.  
-- **Maintainability** – the change is confined to a single file, minimizing downstream impact.
+- **Observability**: The timestamp and commit hash allow tools to report when the graph was last updated and which commit it represents.  
+- **Versioning**: The `version` field provides a simple schema version that can be checked by consumers.  
+- **Data integrity**: The commit hash ties the metadata to a specific repository state, aiding reproducibility.  
 
 ### Risks & follow‑ups  
-- **Test failures** – any tests asserting the old values will fail; run the targeted test suite and adjust expectations.  
-- **Hard‑coded assumptions** – verify downstream services do not rely on the previous commit hash or file count.  
-- **Parsing** – ensure all consumers correctly parse the new ISO timestamp.  
-- **Documentation** – update any docs that reference the old metadata values.
+- **Missing file handling**: Verify that consumers of the graph handle the absence of `meta.json` gracefully.  
+- **Timestamp format**: Ensure downstream consumers parse the ISO‑8601 timestamp correctly.  
+- **Commit hash consistency**: Confirm that the hash matches the current HEAD of the repository.  
+- **File size**: The file is tiny, but check that adding it does not trigger any size limits in CI or packaging scripts.

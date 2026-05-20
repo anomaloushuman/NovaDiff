@@ -26,34 +26,35 @@
 <body>
   <header class="top">
     <h1>electron/workspace-history.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:37:52.217Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:33:10.403Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>refreshWorkspaceHistory</code> routine is added to <code>electron/workspace-history.cjs</code>. It re‑reads the git log, optionally fetches remote refs, and snapshots only commits that lack a usable snapshot, preserving existing ones. The module now imports <code>tryRunGit</code> alongside <code>runGit</code> and exposes the new function in its exports.</p>
+<p>A new module <code>electron/workspace-history.cjs</code> is added to the Electron side of the repo. It implements snapshotting of Git commits, indexing of workspace history, and a refresh routine that re‑reads the log and re‑creates missing snapshots.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import update</strong> – <code>const { runGit, tryRunGit } = require(&quot;./git-service.cjs&quot;);</code> (line 6).  </li>
-<li><strong>New function</strong> – <code>async function refreshWorkspaceHistory(userData, workspaceId, sendProgress, opts = {})</code> (lines 188‑291).  </li>
-<li><strong>Optional fetch</strong> – uses <code>tryRunGit(repoRoot, [&quot;fetch&quot;, &quot;--all&quot;, &quot;--prune&quot;, &quot;--tags&quot;]);</code> unless <code>opts.fetchRemote === false</code>.  </li>
-<li><strong>Snapshot reuse</strong> – checks <code>existing?.snapshotPath</code> and <code>isUsableSnapshotDir</code> to avoid re‑snapshotting.  </li>
-<li><strong>Progress reporting</strong> – mirrors <code>indexWorkspaceHistory</code> but includes a “cached” message for already‑snapshot commits.  </li>
-<li><strong>Export list</strong> – now includes <code>refreshWorkspaceHistory</code> (lines 295‑298).</li>
+<li><strong>Imports</strong>: added <code>fsp</code>, <code>fssync</code>, <code>path</code>, <code>runGit/tryRunGit</code>, and <code>upsertWorkspace/getWorkspace</code> (lines 3‑6, 33).  </li>
+<li><strong>Utility helpers</strong>: <code>removeDirSafe</code> (lines 8‑16) and <code>isUsableSnapshotDir</code> (lines 18‑32) guard filesystem operations.  </li>
+<li><strong>Commit enumeration</strong>: <code>listCommitsOldestFirst</code> (lines 35‑58) runs <code>git log</code> and returns an array of commit objects.  </li>
+<li><strong>Snapshot creation</strong>: <code>snapshotCommit</code> (lines 61‑78) materializes a detached worktree, validates it, and returns the path.  </li>
+<li><strong>Single‑commit snapshot</strong>: <code>ensureCommitSnapshot</code> (lines 80‑98) ties a snapshot to a workspace record via <code>upsertWorkspace</code>.  </li>
+<li><strong>Full history indexing</strong>: <code>indexWorkspaceHistory</code> (lines 100‑183) walks all commits, creates snapshots, writes metadata, and updates workspace state.  </li>
+<li><strong>Refresh logic</strong>: <code>refreshWorkspaceHistory</code> (lines 188‑291) optionally fetches remote refs, re‑reads the log, re‑uses existing snapshots, and updates the workspace.  </li>
+<li><strong>Exports</strong>: all public functions are exported (lines 293‑300).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – prevents duplicate snapshots and tolerates fetch failures without throwing.  </li>
-<li><strong>Performance</strong> – skips snapshotting for commits that already have a usable snapshot, reducing disk I/O.  </li>
-<li><strong>Maintainability</strong> – separates refresh logic from full indexing, making each path easier to test and evolve.  </li>
-<li><strong>Compatibility</strong> – no breaking changes; the new export may require updating imports elsewhere.  </li>
-<li><strong>Observability</strong> – progress callbacks provide the same granularity as <code>indexWorkspaceHistory</code>.</li>
+<li><strong>New API surface</strong>: callers can now trigger history indexing or refresh via the exported functions.  </li>
+<li><strong>Filesystem side‑effects</strong>: the module creates/clears directories under <code>workspace.dataDir</code>, which may affect disk usage and performance.  </li>
+<li><strong>Git dependency</strong>: relies on <code>git</code> being available; errors are surfaced through <code>runGit</code>/<code>tryRunGit</code>.  </li>
+<li><strong>State persistence</strong>: uses <code>upsertWorkspace</code>/<code>getWorkspace</code>, so existing workspace records must be compatible with the new <code>commits</code> structure.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>tryRunGit</code> silently swallowing errors does not hide critical fetch failures.  </li>
-<li>Ensure <code>isUsableSnapshotDir</code> correctly identifies stale snapshots; stale snapshots could be mistakenly reused.  </li>
-<li>Test that <code>refreshWorkspaceHistory</code> correctly updates <code>workspace.historyError</code> on unexpected failures.  </li>
-<li>Confirm that the function handles an empty or missing <code>workspace.commits</code> array without crashing.</li>
+<li>Verify that <code>workspace.dataDir</code> paths are correctly resolved on all OSes; path handling is critical.  </li>
+<li>Ensure <code>runGit</code> and <code>tryRunGit</code> correctly propagate errors; missing Git binaries could crash the process.  </li>
+<li>Performance regression: snapshotting every commit can be expensive; benchmark on large repos.  </li>
+<li>Test that <code>refreshWorkspaceHistory</code> correctly re‑uses existing snapshots and does not overwrite them inadvertently.</li>
 </ul>
 </article>
   </main>

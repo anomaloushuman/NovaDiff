@@ -26,31 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/themes/types.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:50:55.276Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:39:54.946Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/src/themes/types.ts</code> (lines 1‑36) adds a type‑safe theme system for the graph view component.</p>
+<p>A new file <code>packages/graph-view/src/themes/types.ts</code> (added lines R1‑R36) introduces a type system for graph‑view themes and a default configuration.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>export type PresetId = …</code> (lines 1‑6) lists supported preset identifiers.  </li>
-<li><code>export interface AccentSwatch</code> (lines 8‑13) defines accent color metadata.  </li>
-<li><code>export interface ThemePreset</code> (lines 16‑22) bundles preset metadata, colors, accent swatches, and a default accent ID.  </li>
-<li><code>export type HeadingFont = &quot;serif&quot; | &quot;sans&quot; | &quot;mono&quot;</code> (line 25) restricts heading font choices.  </li>
-<li><code>export interface ThemeConfig</code> (lines 27‑31) captures runtime theme configuration.  </li>
-<li><code>export const DEFAULT_THEME_CONFIG: ThemeConfig</code> (lines 33‑36) provides a baseline configuration (<code>presetId: &quot;dark-gold&quot;</code>, <code>accentId: &quot;gold&quot;</code>).</li>
+<li><strong><code>PresetId</code></strong> (<code>&quot;dark-gold&quot; | &quot;dark-ocean&quot; | &quot;dark-forest&quot; | &quot;dark-rose&quot; | &quot;light-minimal&quot;</code>) – supported preset identifiers.  </li>
+<li><strong><code>AccentSwatch</code></strong> – describes an accent set with <code>id</code>, <code>name</code>, <code>accent</code>, <code>accentDim</code>, <code>accentBright</code>.  </li>
+<li><strong><code>ThemePreset</code></strong> – bundles preset metadata, color map, accent swatches, and default accent ID.  </li>
+<li><strong><code>HeadingFont</code></strong> – restricts heading fonts to <code>&quot;serif&quot; | &quot;sans&quot; | &quot;mono&quot;</code>.  </li>
+<li><strong><code>ThemeConfig</code></strong> – runtime theme settings: <code>presetId</code>, <code>accentId</code>, optional <code>headingFont</code>.  </li>
+<li><strong><code>DEFAULT_THEME_CONFIG</code></strong> – baseline config (<code>presetId: &quot;dark-gold&quot;</code>, <code>accentId: &quot;gold&quot;</code>).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Type definitions prevent misuse of preset identifiers and accent data.  </li>
-<li><strong>Maintainability</strong>: Centralized theme definitions simplify adding or updating presets.  </li>
-<li><strong>Compatibility</strong>: As a new module, it introduces no breaking changes; existing code remains unaffected unless it imports from this file.</li>
+<li><strong>API surface expansion</strong> – consumers can import and type theme logic with the new symbols.  </li>
+<li><strong>Centralized defaults</strong> – <code>DEFAULT_THEME_CONFIG</code> offers a single source for initial theme values.  </li>
+<li><strong>No breaking changes</strong> – the file is added; existing code is unaffected unless it imports from this path.  </li>
+<li><strong>Stronger typing</strong> – the new interfaces reduce runtime errors when handling presets or accents.  </li>
+<li><strong>No runtime cost</strong> – only type declarations and a small constant are present.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that components consuming theme data import the correct types from this file.  </li>
-<li>Ensure that preset identifiers used elsewhere match the <code>PresetId</code> union to avoid type errors.  </li>
-<li>Run the repository’s lint, test, and production build scripts to confirm no new TypeScript errors.</li>
+<li><strong>Missing imports</strong> – verify modules that use theme data import from <code>packages/graph-view/src/themes/types.ts</code>.  </li>
+<li><strong>Test coverage</strong> – update tests that rely on theme configuration to reference <code>DEFAULT_THEME_CONFIG</code> or the new interfaces.  </li>
+<li><strong>Documentation</strong> – update README or internal docs to reflect <code>PresetId</code> and <code>ThemeConfig</code>.  </li>
+<li><strong>Future extensions</strong> – adding new presets requires updating the <code>PresetId</code> union to maintain type safety.</li>
 </ul>
 </article>
   </main>

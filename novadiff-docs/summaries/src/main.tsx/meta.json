@@ -1,0 +1,44 @@
+{
+  "relPath": "src/main.tsx",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:35:48.918Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { StrictMode } from \"react\";",
+      "R2 added: import { createRoot } from \"react-dom/client\";",
+      "R3 added: import App from \"./App\";"
+    ],
+    "changed_line_ranges": [
+      "R1-9"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { StrictMode } from \"react\";",
+      "R2 added: import { createRoot } from \"react-dom/client\";",
+      "R3 added: import App from \"./App\";",
+      "R5 added: createRoot(document.getElementById(\"root\") as HTMLElement).render(",
+      "R6 added: <StrictMode>",
+      "R7 added: <App />"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

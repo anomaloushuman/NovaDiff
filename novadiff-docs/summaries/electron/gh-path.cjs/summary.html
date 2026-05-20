@@ -26,37 +26,40 @@
 <body>
   <header class="top">
     <h1>electron/gh-path.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:10:58.111Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:21:50.765Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/gh-path.cjs</code> is added to resolve the GitHub CLI executable. It introduces <code>&quot;use strict&quot;</code> and imports <code>fssync</code>, <code>os</code>, <code>path</code>, and <code>spawnSync</code>. The module caches the resolved path in <code>cachedGhPath</code>.</p>
+<p>A new module <code>electron/gh-path.cjs</code> is added. It supplies helpers to locate the GitHub CLI binary, augment the PATH for GUI‑app contexts, and generate platform‑specific install hints.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> added at lines 3‑6.  </li>
-<li><strong><code>extraPathDirs</code></strong> (lines 15‑31) returns common bin directories: Homebrew, user‑bin, and a Windows‑specific <code>GitHub CLI</code> path.  </li>
-<li><strong><code>augmentPathForCli</code></strong> (lines 38‑51) merges these dirs into the current <code>PATH</code>, deduplicating entries.  </li>
-<li><strong><code>ghCandidatePaths</code></strong> (lines 53‑60) lists typical <code>gh</code> locations.  </li>
-<li><strong><code>resolveViaLoginShell</code></strong> (lines 63‑90) runs <code>/bin/zsh</code> or <code>/bin/bash</code> with <code>-ilc</code>/<code>-lc</code> to locate <code>gh</code> on non‑Windows systems.  </li>
-<li><strong><code>verifyGh</code></strong> (lines 92‑98) executes <code>gh --version</code> to confirm the binary.  </li>
-<li><strong><code>resolveGhExecutable</code></strong> (lines 104‑138) orchestrates the search: checks cache, candidate paths, login shell, then <code>which</code>/<code>where</code>; caches the result and falls back to <code>&quot;gh&quot;</code> or <code>&quot;gh.exe&quot;</code>.  </li>
-<li><strong><code>clearGhCache</code></strong> (lines 140‑142) resets the cache.  </li>
-<li><strong><code>isGhInstalled</code></strong> (lines 144‑150) verifies installation status.  </li>
-<li><strong><code>ghInstallHint</code></strong> (lines 152‑160) returns platform‑specific install guidance.  </li>
-<li><strong><code>ghNotFoundError</code></strong> (lines 162‑164) creates an error containing the hint.  </li>
-<li><strong>Exports</strong> (lines 166‑173) expose the public API.</li>
+<li><strong><code>augmentPathForCli</code></strong> (lines 38‑51): builds a new environment object that merges Homebrew/user bin directories; it does not modify <code>process.env</code>.  </li>
+<li><strong><code>extraPathDirs</code></strong> (lines 15‑31): lists common binary locations, including Windows <code>LOCALAPPDATA</code>.  </li>
+<li><strong><code>ghCandidatePaths</code></strong> (lines 53‑60): enumerates typical <code>gh</code> install locations.  </li>
+<li><strong><code>resolveViaLoginShell</code></strong> (lines 63‑90): runs <code>/bin/zsh</code> or <code>/bin/bash</code> with <code>-ilc</code> / <code>-lc</code> to execute <code>command -v gh</code>; returns the path if found.  </li>
+<li><strong><code>resolveGhExecutable</code></strong> (lines 104‑138): performs a multi‑step lookup—cache, candidate paths, login shell, <code>which/where</code>, then defaults to <code>&quot;gh&quot;</code> or <code>&quot;gh.exe&quot;</code>. Uses <code>cachedGhPath</code> to avoid repeated <code>spawnSync</code>.  </li>
+<li><strong><code>verifyGh</code></strong> (lines 92‑99): runs <code>gh --version</code> to confirm the binary works.  </li>
+<li><strong><code>ghInstallHint</code></strong> (lines 152‑160) and **<code>ghNotFoundError</code>*</li>
+</ul>
+<ul>
+<li>(lines 162‑164): provide platform‑specific guidance.</li>
+</ul>
+<ul>
+<li>The module exports all helpers (lines 166‑173).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes gh resolution logic and caching, reducing repeated lookups.  </li>
-<li>Provides actionable install hints in error messages.</li>
+<li>Centralizes path logic for macOS, Windows, and Linux; functions are small, exported, and testable.  </li>
+<li>Caching reduces repeated synchronous child‑process calls.  </li>
+<li>Explicit handling of Windows (<code>where</code>, <code>gh.exe</code>) and macOS Homebrew paths.  </li>
+<li>Errors include install hints, improving user experience.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>augmentPathForCli</code> returns a new environment object; ensure it does not mutate the caller’s <code>process.env</code>.  </li>
-<li><code>resolveViaLoginShell</code> depends on <code>/bin/zsh</code> or <code>/bin/bash</code>; if neither exists, the fallback must still locate <code>gh</code>.  </li>
-<li>Cached path may become stale if <code>gh</code> is installed or removed during a session; <code>clearGhCache</code> should be invoked accordingly.  </li>
-<li>Add unit tests for helpers, especially <code>ghCandidatePaths</code> and <code>ghInstallHint</code>, to guard against future changes.</li>
+<li><code>spawnSync</code> calls block startup; verify latency on all target platforms.  </li>
+<li><code>resolveViaLoginShell</code> assumes <code>/bin/zsh</code> or <code>/bin/bash</code> exist; test on minimal images or custom macOS setups.  </li>
+<li>If <code>gh</code> is installed/uninstalled after app start, <code>clearGhCache</code> must be called; ensure callers invoke it.  </li>
+<li><code>augmentPathForCli</code> merges directories but does not alter global <code>process.env</code>; downstream modules must use the returned environment.</li>
 </ul>
 </article>
   </main>

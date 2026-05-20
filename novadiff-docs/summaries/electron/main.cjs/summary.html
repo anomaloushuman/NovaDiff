@@ -26,51 +26,60 @@
 <body>
   <header class="top">
     <h1>electron/main.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:17:00.602Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:27:44.553Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>electron/main.cjs</code> module has been refactored to replace synchronous engine calls with asynchronous ones, add progress reporting via IPC, and remove legacy handlers. The changes introduce new imports, helper functions, and async IPC handlers for knowledge‑graph and workspace operations.</p>
+<p>A new <code>electron/main.cjs</code> file replaces the previous main‑process entry point. It imports Node modules, sets up the Electron app, defines window helpers, and registers a comprehensive IPC surface.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>  <ul>
-<li>Added <code>const fssync = require(&quot;node:fs&quot;);</code> (R4).  </li>
-<li>Replaced legacy <code>runCompareEngine</code> with <code>runCompareEngine, runCompareEngineAsync</code> (R16).  </li>
-<li>Added <code>buildKnowledgeGraph</code> (R43), <code>git-service</code> (R51), and <code>github-service</code> (R59).</li>
+<li><strong>Imports</strong> added at lines 1‑16: <code>fs/promises</code>, <code>fs</code>, <code>path</code>, <code>url</code>, <code>electron</code>, <code>compare-runner.cjs</code>, <code>llm.cjs</code>, <code>prefetch-summaries.cjs</code>, etc. (<code>R1‑16</code>).</li>
+<li><strong>Window helpers</strong>:  <ul>
+<li><code>createWindow</code> (lines 164‑203) creates the main window.  </li>
+<li><code>buildMenu</code> (144‑162) builds the application menu.  </li>
+<li><code>iconPath</code> (136‑142) resolves the app icon.  </li>
+<li><code>windowStatePayload</code> (118‑123) and <code>emitWindowState</code> (129‑133) report window state.</li>
 </ul>
 </li>
-<li><strong>Progress helpers</strong>  <ul>
-<li><code>sendEngineProgress(webContents, payload)</code> (R18‑R20).  </li>
-<li><code>sendKnowledgeGraphProgress</code> and <code>sendWorkspaceHistoryProgress</code> emit progress events.</li>
+<li><strong>Progress emitters</strong>:  <ul>
+<li><code>sendEngineProgress</code> (18‑22)  </li>
+<li><code>sendKnowledgeGraphProgress</code> (571‑587)  </li>
+<li><code>sendWorkspaceHistoryProgress</code> (806‑812)  </li>
+<li><code>sendGithubAuthProgress</code> (838‑844)</li>
 </ul>
 </li>
-<li><strong>Async IPC handlers</strong>  <ul>
-<li>New handlers for knowledge‑graph build/read, git tooling detection, repo status, publish preview/execute, and docs read/open, all wired to the new progress callbacks.</li>
+<li><strong>IPC surface</strong>: hundreds of <code>ipcMain.handle</code> registrations covering:  <ul>
+<li>Compare operations (<code>compare-folders</code>, <code>get-file-diff</code>, <code>filter-changes-gitignore</code>, etc.) – lines 222‑457.  </li>
+<li>LLM actions (<code>llm-summarize</code>, <code>llm-summarize-stream</code>, <code>llm-abort-stream</code>, <code>llm-probe</code>) – lines 306‑335.  </li>
+<li>Knowledge‑graph build/read – lines 589‑611.  </li>
+<li>Docs handling (<code>write-novadiff-docs</code>, <code>read-novadiff-docs-file</code>, <code>open-novadiff-docs-in-browser</code>) – lines 500‑570.  </li>
+<li>Git/GitHub integration (<code>git-detect-tooling</code>, <code>git-repo-status</code>, <code>github-list-repos</code>, <code>github-pr-compare-roots</code>, <code>github-gh-install</code>, etc.) – lines 694‑852.  </li>
+<li>Workspace management (<code>workspace-create</code>, <code>workspace-set-active</code>, <code>workspace-list</code>, <code>workspace-update-live-repo</code>, <code>workspace-ensure-commit-snapshot</code>, etc.) – lines 898‑1069.  </li>
+<li>Snapshot operations (<code>workspace-snapshot-list-files</code>, <code>workspace-snapshot-read-file</code>) – lines 1027‑1056.</li>
 </ul>
 </li>
-<li><strong>Legacy removal</strong>  <ul>
-<li>Removed handlers such as <code>filter-changes-gitignore</code>, <code>codebase-outline</code>, and <code>risk-signals</code>.</li>
-</ul>
-</li>
-<li><strong>Window creation</strong>  <ul>
-<li>Updated <code>createWindow</code> logic (ranges 110‑511 and 159‑565) to accommodate the new async flow.</li>
-</ul>
-</li>
+<li><strong>Lifecycle hooks</strong>: <code>app.whenReady</code> (205‑208), <code>activate</code> (209‑213), <code>window-all-closed</code> (216‑220), and <code>before-quit</code> (1088‑1090) which calls <code>cleanupNovadiffWorktrees</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Enables non‑blocking UI during heavy engine operations.  </li>
-<li>Provides real‑time progress updates to renderer processes.  </li>
-<li>Simplifies codebase by eliminating outdated handlers.  </li>
-<li>Requires updated IPC listeners in the renderer to consume new events.</li>
+<li>IPC channel names are explicit; duplicate names would override earlier handlers (risk: collision).  </li>
+<li>Path validation in <code>read-novadiff-docs-file</code> (521‑549) and <code>knowledge-graph-read-file</code> (646‑660) mitigates traversal attacks.  </li>
+<li>Git clone and GH install use <code>child_process.spawn</code> with sanitized arguments; injection remains a risk if inputs are not validated.  </li>
+<li>Node 18</li>
+</ul>
+<ul>
+<li><code>node:</code> imports require compatible Electron; older builds may fail.</li>
+</ul>
+<ul>
+<li>Progress emitters provide telemetry but need matching listeners to avoid memory leaks.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Compatibility</strong>: Ensure all renderer IPC listeners are updated to handle the new progress events.  </li>
-<li><strong>Testing</strong>: Run lint, unit tests, and production build (<code>npm run lint</code>, <code>npm test</code>, <code>npm run build</code>) to confirm no regressions.  </li>
-<li><strong>File system checks</strong>: Verify <code>fssync</code> usage correctly handles synchronous file reads without blocking the main thread.  </li>
-<li><strong>Deprecation</strong>: Confirm that removed legacy handlers are no longer referenced elsewhere in the project.</li>
-</ul>
+<ol>
+<li>Verify renderer code does not reuse IPC channel names such as <code>compare-folders</code> or <code>llm-summarize</code>.  </li>
+<li>Test edge cases for path validation in docs and graph read handlers.  </li>
+<li>Ensure inputs to <code>spawn</code> (git clone, gh install) are sanitized to prevent command injection.  </li>
+<li>Confirm that <code>nova-diff-icon.png</code> is bundled for packaged builds.</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

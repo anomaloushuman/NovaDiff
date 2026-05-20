@@ -1,24 +1,22 @@
 ### Overview  
-A new persistence module (`packages/graph-core/src/persistence/index.ts`) is added. It centralises file‑system helpers for knowledge graphs, metadata, fingerprints, and configuration. The module introduces path sanitisation, directory creation, and optional schema validation.
+A new persistence module (`packages/graph-core/src/persistence/index.ts`) centralises file handling for knowledge graphs, meta, fingerprints, and config. It replaces ad‑hoc logic with a single, well‑structured API.
 
 ### Key changes  
-- **Imports** (lines 1‑5) bring in `fs`, `path`, type definitions, and `validateGraph`.  
-- **`ensureDir(projectRoot)`** (lines 13‑19) creates the `.novadiff-graph` directory if missing and returns its path.  
-- **`sanitiseFilePaths(graph, projectRoot)`** (lines 38‑66) converts absolute node paths to relative or filename‑only forms, preventing leakage of the developer’s directory layout.  
-- **`saveGraph` / `loadGraph`** (lines 69‑106) persist the graph as `knowledge-graph.json`. `loadGraph` optionally validates via `validateGraph`.  
-- **`saveMeta` / `loadMeta`** (lines 107‑116) handle `meta.json`.  
-- **`saveFingerprints` / `loadFingerprints`** (lines 118‑131) manage `fingerprints.json`.  
-- **`saveConfig` / `loadConfig`** (lines 135‑148) read/write `config.json` with a default `{ autoUpdate: false, outputLanguage: "en" }`.  
-- **`saveDomainGraph` / `loadDomainGraph`** (lines 152‑182) mirror graph persistence under `domain-graph.json`.  
+- **Imports & constants**: added `node:fs`/`node:path` helpers and file names (`GRAPH_FILE`, `META_FILE`, etc.) (lines 1‑11).  
+- **`ensureDir(projectRoot)`** (lines 13‑19) guarantees the `.novadiff-graph` folder exists.  
+- **`sanitiseFilePaths(graph, projectRoot)`** (lines 38‑66) converts absolute paths to project‑relative or just the filename, preventing leakage of developer directories.  
+- **`saveGraph` / `loadGraph`** (lines 69‑106) now sanitise before persisting and validate on load via `validateGraph`.  
+- **`saveMeta` / `loadMeta`**, **`saveFingerprints` / `loadFingerprints`**, **`saveConfig` / `loadConfig`** (lines 107‑148) provide CRUD for auxiliary data, with graceful fallbacks on missing or malformed files.  
+- **Domain graph support** (`saveDomainGraph` / `loadDomainGraph`, lines 152‑182) mirrors the main graph logic.  
+- Default config (`DEFAULT_CONFIG`) and error‑safe parsing for config files (lines 140‑147).
 
 ### Impact  
-- **Privacy**: Sanitisation guarantees that no absolute paths are written to disk.  
-- **Data integrity**: Validation in `loadGraph`/`loadDomainGraph` throws on malformed data, preventing downstream errors.  
-- **Maintainability**: Centralised persistence logic replaces scattered file handling across the repo.  
-- **Compatibility**: Callers must import the new functions from this module; legacy imports may need updating.
+- Sanitisation removes sensitive absolute paths; validation throws an `Error` on malformed graphs.  
+- All persistence logic lives in one module, reducing duplication.  
+- Default config is returned when the file is absent or corrupted.
 
 ### Risks & follow‑ups  
-- **Windows path handling**: `isAbsolute` and `relative` may behave differently; run tests on Windows to confirm sanitisation.  
-- **Error propagation**: `loadGraph` throws on validation failure; callers should handle or catch this exception.  
-- **Directory creation**: `ensureDir` assumes `projectRoot` is writable; verify permissions in CI environments.  
-- **Backward compatibility**: If older code expected a different file layout, update imports accordingly and run integration tests.
+- Verify `sanitiseFilePaths` correctly handles paths inside, outside, and already relative to `projectRoot`.  
+- Callers of `loadGraph`/`loadDomainGraph` must handle thrown errors or disable validation (`options?.validate === false`).  
+- Confirm `loadConfig` returns the intended defaults when the file is missing or corrupted.  
+- Ensure the new module is re‑exported from the package’s public index so external consumers can access these helpers.

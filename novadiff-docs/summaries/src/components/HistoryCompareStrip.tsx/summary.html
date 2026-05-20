@@ -26,38 +26,40 @@
 <body>
   <header class="top">
     <h1>src/components/HistoryCompareStrip.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:44:05.894Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:56:00.210Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>HistoryCompareStrip</code> now displays the live repository path in a read‑only field and uses <code>pathDisplayLabel</code> to format that path. The component no longer accepts user edits to the live repo root.</p>
+<p>A new component <code>HistoryCompareStrip</code> is added at <code>src/components/HistoryCompareStrip.tsx</code> (lines 1‑212). It renders a header strip that lets the user pick a base commit, a head commit or a live repository folder, swap the two, and trigger a comparison.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import added</strong>: <code>import { pathDisplayLabel } from &quot;../app/pathDisplay&quot;;</code> (line 9).  </li>
-<li><strong>Prop renamed</strong>: <code>onLiveRepoRoot</code> → <code>_onLiveRepoRoot</code> in the signature (lines 53‑54); the prop is no longer referenced.  </li>
-<li><strong>Input updated</strong>:  <ul>
-<li><code>value={pathDisplayLabel(liveRepoRoot)}</code> (lines 140‑141).  </li>
-<li><code>readOnly</code> attribute added (line 141).  </li>
-<li><code>onChange</code> handler removed (lines 139‑140).  </li>
-<li>Placeholder changed to <code>&quot;Browse for live clone…&quot;</code> (lines 142‑143).  </li>
-<li><code>title</code> attribute removed (line 144).</li>
+<li><strong>Imports</strong> (lines 1‑7): icons <code>ArrowLeftRight</code>, <code>ChevronDown</code>, <code>GitBranch</code>, <code>GitCompareArrows</code>, <code>Loader2</code> from <em>lucide-react</em>.  </li>
+<li><strong>Type imports</strong> (lines 8‑9): <code>WorkspaceCommitSnapshot</code> from <code>../app/workspaceTypes</code> and <code>pathDisplayLabel</code> from <code>../app/pathDisplay</code>.  </li>
+<li><strong>Props interface</strong> (lines 11‑28): <code>HistoryCompareStripProps</code> defines arrays of commits, hash strings, live‑repo flags, busy/error states, and callbacks for every user action.  </li>
+<li><strong>Helpers</strong> (lines 30‑36, 38‑40): <code>truncateSubject</code> trims a commit subject to 48 chars; <code>commitLabel</code> builds the display string.  </li>
+<li><strong>Component</strong> (lines 42‑212):  <ul>
+<li>Renders a title and description.  </li>
+<li>Provides a base‑commit <code>&lt;select&gt;</code> (lines 98‑110) and a head‑commit <code>&lt;select&gt;</code> or live‑repo <code>&lt;input&gt;</code> (lines 134‑170).  </li>
+<li>Swap button (lines 118‑126) and live‑repo toggle checkbox (lines 180‑186).  </li>
+<li>Compare button (lines 191‑205) is disabled until <code>canCompare</code> (lines 62‑66) is true.  </li>
+<li>Shows a loader icon when <code>busy</code> is true (lines 199‑203).  </li>
+<li>Displays an error message if <code>error</code> is set (line 207).  </li>
+<li>All interactive elements include <code>aria-label</code> or <code>aria-hidden</code> attributes as shown in the diff.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>UI</strong>: The live‑repo path is now immutable; users must click the browse button to change it.  </li>
-<li><strong>API</strong>: The component still declares an <code>_onLiveRepoRoot</code> prop but does not use it, which may confuse callers.  </li>
-<li><strong>Formatting</strong>: <code>pathDisplayLabel</code> ensures a consistent, user‑friendly display of the repo path.  </li>
-<li><strong>Tests</strong>: Any tests expecting the live‑repo input to be editable will need updating.  </li>
-<li><strong>Lint</strong>: The unused <code>_onLiveRepoRoot</code> may trigger a warning; consider removing it if no longer needed.</li>
+<li>Adds a self‑contained UI for commit comparison; no changes to existing components.  </li>
+<li>Requires parent components to provide the full set of callbacks and state values.  </li>
+<li>No new runtime dependencies beyond the imported icons and types.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong>: Callers that rely on <code>onLiveRepoRoot</code> being invoked will silently fail. Verify that such callbacks are no longer required.  </li>
-<li><strong>Unused prop</strong>: Decide whether to keep <code>_onLiveRepoRoot</code> for backward compatibility or remove it to avoid lint noise.  </li>
-<li><strong>Localization</strong>: The placeholder text change may need to be reflected in i18n resources.  </li>
-<li><strong>Testing</strong>: Update unit tests for <code>HistoryCompareStrip</code> to assert the read‑only behavior and new placeholder.</li>
+<li><strong>Regression</strong>: unknown from the available diff/scan evidence whether the new strip interferes with existing commit‑selection logic.  </li>
+<li><strong>Accessibility</strong>: the component includes <code>aria-label</code> attributes, but comprehensive testing is not shown in the diff.  </li>
+<li><strong>Testing</strong>: unit tests for <code>truncateSubject</code>, <code>commitLabel</code>, and the enable/disable logic are not present in the current diff.  </li>
+<li><strong>Linting</strong>: running <code>tsc</code>, ESLint, and Prettier should confirm no type or style errors.</li>
 </ul>
 </article>
   </main>

@@ -26,39 +26,39 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/staleness.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:43:21.615Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:28:00.890Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/staleness.ts</code> adds utilities for detecting stale analysis results and merging incremental updates into a knowledge graph.</p>
+<p>A new module <code>packages/graph-core/src/staleness.ts</code> (lines 1‑90) adds utilities for detecting stale knowledge graphs and merging incremental updates.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>execFileSync</code> from <code>child_process</code> (R1) and type imports for <code>KnowledgeGraph</code>, <code>GraphNode</code>, <code>GraphEdge</code> (R2).  </li>
-<li><strong>Interface</strong> – <code>StalenessResult</code> (R4‑R7) exposes <code>stale: boolean</code> and <code>changedFiles: string[]</code>.  </li>
-<li><strong><code>getChangedFiles</code></strong> (R13‑R28) runs <code>git diff &lt;lastCommitHash&gt;..HEAD --name-only</code> in <code>projectDir</code>, returning a trimmed list of changed file paths or an empty array if the command fails.  </li>
-<li><strong><code>isStale</code></strong> (R34‑R42) calls <code>getChangedFiles</code> and flags the graph as stale when any files changed.  </li>
-<li><strong><code>mergeGraphUpdate</code></strong> (R54‑R90)  <ol>
-<li>Builds a <code>Set</code> of changed file paths.  </li>
-<li>Removes nodes whose <code>filePath</code> matches a changed file (R63‑R68).  </li>
-<li>Filters edges whose source or target node was removed (R75‑R78).  </li>
-<li>Adds new nodes/edges and updates <code>project.gitCommitHash</code> and <code>project.analyzedAt</code> (R80‑R89).</li>
+<li><strong>Imports</strong> (<code>R1‑R2</code>): <code>execFileSync</code> from <code>child_process</code> and type definitions from <code>./types.js</code>.  </li>
+<li><strong><code>StalenessResult</code> interface</strong> (<code>R4‑R7</code>): exposes <code>stale: boolean</code> and <code>changedFiles: string[]</code>.  </li>
+<li><strong><code>getChangedFiles</code></strong> (<code>R13‑R28</code>): runs <code>git diff &lt;lastCommitHash&gt;..HEAD --name-only</code> in <code>projectDir</code>; returns trimmed file paths or an empty array on error.  </li>
+<li><strong><code>isStale</code></strong> (<code>R34‑R42</code>): calls <code>getChangedFiles</code> and reports <code>stale</code> if any files changed.  </li>
+<li><strong><code>mergeGraphUpdate</code></strong> (<code>R54‑R90</code>):  <ol>
+<li>Builds a set of changed file paths (<code>changedSet</code>).  </li>
+<li>Removes nodes whose <code>filePath</code> matches a changed file (<code>removedNodeIds</code>).  </li>
+<li>Keeps edges whose source and target are not in <code>removedNodeIds</code>.  </li>
+<li>Returns a new graph with updated <code>project.gitCommitHash</code> and <code>project.analyzedAt</code>, and appends <code>newNodes</code>/<code>newEdges</code>.</li>
 </ol>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – Provides a deterministic way to check staleness; however, <code>getChangedFiles</code> silently returns an empty array on <code>git</code> errors, which may mask stale states.  </li>
-<li><strong>Maintainability</strong> – Centralizes graph‑update logic; future changes to node/edge removal rules can be made in one place.  </li>
-<li><strong>Performance</strong> – <code>execFileSync</code> blocks the event loop; for large repositories the diff operation may become a bottleneck.  </li>
-<li><strong>Compatibility</strong> – No existing files are modified; the module is additive and does not break current APIs.</li>
+<li><strong>Correctness</strong>: Provides deterministic staleness checks and a clear merge strategy for incremental graph updates.  </li>
+<li><strong>Maintainability</strong>: Centralizes git‑based change detection; future extensions can reuse <code>getChangedFiles</code>.  </li>
+<li><strong>Performance</strong>: <code>execFileSync</code> blocks the event loop; suitable for CLI tooling but may need async refactor for high‑throughput services.  </li>
+<li><strong>Compatibility</strong>: Relies on a Git repository; non‑Git environments will silently return an empty change list.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ol>
-<li><strong>Git failure handling</strong> – Verify that <code>getChangedFiles</code> correctly reports errors and that <code>isStale</code> behaves as intended when <code>git</code> is unavailable.  </li>
-<li><strong>Node <code>filePath</code> undefined</strong> – Ensure all nodes in the graph have a <code>filePath</code>; otherwise, <code>mergeGraphUpdate</code> may leave stale nodes.  </li>
-<li><strong>Large graph memory usage</strong> – Benchmark <code>mergeGraphUpdate</code> on the largest expected graphs to confirm acceptable memory and CPU consumption.  </li>
-<li><strong>Integration</strong> – Confirm that callers now use <code>isStale</code>/<code>mergeGraphUpdate</code> instead of older manual merge logic, avoiding duplicate work.</li>
-</ol>
+<ul>
+<li><strong>Error handling</strong>: <code>getChangedFiles</code> swallows all errors; verify that silent failures are acceptable or add logging.  </li>
+<li><strong>Node removal logic</strong>: Assumes <code>filePath</code> is defined on nodes; test with nodes lacking this property to ensure no unintended removals.  </li>
+<li><strong>Edge filtering</strong>: Only checks source/target IDs; confirm that edges referencing removed nodes are correctly pruned.  </li>
+<li><strong>Timestamp precision</strong>: <code>new Date().toISOString()</code> may not match existing format; run integration tests to confirm consistency.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

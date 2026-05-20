@@ -26,56 +26,48 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/graph-builder.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:55:02.047Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:41:00.415Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-core/src/analyzer/graph-builder.ts</code> adds a <code>GraphBuilder</code> class that builds a <code>KnowledgeGraph</code> from source and non‑code artifacts.<br>The file introduces several interfaces (<code>FileMeta</code>, <code>FileAnalysisMeta</code>, <code>NonCodeFileMeta</code>, <code>NonCodeFileAnalysisMeta</code>) and a mapping from definition kinds to node types (<code>KIND_TO_NODE_TYPE</code>).</p>
+<p>A new file <code>packages/graph-core/src/analyzer/graph-builder.ts</code> (lines 1‑337) introduces a <code>GraphBuilder</code> class that assembles a knowledge graph from source files, structural analysis, and non‑code artifacts. The file also defines metadata interfaces and a kind‑to‑node‑type map.</p>
 <h3>Key changes</h3>
 <ul>
 <li><strong>Imports</strong> (lines 1‑13):```ts
-import type { KnowledgeGraph, GraphNode, GraphEdge, StructuralAnalysis, DefinitionInfo, ServiceInfo, EndpointInfo, StepInfo, ResourceInfo, SectionInfo } from &quot;../types.js&quot;;
+import type { KnowledgeGraph, GraphNode, GraphEdge, StructuralAnalysis,
+  DefinitionInfo, ServiceInfo, EndpointInfo, StepInfo, ResourceInfo, SectionInfo } from &quot;../types.js&quot;;
 import { LanguageRegistry } from &quot;../languages/language-registry.js&quot;;</li>
 </ul>
-<pre><code class="language--">- **Kind mapping** (lines 39‑58) maps definition kinds to node types.
-- **GraphBuilder** (lines 60‑337)  
-  
-
-* Holds `nodes`, `edges`, `languages`, `nodeIds`, `edgeKeys`.  
-  
-
-* Constructor accepts `projectName`, `gitHash`, optional `LanguageRegistry`.  
-  
-
-* `addFile` and `addFileWithAnalysis` create file, function, and class nodes with “contains” edges.  
-  
-
-* `addImportEdge` and `addCallEdge` add dependency edges, deduplicated via `edgeKeys`.  
-  
-
-* `addNonCodeFile` and `addNonCodeFileWithAnalysis` create child nodes for definitions, services, endpoints, steps, and resources, using `addChildNode`.  
-  
-
-* `addChildNode` warns on duplicate node IDs (lines 302‑310).  
-  
-
-* `mapKindToNodeType` warns on unknown kinds (lines 312‑318).  
-  
-
-* `build` returns a `KnowledgeGraph` object (lines 320‑336).
-
-### Impact
-
-The class centralises graph construction, decoupling analysis from persistence.  
-Runtime checks for duplicate node IDs and unknown definition kinds improve robustness.  
-All nodes and edges are stored in arrays, which is suitable for current graph sizes but may need review for very large projects.
-
-### Risks &amp; follow‑ups
-- No unit tests cover `GraphBuilder`; run existing graph tests to confirm no regressions.  
-- Edge deduplication relies on `edgeKeys`; verify that duplicate edges are ignored.  
-- `KIND_TO_NODE_TYPE` may miss new definition kinds; monitor for warnings during analysis.  
-- The file is added but not referenced by build scripts—unknown from the available diff/scan evidence.
-</code></pre>
+<p>```- **Metadata interfaces** (lines 15‑37): <code>FileMeta</code>, <code>FileAnalysisMeta</code>, <code>NonCodeFileMeta</code>, <code>NonCodeFileAnalysisMeta</code>.  </p>
+<ul>
+<li><strong>Kind mapping</strong> (lines 39‑58): <code>KIND_TO_NODE_TYPE</code> maps definition kinds (e.g., <code>&quot;table&quot;</code>, <code>&quot;service&quot;</code>) to graph node types.  </li>
+<li><strong>GraphBuilder class</strong> (lines 60‑337):  <ul>
+<li>Holds <code>nodes</code>, <code>edges</code>, <code>languages</code>, <code>nodeIds</code>, <code>edgeKeys</code>.  </li>
+<li>Constructor accepts <code>projectName</code>, <code>gitHash</code>, optional <code>LanguageRegistry</code>.  </li>
+<li><code>detectLanguage</code> uses the registry.  </li>
+<li>File addition: <code>addFile</code>, <code>addFileWithAnalysis</code> create file nodes and, for the latter, function and class nodes with <code>&quot;contains&quot;</code> edges.  </li>
+<li>Edge addition: <code>addImportEdge</code> (weight 0.7) and <code>addCallEdge</code> (weight 0.8).  </li>
+<li>Non‑code handling: <code>addNonCodeFile</code>, <code>addNonCodeFileWithAnalysis</code> create nodes for definitions, services, endpoints, steps, resources, and link them via <code>addChildNode</code>.  </li>
+<li><code>addChildNode</code> warns on duplicate IDs.  </li>
+<li><code>mapKindToNodeType</code> warns on unknown kinds and falls back to <code>&quot;concept&quot;</code>.  </li>
+<li><code>build</code> returns a <code>KnowledgeGraph</code> with sorted languages and current timestamps.</li>
+</ul>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes graph construction logic, reducing duplication across analyzers.  </li>
+<li>Provides explicit metadata contracts via interfaces.  </li>
+<li>Uses <code>Set</code> structures for duplicate detection, improving correctness.  </li>
+<li>No existing public APIs are altered; the new file is isolated.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Language detection</strong>: <code>detectLanguage</code> depends on <code>LanguageRegistry</code>; verify that all project extensions are registered.  </li>
+<li><strong>Duplicate node handling</strong>: <code>addChildNode</code> silently skips duplicates after a warning; confirm downstream consumers tolerate missing nodes.  </li>
+<li><strong>Kind mapping coverage</strong>: <code>KIND_TO_NODE_TYPE</code> may miss future kinds; add tests for unknown kinds to ensure fallback to <code>&quot;concept&quot;</code>.  </li>
+<li><strong>Edge weight semantics</strong>: Current weights (0.7 for imports, 0.8 for calls) are arbitrary; confirm they align with downstream traversal logic.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

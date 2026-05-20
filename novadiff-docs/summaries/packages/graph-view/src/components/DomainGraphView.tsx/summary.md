@@ -1,26 +1,23 @@
 ### Overview  
-Adds a `DomainGraphView.tsx` component that renders domain graphs with ReactFlow and an ELK layout. The component replaces a previous placeholder and introduces node types for domains, flows, and steps.
+A new `DomainGraphView` component is added at `packages/graph-view/src/components/DomainGraphView.tsx` (lines 1‑281). It renders a domain‑level graph with `@xyflow/react`, builds nodes and edges from a `KnowledgeGraph`, and applies an ELK layout.
 
 ### Key changes  
-- **Imports** (lines 1‑24): React hooks, ReactFlow components, `Edge`/`Node` types, styles, node components (`DomainClusterNode`, `FlowNode`, `StepNode`), store hooks (`useDashboardStore`), i18n (`useI18n`), layout utilities (`mergeElkPositions`, `nodesToElkInput`, `applyElkLayout`), and graph types.  
-- **`BuiltGraph` interface** (lines 36‑40) and helper `getDomainMeta` (lines 32‑34).  
-- **`buildDomainOverview`** (lines 42‑89): creates domain‑cluster nodes and cross‑domain edges.  
-- **`buildDomainDetail`** (lines 91‑166): builds flow and step nodes, calculates ordering and counts, and produces edges between flows and steps.  
-- **`DomainGraphViewInner`** (lines 168‑272):  
-  - Memoizes the structural graph (`built`) based on `domainGraph` and `activeDomainId`.  
-  - Runs an async ELK layout in a `useEffect`; cancellation logic prevents stale updates.  
-  - Stores layout issues via `useDashboardStore.getState().appendLayoutIssues`.  
-  - Renders `ReactFlow` with `nodeTypes`, controls, minimap, and background.  
-- **Export** (lines 275‑281): `DomainGraphView` wraps the inner component in `ReactFlowProvider`.
+- **Imports** – added React hooks and `@xyflow/react` components (`ReactFlow`, `ReactFlowProvider`, `Background`, `Controls`, `MiniMap`, `BackgroundVariant`) and type imports for `Edge`/`Node` (R1‑10).  
+- **Node types** – `nodeTypes` maps `"domain-cluster"`, `"flow-node"`, and `"step-node"` to `DomainClusterNode`, `FlowNode`, and `StepNode` (lines 26‑30).  
+- **Helper functions** –  
+  - `getDomainMeta` (lines 32‑34) extracts domain metadata.  
+  - `buildDomainOverview` (lines 42‑90) creates a cluster view of all domains with cross‑domain edges.  
+  - `buildDomainDetail` (lines 91‑166) expands a selected domain into flows and steps, computing step order and counts.  
+- **`DomainGraphViewInner`** (lines 168‑272) memoizes the graph structure, runs `applyElkLayout` (lines 201‑212) asynchronously, and renders `ReactFlow` with background, controls, and minimap.  
+- **Export** – default `DomainGraphView` (lines 275‑281) wraps `DomainGraphViewInner` in `ReactFlowProvider`.
 
 ### Impact  
-- Introduces a fully functional graph view; no API changes.  
-- Requires `useDashboardStore` and `useI18n` to be initialized.  
-- New node types (`domain-cluster`, `flow-node`, `step-node`) must have corresponding component implementations.  
-- Layout computation is async; layout issues are surfaced through the store.
+- **State integration** – uses `useDashboardStore` to read `domainGraph`, `activeDomainId`, `clearActiveDomain`, and to append layout issues via `appendLayoutIssues` (lines 169‑207).  
+- **Error handling** – layout failures are logged to console (lines 213‑216).  
+- **Performance** – graph construction is memoized; ELK layout runs asynchronously, reducing UI blocking.
 
 ### Risks & follow‑ups  
-- **Cleanup**: The effect’s cancellation logic is present, but its effectiveness on unmount is unknown from the diff.  
-- **Performance**: Impact of large graphs on render time is unknown from the available evidence.  
-- **Position mapping**: Correctness of `mergeElkPositions` mapping node IDs is unknown.  
-- **Issue reporting**: Whether `appendLayoutIssues` is wired to the UI is unknown from the diff.
+- **Layout failures** – ELK may reject complex graphs; verify that `applyElkLayout` resolves or logs errors.  
+- **Store contract** – `useDashboardStore` must expose the required actions and state slices.  
+- **Type safety** – `KnowledgeGraph` nodes/edges must match the expected shapes; mismatches could break `buildDomainDetail`.  
+- **Performance regression** – large graphs may cause UI lag; benchmark ELK layout time and consider caching or throttling.

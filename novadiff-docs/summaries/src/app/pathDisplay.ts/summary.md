@@ -1,25 +1,24 @@
-### Overview
-A new file `src/app/pathDisplay.ts` was added. It exports the helper `pathDisplayLabel(absPath: string): string`. The file begins with the comment  
-`/** User‑facing path label — never expose full filesystem paths outside onboarding. */`.
+### Overview  
+A new module `src/app/pathDisplay.ts` adds the exported helper `pathDisplayLabel` (lines 2‑15).  
+It trims whitespace, normalizes slashes, and returns only the last one or two path segments, never the full absolute path.
 
-### Key changes
-- **Function signature**: `export function pathDisplayLabel(absPath: string): string` (added at R2).  
-- **Whitespace handling**: `const trimmed = absPath.trim();` returns `""` if `trimmed` is empty (R3‑R5).  
-- **Path normalization**: backslashes are replaced with forward slashes, the string is split on `/`, and empty segments are filtered out (R7).  
-- **Segment logic**:  
-  - No segments → return `trimmed` (R8‑R9).  
-  - One segment → return that segment (R10‑R12).  
-  - Two or more segments → return `${parts[parts.length - 2]}/${parts[parts.length - 1]}` (R13‑R14).  
-- The function body spans lines R1‑R15.
+### Key changes  
+- **Export**: `export function pathDisplayLabel(absPath: string): string` (lines 2‑15).  
+- **Sanitization**: trims the input and returns an empty string for empty or whitespace‑only paths (lines 3‑6).  
+- **Normalization**: replaces backslashes with forward slashes, splits on `/`, and removes empty segments (line 7).  
+- **Segment selection**:  
+  - If no segments remain, returns the trimmed input (lines 8‑10).  
+  - If one segment exists, returns that segment (lines 11‑13).  
+  - Otherwise returns the last two segments joined by `/` (lines 14‑15).  
+- **Documentation comment**: clarifies that the label is for onboarding UI and should never expose full paths (line 1).
 
-### Impact
-- Centralizes path‑label logic in a single, pure TypeScript utility.  
-- Guarantees that only the last one or two path segments are exposed, in line with the comment about avoiding full filesystem paths.  
-- No other modules are modified; the change is self‑contained.  
-- Operates in O(n) time over the input string, adding negligible overhead.
+### Impact  
+- **Security**: The function never returns a full absolute path, mitigating accidental exposure of filesystem structure.  
+- **Centralization**: Path‑label logic is now in a single, reusable utility.  
+- **No API changes**: Existing modules are unaffected; only new imports are required.
 
-### Risks & follow‑ups
-- **Edge cases**: behavior with multiple consecutive slashes, trailing slashes, or UNC paths is not shown in the diff.  
-- **Testing**: unit tests should cover empty input, single‑segment paths, multi‑segment paths, and Windows backslashes.  
-- **Linting**: ensure the new file passes the repository’s TypeScript linting (`tsc`, `eslint`).  
-- **Documentation**: update any onboarding documentation that references path display logic to point to this helper.
+### Risks & follow‑ups  
+- **Edge‑case handling**: Behavior with root paths (`/`, `C:\\`), UNC paths, or paths with multiple consecutive slashes is unknown from the available diff/scan evidence.  
+- **Integration**: Verify that UI components previously constructing path labels now import and use `pathDisplayLabel`.  
+- **Testing**: Add unit tests for empty, single‑segment, multi‑segment, and mixed‑slash inputs.  
+- **Documentation**: Update onboarding or security docs to reference the new helper and its safety guarantees.

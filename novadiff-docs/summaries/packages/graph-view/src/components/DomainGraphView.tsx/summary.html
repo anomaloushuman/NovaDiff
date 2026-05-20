@@ -26,43 +26,40 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/DomainGraphView.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:20:19.533Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:06:43.681Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Adds a <code>DomainGraphView.tsx</code> component that renders domain graphs with ReactFlow and an ELK layout. The component replaces a previous placeholder and introduces node types for domains, flows, and steps.</p>
+<p>A new <code>DomainGraphView</code> component is added at <code>packages/graph-view/src/components/DomainGraphView.tsx</code> (lines 1‑281). It renders a domain‑level graph with <code>@xyflow/react</code>, builds nodes and edges from a <code>KnowledgeGraph</code>, and applies an ELK layout.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑24): React hooks, ReactFlow components, <code>Edge</code>/<code>Node</code> types, styles, node components (<code>DomainClusterNode</code>, <code>FlowNode</code>, <code>StepNode</code>), store hooks (<code>useDashboardStore</code>), i18n (<code>useI18n</code>), layout utilities (<code>mergeElkPositions</code>, <code>nodesToElkInput</code>, <code>applyElkLayout</code>), and graph types.  </li>
-<li><strong><code>BuiltGraph</code> interface</strong> (lines 36‑40) and helper <code>getDomainMeta</code> (lines 32‑34).  </li>
-<li>**`buildDomain</li>
-</ul>
-<h3>Overview</h3>
-<p>`** (lines 42‑89): creates domain‑cluster nodes and cross‑domain edges.  </p>
-<ul>
-<li><strong><code>buildDomainDetail</code></strong> (lines 91‑166): builds flow and step nodes, calculates ordering and counts, and produces edges between flows and steps.  </li>
-<li><strong><code>DomainGraphViewInner</code></strong> (lines 168‑272):  <ul>
-<li>Memoizes the structural graph (<code>built</code>) based on <code>domainGraph</code> and <code>activeDomainId</code>.  </li>
-<li>Runs an async ELK layout in a <code>useEffect</code>; cancellation logic prevents stale updates.  </li>
-<li>Stores layout issues via <code>useDashboardStore.getState().appendLayoutIssues</code>.  </li>
-<li>Renders <code>ReactFlow</code> with <code>nodeTypes</code>, controls, minimap, and background.</li>
+<li><strong>Imports</strong> – added React hooks and <code>@xyflow/react</code> components (<code>ReactFlow</code>, <code>ReactFlowProvider</code>, <code>Background</code>, <code>Controls</code>, <code>MiniMap</code>, <code>BackgroundVariant</code>) and type imports for <code>Edge</code>/<code>Node</code> (R1‑10).  </li>
+<li><strong>Node types</strong> – <code>nodeTypes</code> maps <code>&quot;domain-cluster&quot;</code>, <code>&quot;flow-node&quot;</code>, and <code>&quot;step-node&quot;</code> to <code>DomainClusterNode</code>, <code>FlowNode</code>, and <code>StepNode</code> (lines 26‑30).  </li>
+<li><strong>Helper functions</strong> –  <ul>
+<li><code>getDomainMeta</code> (lines 32‑34) extracts domain metadata.  </li>
+<li>`buildDomain</li>
 </ul>
 </li>
-<li><strong>Export</strong> (lines 275‑281): <code>DomainGraphView</code> wraps the inner component in <code>ReactFlowProvider</code>.</li>
+</ul>
+<h3>Overview</h3>
+<p>` (lines 42‑90) creates a cluster view of all domains with cross‑domain edges.  </p>
+<ul>
+<li><code>buildDomainDetail</code> (lines 91‑166) expands a selected domain into flows and steps, computing step order and counts.  </li>
+<li><strong><code>DomainGraphViewInner</code></strong> (lines 168‑272) memoizes the graph structure, runs <code>applyElkLayout</code> (lines 201‑212) asynchronously, and renders <code>ReactFlow</code> with background, controls, and minimap.  </li>
+<li><strong>Export</strong> – default <code>DomainGraphView</code> (lines 275‑281) wraps <code>DomainGraphViewInner</code> in <code>ReactFlowProvider</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Introduces a fully functional graph view; no API changes.  </li>
-<li>Requires <code>useDashboardStore</code> and <code>useI18n</code> to be initialized.  </li>
-<li>New node types (<code>domain-cluster</code>, <code>flow-node</code>, <code>step-node</code>) must have corresponding component implementations.  </li>
-<li>Layout computation is async; layout issues are surfaced through the store.</li>
+<li><strong>State integration</strong> – uses <code>useDashboardStore</code> to read <code>domainGraph</code>, <code>activeDomainId</code>, <code>clearActiveDomain</code>, and to append layout issues via <code>appendLayoutIssues</code> (lines 169‑207).  </li>
+<li><strong>Error handling</strong> – layout failures are logged to console (lines 213‑216).  </li>
+<li><strong>Performance</strong> – graph construction is memoized; ELK layout runs asynchronously, reducing UI blocking.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Cleanup</strong>: The effect’s cancellation logic is present, but its effectiveness on unmount is unknown from the diff.  </li>
-<li><strong>Performance</strong>: Impact of large graphs on render time is unknown from the available evidence.  </li>
-<li><strong>Position mapping</strong>: Correctness of <code>mergeElkPositions</code> mapping node IDs is unknown.  </li>
-<li><strong>Issue reporting</strong>: Whether <code>appendLayoutIssues</code> is wired to the UI is unknown from the diff.</li>
+<li><strong>Layout failures</strong> – ELK may reject complex graphs; verify that <code>applyElkLayout</code> resolves or logs errors.  </li>
+<li><strong>Store contract</strong> – <code>useDashboardStore</code> must expose the required actions and state slices.  </li>
+<li><strong>Type safety</strong> – <code>KnowledgeGraph</code> nodes/edges must match the expected shapes; mismatches could break <code>buildDomainDetail</code>.  </li>
+<li><strong>Performance regression</strong> – large graphs may cause UI lag; benchmark ELK layout time and consider caching or throttling.</li>
 </ul>
 </article>
   </main>

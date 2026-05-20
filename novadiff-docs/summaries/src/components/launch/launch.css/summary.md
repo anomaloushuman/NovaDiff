@@ -1,19 +1,21 @@
 ### Overview  
-A new file `src/components/launch/launch.css` (531 lines, R1‑531) was added. It defines a TRON‑style launch sequence with many animations, gradients, and a reduced‑motion fallback.
+A new stylesheet `src/components/launch/launch.css` (added 531 lines, range R1‑531) introduces a TRON‑inspired launch overlay. The diff shows the addition of a comment header and a set of new classes such as `.launch-boot`, `.launch-boot-grid`, `.launch-boot-scan`, `.launch-boot-frame`, and `.launch-boot-logo-ring`, along with modifiers `.is-exiting` and `.is-hold`.
 
 ### Key changes  
-- **New classes**: `.launch-boot`, `.launch-boot-grid`, `.launch-boot-scan`, `.launch-boot-frame`, `.launch-boot-logo-ring`, `.launch-boot-continue`, `.launch-boot-line-placeholder`, `.launch-boot-copy`, `.launch-boot-progress`, `.launch-boot-corners span`, `.typewriter-cursor`, and several `.app-shell` panel visibility rules.  
-- **Keyframe animations**: `launch-continue-in`, `launch-grid-in`, `launch-scan-sweep`, `launch-frame-in`, `launch-logo-pulse`, `typewriter-blink`, `launch-fly-left/right/up/down`, `launch-sheen`, `launch-brand-in`, `launch-chip-in`.  
-- **Reduced‑motion media query** (`@media (prefers-reduced-motion: reduce)`) disables animations and sets opacity for non‑launched panels.  
-- **Sidebar launch animations** for `.sidebar-feature`, `.sidebar-section`, and `.sidebar-user` with staggered delays.
+- **Component styles** – new selectors for the overlay, grid, scan line, frame, and logo ring.  
+- **Keyframes** – `launch-continue-in`, `launch-grid-in`, `launch-scan-sweep`, `launch-frame-in`, `launch-logo-pulse`, and `typewriter-blink`.  
+- **Panel transitions** – `.app-shell.is-revealing .launch-panel--*` use `launch-fly-*` animations for chrome, side, main, and insights panels.  
+- **Sidebar brand** – `.sidebar.sidebar--launch .sidebar-brand` and `.sidebar-feature` receive `launch-brand-in` and `launch-chip-in` animations with staggered delays (0.35 s, 0.44 s, etc.).  
+- **Reduced‑motion support** – a media query disables all animations and forces opacity to 1 for the launch panel when `prefers-reduced-motion` is active.
 
 ### Impact  
-- Adds CSS for the launch UI; size unknown from the diff.  
-- Uses `color-mix`, radial gradients, and multiple animations, which may increase GPU load during launch.  
-- No runtime behavior changes—only styling.
+- **UI/UX** – provides a fully animated launch experience visible only during app start; runtime impact is limited to that window.  
+- **Maintainability** – styles are scoped to the `launch` namespace, reducing global CSS bleed.  
+- **Performance** – unknown from the diff; the file contains many `transform`, `filter`, and `box-shadow` rules that may increase GPU load during launch.  
+- **Compatibility** – uses modern CSS features (`color-mix`, `inset`, `mask-image`); fallback may be needed for older browsers.
 
 ### Risks & follow‑ups  
-- **Import**: Verify that `launch.css` is imported in the launch component or global stylesheet; otherwise the UI will not appear.  
-- **Animation correctness**: Run smoke tests to confirm keyframes trigger and panels fade as intended.  
-- **Reduced‑motion**: Ensure users with `prefers-reduced-motion` see the static fallback and that no animations bleed into other components.  
-- **Browser support**: `color-mix` and `in` syntax require modern browsers; test on Safari/Edge and consider fallbacks if needed.
+- **Browser support** – verify `color-mix` and `mask-image` work in target browsers; provide fallbacks if necessary.  
+- **Reduced‑motion handling** – ensure the media query correctly overrides animations and that the launch panel remains visible.  
+- **Animation timing** – confirm that staggered delays align with the overall launch flow.  
+- **CSS size** – the file is ~531 lines; monitor bundle size impact and consider tree‑shaking if unused in production builds.

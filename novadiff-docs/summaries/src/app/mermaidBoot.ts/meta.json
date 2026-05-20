@@ -1,0 +1,51 @@
+{
+  "relPath": "src/app/mermaidBoot.ts",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:45:08.909Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R14 added: export async function ensureMermaidInit(): Promise<void> {",
+      "R30 added: export async function runMermaidNodes(nodes: HTMLElement[]): Promise<void> {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-37"
+    ],
+    "cited_changed_lines": [
+      "R1 added: let initTheme: \"dark\" | \"default\" | null = null;",
+      "R3 added: function currentMermaidTheme(): \"dark\" | \"default\" {",
+      "R4 added: if (",
+      "R5 added: typeof window !== \"undefined\" &&",
+      "R6 added: typeof window.matchMedia === \"function\" &&",
+      "R7 added: !window.matchMedia(\"(prefers-color-scheme: dark)\").matches"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function ensureMermaidInit (14-29)",
+      "right function currentMermaidTheme (3-13)",
+      "right function runMermaidNodes (30-37)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

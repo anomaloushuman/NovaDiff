@@ -1,21 +1,30 @@
-### Overview
-`InsightsColumn` now accepts a `prefetchProgress` prop and renders a visual progress bar instead of a plain text status. The component’s layout has been tweaked: the summary panel uses a keyed `div` with an enter animation class, and the file‑summary section no longer wraps its content in a generic scroll container.
+### Overview  
+`src/components/InsightsColumn.tsx` introduces a new `InsightsColumn` component that renders a two‑tab interface: **Summary** and **Files**. It displays LLM‑generated file summaries, diff statistics, and a tree of changed files. A small helper `MetricPill` is defined for metric display.
 
-### Key changes
-- **New prop**: `prefetchProgress?: { current: number; total: number } | null` added to `InsightsColumnProps` (line 28).  
-- **Summary panel**: replaced `<div className="insights-scroll">` with `<div key="summary" className="insights-scroll insights-panel-enter">` (lines 106‑108).  
-- **Prefetch status UI**: removed the plain `<p>` (line 189) and added a `<div className="insights-prefetch-status doc-state-enter">` containing a progress bar that shows either a determinate fill or an indeterminate track (lines 191‑212).  
-- **File‑summary footnote**: the reserved‑path warning and chunk hint logic remain unchanged; only the prefetch status rendering changed.  
-- **Minor refactor**: the `ChangedFilesTree` container now uses a keyed `div` with `insights-panel-enter` (lines 258‑261).
+### Key changes  
+- **Imports** (lines 1‑6):  
+  ```ts
+  import type { FileChange, FileDiffPayload } from "../app/types";
+  import type { LlmSettings } from "../app/llmStorage";
+  import { isNovadiffDocsReservedPath } from "../app/novadiffPaths";
+  import { LlmSummaryMarkdown } from "./LlmSummaryMarkdown";
+  import { ChangedFilesTree } from "./ChangedFilesTree";
+  import { Check, LayoutList, Loader2, Sparkles } from "lucide-react";
+  ```
+- **`InsightsColumnProps`** (lines 10‑29): 28 properties covering tab state, file list, selection, diff payload, LLM settings, summary state, prefetch status, and callbacks.
+- **UI logic** (lines 31‑290):  
+  - Tab switching via `onTab`.  
+  - **Summary tab**: shows an overview paragraph, a key‑changes list, a button to request a file summary, a prefetch progress bar, the rendered Markdown summary, and diff statistics with confidence badges.  
+  - **Files tab**: renders `<ChangedFilesTree rows={rows} … />`.  
+- **`MetricPill`** (lines 293‑308): renders a label/value/tone pill.
 
-### Impact
-- **UX**: Users now see a visual indicator of prefetch progress, improving feedback during large diff operations.  
-- **Maintainability**: Adding the `prefetchProgress` prop centralizes progress handling; the component no longer relies on a global state for this UI.  
-- **Performance**: The progress bar uses CSS transitions; no new heavy computations are introduced.  
-- **Compatibility**: Existing callers must supply the new prop (or `null`) to avoid TypeScript errors; backward‑compatibility is preserved by making it optional.
+### Impact  
+- **Build**: Requires `lucide-react` and the LLM components (`LlmSummaryMarkdown`, `ChangedFilesTree`).  
+- **Type safety**: All props are required; missing values will cause compile errors.  
+- **Runtime**: The summary button is disabled when no file is selected, the path is reserved, the file count is zero, the summary is loading, or the LLM API is unavailable (`window.electronAPI`).  
+- **Performance**: Rendering the full file tree and summary can be heavy for large diffs; the progress bar provides visual feedback.
 
-### Risks & follow‑ups
-- **Regression**: Verify that components consuming `InsightsColumn` still compile after the prop change; run the TypeScript build.  
-- **UI consistency**: Ensure the new progress bar styles (`insights-prefetch-status`, `insights-prefetch-track`) are present in the CSS and that animations trigger correctly.  
-- **Accessibility**: The progress bar currently lacks ARIA attributes; consider adding `role="progressbar"` and `aria-valuenow/aria-valuemin/aria-valuemax` for screen readers.  
-- **Testing**: Add unit tests to confirm that `prefetchProgress` renders the correct fill percentage and that the indeterminate state appears when `total` is zero or `null`.
+### Risks & follow‑ups  
+- Verify that consumers supply `llmSettings` and `diffPayload`; otherwise the component will fail to render.  
+- Ensure `lucide-react` is installed to avoid build failures.  
+- Confirm that the UI degrades gracefully when `window.electronAPI` is missing.

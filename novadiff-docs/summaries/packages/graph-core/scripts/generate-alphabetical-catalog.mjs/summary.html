@@ -26,38 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/scripts/generate-alphabetical-catalog.mjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:23:06.565Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:06:25.279Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new Node script <code>packages/graph-core/scripts/generate-alphabetical-catalog.mjs</code> (added lines R1‑323) reads <code>language-names.txt</code>, normalizes language names, resolves tree‑sitter WASM binaries and file extensions, and writes a sorted <code>alphabetical-catalog.generated.ts</code> module.</p>
+<p>A new Node script <code>packages/graph-core/scripts/generate-alphabetical-catalog.mjs</code> (added at R1‑R5) reads <code>language-names.txt</code>, normalizes language names, resolves file extensions and tree‑sitter WASM files, and writes a TypeScript module <code>../src/languages/alphabetical-catalog.generated.ts</code> containing a sorted array of <code>LanguageCatalogEntry</code> objects.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R6‑8): <code>readFileSync</code>, <code>writeFileSync</code> from <code>node:fs</code>; <code>dirname</code>, <code>join</code> from <code>node:path</code>; <code>fileURLToPath</code> from <code>node:url</code>; and a type import <code>LanguageCatalogEntry</code> from <code>./catalog-types.js</code> (R313).  </li>
-<li><strong>Constants</strong>: <code>WASMS_BY_KEY</code> and <code>EXT_BY_KEY</code> map language identifiers to WASM files and extensions.  </li>
-<li><strong>Normalization helpers</strong>:  <ul>
-<li><code>normalizeKey(name)</code> (lines 182‑214) trims and normalizes display names, mapping common aliases.  </li>
-<li><code>slugify(name, used)</code> (lines 217‑230) creates a URL‑friendly id, ensuring uniqueness via a <code>Set</code>.  </li>
-<li><code>resolveWasmsKey(normKey, id)</code> (lines 233‑260) selects the correct WASM key, using an alias table.  </li>
-<li><code>resolveExtensions(normKey, displayName)</code> (lines 263‑270) returns extensions, falling back to substring matching.</li>
-</ul>
-</li>
-<li><strong><code>claimExtensions(exts, wasmsFile)</code></strong> (lines 282‑290) guarantees each extension appears only once across all entries.  </li>
-<li><strong>Main loop</strong> (lines 293‑300) builds <code>{ id, displayName, extensions, wasmsFile }</code> objects, sorts them alphabetically, and writes the output file with a header comment and an exported <code>alphabeticalCatalogEntries</code> array (export added at R316).</li>
+<li><strong>Imports</strong> (<code>R6‑R8</code>): <code>fs</code>, <code>path</code>, and <code>url</code> modules are required to locate the input and output files.  </li>
+<li><strong>Normalization helpers</strong> (<code>R182‑R216</code>): <code>normalizeKey</code> trims and normalizes display names, handling special cases such as “c++”, “objective‑c”, and “webassembly”.  </li>
+<li><strong>Slug generation</strong> (<code>R217‑R232</code>): <code>slugify</code> creates unique identifiers, avoiding collisions via a <code>used</code> set.  </li>
+<li><strong>WASM resolution</strong> (<code>R233‑R262</code>): <code>resolveWasmsKey</code> maps normalized keys to WASM filenames using an alias table.  </li>
+<li><strong>Extension resolution</strong> (<code>R263‑R281</code>): <code>resolveExtensions</code> looks up extensions from <code>EXT_BY_KEY</code>, with a fallback that scans keys containing the display name.  </li>
+<li><strong>Extension claiming</strong> (<code>R282‑R291</code>): <code>claimExtensions</code> ensures each extension appears only once across all entries.  </li>
+<li><strong>Entry construction</strong> (<code>R293‑R300</code>): For each language, an object with <code>id</code>, <code>displayName</code>, <code>extensions</code>, and optional <code>wasmsFile</code> is built.  </li>
+<li><strong>Output generation</strong> (<code>R312‑R322</code>): The sorted entries are formatted into a TypeScript module and written to <code>../src/languages/alphabetical-catalog.generated.ts</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The script must run before any build that imports <code>alphabetical-catalog.generated.ts</code>.  </li>
-<li>Unique ids and deduplicated extensions reduce potential runtime errors in language‑specific tooling.  </li>
-<li>Processing is linear in the number of language names; the added step is negligible compared to the overall build.  </li>
-<li>Console logs (lines 321‑323) report the total number of languages and how many have WASM support, aiding debugging.</li>
+<li><strong>Build pipeline</strong>: The generated file must be included in the TypeScript build; the CI or build scripts should run this generator before compiling.  </li>
+<li><strong>Runtime</strong>: No direct runtime changes; the script is a build‑time helper.  </li>
+<li><strong>Maintainability</strong>: Centralizes language metadata generation, reducing manual edits to the catalog.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>A missing or malformed <code>language-names.txt</code> will cause the script to crash; verify the file’s presence and format.  </li>
-<li>Errors in the alias table could map a language to an incorrect WASM or extension; run unit tests covering a representative set of languages.  </li>
-<li><code>slugify</code> uses a <code>Set</code>, but a future language with the same slug could silently overwrite; monitor the console output for duplicate id warnings.  </li>
-<li>Ensure the generated file is included in the TypeScript build and that consumers import the correct path.</li>
+<li><strong>Normalization correctness</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>Slug uniqueness</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>WASM mapping</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>Build integration</strong>: unknown from the available diff/scan evidence.</li>
 </ul>
 </article>
   </main>

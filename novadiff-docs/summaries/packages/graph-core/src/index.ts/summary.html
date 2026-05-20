@@ -26,35 +26,39 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/index.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:41:09.788Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:26:16.490Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-core/src/index.ts</code> is a new entry point that re‑exports the public surface of the graph‑core package. The file was added in the diff (lines 1‑126) and pulls in types, persistence helpers, schema utilities, plugins, analyzers, search, staleness logic, layer detection, tour generation, language lessons, registry, language configs, parsers, ignore utilities, and starter ignore file generation.</p>
+<p>A new file <code>packages/graph-core/src/index.ts</code> (lines 1‑126) consolidates the public surface of the <code>graph-core</code> package. It re‑exports core schemas, utilities, plugins, analyzers, search, staleness, layer detection, tour generation, language lessons, plugin registry, language configs, parsers, ignore utilities, and a starter ignore file generator.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Added re‑exports for <code>./types.js</code> and <code>./persistence/index.js</code>.  </li>
-<li>Exposed <code>KnowledgeGraphSchema</code>, <code>validateGraph</code>, <code>sanitizeGraph</code>, <code>autoFixGraph</code>, <code>COMPLEXITY_ALIASES</code>, <code>DIRECTION_ALIASES</code>, and related types from <code>./schema.js</code>.  </li>
-<li>Re‑exported <code>TreeSitterPlugin</code>, <code>LanguageExtractor</code>, and <code>builtinExtractors</code> from the plugins tree.  </li>
-<li>Made the analyzer surface available: <code>GraphBuilder</code>, LLM prompts/response parsers, normalization helpers, and search engine types.  </li>
-<li>Added staleness utilities (<code>getChangedFiles</code>, <code>isStale</code>, <code>mergeGraphUpdate</code>).  </li>
-<li>Included layer detection, tour generation, and language‑lesson analyzers.  </li>
-<li>Exported registry and language config APIs (<code>LanguageRegistry</code>, <code>FrameworkRegistry</code>, etc.).  </li>
-<li>Added parser registry (<code>MarkdownParser</code>, <code>YAMLConfigParser</code>, …) and ignore utilities (<code>createIgnoreFilter</code>, <code>generateStarterIgnoreFile</code>).</li>
+<li><code>export * from &quot;./types.js&quot;</code> and `export</li>
+</ul>
+<ul>
+<li>from &quot;./persistence/index.js&quot;` expose core type definitions and persistence helpers.</li>
+</ul>
+<ul>
+<li>Re‑exports from <code>./schema.js</code>: <code>KnowledgeGraphSchema</code>, <code>validateGraph</code>, <code>sanitizeGraph</code>, <code>autoFixGraph</code>, <code>COMPLEXITY_ALIASES</code>, <code>DIRECTION_ALIASES</code>, <code>ValidationResult</code>, <code>GraphIssue</code>.  </li>
+<li>Plugin exports: <code>TreeSitterPlugin</code>, <code>LanguageExtractor</code>, <code>builtinExtractors</code>, <code>GraphBuilder</code>, <code>PluginRegistry</code>.  </li>
+<li>Analyzer exports: prompts, parsers, normalizers, search engine, staleness utilities, layer detection, tour generation, language lesson helpers.  </li>
+<li>Language and framework config exports: <code>LanguageRegistry</code>, <code>FrameworkRegistry</code>, <code>builtinLanguageConfigs</code>, <code>detailedLanguageConfigs</code>, <code>builtinFrameworkConfigs</code>, <code>LanguageConfigSchema</code>, <code>FrameworkConfigSchema</code>, and types <code>LanguageConfig</code>, <code>FrameworkConfig</code>, <code>TreeSitterConfig</code>, <code>FilePatternConfig</code>.  </li>
+<li>Parser exports: <code>MarkdownParser</code>, <code>YAMLConfigParser</code>, <code>JSONConfigParser</code>, <code>TOMLParser</code>, <code>EnvParser</code>, <code>DockerfileParser</code>, <code>SQLParser</code>, <code>GraphQLParser</code>, <code>ProtobufParser</code>, <code>TerraformParser</code>, <code>MakefileParser</code>, <code>ShellParser</code>, and <code>registerAllParsers</code>.  </li>
+<li>Ignore utilities: <code>createIgnoreFilter</code>, <code>DEFAULT_IGNORE_PATTERNS</code>, <code>generateStarterIgnoreFile</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Convenience</strong>: Consumers can import any core API from a single path (<code>import { validateGraph } from &#39;graph-core&#39;</code>).  </li>
-<li><strong>Tree‑shaking</strong>: Re‑exports are static; bundlers can prune unused symbols.  </li>
-<li><strong>Build size</strong>: Slightly larger entry point, but no runtime overhead.  </li>
-<li><strong>Type safety</strong>: All exported types are now part of the public API surface, improving IDE support.</li>
+<li><strong>API surface expansion</strong>: Consumers can import any of the re‑exported symbols directly from <code>graph-core</code>.  </li>
+<li><strong>Build dependency</strong>: All referenced modules must compile; missing files will break the build.  </li>
+<li><strong>Type safety</strong>: New type re‑exports may surface mismatches if downstream code expects different shapes.  </li>
+<li><strong>Documentation</strong>: Update README and docs to reflect the new public exports (unknown from the available diff/scan evidence).</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing modules</strong>: Verify that every re‑exported file exists and compiles; a missing file will break the build.  </li>
-<li><strong>Circular dependencies</strong>: Ensure that the new re‑exports do not introduce cycles that could cause runtime errors.  </li>
-<li><strong>API surface expansion</strong>: Document the new public symbols so downstream projects know what is available.  </li>
-<li><strong>Compatibility</strong>: Since this is a new file, existing consumers are unaffected, but any future migration to this entry point should be tested for type mismatches.</li>
+<li><strong>Missing re‑exports</strong>: Verify that every referenced module actually exists and exports the expected symbols.  </li>
+<li><strong>Circular dependencies</strong>: The large number of re‑exports could introduce hidden cycles; run the linter and build to catch them.  </li>
+<li><strong>Breaking changes for existing consumers</strong>: If the package previously had a different entry point, ensure backward compatibility or provide migration guidance (unknown from the available diff/scan evidence).  </li>
+<li><strong>Test coverage</strong>: Add tests that import each re‑exported symbol to confirm runtime availability and correct behavior.</li>
 </ul>
 </article>
   </main>

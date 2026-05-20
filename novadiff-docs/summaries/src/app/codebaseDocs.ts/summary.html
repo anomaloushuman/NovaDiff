@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/codebaseDocs.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/codebaseDocs.ts</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:40:06.300Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>src/app/codebaseDocs.ts</code> is added. It exports utilities that transform a <code>CodebaseOutline</code> into plain‑text prompts, Markdown reports, and Mermaid diagrams.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import</strong>: <code>import type { CodebaseOutline } from &quot;./types&quot;;</code> (R1).  </li>
+<li><strong>File sampling</strong>: <code>sampleFilePaths(outline, cap?)</code> (lines 3‑9, R3‑8).  </li>
+<li><strong>Symbol sampling</strong>: <code>sampleSymbolLines(outline, cap?)</code> (lines 11‑32, R11‑31).  </li>
+<li><strong>Depth histogram</strong>: <code>depthHistogram(outline)</code> (lines 34‑46, R34‑45).  </li>
+<li><strong>Prompt context</strong>: <code>buildCodebasePromptContext(...)</code> (lines 48‑92, R48‑92).  </li>
+<li><strong>Markdown report</strong>: <code>buildCodebaseMetricsMarkdown(...)</code> (lines 95‑154, R95‑154).  </li>
+<li><strong>Mermaid pie</strong>: <code>codebaseExtensionPieMermaid(outline)</code> (lines 157‑166, R157‑166).  </li>
+<li><strong>Mermaid flowchart</strong>: <code>codebaseDepthMermaid(outline)</code> (lines 169‑178, R169‑178).</li>
+</ul>
+<p>All functions guard against missing fields with optional chaining and array checks, so they should not throw when <code>outline</code> lacks expected properties.</p>
+<h3>Impact</h3>
+<ul>
+<li>Only a new file is added; no existing files are modified.  </li>
+<li>The module exposes only the listed functions, keeping the public surface minimal.  </li>
+<li>Importing it in production code would add the generated strings to the bundle, but the functions themselves are lightweight.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Outline shape</strong>: Verify that <code>CodebaseOutline</code> actually contains <code>by_extension</code>, <code>top_directories</code>, <code>detected_projects</code>, <code>import_edges</code>, <code>cross_file_call_edges</code>, and <code>symbol_spans_by_file</code> to avoid <code>undefined</code> values.  </li>
+<li><strong>Bundle size</strong>: Ensure the module is imported only in tooling or dev environments to prevent unnecessary bundle growth.  </li>
+<li><strong>Mermaid rendering</strong>: Test that the strings produced by <code>codebaseExtensionPieMermaid</code> and <code>codebaseDepthMermaid</code> render correctly in downstream viewers (e.g., VS Code preview, documentation sites).  </li>
+<li><strong>Runtime safety</strong>: Run lint, tests, and the production build to confirm no TypeScript or runtime errors are introduced.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

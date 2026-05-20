@@ -1,27 +1,22 @@
 ### Overview  
-A new component `BackgroundActivityBar` is added to `src/components` (lines 15‑68). It renders a live status bar for background tasks, showing each task’s label, optional detail, elapsed time, and a progress bar that can be indeterminate.
+A new component `BackgroundActivityBar` is added at `src/components/BackgroundActivityBar.tsx` (lines 1‑68). It displays a live status bar for background activities, showing elapsed time and progress, and respects the user’s reduced‑motion preference.
 
 ### Key changes  
-- **Imports** (lines 1‑3): `useEffect`, `useState` from React; `useBackgroundActivity` from the context; `usePrefersReducedMotion` for accessibility.  
-- **Utility** (lines 5‑12): `formatElapsed(ms)` converts milliseconds to `Xs` or `Xm Ys`.  
-- **State & effect** (lines 18‑26): `now` is updated every 500 ms via `setInterval`; the interval is cleared on unmount.  
-- **Render logic** (lines 32‑66):  
-  - Returns `null` if `activities.length === 0`.  
-  - Maps `activities` to DOM nodes, using `activity.id` as key.  
-  - Displays `activity.label`, optional `activity.detail`, and elapsed time from `formatElapsed(now - activity.startedAt)`.  
-  - Shows a progress bar: if `activity.progress` is `null`, the bar is indeterminate (`is‑indeterminate`); otherwise it sets `width` to the rounded percentage.  
-- **Accessibility** (lines 33‑35): `role="status"`, `aria-live="polite"`, `aria-atomic="false"`.  
-- **Reduced motion** (line 44): adds `is‑animated` to the pulse element unless `reduced` is true.
+- **Imports** – `useEffect`, `useState` from React; `useBackgroundActivity` from `../app/BackgroundActivityContext`; `usePrefersReducedMotion` from `../app/usePrefersReducedMotion` (lines 1‑3).  
+- **Utility** – `formatElapsed(ms)` converts milliseconds to a human‑readable string (lines 5‑12).  
+- **State & effect** – `now` state is updated every 500 ms while activities exist; the interval is cleared on cleanup (lines 18‑26).  
+- **Rendering** – For each activity, the component shows `label`, optional `detail`, elapsed time, and a progress bar that is indeterminate when `progress` is `null` (lines 32‑63).  
+- **Accessibility** – Wrapper has `role="status"`, `aria-live="polite"`, `aria-atomic="false"`; each item uses `aria-hidden` appropriately.  
+- **Reduced motion** – Pulsing animation is disabled when `reduced` is true (line 44).
 
 ### Impact  
-- **UI**: Provides visual feedback for background operations.  
-- **Performance**: The 500 ms interval is lightweight; renders only when activities change.  
-- **Accessibility**: Live region and reduced‑motion handling improve inclusivity.  
-- **Maintainability**: The component is self‑contained, with a clear utility function and minimal external dependencies.  
-- **Compatibility**: Requires `useBackgroundActivity` to supply `id`, `label`, `detail`, `startedAt`, and optional `progress`.
+- The component renders only when `activities.length > 0`, avoiding unnecessary DOM updates.  
+- The 500 ms interval runs only while activities are present, limiting overhead.  
+- `formatElapsed` is isolated, easing future formatting changes.  
+- The status bar is announced via an ARIA live region, improving screen‑reader feedback.
 
 ### Risks & follow‑ups  
-- **Memory leak**: The cleanup in `useEffect` clears the interval, but verify in edge cases.  
-- **CSS dependencies**: Classes such as `background-activity-bar`, `is‑animated`, and `is‑indeterminate` must exist.  
-- **Context contract**: Ensure `useBackgroundActivity` returns the expected shape; mismatches will break rendering.  
-- **Usage**: The file is added but not yet imported elsewhere; add it to the app layout or test its presence in the component tree.
+- Verify that `useBackgroundActivity` provides the expected `activities` shape; missing fields could break rendering.  
+- Ensure CSS classes (`background-activity-bar`, `background-activity-pulse`, etc.) exist to avoid visual regressions.  
+- Confirm that the interval cleanup works correctly when the component unmounts or activities clear.  
+- Add unit tests for `formatElapsed` and the component’s rendering logic to guard against future refactors.

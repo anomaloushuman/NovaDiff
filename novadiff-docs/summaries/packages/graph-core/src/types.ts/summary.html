@@ -26,32 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/types.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:44:27.810Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:29:44.024Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/types.ts</code> (lines 1‑204) introduces a comprehensive type system for graph modeling, analysis metadata, and plugin contracts.</p>
+<p>A new file <code>packages/graph-core/src/types.ts</code> (204 added lines) introduces a comprehensive type system for the NovaDiff knowledge graph, defining nodes, edges, layers, projects, and plugin interfaces.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Node &amp; Edge types</strong> – <code>NodeType</code> (lines 1‑7) lists 21 node categories; <code>EdgeType</code> (lines 9‑19) lists 35 edge categories across structural, behavioral, data‑flow, and knowledge relations.  </li>
-<li><strong>Metadata interfaces</strong> – <code>KnowledgeMeta</code> (lines 21‑27) and <code>DomainMeta</code> (lines 29‑35) add optional fields for knowledge‑ and domain‑specific nodes.  </li>
-<li><strong>Graph core interfaces</strong> – <code>GraphNode</code> (lines 39‑53) and <code>GraphEdge</code> (lines 55‑63) model nodes and edges with attributes such as <code>layerId</code>, <code>complexity</code>, <code>direction</code>, and <code>weight</code>.  </li>
-<li><strong>Project &amp; analysis metadata</strong> – <code>ProjectMeta</code>, <code>KnowledgeGraph</code>, <code>ThemeConfig</code>, <code>AnalysisMeta</code>, and <code>ProjectConfig</code> (lines 82‑118) expose configuration and persistence structures.  </li>
-<li><strong>Structural analysis &amp; plugin contracts</strong> – <code>StructuralAnalysis</code> (lines 171‑183) defines analysis results; <code>AnalyzerPlugin</code> (lines 197‑204) specifies plugin APIs (<code>analyzeFile</code>, optional <code>resolveImports</code>, <code>extractCallGraph</code>, <code>extractReferences</code>).  </li>
-<li><strong>Supporting interfaces</strong> – <code>SectionInfo</code>, <code>DefinitionInfo</code>, <code>ServiceInfo</code>, <code>EndpointInfo</code>, <code>StepInfo</code>, <code>ResourceInfo</code>, <code>ReferenceResolution</code>, <code>ImportResolution</code>, and <code>CallGraphEntry</code> (lines 124‑196) provide detailed sub‑structures for non‑code entities.</li>
+<li><strong>Node taxonomy</strong> – <code>export type NodeType</code> (lines 2‑7) lists 21 node kinds (code, non‑code, domain, knowledge).  </li>
+<li><strong>Edge taxonomy</strong> – <code>export type EdgeType</code> (lines 10‑19) lists 35 edge kinds across 8 categories.  </li>
+<li><strong>Metadata interfaces</strong> – <code>KnowledgeMeta</code> (lines 22‑27) and <code>DomainMeta</code> (lines 30‑35) add optional fields for knowledge and domain nodes.  </li>
+<li><strong>Core graph shapes</strong> – <code>GraphNode</code> (lines 39‑53) now includes <code>layerId</code>, <code>domainMeta</code>, <code>knowledgeMeta</code>; <code>GraphEdge</code> (lines 56‑63) adds <code>direction</code> and <code>weight</code>.  </li>
+<li><strong>Project &amp; analysis</strong> – <code>ProjectMeta</code> (lines 83‑90), <code>KnowledgeGraph</code> (lines 93‑101), <code>AnalysisMeta</code> (lines 110‑116), <code>ProjectConfig</code> (lines 118‑122) formalize persistence and configuration.  </li>
+<li><strong>Plugin contracts</strong> – <code>StructuralAnalysis</code> (lines 171‑183) now includes optional structural data (sections, definitions, services, etc.); <code>AnalyzerPlugin</code> (lines 197‑204) exposes <code>analyzeFile</code> and optional <code>resolveImports</code>, <code>extractCallGraph</code>, <code>extractReferences</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Compile‑time</strong>: New exports expand the public surface; modules importing from <code>graph-core</code> must reference this file or adjust imports.  </li>
-<li><strong>Runtime</strong>: No executable code is added; the change is purely type‑level, so no performance or memory impact.  </li>
-<li><strong>Compatibility</strong>: As a new file, it does not break existing code, but consumers must ensure the file is included in the build (tsconfig, package exports).</li>
+<li>Modules must import types from the new file; missing imports will cause compile errors.  </li>
+<li>Plugins implementing <code>AnalyzerPlugin</code> must satisfy the expanded interface; optional methods may be omitted.  </li>
+<li>The file adds ~200 lines of type definitions; runtime impact is negligible, but TypeScript compilation time increases modestly.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify <code>tsconfig.json</code> includes <code>packages/graph-core/src/types.ts</code> and that module resolution paths are correct.  </li>
-<li>Run the full test suite to confirm that no imports inadvertently shadow the new interfaces.  </li>
-<li>Ensure that the <code>AnalyzerPlugin</code> interface aligns with current plugin implementations; update any mismatched method signatures if necessary.  </li>
-<li>Update documentation and code comments to reflect the expanded type definitions, especially for plugin developers.</li>
+<li>Verify that no other module defines <code>NodeType</code> or <code>EdgeType</code> to avoid name collisions.  </li>
+<li>Update documentation (README, type docs) to reflect the new taxonomy.  </li>
+<li>Add unit tests covering all <code>NodeType</code> and <code>EdgeType</code> values to guard against regressions.</li>
 </ul>
 </article>
   </main>

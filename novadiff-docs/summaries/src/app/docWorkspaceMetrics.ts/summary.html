@@ -26,38 +26,41 @@
 <body>
   <header class="top">
     <h1>src/app/docWorkspaceMetrics.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:24:33.464Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:41:43.744Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>depthBarMermaid</code> in <strong>src/app/docWorkspaceMetrics.ts</strong> was refactored to replace the old bar‑graph logic with an XY‑style chart. The function now limits the depth slice to 12 levels and updates the empty‑data message.</p>
+<p><code>src/app/docWorkspaceMetrics.ts</code> is a new module that aggregates file‑change statistics and formats them for LLM prompts, Markdown reports, and Mermaid visualizations. The file adds imports, interfaces, helper functions, and several public utilities.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Slice size</strong> – <code>metrics.depthHistogram.slice(0, 12)</code> (line 189) replaces the previous <code>slice(0, 14)</code>.  </li>
-<li><strong>Empty case</strong> – returns <code>&quot;flowchart LR\n  empty[No path depth data]&quot;</code> (line 191).  </li>
-<li><strong>Chart type</strong> – the former <code>parts</code> array and <code>flowchart TB</code> block (lines 193‑197) were removed.  </li>
-<li><strong>Label/value extraction</strong> – <code>labels = rows.map(d =&gt; \</code>d${d.depth}`)<code>and</code>values = rows.map(d =&gt; d.count)` (lines 193‑196).  </li>
-<li><strong>Dynamic y‑axis</strong> – <code>yMax</code> is computed as `Math.max(maxVal, Math.ceil(maxVal</li>
-</ul>
-<ul>
-<li>1.15))` (lines 196‑201).</li>
-</ul>
-<ul>
-<li><strong>Return</strong> – an array of strings joined with <code>\n</code> that defines an <code>xychart-beta</code> block (lines 197‑203).</li>
+<li><strong>Imports</strong> – <code>import type { ChangeKind, FileChange } from &quot;./types&quot;;</code> (R1).  </li>
+<li><strong>Interfaces</strong> – <code>ExtensionCount</code> (R3‑R6) and <code>DocWorkspaceMetrics</code> (R8‑R17) describe metric shapes.  </li>
+<li><strong>Helpers</strong> – <code>fileExtension</code> (R21‑R29) and <code>firstSegment</code> (R31‑R35) extract extensions and top‑level path segments.  </li>
+<li><strong>Metric builder</strong> – <code>buildDocWorkspaceMetrics</code> (R37‑R85) tallies counts by kind, extension, depth, and root, caps sample paths at 120, and returns a <code>DocWorkspaceMetrics</code> object.  </li>
+<li><strong>Prompt formatter</strong> – <code>metricsToPromptContext</code> (R93‑R143) produces a structured prompt string, optionally including gitignore stats and a code‑base outline.  </li>
+<li><strong>Markdown generator</strong> – <code>buildCompareMetricsMarkdown</code> (R146‑R172) outputs a table of added/removed/modified counts and a sample list of changed paths.  </li>
+<li><strong>Mermaid visualizers</strong> – <code>changeKindPieMermaid</code> (R175‑R185) and <code>depthBarMermaid</code> (R188‑R204) emit Mermaid syntax for pie and bar charts of change kinds and path depth.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Visual output</strong> – consumers will see an XY chart instead of a bar graph; rendering must support <code>xychart-beta</code>.  </li>
-<li><strong>Data coverage</strong> – only the first 12 depth levels are shown, which may hide deeper information but keeps the chart readable.  </li>
-<li><strong>Performance</strong> – the new logic is linear in the sliced array, similar to the old implementation.  </li>
-<li><strong>Maintainability</strong> – the code is now a single, explicit path with clear label/value extraction.</li>
+<li><strong>Performance</strong> – All new functions process <code>rows</code> in a single pass, giving O(n) time and O(k) space where *k</li>
+</ul>
+<ul>
+<li>is the number of distinct extensions, depths, or roots.</li>
+</ul>
+<ul>
+<li><strong>API surface</strong> – The module exports only the new interfaces and functions; existing imports remain unchanged.  </li>
+<li><strong>Observability</strong> – Generated Markdown and Mermaid strings can be logged or displayed in UI components, aiding diff‑report debugging.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Chart compatibility</strong> – unknown from the diff; verify that the target Mermaid renderer supports <code>xychart-beta</code>.  </li>
-<li><strong>Regression tests</strong> – snapshots or visual tests that asserted the old bar‑graph output will need updating.  </li>
-<li><strong>Documentation</strong> – update README or docs to note the new chart type and the reduced depth slice.  </li>
-<li><strong>Edge cases</strong> – confirm that fewer than 12 histogram entries still produce a valid chart and that the empty‑data message triggers correctly.</li>
+<li><strong>Type alignment</strong> – Verify that <code>ChangeKind</code> and <code>FileChange</code> in <code>./types</code> expose <code>kind</code> and <code>path</code> as expected.  </li>
+<li><strong>Sample cap</strong> – <code>SAMPLE_CAP</code> is hard‑coded to 120; assess if this suffices for typical workloads.  </li>
+<li><strong>Gitignore handling</strong> – <code>metricsToPromptContext</code> includes a gitignore line only when <code>gitignore.skippedGitignore &gt; 0</code>; ensure callers supply a non‑null object when relevant.  </li>
+<li><strong>Mermaid syntax</strong> – The output uses Mermaid v9</li>
+</ul>
+<ul>
+<li>features (<code>xychart-beta</code>); test rendering in the target environment to avoid runtime errors.</li>
 </ul>
 </article>
   </main>

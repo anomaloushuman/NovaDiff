@@ -26,37 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/framework-registry.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:07:27.088Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:54:29.988Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/framework-registry.test.ts</code> has been added.<br>The file contains imports (R1‑R4) and a suite of tests covering registration, lookup, detection, default registry creation, and immutability (R6‑R123).</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/framework-registry.test.ts</code> (lines 1‑123) has been added. It imports <code>vitest</code> helpers and the <code>FrameworkRegistry</code>, <code>djangoConfig</code>, and <code>reactConfig</code> symbols (R1‑R4) and contains tests for registration, lookup, detection, and default‑registry behavior.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports added</strong>  <ul>
-<li><code>vitest</code> helpers (R1)  </li>
-<li><code>FrameworkRegistry</code> (R2)  </li>
-<li><code>djangoConfig</code> and <code>reactConfig</code> (R3‑R4)</li>
-</ul>
-</li>
-<li><strong>CRUD tests</strong> (R6‑R11) verify <code>register</code>, <code>getById</code>, and <code>getForLanguage</code>.  </li>
-<li><strong>Detection logic tests</strong> (R13‑R82) exercise <code>detectFrameworks</code> against <code>requirements.txt</code>, <code>package.json</code>, case‑insensitivity, no‑match, empty manifests, duplicate detection, and cross‑language support.  </li>
-<li><strong>Default registry tests</strong> (R84‑R122) confirm <code>FrameworkRegistry.createDefault()</code> registers 10 built‑in frameworks and exposes them across multiple languages.  </li>
-<li><strong>Immutability check</strong> (R100‑R106) ensures <code>getForLanguage</code> returns a copy, not the internal array.</li>
+<li><strong>Imports</strong>: lines 1‑4 add <code>vitest</code> and framework config imports (R1‑R4).  </li>
+<li><strong>Registration tests</strong>: lines 6‑11 verify that a framework can be registered and retrieved by ID, and that duplicate registrations are ignored (R6‑R10, R93‑R97).  </li>
+<li><strong>Language lookup</strong>: lines 13‑20 test <code>getForLanguage</code> for known and unknown languages, and that the returned array is a copy (R13‑R20, R100‑R106).  </li>
+<li><strong>Detection</strong>: lines 28‑71 cover detection from <code>requirements.txt</code> and <code>package.json</code>, case‑insensitivity, duplicate avoidance, and empty manifests (R28‑R71).  </li>
+<li><strong>Cross‑language &amp; defaults</strong>: lines 84‑98 test that <code>createDefault</code> registers all built‑in frameworks (10 total, R109‑R111) and that frameworks are available for multiple languages (Python, TypeScript, Java, Ruby, Go) (R114‑R120).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: The tests enforce expected behavior of registration, lookup, and detection logic.  </li>
-<li><strong>Coverage</strong>: Adds unit coverage for edge cases such as duplicate entries and empty inputs.  </li>
-<li><strong>Maintainability</strong>: Future changes to <code>FrameworkRegistry</code> must satisfy these tests, providing a safety net for refactors.  </li>
-<li><strong>Observability</strong>: Failures will pinpoint specific methods (e.g., <code>detectFrameworks</code>, <code>createDefault</code>) that deviate from expectations.</li>
+<li>Provides automated verification of <code>FrameworkRegistry</code> logic, reducing regressions when the registry implementation changes.  </li>
+<li>Ensures that default configuration remains consistent (10 frameworks, multi‑language support).  </li>
+<li>Test failures will surface during CI, aiding quick identification of registry issues.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>API drift</strong>: If <code>FrameworkRegistry</code>’s public API changes (e.g., method signatures), the tests will fail; review recent refactors.  </li>
-<li><strong>Detection logic changes</strong>: Modifying heuristics could break <code>detectFrameworks</code> tests; ensure new patterns are reflected in expectations.  </li>
-<li><strong>Default config count</strong>: The test expects exactly 10 built‑in frameworks; adding or removing defaults will require updating the assertion.  </li>
-<li><strong>Immutability contract</strong>: If the implementation changes to return a reference instead of a copy, the immutability test will fail; verify that <code>getForLanguage</code> still returns a new array.</li>
+<li><strong>Test flakiness</strong>: detection tests rely on hard‑coded manifest strings; if external data changes, tests may fail (unknown from the available diff/scan evidence).  </li>
+<li><strong>Future framework additions</strong>: adding new frameworks will require updating the <code>createDefault</code> test to reflect the new count and language mappings.  </li>
+<li><strong>Linting/build</strong>: run <code>npm run lint</code>, <code>npm run test</code>, and <code>npm run build</code> to confirm the new file does not introduce style or compilation errors.</li>
 </ul>
 </article>
   </main>

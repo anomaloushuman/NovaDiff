@@ -26,36 +26,35 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/plugin-registry.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:12:32.518Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:59:25.648Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/plugin-registry.test.ts</code> has been added.<br>It exercises the <code>PluginRegistry</code> API and the <code>registerAllParsers</code> helper, ensuring that plugins are registered, looked‑up, and cleaned up correctly, and that file‑type parsing works for a variety of minimal inputs.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/plugin-registry.test.ts</code> (lines 1‑228) was added.<br>It imports <code>vitest</code> helpers, <code>PluginRegistry</code>, <code>registerAllParsers</code>, and types <code>AnalyzerPlugin</code>, <code>StructuralAnalysis</code>, <code>ImportResolution</code>.<br>A helper <code>createMockPlugin</code> (lines 13‑20) constructs a stub <code>AnalyzerPlugin</code> with default <code>analyzeFile</code> and <code>resolveImports</code> implementations.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑4): <code>vitest</code> helpers, <code>PluginRegistry</code>, <code>registerAllParsers</code>, and type imports from <code>../types.js</code>.  </li>
-<li><strong><code>createMockPlugin</code> helper</strong> (lines 13‑20) builds minimal <code>AnalyzerPlugin</code> objects for the tests.  </li>
-<li><strong>Registry tests</strong> (lines 22‑140) cover:  <ul>
-<li>registration, language/file lookup, and priority handling.  </li>
-<li><code>getSupportedLanguages</code>, <code>unregister</code>, and language‑map rebuild logic.  </li>
-<li>Delegation of <code>analyzeFile</code> and <code>resolveImports</code>, including a test for a plugin that omits <code>resolveImports</code>.</li>
+<li><strong>Imports</strong> added at the top of the file (R1‑R4).  </li>
+<li><strong>Mock plugin factory</strong> (<code>createMockPlugin</code>) returns an <code>AnalyzerPlugin</code> with stubbed methods (R13‑R20).  </li>
+<li><strong>Behavioral tests</strong> (R22‑R194) cover:<ul>
+<li>registration, lookup by language and file extension, language mapping, and priority of later registrations.  </li>
+<li><code>getSupportedLanguages</code>, <code>unregister</code>, and language‑file resolution.  </li>
+<li>Delegation of <code>analyzeFile</code> and <code>resolveImports</code> to the correct plugin, including handling of optional <code>resolveImports</code>.</li>
 </ul>
 </li>
-<li><strong>Smoke test for <code>registerAllParsers</code></strong> (lines 197‑228) registers all parsers and verifies that each returns a non‑null <code>StructuralAnalysis</code> for a minimal content snippet.<br>The test iterates over 12 file types: <code>README.md</code>, <code>config.yaml</code>, <code>config.json</code>, <code>config.toml</code>, <code>.env</code>, <code>Dockerfile</code>, <code>schema.sql</code>, <code>schema.graphql</code>, <code>types.proto</code>, <code>main.tf</code>, <code>Makefile</code>, <code>script.sh</code>.</li>
+<li><strong>Smoke test</strong> (R197‑R228) registers all parsers via <code>registerAllParsers</code> and verifies that each parser returns a non‑null <code>StructuralAnalysis</code> for minimal content across a variety of file types (Markdown, YAML, JSON, TOML, <code>.env</code>, Dockerfile, SQL, GraphQL, Proto, Terraform, Makefile, shell script).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: The tests expose edge cases in plugin lookup and lifecycle, tightening the observable contract for <code>PluginRegistry</code>.  </li>
-<li><strong>Maintainability</strong>: <code>createMockPlugin</code> centralizes mock creation, reducing duplication.  </li>
-<li><strong>Observability</strong>: Failure messages include file‑path context (e.g., <code>analyzeFile should return a result for ${filePath}</code>), aiding debugging.  </li>
-<li><strong>Performance</strong>: The smoke test runs ~12 iterations; negligible CI impact.</li>
+<li>Adds 228 lines of test code, expanding coverage of <code>PluginRegistry</code> behavior.  </li>
+<li>Provides concrete assertions for plugin lookup, delegation, and language mapping.  </li>
+<li>The smoke test ensures that every parser can handle minimal content for its supported file types.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression risk</strong>: Changes to <code>PluginRegistry</code> may cause many tests to fail; run the full suite after any implementation change.  </li>
-<li><strong>Optional <code>resolveImports</code> handling</strong>: Verify that non‑code plugins (e.g., the markdown plugin test) still return <code>null</code> for imports.  </li>
-<li><strong>Parser registration</strong>: Ensure <code>registerAllParsers</code> registers all parsers; inspect the test case list for omissions.  </li>
-<li><strong>Snapshot drift</strong>: No snapshots are used; if parser outputs change, update the structural‑analysis shape assertions accordingly.</li>
+<li><strong>Regression risk</strong>: any change to <code>PluginRegistry</code> internals (e.g., language map logic) may cause multiple tests to fail; run the full suite after refactors.  </li>
+<li><strong>Snapshot drift</strong>: if the shape of <code>StructuralAnalysis</code> changes, the smoke test may need updates; verify against current snapshots.  </li>
+<li><strong>Lint/build</strong>: ensure the new file passes the repository’s TypeScript linting and build steps.  </li>
+<li><strong>Performance</strong>: the smoke test iterates over many file types; monitor CI test duration to avoid timeouts.</li>
 </ul>
 </article>
   </main>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/diff-excerpt.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/diff-excerpt.cjs</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:19:33.353Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>electron/diff-excerpt.cjs</code> is a new CommonJS module that exports two helper functions for creating compact diff excerpts. The module is added to the Electron build and mirrors the logic of <code>src/app/diffExcerpt.ts</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>buildDiffExcerpt(payload, maxLen = 24000)</code></strong> (lines 12‑28) iterates over <code>payload.rows</code>, builds tab‑separated lines, stops when the accumulated length exceeds <code>maxLen</code>, and returns the string or <code>undefined</code>.  </li>
+<li><strong><code>buildDiffExcerptChunks(payload, maxLenPerChunk = FILE_SUMMARY_DIFF_CHUNK_CHARS, maxChunks = FILE_SUMMARY_MAX_CHUNKS)</code></strong> (lines 36‑67) pre‑computes lines, calculates an effective max length based on total length and <code>maxChunks</code>, then splits into chunks.  </li>
+<li>Constants <strong><code>FILE_SUMMARY_DIFF_CHUNK_CHARS = 48000</code></strong> and **<code>FILE_SUMMARY_MAX_CHUNKS = 8</code>*</li>
+</ul>
+<ul>
+<li>(lines 3‑4) set default chunk size and maximum number of chunks.</li>
+</ul>
+<ul>
+<li>Exports both functions via <code>module.exports</code> (line 70).  </li>
+<li>Uses strict mode (line 1) and JSDoc comments that match the TypeScript source (lines 6‑11).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides an Electron‑friendly diff excerpt generator that matches the existing TypeScript API.  </li>
+<li>Chunking logic limits memory usage for large diffs, keeping each chunk ≤ 48 k characters or fewer.  </li>
+<li>The module performs only string manipulation, so it has no side effects and is safe for UI‑thread usage.  </li>
+<li>Configurable <code>maxLen</code> and <code>maxLenPerChunk</code> allow adaptation to LLM context size constraints.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Payload shape</strong>: missing <code>left_no</code>, <code>right_no</code>, or <code>left_style</code> may produce empty strings; verify data integrity.  </li>
+<li><strong>Boundary values</strong>: test edge cases near 24 k and 48 k to ensure correct truncation and chunking.  </li>
+<li><strong>Interop</strong>: confirm that Electron code correctly requires this CommonJS module; missing <code>module.exports</code> could break imports.  </li>
+<li><strong>Build validation</strong>: run lint, unit tests, and production build to catch any CommonJS/ESM interop issues.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -26,37 +26,45 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/persistence/persistence.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:45:30.195Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:30:57.026Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/persistence/persistence.test.ts</code> (lines 1‑204) was added to exercise the persistence API of the graph core module.</p>
+<p>A new test file <code>packages/graph-core/src/persistence/persistence.test.ts</code> (lines R1‑R204) has been added to exercise the persistence layer’s read/write functions for knowledge graphs, meta data, fingerprints, and configuration.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports added</strong> (lines 1‑6): Vitest helpers (<code>describe</code>, <code>it</code>, <code>expect</code>, <code>beforeEach</code>, <code>afterEach</code>) and Node utilities (<code>mkdtempSync</code>, <code>rmSync</code>, <code>existsSync</code>, <code>writeFileSync</code>, <code>join</code>, <code>tmpdir</code>).  </li>
-<li><strong>API coverage</strong>: Tests for <code>saveGraph</code>/<code>loadGraph</code>, <code>saveMeta</code>/<code>loadMeta</code>, <code>saveFingerprints</code>/<code>loadFingerprints</code>, and <code>saveConfig</code>/<code>loadConfig</code>.  </li>
-<li><strong>Edge‑case checks</strong>:  <ul>
-<li>Verify that files are written under <code>.&lt;tempDir&gt;/.novadiff-graph/</code>.  </li>
-<li>Round‑trip equality of graph, meta, fingerprints, and config objects.  </li>
-<li><code>null</code> is returned when the expected file is missing.  </li>
-<li><code>loadGraph</code> throws on a fatally invalid graph and respects a <code>{ validate: false }</code> option.  </li>
-<li>Corrupted JSON files result in <code>null</code> for fingerprints and config.</li>
+<li><strong>Imports</strong> (lines R1‑R6):  <ul>
+<li><code>vitest</code> helpers (<code>describe</code>, <code>it</code>, <code>expect</code>, <code>beforeEach</code>, <code>afterEach</code>).  </li>
+<li>Node utilities (<code>mkdtempSync</code>, <code>rmSync</code>, <code>existsSync</code>, <code>join</code>, <code>tmpdir</code>, <code>writeFileSync</code>).  </li>
+<li>Persistence API (<code>saveGraph</code>, <code>loadGraph</code>, <code>saveMeta</code>, <code>loadMeta</code>, <code>saveFingerprints</code>, <code>loadFingerprints</code>, <code>saveConfig</code>, <code>loadConfig</code>).</li>
 </ul>
 </li>
-<li><strong>Default config</strong>: <code>loadConfig</code> falls back to <code>{ autoUpdate: false, outputLanguage: &quot;en&quot; }</code> when <code>config.json</code> is absent or corrupted.</li>
+<li><strong>Sample data</strong>:  <ul>
+<li><code>sampleGraph</code> (type <code>KnowledgeGraph</code>) defined at lines R21‑R68.  </li>
+<li><code>sampleMeta</code> (type <code>AnalysisMeta</code>) at lines R70‑R75.  </li>
+<li><code>sampleFingerprints</code> (type <code>FingerprintStore</code>) at lines R140‑R156.</li>
+</ul>
+</li>
+<li><strong>Test cases</strong> (lines R77‑R203):  <ul>
+<li>Verify file creation and round‑trip integrity for each persistence function.  </li>
+<li>Confirm <code>load*</code> returns <code>null</code> when the expected file is missing.  </li>
+<li>Check error handling for an invalid graph (<code>project: null</code>) and for corrupted JSON files.  </li>
+<li>Validate that <code>loadConfig</code> falls back to <code>{ autoUpdate: false, outputLanguage: &quot;en&quot; }</code> when <code>config.json</code> is absent or malformed.</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides automated regression checks for persistence logic, catching serialization/deserialization bugs.  </li>
-<li>Centralizes tests for future API changes.  </li>
-<li>Exposes failures early by asserting file existence and content equality.</li>
+<li><strong>Correctness</strong>: Tests confirm that serialization and deserialization work for all persistence APIs.  </li>
+<li><strong>Maintainability</strong>: Centralized sample data and expectations make future API changes easier to detect.  </li>
+<li><strong>Observability</strong>: Failure points are clear for missing files, validation errors, and corrupted data.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Temporary directory creation (<code>mkdtempSync</code>) may fail on CI environments lacking write permissions; verify <code>/tmp</code> access.  </li>
-<li>Tests assume the storage path <code>.novadiff-graph</code>; any refactor of this path will break the suite.  </li>
-<li>Default config values are hard‑coded; changes to defaults will cause test failures.  </li>
-<li>Only <code>loadGraph</code> currently accepts a <code>{ validate: false }</code> flag; ensure other loaders honor similar options if added.</li>
+<li><strong>Regression risk</strong>: Any change to the signatures of <code>save*</code>/<code>load*</code> will cause these tests to fail; run <code>npm test</code> after refactors.  </li>
+<li><strong>Default config drift</strong>: Verify that <code>loadConfig</code> still returns the expected defaults when <code>config.json</code> is missing or corrupted.  </li>
+<li><strong>File system permissions</strong>: Tests create temporary directories; ensure CI environments allow write access.  </li>
+<li><strong>Performance</strong>: Temporary directory creation/deletion may affect CI runtime; monitor for slowdowns.</li>
 </ul>
 </article>
   </main>

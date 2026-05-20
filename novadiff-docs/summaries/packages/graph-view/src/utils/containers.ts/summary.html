@@ -26,34 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/containers.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:59:12.955Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:45:41.930Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new utility module <code>packages/graph-view/src/utils/containers.ts</code> is added. It derives container metadata for graph nodes by grouping them either by folder structure or, when necessary, by community detection.</p>
+<p><code>packages/graph-view/src/utils/containers.ts</code> is a new module that derives logical containers from graph nodes. It groups nodes by folder structure, falls back to community detection when folder grouping is insufficient, and suppresses single‑child containers for larger graphs.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑5): <code>GraphNode</code>, <code>GraphEdge</code> from <code>@novadiff/graph-core/types</code> and <code>detectCommunities</code> from <code>./louvain</code>.  </li>
-<li><strong>Interfaces</strong> (lines 7‑12, 14‑17): <code>DerivedContainer</code> and <code>DeriveResult</code> expose container id, name, node ids, and strategy.  </li>
-<li><strong>Folder grouping</strong> (lines 52‑75): <code>groupByFolder</code> uses <code>commonPrefix</code> (lines 30‑45) and <code>firstSegment</code> (lines 47‑51) to bucket nodes by the first path segment after trimming the longest common prefix.  </li>
-<li><strong>Fallback decision</strong> (lines 77‑89): <code>shouldFallbackToCommunity</code> returns true when bucket count is below <code>MIN_BUCKET_COUNT</code> or any bucket exceeds <code>MAX_CONCENTRATION</code>.  </li>
-<li><strong>Derivation entry point</strong> (lines 91‑156): <code>deriveContainers</code> orchestrates grouping, optional community fallback, suppression of single‑child containers (when <code>nodes.length &gt;= MIN_NODES_FOR_SUPPRESSION</code>), and returns <code>{ containers, ungrouped }</code>.  </li>
-<li><strong>Constants</strong> (lines 19‑23): <code>MIN_BUCKET_COUNT</code>, <code>MAX_CONCENTRATION</code>, <code>MIN_NODES_FOR_SUPPRESSION</code>, <code>ROOT_BUCKET</code> control the heuristics.</li>
+<li><strong>Imports</strong> – <code>GraphNode</code>/<code>GraphEdge</code> from <code>@novadiff/graph-core/types</code> and <code>detectCommunities</code> from <code>./louvain</code> (lines 1‑5).  </li>
+<li><strong>Interfaces</strong> – <code>DerivedContainer</code> (id, name, nodeIds, strategy) and <code>DeriveResult</code> (containers, ungrouped) (lines 7‑17).  </li>
+<li><strong>Helper functions</strong>  <ul>
+<li><code>commonPrefix(paths)</code> (lines 30‑45) finds the longest common directory prefix.  </li>
+<li><code>firstSegment(path)</code> (lines 47‑50) extracts the first path segment.  </li>
+<li><code>groupByFolder(nodes)</code> (lines 52‑75) groups nodes by the first segment after trimming the common prefix.  </li>
+<li><code>shouldFallbackToCommunity(groups, rooted, totalNodes)</code> (lines 77‑89) decides whether to use community detection based on bucket count and concentration thresholds.</li>
+</ul>
+</li>
+<li><strong>Main export</strong> – <code>deriveContainers(nodes, edges)</code> (lines 91‑156) orchestrates grouping, optional community detection, container creation, and suppression of single‑child containers when <code>nodes.length ≥ MIN_NODES_FOR_SUPPRESSION</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Deterministic grouping</strong>: Nodes are consistently bucketed by folder or community.  </li>
-<li><strong>Optional community detection</strong>: Invoked only when <code>shouldFallbackToCommunity</code> deems folder grouping insufficient, reducing unnecessary analysis.  </li>
-<li><strong>Single‑child suppression</strong>: Containers with a single node are removed and the node is returned in <code>ungrouped</code>.  </li>
-<li><strong>Root bucket handling</strong>: Nodes without a <code>filePath</code> are placed in a special <code>ROOT_BUCKET</code> container.  </li>
-<li><strong>No API changes</strong>: Existing consumers can import the new module without altering existing code.</li>
+<li><strong>Correctness</strong> – deterministic container derivation; community fallback is used when bucket count &lt; <code>MIN_BUCKET_COUNT</code> or any bucket exceeds <code>MAX_CONCENTRATION</code>.  </li>
+<li><strong>Maintainability</strong> – all container logic resides in a single module with clear type contracts.  </li>
+<li><strong>Performance</strong> – community detection (<code>detectCommunities</code>) is invoked only when needed; suppression is a linear pass over containers.  </li>
+<li><strong>Compatibility</strong> – no existing API changes; new exports are additive.  </li>
+<li><strong>Observability</strong> – exported functions can be unit‑tested; thresholds are exposed as constants.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Community detection integration</strong>: The behavior of <code>detectCommunities</code> is not shown in the diff; verify that it returns <code>(nodeId, cid)</code> pairs as expected.  </li>
-<li><strong>Edge‑case handling</strong>: Ensure nodes lacking <code>filePath</code> are correctly routed to <code>ROOT_BUCKET</code> and that suppression respects <code>MIN_NODES_FOR_SUPPRESSION</code>.  </li>
-<li><strong>Threshold tuning</strong>: <code>MIN_BUCKET_COUNT</code> and <code>MAX_CONCENTRATION</code> may need adjustment for different graph sizes; monitor clustering quality.  </li>
-<li><strong>Performance regression</strong>: Benchmark <code>deriveContainers</code> on large graphs to confirm community fallback does not introduce significant overhead.</li>
+<li><strong>Community detection accuracy</strong> – unknown from the available diff; verify clusters for typical graph shapes.  </li>
+<li><strong>Suppression edge cases</strong> – ensure nodes in single‑child containers are moved to <code>ungrouped</code> when <code>nodes.length ≥ MIN_NODES_FOR_SUPPRESSION</code>.  </li>
+<li><strong>Folder grouping correctness</strong> – test <code>commonPrefix</code> and <code>firstSegment</code> with paths lacking slashes or containing only a root.  </li>
+<li><strong>Integration</strong> – downstream consumers must handle the new <code>strategy</code> field (<code>folder</code> vs <code>community</code>).</li>
 </ul>
 </article>
   </main>

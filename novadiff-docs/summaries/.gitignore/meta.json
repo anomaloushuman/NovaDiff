@@ -1,21 +1,23 @@
 {
   "relPath": ".gitignore",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T20:57:08.907Z",
+  "generatedAt": "2026-05-20T04:06:11.822Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R33-38"
+      "R1-38"
     ],
     "cited_changed_lines": [
-      "R34 added: # Optional legacy clone (not used by NovaDiff)",
-      "R35 added: understandanything/",
-      "R37 added: # Graph engine build output",
-      "R38 added: packages/graph-core/dist"
+      "R1 added: # Logs",
+      "R2 added: logs",
+      "R3 added: *.log",
+      "R4 added: npm-debug.log*",
+      "R5 added: yarn-debug.log*",
+      "R6 added: yarn-error.log*"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

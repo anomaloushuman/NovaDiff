@@ -1,24 +1,21 @@
 ### Overview  
-`packages/graph-view/src/themes/presets.ts` is a new module that defines theme data and helper functions. The file adds imports, two accent swatch arrays, a preset collection, and lookup utilities.
+A new file `packages/graph-view/src/themes/presets.ts` was added. It defines theme presets and helper functions for the graph view component.
 
 ### Key changes  
-- **File added**: `packages/graph-view/src/themes/presets.ts` (lines 1‑183).  
-- **Imports**: `import type { AccentSwatch, ThemePreset } from "./types.ts";` (line 1).  
-- **Accent swatches**:  
-  - `DARK_ACCENT_SWATCHES` (lines 3‑12).  
-  - `LIGHT_ACCENT_SWATCHES` (lines 14‑23).  
-- **Preset collection**: `export const PRESETS: ThemePreset[] = [...]` (lines 25‑171) contains dark and light presets with color palettes.  
-- **Lookup helpers**:  
-  - `export function getPreset(id: string)` (lines 173‑175) returns the preset matching `id` or the first preset if none match.  
-  - `export function getAccent(preset, accentId)` (lines 177‑183) returns an accent swatch by `accentId`, falling back to the preset’s default or the first swatch.
+- Import of types: `import type { AccentSwatch, ThemePreset } from "./types.ts";` (line 1).  
+- Accent swatch constants: `DARK_ACCENT_SWATCHES` and `LIGHT_ACCENT_SWATCHES` (lines 3‑23).  
+- Preset collection: `export const PRESETS: ThemePreset[]` (lines 25‑171) lists eight presets with dark/light variants and associated accent swatches.  
+- Utility functions:  
+  - `export function getPreset(id: string)` (lines 173‑175) returns the preset with the given id or falls back to the first preset.  
+  - `export function getAccent(preset: ThemePreset, accentId: string)` (lines 177‑183) returns the matching accent swatch, or falls back to the preset’s default accent, or the first swatch.
 
 ### Impact  
-- **Deterministic fallback**: Both helpers guarantee a return value, preventing `undefined` results.  
-- **Centralized data**: All theme definitions live in a single array, simplifying future additions.  
-- **Linear lookup**: Uses `Array.find`, which is acceptable for the small preset set shown.
+- The fallback logic in `getPreset` and `getAccent` prevents undefined values when an id is missing.  
+- Centralizing theme data reduces duplication; new themes can be added by extending `PRESETS`.  
+- No existing modules are modified; the file is purely additive.
 
 ### Risks & follow‑ups  
-- **Duplicate IDs**: The code does not check for duplicate `id` values; duplicates could cause unexpected fallbacks.  
-- **Test coverage**: No tests are present for `getPreset` or `getAccent`; adding unit tests would confirm fallback behavior.  
-- **Build validation**: Run lint, TypeScript compilation, and the production build to ensure the new imports resolve correctly.  
-- **Scalability**: If the preset list grows, consider indexing by `id` for O(1) lookup.
+- Verify that other modules import the correct relative path (`./themes/presets.ts`).  
+- Add unit tests for `getPreset` and `getAccent` to confirm fallback behavior.  
+- If the preset list grows, consider memoizing lookups to avoid repeated linear scans.  
+- Ensure `ThemePreset` and `AccentSwatch` definitions in `./types.ts` remain compatible with the new data structure.

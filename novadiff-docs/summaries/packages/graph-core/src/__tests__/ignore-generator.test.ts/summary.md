@@ -1,21 +1,19 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/ignore-generator.test.ts` (lines R1‑162) validates `generateStarterIgnoreFile`. It imports `vitest` helpers, the generator, and Node fs/path/os APIs, then creates a temporary project directory for each test.
+A new test file `packages/graph-core/src/__tests__/ignore-generator.test.ts` (lines R1‑162) was added to validate `generateStarterIgnoreFile`. The suite checks header content, directory‑based suggestions, generic test‑file patterns, and integration with an existing `.gitignore`.
 
 ### Key changes  
-- **Imports** (R1‑R5): `vitest` functions, `generateStarterIgnoreFile`, `mkdirSync`, `rmSync`, `writeFileSync`, `join`, `tmpdir`.  
-- **Setup/teardown** (R7‑R17): `beforeEach` creates a unique temp dir via `tmpdir()` and `mkdirSync`; `afterEach` removes it with `rmSync`.  
-- **Header tests** (R19‑R24): assert that the output contains `.novadiffignore`, “same as .gitignore”, and “Built‑in defaults”.  
-- **Suggestion logic** (R26‑R57): verify all suggested patterns are commented out and that directory‑based suggestions (`__tests__`, `docs`, `test`, `tests`, `fixtures`, `examples`, `.storybook`, `migrations`, `scripts`) appear only when the directory exists.  
-- **Generic test file suggestions** (R84‑R89): always include `*.snap`, `*.test.*`, `*.spec.*`.  
-- **.gitignore integration** (R98‑R161): create `.gitignore` files with `writeFileSync`, check that non‑default patterns are prefixed with `#`, comments/blank lines are ignored, trailing‑slash normalization works, and the section is omitted when no `.gitignore` or all patterns are defaults.
+- **Imports** – added `vitest` helpers, `generateStarterIgnoreFile`, and Node `fs`, `path`, `os` modules (R1‑R5).  
+- **Test harness** – `beforeEach` creates a unique temp directory `tmpdir()/ignore-gen-test-${Date.now()}`; `afterEach` removes it (R10‑R17).  
+- **Header checks** – asserts presence of `.novadiffignore`, a reference to `.gitignore`, and “Built‑in defaults” (R19‑R23).  
+- **Directory suggestions** – verifies commented suggestions for existing directories (`__tests__`, `docs`, `test`, `tests`, `fixtures`, `examples`, `.storybook`, `migrations`, `scripts`) and that non‑existent ones are omitted (R26‑R96).  
+- **Generic test patterns** – ensures `*.snap`, `*.test.*`, and `*.spec.*` are always suggested (R84‑R88).  
+- **`.gitignore` integration** – tests inclusion of uncovered patterns, deduplication, comment/blank‑line skipping, trailing‑slash normalization, and omission when all patterns are covered (R98‑R153).  
+- **Section omission** – confirms no “From .gitignore” section appears when absent or fully covered (R144‑R153).
 
 ### Impact  
-- Adds comprehensive guardrails for `generateStarterIgnoreFile`.  
-- Expands coverage for directory suggestions and `.gitignore` parsing.  
-- Tests perform filesystem writes; cleanup is handled in `afterEach`, but failures could leave temp dirs.
+The added tests provide concrete coverage of ignore‑file generation logic, making regressions in header formatting, directory detection, or `.gitignore` handling immediately visible.
 
 ### Risks & follow‑ups  
-- **Temp dir uniqueness**: `Date.now()` may collide under heavy parallel runs; consider `crypto.randomUUID()` if flaky.  
-- **Cleanup reliability**: ensure `afterEach` runs even on failures to avoid orphaned directories.  
-- **Environment permissions**: tests assume write access to the OS temp directory; verify in CI.  
-- **API changes**: if `generateStarterIgnoreFile` signature changes, these tests will fail; maintainers should update imports accordingly.
+- **Parallel test flakiness** – `Date.now()` may produce duplicate directories; consider a UUID suffix.  
+- **Cleanup reliability** – `rmSync(..., { recursive: true, force: true })` should always delete the temp dir; a final existence check could guard against failures.  
+- **Future default changes** – if built‑in defaults evolve, corresponding assertions (e.g., header text, generic patterns) will need updating.

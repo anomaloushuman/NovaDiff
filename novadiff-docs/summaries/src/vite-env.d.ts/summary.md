@@ -1,22 +1,19 @@
-### Overview  
-`src/vite-env.d.ts` now declares two additional Electron API methods:  
-- **`workspaceRefreshHistory`** (added lines 321‑324)  
-- **`workspaceUpdateUiState`** (added lines 329‑332)  
+### Overview
+A new `src/vite-env.d.ts` file (added at line 1) declares TypeScript typings for the Electron API and several payload interfaces used across the project.
 
-These augment the existing `ElectronAPI` interface without removing any prior members.
+### Key changes
+- **Imports** – type definitions are pulled from `./app/types`, `./app/llmStorage`, and `./app/gitTypes` (diff lines 3‑16).  
+- **Payload interfaces** – added `SummaryPrefetchPayload`, `FileSummaryExportPayload`, `FileSummaryMarkdownReadPayload`, `SelectionSummaryExportPayload`, `SelectionSummaryMarkdownReadPayload`, `NovadiffDocsWritePayload`, and `NovadiffDocsReadPayload` (lines 33‑104).  
+- **ElectronAPI interface** – declares a comprehensive set of methods for folder comparison, file diffing, window control, summary prefetching, artifact persistence, codebase scanning, LLM interactions, Git tooling, workspace management, and more (lines 104‑383).  
+- **Global augmentation** – extends `Window` with an optional `electronAPI` property (lines 385‑388).  
+- **Module export** – exports an empty object to satisfy module resolution (line 391).
 
-### Key changes  
-- `workspaceRefreshHistory(payload: {workspaceId: string; fetchRemote?: boolean}) → Promise<NovaWorkspace>`  
-- `workspaceUpdateUiState(payload: {workspaceId: string; uiState: WorkspaceUiState}) → Promise<WorkspaceSessionState>`  
+### Impact
+- **Type safety** – compile‑time checks and IDE autocompletion for all Electron API calls are now available.  
+- **Consistency** – payload shapes are centralized, reducing duplication.  
+- **Consumer updates** – modules that use `electronAPI` must import the new types and adjust method calls to match the declared signatures.
 
-Both signatures are new; the rest of the interface remains unchanged (see diff lines R321‑324 and R329‑332).
-
-### Impact  
-- **Renderer side**: components can now invoke `window.electronAPI.workspaceRefreshHistory` or `workspaceUpdateUiState` to trigger a history refresh or update UI state.  
-- **Type safety**: TypeScript consumers receive compile‑time checks for the new payload shapes.  
-- **No breaking changes**: existing API contracts are preserved; the additions are purely additive.
-
-### Risks & follow‑ups  
-- **Main‑process implementation**: the main process must expose matching handlers; otherwise calls will fail at runtime (unknown from the available diff/scan evidence).  
-- **Testing**: add unit/integration tests covering the new API paths.  
-- **Documentation**: update API docs to list the new methods and their payloads.
+### Risks & follow‑ups
+- **Signature mismatches** – verify that the runtime Electron implementation matches the declared `ElectronAPI` methods; mismatches will surface at runtime.  
+- **Global conflicts** – ensure no other global declarations clash with the added `Window` augmentation.  
+- **Testing** – run the full test suite and the TypeScript compiler to confirm no new type errors or runtime failures.

@@ -1,0 +1,53 @@
+{
+  "relPath": "electron/novadiff-docs-writer.cjs",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:29:32.691Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");"
+    ],
+    "changed_line_ranges": [
+      "R1-176"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R6 added: const NOVADIFF_DOCS = \"novadiff-docs\";",
+      "R7 added: const DEFAULT_BUNDLE_KEY = \"change-report\";",
+      "R9 added: function bundleKeyOf(bundle) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function writeNovadiffDocsBundle (96-176)",
+      "right function readme (51-95)",
+      "right function bundleHeadline (18-50)",
+      "right function bundleKeyOf (9-13)",
+      "right function bundleBaseDir (14-17)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

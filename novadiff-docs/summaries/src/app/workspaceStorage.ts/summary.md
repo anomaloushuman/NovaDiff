@@ -1,21 +1,28 @@
 ### Overview  
-`src/app/workspaceStorage.ts` now adds two boolean options to `resolveOnboardingGate`: `launchAuthConfirmed` and `launchWorkspaceConfirmed` (added at lines 71‑74). The function signature still lists `hasUser` and `hasActiveWorkspace`, but the logic no longer references them. The gating now depends only on `skipBoot`, `localOnlyMode`, and the new flags.
+`src/app/workspaceStorage.ts` is a new module that centralises local‑storage access for Git user data, active workspace ID, and a local‑only flag. It also supplies utilities for onboarding gate resolution, session merging, and workspace lookup.
 
 ### Key changes  
-- **New option fields** (`launchAuthConfirmed`, `launchWorkspaceConfirmed`) added with comments at R71‑R74.  
-- **Local‑only mode logic** updated at R81‑R82: if `!opts.launchWorkspaceConfirmed` return `"welcome"`.  
-- **Legacy gating removed**: blocks that returned `"welcome"` or `"hub"` based on `hasUser`/`hasActiveWorkspace` (originally lines 79‑91) are deleted.  
-- **Return path**: after the local‑only check, the function always returns `"app"` if no earlier return occurs.  
-- **Signature unchanged**: `hasUser` and `hasActiveWorkspace` remain in the parameter list but are unused.
+* **Imports & constants** – added at line 1:  
+  ```ts
+  import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from "./workspaceTypes";
+  const USER_KEY = "novadiff_git_user_v1";
+  const ACTIVE_WS_KEY = "novadiff_active_workspace_v1";
+  const LOCAL_ONLY_KEY = "novadiff_local_only_v1";
+  ```
+* **Caching helpers** – functions at lines 7‑16, 19‑25, 27‑32, 35‑41, 45‑50, 53‑62 provide safe `get`, `set`, and `remove` operations for the three keys.  
+* **Onboarding gate** – `export type OnboardingGate = "boot" | "welcome" | "hub" | "app"` (line 43) and `resolveOnboardingGate(opts)` (lines 65‑94) decide the next UI step based on flags such as `skipBoot`, `localOnlyMode`, and confirmation flags.  
+* **Session merging** – `mergeSession(partial, current)` (lines 95‑109) returns a new `WorkspaceSessionState` by overriding only supplied fields.  
+* **Workspace lookup** – `findWorkspace(workspaces, id)` (lines 111‑119) returns the matching `NovaWorkspace` or `null`.
 
 ### Impact  
-- The function now yields only `"boot"`, `"welcome"` (in local‑only mode), or `"app"`. The `"hub"` gate is no longer reachable.  
-- Callers that previously relied on `hasUser` or `hasActiveWorkspace` must now provide `launchAuthConfirmed` and `launchWorkspaceConfirmed` to control the flow.  
-- Existing telemetry or logs that referenced the removed gates should be reviewed.  
-- The change is O(1) and has negligible runtime impact.
+* **Persistence** – state is now stored in `localStorage`; code that previously held state in memory must use these helpers.  
+* **Error handling** – each load function catches errors and returns a safe default, preventing crashes when `localStorage` is unavailable.  
+* **Onboarding flow** – gate logic is now a single, testable function, simplifying UI decision making.  
+* **Session consistency** – `mergeSession` preserves untouched fields, reducing accidental data loss.  
+* **Compatibility** – the module only adds exports; existing imports remain valid.
 
 ### Risks & follow‑ups  
-- **Regression in onboarding**: tests or UI paths expecting a `"hub"` gate may fail; run end‑to‑end tests to confirm the new flow.  
-- **Flag misuse**: if `launchAuthConfirmed` or `launchWorkspaceConfirmed` are not set correctly, users may skip the welcome screen unintentionally.  
-- **Legacy references**: search the codebase for `hasUser` and `hasActiveWorkspace` to ensure no remaining dependencies.  
-- **Documentation**: update any docs that mention the old gating logic.
+* **LocalStorage availability** – verify that the runtime defines `localStorage` (e.g., SSR or private mode).  
+* **Data format changes** – ensure `GitUserProfile` and `WorkspaceSessionState` serialisations remain compatible; otherwise `JSON.parse` may fail.  
+* **Onboarding logic correctness** – run integration tests for all gate combinations (`boot`, `welcome`, `hub`, `app`).  
+* **Duplicate keys** – confirm that `novadiff_git_user_v1`, `novadiff_active_workspace_v1`, and `novadiff_local_only_v1` do not clash with other modules.

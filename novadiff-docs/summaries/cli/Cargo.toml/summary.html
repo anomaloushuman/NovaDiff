@@ -26,24 +26,29 @@
 <body>
   <header class="top">
     <h1>cli/Cargo.toml</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T10:36:01.537Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:15:00.147Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>cli/Cargo.toml</code> file is identical between the baseline commit <code>8e0dc031dcfc</code> and the current <code>NovaDiff</code> target. All 19 lines in the diff are marked as equal, indicating no modifications.</p>
+<p>A new crate <code>cli</code> is added with its Cargo.toml at <code>cli/Cargo.toml</code>. It defines a binary named <code>novadiff-cli</code> that points to <code>src/main.rs</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li>No lines were added, removed, or altered; the file content is unchanged.</li>
+<li><code>[package]</code> section added (lines 1‑5): name, version, edition, description.  </li>
+<li>Binary target declared via <code>[[bin]]</code> (lines 7‑9) pointing to <code>src/main.rs</code>.  </li>
+<li>Dependencies listed (lines 11‑19): <code>regex</code>, <code>ignore</code>, <code>rayon</code>, <code>serde</code>, <code>serde_json</code>, <code>sha2</code>, <code>similar</code>, <code>walkdir</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Dependency resolution, build, and test processes remain the same.</li>
-<li>The binary configuration (<code>[[bin]] name = &quot;novadiff-cli&quot; path = &quot;src/main.rs&quot;</code>) is unchanged, so the executable location is still <code>src/main.rs</code>.</li>
+<li>Builds a new executable <code>novadiff-cli</code>; the workspace must now include the <code>cli</code> crate.  </li>
+<li>Provides a command‑line interface for folder comparison, as described in the package description.  </li>
+<li>Adds runtime dependencies that the binary will link against.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Since the file is unchanged, there is no regression risk from this diff.</li>
-<li>Verify that the <code>src/main.rs</code> path is still valid within the overall project structure, but no action is required based solely on this file.</li>
+<li>Ensure the Cargo workspace includes <code>cli</code> so <code>cargo build</code> compiles the binary.  </li>
+<li>Run <code>cargo test</code> to confirm that the new dependencies do not break existing tests.  </li>
+<li>Verify that <code>src/main.rs</code> compiles against the added crates.  </li>
+<li>Monitor binary size and startup performance compared to previous releases.</li>
 </ul>
 </article>
   </main>

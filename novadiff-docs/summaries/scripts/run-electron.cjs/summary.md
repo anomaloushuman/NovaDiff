@@ -1,23 +1,18 @@
 ### Overview  
-The launcher script `scripts/run-electron.cjs` now builds its environment by calling `augmentPathForCli` instead of a plain clone of `process.env`. The helper is imported from `electron/gh-path.cjs` (diff lines R18‑R19). The removal of `ELECTRON_OVERRIDE_DIST_PATH` is unchanged.
+A new script `scripts/run-electron.cjs` is added. It spawns the Electron binary from `node_modules/electron/dist/` instead of using `electron/cli.js`. The script resolves the binary path, cleans the environment, and starts the process with the supplied arguments.
 
 ### Key changes  
-- In `cleanEnv` (lines 17‑23) the original `const env = { …process.env };` (L18) was replaced with:  
-  ```js
-  const { augmentPathForCli } = require(path.join(root, "electron", "gh-path.cjs"));
-  const env = augmentPathForCli({ …process.env });
-  ```  
-  (R18‑R19).  
-- The `delete env.ELECTRON_OVERRIDE_DIST_PATH;` line remains at L20.  
-- No other parts of the script were modified.
+- **Imports** (R9‑R11): `fs`, `path`, and `spawn` from Node core modules; `augmentPathForCli` from `path.join(root, "electron", "gh-path.cjs")` (R18).  
+- **`cleanEnv()`** (lines 17‑22): augments PATH via `augmentPathForCli`, removes `ELECTRON_OVERRIDE_DIST_PATH`, returns sanitized env.  
+- **`resolveElectronBinary()`** (lines 24‑41): reads `path.txt` in the Electron package, validates existence of the binary, returns its full path. Throws if `path.txt` missing or empty, or binary not found.  
+- **Process launch** (lines 49‑53): spawns the binary with `cwd: root`, `stdio: "inherit"`, and the cleaned env.  
+- **Error handling** (lines 55‑66): logs child errors, exits with child’s exit code or forwards signals.
 
 ### Impact  
-- The environment passed to `spawn` now contains any modifications performed by `augmentPathForCli`, which may adjust PATH or related variables.  
-- Existing behaviour that relied on a shallow clone of `process.env` is preserved except for the potential PATH changes.  
-- The change centralises path handling in `gh-path.cjs`, reducing duplication.
+The script guarantees the binary used is the one bundled with the repo, avoiding overridden paths. Centralizes binary resolution logic; future changes to Electron layout can be made in one place. Errors are printed to stdout and the process exits with the child’s exit code, aiding debugging.
 
 ### Risks & follow‑ups  
-- **Missing module**: `electron/gh-path.cjs` must exist and export `augmentPathForCli`.  
-- **Path side‑effects**: Verify that the augmented PATH does not interfere with other tooling.  
-- **Regression**: Ensure that deleting `ELECTRON_OVERRIDE_DIST_PATH` still behaves as intended after augmentation.  
-- **Documentation**: Update any references to the old `process.env` clone.
+- **Missing `path.txt`**: script throws if absent; ensure `npm install` populates it.  
+- **Node version**: relies on `node:fs`, `node:path`, `node:child_process`; requires Node 18+.  
+- **`augmentPathForCli` path**: script assumes `path.join(root, "electron", "gh-path.cjs")` exists and exports correctly; validate this dependency.  
+- **Testing**: add unit tests for `resolveElectronBinary()` and `cleanEnv()` to cover edge cases such as empty `path.txt` or missing binary.

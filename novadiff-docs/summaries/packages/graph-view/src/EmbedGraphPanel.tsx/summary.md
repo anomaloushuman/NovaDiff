@@ -1,21 +1,21 @@
-### Overview  
-A new `EmbedGraphPanel` component is added in **packages/graph-view/src/EmbedGraphPanel.tsx** (lines 263‑279). It renders a lightweight overview graph with `@xyflow/react` and does not depend on the global Zustand store.
+### Overview
+A new file `packages/graph-view/src/EmbedGraphPanel.tsx` adds a fully‑interactive graph embed for NovaDiff documentation. It renders a responsive React Flow graph inside a themed host and provides Escape‑key navigation to the overview layer.
 
-### Key changes  
-- **Imports** – React hooks (`useEffect`, `useMemo`, `useRef`, `useState`) and XYFlow utilities (`Background`, `Controls`, `MiniMap`, `ReactFlow`, etc.) are added (lines 5‑18).  
-- **Utility** – `buildNodesById` (lines 39‑46) builds a `Map<string, GraphNode>` for fast lookup.  
-- **Layout logic** – `useOverviewLayoutForGraph` (lines 47‑154) constructs layer‑cluster nodes, aggregates edges, runs ELK layout asynchronously, and exposes `{ nodes, edges, layoutStatus }`.  
-- **Viewport handling** – `EmbedFitViewOnce` (lines 156‑184) calls `fitView` once after the flow is mounted to avoid infinite loops.  
-- **Rendering** – `EmbedOverviewFlow` (lines 186‑218) renders the flow with interactions disabled; `EmbedSizedFlowMount` (lines 220‑257) mounts the flow only when the host element has non‑zero dimensions, using a `ResizeObserver`.  
-- **Public API** – `EmbedGraphPanelProps` (lines 259‑261) and `EmbedGraphPanel` (lines 263‑279) expose the panel, showing a “Computing layout…” overlay while `layoutStatus` is `"computing"`.
+### Key changes
+- **Imports (R6‑R11)**: `useEffect`, `useRef`, `useState` from React; `ReactFlowProvider` from `@xyflow/react`; CSS import; `GraphViewInner`; `useDashboardStore`; `ThemeProvider`.  
+- **Type definition (R13)**: `FlowDimensions` tracks host width/height.  
+- **`EmbedEscapeToOverview` (R15‑R30)**: Listens for `Escape` key and triggers `navigateToOverview` when `navigationLevel` is `"layer-detail"`.  
+- **`EmbedSizedInteractiveGraph` (R32‑R79)**: Uses a `ResizeObserver` to keep `dimensions` in sync with the host element, wrapping `GraphViewInner` in a `ReactFlowProvider`.  
+- **`EmbedGraphPanel` export (R81‑R97)**: Pulls the current graph from the dashboard store, conditionally renders the sized graph or a loading overlay, and scopes them with `ThemeProvider`.
 
-### Impact  
-- **Self‑contained** – no global state, reducing side‑effects.  
-- **Asynchronous layout** – ELK runs in a promise; the overlay prevents UI freezes.  
-- **Clear separation** – layout, sizing, and rendering are isolated in hooks and small components, easing future maintenance.
+### Impact
+- Adds dependency `@xyflow/react` and its CSS; must be available in the environment.  
+- Introduces a global key listener and a `ResizeObserver`; both are cleaned up on unmount.  
+- Requires CSS classes `embed-graph-flow-host`, `embed-graph-flow-pane`, `embed-graph-layout-overlay`, etc.; missing styles will break layout.  
+- Relies on `useDashboardStore` for graph data and navigation state.
 
-### Risks & follow‑ups  
-- **Layout accuracy** – verify ELK output for complex graphs; visual regression tests are recommended.  
-- **Resize handling** – confirm `ResizeObserver` triggers re‑mount correctly across browsers.  
-- **Edge cases** – empty or single‑node graphs fall back to `EMPTY_OVERVIEW`; ensure no crashes.  
-- **Styling** – component relies on CSS variables (`--color-edge-dot`, `--glass-bg`); check they exist in all themes.
+### Risks & follow‑ups
+- Verify that `@xyflow/react` and its CSS are installed.  
+- Ensure the global Escape listener does not interfere with other components or tests.  
+- Confirm that the referenced CSS classes are defined in the shared stylesheet.  
+- The component is exported but not referenced in this diff; add a usage test or integration point to validate end‑to‑end functionality.

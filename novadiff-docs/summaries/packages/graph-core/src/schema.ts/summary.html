@@ -26,38 +26,44 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/schema.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:42:08.647Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:27:01.033Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>packages/graph-core/src/schema.ts</code> file was added (+701 lines). It introduces Zod schemas for knowledge‑graph entities and a four‑tier validation pipeline.</p>
-<p>The change adds an import (<code>R1</code>), an <code>EdgeTypeSchema</code> enum (<code>R4</code>), and several alias maps (<code>R17</code>, <code>R78</code>, <code>R128</code>, <code>R139</code>). Functions <code>sanitizeGraph</code> (<code>R148</code>), <code>autoFixGraph</code> (<code>R196</code>), <code>normalizeGraph</code> (<code>R467</code>), and <code>validateGraph</code> (<code>R504</code>) implement sanitization, auto‑correction, alias resolution, and validation.</p>
-<p>Supporting helpers <code>buildInvalidCollectionIssue</code> (<code>R452</code>) and <code>buildErrors</code> (<code>R461</code>) aggregate diagnostics. Public interfaces <code>GraphIssue</code> (<code>R436</code>) and <code>ValidationResult</code> (<code>R443</code>) expose error information, and <code>KnowledgeGraphSchema</code> (<code>R426</code>) defines the full graph shape.</p>
+<p><code>packages/graph-core/src/schema.ts</code> now contains a full validation pipeline for knowledge graphs.<br>Key additions include:</p>
+<ul>
+<li><code>import { z } from &quot;zod&quot;</code> (R1).  </li>
+<li><code>EdgeTypeSchema</code> (R4‑14) defines 35 edge types.  </li>
+<li>Alias maps for node types, edge types, complexity, and direction (R17‑140).  </li>
+<li>Sanitization (<code>sanitizeGraph</code>, R148‑194), normalization (<code>normalizeGraph</code>, R467‑502), and auto‑fix (<code>autoFixGraph</code>, R196‑354).  </li>
+<li>Validation orchestration (<code>validateGraph</code>, R504‑701) that produces a <code>ValidationResult</code>.  </li>
+<li>Helper functions <code>buildInvalidCollectionIssue</code> and <code>buildErrors</code> (R452‑465).  </li>
+<li>Exported interfaces <code>GraphIssue</code> and <code>ValidationResult</code> (R436‑449).</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports &amp; enums</strong> – <code>import { z } from &quot;zod&quot;</code> (<code>R1</code>) and <code>EdgeTypeSchema</code> with 35 edge types (<code>R4</code>).  </li>
-<li><strong>Alias maps</strong> – <code>NODE_TYPE_ALIASES</code> (<code>R17</code>), <code>EDGE_TYPE_ALIASES</code> (<code>R78</code>), <code>COMPLEXITY_ALIASES</code> (<code>R128</code>), <code>DIRECTION_ALIASES</code> (<code>R139</code>).  </li>
-<li><strong>Sanitization</strong> – <code>sanitizeGraph</code> normalizes nulls, lower‑cases strings, and removes optional fields (<code>R148</code>).  </li>
-<li><strong>Auto‑fix</strong> – <code>autoFixGraph</code> supplies defaults for missing <code>type</code>, <code>complexity</code>, <code>tags</code>, <code>summary</code>, and coerces edge weights (<code>R196</code>).  </li>
-<li><strong>Normalization</strong> – <code>normalizeGraph</code> replaces aliased node/edge types with canonical ones (<code>R467</code>).  </li>
-<li><strong>Validation pipeline</strong> – <code>validateGraph</code> orchestrates sanitization, normalization, auto‑fix, collection checks, and schema validation for nodes, edges, layers, and tour steps (<code>R504</code>).  </li>
-<li><strong>Error handling</strong> – <code>buildInvalidCollectionIssue</code> and <code>buildErrors</code> aggregate fatal and non‑fatal issues (<code>R452</code>, <code>R461</code>).  </li>
-<li><strong>Exported interfaces</strong> – <code>GraphIssue</code>, <code>ValidationResult</code>, and the full <code>KnowledgeGraphSchema</code> are now public.</li>
+<li><strong>Schema definitions</strong> – <code>EdgeTypeSchema</code> exposes a 35‑value enum (R4‑14).  </li>
+<li><strong>Alias maps</strong> – <code>NODE_TYPE_ALIASES</code>, <code>EDGE_TYPE_ALIASES</code>, <code>COMPLEXITY_ALIASES</code>, <code>DIRECTION_ALIASES</code> (R17‑140) translate common LLM terms to canonical values.  </li>
+<li><strong>Sanitization</strong> – <code>sanitizeGraph</code> normalizes nulls, lower‑cases enums, and removes optional fields (R148‑194).  </li>
+<li><strong>Auto‑fix</strong> – <code>autoFixGraph</code> supplies defaults for missing fields, coerces types, and records <code>GraphIssue</code> objects (R196‑354).  </li>
+<li><strong>Normalization</strong> – <code>normalizeGraph</code> replaces aliased types in nodes/edges (R467‑502).  </li>
+<li><strong>Validation pipeline</strong> – <code>validateGraph</code> orchestrates sanitization, normalization, auto‑fix, collection checks, project metadata validation, and per‑entity validation, returning <code>ValidationResult</code> (R504‑701).  </li>
+<li><strong>Error handling helpers</strong> – <code>buildInvalidCollectionIssue</code> and <code>buildErrors</code> centralize fatal and non‑fatal issue creation (R452‑465).  </li>
+<li><strong>Exported interfaces</strong> – <code>GraphIssue</code> and <code>ValidationResult</code> provide structured diagnostics (R436‑449).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – Every graph component is validated against Zod; invalid collections trigger fatal errors.  </li>
-<li><strong>Observability</strong> – The <code>issues</code> array provides fine‑grained diagnostics for downstream consumers.  </li>
-<li><strong>Maintainability</strong> – Centralized schema definitions reduce duplication across the repo.  </li>
-<li><strong>Performance</strong> – Auto‑fix and normalization run on every validation; may add overhead for large graphs.  </li>
-<li><strong>Compatibility</strong> – Existing code importing <code>schema.ts</code> must reference the new exports; no breaking API changes within the module itself.</li>
+<li><strong>Correctness</strong> – Multi‑tier validation catches malformed collections, missing metadata, and invalid references, reducing downstream errors.  </li>
+<li><strong>Observability</strong> – Rich <code>GraphIssue</code> logs (levels: <code>auto‑corrected</code>, <code>dropped</code>, <code>fatal</code>) aid debugging and telemetry.  </li>
+<li><strong>Maintainability</strong> – Centralized alias maps and schema definitions simplify future updates to node/edge vocabularies.  </li>
+<li><strong>Performance</strong> – Multiple passes (sanitize → normalize → auto‑fix) add overhead; data sizes are modest, and early error detection outweighs the cost.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Test coverage</strong> – Ensure unit tests exercise all alias mappings and auto‑fix scenarios.  </li>
-<li><strong>Performance regression</strong> – Benchmark <code>validateGraph</code> on large datasets to confirm acceptable latency.  </li>
-<li><strong>Schema drift</strong> – If other packages rely on older node/edge type definitions, update imports accordingly.  </li>
-<li><strong>LLM integration</strong> – Verify that LLM‑generated graphs are correctly normalized; watch for edge cases where aliases conflict with canonical values.</li>
+<li><strong>Alias collisions</strong> – Verify that <code>EDGE_TYPE_ALIASES</code> and <code>NODE_TYPE_ALIASES</code> do not map distinct terms to the same canonical value (deterministic risk signal).  </li>
+<li><strong>Auto‑fix side effects</strong> – Defaulting <code>type</code> to <code>&quot;file&quot;</code> or <code>weight</code> to <code>0.5</code> may mask genuine data issues; consider a flag to disable auto‑fix in production.  </li>
+<li><strong>Schema drift</strong> – External consumers relying on the old graph shape may break; document the new <code>KnowledgeGraphSchema</code> contract.  </li>
+<li><strong>Test coverage</strong> – Add unit tests for each validation tier, especially non‑array collections and missing project metadata.</li>
 </ul>
 </article>
   </main>

@@ -1,17 +1,30 @@
-### Overview
-A new TypeScript declaration file was added to the graph‑view package.
+### Overview  
+A new TypeScript declaration file has been added to the `graph-view` package:
 
-### Key changes
-- File `packages/graph-view/src/vite-env.d.ts` added.  
-- Contains a single line: `/// <reference types="vite/client" />`.
+```
+packages/graph-view/src/vite-env.d.ts
+```
 
-### Impact
-- The reference imports Vite client types, making Vite‑specific globals (e.g., `import.meta.env`) available to the TypeScript compiler.  
-- No runtime code is added; the file is only used at compile time.  
-- The package now requires the `vite` types (or the `vite` package) to be present in `devDependencies`.
+The file contains a single line:
 
-### Risks & follow‑ups
-- Ensure `vite` or `@types/vite` is listed in `devDependencies`; otherwise the reference will fail.  
-- Verify that the file is included in the TypeScript `include` array; otherwise the reference is ignored.  
-- Run `npm run lint`, `npm test`, and `npm run build` to confirm no new type errors or build failures.  
-- Monitor CI for any unexpected type‑checking regressions.
+```ts
+/// <reference types="vite/client" />
+```
+
+This line was added at line 1 of the file (diff range R1).
+
+### Key changes  
+- **File addition**: `packages/graph-view/src/vite-env.d.ts` now exists.  
+- **Reference line**: `/// <reference types="vite/client" />` is inserted at the top of the file.  
+- No other files or symbols were modified.
+
+### Impact  
+- **Type safety**: The reference exposes Vite’s global types (e.g., `import.meta.env`) to the TypeScript compiler for the `graph-view` package.  
+- **Build configuration**: The file will be automatically included if the package’s `tsconfig.json` (or the root tsconfig) includes the `src` directory; otherwise it may need to be added to the `include` array.  
+- **Runtime**: No runtime code is added; the change is compile‑time only.  
+
+### Risks & follow‑ups  
+- **Missing inclusion**: Verify that `packages/graph-view/tsconfig.json` (or the root tsconfig) includes `src/**/*.d.ts`; otherwise the reference will be ignored.  
+- **Duplicate type definitions**: Ensure no other declaration files reference `vite/client` in a conflicting way, which could cause duplicate‑definition errors.  
+- **Linting**: Run `tsc --noEmit` and the project’s linting suite to confirm no new type errors appear.  
+- **CI build**: Confirm that the CI pipeline still passes the production build after adding the file.

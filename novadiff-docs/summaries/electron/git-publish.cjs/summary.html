@@ -26,37 +26,32 @@
 <body>
   <header class="top">
     <h1>electron/git-publish.cjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:12:13.783Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:23:21.930Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/git-publish.cjs</code> is added. It exports three functions: <code>buildFullCommitMessage</code>, <code>previewPublish</code>, and <code>executePublish</code>.</p>
+<p><code>electron/git-publish.cjs</code> adds publish‑related utilities to the Electron app. It exports three functions—<code>buildFullCommitMessage</code>, <code>previewPublish</code>, and <code>executePublish</code>—and imports Git and GitHub helpers from <code>git-service.cjs</code> and <code>github-service.cjs</code> (see R3–R5).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports (lines 3‑5)</strong>:```js
-const path = require(&quot;node:path&quot;);
-const { getRepoStatus, stageAll, commit, push, isGitRepo } = require(&quot;./git-service.cjs&quot;);
-const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require(&quot;./github-service.cjs&quot;);</li>
-</ul>
-<p>```- **<code>buildFullCommitMessage</code> (lines 7‑13)**: trims <code>subject</code> and <code>body</code>; returns <code>subject</code> alone if <code>body</code> is empty, otherwise inserts a blank line between them.</p>
-<ul>
-<li><strong><code>previewPublish</code> (lines 19‑42)</strong>: resolves <code>repoRoot</code>, verifies a Git repo, gathers status, GitHub auth, and slug, then returns an object containing <code>repoRoot</code>, <code>branch</code>, <code>upstream</code>, <code>ahead</code>, <code>behind</code>, <code>dirtyFiles</code>, <code>remotes</code>, <code>github</code>, <code>githubSlug</code>, and <code>canPush</code>.</li>
-<li><strong><code>executePublish</code> (lines 48‑101)</strong>: resolves <code>repoRoot</code>, <code>subject</code>, and <code>body</code>; validates the subject; stages all files, commits with the built message, optionally pushes to a remote, and optionally creates a PR via <code>gh</code>. It returns an object with <code>ok</code>, <code>commitHash</code>, <code>branch</code>, <code>pushed</code>, <code>pushRemote</code>, and <code>prUrl</code>.</li>
-<li><strong>Exports (lines 104‑108)</strong>: <code>module.exports = { previewPublish, executePublish, buildFullCommitMessage };</code>.</li>
+<li><strong>Imports</strong> (R3–R5): <code>path</code>, <code>git-service</code> functions (<code>getRepoStatus</code>, <code>stageAll</code>, <code>commit</code>, <code>push</code>, <code>isGitRepo</code>), and <code>github-service</code> helpers (<code>createPullRequest</code>, <code>getAuthStatus</code>, <code>slugFromRepoRoot</code>).  </li>
+<li><strong><code>buildFullCommitMessage</code></strong> (R7–R13): Trims <code>subject</code> and <code>body</code>; returns <code>subject</code> alone if <code>body</code> is empty, otherwise inserts a blank line between them.  </li>
+<li><strong><code>previewPublish</code></strong> (R19–R42): Resolves <code>repoRoot</code>, verifies it is a Git repo, collects status, auth, and slug data, and returns a preview object containing repo details, branch, upstream, dirty files, remotes, GitHub auth status, and a flag indicating if a push is possible.  </li>
+<li><strong><code>executePublish</code></strong> (R48–R101): Validates inputs, stages all changes (<code>stageAll</code>), commits with the built message, optionally pushes to a remote, and optionally creates a PR via the GitHub CLI. The returned result includes <code>commitHash</code>, <code>branch</code>, <code>pushed</code>, <code>pushRemote</code>, and <code>prUrl</code>.  </li>
+<li><strong>Exports</strong> (R104–R108): All three functions are exported.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a clear commit‑message builder and a publish workflow that respects <code>.gitignore</code> through <code>stageAll</code>.  </li>
-<li><code>previewPublish</code> offers a snapshot of the repository state, useful for debugging and CI checks.  </li>
-<li><code>executePublish</code> requires the GitHub CLI to be authenticated; it throws an error if <code>gh</code> is not logged in.  </li>
-<li>The default remote is <code>&quot;origin&quot;</code> unless overridden by <code>opts.remote</code>.</li>
+<li><strong>Correctness</strong>: Provides a clear commit‑message builder and a publish workflow that respects <code>.gitignore</code>.  </li>
+<li><strong>Maintainability</strong>: Centralizes publish logic; changes to Git or GitHub interactions can be made in the service modules.  </li>
+<li><strong>Performance</strong>: <code>stageAll</code> may be costly on large repos; caching or incremental staging could be considered.  </li>
+<li><strong>Compatibility</strong>: Requires a Git repo; PR creation requires a logged‑in <code>gh</code> CLI; errors are thrown explicitly.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Authentication</strong>: <code>executePublish</code> throws if <code>gh</code> is not logged in; CI environments must run <code>gh auth login</code>.  </li>
-<li><strong>Remote default</strong>: The hard‑coded <code>&quot;origin&quot;</code> may not match all repository conventions; verify usage.  </li>
-<li><strong>Error handling</strong>: Only basic checks are performed; consider wrapping Git commands in <code>try/catch</code> to surface underlying errors.  </li>
-<li><strong>Side effects</strong>: The module stages all files and commits unconditionally; tests should confirm that this behavior aligns with user expectations.</li>
+<li>Verify that <code>buildFullCommitMessage</code> omits the newline when the body is empty (tests for empty body).  </li>
+<li>Ensure <code>previewPublish</code> throws the expected error for non‑Git directories.  </li>
+<li>Test <code>executePublish</code> with <code>push</code> and <code>createPullRequest</code> flags separately to confirm error handling for missing remotes or unauthenticated GitHub sessions.  </li>
+<li>Confirm that the returned <code>result</code> object contains accurate <code>branch</code>, <code>pushed</code>, and <code>prUrl</code> fields across different repo states.</li>
 </ul>
 </article>
   </main>

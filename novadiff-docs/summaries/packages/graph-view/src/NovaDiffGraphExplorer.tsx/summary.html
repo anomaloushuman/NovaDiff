@@ -26,39 +26,37 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/NovaDiffGraphExplorer.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:34:23.126Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:18:23.750Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>NovaDiffGraphExplorer.tsx</code> is added under <code>packages/graph-view/src</code>. It exposes the public API <code>NovaDiffGraphExplorerProps</code> and <code>NovaDiffGraphDiffOverlay</code>, and implements an embed‑mode wrapper and a full explorer that validates a knowledge graph, updates the dashboard store, and renders a skeleton while layout is prepared.</p>
+<p>A new <code>NovaDiffGraphExplorer.tsx</code> component is added to <code>packages/graph-view/src</code>. It exposes the public API <code>NovaDiffGraphExplorerProps</code> (lines 21‑33) and <code>NovaDiffGraphDiffOverlay</code> (lines 16‑20), and implements both an embedded and a full graph explorer mode.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File</strong>: <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code> (lines 1‑146).  </li>
-<li><strong>Imports</strong>: React hooks, <code>validateGraph</code> from <code>@novadiff/graph-core/schema</code>, types <code>GraphIssue</code>, <code>KnowledgeGraph</code>, and <code>useDashboardStore</code>.  </li>
-<li><strong>Interfaces</strong>:  <ul>
-<li><code>NovaDiffGraphDiffOverlay</code> (lines 16‑20).  </li>
-<li><code>NovaDiffGraphExplorerProps</code> (lines 21‑33).</li>
+<li><strong>Imports</strong> (R1‑R6): added React hooks, <code>validateGraph</code>, type imports (<code>GraphIssue</code>, <code>KnowledgeGraph</code>), and the local <code>useDashboardStore</code>.  </li>
+<li><strong>Public interfaces</strong> (R16‑R21): declare the overlay and props shapes.  </li>
+<li><strong>Entry point</strong> (R34‑R42): <code>NovaDiffGraphExplorer</code> dispatches to <code>NovaDiffGraphExplorerEmbed</code> or <code>NovaDiffGraphExplorerFull</code> based on <code>embedMode</code>.  </li>
+<li><strong>Fingerprinting</strong> (R44‑R53): <code>graphFingerprint</code> builds a deterministic string to skip re‑validation when the graph hasn’t changed.  </li>
+<li><strong>Full explorer logic</strong> (R56‑R146):  <ul>
+<li>Validates the graph with <code>validateGraph</code>; updates the store (<code>setGraph</code>, <code>setDiffOverlay</code>) and view mode.  </li>
+<li>Handles diff overlay updates, load errors, hydration state, and skeleton UI.  </li>
+<li>Provides <code>NovaDiffEmbedContext</code> and <code>ThemeProvider</code> to child components.</li>
 </ul>
 </li>
-<li><strong>Component</strong>: <code>NovaDiffGraphExplorer</code> (lines 34‑42) delegates to <code>NovaDiffGraphExplorerEmbed</code> when <code>embedMode</code> is true, otherwise to <code>NovaDiffGraphExplorerFull</code>.  </li>
-<li><strong>Utility</strong>: <code>graphFingerprint</code> (lines 44‑55).  </li>
-<li><strong>Full explorer</strong> <code>NovaDiffGraphExplorerFull</code> (lines 56‑146): validates the graph via <code>validateGraph</code>, updates the store (<code>setGraph</code>, <code>setDiffOverlay</code>, view mode), handles load errors and hydration, memoizes embed context, renders a skeleton UI, and wraps <code>DashboardContent</code> with <code>NovaDiffEmbedContext</code>, <code>I18nProvider</code>, and <code>ThemeProvider</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Graph validation occurs client‑side; errors appear as <code>&lt;p className=&quot;novadiff-graph-load-error&quot;&gt;</code>.  </li>
-<li>Centralizes explorer logic; new interfaces provide clear contracts.  </li>
-<li>Fingerprint caching prevents redundant validation; <code>useMemo</code> avoids recreating context values.  </li>
-<li>Relies on existing store actions (<code>setGraph</code>, <code>setDiffOverlay</code>, <code>setViewMode</code>, <code>setIsKnowledgeGraph</code>, `navigateTo</li>
+<li>Immediate validation of incoming graphs; clear error messages for invalid data.  </li>
+<li>Centralizes graph handling; separates embed logic.  </li>
+<li>Fingerprint caching avoids redundant validation on unchanged graphs.  </li>
+<li>Skeleton UI and error paragraph give users feedback during loading or failure.</li>
 </ul>
-<h3>Overview</h3>
-<p>`).</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Store API drift: verify <code>useDashboardStore</code> still exposes the required actions.  </li>
-<li>Dependency updates: ensure <code>@novadiff/graph-core/schema</code> still exports <code>validateGraph</code> and <code>GraphIssue</code>.  </li>
-<li>Effect dependencies: <code>useEffect</code> lists <code>[graph, setGraph]</code>; confirm <code>setGraph</code> is stable.  </li>
-<li>Embed mode handling: confirm <code>NovaDiffGraphExplorerEmbed</code> consumes <code>embedMode</code> correctly and no duplicate context providers are introduced.</li>
+<li><strong>Validation contract</strong>: ensure <code>validateGraph</code> returns the expected shape; otherwise store updates may fail.  </li>
+<li><strong>Store side‑effects</strong>: <code>useDashboardStore</code> mutations (<code>setGraph</code>, <code>setDiffOverlay</code>, view mode switches) must be idempotent; test repeated renders.  </li>
+<li><strong>Embed mode toggle</strong>: verify <code>embedMode</code> correctly routes to <code>NovaDiffGraphExplorerEmbed</code>; regression could break embedded deployments.  </li>
+<li><strong>Type safety</strong>: <code>Omit&lt;NovaDiffGraphExplorerProps, &quot;embedMode&quot;&gt;</code> assumes no other required props are omitted; future prop additions could break the signature.</li>
 </ul>
 </article>
   </main>

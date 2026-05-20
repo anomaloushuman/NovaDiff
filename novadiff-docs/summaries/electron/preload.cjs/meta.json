@@ -1,22 +1,32 @@
 {
   "relPath": "electron/preload.cjs",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:36:27.031Z",
+  "generatedAt": "2026-05-20T04:31:04.198Z",
   "summaryEvidence": {
-    "badges": [],
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "R3 added: const { contextBridge, ipcRenderer } = require(\"electron\");"
+    ],
     "changed_line_ranges": [
-      "R136-137",
-      "R140-141"
+      "R1-183"
     ],
     "cited_changed_lines": [
-      "R136 added: workspaceRefreshHistory: (payload) =>",
-      "R137 added: ipcRenderer.invoke(\"workspace-refresh-history\", payload),",
-      "R140 added: workspaceUpdateUiState: (payload) =>",
-      "R141 added: ipcRenderer.invoke(\"workspace-update-ui-state\", payload),"
+      "R1 added: \"use strict\";",
+      "R3 added: const { contextBridge, ipcRenderer } = require(\"electron\");",
+      "R5 added: const LLM_STREAM = \"llm-stream-token\";",
+      "R6 added: const WINDOW_STATE = \"window-state-changed\";",
+      "R8 added: contextBridge.exposeInMainWorld(\"electronAPI\", {",
+      "R9 added: compareFolders: (left, right) =>"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

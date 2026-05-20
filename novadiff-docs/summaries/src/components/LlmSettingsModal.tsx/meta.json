@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/LlmSettingsModal.tsx",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T09:41:29.907Z",
+  "generatedAt": "2026-05-20T04:57:55.932Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,35 +19,33 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [],
+    "changed_exports": [
+      "R13 added: export function LlmSettingsModal({"
+    ],
     "changed_imports": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import type { LlmProvider, LlmSettings } from \"../app/llmStorage\";",
+      "R3 added: import { saveLlmSettings } from \"../app/llmStorage\";",
       "R4 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";"
     ],
     "changed_line_ranges": [
-      "R4",
-      "L32-35",
-      "L49-56 / R46-51",
-      "L58-68 / R53-61",
-      "L70-113 / R63-65",
-      "L116-117 / R68-69",
-      "L119 / R71",
-      "L123-139 / R75-76"
+      "R1-149"
     ],
     "cited_changed_lines": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import type { LlmProvider, LlmSettings } from \"../app/llmStorage\";",
+      "R3 added: import { saveLlmSettings } from \"../app/llmStorage\";",
       "R4 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";",
-      "L33 removed: if (!open) {",
-      "L34 removed: return null;",
-      "L35 removed: }",
-      "L49 removed: <div",
-      "L50 removed: className=\"llm-modal-backdrop\""
+      "R6 added: interface LlmSettingsModalProps {",
+      "R7 added: open: boolean;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function LlmSettingsModal (12-159)",
-      "right function LlmSettingsModal (13-149)"
+      "right function LlmSettingsModal (13-149)",
+      "right interface LlmSettingsModalProps (6-12)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

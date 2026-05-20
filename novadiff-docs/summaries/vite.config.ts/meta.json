@@ -1,9 +1,9 @@
 {
   "relPath": "vite.config.ts",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:05:14.632Z",
+  "generatedAt": "2026-05-20T04:11:23.370Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,27 +19,25 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [],
+    "changed_exports": [
+      "R9 added: export default defineConfig(() => ({"
+    ],
     "changed_imports": [
       "R1 added: import path from \"node:path\";",
+      "R2 added: import { defineConfig } from \"vite\";",
+      "R3 added: import react from \"@vitejs/plugin-react\";",
       "R4 added: import tailwindcss from \"@tailwindcss/vite\";"
     ],
     "changed_line_ranges": [
-      "R1",
-      "R4",
-      "R6-7",
-      "L6 / R10",
-      "R13-18",
-      "L14 / R24-35",
-      "R38-48"
+      "R1-49"
     ],
     "cited_changed_lines": [
       "R1 added: import path from \"node:path\";",
+      "R2 added: import { defineConfig } from \"vite\";",
+      "R3 added: import react from \"@vitejs/plugin-react\";",
       "R4 added: import tailwindcss from \"@tailwindcss/vite\";",
       "R6 added: const repoRoot = path.resolve(__dirname);",
-      "L6 removed: plugins: [react()],",
-      "R10 added: plugins: [react(), tailwindcss()],",
-      "R13 added: resolve: {"
+      "R8 added: // https://vite.dev/config/"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

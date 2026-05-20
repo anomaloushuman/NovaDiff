@@ -26,40 +26,27 @@
 <body>
   <header class="top">
     <h1>src/components/ui/ui-transitions.css</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:29:00.244Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:12:41.223Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file, <code>src/components/ui/ui-transitions.css</code> (lines 1‑120), adds CSS for overlay, panel, and view transitions. The file introduces a reduced‑motion media query to disable animations when the user prefers less motion.</p>
+<p>A new stylesheet <code>src/components/ui/ui-transitions.css</code> (added lines R1‑120) introduces CSS‑only transition rules for overlays, panels, and view animations, with a media query for reduced‑motion users.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Overlay</strong> – <code>.ui-overlay</code> (lines 3‑6) starts with <code>opacity: 0</code> and a 0.28 s transition.  <ul>
-<li><code>.ui-overlay.is-open</code> (lines 8‑10) sets <code>opacity: 1</code>.  </li>
-<li><code>.ui-overlay.is-closing</code> (lines 12‑15) returns to <code>opacity: 0</code> and disables pointer events.</li>
-</ul>
-</li>
-<li><strong>Panel</strong> – <code>.ui-overlay-panel</code> (lines 17‑25) defines initial opacity, transform, blur, and a 0.32 s transition.  <ul>
-<li><code>.ui-overlay-panel.is-open</code> (lines 27‑31) restores full opacity, no transform, and no blur.  </li>
-<li><code>.ui-overlay-panel.is-closing</code> (lines 33‑37) reverts to reduced opacity, a slight translateY, and a 3 px blur.</li>
-</ul>
-</li>
-<li><strong>View animations</strong> – <code>.ui-view-enter</code> (lines 39‑41) and <code>.ui-view-fade</code> (lines 43‑45) trigger keyframes <code>ui-view-enter</code> (lines 80‑90) and <code>ui-view-fade</code> (lines 93‑101).  </li>
-<li><strong>Reduced‑motion</strong> – media query (lines 104‑120) removes animations, sets a minimal opacity transition, and ensures open states keep full opacity.  </li>
-<li><strong>Workspace helpers</strong> – <code>.workspace-stage</code> (lines 47‑54) and <code>.workspace-stage-inner</code> (lines 56‑61) provide flex containers for the overlay structure.</li>
+<li><strong>Overlay</strong> – <code>.ui-overlay</code> (lines 3‑6) starts with <code>opacity: 0</code> and a 0.28 s transition.<br><code>.ui-overlay.is-open</code> (lines 8‑10) sets <code>opacity: 1</code>.<br><code>.ui-overlay.is-closing</code> (lines 12‑15) fades to <code>opacity: 0</code> and disables pointer events.  </li>
+<li><strong>Panel</strong> – <code>.ui-overlay-panel</code> (lines 17‑25) uses <code>transform</code>, <code>filter</code>, and a 0.32 s cubic‑bezier transition.<br><code>.ui-overlay-panel.is-open</code> (lines 27‑31) restores full opacity, scale, and blur.<br><code>.ui-overlay-panel.is-closing</code> (lines 33‑37) reduces opacity, shifts, and blurs.  </li>
+<li><strong>View animations</strong> – <code>.ui-view-enter</code> (line 39) triggers <code>ui-view-enter</code> keyframes (lines 80‑90).<br><code>.ui-view-fade</code> (line 43) triggers <code>ui-view-fade</code> keyframes (lines 93‑101).  </li>
+<li><strong>Tabs &amp; panels</strong> – <code>.insights-tab</code> (lines 63‑70) and <code>.insights-panel-enter</code> (line 76) add subtle transitions.  </li>
+<li><strong>Reduced‑motion</strong> – media query (lines 104‑120) disables all animations and sets a 0.15 s opacity transition for users preferring reduced motion.</li>
 </ul>
 <h3>Impact</h3>
-<ul>
-<li><strong>UI behavior</strong> – New transitions animate overlay panels and view entries.  </li>
-<li><strong>Accessibility</strong> – Reduced‑motion handling is added; existing components are unaffected.  </li>
-<li><strong>Performance</strong> – Animations use <code>transform</code> and <code>filter</code>; impact on GPU usage is unknown from the diff.  </li>
-<li><strong>Maintainability</strong> – All new classes are prefixed with <code>.ui-</code>, reducing collision risk.</li>
-</ul>
+<p>The changes are purely CSS; no JavaScript logic is altered. If the file is omitted from the bundle, the UI will remain static. The reduced‑motion media query respects user preferences.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>.ui-overlay</code> and <code>.ui-overlay-panel</code> do not clash with any pre‑existing overlay implementations.  </li>
-<li>Run smoke tests for overlay open/close flows to confirm opacity and pointer‑event logic.  </li>
-<li>Test reduced‑motion preference across browsers to ensure animations are correctly disabled.  </li>
-<li>Check that the <code>filter: blur</code> transitions do not cause layout thrashing or visual glitches on older browsers.</li>
+<li><strong>Build inclusion</strong> – verify that <code>ui-transitions.css</code> is imported into the component bundle.  </li>
+<li><strong>Smoke test</strong> – confirm overlay open/close and panel animations work as defined.  </li>
+<li><strong>Reduced‑motion test</strong> – ensure animations are disabled when the media query matches.  </li>
+<li><strong>Name collisions</strong> – check that keyframe names (<code>ui-view-enter</code>, <code>ui-view-fade</code>) do not clash with existing animations.</li>
 </ul>
 </article>
   </main>

@@ -26,37 +26,39 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/ignore-filter.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:40:11.007Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:25:13.672Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/ignore-filter.ts</code> (added in the diff) introduces a reusable ignore‑filter. It exports:</p>
-<ul>
-<li><code>DEFAULT_IGNORE_PATTERNS</code> (R9‑R70) – a hard‑coded list of common build, lock, binary, IDE, and license patterns.</li>
-<li><code>IgnoreFilter</code> interface (R72‑R75) with <code>isIgnored(relativePath: string): boolean</code>.</li>
-<li><code>createIgnoreFilter(projectRoot: string)</code> (R86‑R111) that builds an <code>ignore</code> instance, layers defaults, <code>.novadiff-graph/.novadiffignore</code>, and root <code>.novadiffignore</code>, then returns an object implementing <code>IgnoreFilter</code>.</li>
-</ul>
+<p><code>packages/graph-core/src/ignore-filter.ts</code> adds a reusable ignore filter. The file imports <code>ignore</code>, <code>fs</code> (<code>readFileSync</code>, <code>existsSync</code>) and <code>path</code> (<code>join</code>) at lines 1‑3.</p>
+<p>A constant <code>DEFAULT_IGNORE_PATTERNS</code> (lines 9‑70) lists common dependency, build, lock, binary, IDE, and license patterns. An <code>IgnoreFilter</code> interface (lines 72‑75) exposes <code>isIgnored(relativePath: string): boolean</code>.</p>
+<p><code>createIgnoreFilter(projectRoot: string)</code> (lines 86‑111) builds an <code>ignore</code> instance, layering patterns in this order:  </p>
+<ol>
+<li>hard‑coded defaults,  </li>
+<li><code>.novadiff-graph/.novadiffignore</code> if present,  </li>
+<li></li>
+</ol>
+<p><code>.novadiffignore</code> at the project root if present. The returned object implements <code>isIgnored</code> by delegating to <code>ig.ignores(relativePath)</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: added <code>ignore</code>, <code>readFileSync</code>, <code>existsSync</code>, and <code>join</code> (R1‑R3).  </li>
-<li><strong>Default patterns</strong>: defined in <code>DEFAULT_IGNORE_PATTERNS</code> (R9‑R70).  </li>
-<li><strong>Interface</strong>: <code>IgnoreFilter</code> (R72‑R75).  </li>
-<li><strong>Factory</strong>: <code>createIgnoreFilter</code> (R86‑R111) merges layers and exposes <code>isIgnored</code>.  </li>
-<li><strong>Negation</strong>: later patterns override earlier ones via <code>!</code> syntax, as noted in the comment block (R77‑R84).</li>
+<li><strong>Imports added</strong>: <code>ignore</code>, <code>fs</code>, <code>path</code> (lines 1‑3).  </li>
+<li><strong>Default patterns</strong>: comprehensive array (lines 9‑70).  </li>
+<li><strong>Interface</strong>: <code>IgnoreFilter</code> (lines 72‑75).  </li>
+<li><strong>Factory function</strong>: <code>createIgnoreFilter</code> (lines 86‑111) with layered pattern loading.  </li>
+<li><strong>Pattern loading</strong>: uses <code>existsSync</code> and <code>readFileSync</code> to read user‑defined ignore files.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a single source for ignore rules that can be shared across scanning modules.  </li>
-<li>Centralizes pattern maintenance; adding a rule requires editing only <code>DEFAULT_IGNORE_PATTERNS</code>.  </li>
-<li><code>ignore</code> parses patterns once per <code>createIgnoreFilter</code> call; subsequent <code>isIgnored</code> checks use <code>ig.ignores</code>, offering efficient lookups.  </li>
-<li>No breaking API changes are introduced; the new module is additive.</li>
+<li>Provides a single, documented source for ignore patterns.  </li>
+<li>Enables consistent ignore logic across graph‑core modules.  </li>
+<li>Exposes a clean API (<code>createIgnoreFilter</code>) for internal use.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Malformed ignore files</strong>: <code>ignore</code> may silently ignore patterns; validate contents in tests.  </li>
-<li><strong>Path resolution</strong>: <code>join(projectRoot, &quot;.novadiff-graph&quot;, &quot;.novadiffignore&quot;)</code> assumes a fixed subdirectory; confirm it matches repository layout.  </li>
-<li><strong>Negation precedence</strong>: ensure later layers correctly override earlier ones; unit tests should cover <code>!</code> patterns.  </li>
-<li><strong>Integration</strong>: search for existing hard‑coded ignore logic that may conflict; replace with <code>IgnoreFilter</code> where appropriate.</li>
+<li><strong>Pattern precedence</strong>: later layers can override earlier ones via negation; verify correct behavior.  </li>
+<li><strong>File existence checks</strong>: <code>existsSync</code> paths are resolved with <code>join</code>; confirm cross‑platform correctness.  </li>
+<li><strong>Test coverage</strong>: add unit tests for <code>createIgnoreFilter</code> with various <code>.novadiffignore</code> contents.  </li>
+<li><strong>Integration</strong>: ensure graph‑building components now use this filter and that no legacy ignore logic remains.</li>
 </ul>
 </article>
   </main>

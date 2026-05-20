@@ -26,34 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/App.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:33:07.407Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:16:26.373Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/App.tsx</code> is a new root component that orchestrates token handling, demo mode, data fetching, and the dashboard UI. It imports React hooks, validation utilities, and the dashboard store, and lazy‑loads heavy components.</p>
+<p><code>packages/graph-view/src/App.tsx</code> replaces the previous bootstrap. The file now imports React hooks (<code>useEffect</code>, <code>useState</code>, <code>useMemo</code>, <code>useCallback</code>, <code>lazy</code>, <code>Suspense</code>) and validation utilities (<code>validateGraph</code>, <code>GraphIssue</code>) – see lines 1‑6.</p>
+<p>A demo flag (<code>DEMO_MODE</code>) and session‑storage token logic are added in <code>dataUrl</code> (lines 41‑55) and <code>resolveInitialToken</code> (lines 61‑75). <code>App</code> (lines 78‑97) renders a <code>TokenGate</code> when no token is present, otherwise passes the token to <code>Dashboard</code>.</p>
+<p><code>Dashboard</code> (lines 99‑210) fetches meta, config, knowledge, diff‑overlay, and domain graphs, validates them, and updates the global store via <code>useDashboardStore</code>. <code>DashboardContent</code> (lines 211‑735) orchestrates the UI: header, sidebar, graph view, code viewer, inspector, and modals, with mobile‑aware layout and keyboard shortcuts.</p>
+<p>Heavy components (<code>CodeViewer</code>, <code>LearnPanel</code>, <code>PathFinderModal</code>, <code>KeyboardShortcutsHelp</code>) are lazy‑loaded (lines 28‑34). The file ends with <code>export default App;</code> (line 735).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R6): added React hooks, <code>validateGraph</code> and <code>GraphIssue</code> from <code>@novadiff/graph-core/schema</code>, <code>useDashboardStore</code>, and core view components (<code>GraphView</code>, <code>DomainGraphView</code>, etc.).  </li>
-<li><strong>Lazy loading</strong> (R28‑R34): <code>CodeViewer</code>, <code>LearnPanel</code>, <code>PathFinderModal</code>, and <code>KeyboardShortcutsHelp</code> are loaded with <code>React.lazy</code>.  </li>
-<li><strong>Demo mode</strong> (R36): <code>DEMO_MODE</code> flag controls URL resolution.  </li>
-<li><strong>URL resolution</strong> (R41‑R55): <code>dataUrl</code> returns env‑var URLs in demo mode or token‑appended paths otherwise.  </li>
-<li><strong>Token logic</strong> (R61‑R76): <code>resolveInitialToken</code> reads <code>token</code> from the query string or <code>sessionStorage</code>, clears the param, and persists the token.  </li>
-<li><strong>App component</strong> (R78‑R97): shows <code>TokenGate</code> until a token is available; in demo mode it bypasses the gate.  </li>
-<li><strong>Dashboard</strong> (R99‑R210): fetches <code>meta.json</code>, <code>config.json</code>, <code>knowledge-graph.json</code>, <code>diff-overlay.json</code>, and <code>domain-graph.json</code>; validates graphs with <code>validateGraph</code>; updates store view mode and error state.  </li>
-<li><strong>DashboardContent</strong> (R211‑R709): consumes store state, registers keyboard shortcuts via <code>useKeyboardShortcuts</code> (disabled in embed mode), renders header, sidebar, and graph views, and conditionally shows overlays.  </li>
-<li><strong>Export</strong> (R709): <code>export default App;</code>.</li>
+<li><strong>Imports</strong>: added React hooks and validation utilities (lines 1‑6).  </li>
+<li><strong>Token logic</strong>: <code>dataUrl</code> and <code>resolveInitialToken</code> build URLs based on <code>DEMO_MODE</code> and session storage (lines 41‑75).  </li>
+<li><strong>App</strong>: renders <code>TokenGate</code> or <code>Dashboard</code> depending on token presence (lines 78‑97).  </li>
+<li><strong>Dashboard</strong>: fetches and validates data, updates store (lines 99‑210).  </li>
+<li><strong>DashboardContent</strong>: full UI composition, keyboard shortcuts, mobile layout (lines 211‑735).  </li>
+<li><strong>Lazy loading</strong>: heavy modules imported with <code>lazy</code> (lines 28‑34).  </li>
+<li><strong>Export</strong>: <code>export default App;</code> (line 735).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralized data fetching simplifies future updates but ties the component to <code>@novadiff/graph-core</code>.  </li>
-<li>Multiple fetches on mount may increase network traffic; lazy loading reduces initial bundle size.  </li>
-<li>Error handling surfaces load and validation issues through banners.</li>
+<li><strong>Token handling</strong>: centralizes token acquisition and persistence.  </li>
+<li><strong>Validation</strong>: errors surface via <code>WarningBanner</code> (lines 626‑628).  </li>
+<li><strong>Performance</strong>: lazy loading reduces initial bundle size.  </li>
+<li><strong>Demo mode</strong>: bypasses token gate when <code>VITE_DEMO_MODE=true</code>.  </li>
+<li><strong>UI</strong>: single file contains all layout logic, easing navigation.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>DEMO_MODE</code> must be correctly set in CI; otherwise URLs resolve incorrectly.  </li>
-<li><code>resolveInitialToken</code> clears the URL query param; verify it does not leave stale tokens.  </li>
-<li>Lazy‑loaded chunks (<code>CodeViewer</code>, <code>LearnPanel</code>, etc.) must be present in production builds; missing files could break the UI.</li>
+<li><strong>Token persistence</strong>: verify <code>resolveInitialToken</code> clears the URL and stores the token (lines 61‑75).  </li>
+<li><strong>Lazy‑load failures</strong>: ensure missing chunks (e.g., <code>CodeViewer</code>) are handled gracefully.  </li>
+<li><strong>Demo mode flag</strong>: confirm <code>VITE_DEMO_MODE</code> is set correctly; otherwise the token gate may be skipped.  </li>
+<li><strong>Store updates</strong>: check that <code>setGraph</code>, <code>setDomainGraph</code>, etc., are called only after successful validation (lines 123‑149, 180‑196).</li>
 </ul>
 </article>
   </main>

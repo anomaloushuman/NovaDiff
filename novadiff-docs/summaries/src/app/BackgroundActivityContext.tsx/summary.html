@@ -26,32 +26,34 @@
 <body>
   <header class="top">
     <h1>src/app/BackgroundActivityContext.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:24:01.767Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:38:20.489Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/BackgroundActivityContext.tsx</code> (lines 1‑166) introduces a React context for tracking background activities across the app.</p>
+<p><code>src/app/BackgroundActivityContext.tsx</code> adds a React context for background task tracking. It defines typed activity data, action helpers, and hooks for consumption.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>createContext</code>, <code>useCallback</code>, <code>useContext</code>, <code>useMemo</code>, <code>useState</code>, <code>ReactNode</code> from React (R1‑6).  </li>
-<li><strong>Types</strong>: <code>BackgroundActivityKind</code> enum (R10‑19) and <code>BackgroundActivity</code> interface (R22‑30).  </li>
-<li><strong>Helpers</strong>: <code>sameActivity</code> comparison (R37‑45) and <code>UpsertPatch</code> type (R32‑35).  </li>
-<li><strong>Contexts</strong>: <code>BackgroundActivityContext</code> and <code>BackgroundActivityActionsContext</code> (R58‑64).  </li>
-<li><strong>Provider</strong>: <code>BackgroundActivityProvider</code> (R65‑138) manages an array of activities, exposes <code>upsertActivity</code>, <code>removeActivity</code>, <code>clearActivities</code>, and sorts by <code>startedAt</code> (R85‑96).  </li>
-<li><strong>Hooks</strong>: <code>useBackgroundActivity</code>, <code>useBackgroundActivityOptional</code>, <code>useBackgroundActivityActions</code>, <code>useBackgroundActivityActionsOptional</code> (R140‑166) with runtime checks (R141‑144, R155‑160).</li>
+<li><strong>Imports</strong> – React hooks and <code>ReactNode</code> (R1‑6).  </li>
+<li><strong>Types</strong> – <code>BackgroundActivityKind</code> union (R10‑19) and <code>BackgroundActivity</code> interface (R22‑30).  </li>
+<li><strong>Patch helper</strong> – <code>UpsertPatch</code> type and <code>sameActivity</code> comparison (R32‑45).  </li>
+<li><strong>Context interfaces</strong> – <code>BackgroundActivityActions</code> (R48‑51) and <code>BackgroundActivityContextValue</code> (R54‑56).  </li>
+<li><strong>Contexts</strong> – <code>BackgroundActivityContext</code> and <code>BackgroundActivityActionsContext</code> (R58‑64).  </li>
+<li><strong>Provider</strong> – <code>BackgroundActivityProvider</code> (R65‑139) manages state, exposes <code>upsertActivity</code>, <code>removeActivity</code>, <code>clearActivities</code>, memoizes actions and value, and nests providers.  </li>
+<li><strong>Hooks</strong> – <code>useBackgroundActivity</code>, <code>useBackgroundActivityOptional</code>, <code>useBackgroundActivityActions</code>, and <code>useBackgroundActivityActionsOptional</code> (R140‑166) expose context values with safety checks.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralized activity state reduces duplication; optional hooks allow safe use when the provider may be absent.  </li>
-<li>Runtime errors are thrown if hooks are used outside the provider (lines 141‑144, 155‑160).  </li>
-<li>Activities are sorted on every upsert; the list is small, so re‑render cost is expected to be low.</li>
+<li><strong>Type safety</strong> – Activities are strongly typed and sorted by <code>startedAt</code>.  </li>
+<li><strong>Centralized state</strong> – Reduces duplication; memoized actions keep references stable for effect dependencies.  </li>
+<li><strong>Efficient updates</strong> – State changes only propagate when activities differ; equality checks prevent unnecessary re‑renders.  </li>
+<li><strong>Standalone module</strong> – No existing files are altered; it can be imported independently.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Provider omission</strong>: components using the hooks must be wrapped by <code>BackgroundActivityProvider</code>; otherwise errors will occur.  </li>
-<li><strong>Sorting side‑effects</strong>: verify that ordering by <code>startedAt</code> matches UI expectations during concurrent upserts.  </li>
-<li><strong>Optional hooks</strong>: confirm that <code>useBackgroundActivityOptional</code> and <code>useBackgroundActivityActionsOptional</code> return <code>null</code> when the provider is missing.  </li>
-<li>Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to ensure the new module compiles and passes tests.</li>
+<li><strong>Concurrent updates</strong> – Verify that <code>upsertActivity</code> merges patches correctly under race conditions.  </li>
+<li><strong>Provider usage</strong> – <code>useBackgroundActivity</code> throws an error when called outside the provider; unit tests should confirm this.  </li>
+<li><strong>Clear logic</strong> – Test <code>clearActivities(undefined)</code> and <code>clearActivities(kind)</code> to ensure expected behavior.  </li>
+<li><strong>Default kind</strong> – Activities without an explicit <code>kind</code> default to <code>&quot;other&quot;</code> (R76‑77).</li>
 </ul>
 </article>
   </main>

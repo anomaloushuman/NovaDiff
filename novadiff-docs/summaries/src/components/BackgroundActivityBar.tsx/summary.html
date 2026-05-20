@@ -26,40 +26,33 @@
 <body>
   <header class="top">
     <h1>src/components/BackgroundActivityBar.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:07:41.701Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:50:28.229Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>BackgroundActivityBar</code> is added to <code>src/components</code> (lines 15‑68). It renders a live status bar for background tasks, showing each task’s label, optional detail, elapsed time, and a progress bar that can be indeterminate.</p>
+<p>A new component <code>BackgroundActivityBar</code> is added at <code>src/components/BackgroundActivityBar.tsx</code> (lines 1‑68). It displays a live status bar for background activities, showing elapsed time and progress, and respects the user’s reduced‑motion preference.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑3): <code>useEffect</code>, <code>useState</code> from React; <code>useBackgroundActivity</code> from the context; <code>usePrefersReducedMotion</code> for accessibility.  </li>
-<li><strong>Utility</strong> (lines 5‑12): <code>formatElapsed(ms)</code> converts milliseconds to <code>Xs</code> or <code>Xm Ys</code>.  </li>
-<li><strong>State &amp; effect</strong> (lines 18‑26): <code>now</code> is updated every 500 ms via <code>setInterval</code>; the interval is cleared on unmount.  </li>
-<li><strong>Render logic</strong> (lines 32‑66):  <ul>
-<li>Returns <code>null</code> if <code>activities.length === 0</code>.  </li>
-<li>Maps <code>activities</code> to DOM nodes, using <code>activity.id</code> as key.  </li>
-<li>Displays <code>activity.label</code>, optional <code>activity.detail</code>, and elapsed time from <code>formatElapsed(now - activity.startedAt)</code>.  </li>
-<li>Shows a progress bar: if <code>activity.progress</code> is <code>null</code>, the bar is indeterminate (<code>is‑indeterminate</code>); otherwise it sets <code>width</code> to the rounded percentage.</li>
-</ul>
-</li>
-<li><strong>Accessibility</strong> (lines 33‑35): <code>role=&quot;status&quot;</code>, <code>aria-live=&quot;polite&quot;</code>, <code>aria-atomic=&quot;false&quot;</code>.  </li>
-<li><strong>Reduced motion</strong> (line 44): adds <code>is‑animated</code> to the pulse element unless <code>reduced</code> is true.</li>
+<li><strong>Imports</strong> – <code>useEffect</code>, <code>useState</code> from React; <code>useBackgroundActivity</code> from <code>../app/BackgroundActivityContext</code>; <code>usePrefersReducedMotion</code> from <code>../app/usePrefersReducedMotion</code> (lines 1‑3).  </li>
+<li><strong>Utility</strong> – <code>formatElapsed(ms)</code> converts milliseconds to a human‑readable string (lines 5‑12).  </li>
+<li><strong>State &amp; effect</strong> – <code>now</code> state is updated every 500 ms while activities exist; the interval is cleared on cleanup (lines 18‑26).  </li>
+<li><strong>Rendering</strong> – For each activity, the component shows <code>label</code>, optional <code>detail</code>, elapsed time, and a progress bar that is indeterminate when <code>progress</code> is <code>null</code> (lines 32‑63).  </li>
+<li><strong>Accessibility</strong> – Wrapper has <code>role=&quot;status&quot;</code>, <code>aria-live=&quot;polite&quot;</code>, <code>aria-atomic=&quot;false&quot;</code>; each item uses <code>aria-hidden</code> appropriately.  </li>
+<li><strong>Reduced motion</strong> – Pulsing animation is disabled when <code>reduced</code> is true (line 44).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>UI</strong>: Provides visual feedback for background operations.  </li>
-<li><strong>Performance</strong>: The 500 ms interval is lightweight; renders only when activities change.  </li>
-<li><strong>Accessibility</strong>: Live region and reduced‑motion handling improve inclusivity.  </li>
-<li><strong>Maintainability</strong>: The component is self‑contained, with a clear utility function and minimal external dependencies.  </li>
-<li><strong>Compatibility</strong>: Requires <code>useBackgroundActivity</code> to supply <code>id</code>, <code>label</code>, <code>detail</code>, <code>startedAt</code>, and optional <code>progress</code>.</li>
+<li>The component renders only when <code>activities.length &gt; 0</code>, avoiding unnecessary DOM updates.  </li>
+<li>The 500 ms interval runs only while activities are present, limiting overhead.  </li>
+<li><code>formatElapsed</code> is isolated, easing future formatting changes.  </li>
+<li>The status bar is announced via an ARIA live region, improving screen‑reader feedback.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Memory leak</strong>: The cleanup in <code>useEffect</code> clears the interval, but verify in edge cases.  </li>
-<li><strong>CSS dependencies</strong>: Classes such as <code>background-activity-bar</code>, <code>is‑animated</code>, and <code>is‑indeterminate</code> must exist.  </li>
-<li><strong>Context contract</strong>: Ensure <code>useBackgroundActivity</code> returns the expected shape; mismatches will break rendering.  </li>
-<li><strong>Usage</strong>: The file is added but not yet imported elsewhere; add it to the app layout or test its presence in the component tree.</li>
+<li>Verify that <code>useBackgroundActivity</code> provides the expected <code>activities</code> shape; missing fields could break rendering.  </li>
+<li>Ensure CSS classes (<code>background-activity-bar</code>, <code>background-activity-pulse</code>, etc.) exist to avoid visual regressions.  </li>
+<li>Confirm that the interval cleanup works correctly when the component unmounts or activities clear.  </li>
+<li>Add unit tests for <code>formatElapsed</code> and the component’s rendering logic to guard against future refactors.</li>
 </ul>
 </article>
   </main>

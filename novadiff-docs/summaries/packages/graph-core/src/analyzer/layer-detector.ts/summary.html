@@ -26,47 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/layer-detector.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:56:25.431Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:42:18.404Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-core/src/analyzer/layer-detector.ts</code> adds a lightweight layer detection system and LLM‑driven layer assignment for knowledge graphs. The file introduces new types, heuristics, and helper functions that operate on <code>KnowledgeGraph</code> nodes.</p>
+<p>A new file <code>packages/graph-core/src/analyzer/layer-detector.ts</code> adds lightweight layer detection and LLM‑based inference utilities.<br>The module imports core types (<code>KnowledgeGraph</code>, <code>Layer</code>) from <code>../types.js</code> (line 1) and exports several helpers.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import</strong> (line 1): <code>import type { KnowledgeGraph, Layer } from &quot;../types.js&quot;;</code>.  </li>
-<li><strong>LLM response contract</strong> (lines 6‑10): <code>export interface LLMLayerResponse</code> defines <code>name</code>, <code>description</code>, and <code>filePatterns</code>.  </li>
-<li><strong>Heuristic detection</strong>  <ul>
-<li><code>LAYER_PATTERNS</code> (lines 16‑67) maps directory patterns to layer names.  </li>
-<li><code>matchFileToLayer</code> (lines 80‑97) assigns a file to the first matching pattern.  </li>
-<li><code>detectLayers</code> (lines 105‑144) builds a <code>Layer[]</code> from graph nodes, defaulting unmatched files to a “Core” layer.</li>
-</ul>
-</li>
-<li><strong>LLM prompt &amp; parsing</strong>  <ul>
-<li><code>buildLayerDetectionPrompt</code> (lines 150‑169) generates a prompt listing file paths.  </li>
-<li><code>parseLayerDetectionResponse</code> (lines 177‑219) extracts and normalizes JSON from LLM output, handling code fences.</li>
-</ul>
-</li>
-<li><strong>LLM‑based layer application</strong> (<code>applyLLMLayers</code>, lines 227‑284) assigns file nodes to layers based on <code>filePatterns</code>, creating an “Other” layer for unmatched files.</li>
+<li><strong>Interface</strong> <code>LLMLayerResponse</code> (lines 6‑10) defines the LLM‑returned layer shape.  </li>
+<li><strong>Pattern table</strong> <code>LAYER_PATTERNS</code> (lines 16‑67) lists directory‑pattern → layer mappings.  </li>
+<li><strong>Helper</strong> <code>toLayerId</code> (lines 72‑74) normalises a layer name to a kebab‑case ID.  </li>
+<li><strong>File‑to‑layer matcher</strong> <code>matchFileToLayer</code> (lines 80‑97) checks path segments against <code>LAYER_PATTERNS</code>.  </li>
+<li><strong>Heuristic detector</strong> <code>detectLayers</code> (lines 105‑144) walks the graph, assigns file nodes to layers via <code>matchFileToLayer</code>, and creates a “Core” layer for unmatched files.  </li>
+<li><strong>Prompt builder</strong> <code>buildLayerDetectionPrompt</code> (lines 150‑169) lists all file paths for an LLM prompt.  </li>
+<li><strong>Response parser</strong> <code>parseLayerDetectionResponse</code> (lines 177‑217) extracts JSON from raw or fenced responses, validates entries, and returns an array of <code>LLMLayerResponse</code>.  </li>
+<li><strong>LLM application</strong> <code>applyLLMLayers</code> (lines 227‑284) maps file nodes to LLM‑defined layers using <code>filePatterns</code>; unmatched files go to an “Other” layer.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Adds deterministic layer assignment; heuristic may misclassify edge cases but defaults to “Core”.  </li>
-<li><strong>Maintainability</strong>: Centralizes layer logic; future pattern tweaks can be made in <code>LAYER_PATTERNS</code>.  </li>
-<li><strong>Performance</strong>: O(n × m) where <em>n</em> is nodes and *m</li>
-</ul>
-<ul>
-<li>patterns; acceptable for typical graph sizes.</li>
-</ul>
-<ul>
-<li><strong>Compatibility</strong>: No API changes to existing modules; purely additive.  </li>
-<li><strong>Observability</strong>: New functions can be unit‑tested; LLM prompt generation is deterministic.</li>
+<li>Adds deterministic layer assignment logic and LLM integration without altering existing APIs.  </li>
+<li>All operations run in linear time over graph nodes; no new I/O or recursion.  </li>
+<li>Centralises layer logic in a single module, simplifying reuse across services.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>LLM output format</strong>: <code>parseLayerDetectionResponse</code> expects a JSON array; verify against actual LLM responses.  </li>
-<li><strong>Pattern coverage</strong>: Missing or overlapping patterns may mislabel files; run integration tests on diverse codebases.  </li>
-<li><strong>“Other” layer handling</strong>: The layer is created lazily; nodes with no matching pattern are added to “Other”.  </li>
-<li><strong>Path normalization</strong>: Windows backslashes are replaced, but relative paths may still misalign; validate with mixed‑OS projects.</li>
+<li><code>matchFileToLayer</code> may misclassify files when directory names overlap; test against edge‑case paths.  </li>
+<li><code>parseLayerDetectionResponse</code> assumes a JSON array; validate with varied LLM outputs (code fences, plain text).  </li>
+<li><code>applyLLMLayers</code> lazily creates an “Other” layer; ensure consumers handle missing layers.  </li>
+<li>Path normalization replaces backslashes but does not resolve relative segments (<code>..</code>); run integration tests on mixed OS environments.</li>
 </ul>
 </article>
   </main>

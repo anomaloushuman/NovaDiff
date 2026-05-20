@@ -1,0 +1,52 @@
+{
+  "relPath": "vitest.config.ts",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:11:46.775Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Runtime configuration or environment behavior may shift.",
+        "key": "config",
+        "label": "Config-adjacent path",
+        "tone": "warn"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export default defineConfig({"
+    ],
+    "changed_imports": [
+      "R1 added: import { defineConfig } from \"vitest/config\";"
+    ],
+    "changed_line_ranges": [
+      "R1-8"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { defineConfig } from \"vitest/config\";",
+      "R3 added: export default defineConfig({",
+      "R4 added: test: {",
+      "R5 added: environment: \"node\",",
+      "R6 added: include: [\"tests/**/*.test.ts\"],",
+      "R7 added: },"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "config",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Validate startup/config loading with representative environment settings.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

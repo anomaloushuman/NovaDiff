@@ -26,35 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/domain-persistence.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:05:15.053Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:52:02.868Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/domain-persistence.test.ts</code> has been added to validate the domain‑graph persistence API.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/domain-persistence.test.ts</code> (added lines 1‑6) validates the domain‑graph persistence helpers. It imports <code>vitest</code> utilities, Node <code>fs</code>, <code>path</code>, <code>os</code> modules, and the persistence API (<code>saveDomainGraph</code>, <code>loadDomainGraph</code>) from <code>../persistence/index.js</code>. The test uses the <code>KnowledgeGraph</code> type from <code>../types.js</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑6): <code>vitest</code> helpers, Node <code>fs</code>, <code>path</code>, <code>os</code> modules, and the persistence functions <code>saveDomainGraph</code>, <code>loadDomainGraph</code> plus the <code>KnowledgeGraph</code> type.</li>
-<li><strong>Test root</strong> (line 8): <code>const testRoot = join(tmpdir(), &quot;ua-domain-persist-test&quot;)</code>.</li>
-<li><strong>Sample graph</strong> (lines 10‑33): a minimal <code>KnowledgeGraph</code> object with a single domain node.</li>
-<li><strong>Tests</strong> (lines 35‑64):<ol>
-<li><em>Save &amp; load</em> – writes the graph with <code>saveDomainGraph</code>, reads it back with <code>loadDomainGraph</code>, and checks the node id (lines 45‑50).</li>
-<li><em>Missing graph</em> – verifies <code>loadDomainGraph</code> returns <code>null</code> when no file exists (lines 52‑55).</li>
-<li><em>File naming</em> – ensures the graph is stored as <code>domain-graph.json</code> inside <code>.novadiff-graph</code> and that <code>knowledge-graph.json</code> is absent (lines 57‑62).</li>
-</ol>
+<li><p>*<em>Test setup</em></p>
 </li>
-</ul>
-<h3>Impact</h3>
-<ul>
-<li>Adds runtime assurance for the persistence layer; no production code is altered.</li>
-<li>Uses temporary filesystem operations with cleanup in <code>beforeEach</code>/<code>afterEach</code> (lines 36‑43).</li>
-<li>Introduces a test dependency on <code>vitest</code> and Node core modules.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li>If <code>saveDomainGraph</code> changes its output path, the test may fail; verify the <code>.novadiff-graph</code> directory is created correctly.</li>
-<li>Cleanup race conditions: ensure no concurrent tests use the same temporary directory.</li>
-<li>CI environments may restrict write access to <code>tmpdir</code>; confirm permissions before integration.</li>
-<li>If the <code>KnowledgeGraph</code> type evolves, the literal object may need updating; keep the import in sync.</li>
+<li><p>– <code>testRoot</code> is defined as <code>join(tmpdir(), &quot;ua-domain-persist-test&quot;)</code> (line 8).  </p>
+</li>
+<li><p>*<em>Lifecycle hooks</em></p>
+</li>
+<li><p>– <code>beforeEach</code> (lines 36‑39) removes any existing <code>testRoot</code> and recreates it; <code>afterEach</code> (lines 41‑43) cleans it up.  </p>
+</li>
+<li><p>*<em>Sample graph</em></p>
+</li>
+<li><p>– a minimal <code>KnowledgeGraph</code> (<code>domainGraph</code>, lines 10‑33) contains one domain node (<code>id: &quot;domain:orders&quot;</code>).  </p>
+</li>
+<li><p>*<em>Persistence tests</em></p>
+</li>
+<li><p>–  </p>
+</li>
+<li><p><code>saves and loads domain graph</code> (lines 45‑50) checks that <code>loadDomainGraph</code> returns a graph with</p>
+</li>
 </ul>
 </article>
   </main>

@@ -26,29 +26,33 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/vite-env.d.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:37:41.058Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:22:35.205Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new TypeScript declaration file was added to the graph‑view package.</p>
-<h3>Key changes</h3>
-<ul>
-<li>File <code>packages/graph-view/src/vite-env.d.ts</code> added.  </li>
-<li>Contains a single line: <code>/// &lt;reference types=&quot;vite/client&quot; /&gt;</code>.</li>
-</ul>
-<h3>Impact</h3>
-<ul>
-<li>The reference imports Vite client types, making Vite‑specific globals (e.g., <code>import.meta.env</code>) available to the TypeScript compiler.  </li>
-<li>No runtime code is added; the file is only used at compile time.  </li>
-<li>The package now requires the <code>vite</code> types (or the <code>vite</code> package) to be present in <code>devDependencies</code>.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li>Ensure <code>vite</code> or <code>@types/vite</code> is listed in <code>devDependencies</code>; otherwise the reference will fail.  </li>
-<li>Verify that the file is included in the TypeScript <code>include</code> array; otherwise the reference is ignored.  </li>
-<li>Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to confirm no new type errors or build failures.  </li>
-<li>Monitor CI for any unexpected type‑checking regressions.</li>
-</ul>
+<p>A new TypeScript declaration file has been added to the <code>graph-view</code> package:<code>packages/graph-view/src/vite-env.d.ts</code>The file contains a single line:```ts
+/// <reference types="vite/client" /></p>
+<pre><code class="language-This">
+### Key changes
+
+  
+- **File addition**: `packages/graph-view/src/vite-env.d.ts` now exists.  
+- **Reference line**: `/// &lt;reference types=&quot;vite/client&quot; /&gt;` is inserted at the top of the file.  
+- No other files or symbols were modified.
+
+### Impact
+
+  
+- **Type safety**: The reference exposes Vite’s global types (e.g., `import.meta.env`) to the TypeScript compiler for the `graph-view` package.  
+- **Build configuration**: The file will be automatically included if the package’s `tsconfig.json` (or the root tsconfig) includes the `src` directory; otherwise it may need to be added to the `include` array.  
+- **Runtime**: No runtime code is added; the change is compile‑time only.  
+
+### Risks &amp; follow‑ups  
+- **Missing inclusion**: Verify that `packages/graph-view/tsconfig.json` (or the root tsconfig) includes `src/**/*.d.ts`; otherwise the reference will be ignored.  
+- **Duplicate type definitions**: Ensure no other declaration files reference `vite/client` in a conflicting way, which could cause duplicate‑definition errors.  
+- **Linting**: Run `tsc --noEmit` and the project’s linting suite to confirm no new type errors appear.  
+- **CI build**: Confirm that the CI pipeline still passes the production build after adding the file.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

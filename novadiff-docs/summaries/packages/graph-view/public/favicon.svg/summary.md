@@ -1,19 +1,22 @@
-### Overview  
-A new file `packages/graph-view/public/favicon.svg` has been added. It defines a 32 × 32 SVG icon with a dark rounded square background and a centered gold “U”.
+### Overview
+A new file `packages/graph-view/public/favicon.svg` has been added. It contains a 32 × 32 SVG that defines a dark rectangle with a gold “U” centered inside.
 
-### Key changes  
-- **File addition**: `packages/graph-view/public/favicon.svg` now exists.  
-- **SVG content** (lines added R1‑R4):  
-  - `R1: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">`  
-  - `R2: <rect width="32" height="32" rx="6" fill="#0a0a0a"/>`  
-  - `R3: <text x="16" y="23" font-family="Georgia, serif" font-size="20" fill="#d4a574" text-anchor="middle" font-weight="bold">U</text>`  
-  - `R4: </svg>`
+### Key changes
+- File added: `packages/graph-view/public/favicon.svg`  
+- SVG markup (lines R1‑R4):  
+  - `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">`  
+  - `<rect width="32" height="32" rx="6" fill="#0a0a0a"/>`  
+  - `<text x="16" y="23" font-family="Georgia, serif" font-size="20" fill="#d4a574" text-anchor="middle" font-weight="bold">U</text>`  
+  - `</svg>`  
+- No other files were modified.
 
-### Impact  
-- The file will be served as a static asset from the public folder; no code changes are required.  
-- Unknown from the available diff/scan evidence whether the application’s HTML references this favicon, so its visibility in browser tabs is not guaranteed.
+### Impact
+- The graph view now has a custom favicon asset.  
+- Build tooling should copy this SVG into the public assets so it can be served.  
+- Browser caching may need to be considered if the favicon changes; versioning or cache busting can be used.
 
-### Risks & follow‑ups  
-- Verify that the application’s HTML (e.g., `index.html`) includes a `<link rel="icon" href="favicon.svg">` reference; otherwise the icon will not appear.  
-- Run the nearest targeted tests and perform a quick manual smoke test to confirm the favicon renders correctly in supported browsers.  
-- No other risks are identified from the diff.
+### Risks & follow‑ups
+- Verify that the build process includes `packages/graph-view/public/favicon.svg` in the output; run `npm run build` and inspect the public folder.  
+- Run UI tests to confirm the favicon appears correctly in the browser tab.  
+- Ensure the path is unique and does not conflict with other favicons in the repository.  
+- If the favicon is not referenced in the HTML, confirm that the correct file path is used.

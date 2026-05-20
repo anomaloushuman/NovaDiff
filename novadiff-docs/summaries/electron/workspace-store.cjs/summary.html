@@ -26,38 +26,36 @@
 <body>
   <header class="top">
     <h1>electron/workspace-store.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:38:32.561Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:33:45.931Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new helper <code>updateWorkspaceUiState</code> was added to <code>electron/workspace-store.cjs</code>. It updates a workspace’s UI state, persists the change to the workspace’s <code>meta.json</code>, and returns the updated session.</p>
+<p>A new CommonJS module <code>electron/workspace-store.cjs</code> is added to the Electron side of the app. It implements session persistence and workspace CRUD logic using JSON files on disk.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>New function</strong> <code>updateWorkspaceUiState(userData, workspaceId, uiState)</code> (lines 108‑126).  <ul>
-<li>Loads the session (<code>await loadSession(userData)</code> – R109).  </li>
-<li>Finds the workspace by ID (<code>findIndex</code> – R110).  </li>
-<li>Throws <code>new Error(&quot;Workspace not found&quot;)</code> if missing (R111‑112).  </li>
-<li>Merges existing <code>uiState</code> with the supplied payload (R114‑116).  </li>
-<li>Updates <code>updatedAt</code> and writes the workspace back to <code>meta.json</code> (<code>writeJson(path.join(session.workspaces[idx].dataDir, &quot;meta.json&quot;), session.workspaces[idx])</code> – R120‑123).  </li>
-<li>Returns the session (R124‑125).</li>
-</ul>
-</li>
-<li><strong>Export update</strong>: <code>updateWorkspaceUiState</code> is now part of <code>module.exports</code> (line 191).  </li>
-<li>No other logic changes; functions such as <code>createWorkspace</code> and <code>updateWorkspaceLiveRepo</code> remain unchanged.</li>
+<li><strong>Imports</strong>: added <code>node:fs</code>, <code>node:fs/promises</code>, <code>node:path</code>, and <code>node:crypto</code> (lines 3‑6).  </li>
+<li><strong>Path helpers</strong>: <code>sessionPath(userData)</code> and <code>workspacesRoot(userData)</code> (lines 8‑14).  </li>
+<li><strong>I/O helpers</strong>: <code>readJson(filePath, fallback)</code> and <code>writeJson(filePath, data)</code> (lines 16‑31).  </li>
+<li><strong>Session API</strong>: <code>loadSession</code>, <code>saveSession</code>, <code>setLocalOnlyMode</code>, <code>listWorkspaces</code> (lines 33‑67).  </li>
+<li><strong>Workspace API</strong>: <code>upsertWorkspace</code>, <code>setActiveWorkspace</code>, <code>setGitUser</code>, <code>getWorkspace</code> (lines 74‑106).  </li>
+<li><strong>State updates</strong>: <code>updateWorkspaceUiState</code> and <code>updateWorkspaceLiveRepo</code> (lines 108‑145).  </li>
+<li><strong>Creation flow</strong>: <code>createWorkspace</code> generates a UUID, resolves repo paths, creates directories, writes <code>meta.json</code>, and updates the session (lines 147‑177).  </li>
+<li><strong>Exports</strong>: all public functions plus <code>workspacesRoot</code> (lines 180‑193).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Guarantees UI state persistence and timestamping; throws a clear error when the workspace ID is invalid.  </li>
-<li><strong>Maintainability</strong>: Centralizes UI state handling, reducing duplication.  </li>
-<li><strong>Performance</strong>: Adds one <code>writeJson</code> call per UI update; overhead is negligible for typical usage.  </li>
-<li><strong>Compatibility</strong>: No breaking changes; the new export is additive.</li>
+<li><strong>Persistence</strong>: Sessions are stored in <code>novadiff-session.json</code> under <code>userData</code>; each workspace has a <code>meta.json</code> in its own data directory.  </li>
+<li><strong>API surface</strong>: Callers must import from this module to perform workspace operations.  </li>
+<li><strong>I/O</strong>: Every operation reads or writes JSON files; concurrent calls may contend on the same files.  </li>
+<li><strong>Error handling</strong>: <code>writeJson</code> uses <code>rename</code> for atomic writes, but no file‑locking is implemented.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong>: Verify that callers still work after the export change; run the full test suite.  </li>
-<li><strong>Data integrity</strong>: Ensure <code>writeJson</code> merges <code>uiState</code> without overwriting unrelated fields in <code>meta.json</code>.  </li>
-<li><strong>Concurrency</strong>: Multiple simultaneous UI updates will race; the last write wins. Consider locking if needed.  </li>
-<li><strong>Documentation</strong>: Update public docs or type definitions to expose <code>updateWorkspaceUiState</code>.</li>
+<li><strong>Race conditions</strong>: Concurrent <code>createWorkspace</code> or <code>upsertWorkspace</code> calls could corrupt <code>novadiff-session.json</code> (no locking).  </li>
+<li><strong>Atomicity</strong>: <code>writeJson</code> relies on <code>fs.rename</code>; verify behavior on all target OSes.  </li>
+<li><strong>Path validation</strong>: <code>path.resolve</code> on an empty string throws; the code throws a custom error if the resolved path is empty (lines 151‑153, 133‑136).  </li>
+<li><strong>Testing</strong>: Add unit tests for each exported function, especially <code>createWorkspace</code> and <code>updateWorkspaceLiveRepo</code>.  </li>
+<li><strong>Lint &amp; build</strong>: Run <code>npm run lint</code>, <code>npm test</code>, and the production build to catch any syntax or type issues.</li>
 </ul>
 </article>
   </main>

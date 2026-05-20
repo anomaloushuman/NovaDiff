@@ -26,40 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/EmbedGraphPanel.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:33:36.089Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:17:43.146Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>EmbedGraphPanel</code> component is added in <strong>packages/graph-view/src/EmbedGraphPanel.tsx</strong> (lines 263‑279). It renders a lightweight overview graph with <code>@xyflow/react</code> and does not depend on the global Zustand store.</p>
+<p>A new file <code>packages/graph-view/src/EmbedGraphPanel.tsx</code> adds a fully‑interactive graph embed for NovaDiff documentation. It renders a responsive React Flow graph inside a themed host and provides Escape‑key navigation to the overview layer.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – React hooks (<code>useEffect</code>, <code>useMemo</code>, <code>useRef</code>, <code>useState</code>) and XYFlow utilities (<code>Background</code>, <code>Controls</code>, <code>MiniMap</code>, <code>ReactFlow</code>, etc.) are added (lines 5‑18).  </li>
-<li><strong>Utility</strong> – <code>buildNodesById</code> (lines 39‑46) builds a <code>Map&lt;string, GraphNode&gt;</code> for fast lookup.  </li>
-<li><strong>Layout logic</strong> – `use</li>
+<li><strong>Imports (R6‑R11)</strong>: <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React; <code>ReactFlowProvider</code> from <code>@xyflow/react</code>; CSS import; <code>GraphViewInner</code>; <code>useDashboardStore</code>; <code>ThemeProvider</code>.  </li>
+<li><strong>Type definition (R13)</strong>: <code>FlowDimensions</code> tracks host width/height.  </li>
+<li>**`EmbedEscapeTo</li>
 </ul>
 <h3>Overview</h3>
-<p>LayoutForGraph<code>(lines 47‑154) constructs layer‑cluster nodes, aggregates edges, runs ELK layout asynchronously, and exposes</code>{ nodes, edges, layoutStatus }`.  </p>
-<ul>
-<li><strong>Viewport handling</strong> – <code>EmbedFitViewOnce</code> (lines 156‑184) calls <code>fitView</code> once after the flow is mounted to avoid infinite loops.  </li>
-<li><strong>Rendering</strong> – `Embed</li>
-</ul>
+<p><code>(R15‑R30)**: Listens for</code>Escape<code>key and triggers</code>navigateTo</p>
 <h3>Overview</h3>
-<p>Flow<code>(lines 186‑218) renders the flow with interactions disabled;</code>EmbedSizedFlowMount<code>(lines 220‑257) mounts the flow only when the host element has non‑zero dimensions, using a</code>ResizeObserver`.  </p>
+<p><code>when</code>navigationLevel<code>is</code>&quot;layer-detail&quot;`.  </p>
 <ul>
-<li><strong>Public API</strong> – <code>EmbedGraphPanelProps</code> (lines 259‑261) and <code>EmbedGraphPanel</code> (lines 263‑279) expose the panel, showing a “Computing layout…” overlay while <code>layoutStatus</code> is <code>&quot;computing&quot;</code>.</li>
+<li><strong><code>EmbedSizedInteractiveGraph</code> (R32‑R79)</strong>: Uses a <code>ResizeObserver</code> to keep <code>dimensions</code> in sync with the host element, wrapping <code>GraphViewInner</code> in a <code>ReactFlowProvider</code>.  </li>
+<li><strong><code>EmbedGraphPanel</code> export (R81‑R97)</strong>: Pulls the current graph from the dashboard store, conditionally renders the sized graph or a loading overlay, and scopes them with <code>ThemeProvider</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Self‑contained</strong> – no global state, reducing side‑effects.  </li>
-<li><strong>Asynchronous layout</strong> – ELK runs in a promise; the overlay prevents UI freezes.  </li>
-<li><strong>Clear separation</strong> – layout, sizing, and rendering are isolated in hooks and small components, easing future maintenance.</li>
+<li>Adds dependency <code>@xyflow/react</code> and its CSS; must be available in the environment.  </li>
+<li>Introduces a global key listener and a <code>ResizeObserver</code>; both are cleaned up on unmount.  </li>
+<li>Requires CSS classes <code>embed-graph-flow-host</code>, <code>embed-graph-flow-pane</code>, <code>embed-graph-layout-overlay</code>, etc.; missing styles will break layout.  </li>
+<li>Relies on <code>useDashboardStore</code> for graph data and navigation state.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Layout accuracy</strong> – verify ELK output for complex graphs; visual regression tests are recommended.  </li>
-<li><strong>Resize handling</strong> – confirm <code>ResizeObserver</code> triggers re‑mount correctly across browsers.  </li>
-<li><strong>Edge cases</strong> – empty or single‑node graphs fall back to <code>EMPTY_OVERVIEW</code>; ensure no crashes.  </li>
-<li><strong>Styling</strong> – component relies on CSS variables (<code>--color-edge-dot</code>, <code>--glass-bg</code>); check they exist in all themes.</li>
+<li>Verify that <code>@xyflow/react</code> and its CSS are installed.  </li>
+<li>Ensure the global Escape listener does not interfere with other components or tests.  </li>
+<li>Confirm that the referenced CSS classes are defined in the shared stylesheet.  </li>
+<li>The component is exported but not referenced in this diff; add a usage test or integration point to validate end‑to‑end functionality.</li>
 </ul>
 </article>
   </main>

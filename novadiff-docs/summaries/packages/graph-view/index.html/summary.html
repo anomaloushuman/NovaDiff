@@ -26,32 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/index.html</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:17:08.422Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:01:31.255Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>packages/graph-view/index.html</code> file has been added (lines R1‑R19). It establishes a minimal HTML5 page that loads Google Fonts, mounts a React app, and links a favicon.</p>
+<p>A new file <code>packages/graph-view/index.html</code> was added (lines 1‑19). It serves as the static entry point for the graph view component.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File addition</strong>: <code>packages/graph-view/index.html</code> now exists.  </li>
-<li><strong>Meta tags</strong>: <code>charset=&quot;UTF-8&quot;</code>, <code>viewport=&quot;width=device-width, initial-scale=1.0&quot;</code>, and a favicon link to <code>/favicon.svg</code>.  </li>
-<li><strong>Font preconnects</strong>: <code>&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.googleapis.com&quot;&gt;</code> and <code>&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;</code>.  </li>
-<li><strong>Font stylesheet</strong>: loads <code>DM Serif Display</code>, <code>Inter</code>, and <code>JetBrains Mono</code> with <code>display=swap</code>.  </li>
-<li><strong>Root element</strong>: <code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code> for React rendering.  </li>
-<li><strong>Script entry</strong>: <code>&lt;script type=&quot;module&quot; src=&quot;/src/main.tsx&quot;&gt;&lt;/script&gt;</code>.</li>
+<li>Full HTML5 boilerplate: <code>&lt;!doctype html&gt;</code>, <code>&lt;html lang=&quot;en&quot;&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code>, <code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</code>, <code>&lt;link rel=&quot;icon&quot; type=&quot;image/svg+xml&quot; href=&quot;/favicon.svg&quot;&gt;</code>.</li>
+<li>Title <code>&lt;title&gt;NovaDiff Knowledge Graph&lt;/title&gt;</code> and Google Fonts preconnects with a stylesheet link for DM Serif Display, Inter, and JetBrains Mono.</li>
+<li><code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code> as the mount point for the React app.</li>
+<li><code>&lt;script type=&quot;module&quot; src=&quot;/src/main.tsx&quot;&gt;&lt;/script&gt;</code> points to the bundle entry.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a clean bootstrap for the graph‑view package.  </li>
-<li>Centralizes meta and script configuration, simplifying future edits.  </li>
-<li>Preconnects to Google Fonts may reduce font‑loading latency (common practice).</li>
+<li>Provides a dedicated HTML page that can be loaded directly, independent of client‑side routing.</li>
+<li>The script source <code>/src/main.tsx</code> must be resolved by the bundler; misconfiguration will break the page.</li>
+<li>No existing source files were modified; the change is isolated to the new entry point.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Asset paths</strong>: Verify that <code>/favicon.svg</code> and <code>/src/main.tsx</code> resolve correctly in the deployed environment.  </li>
-<li><strong>Font availability</strong>: Ensure the specified families are accessible and that <code>display=swap</code> behaves as expected.  </li>
-<li><strong>Server routing</strong>: Confirm that the server serves this file for the <code>/graph-view</code> route and that no other route conflicts occur.  </li>
-<li><strong>Build pipeline</strong>: Check that the new file is included in the build artifacts and copied to the correct output directory.</li>
+<li>Verify that the new <code>index.html</code> is copied to the correct output directory during the build; otherwise the route will return 404.</li>
+<li>Confirm that <code>main.tsx</code> mounts to <code>#root</code>; a mismatch will prevent rendering.</li>
+<li>Ensure the bundler’s public path aligns with <code>/src/main.tsx</code>; otherwise the module may fail to load.</li>
+<li>Run a quick manual test to confirm fonts load, favicon displays, and the graph view renders correctly.</li>
 </ul>
 </article>
   </main>

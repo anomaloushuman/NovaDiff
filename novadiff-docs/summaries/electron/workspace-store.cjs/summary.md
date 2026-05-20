@@ -1,25 +1,25 @@
 ### Overview  
-A new helper `updateWorkspaceUiState` was added to `electron/workspace-store.cjs`. It updates a workspace’s UI state, persists the change to the workspace’s `meta.json`, and returns the updated session.
+A new CommonJS module `electron/workspace-store.cjs` is added to the Electron side of the app. It implements session persistence and workspace CRUD logic using JSON files on disk.
 
 ### Key changes  
-- **New function** `updateWorkspaceUiState(userData, workspaceId, uiState)` (lines 108‑126).  
-  - Loads the session (`await loadSession(userData)` – R109).  
-  - Finds the workspace by ID (`findIndex` – R110).  
-  - Throws `new Error("Workspace not found")` if missing (R111‑112).  
-  - Merges existing `uiState` with the supplied payload (R114‑116).  
-  - Updates `updatedAt` and writes the workspace back to `meta.json` (`writeJson(path.join(session.workspaces[idx].dataDir, "meta.json"), session.workspaces[idx])` – R120‑123).  
-  - Returns the session (R124‑125).  
-- **Export update**: `updateWorkspaceUiState` is now part of `module.exports` (line 191).  
-- No other logic changes; functions such as `createWorkspace` and `updateWorkspaceLiveRepo` remain unchanged.
+- **Imports**: added `node:fs`, `node:fs/promises`, `node:path`, and `node:crypto` (lines 3‑6).  
+- **Path helpers**: `sessionPath(userData)` and `workspacesRoot(userData)` (lines 8‑14).  
+- **I/O helpers**: `readJson(filePath, fallback)` and `writeJson(filePath, data)` (lines 16‑31).  
+- **Session API**: `loadSession`, `saveSession`, `setLocalOnlyMode`, `listWorkspaces` (lines 33‑67).  
+- **Workspace API**: `upsertWorkspace`, `setActiveWorkspace`, `setGitUser`, `getWorkspace` (lines 74‑106).  
+- **State updates**: `updateWorkspaceUiState` and `updateWorkspaceLiveRepo` (lines 108‑145).  
+- **Creation flow**: `createWorkspace` generates a UUID, resolves repo paths, creates directories, writes `meta.json`, and updates the session (lines 147‑177).  
+- **Exports**: all public functions plus `workspacesRoot` (lines 180‑193).
 
 ### Impact  
-- **Correctness**: Guarantees UI state persistence and timestamping; throws a clear error when the workspace ID is invalid.  
-- **Maintainability**: Centralizes UI state handling, reducing duplication.  
-- **Performance**: Adds one `writeJson` call per UI update; overhead is negligible for typical usage.  
-- **Compatibility**: No breaking changes; the new export is additive.
+- **Persistence**: Sessions are stored in `novadiff-session.json` under `userData`; each workspace has a `meta.json` in its own data directory.  
+- **API surface**: Callers must import from this module to perform workspace operations.  
+- **I/O**: Every operation reads or writes JSON files; concurrent calls may contend on the same files.  
+- **Error handling**: `writeJson` uses `rename` for atomic writes, but no file‑locking is implemented.  
 
 ### Risks & follow‑ups  
-- **Regression**: Verify that callers still work after the export change; run the full test suite.  
-- **Data integrity**: Ensure `writeJson` merges `uiState` without overwriting unrelated fields in `meta.json`.  
-- **Concurrency**: Multiple simultaneous UI updates will race; the last write wins. Consider locking if needed.  
-- **Documentation**: Update public docs or type definitions to expose `updateWorkspaceUiState`.
+- **Race conditions**: Concurrent `createWorkspace` or `upsertWorkspace` calls could corrupt `novadiff-session.json` (no locking).  
+- **Atomicity**: `writeJson` relies on `fs.rename`; verify behavior on all target OSes.  
+- **Path validation**: `path.resolve` on an empty string throws; the code throws a custom error if the resolved path is empty (lines 151‑153, 133‑136).  
+- **Testing**: Add unit tests for each exported function, especially `createWorkspace` and `updateWorkspaceLiveRepo`.  
+- **Lint & build**: Run `npm run lint`, `npm test`, and the production build to catch any syntax or type issues.

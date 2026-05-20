@@ -26,29 +26,29 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/scripts/language-names.txt</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:23:35.246Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:06:55.546Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/scripts/language-names.txt</code> has been added.<br>The diff shows 675 added lines (R1‑675). The first entry is <strong>“A.NET (A#/A sharp)”</strong> and the last is <strong>“ZPL”</strong>.</p>
+<p>A new data file <code>packages/graph-core/scripts/language-names.txt</code> has been added.<br>The file contains 675 lines, each listing a programming language name (e.g., <code>A.NET (A#/A sharp)</code>, <code>ABAP</code>, <code>Python</code>, <code>ZPL</code>).<br>The diff shows lines 1‑675 added (R1‑675).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File addition</strong>: <code>packages/graph-core/scripts/language-names.txt</code> now exists in the <code>graph-core</code> package.  </li>
-<li><strong>Content</strong>: The file contains a plain‑text list of 675 programming‑language names, alphabetically ordered.  </li>
-<li><strong>No other code changes</strong>: The diff contains only the new file; no imports, exports, or references to it appear in the changed files.</li>
+<li><strong>File addition</strong>: <code>packages/graph-core/scripts/language-names.txt</code> now exists in the repository.  </li>
+<li><strong>Content</strong>: 675 language names, covering mainstream and niche languages.  </li>
+<li><strong>No code changes</strong>: The diff only introduces this data file; no source files or tests were modified.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Build</strong>: The file is static; adding it does not alter compilation or runtime unless another module explicitly reads it.  </li>
-<li><strong>Documentation</strong>: The list can be consumed by future tooling or docs generators that need a reference of language names.  </li>
-<li><strong>Size</strong>: Approximately 10 KB; negligible effect on repository size or network transfer.  </li>
-<li><strong>Testing</strong>: No tests were added or modified; existing tests remain unchanged.</li>
+<li>Any component that imports or reads this file will now have a comprehensive list to work with.  </li>
+<li>Future edits can be made in a single file rather than across multiple code paths.  </li>
+<li>Build size increase is unknown from the available diff/scan evidence.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Unintended consumption</strong>: If a future module imports this file, it will introduce a hard dependency on a large static list. No evidence of such imports in the current diff.  </li>
-<li><strong>Maintenance</strong>: The list is static; consider a script to keep it updated if ongoing coverage is required.  </li>
-<li><strong>Documentation consistency</strong>: Verify that any documentation referring to supported languages includes this new list to avoid discrepancies.</li>
+<li>Verify that modules expecting <code>language-names.txt</code> correctly resolve the new path.  </li>
+<li>Ensure downstream consumers handle the plain‑text format and any special characters (parentheses, slashes).  </li>
+<li>Run existing tests that rely on language lists to confirm they still pass with the expanded set.  </li>
+<li>Update any documentation that lists supported languages to reflect the new additions.</li>
 </ul>
 </article>
   </main>

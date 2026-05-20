@@ -1,40 +1,22 @@
 ### Overview  
-A new `DomainClusterNode` component is added to `packages/graph-view/src/components/DomainClusterNode.tsx`.  
-It introduces a typed data contract (`DomainClusterData`), a node alias (`DomainClusterFlowNode`), and memoized rendering logic.
+A new `DomainClusterNode` component is added to the graph view, introducing a dedicated node type for domain clusters. It renders cluster metadata, handles selection and navigation via the dashboard store, and connects to the flow graph with XYFlow handles.
 
 ### Key changes  
-- **Imports** (lines 1‑4):  
-  ```ts
-  import { memo } from "react";
-  import { Handle, Position } from "@xyflow/react";
-  import type { Node, NodeProps } from "@xyflow/react";
-  import { useDashboardStore } from "../store";
-  ```
-- **Data contract** (lines 6‑13):  
-  ```ts
-  export interface DomainClusterData extends Record<string, unknown> {
-    label: string;
-    summary: string;
-    entities?: string[];
-    flowCount: number;
-    businessRules?: string[];
-    domainId: string;
-  }
-  ```
-- **Node type** (line 15):  
-  ```ts
-  export type DomainClusterFlowNode = Node<DomainClusterData, "domain-cluster">;
-  ```
-- **Component** (lines 17‑64): uses `useDashboardStore` hooks for navigation, selection, and state; renders handles, label, summary, an entity list (truncated to 5 items), and a flow‑count label with pluralization.
-- **Export** (line 66): `export default memo(DomainClusterNode);`
+- **Imports**: Added `memo` from React, `Handle`/`Position` and `Node`/`NodeProps` from `@xyflow/react`, and `useDashboardStore` from the local store.  
+- **Data contract**: Defined `DomainClusterData` interface (label, summary, entities, flowCount, businessRules, domainId) and exported `DomainClusterFlowNode` type.  
+- **Component**: `DomainClusterNode` receives `NodeProps<DomainClusterFlowNode>`, uses store selectors (`navigateToDomain`, `selectedNodeId`, `selectNode`), and renders UI with conditional entity list and flow count.  
+- **Handles**: Adds target and source handles positioned left/right with custom styling.  
+- **Memoization**: Exports `memo(DomainClusterNode)` to avoid unnecessary re‑renders.
 
 ### Impact  
-- The component is now available for use in the graph view; it expects a `DomainClusterFlowNode` prop.  
-- It relies on `useDashboardStore` for `navigateToDomain`, `selectNode`, and `selectedNodeId`.  
-- Memoization (`React.memo`) limits re‑renders when props are unchanged.
+- **Correctness**: New node type must be registered in the graph flow configuration; otherwise it will not appear.  
+- **Maintainability**: Centralizes cluster node logic; future UI tweaks can be made in one place.  
+- **Performance**: `memo` reduces re‑renders when unrelated props change.  
+- **Compatibility**: Requires existing store selectors; if they change, this component will break.  
+- **Observability**: No new logs or metrics, but UI changes may affect user interaction flow.
 
 ### Risks & follow‑ups  
-- **Store integration**: Verify that `navigateToDomain`, `selectNode`, and `selectedNodeId` exist in the store; missing keys will cause runtime errors.  
-- **Data validation**: `data.entities` is optional; the component guards against `undefined` before slicing.  
-- **Pluralization logic**: Test `flowCount` values 0, 1, >1 to ensure correct label rendering.  
-- **Styling**: Confirm that CSS classes (`border-accent`, `bg-accent/10`, etc.) render correctly across themes.
+- Verify that `useDashboardStore` exposes `navigateToDomain`, `selectedNodeId`, and `selectNode`; missing selectors will cause runtime errors.  
+- Ensure `DomainClusterFlowNode` is added to the graph node type registry; otherwise the component will never render.  
+- Confirm CSS classes (`border-accent`, `bg-accent/10`, etc.) exist in the theme; missing classes could break styling.  
+- Run unit tests for the new component and integration tests for graph rendering to catch any regressions.

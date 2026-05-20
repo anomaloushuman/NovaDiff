@@ -1,21 +1,23 @@
 ### Overview  
-`packages/graph-core/src/analyzer/normalize-graph.ts` adds a pre‑processing step that normalizes node IDs, numeric complexities, and edge references before the existing `sanitizeGraph/autoFixGraph/normalizeGraph` pipeline. The file introduces new helper functions and interfaces that operate on the raw graph batch output.
+`packages/graph-core/src/analyzer/normalize-graph.ts` adds a set of utilities for normalizing graph data. The file introduces new functions, constants, and interfaces that operate on node IDs, complexity values, and batch‑output structures.
 
 ### Key changes  
-- **ID normalization** – `normalizeNodeId` (added at line 64) uses `stripToValidPrefix` (line 31) and `TYPE_TO_PREFIX` (line 8) to handle double‑prefixed IDs, project‑name prefixes, and bare paths.  
-- **Complexity handling** – `normalizeComplexity` (line 134) maps string aliases and numeric scales to `"simple" | "moderate" | "complex"` using `VALID_COMPLEXITIES` (line 113) and `COMPLEXITY_STRING_MAP` (line 115).  
-- **Edge rewriting & deduplication** – `normalizeBatchOutput` (line 202) rewrites source/target IDs via an `idMap`, infers missing types with `inferTypeFromId` (line 185), and removes duplicate edges (lines 314‑318).  
-- **Dangling edge reporting** – New interfaces `DroppedEdge` (line 154) and `NormalizationStats` (line 161) capture dropped edges and statistics.  
-- **Result structure** – `NormalizeBatchResult` (line 169) exposes normalized nodes, edges, the ID map, and stats.
+- **`normalizeNodeId`** – lines 64‑110: normalizes IDs to `type:path`, handling double prefixes, project‑name prefixes, and bare paths.  
+- **`normalizeComplexity`** – lines 134‑152: maps string aliases and numeric scales to `"simple" | "moderate" | "complex"`.  
+- **`normalizeBatchOutput`** – lines 202‑329: processes raw nodes/edges, fixes IDs, normalizes complexity, rewrites edge references, deduplicates nodes/edges, drops dangling edges, and returns a `NormalizeBatchResult`.  
+- **Interfaces** – `DroppedEdge` (lines 154‑158), `NormalizationStats` (lines 161‑166), `NormalizeBatchResult` (lines 169‑173) provide structured output and metrics.  
+- **Helper constants** – `VALID_PREFIXES`, `TYPE_TO_PREFIX`, `VALID_COMPLEXITIES`, `COMPLEXITY_STRING_MAP`, `PREFIX_TO_TYPE` support the logic.  
+- **`inferTypeFromId`** – lines 184‑192: derives a node type from an ID prefix, used during edge rewriting.
 
 ### Impact  
-- **Correctness** – Guarantees canonical `type:path` IDs and consistent complexity values before downstream processing.  
-- **Maintainability** – Centralizes normalization logic; downstream modules no longer need ad‑hoc fixes.  
-- **Observability** – `NormalizationStats` provides metrics for monitoring ID corrections and edge drops.  
-- **Performance** – Adds a single pass over nodes and edges; map lookups are O(1) and should not noticeably affect throughput.
+- **Correctness**: guarantees canonical IDs and complexity values before upstream pipelines, reducing downstream errors.  
+- **Observability**: `NormalizationStats` exposes counts of fixed IDs, complexity corrections, rewritten edges, and dropped edges.  
+- **Maintainability**: centralizes normalization logic; future changes to ID/complexity rules can be made in one place.  
+- **Performance**: operations use `Map`/`Set` lookups, yielding linear‑time processing over nodes and edges.  
+- **Compatibility**: adds new exports but does not alter existing APIs; other modules can import these utilities without breaking changes.
 
 ### Risks & follow‑ups  
-- **Regression on existing IDs** – Verify that previously valid IDs remain unchanged; test idempotence of `normalizeNodeId`.  
-- **Double‑prefixed ID handling** – Ensure IDs like `file:file:src/foo.ts` resolve correctly; test with varied malformed IDs.  
-- **Compatibility** – Confirm no other module imports the old `normalize-graph` path; update imports if necessary.  
-- **Stat accuracy** – Cross‑check `stats.idsFixed`, `stats.complexityFixed`, etc., against a known dataset.
+- **Regression in ID handling**: verify that legacy double‑prefixed IDs are still resolved correctly.  
+- **Edge deduplication**: ensure that deduplication does not drop legitimate parallel edges; run integration tests on graphs with intentional duplicates.  
+- **Stats accuracy**: cross‑check `NormalizationStats` against manual counts on sample datasets.  
+- **Cross‑module interactions**: confirm that downstream consumers of `normalizeBatchOutput` correctly handle the new `idMap` and `stats` fields.

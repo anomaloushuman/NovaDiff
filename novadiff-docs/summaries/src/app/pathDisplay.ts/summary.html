@@ -26,37 +26,36 @@
 <body>
   <header class="top">
     <h1>src/app/pathDisplay.ts</h1>
-    <div class="meta">Kind: added · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:40:26.911Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:46:27.000Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/pathDisplay.ts</code> was added. It exports the helper <code>pathDisplayLabel(absPath: string): string</code>. The file begins with the comment<br><code>/** User‑facing path label — never expose full filesystem paths outside onboarding. */</code>.</p>
+<p>A new module <code>src/app/pathDisplay.ts</code> adds the exported helper <code>pathDisplayLabel</code> (lines 2‑15).<br>It trims whitespace, normalizes slashes, and returns only the last one or two path segments, never the full absolute path.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Function signature</strong>: <code>export function pathDisplayLabel(absPath: string): string</code> (added at R2).  </li>
-<li><strong>Whitespace handling</strong>: <code>const trimmed = absPath.trim();</code> returns <code>&quot;&quot;</code> if <code>trimmed</code> is empty (R3‑R5).  </li>
-<li><strong>Path normalization</strong>: backslashes are replaced with forward slashes, the string is split on <code>/</code>, and empty segments are filtered out (R7).  </li>
-<li><strong>Segment logic</strong>:  <ul>
-<li>No segments → return <code>trimmed</code> (R8‑R9).  </li>
-<li>One segment → return that segment (R10‑R12).  </li>
-<li>Two or more segments → return <code>${parts[parts.length - 2]}/${parts[parts.length - 1]}</code> (R13‑R14).</li>
+<li><strong>Export</strong>: <code>export function pathDisplayLabel(absPath: string): string</code> (lines 2‑15).  </li>
+<li><strong>Sanitization</strong>: trims the input and returns an empty string for empty or whitespace‑only paths (lines 3‑6).  </li>
+<li><strong>Normalization</strong>: replaces backslashes with forward slashes, splits on <code>/</code>, and removes empty segments (line 7).  </li>
+<li><strong>Segment selection</strong>:  <ul>
+<li>If no segments remain, returns the trimmed input (lines 8‑10).  </li>
+<li>If one segment exists, returns that segment (lines 11‑13).  </li>
+<li>Otherwise returns the last two segments joined by <code>/</code> (lines 14‑15).</li>
 </ul>
 </li>
-<li>The function body spans lines R1‑R15.</li>
+<li><strong>Documentation comment</strong>: clarifies that the label is for onboarding UI and should never expose full paths (line 1).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes path‑label logic in a single, pure TypeScript utility.  </li>
-<li>Guarantees that only the last one or two path segments are exposed, in line with the comment about avoiding full filesystem paths.  </li>
-<li>No other modules are modified; the change is self‑contained.  </li>
-<li>Operates in O(n) time over the input string, adding negligible overhead.</li>
+<li><strong>Security</strong>: The function never returns a full absolute path, mitigating accidental exposure of filesystem structure.  </li>
+<li><strong>Centralization</strong>: Path‑label logic is now in a single, reusable utility.  </li>
+<li><strong>No API changes</strong>: Existing modules are unaffected; only new imports are required.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Edge cases</strong>: behavior with multiple consecutive slashes, trailing slashes, or UNC paths is not shown in the diff.  </li>
-<li><strong>Testing</strong>: unit tests should cover empty input, single‑segment paths, multi‑segment paths, and Windows backslashes.  </li>
-<li><strong>Linting</strong>: ensure the new file passes the repository’s TypeScript linting (<code>tsc</code>, <code>eslint</code>).  </li>
-<li><strong>Documentation</strong>: update any onboarding documentation that references path display logic to point to this helper.</li>
+<li><strong>Edge‑case handling</strong>: Behavior with root paths (<code>/</code>, <code>C:\\</code>), UNC paths, or paths with multiple consecutive slashes is unknown from the available diff/scan evidence.  </li>
+<li><strong>Integration</strong>: Verify that UI components previously constructing path labels now import and use <code>pathDisplayLabel</code>.  </li>
+<li><strong>Testing</strong>: Add unit tests for empty, single‑segment, multi‑segment, and mixed‑slash inputs.  </li>
+<li><strong>Documentation</strong>: Update onboarding or security docs to reference the new helper and its safety guarantees.</li>
 </ul>
 </article>
   </main>

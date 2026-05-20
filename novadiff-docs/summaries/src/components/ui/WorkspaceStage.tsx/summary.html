@@ -26,31 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/ui/WorkspaceStage.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:28:28.885Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:11:57.815Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>WorkspaceStage</code> is added at <code>src/components/ui/WorkspaceStage.tsx</code> (lines 1‑22). It wraps page content and conditionally applies an enter animation based on the user’s reduced‑motion preference.</p>
+<p>A new UI component <code>WorkspaceStage</code> has been added under <code>src/components/ui/WorkspaceStage.tsx</code>. It introduces a lightweight wrapper that conditionally applies a CSS transition class based on the user&#39;s reduced‑motion preference.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>ReactNode</code> from <code>&quot;react&quot;</code> (R1) and <code>usePrefersReducedMotion</code> from <code>&quot;../../app/usePrefersReducedMotion&quot;</code> (R2).  </li>
-<li><strong>Props interface</strong> <code>WorkspaceStageProps</code> (R4‑R7) with <code>pageKey: string</code> and <code>children: ReactNode</code>.  </li>
-<li><strong>Component</strong> <code>WorkspaceStage</code> (R9‑R22) that:<ul>
-<li>Calls <code>const reduced = usePrefersReducedMotion();</code> (R10).  </li>
-<li>Renders <code>&lt;div className=&quot;workspace-stage&quot;&gt;</code> containing an inner <code>&lt;div&gt;</code> keyed by <code>pageKey</code> with class <code>workspace-stage-inner</code> and, unless <code>reduced</code> is true, the additional class <code>ui-view-enter</code> (R14‑R17).</li>
-</ul>
-</li>
+<li><strong>New file</strong> <code>src/components/ui/WorkspaceStage.tsx</code> with imports for <code>ReactNode</code> and <code>usePrefersReducedMotion</code>.  </li>
+<li><strong>Interface</strong> <code>WorkspaceStageProps</code> declares <code>pageKey: string</code> and <code>children: ReactNode</code>.  </li>
+<li><strong>Component</strong> <code>WorkspaceStage</code> renders a <code>&lt;div&gt;</code> hierarchy, applying the class <code>ui-view-enter</code> when motion is not reduced.  </li>
+<li><strong>Key usage</strong>: the inner <code>&lt;div&gt;</code> receives <code>key={pageKey}</code> to force remounts on page changes.  </li>
+<li><strong>Export</strong>: both the interface and the component are exported for external use.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Additive</strong>: no existing files are modified; the component can be used independently.  </li>
-<li><strong>Runtime</strong>: adds one extra DOM node per render and a conditional class check; negligible performance cost.  </li>
-<li><strong>Dependencies</strong>: requires the <code>usePrefersReducedMotion</code> hook to be exported and the CSS class <code>.ui-view-enter</code> to be defined; missing either will affect animation or cause runtime errors.</li>
+<li><strong>UI behavior</strong>: Adds a fade‑in transition to workspace stages unless the user prefers reduced motion, improving accessibility.  </li>
+<li><strong>Reusability</strong>: The component can be dropped into any page that needs a consistent stage wrapper.  </li>
+<li><strong>Performance</strong>: Minimal overhead; only a single hook call and a conditional class name.  </li>
+<li><strong>Compatibility</strong>: No changes to existing components; purely additive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Hook availability</strong>: confirm <code>usePrefersReducedMotion</code> is exported and works in all target environments; otherwise the build will fail.  </li>
-<li><strong>CSS presence</strong>: verify that <code>.ui-view-enter</code> is defined;</li>
+<li>Verify that the CSS class <code>ui-view-enter</code> exists and behaves as intended.  </li>
+<li>Ensure <code>pageKey</code> is unique per stage to avoid React key warnings.  </li>
+<li>Test the reduced‑motion toggle to confirm the transition is correctly suppressed.  </li>
+<li>Confirm that the component is imported and used in the relevant pages; otherwise the new file remains unused.</li>
 </ul>
 </article>
   </main>

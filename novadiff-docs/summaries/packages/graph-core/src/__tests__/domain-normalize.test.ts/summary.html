@@ -26,34 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/domain-normalize.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:04:38.947Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:51:09.583Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/domain-normalize.test.ts</code> has been added to verify the <code>normalizeNodeId</code> helper for domain, flow, and step node types.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/domain-normalize.test.ts</code> (lines R1‑R46) was added. It imports <code>vitest</code> helpers and <code>normalizeNodeId</code> from <code>../analyzer/normalize-graph.js</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports added</strong>  <ul>
-<li><code>R1 added: import { describe, it, expect } from &quot;vitest&quot;;</code>  </li>
-<li><code>R2 added: import { normalizeNodeId } from &quot;../analyzer/normalize-graph.js&quot;;</code></li>
+<li><strong>Imports</strong>:  <ul>
+<li><code>import { describe, it, expect } from &quot;vitest&quot;;</code> (R1)  </li>
+<li><code>import { normalizeNodeId } from &quot;../analyzer/normalize-graph.js&quot;;</code> (R2)</li>
 </ul>
 </li>
-<li><strong>Test cases added</strong> (<code>R4–R46</code>)  <ul>
-<li>Domain node: <code>normalizeNodeId(&quot;domain:order-management&quot;, { type: &quot;domain&quot;, name: &quot;Order Management&quot; })</code> → <code>&quot;domain:order-management&quot;</code>  </li>
-<li>Flow node: <code>normalizeNodeId(&quot;flow:create-order&quot;, { type: &quot;flow&quot;, name: &quot;Create Order&quot; })</code> → <code>&quot;flow:create-order&quot;</code>  </li>
-<li>Step node with <code>filePath</code>: <code>normalizeNodeId(&quot;step:create-order:validate&quot;, { type: &quot;step&quot;, name: &quot;Validate&quot;, filePath: &quot;src/validators/order.ts&quot; })</code> → <code>&quot;step:create-order:src/validators/order.ts:validate&quot;</code>  </li>
-<li>Step node without <code>filePath</code>: <code>normalizeNodeId(&quot;step:validate&quot;, { type: &quot;step&quot;, name: &quot;Validate&quot; })</code> → <code>&quot;step:validate&quot;</code>  </li>
-<li>Bare step name with <code>filePath</code>: <code>normalizeNodeId(&quot;validate&quot;, { type: &quot;step&quot;, name: &quot;Validate&quot;, filePath: &quot;src/validators/order.ts&quot; })</code> → <code>&quot;step:src/validators/order.ts:validate&quot;</code></li>
+<li><strong>Domain node test</strong>:<br><code>normalizeNodeId(&quot;domain:order-management&quot;, { type: &quot;domain&quot;, name: &quot;Order Management&quot; })</code> → <code>&quot;domain:order-management&quot;</code> (R6‑R10)</li>
+<li><strong>Flow node test</strong>:<br><code>normalizeNodeId(&quot;flow:create-order&quot;, { type: &quot;flow&quot;, name: &quot;Create Order&quot; })</code> → <code>&quot;flow:create-order&quot;</code> (R14‑R18)</li>
+<li><strong>Step node tests</strong>:  <ul>
+<li>With <code>filePath</code>: <code>&quot;step:create-order:src/validators/order.ts:validate&quot;</code> (R22‑R27)  </li>
+<li>Without <code>filePath</code>: <code>&quot;step:validate&quot;</code> (R30‑R35)  </li>
+<li>Bare step name with <code>filePath</code>: <code>&quot;step:src/validators/order.ts:validate&quot;</code> (R38‑R44)</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
-<p>The added tests confirm that <code>normalizeNodeId</code> preserves existing IDs for domain and flow nodes and formats step node IDs correctly, including optional <code>filePath</code> handling. This provides a concrete regression guard for future changes to the normalization logic.</p>
+<p>Adds explicit coverage for <code>normalizeNodeId</code>, making changes to the helper immediately visible through test failures.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Implementation mismatch</strong>: If <code>normalizeNodeId</code> does not handle the step‑with‑filePath case, the corresponding test will fail; run the test suite to verify.  </li>
-<li><strong>Edge cases</strong>: Current tests cover typical patterns; consider adding cases for empty or malformed inputs if the function is expected to handle them.  </li>
-<li><strong>CI integration</strong>: Ensure the new test file is picked up by the <code>vitest</code> configuration and appears in coverage reports.</li>
+<li><strong>Regression risk</strong>: Refactoring <code>normalizeNodeId</code> may cause these tests to fail; run the full suite after changes.  </li>
+<li><strong>Test fragility</strong>: Tests depend on exact string outputs; any change in ID formatting conventions will require updates.  </li>
+<li><strong>Coverage gap</strong>: Only current ID patterns are exercised; consider adding edge cases (e.g., empty names or unsupported types) if the function evolves.</li>
 </ul>
 </article>
   </main>

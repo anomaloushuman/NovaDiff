@@ -26,40 +26,40 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/search.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:14:13.724Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:00:39.572Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/search.test.ts</code> (lines R1‑R158) validates the <code>SearchEngine</code> implementation. It defines a helper <code>makeNode</code>, a sample node set, and a suite of unit tests covering query handling, ranking, scoring, node updates, type filtering, and result limits.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/search.test.ts</code> (lines R1‑158) has been added. It imports <code>vitest</code> helpers, <code>SearchEngine</code>, and the <code>GraphNode</code> type, then defines a <code>makeNode</code> helper (R5‑R10) that supplies default values for <code>type</code>, <code>summary</code>, <code>tags</code>, and <code>complexity</code>. A sample graph of seven nodes (<code>sampleNodes</code>, R13‑57) covers files, classes, and functions with diverse tags.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports added</strong>: <code>vitest</code> helpers and <code>SearchEngine</code> from <code>../search.js</code> (R1‑R3).  </li>
-<li><strong><code>makeNode</code> helper</strong> (R5‑R10) constructs <code>GraphNode</code> objects with defaults.  </li>
-<li><strong>Sample node array</strong> (R13‑R57) includes diverse node types (file, class, function) and metadata (tags, summary).  </li>
-<li><strong>Test cases</strong> (R59‑R158) cover:  <ul>
-<li>Empty query handling (R60‑R64).  </li>
-<li>Exact and fuzzy name matching (R66‑R78).  </li>
-<li>Field‑wide search (summary, tags) (R80‑R94).  </li>
-<li>Ranking priority (R96‑R102).  </li>
-<li>Score bounds (R104‑R112).  </li>
-<li>Dynamic re‑indexing via <code>updateNodes</code> (R114‑R137).  </li>
-<li>Type‑based filtering (R139‑R151).  </li>
-<li>Result limiting (R153‑R157).</li>
+<li><strong>Imports</strong>: <code>vitest</code> (<code>R1</code>), <code>SearchEngine</code> (<code>R2</code>), <code>GraphNode</code> type (<code>R3</code>).  </li>
+<li><strong>Test data helper</strong>: <code>makeNode</code> creates fully‑formed <code>GraphNode</code> objects (R5‑R10).  </li>
+<li><strong>Sample nodes</strong>: seven nodes spanning <code>file</code>, <code>class</code>, and <code>function</code> types (R13‑57).  </li>
+<li><strong>Behavioral tests</strong> (R59‑158):  <ul>
+<li>Empty query returns <code>[]</code> (<code>R60‑64</code>).  </li>
+<li>Exact name match (<code>R66‑71</code>).  </li>
+<li>Fuzzy name match (<code>R73‑78</code>).  </li>
+<li>Cross‑field search on <code>summary</code> (<code>R80‑85</code>) and <code>tags</code> (<code>R87‑94</code>).  </li>
+<li>Name matches rank higher than summary matches (<code>R96‑102</code>).  </li>
+<li>Scores are normalized between 0 and 1 (<code>R104‑112</code>).  </li>
+<li><code>updateNodes</code> re‑indexes and includes new nodes (<code>R114‑137</code>).  </li>
+<li>Type filtering (<code>types: [&quot;function&quot;]</code>) (<code>R139‑150</code>).  </li>
+<li>Limit option (<code>limit: 1</code>) (<code>R153‑157</code>).</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Provides high‑confidence coverage for core search logic; many tests will fail if the API or scoring logic changes.  </li>
-<li><strong>Maintainability</strong>: Centralizes test data in <code>makeNode</code>, easing future test additions.  </li>
-<li><strong>Compatibility</strong>: No API changes; purely test‑only, so runtime behavior remains unchanged.</li>
+<li><strong>Coverage</strong>: Provides comprehensive checks of <code>SearchEngine</code>’s public API, guarding against regressions in scoring, filtering, and re‑indexing.  </li>
+<li><strong>Maintainability</strong>: Centralized <code>makeNode</code> reduces duplication for future node additions.  </li>
+<li><strong>No API change</strong>: Only test code; production exports remain unchanged.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression risk</strong>: Tests will fail if <code>SearchEngine</code> API or scoring logic changes.  </li>
-<li><strong>Test flakiness</strong>: Fuzzy matching tests rely on internal scoring thresholds; confirm stability after algorithm tweaks.  </li>
-<li><strong>Coverage gaps</strong>: Tests focus on positive paths; consider adding edge cases for malformed input or large node sets (unknown from the available diff/scan evidence).  </li>
-<li><strong>Performance impact</strong>: unknown from the available diff/scan evidence.</li>
+<li><strong>Regression risk</strong>: If the scoring algorithm or field indexing changes, several tests may fail. Run the full suite after core refactors.  </li>
+<li><strong>Test fragility</strong>: Defaults in <code>makeNode</code> (e.g., <code>type: &quot;file&quot;</code>) could mask missing fields in real data; verify that production nodes supply required properties.  </li>
+<li><strong>Coverage gaps</strong>: The suite does not exercise very large node sets or special characters; consider adding stress tests if performance tuning is planned.</li>
 </ul>
 </article>
   </main>

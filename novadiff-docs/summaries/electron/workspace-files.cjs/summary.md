@@ -1,28 +1,27 @@
-### Overview
-A new CommonJS module `electron/workspace-files.cjs` (lines 1‑85) exposes utilities for snapshot files used by the Electron renderer.
+### Overview  
+A new CommonJS module `electron/workspace-files.cjs` (R1‑85) adds snapshot‑file utilities for the Electron renderer. It exports two async functions: `listSnapshotFiles` and `readSnapshotTextFile`.
 
-### Key changes
-- **Imports** (R3‑R5): `fssync`, `fsp`, and `path` are required for synchronous existence checks, async I/O, and path resolution.  
-- **`SKIP_DIRS`** (R7‑R15): a `Set` containing `.git`, `node_modules`, `dist`, `build`, `target`, `.novadiff-graph`, and `snapshots` that the walker ignores.  
-- **`listSnapshotFiles(snapshotRoot, opts = {})`** (R17‑R60):  
-  - Resolves `snapshotRoot` (R18).  
-  - Uses `opts.maxFiles` (default 2500, R19).  
-  - Recursively walks the directory tree (R25‑R55), skipping hidden entries except `.env` (R39‑R42) and directories in `SKIP_DIRS` (R47‑R49).  
-  - Returns a sorted array of relative paths (R58).  
-- **`readSnapshotTextFile(snapshotRoot, relPath, maxBytes = 512 KB)`** (R61‑R80):  
-  - Validates `snapshotRoot` and `relPath` (R64‑R70).  
-  - Reads the file asynchronously (R71).  
-  - If the file exceeds `maxBytes`, returns the first `maxBytes` bytes, sets `truncated: true`, and reports the full size (R73‑R77).  
-  - Otherwise returns the full content with `truncated: false` (R79).  
-- **Exports** (R82‑R85): both functions are exported via `module.exports`.
+### Key changes  
+- **Imports** (R3‑R5): `node:fs`, `node:fs/promises`, and `node:path` are required for file system access and path resolution.  
+- **SKIP_DIRS** (R7‑R14): Directories such as `.git`, `node_modules`, `dist`, `build`, `target`, `.novadiff-graph`, and `snapshots` are excluded from traversal.  
+- **`listSnapshotFiles`** (R17‑R58):  
+  - Resolves the root with `path.resolve` (R18).  
+  - Limits to `maxFiles` (default 2500) (R19).  
+  - Recursively walks the tree, skipping hidden files except `.env` (R39‑R42) and directories in `SKIP_DIRS` (R47‑R49).  
+  - Returns a sorted array of relative paths with forward slashes (R58).  
+- **`readSnapshotTextFile`** (R61‑R80):  
+  - Validates `snapshotRoot` and `relPath`, rejecting paths containing `..` (R64‑R70).  
+  - Reads the file via `fsp.readFile` (R71).  
+  - Truncates content to `maxBytes` (default 512 KB) and reports `truncated` and `size` (R72‑R79).  
+- **Exports** (R82‑R85): Both functions are exported.
 
-### Impact
-- **Path safety**: validation prevents directory traversal (R64‑R70).  
-- **Memory guard**: large files are truncated to 512 KB (R73‑R77).  
-- **Centralization**: snapshot file logic is now in a single module, reducing duplication.
+### Impact  
+- **Correctness**: Path validation prevents directory traversal.  
+- **Safety**: Truncation to `maxBytes` limits memory usage.  
+- **Convenience**: Centralized snapshot utilities reduce duplication across the repo.
 
-### Risks & follow‑ups
-- **Directory skipping**: verify that nested `.git` and `node_modules` directories are correctly ignored.  
-- **Path validation**: test inputs with `..` or absolute paths to ensure the error is thrown.  
-- **Truncation threshold**: confirm 512 KB suits the intended use cases; adjust if larger files are common.  
-- **Edge cases**: add tests for empty roots, non‑existent files, and files exactly at the `maxBytes` limit.
+### Risks & follow‑ups  
+- **Large directories**: Verify that the `maxFiles` cap and async walk do not block the event loop.  
+- **Hidden file handling**: Ensure `.env` files remain accessible while other dotfiles are skipped.  
+- **Path traversal**: Test edge cases where `relPath` contains encoded `..` sequences.  
+- **Truncation logic**: Confirm that `maxBytes` truncation correctly reports `size` and `truncated` flags.

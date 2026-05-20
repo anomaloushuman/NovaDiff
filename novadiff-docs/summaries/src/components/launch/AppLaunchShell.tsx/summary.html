@@ -26,56 +26,38 @@
 <body>
   <header class="top">
     <h1>src/components/launch/AppLaunchShell.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:29:49.178Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:13:38.871Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>src/components/launch/AppLaunchShell.tsx</code> (lines 1‑76) is added. It implements a launch sequence state machine, reduced‑motion handling, and exposes a context for downstream components.</p>
+<p>A new component <code>src/components/launch/AppLaunchShell.tsx</code> is added to orchestrate the app launch sequence, providing a context, handling reduced‑motion preferences, and managing phase transitions.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Exports</strong>  <ul>
-<li><code>AppLaunchShellProps</code> (optional <code>chrome</code>, required <code>children</code>, optional <code>onPhaseChange</code>) – added at lines 13‑18.  </li>
-<li><code>AppLaunchShell</code> function – added at line 19.</li>
+<li><strong>Imports</strong>: Adds React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useMemo</code>, <code>useState</code>) and launch‑sequence utilities (<code>LAUNCH_REVEAL_MS</code>, <code>type LaunchPhase</code>, <code>markLaunchComplete</code>, <code>readLaunchSkipped</code>) plus <code>usePrefersReducedMotion</code>, <code>LaunchProvider</code>, <code>LaunchBoot</code>, and <code>launch.css</code>.  </li>
+<li><strong>Props interface</strong> (<code>AppLaunchShellProps</code>, lines 13‑18): optional <code>chrome</code>, required <code>children</code>, optional <code>onPhaseChange</code>.  </li>
+<li><strong>Component logic</strong> (<code>AppLaunchShell</code>, lines 19‑76):  <ul>
+<li>Determines <code>skipSequence</code> via reduced‑motion flag or persisted skip.  </li>
+<li>Manages <code>phase</code> (<code>boot</code>, <code>reveal</code>, <code>ready</code>) and <code>bootVisible</code> state.  </li>
+<li>Calls <code>markLaunchComplete</code> on boot exit and triggers <code>onPhaseChange</code>.  </li>
+<li>Provides context (<code>phase</code>, <code>skipSequence</code>, <code>brandReveal</code>) to descendants.  </li>
+<li>Computes motion‑related CSS classes and renders <code>LaunchBoot</code>, optional chrome panel, and children.</li>
 </ul>
 </li>
-<li><strong>Imports</strong> – added at lines 1‑11:  <ul>
-<li>React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useMemo</code>, <code>useState</code>).  </li>
-<li><code>LAUNCH_REVEAL_MS</code>, <code>LaunchPhase</code>, <code>markLaunchComplete</code>, <code>readLaunchSkipped</code> from <code>../../app/launchSequence</code>.  </li>
-<li><code>usePrefersReducedMotion</code> from <code>../../app/usePrefersReducedMotion</code>.  </li>
-<li><code>LaunchProvider</code> from <code>./LaunchContext</code>.  </li>
-<li><code>LaunchBoot</code> from <code>./LaunchBoot</code>.  </li>
-<li>CSS from <code>./launch.css</code>.</li>
-</ul>
-</li>
-<li><strong>State logic</strong> –  <ul>
-<li><code>skipSequence</code> is <code>true</code> when reduced motion is preferred or <code>readLaunchSkipped()</code> returns true.  </li>
-<li>Initial <code>phase</code> is <code>&quot;ready&quot;</code> if skipping, otherwise <code>&quot;boot&quot;</code>.  </li>
-<li><code>bootVisible</code> tracks whether the boot UI should be shown.</li>
-</ul>
-</li>
-<li><strong>Callbacks &amp; effects</strong> –  <ul>
-<li><code>onBootExitComplete</code> sets <code>bootVisible</code> to false, moves to <code>&quot;reveal&quot;</code>, and calls <code>markLaunchComplete()</code>.  </li>
-<li>An effect transitions from <code>&quot;reveal&quot;</code> to <code>&quot;ready&quot;</code> after <code>LAUNCH_REVEAL_MS</code>.  </li>
-<li>Another effect calls <code>onPhaseChange</code> whenever <code>phase</code> changes.</li>
-</ul>
-</li>
-<li><strong>Context</strong> – <code>LaunchProvider</code> supplies <code>{ phase, skipSequence, brandReveal }</code> where <code>brandReveal</code> is true for <code>&quot;reveal&quot;</code> or <code>&quot;ready&quot;</code>.  </li>
-<li><strong>Rendering</strong> – Conditionally shows <code>LaunchBoot</code>, an optional chrome panel with motion classes, and the children wrapped in a shell div.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds a launch flow that can skip the boot sequence when reduced motion is enabled or previously skipped.  </li>
-<li>Downstream consumers receive <code>skipSequence</code> and <code>brandReveal</code> in addition to <code>phase</code>.  </li>
-<li>New CSS classes (<code>is-launched</code>, <code>is-revealing</code>, <code>is-ready</code>) drive visual transitions.  </li>
-<li><code>markLaunchComplete()</code> is invoked after boot exit, setting the launch completion flag.</li>
+<li><strong>Behavior</strong>: Introduces a controlled launch flow that can skip the boot sequence if reduced motion is preferred or previously skipped.  </li>
+<li><strong>UI</strong>: Adds CSS classes (<code>is-launched</code>, <code>is-revealing</code>, <code>is-ready</code>) that affect visual transitions.  </li>
+<li><strong>API</strong>: Exposes <code>onPhaseChange</code> callback for external observers to react to phase changes.  </li>
+<li><strong>Performance</strong>: Adds a timeout (<code>LAUNCH_REVEAL_MS</code>) and state updates; negligible overhead but must be verified under heavy load.  </li>
+<li><strong>Compatibility</strong>: Requires <code>LaunchBoot</code> and <code>LaunchContext</code> to exist; missing imports will break the build.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>LAUNCH_REVEAL_MS</code>, <code>LaunchPhase</code>, <code>markLaunchComplete</code>, and <code>readLaunchSkipped</code> are exported from <code>launchSequence</code>.  </li>
-<li>Ensure <code>LaunchBoot</code> accepts an <code>onExitComplete</code> prop; otherwise a runtime error will occur.  </li>
-<li>Test that <code>skipSequence</code> correctly bypasses the boot UI and sets the phase to <code>&quot;ready&quot;</code>.  </li>
-<li>Confirm that existing <code>LaunchContext</code> consumers handle the new <code>brandReveal</code> flag without breaking.  </li>
-<li>Run the repo’s lint, test, and production build scripts to catch any type or runtime issues.</li>
+<li><strong>Missing CSS</strong>: Ensure <code>launch.css</code> defines the expected classes; otherwise transitions will be broken.  </li>
+<li><strong>Reduced‑motion handling</strong>: Verify that <code>usePrefersReducedMotion</code> correctly propagates and that <code>readLaunchSkipped</code> persists state across sessions.  </li>
+<li><strong>Phase callback</strong>: Test that <code>onPhaseChange</code> is invoked exactly once per phase transition and that consumers handle it safely.  </li>
+<li><strong>Context consumption</strong>: Confirm that child components consume <code>LaunchProvider</code> correctly; otherwise they may receive undefined context values.</li>
 </ul>
 </article>
   </main>

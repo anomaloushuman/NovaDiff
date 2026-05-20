@@ -1,13 +1,18 @@
 ### Overview
-The `cli/Cargo.toml` file is identical between the baseline commit `8e0dc031dcfc` and the current `NovaDiff` target. All 19 lines in the diff are marked as equal, indicating no modifications.
+A new crate `cli` is added with its Cargo.toml at `cli/Cargo.toml`. It defines a binary named `novadiff-cli` that points to `src/main.rs`.
 
 ### Key changes
-- No lines were added, removed, or altered; the file content is unchanged.
+- `[package]` section added (lines 1‑5): name, version, edition, description.  
+- Binary target declared via `[[bin]]` (lines 7‑9) pointing to `src/main.rs`.  
+- Dependencies listed (lines 11‑19): `regex`, `ignore`, `rayon`, `serde`, `serde_json`, `sha2`, `similar`, `walkdir`.
 
 ### Impact
-- Dependency resolution, build, and test processes remain the same.
-- The binary configuration (`[[bin]] name = "novadiff-cli" path = "src/main.rs"`) is unchanged, so the executable location is still `src/main.rs`.
+- Builds a new executable `novadiff-cli`; the workspace must now include the `cli` crate.  
+- Provides a command‑line interface for folder comparison, as described in the package description.  
+- Adds runtime dependencies that the binary will link against.
 
 ### Risks & follow‑ups
-- Since the file is unchanged, there is no regression risk from this diff.
-- Verify that the `src/main.rs` path is still valid within the overall project structure, but no action is required based solely on this file.
+- Ensure the Cargo workspace includes `cli` so `cargo build` compiles the binary.  
+- Run `cargo test` to confirm that the new dependencies do not break existing tests.  
+- Verify that `src/main.rs` compiles against the added crates.  
+- Monitor binary size and startup performance compared to previous releases.

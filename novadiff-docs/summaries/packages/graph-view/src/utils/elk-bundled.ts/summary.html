@@ -26,36 +26,35 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/elk-bundled.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:59:41.844Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:46:22.370Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/src/utils/elk-bundled.ts</code> (R1‑R35) adds a Vite/Electron‑friendly shim for the ELK layout engine. It declares typed constructors, resolves the UMD bundle’s export, and lazily loads the engine and its instance.</p>
+<p>New file <code>packages/graph-view/src/utils/elk-bundled.ts</code> (lines 1‑35) adds an ESM‑compatible shim for the ELK layout engine’s UMD bundle, enabling lazy loading in Vite/Electron contexts.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Type definitions</strong> (<code>R3‑R7</code>):  <ul>
-<li><code>ElkLayoutInstance</code> with a <code>layout(graph: unknown): Promise&lt;unknown&gt;</code> method.  </li>
-<li><code>ElkConstructor</code> as <code>new () =&gt; ElkLayoutInstance</code>.</li>
+<li><strong>Exported types</strong>  <ul>
+<li><code>ElkLayoutInstance</code> (lines 3‑5) – interface with <code>layout(graph: unknown): Promise&lt;unknown&gt;</code>.  </li>
+<li><code>ElkConstructor</code> (line 7) – constructor type returning <code>ElkLayoutInstance</code>.</li>
 </ul>
 </li>
-<li><strong><code>resolveElkConstructor</code></strong> (<code>R9‑R14</code>): inspects the imported module for <code>default</code> or <code>ELK</code>; throws an error if neither is a function.  </li>
-<li><strong><code>loadElkConstructor</code></strong> (<code>R19‑R25</code>): imports <code>elkjs/lib/elk.bundled.js</code> once, caches the constructor promise, and returns it.  </li>
-<li><strong><code>loadElk</code></strong> (<code>R30‑R35</code>): creates a single <code>ElkLayoutInstance</code> from the cached constructor, caching the instance promise.  </li>
-<li><strong>Shim comment</strong> (<code>R1</code>): explains the need for this file in Vite/Electron contexts where the UMD bundle lacks an ESM default export.</li>
+<li><strong><code>resolveElkConstructor</code></strong> (lines 9‑14) checks <code>mod.default</code> or <code>mod.ELK</code>; throws if neither is a function.  </li>
+<li><strong><code>loadElkConstructor</code></strong> (lines 19‑25) performs a single dynamic import of <code>&quot;elkjs/lib/elk.bundled.js&quot;</code> and caches the resulting promise (<code>ctorPromise</code>).  </li>
+<li><strong><code>loadElk</code></strong> (lines 30‑35) creates an <code>ElkLayoutInstance</code> by invoking the cached constructor and caches the instance promise (<code>instancePromise</code>).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: ensures the ELK constructor is resolved from the UMD bundle, throwing a clear error if missing.  </li>
-<li><strong>Performance</strong>: caches both constructor and instance promises, avoiding repeated imports or instantiations.  </li>
-<li><strong>Maintainability</strong>: centralizes ELK loading logic; other modules can import <code>loadElk</code> without bundler quirks.  </li>
-<li><strong>Compatibility</strong>: works with Vite/Electron setups that otherwise cannot import the UMD bundle as an ES module.</li>
+<li><strong>Correctness</strong>: <code>resolveElkConstructor</code> validates the constructor before use, preventing silent failures.  </li>
+<li><strong>Performance</strong>: Caching (<code>ctorPromise</code>, <code>instancePromise</code>) avoids repeated bundle loads, reducing startup time and memory usage.  </li>
+<li><strong>Maintainability</strong>: Centralizes ELK loading logic; other modules can <code>import { loadElk }</code> without handling UMD quirks.  </li>
+<li><strong>Compatibility</strong>: The file is a pure TS module with no side effects, suitable for both browser and Node environments.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import path resolution</strong>: verify that <code>elkjs/lib/elk.bundled.js</code> resolves correctly in all target environments.  </li>
-<li><strong>Error handling</strong>: ensure the thrown error message is surfaced to users when the bundle is missing or malformed.  </li>
-<li><strong>Caching correctness</strong>: test that repeated calls to <code>loadElk</code> return the same instance and that promise rejection propagates properly.  </li>
-<li><strong>Type safety</strong>: run TypeScript linting to confirm that the new types integrate cleanly with existing graph‑view code.</li>
+<li>Runtime failure if <code>&quot;elkjs/lib/elk.bundled.js&quot;</code> is missing or corrupted; callers should handle promise rejection.  </li>
+<li>Verify that the caching logic correctly prevents multiple imports across the application.  </li>
+<li>Ensure that the returned <code>ElkLayoutInstance</code> satisfies downstream expectations.  </li>
+<li>Test dynamic import behavior in Electron’s preload script.</li>
 </ul>
 </article>
   </main>

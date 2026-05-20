@@ -1,9 +1,9 @@
 {
   "relPath": "electron/main.cjs",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:17:00.602Z",
+  "generatedAt": "2026-05-20T04:27:44.553Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,42 +21,37 @@
     ],
     "changed_exports": [],
     "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
       "R4 added: const fssync = require(\"node:fs\");",
-      "L15 removed: const { runCompareEngine } = require(\"./compare-runner.cjs\");",
-      "R16 added: const { runCompareEngine, runCompareEngineAsync } = require(\"./compare-runner.cjs\");",
-      "R43 added: const { buildKnowledgeGraph } = require(\"./knowledge-graph-runner.cjs\");",
-      "R51 added: } = require(\"./git-service.cjs\");",
-      "R59 added: } = require(\"./github-service.cjs\");"
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { pathToFileURL } = require(\"node:url\");",
+      "R15 added: } = require(\"electron\");",
+      "R16 added: const { runCompareEngine, runCompareEngineAsync } = require(\"./compare-runner.cjs\");"
     ],
     "changed_line_ranges": [
-      "R4",
-      "L15 / R16-22",
-      "R43-82",
-      "R84-85",
-      "L168 / R217",
-      "L170 / R219",
-      "R227",
-      "L376 / R426"
+      "R1-1090"
     ],
     "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs/promises\");",
       "R4 added: const fssync = require(\"node:fs\");",
-      "L15 removed: const { runCompareEngine } = require(\"./compare-runner.cjs\");",
-      "R16 added: const { runCompareEngine, runCompareEngineAsync } = require(\"./compare-runner.cjs\");",
-      "R18 added: function sendEngineProgress(webContents, payload) {",
-      "R19 added: if (webContents && !webContents.isDestroyed()) {",
-      "R20 added: webContents.send(\"engine-progress\", payload);"
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { pathToFileURL } = require(\"node:url\");",
+      "R7 added: const {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function createWindow (110-511)",
-      "right function sendKnowledgeGraphProgress (566-800)",
-      "right function sendGithubAuthProgress (833-1058)",
-      "right function sendEngineProgress (18-102)",
-      "right function sendWorkspaceHistoryProgress (801-832)",
-      "right function createWindow (159-565)"
+      "right function createWindow (164-570)",
+      "right function sendGithubAuthProgress (838-1090)",
+      "right function sendKnowledgeGraphProgress (571-805)",
+      "right function sendEngineProgress (18-107)",
+      "right function sendWorkspaceHistoryProgress (806-837)",
+      "right function buildMenu (144-163)",
+      "right function windowStatePayload (118-128)",
+      "right function getTargetWindow (108-117)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

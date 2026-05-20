@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/file-summary-export.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/file-summary-export.cjs</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:20:37.036Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>electron/file-summary-export.cjs</code> is a new Electron module that writes and reads Markdown, HTML, and PDF summaries for file‑level and selection‑level diffs. It is added to the NovaDiff Electron side and exports four main functions plus <code>isReservedNovadiffRel</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><p>*<em>Imports &amp; setup</em></p>
+</li>
+<li><p>– <code>fs/promises</code>, <code>path</code>, <code>crypto</code>, <code>marked</code>, <code>htmlToPdfFile</code>, and <code>normalizeMarkdownDocument</code> are required (lines 3‑8). <code>marked.setOptions</code> is configured for GFM (line 10).  </p>
+</li>
+<li><p>*<em>Path handling</em></p>
+</li>
+<li><p>– <code>safeSummarySegments</code> (lines 55‑81) validates relative paths. <code>resolveSummaryDirAbs</code> (lines 90‑103), <code>resolveSelectionBaseDirAbs</code> (lines 114‑127), and <code>resolveSelectionDirAbs</code> (lines 130‑138) resolve directories, falling back to a SHA‑256 hash when paths are too long or invalid. <code>MAX_ABS</code> is set to 220 on Windows, 400 otherwise (line 84).  </p>
+</li>
+<li><p>*<em>Document builders</em></p>
+</li>
+<li><p>– <code>buildFileSummaryDocument</code> (lines 159‑216) and <code>buildSelectionSummaryDocument</code> (lines 217‑282) convert Markdown to HTML, inject Mermaid fences, and embed a script that signals PDF readiness.  </p>
+</li>
+<li><p>*<em>Export functions</em></p>
+</li>
+<li><p>– <code>exportFileSummaryArtifacts</code> (lines 294‑356) and <code>exportSelectionSummaryArtifacts</code> (lines 422‑490) write <code>summary.md</code>, <code>summary.html</code>, <code>summary.pdf</code>, and <code>meta.json</code>. PDF generation uses <code>htmlToPdfFile</code> (lines 344‑345, 478‑479) with <code>landscape: false</code>; any error is returned as <code>pdfWarning</code>.  </p>
+</li>
+<li><p>*<em>Read functions</em></p>
+</li>
+<li><p>– <code>readFileSummaryMarkdowns</code> (lines 365‑416) loads persisted file summaries, returning <code>badges</code> from <code>meta.summaryEvidence</code>.<br><code>readSelectionSummaryMarkdowns</code> (lines 498‑572) loads all selection artifacts under a given <code>relPath</code>, returning <code>label</code>, <code>selectionKey</code>, <code>requestedMode</code>, <code>effectiveMode</code>, <code>lineRanges</code>, <code>symbol</code>, <code>generatedAt</code>, <code>markdown</code>, and <code>htmlRelPath</code>. Results are sorted by <code>relPath</code> and <code>generatedAt</code>.  </p>
+</li>
+<li><p>*<em>Exports</em></p>
+</li>
+<li><p>– The module exports <code>exportFileSummaryArtifacts</code>, <code>readFileSummaryMarkdowns</code>, <code>exportSelectionSummaryArtifacts</code>, <code>readSelectionSummaryMarkdowns</code>, and <code>isReservedNovadiffRel</code> (lines 574‑580).</p>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><p>*<em>Correctness</em></p>
+</li>
+<li><p>– Path validation prevents accidental overwrites of reserved or malformed paths.  </p>
+</li>
+<li><p>*<em>Maintainability</em></p>
+</li>
+<li><p>– Centralized path resolution and document building reduce duplication.  </p>
+</li>
+<li><p>*<em>Observability</em></p>
+</li>
+<li><p>– <code>meta.json</code> and <code>summary.md</code> provide audit trails; PDF errors surface via <code>pdfWarning</code>.  </p>
+</li>
+<li><p>*<em>Performance</em></p>
+</li>
+<li><p>–</p>
+</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

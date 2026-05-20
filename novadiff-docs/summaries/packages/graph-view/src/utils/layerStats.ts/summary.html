@@ -26,44 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/layerStats.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:01:22.578Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:48:14.228Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/utils/layerStats.ts</code> is a new file that introduces a lightweight helper for summarizing a layer’s complexity. It replaces an older, expensive node‑filtering routine that was O(N × K) per layer.</p>
+<p>A new utility file <code>packages/graph-view/src/utils/layerStats.ts</code> (lines 1‑39) adds logic to compute statistics for a graph layer. It introduces a <code>Complexity</code> type, a <code>LayerStats</code> interface, and the <code>computeLayerStats</code> function.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>GraphNode</code> and <code>Layer</code> are imported from <code>@novadiff/graph-core/types</code> (line 1).  </li>
-<li><strong>Exports</strong> –  <ul>
-<li><code>Complexity</code> type (<code>&quot;simple&quot; | &quot;moderate&quot; | &quot;complex&quot;</code>) – line 3.  </li>
-<li><code>LayerStats</code> interface with <code>resolvedCount: number</code> and <code>aggregateComplexity: Complexity</code> – lines 5‑10.  </li>
-<li><code>computeLayerStats(layer: Layer, nodesById: Map&lt;string, GraphNode&gt;): LayerStats</code> – lines 20‑39.</li>
+<li><code>import type { GraphNode, Layer } from &quot;@novadiff/graph-core/types&quot;;</code> (R1) pulls core graph types.  </li>
+<li><code>export type Complexity = &quot;simple&quot; | &quot;moderate&quot; | &quot;complex&quot;;</code> (R3) defines three complexity buckets.  </li>
+<li><code>export interface LayerStats { resolvedCount: number; aggregateComplexity: Complexity; }</code> (R5‑10) exposes the result shape.  </li>
+<li><code>export function computeLayerStats(layer: Layer, nodesById: Map&lt;string, GraphNode&gt;): LayerStats</code> (R20‑39) iterates over <code>layer.nodeIds</code>, counts resolved nodes, tallies complexity buckets, and derives an aggregate label when a bucket exceeds 30 % of resolved nodes (threshold logic in R32‑37).</li>
 </ul>
-</li>
-<li><strong>Implementation</strong> –  <ul>
-<li>Iterates once over <code>layer.nodeIds</code>, looks up each node in <code>nodesById</code>.  </li>
-<li>Counts resolved nodes and tallies their <code>complexity</code> values.  </li>
-<li>Determines <code>aggregateComplexity</code> using a 30 % threshold:```ts
-const aggregateComplexity: Complexity =
-  counts.complex &gt; resolved * 0.3 ? &quot;complex&quot;
-  : counts.moderate &gt; resolved * 0.3 ? &quot;moderate&quot;
-  : &quot;simple&quot;;</li>
-</ul>
-</li>
-</ul>
-<p>```- Returns <code>{ resolvedCount: resolved, aggregateComplexity }</code>.  </p>
+<p>The implementation runs in <strong>O(layer.nodeIds.length)</strong>, replacing the former O(N × K) filter described in the comment block (R12‑19).</p>
 <h3>Impact</h3>
 <ul>
-<li><strong>Performance</strong> – O(<code>layer.nodeIds.length</code>) versus the prior O(N × K) approach that caused freezes on large graphs.  </li>
-<li><strong>Maintainability</strong> – Centralizes complexity logic; future threshold changes can be made in one place.  </li>
-<li><strong>Compatibility</strong> – No API changes to existing modules; the new file is an addition only.</li>
+<li><strong>Performance</strong>: Eliminates the super‑linear cost of filtering nodes per layer, reducing render times for large graphs.  </li>
+<li><strong>API surface</strong>: Provides a typed <code>LayerStats</code> object and a clear <code>Complexity</code> type, improving type safety.  </li>
+<li><strong>Maintainability</strong>: Centralizes complexity logic, reducing duplication.  </li>
+<li><strong>Observability</strong>: <code>resolvedCount</code> can be logged or displayed to detect incomplete node mappings.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that all callers now use <code>computeLayerStats</code> instead of the old filter logic.  </li>
-<li>Ensure every <code>GraphNode</code> in <code>nodesById</code> has a <code>complexity</code> property to avoid runtime errors.  </li>
-<li>Confirm that the 30 % threshold matches UI expectations; add tests for edge cases with low <code>resolvedCount</code>.  </li>
-<li>Run lint, unit tests, and the production build to catch any type‑safety or import issues introduced by the new file.</li>
+<li><strong>Node mapping correctness</strong>: If <code>nodesById</code> lacks entries, <code>resolvedCount</code> will be lower than expected; verify that all layers receive a complete map.  </li>
+<li><strong>Threshold logic</strong>: The 30 % rule is hard‑coded; confirm it matches business requirements and update tests if thresholds change.  </li>
+<li><strong>Integration</strong>: Ensure existing code that relied on the old O(N × K) logic now imports and uses <code>computeLayerStats</code> correctly.</li>
 </ul>
 </article>
   </main>

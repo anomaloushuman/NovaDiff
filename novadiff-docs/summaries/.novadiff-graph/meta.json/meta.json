@@ -1,24 +1,23 @@
 {
   "relPath": ".novadiff-graph/meta.json",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:35:36.762Z",
+  "generatedAt": "2026-05-20T04:17:36.797Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L2-3 / R2-3",
-      "L5 / R5"
+      "R1-6"
     ],
     "cited_changed_lines": [
-      "L2 removed: \"lastAnalyzedAt\": \"2026-05-19T20:52:49.662Z\",",
-      "L3 removed: \"gitCommitHash\": \"8e0dc031dcfc62a38f560a90bc881a8fd6655a51\",",
-      "R2 added: \"lastAnalyzedAt\": \"2026-05-19T22:32:24.542Z\",",
-      "R3 added: \"gitCommitHash\": \"46a8da0664d1dce2715e93ec6698cf67012b963f\",",
-      "L5 removed: \"analyzedFiles\": 324",
-      "R5 added: \"analyzedFiles\": 329"
+      "R1 added: {",
+      "R2 added: \"lastAnalyzedAt\": \"2026-05-20T01:19:05.928Z\",",
+      "R3 added: \"gitCommitHash\": \"6c333f6cf037bf75318c26081cae3324fdb89c64\",",
+      "R4 added: \"version\": \"1.0.0\",",
+      "R5 added: \"analyzedFiles\": 329",
+      "R6 added: }"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

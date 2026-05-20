@@ -1,24 +1,19 @@
 ### Overview  
-A new file `packages/graph-core/src/analyzer/tour-generator.ts` adds a lightweight tour‑generation system. It exports three functions and imports the `KnowledgeGraph` and `TourStep` types from `../types.js` (line 1). The functions are:
-
-- `buildTourGenerationPrompt` (lines 7‑62) – builds an LLM prompt that includes project metadata, node and edge lists, and layer information, and specifies a JSON response format.  
-- `parseTourGenerationResponse` (lines 70‑120) – extracts JSON from raw or fenced text, validates required fields, and returns an array of `TourStep`.  
-- `generateHeuristicTour` (lines 135‑293) – heuristically builds a tour using Kahn’s topological sort, groups nodes by layers when present, batches code nodes into steps, and appends a final “Key Concepts” step for concept nodes.
+`packages/graph-core/src/analyzer/tour-generator.ts` adds LLM‑based and heuristic tour generation for a knowledge graph. The file imports `KnowledgeGraph` and `TourStep` (line 1) and exports three functions.
 
 ### Key changes  
-- Import added: `KnowledgeGraph, TourStep` (line 1).  
-- Prompt construction, parsing, and heuristic generation functions added (lines 7‑62, 70‑120, 135‑293).  
-- Documentation comments added for each function.  
-- Topological sort handles isolated nodes and cycles by appending them after the main pass (lines 181‑186).  
-- Concept nodes are always appended last (lines 274‑285).
+- **`buildTourGenerationPrompt`** (lines 7‑62): builds a prompt that includes project metadata, node summaries, up to 50 edges, and layer info.  
+- **`parseTourGenerationResponse`** (lines 70‑120): extracts JSON from raw or markdown‑wrapped responses, validates required fields, and returns a `TourStep[]`. It returns an empty array on parse failure.  
+- **`generateHeuristicTour`** (lines 135‑293): creates a deterministic tour without an LLM. It separates concept nodes, builds adjacency maps, performs Kahn’s topological sort, groups nodes by layers when present, batches unlayered nodes in groups of three, and appends a final “Key Concepts” step. Order numbers are assigned sequentially.
 
 ### Impact  
-- **Algorithmic**: Uses Kahn’s algorithm (O(V+E)) for ordering code nodes.  
-- **Structure**: Centralizes prompt logic and parsing, reducing duplication.  
-- **Extensibility**: New functions are additive; existing exports remain unchanged.
+- **API surface**: Consumers can request tours via LLM or fallback to the deterministic heuristic.  
+- **Parsing robustness**: `parseTourGenerationResponse` guards against malformed responses, reducing runtime crashes.  
+- **Performance**: Topological sort runs in O(V+E); batching keeps step counts manageable for large graphs.  
+- **Maintainability**: Clear separation of prompt construction, response parsing, and heuristic logic simplifies future extensions.
 
 ### Risks & follow‑ups  
-- `parseTourGenerationResponse` silently returns an empty array on any parsing error (lines 117‑119); downstream code should handle empty tours.  
-- Layer ordering is derived from the topological sort; no evidence that layer dependencies are fully respected.  
-- Concept nodes are appended after all code nodes; if a concept node depends on code, the current ordering may mislead users.  
-- Prompt size grows with graph size; no evidence on token limits from the diff.
+- **LLM prompt size**: The prompt includes all nodes and up to 50 edges; token limits may be exceeded in very large projects (unknown from the diff).  
+- **Parsing edge cases**: The function returns an empty array on any parse error; unit tests should cover missing fields or non‑JSON responses (unknown from the diff).  
+- **Cycle handling**: Isolated nodes are appended after the topological sort; cycles are not explicitly detected, which could affect ordering (unknown from the diff).  
+- **Layer ordering**: The heuristic assumes layers are topologically sorted; verify that layer order aligns with dependency order in real projects (unknown from the diff).

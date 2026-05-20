@@ -26,39 +26,37 @@
 <body>
   <header class="top">
     <h1>src/components/GraphMetricsStrip.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:11:17.169Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:55:26.552Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>GraphMetricsStrip</code> is added at <code>src/components/GraphMetricsStrip.tsx</code>.<br>It renders a toggleable strip that visualizes workspace metrics (change mix, depth, imports, calls) and tables for the top extensions and roots.</p>
+<p>A new component <code>src/components/GraphMetricsStrip.tsx</code> (lines 1‑134) has been added.<br>It exports an interface <code>GraphMetricsStripProps</code> (lines 5‑15) and a function component <code>GraphMetricsStrip</code> (lines 17‑134) that renders a toggleable metrics strip.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File added</strong>: <code>src/components/GraphMetricsStrip.tsx</code> (lines 1‑134).  </li>
-<li><strong>Imports</strong> (lines 1‑3): <code>useState</code> from React, <code>DocWorkspaceMetrics</code> type, and <code>DocMermaidMount</code>.  </li>
-<li><strong>Props interface</strong> (lines 5‑15): <code>metrics</code>, <code>pieDef</code>, <code>depthDef</code>, <code>importDef</code>, <code>callDef</code>, <code>metricsChartsLoading</code>, <code>outlineLoading</code>, <code>topExtensions</code>, <code>topRoots</code>.  </li>
-<li><strong>Component implementation</strong> (lines 17‑134):  <ul>
-<li>Uses <code>useState</code> to track <code>open</code>.  </li>
-<li>Renders a button that toggles the strip (<code>aria-expanded={open}</code>).  </li>
-<li>When open, shows four <code>DocMermaidMount</code> charts with <code>definition</code>, <code>loading</code>, and <code>loadingLabel</code> props.  </li>
-<li>Displays two tables for <code>topExtensions</code> and <code>topRoots</code>.  </li>
-<li>Footer shows a count derived from <code>metrics.byKind</code>.</li>
+<li><strong>Imports</strong> – <code>useState</code> from React, <code>DocWorkspaceMetrics</code> type, and <code>DocMermaidMount</code> component are added (lines 1‑3).  </li>
+<li><strong>Props</strong> – <code>GraphMetricsStripProps</code> requires <code>metrics</code>, <code>pieDef</code>, <code>depthDef</code>, <code>importDef</code>, <code>callDef</code>, <code>metricsChartsLoading</code>, <code>outlineLoading</code>, <code>topExtensions</code>, and <code>topRoots</code>.  </li>
+<li><strong>State</strong> – local <code>open</code> state controls the strip’s visibility.  </li>
+<li><strong>Rendering</strong> –  <ul>
+<li>Two chart sections use <code>DocMermaidMount</code> with <code>pieDef</code> and <code>depthDef</code>.  </li>
+<li>Two additional charts use <code>importDef</code> and <code>callDef</code> with loading flags.  </li>
+<li>Two tables display the top 10 extensions and path roots.</li>
 </ul>
 </li>
-<li><strong>Styling</strong>: relies on CSS classes such as <code>kg-metrics-strip</code>, <code>kg-metrics-strip-toggle</code>, <code>kg-metrics-strip-body</code>, <code>kg-metrics-charts</code>, and <code>kg-metrics-tables</code>.</li>
+<li><strong>Footer</strong> – shows the total paths from <code>metrics.byKind</code> (line 127).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>No existing component is modified</strong>; the addition is non‑breaking.  </li>
-<li><strong>Data contract</strong>: callers must provide a <code>DocWorkspaceMetrics</code> object matching the expected shape; mismatches will surface at runtime.  </li>
-<li><strong>Dependencies</strong>: requires <code>DocMermaidMount</code> and the referenced CSS classes; missing assets will affect layout or chart rendering.  </li>
-<li><strong>Render cost</strong>: the strip is hidden by default, so the four Mermaid charts are only rendered after the user toggles it open.</li>
+<li><strong>UI</strong> – introduces an interactive metrics panel that can be toggled by users.  </li>
+<li><strong>Dependencies</strong> – requires the <code>DocMermaidMount</code> component and CSS classes such as <code>kg-metrics-strip</code>, <code>doc-workspace-chart</code>, etc.  </li>
+<li><strong>Performance</strong> – rendering multiple <code>DocMermaidMount</code> instances may increase load time; loading flags are provided.  </li>
+<li><strong>Type safety</strong> – the new interface ensures callers supply a <code>DocWorkspaceMetrics</code> object and string definitions.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>DocMermaidMount</code> correctly handles the <code>loading</code> and <code>loadingLabel</code> props; otherwise charts may not appear.  </li>
-<li>Ensure the footer’s <code>metrics.byKind</code> aggregation matches the actual <code>metrics</code> structure; a mismatch will break the path count.  </li>
-<li>Test the toggle logic for accessibility (e.g., <code>aria-expanded</code> state).  </li>
-<li>Confirm that the CSS classes (<code>kg-metrics-strip</code>, <code>kg-metrics-charts</code>, etc.) exist in the global stylesheet; missing classes will break layout.</li>
+<li>Unknown from the available diff whether <code>DocMermaidMount</code> exists and accepts the used props.  </li>
+<li>Unknown if <code>metrics.byKind</code> contains numeric values; otherwise the footer may display <code>NaN</code>.  </li>
+<li>Unknown if the referenced CSS classes are defined, which could affect layout.  </li>
+<li>Unknown if the toggle behavior updates state correctly and unmounts cleanly.</li>
 </ul>
 </article>
   </main>

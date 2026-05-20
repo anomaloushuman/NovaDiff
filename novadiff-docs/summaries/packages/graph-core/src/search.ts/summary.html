@@ -26,44 +26,44 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/search.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:42:45.520Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:27:32.155Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-core/src/search.ts</code> adds a lightweight full‑text search engine built on <strong>Fuse.js</strong>.<br>It exports three symbols:  </p>
-<ul>
-<li><code>SearchResult</code> (R4‑7) – `{ nodeId: string; score: number; /</li>
-</ul>
-<ul>
-<li>0 = perfect, 1 = worst */ }`</li>
-</ul>
-<ul>
-<li><code>SearchOptions</code> (R9‑12) – <code>{ types?: GraphNode[&quot;type&quot;][]; limit?: number; }</code>  </li>
-<li><code>SearchEngine</code> (R27‑65) – a class that indexes an array of <code>GraphNode</code> objects.</li>
-</ul>
+<p>A new <code>search.ts</code> module is added under <code>packages/graph-core/src</code>. It introduces a lightweight full‑text search layer powered by <strong>Fuse.js</strong> for <code>GraphNode</code> objects.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>Fuse</code> and <code>IFuseOptions</code> from <em>fuse.js</em> (R1) and <code>GraphNode</code> from <code>./types.js</code> (R2).  </li>
-<li><strong>Fuse configuration</strong> (R14‑25): keys with weights, <code>threshold: 0.4</code>, <code>includeScore: true</code>, <code>ignoreLocation: true</code>, <code>useExtendedSearch: true</code>.  </li>
-<li><strong>SearchEngine</strong>:  <ul>
-<li><code>constructor(nodes)</code> stores the nodes and builds a Fuse index.  </li>
-<li><code>search(query, options?)</code> trims the query, turns space‑separated tokens into an OR‑style extended query (<code>&quot;a b&quot; → &quot;a | b&quot;</code>), runs Fuse, filters by <code>options.types</code> if supplied, limits to <code>options.limit</code> (default 50), and maps results to <code>SearchResult</code>.  </li>
+<li><strong>Imports</strong> (R1‑R2): <code>Fuse</code> and <code>IFuseOptions</code> from *fuse.js</li>
+</ul>
+<ul>
+<li>and <code>GraphNode</code> from <code>./types.js</code>.</li>
+</ul>
+<ul>
+<li><strong>Interfaces</strong> (R4‑R7, R9‑R12):  <ul>
+<li><code>SearchResult</code> exposes <code>nodeId</code> and <code>score</code> (0 = perfect match, 1 = worst).  </li>
+<li><code>SearchOptions</code> allows optional <code>types</code> filtering and a <code>limit</code>.</li>
+</ul>
+</li>
+<li><strong>Fuse configuration</strong> (R14‑R25): <code>FUSE_OPTIONS</code> sets key weights, threshold, and enables extended search.  </li>
+<li><strong><code>SearchEngine</code> class</strong> (R27‑R65):  <ul>
+<li>Stores <code>nodes</code> and a <code>Fuse</code> instance.  </li>
+<li><code>search(query, options?)</code> trims the query, joins tokens with <code>|</code> for OR matching, runs Fuse, filters by <code>types</code>, limits results, and maps to <code>SearchResult</code>.  </li>
 <li><code>updateNodes(nodes)</code> rebuilds the internal index.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: deterministic scoring (0–1) and filtering by type.  </li>
-<li><strong>Maintainability</strong>: all search logic resides in a single module; changes to <code>FUSE_OPTIONS</code> propagate automatically.  </li>
-<li><strong>Compatibility</strong>: introduces a runtime dependency on <code>fuse.js</code>; no existing public APIs are altered.</li>
+<li><strong>Functionality</strong>: Provides a public search API for graph nodes, enabling UI search bars and tooling.  </li>
+<li><strong>Compatibility</strong>: Requires adding <em>fuse.js</em> to dependencies; no breaking changes to existing modules.  </li>
+<li><strong>Observability</strong>: No new logs; results are deterministic based on Fuse scoring.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Dependency missing</strong>: ensure <code>fuse.js</code> is listed in <code>package.json</code> and bundled.  </li>
-<li><strong>Type mismatches</strong>: <code>GraphNode</code> must expose <code>id</code>, <code>type</code>, <code>name</code>, <code>tags</code>, <code>summary</code>, and <code>languageNotes</code> as used in the Fuse keys.  </li>
-<li><strong>Threshold tuning</strong>: the chosen <code>0.4</code> may affect recall; benchmark if needed.  </li>
-<li><strong>Extended search behavior</strong>: the OR logic could match unintended tokens; validate with edge‑case queries.</li>
+<li><strong>Dependency version</strong>: Ensure <em>fuse.js</em> is pinned to a compatible major version.  </li>
+<li><strong>Score interpretation</strong>: <code>score</code> is inverted (0 = perfect); confirm consumers handle this convention.  </li>
+<li><strong>Type safety</strong>: <code>GraphNode[&quot;type&quot;]</code> filtering assumes <code>type</code> exists; verify all node shapes meet this contract.  </li>
+<li><strong>Performance regression</strong>: unknown from the available diff/scan evidence; benchmark search on the largest graph to confirm acceptable latency and memory usage.</li>
 </ul>
 </article>
   </main>

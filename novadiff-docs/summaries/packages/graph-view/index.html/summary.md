@@ -1,21 +1,19 @@
-### Overview  
-A new `packages/graph-view/index.html` file has been added (lines R1‑R19). It establishes a minimal HTML5 page that loads Google Fonts, mounts a React app, and links a favicon.
+### Overview
+A new file `packages/graph-view/index.html` was added (lines 1‑19). It serves as the static entry point for the graph view component.
 
-### Key changes  
-- **File addition**: `packages/graph-view/index.html` now exists.  
-- **Meta tags**: `charset="UTF-8"`, `viewport="width=device-width, initial-scale=1.0"`, and a favicon link to `/favicon.svg`.  
-- **Font preconnects**: `<link rel="preconnect" href="https://fonts.googleapis.com">` and `<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`.  
-- **Font stylesheet**: loads `DM Serif Display`, `Inter`, and `JetBrains Mono` with `display=swap`.  
-- **Root element**: `<div id="root"></div>` for React rendering.  
-- **Script entry**: `<script type="module" src="/src/main.tsx"></script>`.
+### Key changes
+- Full HTML5 boilerplate: `<!doctype html>`, `<html lang="en">`, `<head>`, `<meta charset="UTF-8">`, `<meta name="viewport" content="width=device-width, initial-scale=1.0">`, `<link rel="icon" type="image/svg+xml" href="/favicon.svg">`.
+- Title `<title>NovaDiff Knowledge Graph</title>` and Google Fonts preconnects with a stylesheet link for DM Serif Display, Inter, and JetBrains Mono.
+- `<div id="root"></div>` as the mount point for the React app.
+- `<script type="module" src="/src/main.tsx"></script>` points to the bundle entry.
 
-### Impact  
-- Provides a clean bootstrap for the graph‑view package.  
-- Centralizes meta and script configuration, simplifying future edits.  
-- Preconnects to Google Fonts may reduce font‑loading latency (common practice).  
+### Impact
+- Provides a dedicated HTML page that can be loaded directly, independent of client‑side routing.
+- The script source `/src/main.tsx` must be resolved by the bundler; misconfiguration will break the page.
+- No existing source files were modified; the change is isolated to the new entry point.
 
-### Risks & follow‑ups  
-- **Asset paths**: Verify that `/favicon.svg` and `/src/main.tsx` resolve correctly in the deployed environment.  
-- **Font availability**: Ensure the specified families are accessible and that `display=swap` behaves as expected.  
-- **Server routing**: Confirm that the server serves this file for the `/graph-view` route and that no other route conflicts occur.  
-- **Build pipeline**: Check that the new file is included in the build artifacts and copied to the correct output directory.
+### Risks & follow‑ups
+- Verify that the new `index.html` is copied to the correct output directory during the build; otherwise the route will return 404.
+- Confirm that `main.tsx` mounts to `#root`; a mismatch will prevent rendering.
+- Ensure the bundler’s public path aligns with `/src/main.tsx`; otherwise the module may fail to load.
+- Run a quick manual test to confirm fonts load, favicon displays, and the graph view renders correctly.

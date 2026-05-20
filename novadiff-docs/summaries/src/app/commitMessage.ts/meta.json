@@ -1,0 +1,53 @@
+{
+  "relPath": "src/app/commitMessage.ts",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:40:40.684Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R7 added: export function buildCommitMessageContext(",
+      "R33 added: export function parseCommitMessageOutput(raw: string): {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { DocWorkspaceMetrics } from \"./docWorkspaceMetrics\";",
+      "R2 added: import type { FileChange } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-59"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { DocWorkspaceMetrics } from \"./docWorkspaceMetrics\";",
+      "R2 added: import type { FileChange } from \"./types\";",
+      "R4 added: const MAX_PATHS = 90;",
+      "R6 added: /** Compact change list for the commit-message LLM prompt. */",
+      "R7 added: export function buildCommitMessageContext(",
+      "R8 added: metrics: DocWorkspaceMetrics,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function parseCommitMessageOutput (33-59)",
+      "right function buildCommitMessageContext (7-32)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,18 +1,26 @@
-### Overview
-A new entry point file `packages/graph-view/src/index.ts` was added. It re‑exports the `NovaDiffGraphExplorer` component and its related types from `./NovaDiffGraphExplorer`.
+### Overview  
+A new entry point `packages/graph-view/src/index.ts` has been added.  
+The file re‑exports the `NovaDiffGraphExplorer` component and its related types from `./NovaDiffGraphExplorer`.
 
-### Key changes
-- Exported component: `export { NovaDiffGraphExplorer } from "./NovaDiffGraphExplorer";` (lines 1‑1)
-- Exported types: `export type { NovaDiffGraphExplorerProps, NovaDiffGraphDiffOverlay } from "./NovaDiffGraphExplorer";` (lines 2‑5)
+### Key changes  
+- **File added:** `packages/graph-view/src/index.ts` (lines R1‑R5).  
+- **Exports added:**  
+  ```ts
+  export { NovaDiffGraphExplorer } from "./NovaDiffGraphExplorer";
+  export type {
+    NovaDiffGraphExplorerProps,
+    NovaDiffGraphDiffOverlay,
+  } from "./NovaDiffGraphExplorer";
+  ```
+- No other files were modified.
 
-### Impact
-- Public API: Consumers can import `NovaDiffGraphExplorer`, `NovaDiffGraphExplorerProps`, and `NovaDiffGraphDiffOverlay` directly from the graph‑view package.
-- Type safety: The type exports provide compile‑time checks and IDE autocompletion for the component’s props and overlay.
-- Runtime: No functional changes; the file only re‑exports existing symbols.
-- Build: The new file will be part of the TypeScript compilation and bundled output.
+### Impact  
+- Provides a public API surface for the graph view; consumers can import `NovaDiffGraphExplorer`, `NovaDiffGraphExplorerProps`, and `NovaDiffGraphDiffOverlay` directly from the package.  
+- The new file must be included in the TypeScript compilation (e.g., via `tsconfig.json`) and referenced in the package’s `exports` field if conditional exports are used.  
+- No runtime behavior of existing modules is altered; the change is purely an API addition.  
+- Documentation should be updated to reflect the new exports.
 
-### Risks & follow‑ups
-- Verify that the exported names do not collide with existing exports in the package.
-- Update documentation (README, API docs) to reflect the new exports.
-- Add tests that import the component via the new entry point to confirm the re‑export works.
-- Confirm that bundlers correctly tree‑shake unused exports; no unintended side effects are expected.
+### Risks & follow‑ups  
+- Verify that `packages/graph-view/package.json` lists the new file in its `exports` or `main` field.  
+- Run the test suite to confirm that importing `NovaDiffGraphExplorer` and its types works without type errors.  
+- Ensure that the added types do not shadow existing symbols and that consumers can reference them without conflict.

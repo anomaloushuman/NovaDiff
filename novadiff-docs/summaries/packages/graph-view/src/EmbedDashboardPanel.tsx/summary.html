@@ -26,35 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/EmbedDashboardPanel.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:47:21.829Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:17:02.780Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Adds a new embeddable dashboard panel component (<code>EmbedDashboardPanel</code>) with full chrome and project‑wide class depth to <code>packages/graph-view/src</code>.</p>
+<p>A new file <code>packages/graph-view/src/EmbedDashboardPanel.tsx</code> adds an embed dashboard panel. It imports React hooks, <code>ReactFlowProvider</code>, Flow CSS, <code>GraphIssue</code> type, <code>DashboardContent</code>, <code>useDashboardStore</code>, <code>ThemeProvider</code>, and <code>NOVADIFF_EMBED_THEME</code>. The panel renders dashboard content inside a resizable container.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: React hooks, <code>ReactFlowProvider</code>, <code>@xyflow/react</code> CSS, <code>GraphIssue</code> type, <code>DashboardContent</code>, <code>useDashboardStore</code>, <code>ThemeProvider</code>, and <code>NOVADIFF_EMBED_THEME</code>.</li>
-<li><strong><code>FlowDimensions</code> type</strong> and **<code>EmbedSizedDashboard</code>*</li>
-</ul>
-<ul>
-<li>component that uses a <code>ResizeObserver</code> to set the pane’s width/height.</li>
-</ul>
-<ul>
-<li><strong><code>EmbedDashboardPanelProps</code></strong> interface exposing optional <code>accessToken</code> and <code>graphIssues</code>.</li>
-<li><strong><code>EmbedDashboardPanel</code></strong> pulls <code>graph</code> from the store, wraps content in <code>ThemeProvider</code> with <code>NOVADIFF_EMBED_THEME</code>, and conditionally renders the sized dashboard or a “Preparing graph…” overlay.</li>
-<li>Default values: <code>accessToken=&quot;__novadiff__&quot;</code> and <code>graphIssues=[]</code>.</li>
+<li><strong>Imports (R5‑R10)</strong>: added <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React; <code>ReactFlowProvider</code> from <code>@xyflow/react</code>; Flow CSS; <code>GraphIssue</code> type; <code>DashboardContent</code>; <code>useDashboardStore</code>; <code>ThemeProvider</code>; <code>NOVADIFF_EMBED_THEME</code>.  </li>
+<li><strong><code>EmbedSizedDashboard</code> (R16‑R63)</strong>: new component that measures its host div with a <code>ResizeObserver</code> and passes <code>width</code>/<code>height</code> to <code>ReactFlowProvider</code>.  </li>
+<li><strong><code>EmbedDashboardPanelProps</code> (R64‑R68)</strong>: interface exposing optional <code>accessToken</code> and <code>graphIssues</code>.  </li>
+<li><strong><code>EmbedDashboardPanel</code> (R69‑R95)</strong>: uses <code>useDashboardStore</code> to get <code>graph</code>; wraps content in <code>ThemeProvider</code>; conditionally renders <code>EmbedSizedDashboard</code> with <code>DashboardContent</code> or a loading overlay.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Global CSS import <code>@xyflow/react/dist/style.css</code> may interfere with existing styles.</li>
-<li><code>ResizeObserver</code> usage could affect performance or require a polyfill on older browsers.</li>
-<li>The placeholder <code>accessToken</code> must be overridden for authenticated usage; otherwise requests may fail or expose data.</li>
-<li>Component depends on <code>useDashboardStore</code>; it will error if rendered outside the store provider.</li>
-<li>New public surface requires documentation and tests to cover its API and rendering behavior.</li>
+<li><strong>Bundle size</strong>: includes <code>@xyflow/react</code> and its CSS.  </li>
+<li><strong>Performance</strong>: <code>ResizeObserver</code> may trigger frequent updates; dimensions are memoized.  </li>
+<li><strong>Styling</strong>: Flow CSS import is required; missing it will break layout.  </li>
+<li><strong>API surface</strong>: new component and props must be imported from the new file.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>**Style conflicts</li>
+<li>Verify <code>@xyflow/react</code> is a dependency and its CSS is bundled.  </li>
+<li>Ensure <code>useDashboardStore</code> provides a <code>graph</code> before rendering; otherwise the overlay may flicker.  </li>
+<li>Test the component with <code>NOVADIFF_EMBED_THEME</code> in light and dark modes.  </li>
+<li>Confirm <code>ro.disconnect()</code> runs on unmount to avoid memory leaks.</li>
 </ul>
 </article>
   </main>

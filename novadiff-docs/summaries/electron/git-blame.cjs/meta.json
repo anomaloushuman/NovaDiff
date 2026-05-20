@@ -1,9 +1,9 @@
 {
   "relPath": "electron/git-blame.cjs",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T17:31:41.503Z",
+  "generatedAt": "2026-05-20T04:22:51.947Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,36 +11,36 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "R3 added: const { spawnSync } = require(\"node:child_process\");"
+    ],
     "changed_line_ranges": [
-      "L5 / R5",
-      "L8-11",
-      "L41-42 / R37-38",
-      "L44-45 / R40-42",
-      "L47 / R44",
-      "L52-56 / R49-57",
-      "L58 / R59-65",
-      "L62 / R69-74"
+      "R1-83"
     ],
     "cited_changed_lines": [
-      "L5 removed: /** @type {Map<string, { lineAuthors: string[]; owners: Array<{ author: string; lineCount: number; ratio: number }> }>} */",
+      "R1 added: \"use strict\";",
+      "R3 added: const { spawnSync } = require(\"node:child_process\");",
       "R5 added: /** @type {Map<string, object>} */",
-      "L8 removed: function cacheKey(root, relPath) {",
-      "L9 removed: return `${root}::${relPath}`;",
-      "L10 removed: }",
-      "L41 removed: function blameFileOwnership(root, relPath) {"
+      "R6 added: const blameCache = new Map();",
+      "R8 added: function parseBlamePorcelain(stdout) {",
+      "R9 added: const lines = String(stdout ?? \"\").split(/\\r?\\n/);"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function blameFileOwnership (41-67)",
-      "left function cacheKey (8-11)",
       "right function blameFileAtRef (37-78)",
+      "right function parseBlamePorcelain (8-36)",
       "right function blameFileOwnership (79-83)"
     ],
     "verification_hints": [

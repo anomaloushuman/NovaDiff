@@ -26,30 +26,42 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/diff-overlay.json</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:33:25.344Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:16:01.179Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>diff-overlay.json</code> was regenerated on <strong>2026‑05‑19T22:18:08.136Z</strong> (R4), replacing the previous timestamp (L4). The overlay now contains a leaner set of files, focusing on core runtime and diff‑visualization modules while removing legacy language, persistence, and UI components.</p>
+<p>A new file, <code>.novadiff-graph/diff-overlay.json</code>, was added to the repository (change kind: added, lines 1‑156). It contains metadata for the current diff run.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Timestamp</strong> – <code>generatedAt</code> updated to 2026‑05‑19T22:18:08.136Z (R4).  </li>
-<li><strong>File list</strong> – only core runtime modules (<code>electron</code>, <code>graph‑view</code>, <code>packages/graph‑core</code>) remain; test, config, build, and legacy UI files such as <code>README.md</code>, <code>THIRD_PARTY_NOTICES.md</code>, and <code>electron/compare-runner.cjs</code> were removed (L10‑22, L25‑26).  </li>
-<li><strong>Node pruning</strong> – <code>changedNodeIds</code> now contains only essential runtime functions; most function‑level nodes were dropped (L183‑184 / R14).  </li>
-<li><strong>Affected nodes</strong> – <code>affectedNodeIds</code> array is now empty, indicating no nodes are marked as affected by these removals (L187‑198).  </li>
-<li><strong>Build artifacts</strong> – files like <code>vite-env.d.ts</code>, <code>tsconfig.json</code>, and <code>vite.config.ts</code> were removed (L10‑22).</li>
+<li><strong>File addition</strong>: <code>.novadiff-graph/diff-overlay.json</code> now exists.  </li>
+<li><strong>Metadata fields</strong>:  <ul>
+<li><code>&quot;version&quot;: &quot;1.0.0&quot;</code> (R2)  </li>
+<li><code>&quot;baseBranch&quot;: &quot;novadiff-compare&quot;</code> (R3)  </li>
+<li><code>&quot;generatedAt&quot;: &quot;2026-05-20T01:19:05.929Z&quot;</code> (R4)</li>
+</ul>
+</li>
+<li><strong>Changed files list</strong> (<code>&quot;changedFiles&quot;</code> array, R5‑6): includes entries such as  <ul>
+<li><code>electron/main.cjs</code>  </li>
+<li><code>packages/graph-view/src/App.tsx</code>  </li>
+<li><code>src/App.tsx</code><br>(the array lists all files touched in this diff).</li>
+</ul>
+</li>
+<li><strong>Changed node IDs</strong> (<code>&quot;changedNodeIds&quot;</code> array, R36‑154): a comprehensive list of file‑ and function‑level identifiers that were affected.  </li>
+<li><strong>Affected node IDs</strong> (<code>&quot;affectedNodeIds&quot;</code> array, R155‑156): empty, indicating no nodes were explicitly marked beyond the changed ones.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Smaller overlay</strong> – fewer files and nodes reduce payload size.  </li>
-<li><strong>Focused feature set</strong> – the overlay tracks only core workspace and diff visualization, omitting legacy language support, persistence logic, and many UI components.  </li>
-<li><strong>Build configuration</strong> – removal of build artifacts requires updating build scripts to match the new structure.</li>
+<li><strong>Data source</strong>: Consumers can read this JSON to determine which files and nodes changed.  </li>
+<li><strong>Versioning</strong>: The <code>&quot;version&quot;</code> field allows future consumers to adapt to schema changes.  </li>
+<li><strong>Timestamping</strong>: <code>&quot;generatedAt&quot;</code> provides a deterministic point for caching or debugging.  </li>
+<li><strong>Backward compatibility</strong>: Existing code that ignores this file remains unaffected; new consumers must handle its absence gracefully.</li>
 </ul>
-<h3>Risks &amp; follow-ups</h3>
+<h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Legacy functionality</strong> – removal of language, persistence, and UI modules may affect integrations that rely on those features.  </li>
-<li><strong>Placeholder handling</strong> – empty entries were inserted for removed files; verify that downstream tooling can handle these placeholders (unknown from the available diff).  </li>
-<li><strong>Testing</strong> – run targeted tests for the remaining runtime modules and perform a smoke test on the diff visualization to ensure no regressions.</li>
+<li><strong>Consumer compatibility</strong>: Verify that modules expecting a pre‑existing overlay file handle the new file correctly.  </li>
+<li><strong>Performance</strong>: Loading a large <code>&quot;changedNodeIds&quot;</code> array could impact startup; benchmark if necessary.  </li>
+<li><strong>Test coverage</strong>: Run targeted tests that read <code>diff-overlay.json</code> and confirm the node lists match expectations.  </li>
+<li><strong>Documentation</strong>: Update any README or API docs that reference diff metadata to include the new file and its schema.</li>
 </ul>
 </article>
   </main>

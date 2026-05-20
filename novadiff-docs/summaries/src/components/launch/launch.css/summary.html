@@ -26,30 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/launch/launch.css</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:32:24.746Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:15:44.937Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/components/launch/launch.css</code> (531 lines, R1‑531) was added. It defines a TRON‑style launch sequence with many animations, gradients, and a reduced‑motion fallback.</p>
+<p>A new stylesheet <code>src/components/launch/launch.css</code> (added 531 lines, range R1‑531) introduces a TRON‑inspired launch overlay. The diff shows the addition of a comment header and a set of new classes such as <code>.launch-boot</code>, <code>.launch-boot-grid</code>, <code>.launch-boot-scan</code>, <code>.launch-boot-frame</code>, and <code>.launch-boot-logo-ring</code>, along with modifiers <code>.is-exiting</code> and <code>.is-hold</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>New classes</strong>: <code>.launch-boot</code>, <code>.launch-boot-grid</code>, <code>.launch-boot-scan</code>, <code>.launch-boot-frame</code>, <code>.launch-boot-logo-ring</code>, <code>.launch-boot-continue</code>, <code>.launch-boot-line-placeholder</code>, <code>.launch-boot-copy</code>, <code>.launch-boot-progress</code>, <code>.launch-boot-corners span</code>, <code>.typewriter-cursor</code>, and several <code>.app-shell</code> panel visibility rules.  </li>
-<li><strong>Keyframe animations</strong>: <code>launch-continue-in</code>, <code>launch-grid-in</code>, <code>launch-scan-sweep</code>, <code>launch-frame-in</code>, <code>launch-logo-pulse</code>, <code>typewriter-blink</code>, <code>launch-fly-left/right/up/down</code>, <code>launch-sheen</code>, <code>launch-brand-in</code>, <code>launch-chip-in</code>.  </li>
-<li><strong>Reduced‑motion media query</strong> (<code>@media (prefers-reduced-motion: reduce)</code>) disables animations and sets opacity for non‑launched panels.  </li>
-<li><strong>Sidebar launch animations</strong> for <code>.sidebar-feature</code>, <code>.sidebar-section</code>, and <code>.sidebar-user</code> with staggered delays.</li>
+<li><strong>Component styles</strong> – new selectors for the overlay, grid, scan line, frame, and logo ring.  </li>
+<li><strong>Keyframes</strong> – <code>launch-continue-in</code>, <code>launch-grid-in</code>, <code>launch-scan-sweep</code>, <code>launch-frame-in</code>, <code>launch-logo-pulse</code>, and <code>typewriter-blink</code>.  </li>
+<li><strong>Panel transitions</strong> – <code>.app-shell.is-revealing .launch-panel--*</code> use <code>launch-fly-*</code> animations for chrome, side, main, and insights panels.  </li>
+<li><strong>Sidebar brand</strong> – <code>.sidebar.sidebar--launch .sidebar-brand</code> and <code>.sidebar-feature</code> receive <code>launch-brand-in</code> and <code>launch-chip-in</code> animations with staggered delays (0.35 s, 0.44 s, etc.).  </li>
+<li><strong>Reduced‑motion support</strong> – a media query disables all animations and forces opacity to 1 for the launch panel when <code>prefers-reduced-motion</code> is active.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds CSS for the launch UI; size unknown from the diff.  </li>
-<li>Uses <code>color-mix</code>, radial gradients, and multiple animations, which may increase GPU load during launch.  </li>
-<li>No runtime behavior changes—only styling.</li>
+<li><strong>UI/UX</strong> – provides a fully animated launch experience visible only during app start; runtime impact is limited to that window.  </li>
+<li><strong>Maintainability</strong> – styles are scoped to the <code>launch</code> namespace, reducing global CSS bleed.  </li>
+<li><strong>Performance</strong> – unknown from the diff; the file contains many <code>transform</code>, <code>filter</code>, and <code>box-shadow</code> rules that may increase GPU load during launch.  </li>
+<li><strong>Compatibility</strong> – uses modern CSS features (<code>color-mix</code>, <code>inset</code>, <code>mask-image</code>); fallback may be needed for older browsers.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import</strong>: Verify that <code>launch.css</code> is imported in the launch component or global stylesheet; otherwise the UI will not appear.  </li>
-<li><strong>Animation correctness</strong>: Run smoke tests to confirm keyframes trigger and panels fade as intended.  </li>
-<li><strong>Reduced‑motion</strong>: Ensure users with <code>prefers-reduced-motion</code> see the static fallback and that no animations bleed into other components.  </li>
-<li><strong>Browser support</strong>: <code>color-mix</code> and <code>in</code> syntax require modern browsers; test on Safari/Edge and consider fallbacks if needed.</li>
+<li><strong>Browser support</strong> – verify <code>color-mix</code> and <code>mask-image</code> work in target browsers; provide fallbacks if necessary.  </li>
+<li><strong>Reduced‑motion handling</strong> – ensure the media query correctly overrides animations and that the launch panel remains visible.  </li>
+<li><strong>Animation timing</strong> – confirm that staggered delays align with the overall launch flow.  </li>
+<li><strong>CSS size</strong> – the file is ~531 lines; monitor bundle size impact and consider tree‑shaking if unused in production builds.</li>
 </ul>
 </article>
   </main>

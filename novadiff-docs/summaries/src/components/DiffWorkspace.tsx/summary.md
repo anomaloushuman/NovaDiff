@@ -1,23 +1,22 @@
 ### Overview  
-`DiffWorkspace` now displays the selected folder paths in a read‑only, formatted form and no longer accepts user edits. The component internally renames the `onLeft`/`onRight` callbacks to `_onLeft`/`_onRight` and removes the `title` attributes that previously showed the raw paths.
+A new `DiffWorkspace` component is added in `src/components/DiffWorkspace.tsx`.  
+It renders a full diff UI, handles selection of diff rows, and shows a modal for documenting the selected rows.
 
 ### Key changes  
-- **Import added**: `pathDisplayLabel` from `../app/pathDisplay` (line 7).  
-- **Prop destructuring**: `onLeft` and `onRight` are captured as `_onLeft`/`_onRight` (lines 63‑64).  
-- **Input values**: `value={pathDisplayLabel(leftRoot)}` and `value={pathDisplayLabel(rightRoot)}` replace the raw `leftRoot`/`rightRoot` (lines 125‑126, 160‑161).  
-- **Read‑only inputs**: `readOnly` flag added to both path selectors (lines 126, 161).  
-- **Removed handlers**: `onChange` callbacks and `title` attributes are gone (lines 124‑129, 160‑165).  
-- **External API unchanged**: `DiffWorkspaceProps` still exposes `onLeft`/`onRight`; the component forwards them via the renamed internal variables.
+- **Imports** (lines 1‑16) add `MouseEvent` from `react`, types `DiffRow`, `FileDiffPayload`, `SelectionDocMode` from `../app/types`, the helper `pathDisplayLabel` from `../app/pathDisplay`, icons from `lucide-react`, and the modal component `SelectedDiffSummaryModal`.  
+- **`DiffWorkspaceProps` interface** (lines 18‑58) lists all props required by the workspace, including callbacks for browsing, swapping, comparing, and selection logic.  
+- **`DiffWorkspace` function** (lines 60‑370) builds the UI: path selectors, compare button, busy/compare status banner, file statistics, selected‑path bar, diff panes, and the diff table rendered with `DiffTableRow`.  
+- **`DiffTableRow` helper** (lines 371‑400) renders a single diff row, applies styles, and handles click selection.  
+- **Modal integration** (lines 353‑360) mounts `SelectedDiffSummaryModal` with props for open state, label, summary, loading, error, and close handler.
 
 ### Impact  
-- **UI behavior**: Users can no longer edit the path fields; they must use the browse buttons.  
-- **Accessibility**: Removing `title` attributes may reduce tooltip help, but the formatted label is now clearer.  
-- **Maintainability**: Centralizing path formatting in `pathDisplayLabel` reduces duplication and eases future styling changes.  
-- **Performance**: Minor; the component now performs a single formatting call per render instead of handling change events.  
-- **Compatibility**: Existing callers remain unaffected because the public prop names are unchanged.
+- The component must be wired into the app’s routing or parent component; missing props will cause runtime errors.  
+- It centralizes diff‑related UI logic, making future changes to selection or modal behavior easier to maintain.  
+- Rendering many diff rows may affect scroll performance; consider virtualization if tests show slowdown.  
+- The component depends on existing exports: `SelectedDiffSummaryModal` and the types from `../app/types`.
 
 ### Risks & follow‑ups  
-- **Regression**: Verify that the browse buttons still correctly update the parent state via `_onLeft`/`_onRight`.  
-- **Accessibility**: Ensure screen readers still announce the path values; consider adding `aria-label` if needed.  
-- **Testing**: Update unit tests that previously expected editable inputs or `title` attributes.  
-- **Documentation**: Update any docs or README sections that mention editable path fields.
+- **Import failures**: Verify that `../app/types` exports `DiffRow`, `FileDiffPayload`, and `SelectionDocMode`.  
+- **Modal contract**: Ensure `SelectedDiffSummaryModal` accepts the props used; mismatches will break the modal.  
+- **Event handling**: `onSelectDiffRow` expects a `MouseEvent`; callers must pass the correct event type.  
+- **Styling**: CSS classes such as `diff-row-selected` and `diff-row-muted` must be defined; otherwise rows will appear unstyled.

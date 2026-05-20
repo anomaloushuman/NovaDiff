@@ -1,25 +1,25 @@
 ### Overview  
-A new module `electron/gh-install.cjs` (lines 1‑196) adds runtime detection and optional installation of the GitHub CLI (`gh`). It replaces a manual install flow with platform‑specific logic.
+A new module `electron/gh-install.cjs` (lines 1‑196) is added to the Electron build. It implements runtime detection, installation, and status reporting for the GitHub CLI (`gh`) on macOS, Windows, and Linux.
 
 ### Key changes  
-- **Imports**: `spawn` and `spawnSync` from `node:child_process` (R3‑R4) and `fssync` from `node:fs` (R4).  
-- **Path helpers**: `augmentPathForCli`, `resolveGhExecutable`, `isGhInstalled`, `clearGhCache` required from `./gh-path.cjs` (R5‑R10).  
-- **`resolveBrew`** (lines 15‑38) searches common Homebrew paths and falls back to `command -v brew`.  
-- **`getInstallPlan`** (lines 40‑79) returns an install strategy per OS: Homebrew on macOS, winget on Windows, or a manual hint on other platforms.  
-- **`readGhVersion`** (lines 81‑94) runs `gh --version` via `spawnSync` to report the installed version.  
-- **`getGhToolingStatus`** (lines 96‑110) aggregates installation status, path, version, and install plan.  
-- **`runInstallCommand`** (lines 116‑142) spawns the installer process, streams logs, and clears cache on completion.  
-- **`installGh`** (lines 148‑190) orchestrates the auto‑install flow, validates success, and returns `{ok, path, version}`.  
-- **Exports**: `GH_FEATURE_REASON`, `getGhToolingStatus`, `installGh` (lines 192‑196).
+- **Imports** – `spawn`/`spawnSync` from `node:child_process` and `fssync` from `node:fs` are added (R3, R4, R24, R85).  
+- **`resolveBrew()`** (lines 15‑38) checks known Homebrew paths or runs `command -v brew`.  
+- **`getInstallPlan()`** (lines 40‑79) returns an object with `canAutoInstall`, `method`, `command`, and URLs, tailored per platform.  
+- **`readGhVersion()`** (lines 81‑94) runs `gh --version` via `spawnSync` to capture the installed version.  
+- **`getGhToolingStatus()`** (lines 96‑110) aggregates installation status, path, version, and plan details.  
+- **`runInstallCommand()`** (lines 116‑142) spawns the install command, streams output to an optional logger, and clears the gh cache on completion.  
+- **`installGh()`** (lines 148‑190) orchestrates the installation flow, validates success, and returns the installed path and version.  
+- **Exports** (lines 192‑196) expose `GH_FEATURE_REASON`, `getGhToolingStatus`, and `installGh`.
 
 ### Impact  
-- Adds detection of `gh` and an automated install path, reducing manual setup.  
-- Centralizes CLI logic in one module; functions are small and testable.  
-- Uses `spawnSync` for quick checks; installation uses async `spawn`, keeping UI responsive.  
-- Explicitly supports macOS (Homebrew) and Windows (winget); Linux falls back to manual instructions.
+- **Deterministic checks** – `spawnSync` is used for quick existence and version queries, reducing nondeterminism.  
+- **Centralized logic** – All CLI tooling concerns live in one module; adding a new platform only requires extending `getInstallPlan()`.  
+- **Responsive UI** – `runInstallCommand()` is async, keeping the Electron UI responsive during installs.  
+- **Explicit URLs** – Manual install hints point to `https://cli.github.com/` and platform‑specific resources.  
+- **Logging** – Optional `onLog` streams install output, aiding debugging.
 
 ### Risks & follow‑ups  
-- `spawnSync` may block startup; verify timeout handling on slow systems.  
-- Linux users still need manual install; ensure the manual hint is clear.  
-- `runInstallCommand` rejects on non‑zero exit; callers must handle this.  
-- `clearGhCache` must correctly reset any cached `gh` state; run integration tests after installation.
+- **Homebrew detection** – `resolveBrew()` relies on known paths and `command -v brew`; verify it finds Homebrew on all supported macOS variants.  
+- **Cache invalidation** – `clearGhCache()` is called before and after installs; missing it could leave stale state.  
+- **Permission handling** – Homebrew or winget installs may require elevated privileges; test error paths.  
+- **Linux support** – No auto‑install is offered; confirm `isGhInstalled()` correctly reports absence.

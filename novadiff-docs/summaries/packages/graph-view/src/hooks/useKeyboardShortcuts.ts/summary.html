@@ -26,48 +26,40 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/hooks/useKeyboardShortcuts.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:48:02.102Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:34:04.975Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <strong>packages/graph-view/src/hooks/useKeyboardShortcuts.ts</strong> introduces a keyboard‑shortcut system for the graph view.  </p>
-<ul>
-<li><strong>Interface</strong> <code>KeyboardShortcut</code> (lines 3‑12) defines optional modifier flags (<code>ctrlKey</code>, <code>shiftKey</code>, <code>altKey</code>, <code>metaKey</code>) and required fields (<code>key</code>, <code>description</code>, <code>action</code>, <code>category</code>).  </li>
-<li><strong>Hook</strong> <code>useKeyboardShortcuts</code> (lines 14‑51) registers a global <code>keydown</code> listener via <code>useEffect</code> (R1).  </li>
-<li><strong>Formatter</strong> <code>formatShortcutKey</code> (lines 52‑71) builds a human‑readable shortcut string.</li>
-</ul>
+<p><code>packages/graph-view/src/hooks/useKeyboardShortcuts.ts</code> adds a reusable hook for global keyboard shortcuts and a helper to format shortcut keys for display.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Interface</strong>: added optional modifier flags and required fields (diff lines R3‑R11).  </li>
-<li><strong>Hook</strong>:  <ul>
-<li>Uses <code>useEffect</code> to attach a listener (R1).  </li>
-<li>Skips shortcuts when the event target is an <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, or content‑editable element unless the key is <code>Escape</code> (lines 21‑27).  </li>
-<li>Matches shortcuts by key and modifier state, with a “not pressed” fallback (lines 29‑34).  </li>
-<li>Prevents default for shortcuts involving <code>Ctrl</code>, <code>Meta</code>, or <code>Alt</code> (lines 37‑40).  </li>
-<li>Executes <code>shortcut.action()</code> and breaks the loop (lines 41‑42).  </li>
-<li>Cleans up by removing the listener (lines 47‑48).</li>
+<li><strong>Import</strong>: <code>useEffect</code> from React (line 1).  </li>
+<li><strong>Interface</strong>: <code>KeyboardShortcut</code> (lines 3‑12) defines <code>key</code>, optional modifier flags (<code>ctrlKey</code>, <code>shiftKey</code>, <code>altKey</code>, <code>metaKey</code>), <code>description</code>, <code>action</code>, and <code>category</code>.  </li>
+<li><strong>Hook</strong>: <code>useKeyboardShortcuts(shortcuts, enabled = true)</code> (lines 14‑51) registers a <code>keydown</code> listener via <code>useEffect</code>.  <ul>
+<li>Skips shortcuts when the event target is an <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, or content‑editable element, unless the key is <code>Escape</code>.  </li>
+<li>Matches the pressed key and modifiers against each shortcut, using <code>!event.modifier</code> when the shortcut flag is undefined.  </li>
+<li>Calls <code>event.preventDefault()</code> when <code>ctrlKey</code>, <code>metaKey</code>, or <code>altKey</code> are active to avoid browser conflicts, then executes the shortcut’s <code>action</code>.</li>
 </ul>
 </li>
-<li><strong>Formatter</strong>:  <ul>
-<li>Detects macOS via <code>navigator.userAgentData</code> or <code>navigator.platform</code> (lines 55‑58).  </li>
-<li>Omits the Shift symbol for punctuation that inherently requires it (lines 63‑65).  </li>
-<li>Returns the joined string (lines 70‑71).</li>
+<li><strong>Formatter</strong>: <code>formatShortcutKey(shortcut)</code> (lines 52‑71) builds a human‑readable string.  <ul>
+<li>Detects macOS via <code>navigator.userAgentData?.platform</code> or <code>navigator.platform</code>.  </li>
+<li>Adds symbols <code>⌘</code>, <code>⇧</code>, <code>⌥</code> for <code>metaKey</code>, <code>shiftKey</code>, and <code>altKey</code> respectively, omitting <code>⇧</code> for punctuation that requires shift.  </li>
+<li>Appends the key in uppercase or the original character if it is shifted punctuation.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: listener now ignores typing contexts and respects modifier combinations, reducing accidental activation (inferred from logic).  </li>
-<li><strong>Maintainability</strong>: centralizes shortcut logic in a single file, simplifying future extensions.  </li>
-<li><strong>Performance</strong>: a single global listener per component mount; cleanup handled in the effect’s return.  </li>
-<li><strong>Observability</strong>: <code>formatShortcutKey</code> provides consistent UI labels for shortcut lists.</li>
+<li>Centralizes shortcut logic, simplifying addition or modification of shortcuts across the app.  </li>
+<li>Provides a single global <code>keydown</code> listener per component mount, with an early return when <code>enabled</code> is <code>false</code>.  </li>
+<li>Offers platform‑aware key labels for tooltips or help dialogs.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the <code>keydown</code> listener does not interfere with existing global shortcuts elsewhere in the app (unknown from diff).  </li>
-<li>Ensure <code>navigator.userAgentData</code> fallback correctly detects macOS on all target browsers (unknown from diff).  </li>
-<li>Test that the <code>Escape</code> key still functions in input fields when shortcuts are disabled (unknown from diff).  </li>
-<li>Confirm that the new interface does not break existing consumers that may have relied on implicit modifier defaults (unknown from diff).</li>
+<li><strong>Browser shortcut conflicts</strong>: Verify that common shortcuts (e.g., <code>Ctrl+S</code>, <code>⌘+Z</code>) still function after <code>preventDefault()</code> is applied.  </li>
+<li><strong>Meta key detection</strong>: The matching logic defaults to <code>!event.metaKey</code> when <code>shortcut.metaKey</code> is omitted; tests should cover this case.  </li>
+<li><strong>Shift‑punctuation handling</strong>: <code>formatShortcutKey</code> omits <code>⇧</code> for punctuation; confirm this matches user expectations.  </li>
+<li><strong>Testing coverage</strong>: Add unit tests for <code>useKeyboardShortcuts</code> covering input bypass, modifier matching, and default prevention.</li>
 </ul>
 </article>
   </main>

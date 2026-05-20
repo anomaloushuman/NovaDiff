@@ -26,36 +26,39 @@
 <body>
   <header class="top">
     <h1>src/components/KnowledgeGraphPanel.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:14:21.567Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:57:24.633Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>KnowledgeGraphPanel</code> component is added at <code>src/components/KnowledgeGraphPanel.tsx</code> (lines 1‑692). It provides a UI for building, viewing, and interacting with a knowledge graph.</p>
+<p>A new <code>KnowledgeGraphPanel</code> component (src/components/KnowledgeGraphPanel.tsx, lines 117‑692) adds a UI for building, viewing, and interacting with a code knowledge graph. It introduces LLM‑powered code explanations and a fullscreen explorer.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports &amp; lazy loading</strong> – Lines 1‑17 add <code>createPortal</code>, <code>FileChange</code>, <code>LlmSettings</code>, <code>DocWorkspaceMetrics</code>, <code>isNovadiffDocsReservedPath</code>, and lazily import <code>NovaDiffGraphExplorer</code> (lines 22‑24).  </li>
-<li><strong>Props interface</strong> – Defined at lines 26‑41 (<code>KnowledgeGraphPanelProps</code>) with fields for comparison flags, root paths, titles, file changes, LLM settings, metrics, and UI flags.  </li>
-<li><strong>Utility functions</strong> – <code>parseProgressMessage</code> (lines 62‑68) extracts <code>current</code>/<code>total</code> from a string; <code>buildAutoKey</code> (lines 70‑76) creates a memoized key for caching.  </li>
-<li><strong>Error boundary</strong> – <code>GraphExplorerErrorBoundary</code> (lines 79‑115) catches explorer render errors and offers a retry button that resets the boundary.  </li>
-<li><strong>State &amp; effects</strong> – Lines 133‑147 hold state for build side, progress, stats, payload, viewer, fullscreen, and activity. <code>useEffect</code> hooks (lines 176‑206, 305‑334, 342‑358, 380‑393) manage progress listening, build lifecycle, fullscreen handling, and mounting.  </li>
-<li><strong>Build &amp; load logic</strong> – <code>runBuild</code> (lines 227‑303) triggers graph construction, uses <code>loadGraphFromDisk</code> (lines 208‑225) for caching, and updates <code>buildGenerationRef</code> to avoid stale updates.  </li>
-<li><strong>Viewer &amp; portal</strong> – <code>viewerShell</code> (lines 469‑532) renders the explorer; <code>createPortal</code> is used for fullscreen mode (lines 676‑679).  </li>
-<li><strong>UI elements</strong> – Toolbar buttons, progress card, stats grid, and status line are rendered conditionally based on state.</li>
+<li><strong>Imports</strong> – React hooks, <code>createPortal</code> (R13), type imports (<code>FileChange</code>, <code>LlmSettings</code>, <code>DocWorkspaceMetrics</code> – R14‑16), and <code>isNovadiffDocsReservedPath</code> (R17).  </li>
+<li><strong>Props interface</strong> (<code>KnowledgeGraphPanelProps</code>, R26) defines comparison flags, titles, metrics, and loading states.  </li>
+<li><strong>Helper functions</strong> – <code>parseProgressMessage</code> (R62‑68) extracts progress numbers; <code>buildAutoKey</code> (R70‑76) creates a cache key.  </li>
+<li><strong>Error boundary</strong> (<code>GraphExplorerErrorBoundary</code>, R79‑115) catches explorer render errors and offers a retry button.  </li>
+<li><strong>Component logic</strong> – state for build side, progress, stats, graph payload, viewer visibility, fullscreen, and error.  <ul>
+<li><code>useEffect</code> hooks listen to <code>window.electronAPI.knowledgeGraphProgress</code>, load/build graphs, defer work with <code>requestIdleCallback</code> (fallback <code>setTimeout</code>), handle fullscreen key events, and mount the explorer.  </li>
+<li><code>runBuild</code> triggers a graph build, uses caching via <code>loadGraphFromDisk</code>, and updates UI state.  </li>
+<li><code>explainCode</code> streams LLM explanations, saves artifacts, and integrates with the explorer.</li>
+</ul>
+</li>
+<li><strong>UI rendering</strong> – conditional explorer, progress card, stats grid, toolbar actions, and fullscreen portal via <code>createPortal</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The component introduces many hooks and state variables, increasing render complexity.  </li>
-<li><code>buildGenerationRef</code> mitigates race conditions by ensuring only the latest build updates the UI.  </li>
-<li>Lazy loading and <code>requestIdleCallback</code> (lines 328‑332) defer heavy work until idle.  </li>
-<li>Background activity integration (<code>useBackgroundActivityOptional</code>, line 150) reports progress to the UI.</li>
+<li>Adds a fully‑featured knowledge‑graph panel, expanding documentation capabilities.  </li>
+<li>Uses <code>requestIdleCallback</code> (or <code>setTimeout</code>) to defer heavy graph scans, reducing initial UI lag.  </li>
+<li>Progress and activity are reported through <code>useBackgroundActivityActionsOptional</code>, improving user feedback.  </li>
+<li>New types and helper functions centralize logic; the error boundary isolates explorer failures.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>@novadiff/graph-view</code> resolves in all target environments.  </li>
-<li>Ensure the <code>requestIdleCallback</code> fallback timer behaves correctly on browsers lacking the API.  </li>
-<li>Confirm that <code>createPortal</code> does not interfere with server‑side rendering or test setups.  </li>
-<li>Test that the error boundary’s retry button correctly resets the explorer state.  </li>
-<li>Validate that all <code>window.electronAPI</code> calls handle missing or malformed responses gracefully.</li>
+<li><strong>Electron API</strong> – the component relies on <code>window.electronAPI</code> (e.g., <code>buildKnowledgeGraph</code>, <code>readKnowledgeGraph</code>, <code>llmSummarizeStream</code>). Verify these APIs are exposed in all builds.  </li>
+<li><strong>Idle callback support</strong> – fallback timing should be tested on environments lacking <code>requestIdleCallback</code>.  </li>
+<li><strong>Portal usage</strong> – <code>document.body</code> must exist when rendering (e.g., during SSR or tests).  </li>
+<li><strong>Error boundary</strong> – errors are logged to console; ensure the retry path resets state correctly.  </li>
+<li><strong>Type safety</strong> – run TypeScript linting to confirm imported types match actual shapes.</li>
 </ul>
 </article>
   </main>

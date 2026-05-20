@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/App.tsx",
   "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:33:07.407Z",
+  "generatedAt": "2026-05-20T05:16:26.373Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,7 +21,7 @@
     ],
     "changed_exports": [
       "R211 added: export function DashboardContent({",
-      "R709 added: export default App;"
+      "R735 added: export default App;"
     ],
     "changed_imports": [
       "R1 added: import { useEffect, useState, useMemo, useCallback, lazy, Suspense } from \"react\";",
@@ -32,7 +32,7 @@
       "R6 added: import DomainGraphView from \"./components/DomainGraphView\";"
     ],
     "changed_line_ranges": [
-      "R1-709"
+      "R1-735"
     ],
     "cited_changed_lines": [
       "R1 added: import { useEffect, useState, useMemo, useCallback, lazy, Suspense } from \"react\";",
@@ -47,7 +47,7 @@
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function DashboardContent (211-709)",
+      "right function DashboardContent (211-735)",
       "right function Dashboard (99-210)",
       "right function App (78-98)",
       "right function dataUrl (41-60)",

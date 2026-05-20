@@ -26,33 +26,32 @@
 <body>
   <header class="top">
     <h1>src/app/usePrefersReducedMotion.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:27:33.874Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:48:12.850Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new React hook <code>usePrefersReducedMotion</code> was added in <code>src/app/usePrefersReducedMotion.ts</code>. It returns a boolean indicating whether the user prefers reduced motion and updates reactively.</p>
+<p>A new hook <code>usePrefersReducedMotion</code> was added to <strong>src/app/usePrefersReducedMotion.ts</strong> (lines R1‑R19). It exposes a boolean that reflects the user’s “prefers‑reduced‑motion” media query, using the browser’s <code>matchMedia</code> API.</p>
 <h3>Key changes</h3>
 <ul>
-<li>New file <code>src/app/usePrefersReducedMotion.ts</code> (lines 1‑19 added).  </li>
-<li>Imports <code>useEffect</code> and <code>useState</code> from React (R1).  </li>
-<li>Exports <code>function usePrefersReducedMotion(): boolean</code> (R3).  </li>
-<li>Initializes state with <code>useState(() =&gt; { … })</code> (R4‑8).  </li>
-<li>SSR guard: <code>typeof window === &quot;undefined&quot; || !window.matchMedia</code> → <code>false</code> (R5‑6).  </li>
-<li>Initial value from <code>window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;).matches</code> (R8).  </li>
-<li><code>useEffect</code> adds a <code>&quot;change&quot;</code> listener on <code>mq</code> and updates state via <code>setReduced(mq.matches)</code> (R11‑15).  </li>
-<li>Cleanup removes the listener on unmount (R15‑16).  </li>
-<li>Hook returns the <code>reduced</code> state (R18‑19).</li>
+<li><strong>Import</strong> – <code>useEffect</code> and <code>useState</code> from React are imported (R1).  </li>
+<li><strong>Export</strong> – <code>export function usePrefersReducedMotion(): boolean</code> is added (R3).  </li>
+<li><strong>State init</strong> – <code>useState</code> is seeded with a function that checks <code>window.matchMedia(&quot;(prefers-reduced-motion: reduce)&quot;)</code> and falls back to <code>false</code> when <code>window</code> or <code>matchMedia</code> is unavailable (R4‑R7).  </li>
+<li><strong>Effect</strong> – <code>useEffect</code> registers a <code>change</code> listener on the media query and updates state accordingly, cleaning up on unmount (R11‑R16).  </li>
+<li><strong>Return</strong> – The hook returns the current <code>reduced</code> state (R18).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a reusable, SSR‑safe hook for reduced‑motion preference.  </li>
-<li>Adds a single event listener per mount; cleanup is handled.</li>
+<li><strong>SSR safety</strong> – The initial state guard (<code>typeof window === &quot;undefined&quot;</code>) prevents errors during server‑side rendering.  </li>
+<li><strong>Encapsulation</strong> – Media‑query logic is isolated in a reusable hook, improving maintainability.  </li>
+<li><strong>Performance</strong> – Only one event listener is attached per component instance.  </li>
+<li><strong>Compatibility</strong> – Uses standard <code>matchMedia</code>; safe when <code>window</code> is absent.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the default <code>false</code> during SSR matches hydration expectations.  </li>
-<li>Ensure <code>matchMedia</code> and <code>&quot;change&quot;</code> events are supported in target browsers; consider polyfills if needed.  </li>
-<li>Confirm that <code>removeEventListener</code> is invoked correctly on unmount.</li>
+<li>Verify that the hook does not throw during SSR (the guard is present but should be tested).  </li>
+<li>Ensure <code>matchMedia</code> is supported in target browsers; consider a polyfill if needed.  </li>
+<li>Run unit tests to confirm initial state and change‑event updates behave as expected.  </li>
+<li>Confirm that the empty dependency array in <code>useEffect</code> is appropriate and does not miss updates if the media query changes before mount.</li>
 </ul>
 </article>
   </main>

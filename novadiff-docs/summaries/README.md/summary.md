@@ -1,20 +1,32 @@
 ### Overview  
-The `README.md` was updated to reflect new feature bullets, a revised roadmap, and clearer prerequisites. No code‑level changes were made.
+A new `README.md` file (lines R1‑R72) has been added to the repository. It introduces NovaDiff, lists its features, roadmap, quick‑start instructions, and technical stack.
 
 ### Key changes  
-- **Documentation workspace** and **Git & GitHub** bullets added at lines 22‑23 (diff lines R22, R23).  
-- Old Git integration bullet (`git difftool --dir-diff`) removed at line 27; new bullet covering status, publish, PR compare via worktrees, and GitHub CLI added at line 29 (diff lines L27, R29).  
-- Prerequisites expanded to include `Git` and optional `GitHub CLI` at lines 34‑36 (diff lines L34, R36).  
-- Note that the first graph build compiles the in‑repo engine (`npm run graph:build` runs automatically before `npm run build` / `electron:dev`) inserted at lines 51‑52 (diff lines R51‑52).  
-- Reference to `THIRD_PARTY_NOTICES.md` added at lines 70‑71 (diff lines R70‑71).
+- **File addition**: `README.md` now exists in the root.  
+- **Header & branding**: `# NovaDiff` (R1) and tagline **AI‑Powered Code Folder Comparison & Intelligent Review** (R3).  
+- **Hero image**: `![NovaDiff Hero](https://github.com/anomaloushuman/NovaDiff/blob/cf1a138540b0b7e4a203ade2f87423cf7ecb37d7/nova-diff-desktop.jpg)` (R9).  
+- **Feature list** (R13‑R22):  
+  - Lightning‑fast folder comparison  
+  - Beautiful syntax‑highlighted side‑by‑side diffs  
+  - AI‑Powered Insights and smart summaries  
+  - Semantic diffing (moved code, renamed variables)  
+  - Smart change categorization & prioritization  
+  - AI Review Comments and merge assistance  
+  - Ignore patterns, `.gitignore` support, custom rules  
+  - Modern dark‑first UI  
+  - Documentation workspace with per‑file AI summaries and code knowledge graph  
+  - Git & GitHub integration (auth detection, PR compare, auto‑commit)  
+- **Roadmap** (R25‑R32): completed core engine, LLM support, Git integration; pending 3‑way merge view, VS Code extension, self‑hosted web.  
+- **Quick start** (R34‑R51): prerequisites (Node.js, Rust, Git, optional GitHub CLI) and commands for cloning, dev, and release builds.  
+- **Tech stack** (R53‑R60): Electron + React + TypeScript UI, Rust CLI engine, local review via Ollama/LM Studio, AI layer options, Tree‑sitter parsing.  
+- **License & contributions** (R64‑R68): MIT license notice and link to `CONTRIBUTIONS.md`.
 
 ### Impact  
-- Documentation now matches the current feature set, reducing user confusion.  
-- Roadmap and prerequisites are accurate for contributors.  
-- No runtime or API changes; the build process remains unchanged.
+- Adds onboarding documentation for new users and contributors.  
+- Includes the README in CI artifacts; scripts referencing an old README may need updating.  
+- Contains keywords that improve repository discoverability (e.g., “semantic diffing”, “AI‑Powered Insights”).
 
 ### Risks & follow‑ups  
-- Verify that the new Git integration features are fully implemented elsewhere (unknown from the available diff).  
-- Confirm that `npm run graph:build` indeed runs before `electron:dev` as described (unknown from the available diff).  
-- Ensure `THIRD_PARTY_NOTICES.md` exists and contains correct attributions (unknown from the available diff).  
-- Check that the removed `git difftool --dir-diff` bullet does not appear in other documentation.
+- **Broken links**: Verify URLs for the hero image, Node.js, Rust, and GitHub CLI.  
+- **License compliance**: Ensure the MIT license text matches repository policy.  
+- **CI documentation**: Confirm that CI pipelines include the new README in generated docs.

@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:48:01.969Z",
+  "generatedAt": "2026-05-20T05:19:22.061Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,32 +19,37 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [],
+    "changed_exports": [
+      "R13 added: export interface NovaDiffGraphExplorerEmbedProps {",
+      "R36 added: export function NovaDiffGraphExplorerEmbed({"
+    ],
     "changed_imports": [
-      "L11 removed: import { EmbedGraphPanel } from \"./EmbedGraphPanel\";",
-      "R11 added: import { EmbedDashboardPanel } from \"./EmbedDashboardPanel\";"
+      "R1 added: import { useEffect, useMemo, useRef } from \"react\";",
+      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
+      "R3 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R4 added: import { useDashboardStore } from \"./store\";",
+      "R5 added: import {",
+      "R10 added: import { I18nProvider } from \"./contexts/I18nContext\";"
     ],
     "changed_line_ranges": [
-      "L11 / R11",
-      "L61 / R61-69",
-      "L71 / R79",
-      "L101 / R109"
+      "R1-113"
     ],
     "cited_changed_lines": [
-      "L11 removed: import { EmbedGraphPanel } from \"./EmbedGraphPanel\";",
-      "R11 added: import { EmbedDashboardPanel } from \"./EmbedDashboardPanel\";",
-      "L61 removed: store.navigateToOverview();",
-      "R61 added: const kind = (graph as KnowledgeGraph & { kind?: string }).kind;",
-      "R62 added: if (kind === \"knowledge\") {",
-      "R63 added: store.setViewMode(\"knowledge\");"
+      "R1 added: import { useEffect, useMemo, useRef } from \"react\";",
+      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
+      "R3 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R4 added: import { useDashboardStore } from \"./store\";",
+      "R5 added: import {",
+      "R6 added: NovaDiffEmbedContext,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function NovaDiffGraphExplorerEmbed (36-105)",
-      "right function NovaDiffGraphExplorerEmbed (36-113)"
+      "right function NovaDiffGraphExplorerEmbed (36-113)",
+      "right function graphFingerprint (23-35)",
+      "right interface NovaDiffGraphExplorerEmbedProps (13-22)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

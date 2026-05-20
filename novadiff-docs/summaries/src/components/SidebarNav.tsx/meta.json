@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/SidebarNav.tsx",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:16:45.433Z",
+  "generatedAt": "2026-05-20T05:00:48.227Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,37 +20,31 @@
       }
     ],
     "changed_exports": [
-      "L15 removed: export type WorkspacePage = \"compare\" | \"docs\";",
-      "R18 added: export type WorkspacePage = \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";"
+      "R18 added: export type WorkspacePage = \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
+      "R35 added: export function SidebarNav({"
     ],
     "changed_imports": [
-      "R2 added: import { useLaunch } from \"./launch/LaunchContext\";",
-      "R3 added: import { TypewriterText } from \"./launch/TypewriterText\";"
-    ],
-    "changed_line_ranges": [
-      "R2-3",
-      "R12",
-      "L15 / R18",
-      "R26-29",
-      "R41-44",
-      "R47-50",
-      "L37 / R52",
-      "L41-43 / R56-84"
-    ],
-    "cited_changed_lines": [
+      "R1 added: import appMark from \"../../nova-diff-icon.png\";",
       "R2 added: import { useLaunch } from \"./launch/LaunchContext\";",
       "R3 added: import { TypewriterText } from \"./launch/TypewriterText\";",
-      "R12 added: History,",
-      "L15 removed: export type WorkspacePage = \"compare\" | \"docs\";",
-      "R18 added: export type WorkspacePage = \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
-      "R26 added: localOnlyMode?: boolean;"
+      "R4 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-238"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import appMark from \"../../nova-diff-icon.png\";",
+      "R2 added: import { useLaunch } from \"./launch/LaunchContext\";",
+      "R3 added: import { TypewriterText } from \"./launch/TypewriterText\";",
+      "R4 added: import {",
+      "R5 added: BookOpen,",
+      "R6 added: Brain,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function SidebarNav (28-156)",
       "right function SidebarNav (35-238)",
       "right interface SidebarNavProps (20-34)"
     ],

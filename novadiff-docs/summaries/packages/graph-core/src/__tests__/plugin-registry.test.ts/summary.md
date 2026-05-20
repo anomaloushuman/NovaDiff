@@ -1,25 +1,24 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/plugin-registry.test.ts` has been added.  
-It exercises the `PluginRegistry` API and the `registerAllParsers` helper, ensuring that plugins are registered, looked‑up, and cleaned up correctly, and that file‑type parsing works for a variety of minimal inputs.
+A new test file `packages/graph-core/src/__tests__/plugin-registry.test.ts` (lines 1‑228) was added.  
+It imports `vitest` helpers, `PluginRegistry`, `registerAllParsers`, and types `AnalyzerPlugin`, `StructuralAnalysis`, `ImportResolution`.  
+A helper `createMockPlugin` (lines 13‑20) constructs a stub `AnalyzerPlugin` with default `analyzeFile` and `resolveImports` implementations.
 
 ### Key changes  
-- **Imports** (lines 1‑4): `vitest` helpers, `PluginRegistry`, `registerAllParsers`, and type imports from `../types.js`.  
-- **`createMockPlugin` helper** (lines 13‑20) builds minimal `AnalyzerPlugin` objects for the tests.  
-- **Registry tests** (lines 22‑140) cover:  
-  - registration, language/file lookup, and priority handling.  
-  - `getSupportedLanguages`, `unregister`, and language‑map rebuild logic.  
-  - Delegation of `analyzeFile` and `resolveImports`, including a test for a plugin that omits `resolveImports`.  
-- **Smoke test for `registerAllParsers`** (lines 197‑228) registers all parsers and verifies that each returns a non‑null `StructuralAnalysis` for a minimal content snippet.  
-  The test iterates over 12 file types: `README.md`, `config.yaml`, `config.json`, `config.toml`, `.env`, `Dockerfile`, `schema.sql`, `schema.graphql`, `types.proto`, `main.tf`, `Makefile`, `script.sh`.
+- **Imports** added at the top of the file (R1‑R4).  
+- **Mock plugin factory** (`createMockPlugin`) returns an `AnalyzerPlugin` with stubbed methods (R13‑R20).  
+- **Behavioral tests** (R22‑R194) cover:
+  - registration, lookup by language and file extension, language mapping, and priority of later registrations.  
+  - `getSupportedLanguages`, `unregister`, and language‑file resolution.  
+  - Delegation of `analyzeFile` and `resolveImports` to the correct plugin, including handling of optional `resolveImports`.  
+- **Smoke test** (R197‑R228) registers all parsers via `registerAllParsers` and verifies that each parser returns a non‑null `StructuralAnalysis` for minimal content across a variety of file types (Markdown, YAML, JSON, TOML, `.env`, Dockerfile, SQL, GraphQL, Proto, Terraform, Makefile, shell script).
 
 ### Impact  
-- **Correctness**: The tests expose edge cases in plugin lookup and lifecycle, tightening the observable contract for `PluginRegistry`.  
-- **Maintainability**: `createMockPlugin` centralizes mock creation, reducing duplication.  
-- **Observability**: Failure messages include file‑path context (e.g., `analyzeFile should return a result for ${filePath}`), aiding debugging.  
-- **Performance**: The smoke test runs ~12 iterations; negligible CI impact.
+- Adds 228 lines of test code, expanding coverage of `PluginRegistry` behavior.  
+- Provides concrete assertions for plugin lookup, delegation, and language mapping.  
+- The smoke test ensures that every parser can handle minimal content for its supported file types.
 
 ### Risks & follow‑ups  
-- **Regression risk**: Changes to `PluginRegistry` may cause many tests to fail; run the full suite after any implementation change.  
-- **Optional `resolveImports` handling**: Verify that non‑code plugins (e.g., the markdown plugin test) still return `null` for imports.  
-- **Parser registration**: Ensure `registerAllParsers` registers all parsers; inspect the test case list for omissions.  
-- **Snapshot drift**: No snapshots are used; if parser outputs change, update the structural‑analysis shape assertions accordingly.
+- **Regression risk**: any change to `PluginRegistry` internals (e.g., language map logic) may cause multiple tests to fail; run the full suite after refactors.  
+- **Snapshot drift**: if the shape of `StructuralAnalysis` changes, the smoke test may need updates; verify against current snapshots.  
+- **Lint/build**: ensure the new file passes the repository’s TypeScript linting and build steps.  
+- **Performance**: the smoke test iterates over many file types; monitor CI test duration to avoid timeouts.

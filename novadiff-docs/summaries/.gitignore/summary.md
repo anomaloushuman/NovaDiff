@@ -1,17 +1,21 @@
-### Overview
-The `.gitignore` file was modified to add ignore rules for legacy clone artifacts and graph‑engine build output. The changes appear in lines 34–38 of the file.
+### Overview  
+A new `.gitignore` file was added at the repository root (line range R1‑38). It contains ignore rules for logs, build artifacts, editor metadata, and tool‑specific directories.
 
-### Key changes
-- **Line 34** – added comment `# Optional legacy clone (not used by NovaDiff)`.
-- **Line 35** – added pattern `understandanything/` to ignore that directory.
-- **Line 37** – added comment `# Graph engine build output`.
-- **Line 38** – added pattern `packages/graph-core/dist` to ignore the build‑output directory.
+### Key changes  
+- Added `.gitignore` (R1‑38).  
+- Excludes log files: `*.log`, `npm-debug.log*`, `yarn-debug.log*`, `yarn-error.log*`, `pnpm-debug.log*`, `lerna-debug.log*` (lines 1‑6).  
+- Ignores build and distribution directories: `node_modules`, `dist`, `dist-ssr`, `packages/graph-core/dist` (lines 10‑12, 38).  
+- Skips editor/IDE metadata: `.vscode/*`, `!.vscode/extensions.json`, `.idea`, `.DS_Store`, `*.suo`, `*.ntvs*`, `*.njsproj`, `*.sln`, `*.sw?` (lines 15‑24).  
+- Excludes Rust CLI target (`cli/target`) and Electron installer output (`release`) (lines 26‑30).  
+- Omits legacy clone directory (`understandanything/`) and temporary folder `Bn` (lines 34‑36).
 
-### Impact
-- Only affects version‑control behavior; no code or runtime changes are introduced.
-- The added ignore patterns prevent accidental commits of the specified directories.
+### Impact  
+- Centralizes ignore rules, simplifying future updates.  
+- Git and CI tools will now respect these ignores; no code changes are required.  
+- CI logs may be cleaner, but verify that any required artifacts are not inadvertently ignored.
 
-### Risks & follow‑ups
-- Verify that `understandanything/` and `packages/graph-core/dist` are not required by CI or deployment scripts; otherwise, missing files could cause failures.
-- Update any scripts that previously expected these directories in the repository to generate them locally.
-- Run a quick lint or `.gitignore` parser check to ensure the new comments do not interfere with tooling.
+### Risks & follow‑ups  
+- Confirm that `packages/graph-core/dist` is not needed in the repo; adjust the ignore if necessary.  
+- Run the test suite and CI pipeline to ensure ignored files do not affect tests or deployment scripts.  
+- Verify that the `!.vscode/extensions.json` rule still allows necessary VS Code settings to be tracked.  
+- Ensure that excluding `understandanything/` does not hide needed legacy files for downstream consumers.

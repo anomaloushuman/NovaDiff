@@ -1,25 +1,23 @@
 ### Overview
-`packages/graph-view/src/themes/index.ts` now aggregates theme‑related exports.  
-The file adds five lines (R1‑R5) that re‑export symbols from the theme implementation modules.
+A new module `packages/graph-view/src/themes/index.ts` has been added. It consolidates exports from several internal files into a single public surface.
 
 ### Key changes
-- **R1**: `export { ThemeProvider, useTheme } from "./ThemeContext.tsx";`
-- **R2**: `export { PRESETS, getPreset, getAccent } from "./presets.ts";`
-- **R3**: `export { applyTheme } from "./theme-engine.ts";`
-- **R4**: `export type { HeadingFont, PresetId, ThemeConfig, ThemePreset, AccentSwatch } from "./types.ts";`
-- **R5**: `export { DEFAULT_THEME_CONFIG } from "./types.ts";`
+- `export { ThemeProvider, useTheme } from "./ThemeContext.tsx";` – re‑exports the context provider and hook.  
+- `export { PRESETS, getPreset, getAccent } from "./presets.ts";` – exposes preset data and helper functions.  
+- `export { applyTheme } from "./theme-engine.ts";` – provides the runtime theme application logic.  
+- `export type { HeadingFont, PresetId, ThemeConfig, ThemePreset, AccentSwatch } from "./types.ts";` – re‑exports core type definitions.  
+- `export { DEFAULT_THEME_CONFIG } from "./types.ts";` – exposes the default configuration object.  
 
-These lines expose the public API for theme configuration, provider, and utilities.
+These lines are added at the top of the file (diff lines 1‑5).
 
 ### Impact
-- Consumers can import theme symbols from a single entry point:  
-  `import { ThemeProvider } from 'graph-view/themes';`
-- No new runtime logic is introduced; the file only re‑exports existing modules.
-- The public surface is now centralized, simplifying discoverability and maintenance.
-- The file must be part of the package’s public API (e.g., referenced in `src/index.ts` or `package.json`).
+- **Correctness**: Consumers can now import theme utilities directly from `packages/graph-view/src/themes`.  
+- **Maintainability**: Centralizes theme exports, reducing import churn across the codebase.  
+- **Compatibility**: No breaking changes are introduced; the new file only adds exports.  
+- **Observability**: The module only re‑exports existing functionality, so no new runtime behavior is added.
 
 ### Risks & follow‑ups
-- Verify that `packages/graph-view/src/themes/index.ts` is emitted in the build output; missing it will break imports.
-- Run unit tests that import these symbols to ensure they resolve correctly.
-- Ensure re‑exported types do not collide with existing global types.
-- Confirm that the new exports do not expose internal implementation details that should remain private.
+- Verify that `ThemeContext.tsx`, `presets.ts`, `theme-engine.ts`, and `types.ts` compile and are included in the build (unknown from the available diff/scan evidence).  
+- Ensure the new exports do not shadow existing symbols in other modules.  
+- Run the existing test suite to confirm that no tests fail due to the added public surface (unknown from the available diff/scan evidence).  
+- Check that the documentation generator picks up the new exports for API docs.

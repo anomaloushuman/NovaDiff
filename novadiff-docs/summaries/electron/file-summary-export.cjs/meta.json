@@ -1,0 +1,60 @@
+{
+  "relPath": "electron/file-summary-export.cjs",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:20:37.036Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const crypto = require(\"node:crypto\");",
+      "R6 added: const { marked } = require(\"marked\");",
+      "R7 added: const { htmlToPdfFile } = require(\"./novadiff-docs-pdf.cjs\");",
+      "R8 added: const { normalizeMarkdownDocument } = require(\"./novadiff-docs-html.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-580"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs/promises\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const crypto = require(\"node:crypto\");",
+      "R6 added: const { marked } = require(\"marked\");",
+      "R7 added: const { htmlToPdfFile } = require(\"./novadiff-docs-pdf.cjs\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function readSelectionSummaryMarkdowns (498-580)",
+      "right function buildSelectionSummaryDocument (217-293)",
+      "right function exportSelectionSummaryArtifacts (422-497)",
+      "right function exportFileSummaryArtifacts (294-364)",
+      "right function buildFileSummaryDocument (159-216)",
+      "right function readFileSummaryMarkdowns (365-421)",
+      "right function safeSummarySegments (55-89)",
+      "right function resolveSelectionDirAbs (130-158)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

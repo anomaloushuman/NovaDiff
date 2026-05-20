@@ -26,31 +26,30 @@
 <body>
   <header class="top">
     <h1>src/app/llmStorage.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:26:43.997Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:44:35.811Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/app/llmStorage.ts</code> extends the <code>LlmSummarizePayload</code> interface with five optional properties that provide richer context for LLM summarization. The additions appear at lines 56‑61 of the file.</p>
+<p><code>src/app/llmStorage.ts</code> introduces LLM configuration types and persistence helpers.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>explainCode?: boolean</code> – flag to request a code explanation.  </li>
-<li><code>codeExcerpt?: string</code> – raw code snippet.  </li>
-<li><code>lineStart?: number</code> – start line of the excerpt.  </li>
-<li><code>lineEnd?: number</code> – end line of the excerpt.  </li>
-<li><code>symbolName?: string</code> – name of the symbol to explain.<br>These fields are added after the existing <code>selectionSymbol</code> property in the interface.</li>
+<li><strong>Imports</strong> – <code>FileSummaryEvidence</code>, <code>DiffSelectionLineRange</code>, <code>DiffSelectionSymbolMatch</code>, <code>RiskSignal</code>, <code>SelectionDocMode</code> from <code>./types</code> (R1‑R6).  </li>
+<li><strong>Provider &amp; settings</strong> – <code>export type LlmProvider = &quot;ollama&quot; | &quot;lmstudio&quot;</code> (R9) and <code>export interface LlmSettings</code> with <code>provider</code>, <code>baseUrl</code>, <code>model</code> (R11‑R15).  </li>
+<li><strong>Payload</strong> – <code>export interface LlmSummarizePayload extends LlmSettings</code> adds many fields for diff context and summarization metadata (R17‑R62).  </li>
+<li><strong>Defaults</strong> – <code>defaultBase</code> and <code>defaultModel</code> return provider‑specific URLs and model names (R66‑R73).  </li>
+<li><strong>Lifecycle</strong> – <code>defaultLlmSettings</code> (R74‑R80), <code>loadLlmSettings</code> (R82‑R104) reads from <code>localStorage</code> key <code>novadiff_llm_settings_v1</code> with JSON parsing and fallbacks, and <code>saveLlmSettings</code> (R106‑R108) writes the JSON string.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Compatibility</strong>: Existing payloads remain valid because the new fields are optional.  </li>
-<li><strong>Functionality</strong>: Callers can now supply additional context, potentially improving LLM responses.  </li>
-<li><strong>Performance</strong>: Adding optional properties does not alter runtime behavior.</li>
+<li>Centralizes LLM configuration and persistence; future provider changes can be added in one place.  </li>
+<li>Uses synchronous <code>localStorage</code> access; invoked during initialization or settings changes.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that modules importing <code>LlmSummarizePayload</code> compile after the change.  </li>
-<li>Update any test fixtures or mocks that construct <code>LlmSummarizePayload</code> to include the new optional fields if desired.  </li>
-<li>Ensure JSON serialization logic (e.g., <code>JSON.stringify</code>) handles the new fields without affecting existing output.  </li>
-<li>Run <code>npm run lint</code>, <code>npm test</code>, and the production build to confirm no new warnings or errors.</li>
+<li><strong>Environment safety</strong> – <code>localStorage</code> may be unavailable in non‑browser contexts; guard usage or provide fallback (unknown from the available diff/scan evidence).  </li>
+<li><strong>JSON schema drift</strong> – mismatched stored objects may silently default; ensure stored shape matches <code>LlmSettings</code>.  </li>
+<li><strong>Provider defaults</strong> – verify that <code>defaultBase</code> and <code>defaultModel</code> match actual server endpoints.  </li>
+<li><strong>Type coverage</strong> – extensive <code>LlmSummarizePayload</code> fields are not yet exercised; add unit tests for serialization/deserialization.</li>
 </ul>
 </article>
   </main>

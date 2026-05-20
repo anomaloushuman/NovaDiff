@@ -26,11 +26,11 @@
 <body>
   <header class="top">
     <h1>src/components/SelectedDiffSummaryModal.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:16:03.483Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:00:04.096Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>SelectedDiffSummaryModal</code> is added at <code>src/components/SelectedDiffSummaryModal.tsx</code>. It renders a modal overlay that displays LLM‑generated documentation for a selected code range, with loading, error handling, and a close button.</p>
+<p>A new component <code>SelectedDiffSummaryModal</code> is added in <code>src/components/SelectedDiffSummaryModal.tsx</code>. It renders a modal overlay that displays a summary of selected lines, a loading indicator, and error messages.</p>
 <h3>Key changes</h3>
 <ul>
 <li><strong>Imports</strong> (lines 1‑3):```ts
@@ -38,7 +38,7 @@ import { X } from &quot;lucide-react&quot;;
 import { LlmSummaryMarkdown } from &quot;./LlmSummaryMarkdown&quot;;
 import { AnimatedOverlay } from &quot;./ui/AnimatedOverlay&quot;;</li>
 </ul>
-<p><code>- **Props interface** (`SelectedDiffSummaryModalProps`, lines 5‑12):</code>ts
+<p><code>- **Props interface** (lines 5‑12):</code>ts
 export interface SelectedDiffSummaryModalProps {
     open: boolean;
     label: string | null;
@@ -46,22 +46,25 @@ export interface SelectedDiffSummaryModalProps {
     loading: boolean;
     error: string | null;
     onClose: () =&gt; void;
-  }
-```- **Component** (<code>SelectedDiffSummaryModal</code>, lines 14‑63): renders an <code>AnimatedOverlay</code> with custom classes, a header containing a title, optional kicker (<code>label</code>), and a close button using the <code>X</code> icon. The body shows an error paragraph if <code>error</code> is set, a loading spinner when <code>loading</code> is true and no trimmed <code>summary</code>, the <code>LlmSummaryMarkdown</code> component when <code>summary</code> exists, and a caret animation while streaming (<code>loading &amp;&amp; summary?.trim()</code>).</p>
-<h3>Impact</h3>
-<ul>
-<li><strong>UI</strong>: Provides a reusable modal for LLM summaries, giving users visual feedback during analysis.  </li>
-<li><strong>State handling</strong>: Centralizes loading, error, and summary rendering logic, reducing duplication.  </li>
-<li><strong>Accessibility</strong>: Uses <code>aria-label</code> on the close button and <code>aria-hidden</code> on decorative elements.  </li>
-<li><strong>Performance</strong>: Conditional rendering limits unnecessary DOM updates; the spinner appears only when needed.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Missing CSS</strong>: The classes <code>summary-modal-backdrop</code>, <code>summary-modal</code>, and related styles must exist; otherwise the overlay may break layout.  </li>
-<li><strong>Icon import</strong>: <code>lucide-react</code> must be installed and export <code>X</code>; a missing dependency will cause a build error.  </li>
-<li><strong>Markdown rendering</strong>: It is unknown from the diff whether <code>LlmSummaryMarkdown</code> sanitizes input; if not, XSS could be introduced.  </li>
-<li><strong>Prop validation</strong>: No runtime checks are present; passing undefined props may lead to unexpected UI states.</li>
-</ul>
+  }</p>
+<pre><code class="language--">- **UI structure**: uses `AnimatedOverlay` with `backdropClassName=&quot;summary-modal-backdrop&quot;` and `panelClassName=&quot;summary-modal&quot;`. The header contains a close button (`&lt;X size={18} aria-hidden /&gt;`) and an optional label. The body conditionally shows:
+  - a spinner when `loading &amp;&amp; !summary?.trim()`;
+  - the summary via `&lt;LlmSummaryMarkdown source={summary} /&gt;` when `summary` is present;
+  - a caret (`▍`) when `loading &amp;&amp; summary?.trim()`.
+
+### Impact
+
+  
+- The modal explicitly handles open, loading, error, and summary states, centralizing the logic for this UI element.  
+- Conditional rendering avoids rendering unnecessary DOM nodes during loading or error states.  
+- No existing components are modified; only new imports and CSS class names (`summary-modal-*`) are introduced.
+
+### Risks &amp; follow‑ups  
+- **Dependencies**: `lucide-react`, `LlmSummaryMarkdown`, and `AnimatedOverlay` must be installed and exported correctly.  
+- **Styles**: CSS classes such as `summary-modal-backdrop`, `summary-modal`, `summary-modal-header`, etc., must exist to ensure proper layout.  
+- **Prop usage**: All props are required by the interface; callers must provide them to avoid TypeScript errors.  
+- **Testing**: Unit tests should cover the loading, error, and summary rendering paths, and confirm that clicking the close button triggers `onClose`.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

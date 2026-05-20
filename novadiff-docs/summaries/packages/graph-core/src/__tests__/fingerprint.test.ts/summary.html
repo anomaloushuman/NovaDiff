@@ -26,36 +26,35 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/fingerprint.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:06:57.883Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:53:51.981Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/fingerprint.test.ts</code> (lines R1‑427) has been added.<br>It exercises the fingerprint utilities <code>contentHash</code>, <code>extractFileFingerprint</code>, <code>compareFingerprints</code>, and <code>analyzeChanges</code>.<br>Mocks for <code>node:fs</code> are set up via <code>vi.mock(&quot;node:fs&quot;)</code> (lines 12‑16) and typed access via <code>vi.mocked</code> (lines 20‑21).</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/fingerprint.test.ts</code> (lines R1‑R427) has been added.<br>It imports the fingerprint utilities (<code>contentHash</code>, <code>extractFileFingerprint</code>, <code>compareFingerprints</code>, <code>analyzeChanges</code>) and the <code>StructuralAnalysis</code> type from <code>../types.js</code>.<br>The file mocks <code>node:fs</code> (lines R12‑R18) to provide <code>readFileSync</code> and <code>existsSync</code> stubs, and clears these mocks before each test (line R23).<br>All tests run under <code>vitest</code> (imported at R1).</p>
 <h3>Key changes</h3>
 <ul>
-<li>Imports added at R1‑6: <code>vitest</code> helpers, <code>StructuralAnalysis</code> type, and fingerprint functions from <code>../fingerprint.js</code>.  </li>
-<li>Additional import of <code>readFileSync</code> and <code>existsSync</code> from <code>node:fs</code> at R18.  </li>
-<li>Test cases cover:  <ul>
-<li>SHA‑256 consistency and uniqueness of <code>contentHash</code> (lines 27‑38).  </li>
-<li>Extraction of functions, classes, imports, exports, content hash, and line count in <code>extractFileFingerprint</code> (lines 40‑125).  </li>
-<li>Detection of change levels (<code>NONE</code>, <code>COSMETIC</code>, <code>STRUCTURAL</code>) in <code>compareFingerprints</code> across structural modifications (lines 128‑330).  </li>
-<li>Classification of new, deleted, unchanged, and unknown files in <code>analyzeChanges</code> (lines 332‑427).</li>
-</ul>
-</li>
-<li>Edge‑case checks for non‑mutating array handling and conservative classification when <code>hasStructuralAnalysis</code> is false (lines 270‑329).</li>
+<li><strong>Imports</strong> – <code>vitest</code> helpers, <code>StructuralAnalysis</code>, and the four fingerprint functions (R1‑R10).  </li>
+<li><strong>Mocking</strong> – <code>vi.mock(&quot;node:fs&quot;)</code> replaces the real file‑system functions (R12‑R16).  </li>
+<li><strong>Content‑hash tests</strong> – verify deterministic SHA‑256 output and distinct hashes for different inputs (R27‑R34).  </li>
+<li><strong>Fingerprint extraction tests</strong> – cover functions, classes, imports, exports, content hash, and line counts (R40‑R126).  </li>
+<li><strong>Fingerprint comparison tests</strong> – exercise all change levels (<code>NONE</code>, <code>COSMETIC</code>, <code>STRUCTURAL</code>) and edge cases such as missing structural analysis (R128‑R330).  </li>
+<li><strong>Analyze‑changes tests</strong> – validate classification of new, deleted, unchanged, and unknown files, and confirm that input arrays are not mutated (R332‑R427).  </li>
+<li><strong>Mock usage</strong> – <code>mockedReadFileSync</code> and <code>mockedExistsSync</code> are cast with <code>vi.mocked</code> (R20‑R21).  </li>
+<li><strong>Registry and store</strong> – a mock registry (<code>analyzeFile</code>) and an existing fingerprint store are used in the <code>analyzeChanges</code> tests (R333‑R361).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides unit coverage for fingerprint logic, helping detect regressions in change detection.  </li>
-<li>Centralizes test logic; future updates to fingerprint functions will be caught early.  </li>
-<li>Tests execute locally and do not alter production code.</li>
+<li><strong>Coverage</strong> – the test suite exercises every exported fingerprinting function and the <code>analyzeChanges</code> workflow, providing early detection of regressions.  </li>
+<li><strong>Maintainability</strong> – changes to fingerprint logic will be caught by the focused test blocks.  </li>
+<li><strong>Observability</strong> – failures surface immediately in CI with clear diagnostics on which comparison rule failed.  </li>
+<li><strong>Performance</strong> – unknown from the available diff/scan evidence.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Mock reliability: ensure <code>vi.mocked</code> types match stubs; otherwise assertions may silently pass.  </li>
-<li>Test flakiness: <code>contentHash</code> relies on deterministic SHA‑256; confirm no environment‑specific variations.  </li>
-<li>Coverage gaps: verify all public fingerprint functions are exercised; consider integration tests for real file trees.  </li>
-<li>Future API changes: if <code>FingerprintStore</code> or <code>StructuralAnalysis</code> evolve, update test fixtures accordingly.</li>
+<li><strong>Mock reliability</strong> – ensure <code>vi.mocked</code> correctly casts the stubs; run tests to confirm no TypeScript errors.  </li>
+<li><strong>Snapshot drift</strong> – if the hash algorithm or fingerprint format changes, snapshots may need updating (<code>vitest --update</code>).  </li>
+<li><strong>Edge‑case coverage</strong> – verify that <code>analyzeChanges</code> handles files lacking structural analysis; targeted tests already exist (R304‑R330).  </li>
+<li><strong>CI integration</strong> – confirm the new test file is included in the test matrix and that the <code>vitest</code> command is updated accordingly.</li>
 </ul>
 </article>
   </main>

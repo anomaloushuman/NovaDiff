@@ -1,20 +1,23 @@
 ### Overview  
-A new file `packages/graph-view/src/themes/types.ts` (lines 1‑36) adds a type‑safe theme system for the graph view component.
+A new file `packages/graph-view/src/themes/types.ts` (added lines R1‑R36) introduces a type system for graph‑view themes and a default configuration.
 
 ### Key changes  
-- `export type PresetId = …` (lines 1‑6) lists supported preset identifiers.  
-- `export interface AccentSwatch` (lines 8‑13) defines accent color metadata.  
-- `export interface ThemePreset` (lines 16‑22) bundles preset metadata, colors, accent swatches, and a default accent ID.  
-- `export type HeadingFont = "serif" | "sans" | "mono"` (line 25) restricts heading font choices.  
-- `export interface ThemeConfig` (lines 27‑31) captures runtime theme configuration.  
-- `export const DEFAULT_THEME_CONFIG: ThemeConfig` (lines 33‑36) provides a baseline configuration (`presetId: "dark-gold"`, `accentId: "gold"`).
+- **`PresetId`** (`"dark-gold" | "dark-ocean" | "dark-forest" | "dark-rose" | "light-minimal"`) – supported preset identifiers.  
+- **`AccentSwatch`** – describes an accent set with `id`, `name`, `accent`, `accentDim`, `accentBright`.  
+- **`ThemePreset`** – bundles preset metadata, color map, accent swatches, and default accent ID.  
+- **`HeadingFont`** – restricts heading fonts to `"serif" | "sans" | "mono"`.  
+- **`ThemeConfig`** – runtime theme settings: `presetId`, `accentId`, optional `headingFont`.  
+- **`DEFAULT_THEME_CONFIG`** – baseline config (`presetId: "dark-gold"`, `accentId: "gold"`).
 
 ### Impact  
-- **Correctness**: Type definitions prevent misuse of preset identifiers and accent data.  
-- **Maintainability**: Centralized theme definitions simplify adding or updating presets.  
-- **Compatibility**: As a new module, it introduces no breaking changes; existing code remains unaffected unless it imports from this file.
+- **API surface expansion** – consumers can import and type theme logic with the new symbols.  
+- **Centralized defaults** – `DEFAULT_THEME_CONFIG` offers a single source for initial theme values.  
+- **No breaking changes** – the file is added; existing code is unaffected unless it imports from this path.  
+- **Stronger typing** – the new interfaces reduce runtime errors when handling presets or accents.  
+- **No runtime cost** – only type declarations and a small constant are present.
 
 ### Risks & follow‑ups  
-- Verify that components consuming theme data import the correct types from this file.  
-- Ensure that preset identifiers used elsewhere match the `PresetId` union to avoid type errors.  
-- Run the repository’s lint, test, and production build scripts to confirm no new TypeScript errors.
+- **Missing imports** – verify modules that use theme data import from `packages/graph-view/src/themes/types.ts`.  
+- **Test coverage** – update tests that rely on theme configuration to reference `DEFAULT_THEME_CONFIG` or the new interfaces.  
+- **Documentation** – update README or internal docs to reflect `PresetId` and `ThemeConfig`.  
+- **Future extensions** – adding new presets requires updating the `PresetId` union to maintain type safety.

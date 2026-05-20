@@ -1,0 +1,62 @@
+{
+  "relPath": "src/app/changedFilesTree.ts",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:38:53.394Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export interface DirNode {",
+      "R10 added: export interface FileNode {",
+      "R17 added: export type TreeNode = DirNode | FileNode;",
+      "R19 added: export type FlatRow =",
+      "R34 added: export function normalizePathSegments(path: string): string[] {",
+      "R43 added: export function ancestorDirPaths(filePath: string): string[] {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { ChangeKind, FileChange } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-160"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { ChangeKind, FileChange } from \"./types\";",
+      "R3 added: export interface DirNode {",
+      "R4 added: type: \"dir\";",
+      "R5 added: name: string;",
+      "R6 added: fullPath: string;",
+      "R7 added: children: Map<string, TreeNode>;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function flattenVisibleRows (131-160)",
+      "right function addFilePathToTree (87-113)",
+      "right interface FileNode (10-33)",
+      "right function ensureDir (64-86)",
+      "right function buildChangedFilesTreeRoot (114-130)",
+      "right function ancestorDirPaths (43-54)",
+      "right function normalizePathSegments (34-42)",
+      "right function sortChildren (55-63)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

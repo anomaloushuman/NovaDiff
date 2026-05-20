@@ -26,28 +26,32 @@
 <body>
   <header class="top">
     <h1>.gitignore</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:57:08.907Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:06:11.822Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>.gitignore</code> file was modified to add ignore rules for legacy clone artifacts and graph‑engine build output. The changes appear in lines 34–38 of the file.</p>
+<p>A new <code>.gitignore</code> file was added at the repository root (line range R1‑38). It contains ignore rules for logs, build artifacts, editor metadata, and tool‑specific directories.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Line 34</strong> – added comment <code># Optional legacy clone (not used by NovaDiff)</code>.</li>
-<li><strong>Line 35</strong> – added pattern <code>understandanything/</code> to ignore that directory.</li>
-<li><strong>Line 37</strong> – added comment <code># Graph engine build output</code>.</li>
-<li><strong>Line 38</strong> – added pattern <code>packages/graph-core/dist</code> to ignore the build‑output directory.</li>
+<li>Added <code>.gitignore</code> (R1‑38).  </li>
+<li>Excludes log files: <code>*.log</code>, <code>npm-debug.log*</code>, <code>yarn-debug.log*</code>, <code>yarn-error.log*</code>, <code>pnpm-debug.log*</code>, <code>lerna-debug.log*</code> (lines 1‑6).  </li>
+<li>Ignores build and distribution directories: <code>node_modules</code>, <code>dist</code>, <code>dist-ssr</code>, <code>packages/graph-core/dist</code> (lines 10‑12, 38).  </li>
+<li>Skips editor/IDE metadata: <code>.vscode/*</code>, <code>!.vscode/extensions.json</code>, <code>.idea</code>, <code>.DS_Store</code>, <code>*.suo</code>, <code>*.ntvs*</code>, <code>*.njsproj</code>, <code>*.sln</code>, <code>*.sw?</code> (lines 15‑24).  </li>
+<li>Excludes Rust CLI target (<code>cli/target</code>) and Electron installer output (<code>release</code>) (lines 26‑30).  </li>
+<li>Omits legacy clone directory (<code>understandanything/</code>) and temporary folder <code>Bn</code> (lines 34‑36).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Only affects version‑control behavior; no code or runtime changes are introduced.</li>
-<li>The added ignore patterns prevent accidental commits of the specified directories.</li>
+<li>Centralizes ignore rules, simplifying future updates.  </li>
+<li>Git and CI tools will now respect these ignores; no code changes are required.  </li>
+<li>CI logs may be cleaner, but verify that any required artifacts are not inadvertently ignored.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>understandanything/</code> and <code>packages/graph-core/dist</code> are not required by CI or deployment scripts; otherwise, missing files could cause failures.</li>
-<li>Update any scripts that previously expected these directories in the repository to generate them locally.</li>
-<li>Run a quick lint or <code>.gitignore</code> parser check to ensure the new comments do not interfere with tooling.</li>
+<li>Confirm that <code>packages/graph-core/dist</code> is not needed in the repo; adjust the ignore if necessary.  </li>
+<li>Run the test suite and CI pipeline to ensure ignored files do not affect tests or deployment scripts.  </li>
+<li>Verify that the <code>!.vscode/extensions.json</code> rule still allows necessary VS Code settings to be tracked.  </li>
+<li>Ensure that excluding <code>understandanything/</code> does not hide needed legacy files for downstream consumers.</li>
 </ul>
 </article>
   </main>

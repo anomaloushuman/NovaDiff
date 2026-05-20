@@ -1,24 +1,35 @@
 ### Overview  
-A new UI overlay component, `AnimatedOverlay`, is added in **src/components/ui/AnimatedOverlay.tsx** (lines 1‑79). It provides animated show/hide behavior, respects reduced‑motion preferences, and handles keyboard and backdrop interactions.
+A new component `AnimatedOverlay` was added to `src/components/ui/AnimatedOverlay.tsx` (lines R1‑79). It implements a modal overlay that respects the user’s reduced‑motion preference.
 
 ### Key changes  
-- **Imports** – `useEffect`, `useState` from React (R1) and a custom `usePrefersReducedMotion` hook (R2).  
-- **Constant** – `CLOSE_MS = 300` (R4).  
-- **Props interface** – `AnimatedOverlayProps` (R6‑R13) exposes `open`, `onClose`, `backdropClassName`, `panelClassName`, optional `labelledBy`, and `children`.  
-- **Component** – exported at R15.  
-  - State: `mounted` and `visible` (R24‑R25).  
-  - First `useEffect` (R27‑R43) mounts/unmounts the overlay, triggers visibility, and schedules a close delay (`CLOSE_MS` or 0 for reduced motion).  
-  - Second `useEffect` (R45‑R56) listens for the Escape key to call `onClose`.  
-- **Render** – returns `null` when not mounted (R58‑R60). Otherwise renders a dialog with classes `ui-overlay`, `ui-overlay-panel`, and dynamic `is-open`/`is-closing` (R62‑R78). Backdrop click triggers `onClose` (R70‑R74).
+- **Imports**  
+  - R1 added: `import { useEffect, useState } from "react";`  
+  - R2 added: `import { usePrefersReducedMotion } from "../../app/usePrefersReducedMotion";`  
+- **Constant**  
+  - R4 added: `const CLOSE_MS = 300;` – delay used when closing the overlay.  
+- **Props interface** (`AnimatedOverlayProps`, R6‑13)  
+  - `open: boolean`  
+  - `onClose: () => void`  
+  - `backdropClassName: string`  
+  - `panelClassName: string`  
+  - `labelledBy?: string`  
+  - `children: React.ReactNode`  
+- **Component logic** (`AnimatedOverlay`, R15‑79)  
+  - State: `mounted` and `visible`.  
+  - First `useEffect` syncs mounting/visibility with `open` and reduced‑motion settings, using `requestAnimationFrame` for the opening transition and `window.setTimeout` for the closing delay.  
+  - Second `useEffect` adds a global `keydown` listener that calls `onClose` when the Escape key is pressed.  
+  - Backdrop click handler triggers `onClose`.  
+  - Renders a `div` with `role="dialog"`, `aria-modal="true"`, optional `aria-labelledby`, and CSS classes `ui-overlay`, `ui-overlay-panel`, plus motion states `is-open` or `is-closing`.
 
 ### Impact  
-- **Accessibility** – dialog role, `aria-modal`, and optional `aria-labelledby`.  
-- **Animation** – double `requestAnimationFrame` sequence (R34‑R36) for smooth transitions; reduced‑motion path skips animation.  
-- **Centralization** – animation logic is contained in one component, simplifying future adjustments.  
-- **No breaking changes** – existing files are untouched; the new component is fully controlled via props.
+- **Correctness** – The component mounts only when `open` is true and unmounts after the closing delay, respecting reduced‑motion settings.  
+- **Maintainability** – A clear `AnimatedOverlayProps` interface and self‑contained logic simplify future extensions.  
+- **Performance** – Uses `requestAnimationFrame` for visibility changes and a 300 ms timeout for closing, reducing layout thrashing.  
+- **Compatibility** – Relies on `window` and `document` APIs; may need SSR guards if used server‑side.  
+- **Observability** – No side‑effects beyond event listeners; listeners are cleaned up on unmount.
 
 ### Risks & follow‑ups  
-- The component imports `usePrefersReducedMotion`; ensure this hook exists and returns a boolean.  
-- CSS classes `ui-overlay`, `ui-overlay-panel`, `is-open`, and `is-closing` must be defined; otherwise visual behavior will be missing.  
-- Verify that `onClose` fires on Escape key and backdrop click; missing event listeners could leave the overlay open.  
-- The double `requestAnimationFrame` call (R34‑R36) may cause layout thrashing on very old browsers; test across target environments.
+- Verify that `onClose` fires correctly on Escape key and backdrop click.  
+- Ensure `usePrefersReducedMotion` disables animation when appropriate.  
+- Test that the component unmounts cleanly after closing to avoid memory leaks.  
+- Confirm that the referenced CSS classes (`ui-overlay`, `ui-overlay-panel`, `is-open`, `is-closing`) exist and produce the intended visual effect.

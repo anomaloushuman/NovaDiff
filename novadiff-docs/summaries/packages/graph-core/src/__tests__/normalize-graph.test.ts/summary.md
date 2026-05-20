@@ -1,20 +1,30 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/normalize-graph.test.ts` (lines R1‑R498) has been added. It exercises the graph‑normalization utilities `normalizeNodeId`, `normalizeComplexity`, and `normalizeBatchOutput`, and verifies that the resulting graph satisfies the schema via `validateGraph`.
+A new test file `packages/graph-core/src/__tests__/normalize-graph.test.ts` (lines R1‑R498) has been added to exercise the graph‑normalization utilities and their integration with the schema validator.
 
 ### Key changes  
-- **Imports** – The test pulls `describe`, `it`, `expect` from `vitest` (R1), the three analyzer functions from `../analyzer/normalize-graph.js` (R2‑R6), and `validateGraph` from `../schema.js` (R7).  
-- **Node ID normalization** – Tests cover correct IDs, double prefixes, project‑name stripping, bare paths, whitespace trimming, and handling of non‑code types (e.g., `module:`, `concept:`).  
-- **Complexity mapping** – Assertions verify string aliases, numeric ranges, case‑insensitivity, and defaulting for undefined/negative values.  
-- **Batch output normalization** – Checks include ID rewriting, numeric complexity conversion, edge rewriting, dangling edge removal, node/edge deduplication, and stats reporting (`idsFixed`, `complexityFixed`, `edgesRewritten`, `danglingEdgesDropped`).  
-- **Integration test** – Wraps a normalized graph in a full schema object and asserts `validateGraph` succeeds (lines R444‑R496).
+- **Imports added** (R1‑R7):  
+  ```ts
+  import { describe, it, expect } from "vitest";
+  import {
+    normalizeNodeId,
+    normalizeComplexity,
+    normalizeBatchOutput,
+  } from "../analyzer/normalize-graph.js";
+  import { validateGraph } from "../schema.js";
+  ```
+- **`normalizeNodeId` tests** (R9‑R107): cover handling of file, function, and class IDs; stripping of project prefixes; normalization of bare paths; whitespace trimming; support for non‑code prefixes; fallback for unknown types.
+- **`normalizeComplexity` tests** (R124‑R184): verify mapping of string aliases, numeric ranges, case insensitivity, and defaulting to `"moderate"` for undefined, null, zero, or negative values.
+- **`normalizeBatchOutput` tests** (R187‑R440): assert node ID rewriting, numeric‑to‑string complexity conversion, edge rewriting, dangling‑edge removal, node/edge deduplication, and accurate statistics reporting.
+- **Integration test** (R443‑R497): builds a graph from the normalized output, validates it with `validateGraph`, and checks that the resulting graph contains the expected nodes and edges.
 
 ### Impact  
-- Adds 498 lines of test code, increasing coverage of the normalization module.  
-- Provides explicit assertions on normalization stats, aiding future regression detection.  
-- Confirms that normalized graphs remain valid against the public JSON schema, protecting downstream consumers.
+- **Correctness**: The tests confirm that normalization logic behaves as specified and that the output satisfies the graph schema.  
+- **Maintainability**: Centralized edge‑case coverage makes future refactors easier to validate.  
+- **Observability**: Statistics from `normalizeBatchOutput` are exercised, aiding debugging of normalization issues.  
+- **Compatibility**: The public API of the analyzer remains stable; any breaking change will surface in these tests.
 
 ### Risks & follow‑ups  
-- **Schema changes** – The integration test may fail if the schema evolves; run `vitest` after any schema update.  
-- **Test stability** – No snapshots are used, but any change to output formatting could break tests; review failures carefully.  
-- **Linting/build** – Ensure the new file passes the repository’s lint, test, and build pipelines (`npm run lint`, `npm test`, `npm run build`).  
-- **Documentation** – Update any docs that reference normalization behavior to reflect the new edge‑rewriting and deduplication logic.
+- **Regression in normalization**: Changes to normalization rules will cause test failures; run `vitest` to verify.  
+- **Schema drift**: If the schema changes, `validateGraph` may fail; keep the schema and validator in sync.  
+- **Performance**: Large graphs could expose inefficiencies in ID rewriting or deduplication; monitor test runtimes.  
+- **Missing edge cases**: Current tests cover typical scenarios; consider adding tests for uncommon prefixes or malformed IDs if new features are introduced.

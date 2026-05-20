@@ -1,22 +1,23 @@
-### Overview
-A brand‑new stylesheet `src/components/onboarding/onboarding.css` has been added to provide the visual foundation for the onboarding flow. It defines the overlay, welcome screens, user cards, device‑code blocks, and related UI elements.
+### Overview  
+`src/components/onboarding/onboarding.css` has been added.  
+The file contains 262 new lines that style the onboarding overlay, welcome screens, workspace hub, and related UI components.
 
-### Key changes
-- **Overlay styling** – `.onboarding-overlay` now covers the viewport with `position: fixed; inset: 0; z-index: 12000;` and a backdrop blur.
-- **Welcome screen layout** – `.welcome-screen` and `.workspace-hub` share a centered container (`width: min(720px, 100%); margin: 0 auto;`).
-- **User card interactions** – `.welcome-user-card` gains hover and selected states, changing border color and background via `color-mix`.
-- **Device‑code block** – `.welcome-device-code-block` and `.welcome-device-code` provide a prominent, monospace‑styled code display.
-- **Responsive grid** – `.git-history-pickers` switches to a single column on screens ≤640 px.
-- **Miscellaneous UI helpers** – classes for avatars, buttons, and consent sections are added for consistency across onboarding steps.
+### Key changes  
+- **Overlay** – `.onboarding-overlay` (lines 1‑12) is defined with `position: fixed; inset: 0; z-index: 12000;` and flex centering.  
+- **Screen layout** – `.welcome-screen` and `.workspace-hub` (lines 14‑18) share a max‑width of `min(720px, 100%)` and are centered.  
+- **Cards & avatars** – `.welcome-user-card`, `.welcome-user-avatar`, and related classes (lines 50‑70) set flex layouts, padding, borders, and hover effects.  
+- **Responsive grid** – `.git-history-pickers` (lines 177‑182) switches from two columns to one on screens ≤640 px (media query lines 184‑188).  
+- **Animation** – `.spin-ic` (lines 221‑225) uses a `spin-ic` keyframe animation (lines 227‑231).  
+- **Additional UI** – New classes for device code blocks, consent prompts, and local‑only dividers appear (lines 126‑262).
 
-### Impact
-- **UI correctness** – The new CSS will render the onboarding overlay and related components; missing imports could leave the UI unstyled.
-- **Maintainability** – Centralizing onboarding styles reduces duplication but increases the file size (~262 lines). Future style changes should target this file to avoid scattered overrides.
-- **Performance** – The overlay’s `backdrop-filter: blur(8px)` may impact rendering on low‑end devices; monitor frame rates during onboarding.
-- **Compatibility** – Uses modern CSS features (`color-mix`, `inset`) that may not be supported in older browsers; ensure polyfills or fallbacks if needed.
+### Impact  
+- **UI correctness** – The overlay’s high `z-index` (12000) may cover other elements; no evidence of interaction handling is present.  
+- **Maintainability** – Styles are scoped to component classes, limiting global leakage.  
+- **Performance** – No heavy selectors or animations that could degrade rendering; the file is ~262 lines of straightforward CSS.  
+- **Compatibility** – Uses modern CSS (`color-mix`, `inset`) without fallbacks; support depends on target browsers.
 
-### Risks & follow‑ups
-- **Missing CSS import** – Verify that `onboarding.css` is imported in the onboarding component or global styles; otherwise the UI will appear unstyled.
-- **Specificity clashes** – Existing global styles might override these new classes; run visual regression tests to confirm appearance.
-- **Backwards compatibility** – Test on browsers that lack `color-mix` support; consider graceful degradation.
-- **Performance regression** – Profile the onboarding flow on target devices to ensure the backdrop blur does not cause jank.
+### Risks & follow‑ups  
+- **Regression** – Unknown from the diff; run onboarding flow tests to ensure the overlay does not interfere with existing modals or tooltips.  
+- **Responsiveness** – Verify the two‑column to single‑column transition at 640 px (media query lines 184‑188).  
+- **Browser support** – Confirm `color-mix` and `inset` are supported or polyfilled in the target browsers.  
+- **Test coverage** – Execute the nearest targeted tests and perform a manual smoke test for the overlay area.

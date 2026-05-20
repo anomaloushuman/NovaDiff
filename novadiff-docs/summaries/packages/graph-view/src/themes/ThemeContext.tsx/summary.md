@@ -1,21 +1,31 @@
 ### Overview  
-In `packages/graph-view/src/themes/ThemeContext.tsx`, the `ThemeProvider` API now accepts an optional `scopeToHost` flag. When true, theme tokens are applied only to a wrapper element instead of the global `document.documentElement`. The helper `resolveInitialTheme` was extended to accept this flag and skip the local‑storage lookup.
+`packages/graph-view/src/themes/ThemeContext.tsx` now defines a React context for theme handling.  
+- New context type `ThemeContextValue` (lines 17‑26).  
+- `ThemeContext` created with `createContext<ThemeContextValue | null>(null)` (line 25).  
+- `ThemeProvider` component (lines 66‑147) and `useTheme` hook (lines 148‑152) are exported.
 
 ### Key changes  
-- **`resolveInitialTheme` (L49‑55)** now takes `scopeToHost?: boolean`; if true it returns `metaTheme ?? DEFAULT_THEME_CONFIG` without reading local storage.  
-- **`ThemeProvider` signature (L60‑62)** gains `scopeToHost?: boolean`; the initial state is created with `resolveInitialTheme(metaTheme, scopeToHost)`.  
-- **Theme application (L67‑85)** branches: `applyTheme(config, host)` when `scopeToHost` is true, otherwise `applyTheme(config)`.  
-- **Local‑storage persistence (L86‑90)** is skipped when `scopeToHost` is true (`initialized.current && !scopeToHost`).  
-- **Cleanup (L96‑102)** clears the theme only on the host element when `scopeToHost` is true.  
-- **Meta‑theme update (L106‑113)** now updates the config immediately if `scopeToHost` and a `metaTheme` are present, and the effect dependency list includes `scopeToHost`.  
-- **Wrapper element (L134‑140)** is rendered only when `scopeToHost` is true, providing a `ref` (`hostRef`) for scoped styling.
+- **Imports** (lines 1‑13): added `createContext`, `useCallback`, `useContext`, `useEffect`, `useRef`, `useState`, `type ReactNode`; type imports from `./types.ts`; constants and helpers from `./presets.ts` and `./theme-engine.ts`.  
+- **Persistence helpers**: `loadFromLocalStorage` (lines 27‑40) and `saveToLocalStorage` (lines 41‑47) read/write the key `"ua-theme"`.  
+- **Initial theme resolution**: `resolveInitialTheme` (lines 49‑58) chooses between `metaTheme`, localStorage, or `DEFAULT_THEME_CONFIG`.  
+- **Provider logic**:  
+  - State initialized via `resolveInitialTheme`.  
+  - `useEffect` applies theme on mount/update; saves to localStorage only when `scopeToHost` is false and the component has mounted (lines 75‑90).  
+  - Cleanup `clearTheme` on unmount when `scopeToHost` is true (lines 92‑102).  
+  - Async `metaTheme` updates handled in a separate `useEffect` (lines 104‑113).  
+- **Setters**: `setPreset`, `setAccent`, `setHeadingFont` memoized with `useCallback` (lines 115‑128).  
+- **Context value**: `{ config, preset, setPreset, setAccent, setHeadingFont }` (line 133).  
+- **Hook**: `useTheme` throws if used outside a provider (lines 148‑152).
 
 ### Impact  
-- **Global CSS isolation**: When `scopeToHost` is true, theme variables are confined to the wrapper, preventing accidental overrides of other parts of the app.  
-- **Local‑storage behavior**: Theme selections are not persisted while scoped; this is intentional per the new logic.  
-- **Cleanup correctness**: `clearTheme` is invoked only on the host element during unmount, avoiding stray CSS variables.
+- **Single source of truth**: Theme state lives only in `ThemeProvider` state and context.  
+- **Persistence**: User preferences survive page reloads via localStorage unless overridden by `metaTheme`.  
+- **Scoped theming**: `scopeToHost` allows tokens to apply only to a wrapper element, useful for embedded graphs.  
+- **Error handling**: LocalStorage errors are caught silently, preventing crashes but hiding failures.  
+- **Consumer migration**: Components must now be wrapped in `ThemeProvider` or use `useTheme`.
 
 ### Risks & follow‑ups  
-- **Regression**: Components that previously relied on global theme variables may break when `scopeToHost` is enabled; visual regression tests are recommended.  
-- **Persistence loss**: Confirm that non‑persistence of user‑selected themes while scoped is acceptable for the intended use case.  
-- **Dependency validation**: The updated `useEffect` dependencies (`[metaTheme, scopeToHost]`) should be reviewed to avoid stale closures or unnecessary re‑applications.
+- **Silent storage failures**: `saveToLocalStorage` and `loadFromLocalStorage` swallow errors; verify fallback behavior is acceptable.  
+- **Provider usage**: `useTheme` throws if called outside a provider; ensure all consumers are updated.  
+- **Scope flag logic**: `clearTheme` runs only on unmount when `scopeToHost` is true; confirm cleanup works in embedded scenarios.  
+- **Async metaTheme**: The provider updates config when `metaTheme` arrives after mount; test that this does not overwrite a user‑selected preset stored in localStorage.

@@ -26,30 +26,31 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/config.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T11:03:07.813Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:15:25.949Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file, <code>.novadiff-graph/config.json</code>, has been added to the repository.<br>The file contains four lines:```
-{
-  &quot;autoUpdate&quot;: false,
-  &quot;outputLanguage&quot;: &quot;en&quot;
-}</p>
-<pre><code class="language-###">
-- **File addition**: `.novadiff-graph/config.json` now exists (previously absent).  
-- **Configuration defaults**: The file sets `&quot;autoUpdate&quot;: false` and `&quot;outputLanguage&quot;: &quot;en&quot;`.
-
-### Impact
-
-- **Scope**: The change is limited to the new configuration file; no other files were modified.  
-- **Usage**: It is unknown from the diff whether any component currently reads this file.  
-- **Future maintenance**: Centralizing these flags may simplify future adjustments, but code that previously assumed no config file may need to handle its presence.
-
-### Risks &amp; follow‑ups
-- **Configuration loading**: Unknown from the available evidence whether the graph module loads this file; verify that the loader is invoked during initialization.  
-- **Flag enforcement**: Run targeted tests to confirm that `autoUpdate` is respected if the config is read.  
-- **Documentation**: Update any relevant docs to reflect the new configuration options once their usage is confirmed.
-</code></pre>
+<p>A new file <code>.novadiff-graph/config.json</code> has been added. It contains a minimal JSON object with two properties.</p>
+<h3>Key changes</h3>
+<ul>
+<li>File addition: <code>.novadiff-graph/config.json</code> (lines R1‑R4 added).  </li>
+<li><code>autoUpdate</code>: set to <code>false</code> (line R2).  </li>
+<li><code>outputLanguage</code>: set to <code>&quot;en&quot;</code> (line R3).  </li>
+<li>JSON structure: <code>{ &quot;autoUpdate&quot;: false, &quot;outputLanguage&quot;: &quot;en&quot; }</code> (lines R1‑R4).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The presence of this file may affect components that load configuration from this path.  </li>
+<li>The default values are explicitly defined; previously implicit defaults may no longer apply.  </li>
+<li>Unknown from the available diff/scan evidence whether any runtime behavior changes.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that consumers of this config handle the <code>false</code> value for <code>autoUpdate</code>.  </li>
+<li>Ensure older deployments that did not ship this file still function, or provide a fallback.  </li>
+<li>Update documentation to list the new config file and its purpose.  </li>
+<li>Run targeted tests that load the config and confirm the default language is <code>&quot;en&quot;</code>.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

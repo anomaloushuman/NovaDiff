@@ -26,36 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/tour-generator.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:58:42.136Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:44:35.034Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/analyzer/tour-generator.ts</code> adds a lightweight tour‑generation system. It exports three functions and imports the <code>KnowledgeGraph</code> and <code>TourStep</code> types from <code>../types.js</code> (line 1). The functions are:</p>
-<ul>
-<li><code>buildTourGenerationPrompt</code> (lines 7‑62) – builds an LLM prompt that includes project metadata, node and edge lists, and layer information, and specifies a JSON response format.  </li>
-<li><code>parseTourGenerationResponse</code> (lines 70‑120) – extracts JSON from raw or fenced text, validates required fields, and returns an array of <code>TourStep</code>.  </li>
-<li><code>generateHeuristicTour</code> (lines 135‑293) – heuristically builds a tour using Kahn’s topological sort, groups nodes by layers when present, batches code nodes into steps, and appends a final “Key Concepts” step for concept nodes.</li>
-</ul>
+<p><code>packages/graph-core/src/analyzer/tour-generator.ts</code> adds LLM‑based and heuristic tour generation for a knowledge graph. The file imports <code>KnowledgeGraph</code> and <code>TourStep</code> (line 1) and exports three functions.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Import added: <code>KnowledgeGraph, TourStep</code> (line 1).  </li>
-<li>Prompt construction, parsing, and heuristic generation functions added (lines 7‑62, 70‑120, 135‑293).  </li>
-<li>Documentation comments added for each function.  </li>
-<li>Topological sort handles isolated nodes and cycles by appending them after the main pass (lines 181‑186).  </li>
-<li>Concept nodes are always appended last (lines 274‑285).</li>
+<li><strong><code>buildTourGenerationPrompt</code></strong> (lines 7‑62): builds a prompt that includes project metadata, node summaries, up to 50 edges, and layer info.  </li>
+<li><strong><code>parseTourGenerationResponse</code></strong> (lines 70‑120): extracts JSON from raw or markdown‑wrapped responses, validates required fields, and returns a <code>TourStep[]</code>. It returns an empty array on parse failure.  </li>
+<li><strong><code>generateHeuristicTour</code></strong> (lines 135‑293): creates a deterministic tour without an LLM. It separates concept nodes, builds adjacency maps, performs Kahn’s topological sort, groups nodes by layers when present, batches unlayered nodes in groups of three, and appends a final “Key Concepts” step. Order numbers are assigned sequentially.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Algorithmic</strong>: Uses Kahn’s algorithm (O(V+E)) for ordering code nodes.  </li>
-<li><strong>Structure</strong>: Centralizes prompt logic and parsing, reducing duplication.  </li>
-<li><strong>Extensibility</strong>: New functions are additive; existing exports remain unchanged.</li>
+<li><strong>API surface</strong>: Consumers can request tours via LLM or fallback to the deterministic heuristic.  </li>
+<li><strong>Parsing robustness</strong>: <code>parseTourGenerationResponse</code> guards against malformed responses, reducing runtime crashes.  </li>
+<li><strong>Performance</strong>: Topological sort runs in O(V+E); batching keeps step counts manageable for large graphs.  </li>
+<li><strong>Maintainability</strong>: Clear separation of prompt construction, response parsing, and heuristic logic simplifies future extensions.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>parseTourGenerationResponse</code> silently returns an empty array on any parsing error (lines 117‑119); downstream code should handle empty tours.  </li>
-<li>Layer ordering is derived from the topological sort; no evidence that layer dependencies are fully respected.  </li>
-<li>Concept nodes are appended after all code nodes; if a concept node depends on code, the current ordering may mislead users.  </li>
-<li>Prompt size grows with graph size; no evidence on token limits from the diff.</li>
+<li><strong>LLM prompt size</strong>: The prompt includes all nodes and up to 50 edges; token limits may be exceeded in very large projects (unknown from the diff).  </li>
+<li><strong>Parsing edge cases</strong>: The function returns an empty array on any parse error; unit tests should cover missing fields or non‑JSON responses (unknown from the diff).  </li>
+<li><strong>Cycle handling</strong>: Isolated nodes are appended after the topological sort; cycles are not explicitly detected, which could affect ordering (unknown from the diff).  </li>
+<li><strong>Layer ordering</strong>: The heuristic assumes layers are topologically sorted; verify that layer order aligns with dependency order in real projects (unknown from the diff).</li>
 </ul>
 </article>
   </main>

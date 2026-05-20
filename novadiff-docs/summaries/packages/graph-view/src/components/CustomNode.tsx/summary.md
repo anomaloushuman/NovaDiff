@@ -1,23 +1,22 @@
 ### Overview  
-A new `CustomNode` component is added to `packages/graph-view/src/components/CustomNode.tsx`. It renders a custom node for XYFlow with color bars, handles, and diff/selection overlays.
+A new `CustomNode` component is added to `packages/graph-view/src/components/CustomNode.tsx`. It renders a node with a colored side bar, type label, complexity badge, optional test icon, and supports diff overlays, selection glow, and neighbor highlighting.
 
 ### Key changes  
-- **Imports** (lines 1‑5): `memo` from `react`; `Handle`, `Position` from `@xyflow/react`; type imports for `NodeProps`, `Node`, `NodeType`; `useI18n` from context.  
-- **Color maps** (lines 8‑30 and 32‑54) keyed by `NodeType` to keep styling consistent with the core union.  
-- **Data contract** (`CustomNodeData`, lines 62‑80) defines node metadata and UI flags.  
-- **Node type alias** (`CustomFlowNode`, line 82) registers the `"custom"` node with XYFlow.  
-- **Component logic** (`CustomNodeComponent`, lines 84‑187) renders the card, applies classes based on flags, and uses `useI18n` for labels.  
-- **Memoization** (line 189) wraps the component with `memo` to avoid unnecessary re‑renders.  
-- **Export** (line 190) exposes `CustomNode` as the default export.
+- **Imports** (lines 1‑5): `memo` from React; `Handle`, `Position`, `NodeProps`, `Node` from `@xyflow/react`; `NodeType` from `@novadiff/graph-core/types`; `useI18n` from the local context.  
+- **Color maps** (lines 7‑30, 32‑54, 56‑60): `typeColors`, `typeTextColors`, and `complexityColors` keyed by `NodeType` or complexity string.  
+- **`CustomNodeData` interface** (lines 62‑80): defines node metadata, flags for selection, diff state, and an optional click callback.  
+- **`CustomFlowNode` type** (line 82): `Node<CustomNodeData, "custom">`.  
+- **`CustomNodeComponent`** (lines 84‑187): renders the node, applies dynamic classes for selection, diff, and neighbor states, and uses `Handle` for XYFlow connections.  
+- **Memoization** (line 189): `const CustomNode = memo(CustomNodeComponent);`.  
+- **Default export** (line 190): `export default CustomNode;`.
 
 ### Impact  
-- Provides type safety for node data via `CustomNodeData`.  
-- Emits a dev‑time warning for unknown `nodeType` values (lines 94‑96).  
-- Diff overlay classes (`diff-changed-glow`, `diff-affected-glow`) give visual cues for changes.  
-- Memoization improves rendering performance for unchanged nodes.
+- The component now supports the `"custom"` node type with diff overlays and selection logic.  
+- Centralized color maps and a dedicated interface simplify future style or data changes.  
+- A dev‑mode warning (`console.warn`) flags unknown `nodeType` values, aiding debugging.
 
 ### Risks & follow‑ups  
-- Color maps must stay in sync with the core `NodeType` union; update after core changes.  
-- Unknown `nodeType` values trigger a warning; consider stricter validation or a fallback.  
-- i18n keys `t.customNode.tested` and `t.customNode.hasTests` must exist; run extraction to confirm.  
-- No unit tests exist for this component yet; add snapshot and interaction tests to guard against regressions.
+- **Unknown `NodeType` values**: The dev‑mode warning may surface if the core union and the color map diverge; verify sync after core updates.  
+- **Memoization**: Ensure that `data` props are stable; otherwise, memo may not prevent unnecessary renders.  
+- **Diff overlay styling**: Confirm that CSS variables (`--color-diff-changed`, `--color-diff-affected`) exist in the theme.  
+- **Test icon rendering**: Verify that `t.customNode.tested` and `t.customNode.hasTests` keys are present in the i18n bundle.

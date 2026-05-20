@@ -26,33 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/hooks/useIsMobile.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:47:26.669Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:33:32.447Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new hook <code>useIsMobile</code> is added at <code>packages/graph-view/src/hooks/useIsMobile.ts</code>. It returns a boolean indicating whether the viewport width is below a configurable breakpoint (default <code>768 px</code>).</p>
+<p>A new hook, <code>useIsMobile</code>, is added at <code>packages/graph-view/src/hooks/useIsMobile.ts</code>. It returns a boolean indicating whether the viewport width is below a configurable breakpoint (default 768 px).</p>
 <h3>Key changes</h3>
 <ul>
-<li>Import <code>useEffect</code> and <code>useState</code> from <code>react</code> (line 1).  </li>
-<li>Define <code>DEFAULT_BREAKPOINT = 768</code> (line 3).  </li>
-<li>Exported function <code>useIsMobile(breakpoint = DEFAULT_BREAKPOINT): boolean</code> (line 5).  </li>
-<li>Media query string: <code>(max-width: ${breakpoint - 1}px)</code> (line 6).  </li>
-<li>Initial state lazily computed: returns <code>false</code> when <code>typeof window === &quot;undefined&quot;</code> (SSR) and otherwise <code>window.matchMedia(query).matches</code> (lines 7‑9).  </li>
-<li><code>useEffect</code> attaches a <code>change</code> listener to update state and cleans up on unmount (lines 12‑18).  </li>
-<li>Hook returns the current <code>isMobile</code> flag (line 20).</li>
+<li>Import <code>useEffect</code> and <code>useState</code> from <code>react</code> (R1).  </li>
+<li>Define <code>DEFAULT_BREAKPOINT = 768</code> (R3).  </li>
+<li>Export <code>useIsMobile(breakpoint = DEFAULT_BREAKPOINT)</code> (R5).  </li>
+<li>Build media query <code>(max-width: ${breakpoint - 1}px)</code> (R6).  </li>
+<li>Initialize state with <code>useState&lt;boolean&gt;</code>; guard against SSR (<code>typeof window === &quot;undefined&quot;</code> returns false) (R7‑R9).  </li>
+<li><code>useEffect</code> creates a <code>MediaQueryList</code>, updates state on change, and removes the listener on cleanup (R12‑R18).  </li>
+<li>Return the current <code>isMobile</code> state (R20‑R21).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes breakpoint logic; components can import a single hook instead of duplicating media‑query code.  </li>
-<li>SSR‑safe: returns <code>false</code> on server, preventing hydration mismatches.  </li>
-<li>Minimal overhead: one <code>matchMedia</code> listener per component instance.</li>
+<li>SSR‑safe: returns <code>false</code> when <code>window</code> is undefined.  </li>
+<li>Single source of truth for breakpoint logic; default can be adjusted.  </li>
+<li>Minimal overhead: one event listener per hook instance.  </li>
+<li>Works in browsers supporting <code>matchMedia</code> and <code>addEventListener</code> on <code>MediaQueryList</code>.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>SSR usage</strong>: Components should not depend on the hook’s value during the initial server render.  </li>
-<li><strong>Listener cleanup</strong>: Verify <code>removeEventListener</code> is called correctly; run unit tests for unmount scenarios.  </li>
-<li><strong>Custom breakpoint</strong>: Ensure passing a different breakpoint updates the query and listener.  </li>
-<li><strong>Browser support</strong>: <code>addEventListener</code> on <code>MediaQueryList</code> may not exist in older browsers; consider a polyfill if needed.</li>
+<li>Verify <code>matchMedia</code> support in target browsers; fallback may be needed for legacy environments (unknown from the available diff/scan evidence).  </li>
+<li>Confirm cleanup correctly removes the listener to avoid memory leaks.  </li>
+<li>Test the hook in SSR contexts (e.g., Next.js) to ensure no crashes.  </li>
+<li>Ensure that changing the <code>breakpoint</code> prop updates the listener and state as expected.</li>
 </ul>
 </article>
   </main>

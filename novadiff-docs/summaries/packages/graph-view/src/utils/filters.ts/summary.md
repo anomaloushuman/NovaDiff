@@ -1,27 +1,29 @@
 ### Overview  
-`packages/graph-view/src/utils/filters.ts` now exports three helpers:  
-- `filterNodes` (lines 19‑56)  
-- `filterEdges` (lines 57‑76)  
-- internal `getEdgeCategory` (lines 81‑88).  
-
-The file adds imports for `GraphNode`, `GraphEdge`, `FilterState`, `NodeType`, `Complexity`, `EdgeCategory`, and `EDGE_CATEGORY_MAP` (lines 1‑3).
+`packages/graph-view/src/utils/filters.ts` introduces typed filtering utilities for graph nodes and edges. The module replaces ad‑hoc logic with reusable functions that operate on pre‑computed indices.
 
 ### Key changes  
-- **`filterNodes`** receives a pre‑computed `nodeIdToLayerIds: Map<string, Set<string>>`.  
-  *Layer checks run in O(1)* by looking up the set of layer IDs for each node and testing membership against `filters.layerIds`. This replaces the previous O(N × L × K) loop that used `layer.nodeIds.includes`.  
-- **`filterEdges`** keeps edges only if both endpoints are visible (`visibleNodeIds.has`) and if the edge’s category (determined by `getEdgeCategory`) is present in `filters.edgeCategories`.  
-- **`getEdgeCategory`** iterates over `EDGE_CATEGORY_MAP` to map an edge type to its category, returning `null` for unknown types.  
-
-All functions are fully typed and documented with JSDoc comments.
+- **Imports** (lines 1‑3):  
+  ```ts
+  import type { GraphNode, GraphEdge } from "@novadiff/graph-core/types";
+  import type { FilterState, NodeType, Complexity, EdgeCategory } from "../store";
+  import { EDGE_CATEGORY_MAP } from "../store";
+  ```
+- **`filterNodes`** (lines 19‑52):  
+  * Filters by `nodeTypes` and `complexities`.  
+  * Uses `nodeIdToLayerIds: Map<string, Set<string>>` for O(1) layer membership checks, matching the “any‑layer‑wins” semantics described in the comment.  
+- **`filterEdges`** (lines 57‑76):  
+  * Keeps only edges whose `source` and `target` are in `visibleNodeIds`.  
+  * Filters by edge category via `getEdgeCategory`.  
+- **`getEdgeCategory`** (lines 81‑88):  
+  * Looks up an edge’s category in `EDGE_CATEGORY_MAP`; returns `null` if the type is unknown.
 
 ### Impact  
-- **Performance**: Constant‑time layer membership checks reduce export time for large graphs (#102).  
-- **Correctness**: Maintains “any‑layer‑wins” semantics; nodes belonging to any selected layer are kept.  
-- **Maintainability**: Centralizes filtering logic, simplifying future extensions.  
-- **Observability**: Functions are pure; no new runtime side‑effects.
+- **Performance**: The comment in `filterNodes` notes that the new O(1) layer lookup removes the former O(N × L × K) cost that dominated export time on large graphs (#102).  
+- **Correctness**: Explicit type checks prevent accidental inclusion of unsupported node types or complexities.  
+- **Maintainability**: Centralized filtering logic simplifies future extensions (e.g., new node/edge attributes).  
 
 ### Risks & follow‑ups  
-- `filterNodes` drops a node if `nodeIdToLayerIds` lacks an entry for its ID. Ensure the map is populated before use.  
-- `filterEdges` allows edges with unknown types to pass the category filter because `getEdgeCategory` returns `null`. Verify that `EDGE_CATEGORY_MAP` covers all edge types.  
-- Update any components that previously relied on legacy filtering logic to import and invoke these new helpers.  
-- Add unit tests for edge cases (nodes with no layers, edges with unknown types) to confirm deterministic behavior.
+- **Edge category coverage**: `getEdgeCategory` returns `null` for unknown types, causing `filterEdges` to drop those edges. Verify that `EDGE_CATEGORY_MAP` contains all used edge types.  
+- **Layer index consistency**: `nodeIdToLayerIds` must be correctly populated in the store; stale indices could misfilter nodes.  
+- **Compatibility**: Confirm that existing consumers still receive the same node/edge sets after the refactor (unknown from the diff).  
+- **Testing**: Add unit tests for `filterNodes` and `filterEdges` covering cases such as no layers selected, multi‑layer nodes, and unknown categories.

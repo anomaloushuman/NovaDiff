@@ -26,38 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/vite.config.demo.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:20:08.337Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:03:40.822Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new Vite config file <code>packages/graph-view/vite.config.demo.ts</code> (lines R1‑49) is added to bootstrap the demo build. It sets a base path, resolves core modules, injects a demo‑mode flag, and configures chunk splitting and plugins.</p>
+<p>A new Vite configuration file <code>packages/graph-view/vite.config.demo.ts</code> (lines 1‑49) has been added to support a demo build of the graph view.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R4):```ts
-import { defineConfig } from &quot;vite&quot;;
-import react from &quot;@vitejs/plugin-react&quot;;
-import tailwindcss from &quot;@tailwindcss/vite&quot;;
-import path from &quot;path&quot;;</li>
+<li><strong>Imports</strong> added:  <ul>
+<li><code>defineConfig</code> from <code>vite</code> (R1)  </li>
+<li><code>react</code> from <code>@vitejs/plugin-react</code> (R2)  </li>
+<li><code>tailwindcss</code> from <code>@tailwindcss/vite</code> (R3)  </li>
+<li><code>path</code> from <code>path</code> (R4)</li>
 </ul>
-<p>```- **Export** (R6): <code>export default defineConfig({ … })</code> with <code>base: &quot;/demo/&quot;</code> (R7).  </p>
-<ul>
-<li><strong>Module resolution</strong> (R9‑R15): <code>resolve.alias</code> maps<br><code>@novadiff/graph-core/schema</code> → <code>../core/dist/schema.js</code>,<br><code>@novadiff/graph-core/search</code> → <code>../core/dist/search.js</code>,<br><code>@novadiff/graph-core/types</code> → <code>../core/dist/types.js</code>.  </li>
-<li><strong>Environment flag</strong> (R17‑R19): <code>define: { &quot;import.meta.env.VITE_DEMO_MODE&quot;: JSON.stringify(&quot;true&quot;) }</code>.  </li>
-<li><strong>Chunking</strong> (R21‑R44): <code>build.rollupOptions.output.manualChunks</code> splits React, XYFlow, graph‑layout, and markdown‑related dependencies into separate vendor bundles.  </li>
-<li><strong>Plugins</strong> (R48): <code>plugins: [react(), tailwindcss()]</code>.</li>
+</li>
+<li><strong>Base path</strong> set to <code>&quot;/demo/&quot;</code> (R7) to serve assets under <code>/demo/</code>.  </li>
+<li><strong>Aliases</strong> map <code>@novadiff/graph-core/*</code> to compiled <code>dist/*.js</code> files (R11‑R13).  </li>
+<li><strong>Environment</strong> variable <code>import.meta.env.VITE_DEMO_MODE</code> set to <code>&quot;true&quot;</code> (R18).  </li>
+<li><strong>Chunking</strong> logic splits <code>node_modules</code> into <code>react-vendor</code>, <code>xyflow</code>, <code>graph-layout</code>, and <code>markdown</code> bundles (R24‑R41).  </li>
+<li><strong>Plugins</strong> registered: <code>react()</code> and <code>tailwindcss()</code> (R48).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Core modules are resolved to the compiled <code>dist/*.js</code> files, enabling the demo to import them directly.  </li>
-<li>The <code>VITE_DEMO_MODE</code> flag is available in <code>import.meta.env</code>, allowing demo‑specific code paths.  </li>
-<li>Manual chunking creates distinct vendor bundles for React, XYFlow, graph‑layout, and markdown dependencies.</li>
+<li>The demo build can resolve core modules via the new aliases.  </li>
+<li><code>VITE_DEMO_MODE</code> flag is available to the application code.  </li>
+<li>Chunking may reduce bundle size for the demo, but the exact impact is unknown from the diff.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>The paths <code>../core/dist/*.js</code> must exist after the core build; missing files will break the demo.  </li>
-<li>The regexes in <code>manualChunks</code> must match all intended modules; incorrect matches could leave dependencies in the main bundle.  </li>
-<li>Run <code>vite build --config packages/graph-view/vite.config.demo.ts</code> to verify the base path and env flag.  </li>
-<li>Ensure the <code>react</code> and <code>tailwindcss</code> plugins load without warnings on all target platforms.</li>
+<li>Verify that the <code>path.resolve</code> aliases point to the correct build outputs; a mismatch will break module resolution.  </li>
+<li>Ensure the regexes in <code>manualChunks</code> cover all intended node_modules; missing patterns could lead to oversized bundles.  </li>
+<li>Test that the application consumes <code>VITE_DEMO_MODE</code> as expected.  </li>
+<li>Confirm that the <code>/demo/</code> base path does not conflict with production routes.</li>
 </ul>
 </article>
   </main>

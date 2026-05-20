@@ -26,11 +26,11 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/main.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:35:54.917Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:21:01.418Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new entry point <code>packages/graph-view/src/main.tsx</code> has been added to bootstrap the Graph View React application.</p>
+<p><code>packages/graph-view/src/main.tsx</code> is a new entry point that bootstraps the React application. The file adds imports for <code>StrictMode</code> (react), <code>createRoot</code> (react‑dom/client), a local stylesheet, and the root <code>App</code> component. It then creates a React 18 root on the DOM element with id <code>root</code> and renders <code>&lt;App /&gt;</code> inside a <code>&lt;StrictMode&gt;</code> wrapper.</p>
 <h3>Key changes</h3>
 <ul>
 <li><strong>Imports added</strong> (lines 1‑4):```ts
@@ -39,26 +39,30 @@ import { createRoot } from &quot;react-dom/client&quot;;
 import &quot;./index.css&quot;;
 import App from &quot;./App&quot;;</li>
 </ul>
-<p><code>- **Root rendering** (lines 6‑10):</code>ts
+<p><code>- **Root creation** (line 6):</code>ts
 createRoot(document.getElementById(&quot;root&quot;)!).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );</p>
-<pre><code class="language--">
-### Impact
+```uses React 18’s <code>createRoot</code> API and a non‑null assertion on the element.</p>
+<ul>
+<li><strong>StrictMode wrapper</strong> (lines 7‑9):```tsx</li>
+</ul>
+<StrictMode>
+    <App />
+  </StrictMode>
+```### Impact
 
   
-- The app mounts to the DOM element with id `root`. If that element is missing, rendering will fail.  
-- Bootstrap logic is centralized, simplifying future updates.  
-- Uses React 18’s `createRoot`, enabling concurrent rendering.
-
-### Risks &amp; follow‑ups  
-- Verify that the target HTML contains `&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;` before this file runs.  
-- Ensure the new `main.tsx` is referenced in the build entry points (e.g., `tsconfig.json`, `vite`/`webpack` config).  
-- Confirm that `index.css` exists; missing CSS may affect styling.  
-- `createRoot` requires React 18+; check that the project’s dependencies satisfy this requirement.
-</code></pre>
+<ul>
+<li>The app mounts correctly under React 18, enabling the new root API.  </li>
+<li>The use of <code>&lt;StrictMode&gt;</code> activates additional development checks.  </li>
+<li>The non‑null assertion guarantees that the element exists at runtime, otherwise a runtime error will occur.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing root element</strong>: <code>document.getElementById(&quot;root&quot;)!</code> will throw if <code>&lt;div id=&quot;root&quot;&gt;&lt;/div&gt;</code> is absent in <code>index.html</code>.  </li>
+<li><strong>Missing CSS</strong>: Importing <code>./index.css</code> will fail if the file is not present or not bundled.  </li>
+<li><strong>Duplicate root creation</strong>: If another script also calls <code>createRoot</code> on the same element, conflicts may arise.  </li>
+<li><strong>Linting &amp; build</strong>: Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to confirm no TypeScript or bundler errors.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

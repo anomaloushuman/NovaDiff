@@ -1,23 +1,25 @@
 ### Overview  
-A new utility module `packages/graph-view/src/utils/containers.ts` is added. It derives container metadata for graph nodes by grouping them either by folder structure or, when necessary, by community detection.
+`packages/graph-view/src/utils/containers.ts` is a new module that derives logical containers from graph nodes. It groups nodes by folder structure, falls back to community detection when folder grouping is insufficient, and suppresses single‑child containers for larger graphs.
 
 ### Key changes  
-- **Imports** (lines 1‑5): `GraphNode`, `GraphEdge` from `@novadiff/graph-core/types` and `detectCommunities` from `./louvain`.  
-- **Interfaces** (lines 7‑12, 14‑17): `DerivedContainer` and `DeriveResult` expose container id, name, node ids, and strategy.  
-- **Folder grouping** (lines 52‑75): `groupByFolder` uses `commonPrefix` (lines 30‑45) and `firstSegment` (lines 47‑51) to bucket nodes by the first path segment after trimming the longest common prefix.  
-- **Fallback decision** (lines 77‑89): `shouldFallbackToCommunity` returns true when bucket count is below `MIN_BUCKET_COUNT` or any bucket exceeds `MAX_CONCENTRATION`.  
-- **Derivation entry point** (lines 91‑156): `deriveContainers` orchestrates grouping, optional community fallback, suppression of single‑child containers (when `nodes.length >= MIN_NODES_FOR_SUPPRESSION`), and returns `{ containers, ungrouped }`.  
-- **Constants** (lines 19‑23): `MIN_BUCKET_COUNT`, `MAX_CONCENTRATION`, `MIN_NODES_FOR_SUPPRESSION`, `ROOT_BUCKET` control the heuristics.
+- **Imports** – `GraphNode`/`GraphEdge` from `@novadiff/graph-core/types` and `detectCommunities` from `./louvain` (lines 1‑5).  
+- **Interfaces** – `DerivedContainer` (id, name, nodeIds, strategy) and `DeriveResult` (containers, ungrouped) (lines 7‑17).  
+- **Helper functions**  
+  - `commonPrefix(paths)` (lines 30‑45) finds the longest common directory prefix.  
+  - `firstSegment(path)` (lines 47‑50) extracts the first path segment.  
+  - `groupByFolder(nodes)` (lines 52‑75) groups nodes by the first segment after trimming the common prefix.  
+  - `shouldFallbackToCommunity(groups, rooted, totalNodes)` (lines 77‑89) decides whether to use community detection based on bucket count and concentration thresholds.  
+- **Main export** – `deriveContainers(nodes, edges)` (lines 91‑156) orchestrates grouping, optional community detection, container creation, and suppression of single‑child containers when `nodes.length ≥ MIN_NODES_FOR_SUPPRESSION`.
 
 ### Impact  
-- **Deterministic grouping**: Nodes are consistently bucketed by folder or community.  
-- **Optional community detection**: Invoked only when `shouldFallbackToCommunity` deems folder grouping insufficient, reducing unnecessary analysis.  
-- **Single‑child suppression**: Containers with a single node are removed and the node is returned in `ungrouped`.  
-- **Root bucket handling**: Nodes without a `filePath` are placed in a special `ROOT_BUCKET` container.  
-- **No API changes**: Existing consumers can import the new module without altering existing code.
+- **Correctness** – deterministic container derivation; community fallback is used when bucket count < `MIN_BUCKET_COUNT` or any bucket exceeds `MAX_CONCENTRATION`.  
+- **Maintainability** – all container logic resides in a single module with clear type contracts.  
+- **Performance** – community detection (`detectCommunities`) is invoked only when needed; suppression is a linear pass over containers.  
+- **Compatibility** – no existing API changes; new exports are additive.  
+- **Observability** – exported functions can be unit‑tested; thresholds are exposed as constants.
 
 ### Risks & follow‑ups  
-- **Community detection integration**: The behavior of `detectCommunities` is not shown in the diff; verify that it returns `(nodeId, cid)` pairs as expected.  
-- **Edge‑case handling**: Ensure nodes lacking `filePath` are correctly routed to `ROOT_BUCKET` and that suppression respects `MIN_NODES_FOR_SUPPRESSION`.  
-- **Threshold tuning**: `MIN_BUCKET_COUNT` and `MAX_CONCENTRATION` may need adjustment for different graph sizes; monitor clustering quality.  
-- **Performance regression**: Benchmark `deriveContainers` on large graphs to confirm community fallback does not introduce significant overhead.
+- **Community detection accuracy** – unknown from the available diff; verify clusters for typical graph shapes.  
+- **Suppression edge cases** – ensure nodes in single‑child containers are moved to `ungrouped` when `nodes.length ≥ MIN_NODES_FOR_SUPPRESSION`.  
+- **Folder grouping correctness** – test `commonPrefix` and `firstSegment` with paths lacking slashes or containing only a root.  
+- **Integration** – downstream consumers must handle the new `strategy` field (`folder` vs `community`).

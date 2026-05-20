@@ -26,37 +26,36 @@
 <body>
   <header class="top">
     <h1>src/components/DocMermaidMount.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:08:57.384Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:53:10.103Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new React component <code>DocMermaidMount</code> is added in <strong>src/components/DocMermaidMount.tsx</strong> (lines 1‑113). It renders Mermaid diagrams from a string definition and provides a loading skeleton, error handling, and a ready state that toggles visibility of the rendered SVG.</p>
+<p>A new React component <code>DocMermaidMount</code> is added to <code>src/components/DocMermaidMount.tsx</code> (lines 1‑113). It renders Mermaid diagrams from a string definition, showing a loading skeleton, handling errors, and cancelling stale renders.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – added <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from <code>react</code> (R1) and <code>runMermaidNodes</code> from <code>../app/mermaidBoot</code> (R2).  </li>
-<li><strong>Types</strong> – declared <code>RenderPhase</code> union (<code>idle | waiting | rendering | ready | error</code>) (R4) and <code>DocMermaidMountProps</code> interface (R6‑R12) with <code>definition</code>, optional <code>loading</code>, <code>loadingLabel</code>, and <code>errorLabel</code>.  </li>
-<li><strong>Component logic</strong> –  <ul>
-<li>Uses <code>useRef</code> for the host <code>&lt;div&gt;</code> and a generation counter (<code>renderGenRef</code>) (R20‑R23).  </li>
-<li>Manages <code>phase</code> state (<code>idle</code>, <code>waiting</code>, <code>rendering</code>, <code>ready</code>, <code>error</code>) (R22).  </li>
-<li><code>useEffect</code> (R24‑R81) creates a <code>&lt;pre class=&quot;mermaid&quot;&gt;</code>, calls <code>runMermaidNodes</code>, updates <code>phase</code>, and cancels stale renders via a <code>cancelled</code> flag and generation check.  </li>
-<li>Rendering defers to <code>requestAnimationFrame</code> (R71‑R76) to ensure layout stability.  </li>
-<li>UI shows a skeleton while loading or rendering, an error message on failure, and the host div with conditional classes (<code>is-ready</code>, <code>is-busy</code>, <code>is-error</code>) (R83‑R111).</li>
+<li><strong>Imports</strong> (R1‑R2): <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from <code>react</code>; <code>runMermaidNodes</code> from <code>../app/mermaidBoot</code>.  </li>
+<li><strong>RenderPhase type</strong> (R4): <code>&quot;idle&quot; | &quot;waiting&quot; | &quot;rendering&quot; | &quot;ready&quot; | &quot;error&quot;</code>.  </li>
+<li><strong>Props interface</strong> (R6‑R12): <code>definition: string</code>; optional <code>loading</code>, <code>loadingLabel</code>, <code>errorLabel</code>.  </li>
+<li><strong>Component</strong> (R14‑R113):  <ul>
+<li>Uses <code>useRef</code> for host <code>&lt;div&gt;</code> and a generation counter (<code>renderGenRef</code>).  </li>
+<li><code>useEffect</code> on <code>[definition, loading]</code> handles empty definitions, shows skeleton, and triggers <code>runMermaidNodes([pre])</code> inside <code>requestAnimationFrame</code>.  </li>
+<li>Cancels outdated renders via <code>cancelled</code> flag and generation check.  </li>
+<li>UI renders a skeleton (<code>doc-mermaid-skeleton</code>), an error message (<code>doc-mermaid-error</code>), and a host <code>&lt;div&gt;</code> with classes reflecting the current phase.</li>
 </ul>
 </li>
-<li><strong>Accessibility</strong> – skeleton has <code>aria-busy=&quot;true&quot;</code> and <code>aria-live=&quot;polite&quot;</code>; host div gets <code>aria-hidden</code> when busy (R96‑R110).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Centralizes Mermaid rendering logic, making future updates to <code>runMermaidNodes</code> or CSS easier.  </li>
-<li>Uses a generation counter to guard against race conditions when <code>definition</code> changes rapidly.  </li>
-<li>Defers rendering with <code>requestAnimationFrame</code>, reducing layout thrashing.</li>
+<li><strong>Lifecycle safety</strong>: Generation counter and cancellation guard prevent overlapping renders.  </li>
+<li><strong>User feedback</strong>: Skeleton and error UI provide clear status.  </li>
+<li><strong>Styling hooks</strong>: Class names (<code>doc-mermaid-mount</code>, <code>is-ready</code>, <code>is-busy</code>, <code>is-error</code>) allow CSS customization.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>runMermaidNodes</code> correctly processes the <code>&lt;pre&gt;</code> element and that Mermaid’s CSS is loaded.  </li>
-<li>Ensure CSS classes (<code>doc-mermaid-mount</code>, <code>doc-mermaid-skeleton</code>, etc.) exist and are scoped to avoid clashes.  </li>
-<li>Test cancellation logic by rapidly changing <code>definition</code> to confirm no stray SVGs or memory leaks.  </li>
-<li>Confirm correct phase transitions when <code>loading</code> is toggled mid‑render.</li>
+<li><strong>Race conditions</strong>: Verify rapid <code>definition</code> changes do not trigger overlapping renders; the generation counter mitigates this.  </li>
+<li><strong>CSS dependencies</strong>: Ensure styles for the mentioned classes exist; missing styles could affect layout.  </li>
+<li><strong>SSR compatibility</strong>: Component uses <code>useEffect</code>, so it runs only on the client; confirm surrounding app handles this.  </li>
+<li><strong><code>runMermaidNodes</code> contract</strong>: Import is used with <code>.then/.catch</code>; tests should cover success and failure paths.</li>
 </ul>
 </article>
   </main>

@@ -1,18 +1,21 @@
-### Overview
-A new component `WorkspaceStage` is added at `src/components/ui/WorkspaceStage.tsx` (lines 1‑22). It wraps page content and conditionally applies an enter animation based on the user’s reduced‑motion preference.
+### Overview  
+A new UI component `WorkspaceStage` has been added under `src/components/ui/WorkspaceStage.tsx`. It introduces a lightweight wrapper that conditionally applies a CSS transition class based on the user's reduced‑motion preference.
 
-### Key changes
-- **Imports**: `ReactNode` from `"react"` (R1) and `usePrefersReducedMotion` from `"../../app/usePrefersReducedMotion"` (R2).  
-- **Props interface** `WorkspaceStageProps` (R4‑R7) with `pageKey: string` and `children: ReactNode`.  
-- **Component** `WorkspaceStage` (R9‑R22) that:
-  - Calls `const reduced = usePrefersReducedMotion();` (R10).  
-  - Renders `<div className="workspace-stage">` containing an inner `<div>` keyed by `pageKey` with class `workspace-stage-inner` and, unless `reduced` is true, the additional class `ui-view-enter` (R14‑R17).
+### Key changes  
+- **New file** `src/components/ui/WorkspaceStage.tsx` with imports for `ReactNode` and `usePrefersReducedMotion`.  
+- **Interface** `WorkspaceStageProps` declares `pageKey: string` and `children: ReactNode`.  
+- **Component** `WorkspaceStage` renders a `<div>` hierarchy, applying the class `ui-view-enter` when motion is not reduced.  
+- **Key usage**: the inner `<div>` receives `key={pageKey}` to force remounts on page changes.  
+- **Export**: both the interface and the component are exported for external use.
 
-### Impact
-- **Additive**: no existing files are modified; the component can be used independently.  
-- **Runtime**: adds one extra DOM node per render and a conditional class check; negligible performance cost.  
-- **Dependencies**: requires the `usePrefersReducedMotion` hook to be exported and the CSS class `.ui-view-enter` to be defined; missing either will affect animation or cause runtime errors.
+### Impact  
+- **UI behavior**: Adds a fade‑in transition to workspace stages unless the user prefers reduced motion, improving accessibility.  
+- **Reusability**: The component can be dropped into any page that needs a consistent stage wrapper.  
+- **Performance**: Minimal overhead; only a single hook call and a conditional class name.  
+- **Compatibility**: No changes to existing components; purely additive.
 
-### Risks & follow‑ups
-- **Hook availability**: confirm `usePrefersReducedMotion` is exported and works in all target environments; otherwise the build will fail.  
-- **CSS presence**: verify that `.ui-view-enter` is defined;
+### Risks & follow‑ups  
+- Verify that the CSS class `ui-view-enter` exists and behaves as intended.  
+- Ensure `pageKey` is unique per stage to avoid React key warnings.  
+- Test the reduced‑motion toggle to confirm the transition is correctly suppressed.  
+- Confirm that the component is imported and used in the relevant pages; otherwise the new file remains unused.

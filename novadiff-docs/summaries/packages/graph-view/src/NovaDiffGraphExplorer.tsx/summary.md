@@ -1,24 +1,24 @@
 ### Overview  
-A new component `NovaDiffGraphExplorer.tsx` is added under `packages/graph-view/src`. It exposes the public API `NovaDiffGraphExplorerProps` and `NovaDiffGraphDiffOverlay`, and implements an embed‑mode wrapper and a full explorer that validates a knowledge graph, updates the dashboard store, and renders a skeleton while layout is prepared.
+A new `NovaDiffGraphExplorer.tsx` component is added to `packages/graph-view/src`. It exposes the public API `NovaDiffGraphExplorerProps` (lines 21‑33) and `NovaDiffGraphDiffOverlay` (lines 16‑20), and implements both an embedded and a full graph explorer mode.
 
 ### Key changes  
-- **File**: `packages/graph-view/src/NovaDiffGraphExplorer.tsx` (lines 1‑146).  
-- **Imports**: React hooks, `validateGraph` from `@novadiff/graph-core/schema`, types `GraphIssue`, `KnowledgeGraph`, and `useDashboardStore`.  
-- **Interfaces**:  
-  - `NovaDiffGraphDiffOverlay` (lines 16‑20).  
-  - `NovaDiffGraphExplorerProps` (lines 21‑33).  
-- **Component**: `NovaDiffGraphExplorer` (lines 34‑42) delegates to `NovaDiffGraphExplorerEmbed` when `embedMode` is true, otherwise to `NovaDiffGraphExplorerFull`.  
-- **Utility**: `graphFingerprint` (lines 44‑55).  
-- **Full explorer** `NovaDiffGraphExplorerFull` (lines 56‑146): validates the graph via `validateGraph`, updates the store (`setGraph`, `setDiffOverlay`, view mode), handles load errors and hydration, memoizes embed context, renders a skeleton UI, and wraps `DashboardContent` with `NovaDiffEmbedContext`, `I18nProvider`, and `ThemeProvider`.
+- **Imports** (R1‑R6): added React hooks, `validateGraph`, type imports (`GraphIssue`, `KnowledgeGraph`), and the local `useDashboardStore`.  
+- **Public interfaces** (R16‑R21): declare the overlay and props shapes.  
+- **Entry point** (R34‑R42): `NovaDiffGraphExplorer` dispatches to `NovaDiffGraphExplorerEmbed` or `NovaDiffGraphExplorerFull` based on `embedMode`.  
+- **Fingerprinting** (R44‑R53): `graphFingerprint` builds a deterministic string to skip re‑validation when the graph hasn’t changed.  
+- **Full explorer logic** (R56‑R146):  
+  - Validates the graph with `validateGraph`; updates the store (`setGraph`, `setDiffOverlay`) and view mode.  
+  - Handles diff overlay updates, load errors, hydration state, and skeleton UI.  
+  - Provides `NovaDiffEmbedContext` and `ThemeProvider` to child components.
 
 ### Impact  
-- Graph validation occurs client‑side; errors appear as `<p className="novadiff-graph-load-error">`.  
-- Centralizes explorer logic; new interfaces provide clear contracts.  
-- Fingerprint caching prevents redundant validation; `useMemo` avoids recreating context values.  
-- Relies on existing store actions (`setGraph`, `setDiffOverlay`, `setViewMode`, `setIsKnowledgeGraph`, `navigateToOverview`).
+- Immediate validation of incoming graphs; clear error messages for invalid data.  
+- Centralizes graph handling; separates embed logic.  
+- Fingerprint caching avoids redundant validation on unchanged graphs.  
+- Skeleton UI and error paragraph give users feedback during loading or failure.
 
 ### Risks & follow‑ups  
-- Store API drift: verify `useDashboardStore` still exposes the required actions.  
-- Dependency updates: ensure `@novadiff/graph-core/schema` still exports `validateGraph` and `GraphIssue`.  
-- Effect dependencies: `useEffect` lists `[graph, setGraph]`; confirm `setGraph` is stable.  
-- Embed mode handling: confirm `NovaDiffGraphExplorerEmbed` consumes `embedMode` correctly and no duplicate context providers are introduced.
+- **Validation contract**: ensure `validateGraph` returns the expected shape; otherwise store updates may fail.  
+- **Store side‑effects**: `useDashboardStore` mutations (`setGraph`, `setDiffOverlay`, view mode switches) must be idempotent; test repeated renders.  
+- **Embed mode toggle**: verify `embedMode` correctly routes to `NovaDiffGraphExplorerEmbed`; regression could break embedded deployments.  
+- **Type safety**: `Omit<NovaDiffGraphExplorerProps, "embedMode">` assumes no other required props are omitted; future prop additions could break the signature.

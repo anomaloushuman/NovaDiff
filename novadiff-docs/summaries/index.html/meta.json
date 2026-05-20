@@ -1,0 +1,33 @@
+{
+  "relPath": "index.html",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-20T04:08:09.149Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-19"
+    ],
+    "cited_changed_lines": [
+      "R1 added: <!doctype html>",
+      "R2 added: <html lang=\"en\">",
+      "R3 added: <head>",
+      "R4 added: <meta charset=\"UTF-8\" />",
+      "R5 added: <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\" />",
+      "R6 added: <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin />"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

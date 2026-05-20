@@ -1,22 +1,22 @@
 ### Overview  
-`packages/graph-core/src/fingerprint.ts` replaces the previous ad‑hoc change‑detection logic with a structured fingerprinting system for source files.
+A new module `packages/graph-core/src/fingerprint.ts` implements a fingerprinting pipeline for JavaScript/TypeScript files. It hashes file contents, extracts structural signatures (functions, classes, imports, exports), and classifies changes into NONE, COSMETIC, or STRUCTURAL.
 
 ### Key changes  
-- **Imports added** (lines 1‑5): `node:crypto`, `node:fs`, `node:path`, `./types.js`, `./plugins/registry.js`.  
-- **New types** (lines 9‑63): `FunctionFingerprint`, `ClassFingerprint`, `ImportFingerprint`, `FileFingerprint`, `FingerprintStore`, `ChangeLevel`, `FileChangeResult`, `ChangeAnalysis`.  
-- **`contentHash`** (lines 70‑72) computes a SHA‑256 hash of file contents.  
-- **`extractFileFingerprint`** (lines 79‑122) builds a structural fingerprint from a `StructuralAnalysis`, capturing functions, classes, imports, exports, and line counts.  
-- **`compareFingerprints`** (lines 131‑246) compares two fingerprints, classifying changes as `NONE`, `COSMETIC`, or `STRUCTURAL` and producing a diff list.  
-- **`buildFingerprintStore`** (lines 253‑291) creates a fingerprint store for a project, falling back to content‑hash‑only fingerprints when structural analysis is unavailable (lines 268‑281).  
-- **`analyzeChanges`** (lines 297‑385) orchestrates change detection across a set of files, returning a `ChangeAnalysis` summary.
+- **Imports** (R1‑R5): added `node:crypto`, `node:fs`, `node:path`, and type imports from `./types.js` and `./plugins/registry.js`.  
+- **Type definitions** (R9‑R48): introduced `FunctionFingerprint`, `ClassFingerprint`, `ImportFingerprint`, `FileFingerprint`, `FingerprintStore`, and `ChangeLevel`.  
+- **Helpers** (R70‑R121): `contentHash` computes SHA‑256; `extractFileFingerprint` builds a `FileFingerprint` from a `StructuralAnalysis`.  
+- **Comparison** (R131‑R246): `compareFingerprints` checks content hash, structural signatures, and flags significant size changes. Missing structural analysis defaults to STRUCTURAL.  
+- **Store builder** (R253‑R291): `buildFingerprintStore` reads files, runs `registry.analyzeFile`, and falls back to hash‑only fingerprints when analysis is unavailable.  
+- **Change analyzer** (R297‑R385): `analyzeChanges` orchestrates file existence checks, fingerprint extraction, and categorizes changes into new, deleted, unchanged, cosmetic, or structural.
 
 ### Impact  
-- **Correctness**: Deterministic structural change detection; conservative `STRUCTURAL` classification when analysis is missing (lines 142‑149).  
-- **Maintainability**: Centralized fingerprint logic and explicit type definitions aid future extensions.  
-- **Performance**: Adds file I/O and hashing per file; early hash comparison (lines 138‑140) mitigates unnecessary work, but overall runtime depends on project size.
+- **Correctness**: Structural comparison can surface API changes that content hashing alone would miss.  
+- **Maintainability**: Centralized fingerprint logic replaces scattered implementations.  
+- **Compatibility**: The module is additive; no existing APIs are altered.  
+- **Performance**: Reading and hashing all files adds runtime cost; impact on CI or hot‑reload scenarios is unknown from the diff.
 
 ### Risks & follow‑ups  
-- **False positives**: Structural comparison may flag benign changes (e.g., reordered imports) as `STRUCTURAL` (lines 220‑226).  
-- **Missing analysis**: Files without tree‑sitter support are always marked `STRUCTURAL` (lines 268‑281); confirm this aligns with business expectations.  
-- **Registry integration**: `registry.analyzeFile` must return a `StructuralAnalysis`; test that unsupported file types are handled correctly.  
-- **Performance regression**: Benchmark `buildFingerprintStore` on large codebases to ensure acceptable runtime.
+- **False positives**: `JSON.stringify` on arrays may mis‑order elements; ensure `methods`/`properties` are sorted before comparison.  
+- **Large file handling**: `content.split("\n")` could be memory intensive; benchmark on large files.  
+- **Registry contract**: `registry.analyzeFile` must return `StructuralAnalysis` or `null`; otherwise fingerprints become hash‑only.  
+- **Test coverage**: Add unit tests for `compareFingerprints` edge cases (e.g., no structural analysis, significant size change).

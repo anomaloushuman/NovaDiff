@@ -1,9 +1,9 @@
 {
   "relPath": "package.json",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T21:04:04.221Z",
+  "generatedAt": "2026-05-20T04:09:39.017Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,22 +16,15 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R7-10",
-      "L10-11 / R14-18",
-      "R24-33",
-      "L26 / R43-44",
-      "R47-48",
-      "R58",
-      "R74-75",
-      "L55 / R78"
+      "R1-100"
     ],
     "cited_changed_lines": [
-      "R7 added: \"workspaces\": [",
-      "R8 added: \"packages/graph-core\",",
-      "R9 added: \"packages/graph-view\"",
-      "R10 added: ],",
-      "L10 removed: \"electron:dev\": \"npm run rust:build && concurrently -k \\\"npm run dev\\\" \\\"wait-on http://127.0.0.1:1420 && node ./scripts/run-electr…",
-      "L11 removed: \"build\": \"tsc && vite build\","
+      "R1 added: {",
+      "R2 added: \"name\": \"novadiff\",",
+      "R3 added: \"private\": true,",
+      "R4 added: \"version\": \"0.1.0\",",
+      "R5 added: \"type\": \"module\",",
+      "R6 added: \"main\": \"electron/main.cjs\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

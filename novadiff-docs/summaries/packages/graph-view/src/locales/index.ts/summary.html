@@ -26,59 +26,33 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/locales/index.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:52:01.673Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:35:09.591Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/src/locales/index.ts</code> (lines R1‑R32) introduces a lightweight locale system for the graph‑view module. It imports JSON locale files, defines a <code>LocaleKey</code> union, exposes a <code>Locale</code> type, and provides helper functions to retrieve and resolve locales.</p>
+<p>A new module <code>packages/graph-view/src/locales/index.ts</code> (lines R1‑32) introduces locale definitions and lookup utilities.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R5)```ts
-import en from &quot;./en&quot;;
-import zh from &quot;./zh&quot;;
-import zhTW from &quot;./zh-TW&quot;;
-import ja from &quot;./ja&quot;;
-import ko from &quot;./ko&quot;;</li>
+<li><strong>Imports</strong>: <code>en</code>, <code>zh</code>, <code>zhTW</code>, <code>ja</code>, <code>ko</code> (R1‑R5).  </li>
+<li><strong>Types</strong>: <code>LocaleKey</code> enumerates supported keys (R7); <code>Locale</code> is inferred from <code>en</code> (R8).  </li>
+<li><strong>Locale map</strong>: <code>locales</code> records each key to its locale object (R10‑R16).  </li>
+<li><strong>Lookup</strong>: <code>getLocale(key)</code> returns the locale or falls back to <code>en</code> (R18‑R20).  </li>
+<li><strong>Normalization</strong>: <code>resolveLocaleKey(lang)</code> normalizes language strings to a <code>LocaleKey</code> (R22‑R29).  </li>
+<li><strong>Re‑exports</strong>: individual locales are re‑exported, aliasing <code>zhTW</code> as <code>&quot;zh-TW&quot;</code> (R32).</li>
 </ul>
-<p><code>- **Types** (R7‑R8)</code>ts
-export type LocaleKey = &quot;en&quot; | &quot;zh&quot; | &quot;zh-TW&quot; | &quot;ja&quot; | &quot;ko&quot;;
-  export type Locale = typeof en;
-<code>- **Locale map** (R10‑R16)</code>ts
-export const locales: Record&lt;LocaleKey, Locale&gt; = {
-    en,
-    zh,
-    &quot;zh-TW&quot;: zhTW,
-    ja,
-    ko,
-  };
-<code>- **Accessor** (R18‑R20)</code>ts
-export function getLocale(key: LocaleKey): Locale {
-    return locales[key] ?? locales.en;
-  }
-<code>- **Resolver** (R22‑R29)</code>ts
-export function resolveLocaleKey(lang: string | undefined): LocaleKey {
-    if (!lang) return &quot;en&quot;;
-    const normalized = lang.toLowerCase().replace(/[_\s]/g, &quot;-&quot;);
-    if (normalized === &quot;zh&quot; || normalized === &quot;chinese&quot; || normalized === &quot;zh-cn&quot;) return &quot;zh&quot;;
-    if (normalized === &quot;zh-tw&quot; || normalized === &quot;traditional-chinese&quot;) return &quot;zh-TW&quot;;
-    if (normalized === &quot;ja&quot; || normalized === &quot;japanese&quot;) return &quot;ja&quot;;
-    if (normalized === &quot;ko&quot; || normalized === &quot;korean&quot;) return &quot;ko&quot;;
-    return &quot;en&quot;;
-  }
-<code>- **Re‑exports** (R32)</code>ts
-export { en, zh, zhTW as &quot;zh-TW&quot;, ja, ko };</p>
-<pre><code class="language-###">
-  
-- Centralizes locale definitions and resolution logic, simplifying future language additions.  
-- Provides deterministic lookup with a clear fallback to `en`.  
-- No existing code is altered; consumers must import from the new path to use the locale system.
-
-### Risks &amp; follow‑ups  
-- **Missing locale files**: Verify that `en.json`, `zh.json`, `zh-TW.json`, `ja.json`, and `ko.json` exist and export valid objects.  
-- **Alias correctness**: Ensure that `zhTW as &quot;zh-TW&quot;` re‑export works for downstream consumers.  
-- **Resolver edge cases**: Add tests for uncommon language strings (e.g., `&quot;zh_cn&quot;`, `&quot;japanese&quot;`) to confirm mapping.  
-- **Type safety**: Run the TypeScript compiler to confirm that `LocaleKey` and `Locale` types are inferred correctly across the repo.
-</code></pre>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes locale handling, simplifying future additions.  </li>
+<li>Provides type safety for locale keys.  </li>
+<li>O(1) lookup via the <code>locales</code> map; normalization uses lightweight string ops.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that the <code>zhTW</code> alias correctly resolves to <code>&quot;zh-TW&quot;</code> in imports and consumers.  </li>
+<li>Add unit tests for <code>resolveLocaleKey</code> covering edge cases (e.g., <code>&quot;zh_cn&quot;</code>, <code>&quot;ja-JP&quot;</code>).  </li>
+<li>Ensure <code>getLocale</code>’s fallback to <code>en</code> behaves as expected when an unknown key is passed.  </li>
+<li>Check for potential circular dependencies introduced by re‑exporting locale modules.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

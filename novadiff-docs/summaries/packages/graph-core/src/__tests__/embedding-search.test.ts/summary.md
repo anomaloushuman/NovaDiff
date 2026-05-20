@@ -1,27 +1,23 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/embedding-search.test.ts` has been added.  
-The file imports `vitest` helpers (lines 1‑3), the `SemanticSearchEngine` and `cosineSimilarity` utilities (line 2), and the `GraphNode` type (line 3).  
-It defines an in‑memory `nodes` array (lines 5‑9) and an `embeddings` map (lines 12‑16) for three sample nodes.  
-The test suite (lines 18‑92) exercises the cosine similarity function and the search engine’s public API.
+A new test file `packages/graph-core/src/__tests__/embedding-search.test.ts` (lines 1‑92) has been added. It validates the `cosineSimilarity` helper and the `SemanticSearchEngine` class.
 
 ### Key changes  
-- **Imports**: `vitest`, `SemanticSearchEngine`, `cosineSimilarity`, `GraphNode`.  
-- **Test data**: `nodes` array and `embeddings` map defined inline.  
-- **Cosine similarity tests**: identity, orthogonality, similarity threshold, zero‑vector handling.  
-- **SemanticSearchEngine tests**:  
+- **Imports** (R1‑R3): `vitest` helpers, `SemanticSearchEngine`, `cosineSimilarity`, and the `GraphNode` type.  
+- **Test data** (R5‑R7): a mock `nodes` array of three `GraphNode` objects and a 4‑dimensional `embeddings` map.  
+- **Unit tests** for `cosineSimilarity` covering identical, orthogonal, similar, and zero‑vector cases.  
+- **Comprehensive tests** for `SemanticSearchEngine`:  
   - Result ordering by similarity.  
   - `limit` and `threshold` options.  
-  - Type filtering (`types: ["function"]`).  
+  - `types` filtering.  
   - Handling of missing embeddings.  
-  - `hasEmbeddings` flag behavior.  
-  - `addEmbedding` updates the index.
+  - `hasEmbeddings` and `addEmbedding` behavior.
 
 ### Impact  
-- Provides unit coverage for core search logic, ensuring that changes to similarity calculations or filtering are detected during testing.  
-- Centralizes test data; future updates to node structure or embeddings can be made in a single location.  
-- No modifications to production code paths; the new file only adds tests.
+- Adds coverage for embedding utilities; no production code is modified, so runtime behavior is unchanged.  
+- Provides concrete test scenarios that can serve as a reference for future changes to the search engine or similarity function.
 
 ### Risks & follow‑ups  
-- **Determinism**: The tests rely on fixed embeddings; any change to `cosineSimilarity` must preserve the expected outputs.  
-- **Coverage gaps**: All public methods of `SemanticSearchEngine` are exercised, but edge cases such as an empty node list are not explicitly tested.  
-- **CI integration**: It is unknown from the diff whether the new tests are automatically included in the CI pipeline.
+- If `SemanticSearchEngine` does not implement the `types` filter or `threshold` logic as expected, the tests will fail; verify the implementation matches the test expectations.  
+- Ensure the relative import `../embedding-search.js` resolves correctly in the test environment.  
+- The test embeddings are 4‑dimensional; confirm this matches the dimensionality used in production (unknown from the available diff/scan evidence).  
+- Run the full test suite to confirm no flakiness is introduced.

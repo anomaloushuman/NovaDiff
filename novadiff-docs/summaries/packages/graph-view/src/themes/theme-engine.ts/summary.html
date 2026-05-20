@@ -26,37 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/themes/theme-engine.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:50:06.718Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:39:28.562Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>theme-engine.ts</code> file was added at <code>packages/graph-view/src/themes/</code>. It centralizes theme application and teardown logic for the graph‑view component.</p>
+<p>A new file <code>packages/graph-view/src/themes/theme-engine.ts</code> introduces a lightweight theme system.<br>It defines a <code>hexToRgb</code> helper (R4‑R7), a <code>deriveFromAccent</code> routine that builds RGBA values from an accent hex and dark‑mode flag (R10‑R30), and two public functions: <code>applyTheme</code> (R34‑R69) and <code>clearTheme</code> (R72‑R90). The file imports the <code>ThemeConfig</code> type from <code>./types.ts</code> and the <code>getAccent</code> / <code>getPreset</code> helpers from <code>./presets.ts</code> (R1‑R2).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑2): <code>ThemeConfig</code> type and <code>getAccent</code>, <code>getPreset</code> helpers.  </li>
-<li><strong><code>hexToRgb</code></strong> (lines 4‑8): converts a hex string to an <code>&quot;R, G, B&quot;</code> string used for RGBA values.  </li>
-<li><strong><code>deriveFromAccent</code></strong> (lines 10‑30): builds a set of derived CSS variables (e.g., <code>color-border-subtle</code>, <code>glass-bg</code>) based on an accent color and a dark‑mode flag.  </li>
-<li><strong><code>applyTheme</code></strong> (lines 34‑69):  <ul>
-<li>Applies preset colors (<code>--color-…</code>).  </li>
-<li>Sets accent variables (<code>--color-accent</code>, <code>--color-accent-dim</code>, <code>--color-accent-bright</code>).  </li>
-<li>Adds derived variables via <code>deriveFromAccent</code>.  </li>
-<li>Sets <code>data-theme</code> attribute and heading‑font CSS variable.</li>
-</ul>
-</li>
-<li><strong><code>clearTheme</code></strong> (lines 72‑90): removes all theme‑related inline styles and the <code>data-theme</code> attribute, enabling clean teardown.</li>
+<li><strong>Imports</strong> – <code>ThemeConfig</code> and preset helpers added (R1‑R2).  </li>
+<li><strong>Utility</strong> – <code>hexToRgb</code> converts a hex string to an RGB string (R4‑R7).  </li>
+<li><strong>Derived values</strong> – <code>deriveFromAccent</code> returns a record of RGBA strings based on an accent hex and a dark‑mode flag (R10‑R30).  </li>
+<li><strong>Theme application</strong> – <code>applyTheme</code> writes preset colors, accent colors, derived values, a <code>data-theme</code> attribute, and a heading‑font CSS variable to the target element’s style (R34‑R69).  </li>
+<li><strong>Teardown</strong> – <code>clearTheme</code> removes all CSS variables written by <code>applyTheme</code> and the <code>data-theme</code> attribute (R72‑R90).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Consistency</strong>: All theme logic lives in one module, ensuring uniform CSS variable names and values across themes.  </li>
-<li><strong>Performance</strong>: Only a handful of <code>style.setProperty</code>/<code>removeProperty</code> calls per theme; negligible runtime cost.  </li>
-<li><strong>Compatibility</strong>: Uses standard CSS custom properties; no browser‑specific code.</li>
+<li><strong>Centralization</strong> – Theme logic is now in a single module, reducing duplication across components.  </li>
+<li><strong>Simplicity</strong> – Operations are straightforward DOM style updates; the code uses only standard CSS custom properties and attributes.  </li>
+<li><strong>Extensibility</strong> – Future presets or accent logic can be updated in one place.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><code>hexToRgb</code> has no validation; test with malformed hex strings to avoid runtime errors.  </li>
-<li><code>applyTheme</code> defaults to <code>&quot;serif&quot;</code> when <code>config.headingFont</code> is missing; confirm this matches design expectations.  </li>
-<li><code>clearTheme</code> must remove every property added by <code>applyTheme</code>; run integration tests after theme switches.  </li>
-<li>Verify that <code>getPreset</code> and <code>getAccent</code> return the expected objects against existing preset data.</li>
+<li><code>hexToRgb</code> may misbehave with malformed hex strings (e.g., missing <code>#</code> or wrong length).  </li>
+<li><code>clearTheme</code> must remove every property set by <code>applyTheme</code>; missing keys could leave stale styles.  </li>
+<li>Verify that <code>applyTheme</code> respects the default <code>target</code> (<code>document.documentElement</code>) when invoked from a standalone graph view.  </li>
+<li>Run linting and unit tests to catch any type mismatches introduced by the new imports.</li>
 </ul>
 </article>
   </main>

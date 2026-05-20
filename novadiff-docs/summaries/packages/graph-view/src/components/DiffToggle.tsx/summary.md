@@ -1,26 +1,31 @@
 ### Overview  
-A new `DiffToggle` component is added under `packages/graph-view/src/components`. It introduces a UI button to toggle diff overlay visibility, leveraging the dashboard store and i18n context.
+`packages/graph-view/src/components/DiffToggle.tsx` (lines R1‑66) introduces a new component that toggles a diff overlay and displays counts of changed and affected nodes.
 
 ### Key changes  
-- **Imports added**: `useDashboardStore` from `../store` and `useI18n` from `../contexts/I18nContext`.  
-- **State hooks**: `diffMode`, `toggleDiffMode`, `changedNodeIds`, and `affectedNodeIds` are extracted from the store.  
-- **Computed flag**: `hasDiff` checks if any nodes have changed (`changedNodeIds.size > 0`).  
-- **Button behavior**:  
-  - `onClick` triggers `toggleDiffMode`.  
-  - Disabled when `!hasDiff`.  
-  - Dynamic classes and titles based on `diffMode` and `hasDiff`.  
-- **Conditional rendering**: When diff is active and data exists, a legend shows counts of changed and affected nodes with color indicators.  
-- **Export**: `export default function DiffToggle()` makes the component available for import elsewhere.
+- **Imports**  
+  - `useDashboardStore` from `../store` (R1)  
+  - `useI18n` from `../contexts/I18nContext` (R2)  
+- **Export**  
+  - `export default function DiffToggle()` (R4)  
+- **Store hooks**  
+  - `diffMode`, `toggleDiffMode`, `changedNodeIds`, `affectedNodeIds` (R5‑R8)  
+- **i18n**  
+  - `t` from `useI18n()` used for button titles and labels (`diffToggle.*` keys) (R9‑R30)  
+- **Button behavior**  
+  - Disabled when `changedNodeIds.size === 0` (R16‑R18)  
+  - Title switches between `hideOverlay`, `showOverlay`, and `noData` based on `diffMode` and data presence (R25‑R31)  
+- **Conditional stats panel**  
+  - Rendered when `diffMode && hasDiff` (R36‑R63)  
+  - Shows colored indicators and counts for `changedNodeIds` and `affectedNodeIds` (R38‑R60)
 
 ### Impact  
-- **UI**: Adds a new toggle button; no existing components are modified.  
-- **State**: Requires `diffMode`, `toggleDiffMode`, `changedNodeIds`, and `affectedNodeIds` to exist in the dashboard store; otherwise runtime errors.  
-- **Internationalization**: Depends on `t.diffToggle.*` keys; missing keys will result in undefined strings.  
-- **Styling**: Uses CSS variables (`--color-diff-changed`, `--color-diff-affected`); missing variables may break appearance.  
-- **Performance**: Minimal; only a few store reads and a simple button render.
+- Adds a lightweight UI element; no existing components are altered.  
+- Requires the dashboard store and i18n context to be present in the component tree.  
+- Introduces translation keys `diffToggle.hideOverlay`, `diffToggle.showOverlay`, `diffToggle.noData`, `diffToggle.changed`, and `diffToggle.affected`.  
+- Re‑renders only when the referenced store values change, so performance impact is minimal.
 
-### Risks & follow-ups  
-- Verify that the dashboard store exposes the required fields (`diffMode`, `toggleDiffMode`, `changedNodeIds`, `affectedNodeIds`).  
-- Ensure i18n keys `diffToggle.hideOverlay`, `diffToggle.showOverlay`, `diffToggle.noData`, `diffToggle.changed`, and `diffToggle.affected` exist.  
-- Confirm CSS variables for diff colors are defined in the theme; otherwise the legend will not display correctly.  
-- Run unit tests for the new component to catch any missing dependencies or rendering issues.
+### Risks & follow‑ups  
+- **Context availability** – Verify that `useDashboardStore` and `useI18n` providers wrap the component tree; otherwise runtime errors occur.  
+- **Missing translations** – Ensure all `diffToggle.*` keys exist; otherwise raw keys will display.  
+- **Button state** – Test that the button disables when `changedNodeIds.size === 0` and re‑enables after changes.  
+- **Stats accuracy** – Confirm that `affectedNodeIds` is populated correctly; otherwise the displayed counts may be misleading.

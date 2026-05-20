@@ -26,33 +26,28 @@
 <body>
   <header class="top">
     <h1>scripts/run-electron.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:05:48.816Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:12:27.032Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The launcher script <code>scripts/run-electron.cjs</code> now builds its environment by calling <code>augmentPathForCli</code> instead of a plain clone of <code>process.env</code>. The helper is imported from <code>electron/gh-path.cjs</code> (diff lines R18‑R19). The removal of <code>ELECTRON_OVERRIDE_DIST_PATH</code> is unchanged.</p>
+<p>A new script <code>scripts/run-electron.cjs</code> is added. It spawns the Electron binary from <code>node_modules/electron/dist/</code> instead of using <code>electron/cli.js</code>. The script resolves the binary path, cleans the environment, and starts the process with the supplied arguments.</p>
 <h3>Key changes</h3>
 <ul>
-<li>In <code>cleanEnv</code> (lines 17‑23) the original <code>const env = { …process.env };</code> (L18) was replaced with:```js
-const { augmentPathForCli } = require(path.join(root, &quot;electron&quot;, &quot;gh-path.cjs&quot;));
-const env = augmentPathForCli({ …process.env });</li>
+<li><strong>Imports</strong> (R9‑R11): <code>fs</code>, <code>path</code>, and <code>spawn</code> from Node core modules; <code>augmentPathForCli</code> from <code>path.join(root, &quot;electron&quot;, &quot;gh-path.cjs&quot;)</code> (R18).  </li>
+<li><strong><code>cleanEnv()</code></strong> (lines 17‑22): augments PATH via <code>augmentPathForCli</code>, removes <code>ELECTRON_OVERRIDE_DIST_PATH</code>, returns sanitized env.  </li>
+<li><strong><code>resolveElectronBinary()</code></strong> (lines 24‑41): reads <code>path.txt</code> in the Electron package, validates existence of the binary, returns its full path. Throws if <code>path.txt</code> missing or empty, or binary not found.  </li>
+<li><strong>Process launch</strong> (lines 49‑53): spawns the binary with <code>cwd: root</code>, <code>stdio: &quot;inherit&quot;</code>, and the cleaned env.  </li>
+<li><strong>Error handling</strong> (lines 55‑66): logs child errors, exits with child’s exit code or forwards signals.</li>
 </ul>
-<pre><code class="language-(R18‑R19).">- The `delete env.ELECTRON_OVERRIDE_DIST_PATH;` line remains at L20.  
-- No other parts of the script were modified.
-
-### Impact
-
-  
-- The environment passed to `spawn` now contains any modifications performed by `augmentPathForCli`, which may adjust PATH or related variables.  
-- Existing behaviour that relied on a shallow clone of `process.env` is preserved except for the potential PATH changes.  
-- The change centralises path handling in `gh-path.cjs`, reducing duplication.
-
-### Risks &amp; follow‑ups  
-- **Missing module**: `electron/gh-path.cjs` must exist and export `augmentPathForCli`.  
-- **Path side‑effects**: Verify that the augmented PATH does not interfere with other tooling.  
-- **Regression**: Ensure that deleting `ELECTRON_OVERRIDE_DIST_PATH` still behaves as intended after augmentation.  
-- **Documentation**: Update any references to the old `process.env` clone.
-</code></pre>
+<h3>Impact</h3>
+<p>The script guarantees the binary used is the one bundled with the repo, avoiding overridden paths. Centralizes binary resolution logic; future changes to Electron layout can be made in one place. Errors are printed to stdout and the process exits with the child’s exit code, aiding debugging.</p>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Missing <code>path.txt</code></strong>: script throws if absent; ensure <code>npm install</code> populates it.  </li>
+<li><strong>Node version</strong>: relies on <code>node:fs</code>, <code>node:path</code>, <code>node:child_process</code>; requires Node 18+.  </li>
+<li><strong><code>augmentPathForCli</code> path</strong>: script assumes <code>path.join(root, &quot;electron&quot;, &quot;gh-path.cjs&quot;)</code> exists and exports correctly; validate this dependency.  </li>
+<li><strong>Testing</strong>: add unit tests for <code>resolveElectronBinary()</code> and <code>cleanEnv()</code> to cover edge cases such as empty <code>path.txt</code> or missing binary.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

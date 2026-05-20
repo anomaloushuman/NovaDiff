@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/EmbedGraphPanel.tsx",
   "kind": "added",
-  "leftTitle": "8e0dc031dcfc",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T19:33:36.089Z",
+  "generatedAt": "2026-05-20T05:17:43.146Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,40 +20,35 @@
       }
     ],
     "changed_exports": [
-      "R259 added: export interface EmbedGraphPanelProps {",
-      "R263 added: export function EmbedGraphPanel({ graph }: EmbedGraphPanelProps) {"
+      "R81 added: export function EmbedGraphPanel() {"
     ],
     "changed_imports": [
-      "R5 added: import { useEffect, useMemo, useRef, useState } from \"react\";",
-      "R6 added: import {",
-      "R17 added: import type { Edge, Node } from \"@xyflow/react\";",
-      "R18 added: import \"@xyflow/react/dist/style.css\";",
-      "R19 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R20 added: import type { GraphNode } from \"@novadiff/graph-core/types\";"
+      "R6 added: import { useEffect, useRef, useState } from \"react\";",
+      "R7 added: import { ReactFlowProvider } from \"@xyflow/react\";",
+      "R8 added: import \"@xyflow/react/dist/style.css\";",
+      "R9 added: import { GraphViewInner } from \"./components/GraphView\";",
+      "R10 added: import { useDashboardStore } from \"./store\";",
+      "R11 added: import { ThemeProvider } from \"./themes/index\";"
     ],
     "changed_line_ranges": [
-      "R1-279"
+      "R1-97"
     ],
     "cited_changed_lines": [
       "R1 added: /**",
-      "R2 added: * NovaDiff documentation embed — isolated overview graph (no Zustand dashboard store).",
-      "R3 added: */",
-      "R5 added: import { useEffect, useMemo, useRef, useState } from \"react\";",
-      "R6 added: import {",
-      "R7 added: Background,"
+      "R2 added: * NovaDiff documentation embed — full interactive graph (overview + layer drill-in).",
+      "R3 added: * Uses the shared GraphViewInner inside a sized host so React Flow gets pixel dimensions.",
+      "R4 added: */",
+      "R6 added: import { useEffect, useRef, useState } from \"react\";",
+      "R7 added: import { ReactFlowProvider } from \"@xyflow/react\";"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function useOverviewLayoutForGraph (47-156)",
-      "right function EmbedSizedFlowMount (221-258)",
-      "right function EmbedOverviewFlow (186-220)",
-      "right function EmbedFitViewOnce (157-185)",
-      "right function EmbedGraphPanel (263-279)",
-      "right function buildNodesById (39-46)",
-      "right interface EmbedGraphPanelProps (259-262)"
+      "right function EmbedSizedInteractiveGraph (32-80)",
+      "right function EmbedEscapeToOverview (15-31)",
+      "right function EmbedGraphPanel (81-97)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

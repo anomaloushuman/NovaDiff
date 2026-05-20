@@ -26,35 +26,56 @@
 <body>
   <header class="top">
     <h1>tsconfig.json</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:04:30.504Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:10:17.203Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The root <code>tsconfig.json</code> was modified to broaden the TypeScript compilation scope.<br>At line 23 the <code>include</code> array was replaced with:```json
-&quot;include&quot;: [
-  &quot;src&quot;,
-  &quot;packages/graph-view/src/NovaDiffGraphExplorer.tsx&quot;,
-  &quot;packages/graph-view/src/index.ts&quot;
-]</p>
-<pre><code class="language-###">
-  
-- `include` changed from `[&quot;src&quot;]` to the three‑item array above (diff line 23).  
-- No other compiler options were altered.  
-- The change is limited to the root configuration file.
-
-### Impact
-
-  
-- The two new files will now be type‑checked and bundled as part of the build.  
-- The compiler will consider these files when resolving modules, potentially exposing new exports.  
-- Incremental compilation will track them, but the effect on build time or artifact size is unknown from the diff.
-
-### Risks &amp; follow‑ups  
-- **Type errors**: Verify that `NovaDiffGraphExplorer.tsx` and `index.ts` compile without errors (`tsc --noEmit`).  
-- **Duplicate declarations**: Ensure these files do not re‑export symbols already exposed elsewhere.  
-- **Build artifacts**: Confirm the new files appear in the final bundle (e.g., via Webpack/Vite).  
-- **CI pipeline**: Check that the CI build passes with the expanded `include` set; potential OOM issues on limited‑memory runners are unknown from the available evidence.
-</code></pre>
+<p>A new <code>tsconfig.json</code> file (lines 1‑25) has been added to the repository. It configures TypeScript for the project with an ES2020 target, ESNext module style, and strict linting options.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>compilerOptions</strong> (lines 2‑6):  <ul>
+<li><code>target: &quot;ES2020&quot;</code>  </li>
+<li><code>module: &quot;ESNext&quot;</code>  </li>
+<li><code>useDefineForClassFields: true</code>  </li>
+<li><code>lib: [&quot;ES2020&quot;, &quot;DOM&quot;, &quot;DOM.Iterable&quot;]</code></li>
+</ul>
+</li>
+<li><strong>Bundler mode</strong> (lines 9‑13):  <ul>
+<li><code>moduleResolution: &quot;bundler&quot;</code>  </li>
+<li><code>allowImportingTsExtensions: true</code>  </li>
+<li><code>resolveJsonModule: true</code></li>
+</ul>
+</li>
+<li><strong>Strict type‑checking</strong> (lines 18‑21):  <ul>
+<li><code>strict: true</code>  </li>
+<li><code>noUnusedLocals: true</code>  </li>
+<li><code>noUnusedParameters: true</code>  </li>
+<li><code>noFallthroughCasesInSwitch: true</code></li>
+</ul>
+</li>
+<li><strong>Build flags</strong> (lines 7‑15):  <ul>
+<li><code>noEmit: true</code>  </li>
+<li><code>isolatedModules: true</code>  </li>
+<li><code>jsx: &quot;react-jsx&quot;</code></li>
+</ul>
+</li>
+<li><strong>Project inclusion</strong> (line 23): includes <code>src</code>, <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code>, and <code>packages/graph-view/src/index.ts</code>.  </li>
+<li><strong>Reference</strong> (line 24): points to <code>tsconfig.node.json</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The compiler will target ES2020 and emit ESNext modules, affecting downstream bundling.  </li>
+<li><code>noEmit: true</code> means the TypeScript compiler performs only type‑checking; emitted JavaScript must come from the bundler.  </li>
+<li>Bundler mode flags allow importing <code>.ts</code> files and JSON modules directly.  </li>
+<li>Strict flags may surface type errors that were previously ignored.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>tsconfig.node.json</code> exists and contains compatible overrides; missing it will break the build.  </li>
+<li>Run the nearest targeted tests and a smoke test for the graph‑view components to confirm type‑checking passes.  </li>
+<li>Ensure the build pipeline respects <code>noEmit: true</code>; adjust if it previously emitted JavaScript.  </li>
+<li>Check that the new strict flags do not introduce regressions in legacy code by running linting and unit tests.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

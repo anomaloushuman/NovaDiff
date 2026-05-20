@@ -1,24 +1,21 @@
-### Overview  
-A new `theme-engine.ts` file was added at `packages/graph-view/src/themes/`. It centralizes theme application and teardown logic for the graph‑view component.
+### Overview
+A new file `packages/graph-view/src/themes/theme-engine.ts` introduces a lightweight theme system.  
+It defines a `hexToRgb` helper (R4‑R7), a `deriveFromAccent` routine that builds RGBA values from an accent hex and dark‑mode flag (R10‑R30), and two public functions: `applyTheme` (R34‑R69) and `clearTheme` (R72‑R90). The file imports the `ThemeConfig` type from `./types.ts` and the `getAccent` / `getPreset` helpers from `./presets.ts` (R1‑R2).
 
-### Key changes  
-- **Imports** (lines 1‑2): `ThemeConfig` type and `getAccent`, `getPreset` helpers.  
-- **`hexToRgb`** (lines 4‑8): converts a hex string to an `"R, G, B"` string used for RGBA values.  
-- **`deriveFromAccent`** (lines 10‑30): builds a set of derived CSS variables (e.g., `color-border-subtle`, `glass-bg`) based on an accent color and a dark‑mode flag.  
-- **`applyTheme`** (lines 34‑69):  
-  - Applies preset colors (`--color-…`).  
-  - Sets accent variables (`--color-accent`, `--color-accent-dim`, `--color-accent-bright`).  
-  - Adds derived variables via `deriveFromAccent`.  
-  - Sets `data-theme` attribute and heading‑font CSS variable.  
-- **`clearTheme`** (lines 72‑90): removes all theme‑related inline styles and the `data-theme` attribute, enabling clean teardown.
+### Key changes
+- **Imports** – `ThemeConfig` and preset helpers added (R1‑R2).  
+- **Utility** – `hexToRgb` converts a hex string to an RGB string (R4‑R7).  
+- **Derived values** – `deriveFromAccent` returns a record of RGBA strings based on an accent hex and a dark‑mode flag (R10‑R30).  
+- **Theme application** – `applyTheme` writes preset colors, accent colors, derived values, a `data-theme` attribute, and a heading‑font CSS variable to the target element’s style (R34‑R69).  
+- **Teardown** – `clearTheme` removes all CSS variables written by `applyTheme` and the `data-theme` attribute (R72‑R90).
 
-### Impact  
-- **Consistency**: All theme logic lives in one module, ensuring uniform CSS variable names and values across themes.  
-- **Performance**: Only a handful of `style.setProperty`/`removeProperty` calls per theme; negligible runtime cost.  
-- **Compatibility**: Uses standard CSS custom properties; no browser‑specific code.
+### Impact
+- **Centralization** – Theme logic is now in a single module, reducing duplication across components.  
+- **Simplicity** – Operations are straightforward DOM style updates; the code uses only standard CSS custom properties and attributes.  
+- **Extensibility** – Future presets or accent logic can be updated in one place.
 
-### Risks & follow‑ups  
-- `hexToRgb` has no validation; test with malformed hex strings to avoid runtime errors.  
-- `applyTheme` defaults to `"serif"` when `config.headingFont` is missing; confirm this matches design expectations.  
-- `clearTheme` must remove every property added by `applyTheme`; run integration tests after theme switches.  
-- Verify that `getPreset` and `getAccent` return the expected objects against existing preset data.
+### Risks & follow‑ups
+- `hexToRgb` may misbehave with malformed hex strings (e.g., missing `#` or wrong length).  
+- `clearTheme` must remove every property set by `applyTheme`; missing keys could leave stale styles.  
+- Verify that `applyTheme` respects the default `target` (`document.documentElement`) when invoked from a standalone graph view.  
+- Run linting and unit tests to catch any type mismatches introduced by the new imports.

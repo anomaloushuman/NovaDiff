@@ -1,19 +1,21 @@
 ### Overview  
-A new worker script `packages/graph-view/src/utils/layout.worker.ts` is added to compute graph layouts on a background thread using the `@dagrejs/dagre` library.
+A new worker module `packages/graph-view/src/utils/layout.worker.ts` is added to perform graph layout calculations using the `@dagrejs/dagre` library. It defines the public contract through `LayoutMessage` (lines 3‑7) and `LayoutResult` (lines 10‑12) and exposes a message handler that receives node/edge data, runs Dagre, and posts back node positions.
 
 ### Key changes  
-- Import `dagre` (line 1).  
-- Export interfaces `LayoutMessage` (lines 3‑7) and `LayoutResult` (lines 10‑12).  
-- `self.onmessage` handler (line 15) parses a `LayoutMessage`, builds a `dagre.graphlib.Graph`, configures layout options (`rankdir`, `nodesep`, etc.), runs `dagre.layout(g)`, and posts back a `LayoutResult` (line 46).  
-- Node positions are offset by half their width/height (lines 38‑43).
+- **Import** `dagre` (R1).  
+- **Exported interfaces** `LayoutMessage` (R3‑R7) and `LayoutResult` (R10‑R12).  
+- **Message handler** (`self.onmessage`, R15‑R47) parses `LayoutMessage`, builds a Dagre graph, configures layout options (`rankdir`, `nodesep`, etc.), runs `dagre.layout`, and constructs a `positions` map.  
+- **Result posting** (`self.postMessage`, R46) sends back a `LayoutResult` object, using `satisfies LayoutResult` for type safety.  
+- The worker is self‑contained; no external state is referenced.
 
 ### Impact  
-- Centralizes layout logic in a dedicated worker, reducing coupling in UI components.  
-- Offloads layout calculations from the main thread; each message rebuilds the entire graph, which may be costly for very large graphs.  
-- Adds runtime dependency on `@dagrejs/dagre`; ensure it is bundled for the target environment.
+- **Deterministic layout**: given the same node dimensions and edge list, the worker produces the same positions.  
+- **Performance**: layout is performed in a Web Worker, preventing UI thread blocking for large graphs.  
+- **Explicit API**: exported interfaces make the worker’s contract clear and testable.  
+- **Dependency**: requires `@dagrejs/dagre`; ensure it is listed in `package.json` and bundled correctly.
 
 ### Risks & follow‑ups  
-- Verify that the build pipeline emits the worker file and that target browsers support `Worker`.  
-- Callers must send `LayoutMessage` objects matching the defined shape; mismatches could produce incorrect positions.  
-- Confirm that the installed `@dagrejs/dagre` version matches the API used (e.g., `graphlib.Graph` constructor).  
-- Unknown from the available diff/scan evidence whether this change introduces performance regressions; benchmark if needed.
+- **Dependency version**: verify that the installed `@dagrejs/dagre` version matches the API used (`graphlib.Graph`).  
+- **Worker registration**: confirm that consuming code correctly instantiates this worker and handles its `onmessage` responses.  
+- **Edge cases**: test with empty node/edge arrays to ensure no runtime errors.  
+- **Type safety**: ensure that the `satisfies LayoutResult` check passes in all build configurations; adjust TS settings if necessary.

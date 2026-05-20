@@ -26,36 +26,35 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/vite.config.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:20:54.197Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:04:18.799Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/vite.config.ts</code> (lines 1‑362) defines a Vite dev server that serves NovaDiff graph data, configuration, and source‑file content with strict security checks.</p>
+<p><code>packages/graph-view/vite.config.ts</code> (added, lines 1‑362) introduces a Vite configuration that powers the NovaDiff dashboard. It creates a one‑time access token, a custom server middleware that serves graph files, configuration, and file content, and helper functions for path validation and graph‑file handling.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports &amp; token</strong> – <code>defineConfig</code>, <code>react</code>, <code>tailwindcss</code>, <code>path</code>, <code>fs</code>, <code>crypto</code> are added (R2‑7).<br><code>ACCESS_TOKEN</code> is generated from <code>NOVADIFF_GRAPH_ACCESS_TOKEN</code> or a random 16‑byte hex string (line 12).<br><code>MAX_SOURCE_FILE_BYTES</code> limits preview size (line 13).  </li>
-<li><strong>Graph utilities</strong> – <code>graphFileCandidates</code> (15‑22), <code>findGraphFile</code> (26‑27), <code>projectRootFromGraphFile</code> (30‑31), <code>normalizeGraphPath</code> (34‑52), and <code>graphFilePathSet</code> (55‑69) locate and validate graph files.  </li>
-<li><strong>Language detection</strong> – <code>detectLanguage</code> maps file extensions to language names (72‑101).  </li>
-<li><strong>Response helpers</strong> – <code>sendJson</code> and <code>rejectFileRequest</code> (104‑112).  </li>
-<li><strong>File‑content endpoint</strong> – <code>readSourceFile</code> (114‑176) validates relative paths, checks size, rejects binaries, and returns language via <code>detectLanguage</code>.  </li>
-<li><strong>Middleware</strong> – protects <code>/knowledge-graph.json</code>, <code>/domain-graph.json</code>, <code>/diff‑overlay.json</code>, <code>/meta.json</code>, <code>/config.json</code>, and <code>/file‑content.json</code> with the token (250‑268).<br><code>/file‑content.json</code> is served by <code>readSourceFile</code> (271‑273).  </li>
-<li><strong>Graph file sanitization</strong> – absolute paths in graph nodes are converted to project‑relative paths before sending (312‑333).  </li>
-<li><strong>Server config</strong> – binds to <code>127.0.0.1:5173</code>, opens the dashboard URL with the token (187‑191), and logs the URL once on startup (238‑244).  </li>
-<li><strong>Build</strong> – custom Rollup chunking for large dependencies (<code>react‑vendor</code>, <code>xyflow</code>, <code>elk</code>, <code>graphology</code>, <code>graph‑layout</code>, <code>markdown</code>) (204‑226).</li>
+<li><strong>Imports &amp; token</strong> – <code>defineConfig</code>, <code>react</code>, <code>tailwindcss</code>, <code>path</code>, <code>fs</code>, <code>crypto</code> (R2‑R7).  </li>
+<li><strong>Graph file utilities</strong> – <code>graphFileCandidates</code>, <code>findGraphFile</code>, <code>projectRootFromGraphFile</code>, <code>normalizeGraphPath</code>, <code>graphFilePathSet</code> (lines 34‑71).  </li>
+<li><strong>Language detection</strong> – <code>detectLanguage</code> maps extensions to language strings (lines 72‑102).  </li>
+<li><strong>HTTP helpers</strong> – <code>sendJson</code>, <code>rejectFileRequest</code>, <code>readSourceFile</code> (lines 104‑177) enforce the token, sanitize paths, and validate file inclusion in the graph.  </li>
+<li><strong>Vite server config</strong> – host <code>127.0.0.1</code>, port <code>5173</code>, auto‑open URL with token (lines 185‑191).  </li>
+<li><strong>Middleware</strong> – serves <code>/knowledge-graph.json</code>, <code>/domain-graph.json</code>, <code>/diff-overlay.json</code>, <code>/meta.json</code>, <code>/config.json</code>, and <code>/file-content.json</code> with token checks, path sanitization, and graph‑file sanitisation (lines 236‑358).  </li>
+<li><strong>Console output</strong> – prints dashboard URL once on server start (lines 239‑244).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Security</strong> – token enforcement and path validation prevent unauthorized access and path traversal (lines 250‑268, 114‑176).  </li>
-<li><strong>Privacy</strong> – sanitization of absolute paths avoids leaking the developer’s filesystem layout (lines 312‑333).  </li>
-<li><strong>Performance</strong> – early rejection of oversized or binary files keeps the server lightweight (lines 159‑165).  </li>
-<li><strong>Observability</strong> – the dashboard URL is logged once at startup (lines 238‑244).</li>
+<li><strong>Security</strong> – token enforcement blocks unauthorized access to graph data.  </li>
+<li><strong>Correctness</strong> – path normalization and graph‑file validation guard against traversal and missing files.  </li>
+<li><strong>Observability</strong> – console log of the dashboard URL aids debugging.  </li>
+<li><strong>Compatibility</strong> – relies on Node’s <code>fs</code>, <code>path</code>, and Vite 4 API; no breaking changes to existing projects.  </li>
+<li><strong>Performance</strong> – reading and parsing graph files on each request may add latency; acceptable for development but could be cached in production.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Token mismatch</strong> – verify that the printed token matches client requests (lines 238‑244).  </li>
-<li><strong>Graph file absence</strong> – 404 is returned if <code>knowledge-graph.json</code> is missing (lines 130‑133, 350‑354).  </li>
-<li><strong>Path sanitization edge cases</strong> – test nodes with absolute paths outside the project to confirm they are reduced to filenames (lines 328‑332).  </li>
-<li><strong>Binary file detection</strong> – confirm binary files return status 415 (lines 164‑165).</li>
+<li><strong>Token volatility</strong> – without <code>NOVADIFF_GRAPH_ACCESS_TOKEN</code>, a new random token is generated on every restart (R12). Tests or CI may fail if a stable token is expected.  </li>
+<li><strong>Path sanitisation</strong> – <code>normalizeGraphPath</code> may reject legitimate relative paths; verify against edge cases such as <code>../src</code>.  </li>
+<li><strong>Graph file discovery</strong> – <code>graphFileCandidates</code> assumes <code>.novadiff-graph</code> directories; ensure build scripts create these paths.  </li>
+<li><strong>Middleware coverage</strong> – confirm that all required endpoints (<code>/config.json</code>, <code>/file-content.json</code>) correctly handle missing or malformed files without leaking sensitive data.</li>
 </ul>
 </article>
   </main>

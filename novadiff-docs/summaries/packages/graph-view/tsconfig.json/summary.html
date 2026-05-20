@@ -26,17 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/tsconfig.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:19:25.127Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:03:06.910Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/tsconfig.json</code> has been added. The file contains an empty <code>files</code> array and a single <code>references</code> entry pointing to <code>./tsconfig.app.json</code>. The change appears in the diff at lines R1‑R4.</p>
+<p>A new TypeScript configuration file has been added at <code>packages/graph-view/tsconfig.json</code>.<br>The file contains an empty <code>&quot;files&quot;</code> array and a single reference to <code>./tsconfig.app.json</code> (lines 1‑4 of the diff).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File added</strong>: <code>packages/graph-view/tsconfig.json</code> (lines R1‑R4).  </li>
-<li><strong>Empty <code>files</code> array</strong>: <code>&quot;files&quot;: []</code>.  </li>
-<li><strong>Reference</strong>: `&quot;references&quot;: [{ &quot;path</li>
+<li><strong>File added</strong>: `packages/graph-view/tsconfig.json````json
+{
+  &quot;files&quot;: [],
+  &quot;references&quot;: [{ &quot;path&quot;: &quot;./tsconfig.app.json&quot; }]
+}</li>
 </ul>
+<pre><code class="language--">
+### Impact
+
+- The file enables project references for the `graph-view` package, allowing isolated compilation.  
+- With an empty `&quot;files&quot;` array, the compiler will include all files under the package root unless excluded elsewhere.  
+- The reference to `tsconfig.app.json` introduces a dependency that must exist and be correctly configured; otherwise the build will fail.
+
+### Risks &amp; follow‑ups
+- **Missing `tsconfig.app.json`**: Verify that the referenced file exists in `packages/graph-view`.  
+- **Build failures**: Run `tsc -b packages/graph-view` to confirm the reference chain resolves.  
+- **Duplicate references**: Ensure no other tsconfig files inadvertently reference `graph-view` in a conflicting way.  
+- **Performance impact**: Monitor compile times; the empty `&quot;files&quot;` array could increase the number of files processed.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

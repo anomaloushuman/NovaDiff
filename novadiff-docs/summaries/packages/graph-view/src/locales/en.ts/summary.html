@@ -26,31 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/locales/en.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:51:29.549Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:34:31.026Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Adds a new English locale file for the graph‑view component. The file is located at <code>packages/graph-view/src/locales/en.ts</code> and defines a constant <code>en</code> containing UI strings grouped into sections such as <code>common</code>, `project</p>
-<h3>Overview</h3>
-<p><code>, </code>nodeInfo`, etc.</p>
+<p>A new locale file <code>packages/graph-view/src/locales/en.ts</code> has been added. It defines the English string bundle <code>en</code> (exported at line 1) and exports it as the module’s default export (line 272).</p>
 <h3>Key changes</h3>
 <ul>
-<li>New file <code>packages/graph-view/src/locales/en.ts</code> added.  </li>
-<li>Lines 1‑272 contain the <code>en</code> object; line 272 exports it as default (<code>export default en;</code>).  </li>
-<li>The object holds roughly 270 string entries covering all UI text used in graph‑view.</li>
+<li><strong>File creation</strong> – <code>packages/graph-view/src/locales/en.ts</code> now exists.  </li>
+<li><strong>Exported object</strong> – <code>export const en = { … }</code> introduces a comprehensive set of UI labels, tooltips, and messages (see diff lines 1‑270).  </li>
+<li><strong>Default export</strong> – <code>export default en;</code> (line 272) makes the bundle available via <code>import en from &#39;./locales/en&#39;</code>.  </li>
+<li><strong>No other modules touched</strong> – the diff shows only this new file; no imports or references were added elsewhere.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>No existing files are modified; the change is additive.  </li>
-<li>Components that import <code>en</code> can display English text, enabling i18n support.  </li>
-<li>The added strings will be compiled into the bundle; the size impact is minimal.</li>
+<li>The bundle is self‑contained; importing it will not cause runtime errors unless the import path is incorrect.  </li>
+<li>It centralizes English strings, simplifying future updates.  </li>
+<li>Existing code that does not import <code>en</code> remains unaffected.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import consistency</strong>: verify that components needing the locale import <code>en</code> correctly; missing imports will cause runtime errors.  </li>
-<li><strong>Build inclusion</strong>: ensure the new file is included in the TypeScript compilation and bundled output.  </li>
-<li><strong>Default vs. named export</strong>: confirm consuming code uses the default export where appropriate.  </li>
-<li><strong>Key coverage</strong>: run i18n tests to confirm all UI elements reference existing keys and that no duplicate keys exist.</li>
+<li><strong>Unused file</strong> – Verify that the build process includes this file; otherwise it may be omitted from the bundle.  </li>
+<li><strong>Missing imports</strong> – Ensure components that need English strings import <code>en</code> from the correct path.  </li>
+<li><strong>Duplicate keys</strong> – The large object contains many nested keys; confirm that no accidental key collisions exist with other locale files.  </li>
+<li><strong>Build size</strong> – Adding a large string bundle could increase bundle size; monitor the production build size to confirm it stays within acceptable limits.</li>
 </ul>
 </article>
   </main>

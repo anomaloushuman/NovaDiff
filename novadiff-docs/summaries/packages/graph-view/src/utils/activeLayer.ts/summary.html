@@ -26,34 +26,37 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/utils/activeLayer.ts</h1>
-    <div class="meta">Kind: added · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:50:54.981Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:45:11.983Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new utility <code>packages/graph-view/src/utils/activeLayer.ts</code> is added to resolve the active layer from a <code>KnowledgeGraph</code>. It introduces a synthetic project‑wide layer ID and handles both normal and project‑wide cases.</p>
+<p>A new file <code>packages/graph-view/src/utils/activeLayer.ts</code> is added. It exports a helper that resolves an active layer ID into a detailed layer object, including a synthetic “project‑wide” layer.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import</strong> <code>KnowledgeGraph</code> type (<code>R1</code>).  </li>
-<li><strong>Constant</strong> <code>PROJECT_WIDE_LAYER_ID = &quot;__novadiff_project__&quot;</code> (<code>R4</code>).  </li>
-<li><strong>Exported function</strong> <code>resolveActiveLayer</code> (<code>R6</code>).  </li>
-<li>Handles <code>null</code> graph or activeLayerId (<code>R10‑12</code>).  </li>
-<li>Special case for <code>PROJECT_WIDE_LAYER_ID</code>: aggregates all node IDs across layers or falls back to all nodes (<code>R13‑32</code>).  </li>
-<li>Normal case: finds the layer by ID and returns its metadata (<code>R34‑43</code>).  </li>
-<li>Returns <code>null</code> if the layer is not found (<code>R35‑36</code>).</li>
+<li><strong>Import</strong> (line 1, R1): <code>import type { KnowledgeGraph } from &quot;@novadiff/graph-core/types&quot;;</code>  </li>
+<li><strong>Constant</strong> (line 4, R4): <code>export const PROJECT_WIDE_LAYER_ID = &quot;__novadiff_project__&quot;;</code>  </li>
+<li><strong>Function</strong> (lines 6‑9, R6‑9):```ts
+export function resolveActiveLayer(
+  graph: KnowledgeGraph,
+  activeLayerId: string | null
+): { id: string; name: string; description: string; nodeIds: string[] } | null</li>
+</ul>
+<p>```- **Project‑wide logic** (lines 13‑26, R13‑26): if <code>activeLayerId === PROJECT_WIDE_LAYER_ID</code>, aggregates all node IDs from every layer; if no layers exist, falls back to nodes that have a <code>layerId</code>.  </p>
+<ul>
+<li><strong>Normal layer lookup</strong> (lines 34‑43, R34‑43): finds the matching layer in <code>graph.layers</code> and returns its metadata.  </li>
+<li><strong>Null handling</strong> (lines 10‑12, 35‑36, R10‑12, R35‑36): returns <code>null</code> when <code>graph</code> or <code>activeLayerId</code> is falsy, or when no matching layer is found.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Guarantees a consistent view for the project‑wide synthetic layer, preventing missing node data when no layers exist.  </li>
-<li><strong>Maintainability</strong>: Centralizes layer resolution logic; other modules can import <code>resolveActiveLayer</code> instead of duplicating code.  </li>
-<li><strong>Performance</strong>: Linear scans over <code>graph.layers</code> and <code>graph.nodes</code>; acceptable for current graph sizes.  </li>
-<li><strong>Compatibility</strong>: No API changes; purely an internal helper.</li>
+<li>Provides a single source of truth for layer resolution; callers can import <code>resolveActiveLayer</code> from this file.  </li>
+<li>No API changes to existing modules; the new function is purely an internal helper. (unknown from the available diff/scan evidence)</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>graph.layers</code> and <code>graph.nodes</code> are populated as expected; otherwise the fallback logic may return incomplete data.  </li>
-<li>Ensure <code>PROJECT_WIDE_LAYER_ID</code> does not collide with real layer IDs in future data models.  </li>
-<li>Add unit tests covering both the synthetic layer and normal layer resolution paths.  </li>
-<li>Confirm that the deduplication via <code>Set</code> correctly handles duplicate node IDs across layers.</li>
+<li>Verify that <code>PROJECT_WIDE_LAYER_ID</code> does not collide with real layer IDs in existing projects.  </li>
+<li>Ensure node aggregation correctly handles cases where <code>graph.layers</code> is empty but <code>graph.nodes</code> contains nodes without <code>layerId</code>.  </li>
+<li>Add unit tests for both the synthetic layer path and normal layer resolution.  </li>
+<li>Confirm callers correctly import and use <code>resolveActiveLayer</code>; update documentation if necessary.</li>
 </ul>
 </article>
   </main>

@@ -1,32 +1,21 @@
 ### Overview  
-`src/components/LlmSettingsModal.tsx` now renders its modal through the `AnimatedOverlay` component instead of a custom backdrop `<div>`. The early‑return guard (`if (!open) { return null; }`) has been removed, so the component mounts regardless of the `open` prop and relies on `AnimatedOverlay` to show/hide the panel. Event handling for closing the modal has been shifted to the overlay’s `onClose` prop, and the backdrop and panel classes are now supplied via `backdropClassName` and `panelClassName`.
+A new component `src/components/LlmSettingsModal.tsx` (lines 1‑149) introduces a modal for configuring local LLM providers (Ollama or LM Studio). It exports `LlmSettingsModalProps` and internally manages provider, base URL, model, probe status, and busy state.
 
 ### Key changes  
-- **Import added** (line 4): `import { AnimatedOverlay } from "./ui/AnimatedOverlay"`.  
-- **Early‑return removed** (lines 33‑35).  
-- **Backdrop `<div>` removed** (lines 49‑56).  
-- **Panel `<div>` removed** (line 58).  
-- **`AnimatedOverlay` usage** (lines 46‑51):  
-  ```tsx
-  <AnimatedOverlay
-    open={open}
-    onClose={onClose}
-    backdropClassName="llm-modal-backdrop"
-    panelClassName="llm-modal"
-    labelledBy="llm-modal-title"
-  >
-  ```  
-- **Button class names simplified**: removed `className="llm-btn ghost"` and `className="llm-btn primary"`; dynamic `className={provider === "ollama" ? "active" : ""}` now controls the provider buttons.  
-- **Event handlers**: `onMouseDown` click‑outside logic removed; closing is handled by `AnimatedOverlay`.  
+- **Imports** (R1‑4): `useEffect`, `useState` from React; types `LlmProvider`, `LlmSettings`; `saveLlmSettings`; `AnimatedOverlay`.  
+- **Props interface** (R6‑10): `open: boolean`, `initial: LlmSettings`, `onClose: () => void`, `onSaved: (s: LlmSettings) => void`.  
+- **State** (R19‑23): `provider`, `baseUrl`, `model`, `probe`, `busy`.  
+- **useEffect** (R25‑32): resets state when `open` or `initial` changes.  
+- **Preset logic** (R34‑42): `applyPreset` sets defaults for Ollama (`http://127.0.0.1:11434`, `llama3.2`) or LM Studio (`http://127.0.0.1:1234`, `local-model`).  
+- **UI** (R45‑147): provider buttons, input fields, a test‑connection button that calls `window.electronAPI?.llmProbe`, and a save button that persists settings via `saveLlmSettings` and triggers `onSaved`.
 
 ### Impact  
-- The modal is always mounted, which may increase memory usage but keeps state intact when toggled.  
-- Styling is largely preserved via the same `backdropClassName`/`panelClassName`, but the removal of explicit `<div>` wrappers could affect layout if CSS targets those elements.  
-- Click‑outside closing behavior now depends on `AnimatedOverlay`; if that component does not propagate the event, the modal may not close as before.  
-- Button styling changes may alter the visual appearance of the provider selector, cancel, test, and save actions.
+- **Performance**: All state updates are local to the modal; negligible overhead.  
+- **Maintainability**: Centralizes LLM configuration; adding new providers can reuse `applyPreset`.  
+- **Observability**: The `probe` message provides immediate feedback on connection tests.
 
 ### Risks & follow‑ups  
-- **Close‑on‑outside**: Verify that `AnimatedOverlay` correctly closes the modal when clicking the backdrop.  
-- **Styling regressions**: Inspect the modal layout and button appearance to ensure the removed `<div>` wrappers and class names do not break the design.  
-- **Mounting overhead**: Monitor performance when the modal is frequently toggled; consider re‑introducing an early‑return if unnecessary renders become problematic.  
-- **Accessibility**: Confirm that the `labelledBy` prop and ARIA attributes still provide the expected screen‑reader support.
+- **Electron API availability**: The test button is disabled if `window.electronAPI?.llmProbe` is undefined; confirm this API is exposed in the renderer.  
+- **Prop validation**: Callers must supply a complete `initial` `LlmSettings`; missing fields could break state initialization.  
+- **CSS classes**: Ensure `llm-modal-backdrop`, `llm-modal`, etc., exist to avoid layout issues.  
+- **Persistence**: Verify that `saveLlmSettings` writes correctly and that `onSaved` updates parent state.

@@ -26,33 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:48:01.969Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:19:22.061Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>NovaDiffGraphExplorerEmbed</code> now imports <code>EmbedDashboardPanel</code> instead of <code>EmbedGraphPanel</code> (line 11).<br>It adds explicit view‑mode handling based on <code>graph.kind</code> (lines 61‑69) and removes navigation to the overview screen during embed mode (line 71 removed, line 79 added).</p>
+<p>A new file <code>packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx</code> introduces an <strong>embed‑only graph explorer</strong> component that loads a <code>KnowledgeGraph</code> into the dashboard store, validates it, and renders an <code>EmbedDashboardPanel</code> without the full dashboard chrome.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import swap</strong> – <code>import { EmbedGraphPanel } from &quot;./EmbedGraphPanel&quot;;</code> removed; <code>import { EmbedDashboardPanel } from &quot;./EmbedDashboardPanel&quot;;</code> added (line 11).  </li>
-<li><strong>View‑mode logic</strong> – after <code>store.setGraph(validation.data)</code> the component checks <code>(graph as KnowledgeGraph &amp; { kind?: string }).kind</code>.  <ul>
-<li>If <code>&quot;knowledge&quot;</code> it calls <code>store.setViewMode(&quot;knowledge&quot;)</code> and <code>store.setIsKnowledgeGraph(true)</code>.  </li>
-<li>Otherwise it calls <code>store.setViewMode(&quot;structural&quot;)</code>, <code>store.setIsKnowledgeGraph(false)</code>, and <code>store.enterNovaDiffEmbedDepth()</code> (lines 61‑69).</li>
-</ul>
-</li>
-<li><strong>Cleanup effect</strong> – <code>store.navigateToOverview()</code> removed from the cleanup effect (line 71 removed); <code>store.enterNovaDiffEmbedDepth()</code> added (line 79).  </li>
-<li><strong>Render change</strong> – JSX now renders <code>&lt;EmbedDashboardPanel graphIssues={validation.issues} /&gt;</code> instead of <code>&lt;EmbedGraphPanel /&gt;</code> (line 109).</li>
+<li><strong>Imports</strong>: Adds React hooks, <code>validateGraph</code> from <code>@novadiff/graph-core/schema</code>, <code>KnowledgeGraph</code> type, <code>useDashboardStore</code>, context utilities, and <code>I18nProvider</code>.  </li>
+<li><strong>API surface</strong>: Exports <code>NovaDiffGraphExplorerEmbedProps</code> and the <code>NovaDiffGraphExplorerEmbed</code> function.  </li>
+<li><strong>Graph fingerprinting</strong>: Implements <code>graphFingerprint</code> (lines 23‑32) to avoid re‑loading identical graphs.  </li>
+<li><strong>Store interaction</strong>: On mount, validates the graph, sets it in the store, configures view mode (<code>knowledge</code> vs <code>structural</code>), and enters embed depth. On unmount, cleans up tour, overlays, layout issues, and resets embed depth.  </li>
+<li><strong>Rendering logic</strong>: Shows a validation error, a skeleton while the store loads the graph, or the <code>EmbedDashboardPanel</code> wrapped in <code>NovaDiffEmbedContext.Provider</code> and <code>I18nProvider</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Knowledge graphs are displayed in the dedicated “knowledge” view, preventing accidental structural view rendering.  </li>
-<li>Removing the overview navigation simplifies the embed flow and reduces state churn during initialization.  </li>
-<li>The component signature remains unchanged; consumers only need to import the new dashboard panel if they rely on the panel directly.</li>
+<li><strong>Correctness</strong>: Validates incoming graphs before use, preventing malformed data from propagating.  </li>
+<li><strong>Maintainability</strong>: Centralizes embed‑specific store actions; future changes to embed behavior can be made in this file.  </li>
+<li><strong>Performance</strong>: Fingerprinting reduces unnecessary store updates when the same graph is re‑passed.  </li>
+<li><strong>Observability</strong>: Provides clear error messages (<code>novadiff-graph-load-error</code>) and a skeleton UI during loading.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>If a graph lacks a <code>kind</code> field, the component defaults to structural mode; confirm this is acceptable for all downstream consumers (unknown from the available diff).  </li>
-<li>Verify that <code>EmbedDashboardPanel</code> is exported and accepts the <code>graphIssues</code> prop; run unit tests that render the embed component.  </li>
-<li>Ensure that removing <code>store.navigateToOverview()</code> does not leave the UI in an inconsistent state for users expecting the overview after embedding.</li>
+<li><strong>Store API compatibility</strong>: Ensure <code>useDashboardStore</code> exposes <code>stopTour</code>, <code>resetEmbedOverlays</code>, <code>clearLayoutIssues</code>, <code>setGraph</code>, <code>setViewMode</code>, <code>setIsKnowledgeGraph</code>, and <code>enterNovaDiffEmbedDepth</code>.  </li>
+<li><strong>Validation side‑effects</strong>: Verify that <code>validateGraph</code> does not mutate the graph and that its <code>issues</code> are correctly passed to <code>EmbedDashboardPanel</code>.  </li>
+<li><strong>Cleanup correctness</strong>: Confirm that the unmount effect restores the store to a clean state, especially <code>enterNovaDiffEmbedDepth</code> which may alter navigation depth.  </li>
+<li><strong>Internationalization</strong>: Test that <code>I18nProvider</code> correctly applies <code>outputLanguage</code> and that the component renders in non‑English locales.</li>
 </ul>
 </article>
   </main>

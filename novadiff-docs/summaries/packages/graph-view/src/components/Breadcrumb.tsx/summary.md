@@ -1,26 +1,41 @@
 ### Overview  
-The `Breadcrumb` component in `packages/graph-view/src/components/Breadcrumb.tsx` has been updated to centralize active‑layer resolution and add a navigation path for the NovaDiff embed depth. The inline lookup for the active layer has been replaced with a helper, and the click logic now distinguishes project‑wide layers.
+A new `Breadcrumb` component was added to **packages/graph-view/src/components/Breadcrumb.tsx** (lines R1‑R44). It renders a breadcrumb bar in the top‑left corner of the graph view, showing the current navigation level and allowing quick navigation back to the overview or to a deeper embed depth.
 
 ### Key changes  
-- **Import added** (`R3`): `import { PROJECT_WIDE_LAYER_ID, resolveActiveLayer } from "../utils/activeLayer";`  
-- **New state** (`R10`): `const enterNovaDiffEmbedDepth = useDashboardStore((s) => s.enterNovaDiffEmbedDepth);`  
-- **Active layer logic** (`R13‑15`):  
+- **Imports** (R1‑R3)  
+  ```ts
+  import { useDashboardStore } from "../store";
+  import { useI18n } from "../contexts/I18nContext";
+  import { PROJECT_WIDE_LAYER_ID, resolveActiveLayer } from "../utils/activeLayer";
+  ```
+- **State hooks** (R6‑R11)  
+  ```ts
+  const navigationLevel = useDashboardStore((s) => s.navigationLevel);
+  const activeLayerId = useDashboardStore((s) => s.activeLayerId);
+  const graph = useDashboardStore((s) => s.graph);
+  const navigateToOverview = useDashboardStore((s) => s.navigateToOverview);
+  const enterNovaDiffEmbedDepth = useDashboardStore((s) => s.enterNovaDiffEmbedDepth);
+  const { t } = useI18n();
+  ```
+- **Active‑layer logic** (R13‑R15)  
   ```ts
   const activeLayer = graph && activeLayerId ? resolveActiveLayer(graph, activeLayerId) : null;
   const isProjectWide = activeLayerId === PROJECT_WIDE_LAYER_ID;
-  ```  
-  The previous lookup (`L11`) was removed.  
-- **Button click** (`R28`): `onClick={() => (isProjectWide ? navigateToOverview() : enterNovaDiffEmbedDepth())}` – the old `onClick={navigateToOverview}` (`L24`) was removed.  
-- **Display text** (`R35`): shows `"All layers · Classes"` when `isProjectWide`, otherwise the layer name (`activeLayer?.name ?? t.layer.defaultName`).  
-- **Removed**: the old `activeLayer` lookup and its JSX usage (`L11`, `L31`).
+  ```
+- **Conditional rendering** (R17‑R41)  
+  - `navigationLevel === "overview"` shows a badge with `t.breadcrumb.projectOverview`.  
+  - `navigationLevel === "layer-detail"` shows a button that toggles between overview and embed depth, displays the active layer name (or `t.layer.defaultName`), and a back‑arrow hint (`t.breadcrumb.escBack`).  
+- **Export** (R5) – `export default function Breadcrumb() { … }`.
 
 ### Impact  
-- **Consistency**: Active‑layer resolution is now handled by a single helper, reducing the risk of stale graph lookups.  
-- **Maintainability**: Logic is moved out of the component, simplifying future changes.  
-- **UI behavior**: The breadcrumb now displays a distinct label for project‑wide layers and routes correctly to the overview or NovaDiff embed depth.
+- **UI**: Adds a breadcrumb bar that appears in the top‑left corner, improving navigation visibility.  
+- **Store subscriptions**: The component subscribes to several slices of `useDashboardStore`; frequent changes may trigger re‑renders.  
+- **Internationalization**: Requires the `t.breadcrumb.*` keys and `t.layer.defaultName` to exist; missing keys will render `undefined`.  
+- **Styling**: Uses Tailwind classes; global style changes may affect appearance.  
+- **Testing**: No tests are present in the diff; integration tests should cover visibility and click behavior.
 
 ### Risks & follow‑ups  
-- Verify that `resolveActiveLayer` correctly handles `undefined` graphs and returns `null` when appropriate.  
-- Ensure `PROJECT_WIDE_LAYER_ID` matches the value used elsewhere in the application.  
-- Confirm that `enterNovaDiffEmbedDepth` exists in the dashboard store and behaves as expected.  
-- Run UI tests to check that the `"All layers · Classes"` label appears only for project‑wide layers.
+- **Missing i18n keys** – verify that all `t.breadcrumb.*` and `t.layer.defaultName` keys exist in locale files.  
+- **Store shape** – ensure `useDashboardStore` exposes `navigationLevel`, `activeLayerId`, `graph`, `navigateToOverview`, and `enterNovaDiffEmbedDepth`; otherwise the component will crash.  
+- **Active‑layer resolution** – confirm that `resolveActiveLayer` correctly handles `null` or `undefined` `graph`/`activeLayerId` cases.  
+- **Performance** – monitor re‑render frequency when the dashboard state changes; consider memoizing derived values if needed.

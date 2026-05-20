@@ -26,37 +26,54 @@
 <body>
   <header class="top">
     <h1>src/components/ui/AnimatedOverlay.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:27:33.182Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:11:05.893Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new UI overlay component, <code>AnimatedOverlay</code>, is added in <strong>src/components/ui/AnimatedOverlay.tsx</strong> (lines 1‑79). It provides animated show/hide behavior, respects reduced‑motion preferences, and handles keyboard and backdrop interactions.</p>
+<p>A new component <code>AnimatedOverlay</code> was added to <code>src/components/ui/AnimatedOverlay.tsx</code> (lines R1‑79). It implements a modal overlay that respects the user’s reduced‑motion preference.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>useEffect</code>, <code>useState</code> from React (R1) and a custom <code>usePrefersReducedMotion</code> hook (R2).  </li>
-<li><strong>Constant</strong> – <code>CLOSE_MS = 300</code> (R4).  </li>
-<li><strong>Props interface</strong> – <code>AnimatedOverlayProps</code> (R6‑R13) exposes <code>open</code>, <code>onClose</code>, <code>backdropClassName</code>, <code>panelClassName</code>, optional <code>labelledBy</code>, and <code>children</code>.  </li>
-<li><strong>Component</strong> – exported at R15.  <ul>
-<li>State: <code>mounted</code> and <code>visible</code> (R24‑R25).  </li>
-<li>First <code>useEffect</code> (R27‑R43) mounts/unmounts the overlay, triggers visibility, and schedules a close delay (<code>CLOSE_MS</code> or 0 for reduced motion).  </li>
-<li>Second <code>useEffect</code> (R45‑R56) listens for the Escape key to call <code>onClose</code>.</li>
+<li><strong>Imports</strong>  <ul>
+<li>R1 added: <code>import { useEffect, useState } from &quot;react&quot;;</code>  </li>
+<li>R2 added: <code>import { usePrefersReducedMotion } from &quot;../../app/usePrefersReducedMotion&quot;;</code></li>
 </ul>
 </li>
-<li><strong>Render</strong> – returns <code>null</code> when not mounted (R58‑R60). Otherwise renders a dialog with classes <code>ui-overlay</code>, <code>ui-overlay-panel</code>, and dynamic <code>is-open</code>/<code>is-closing</code> (R62‑R78). Backdrop click triggers <code>onClose</code> (R70‑R74).</li>
+<li><strong>Constant</strong>  <ul>
+<li>R4 added: <code>const CLOSE_MS = 300;</code> – delay used when closing the overlay.</li>
+</ul>
+</li>
+<li><strong>Props interface</strong> (<code>AnimatedOverlayProps</code>, R6‑13)  <ul>
+<li><code>open: boolean</code>  </li>
+<li><code>onClose: () =&gt; void</code>  </li>
+<li><code>backdropClassName: string</code>  </li>
+<li><code>panelClassName: string</code>  </li>
+<li><code>labelledBy?: string</code>  </li>
+<li><code>children: React.ReactNode</code></li>
+</ul>
+</li>
+<li><strong>Component logic</strong> (<code>AnimatedOverlay</code>, R15‑79)  <ul>
+<li>State: <code>mounted</code> and <code>visible</code>.  </li>
+<li>First <code>useEffect</code> syncs mounting/visibility with <code>open</code> and reduced‑motion settings, using <code>requestAnimationFrame</code> for the opening transition and <code>window.setTimeout</code> for the closing delay.  </li>
+<li>Second <code>useEffect</code> adds a global <code>keydown</code> listener that calls <code>onClose</code> when the Escape key is pressed.  </li>
+<li>Backdrop click handler triggers <code>onClose</code>.  </li>
+<li>Renders a <code>div</code> with <code>role=&quot;dialog&quot;</code>, <code>aria-modal=&quot;true&quot;</code>, optional <code>aria-labelledby</code>, and CSS classes <code>ui-overlay</code>, <code>ui-overlay-panel</code>, plus motion states <code>is-open</code> or <code>is-closing</code>.</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Accessibility</strong> – dialog role, <code>aria-modal</code>, and optional <code>aria-labelledby</code>.  </li>
-<li><strong>Animation</strong> – double <code>requestAnimationFrame</code> sequence (R34‑R36) for smooth transitions; reduced‑motion path skips animation.  </li>
-<li><strong>Centralization</strong> – animation logic is contained in one component, simplifying future adjustments.  </li>
-<li><strong>No breaking changes</strong> – existing files are untouched; the new component is fully controlled via props.</li>
+<li><strong>Correctness</strong> – The component mounts only when <code>open</code> is true and unmounts after the closing delay, respecting reduced‑motion settings.  </li>
+<li><strong>Maintainability</strong> – A clear <code>AnimatedOverlayProps</code> interface and self‑contained logic simplify future extensions.  </li>
+<li><strong>Performance</strong> – Uses <code>requestAnimationFrame</code> for visibility changes and a 300 ms timeout for closing, reducing layout thrashing.  </li>
+<li><strong>Compatibility</strong> – Relies on <code>window</code> and <code>document</code> APIs; may need SSR guards if used server‑side.  </li>
+<li><strong>Observability</strong> – No side‑effects beyond event listeners; listeners are cleaned up on unmount.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>The component imports <code>usePrefersReducedMotion</code>; ensure this hook exists and returns a boolean.  </li>
-<li>CSS classes <code>ui-overlay</code>, <code>ui-overlay-panel</code>, <code>is-open</code>, and <code>is-closing</code> must be defined; otherwise visual behavior will be missing.  </li>
-<li>Verify that <code>onClose</code> fires on Escape key and backdrop click; missing event listeners could leave the overlay open.  </li>
-<li>The double <code>requestAnimationFrame</code> call (R34‑R36) may cause layout thrashing on very old browsers; test across target environments.</li>
+<li>Verify that <code>onClose</code> fires correctly on Escape key and backdrop click.  </li>
+<li>Ensure <code>usePrefersReducedMotion</code> disables animation when appropriate.  </li>
+<li>Test that the component unmounts cleanly after closing to avoid memory leaks.  </li>
+<li>Confirm that the referenced CSS classes (<code>ui-overlay</code>, <code>ui-overlay-panel</code>, <code>is-open</code>, <code>is-closing</code>) exist and produce the intended visual effect.</li>
 </ul>
 </article>
   </main>

@@ -26,39 +26,56 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/hooks/useEmbedAutoExpand.ts</h1>
-    <div class="meta">Kind: added · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:50:02.393Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:32:59.117Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new hook <code>useEmbedAutoExpand</code> is added under <code>packages/graph-view/src/hooks/</code>. It orchestrates automatic expansion of folder containers and viewport fitting when the NovaDiff embed is active and the graph layout is ready.</p>
+<p>A new hook, <code>useEmbedAutoExpand</code>, is added to <code>packages/graph-view/src/hooks/useEmbedAutoExpand.ts</code> (lines R42‑129). It expands folder containers and fits the viewport when a NovaDiff embed is active.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: added <code>useEffect</code>, <code>useRef</code>, <code>useState</code> from React, <code>useReactFlow</code> from <code>@xyflow/react</code>, <code>useDashboardStore</code> from the store, and <code>useNovaDiffEmbed</code> from the embed context.  </li>
-<li><strong>Constants</strong>: <code>EXPAND_POLL_MS</code> (100 ms) and <code>EXPAND_TIMEOUT_MS</code> (120 000 ms) control the polling loop for layout readiness.  </li>
-<li><strong>Interface</strong>: <code>EmbedAutoExpandInput</code> defines the hook’s contract (<code>navigationLevel</code>, <code>activeLayerId</code>, <code>layoutReady</code>, <code>containerIds</code>, <code>graphFingerprint</code>).  </li>
-<li><strong>Helper functions</strong>: <code>containersFullyLaidOut</code> checks if all target containers are expanded and cached; <code>waitForContainerLayouts</code> polls until layouts are ready or timeout.  </li>
-<li><strong>Hook logic</strong>:  <ul>
-<li>Triggers only in embed mode and when <code>navigationLevel</code> is <code>&quot;overview&quot;</code> or <code>&quot;layer-detail&quot;</code>.  </li>
-<li>Expands missing containers via <code>expandManyContainers</code>.  </li>
-<li>After expansion, waits for layouts, then calls <code>fitView</code> with a smooth animation.  </li>
-<li>Manages an <code>isExpanding</code> state and a cancellation flag to avoid state updates after unmount.</li>
+<li><strong>Imports</strong> (R1‑R4)```ts
+import { useEffect, useRef, useState } from &quot;react&quot;;
+import { useReactFlow } from &quot;@xyflow/react&quot;;
+import { useDashboardStore } from &quot;../store&quot;;
+import { useNovaDiffEmbed } from &quot;../contexts/NovaDiffEmbedContext&quot;;</li>
 </ul>
-</li>
-</ul>
-<h3>Impact</h3>
-<ul>
-<li><strong>Correctness</strong>: Guarantees that the viewport is only fitted after all containers are fully laid out, preventing premature zooming.  </li>
-<li><strong>Performance</strong>: Introduces a polling loop (<code>EXPAND_POLL_MS</code>) that may add minor overhead; the timeout (<code>EXPAND_TIMEOUT_MS</code>) protects against infinite waits.  </li>
-<li><strong>Maintainability</strong>: Centralizes embed‑specific expansion logic; future changes to container expansion or viewport fitting can be made in one place.  </li>
-<li><strong>Observability</strong>: Exposes <code>isExpanding</code> for UI feedback (e.g., loading spinners) and logs can be added around the polling for debugging.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Race conditions</strong>: Verify that <code>expandManyContainers</code> completes before <code>waitForContainerLayouts</code> starts; the current implementation assumes immediate state updates.  </li>
-<li><strong>Memory leaks</strong>: Ensure the cleanup function correctly sets <code>cancelledRef.current</code> to avoid state updates after component unmount.  </li>
-<li><strong>Compatibility</strong>: Confirm that <code>useDashboardStore.getState().enterNovaDiffEmbedDepth()</code> and <code>expandedContainers</code> exist in all target environments.  </li>
-<li><strong>Testing</strong>: Add unit tests for the polling logic and the <code>fitView</code> call sequence to catch regressions when layout data changes.</li>
-</ul>
+<pre><code class="language--">  `EXPAND_POLL_MS = 100` ms, `EXPAND_TIMEOUT_MS = 120 000` ms.
+- **Interface** (R9‑R15)  
+  `EmbedAutoExpandInput` defines navigation level, active layer, layout flag, container IDs, and graph fingerprint.
+- **Helper functions**  
+  - `containersFullyLaidOut` (R17‑R21) checks `expandedContainers` and `containerLayoutCache`.  
+  - `waitForContainerLayouts` (R24‑R35) polls every `EXPAND_POLL_MS` until all target containers are laid out or the timeout expires.
+- **Hook logic** (R42‑R129)  
+  
+
+* Activates only when `embedMode` is true and the navigation level matches (`overview` or `layer-detail`).  
+  
+
+* Expands missing containers via `expandManyContainers`.  
+  
+
+* Waits for layout with `waitForContainerLayouts`, then calls `fitView` (duration 550 ms, padding 0.28, maxZoom 1, minZoom 0.2).  
+  
+
+* Uses `runKeyRef` to avoid duplicate work and `cancelledRef` to abort pending operations.  
+  
+
+* Returns `isExpanding` to indicate ongoing expansion.
+
+### Impact
+
+  
+- **Correctness** – ensures containers are expanded before `fitView` is invoked.  
+- **Maintainability** – centralizes embed‑specific logic; helper functions are pure and testable.  
+- **Performance** – polls every 100 ms up to a 120 s timeout; bounded by the defined constants.  
+- **Compatibility** – relies on existing `useDashboardStore` and `useReactFlow`; no public API changes.
+
+### Risks &amp; follow‑ups  
+- **Race conditions** – `waitForContainerLayouts` may not handle rapid layout changes; test with concurrent expansions.  
+- **Timeout edge cases** – 120 s may be excessive for very large graphs; consider exposing the timeout.  
+- **Embed mode detection** – depends on `useNovaDiffEmbed`; verify it reports `embedMode` correctly.  
+- **Viewport fitting** – validate that the `fitView` parameters produce the intended zoom/center across screen sizes; adjust padding if needed.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

@@ -26,36 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/CodeViewer.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:17:02.413Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:03:29.338Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>CodeViewer.tsx</code> component is added at <code>packages/graph-view/src/components</code>.<br>It renders source files from the dashboard graph, supports line selection, and can request code explanations via the NovaDiff embed API.</p>
+<p>A new <code>CodeViewer</code> component is added at <code>packages/graph-view/src/components/CodeViewer.tsx</code> (lines 1‑415). It renders a syntax‑highlighted source file, allows line‑range selection, and can open an “Explain code” modal via the NovaDiff embed context.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – React hooks, <code>createPortal</code>, Prism‑renderer (<code>Highlight</code>, <code>themes.vsDark</code>), and context hooks (<code>useDashboardStore</code>, <code>useI18n</code>, <code>useNovaDiffEmbed</code>).  </li>
-<li><strong>Interfaces</strong> – <code>SourceFile</code> (path, language, content, sizeBytes, lineCount) and <code>CodeViewerProps</code> (accessToken, presentation, onClose, onExpand).  </li>
-<li><strong>Utility functions</strong> – <code>fileContentUrl</code>, <code>fallbackLanguage</code>, and <code>formatBytes</code>.  </li>
-<li><strong>State</strong> – <code>SourceState</code> tracks loading, loaded, and error states.  </li>
-<li><strong>Data fetching</strong> – Uses <code>fetch(fileContentUrl(...))</code> or <code>embed.readFile</code> when <code>accessToken === &quot;__novadiff__&quot;</code>.  </li>
-<li><strong>Selection</strong> – <code>selectAnchor</code>, <code>selectEnd</code>, <code>userSelection</code>, and <code>highlightedRange</code> manage line‑range selection and node‑range highlighting.  </li>
-<li><strong>Explain code</strong> – <code>runExplainCode</code> calls <code>embed.explainCode</code> and displays the result in a portal‑rendered <code>ExplainCodeModal</code>.  </li>
-<li><strong>UI</strong> – Header shows file info, a Prism‑highlighted code block with line numbers, and buttons for explain, expand, and close.</li>
+<li><strong>Imports</strong> (R1‑6): React hooks, <code>createPortal</code>, Prism‑renderer (<code>Highlight</code>, <code>themes</code>), and local contexts (<code>useDashboardStore</code>, <code>useI18n</code>, <code>useNovaDiffEmbed</code>).  </li>
+<li><strong>Interfaces</strong> (R9‑15, R16‑22): <code>CodeViewerProps</code> (accessToken, presentation, callbacks) and <code>SourceFile</code> (path, language, content, sizeBytes, lineCount).  </li>
+<li><strong>Utility functions</strong> (R29‑33, R34‑55, R56‑60): <code>fileContentUrl</code>, <code>fallbackLanguage</code>, and <code>formatBytes</code>.  </li>
+<li><strong>Component export</strong> (R62): <code>export default function CodeViewer(...)</code>.  </li>
+<li><strong>Logic</strong>:  <ul>
+<li>Retrieves graph data via <code>useDashboardStore</code>.  </li>
+<li>Loads file content with <code>fetch</code> or <code>embed.readFile</code>; demo mode (<code>__demo__</code>) blocks loading.  </li>
+<li>Manages selection state (<code>selectAnchor</code>, <code>selectEnd</code>) and runs <code>runExplainCode</code> to stream explanation text to a portal modal.  </li>
+<li>Renders a Prism <code>Highlight</code> block with line numbers, node‑highlighting, and user selection highlighting.</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – Explicit async handling for fetch and embed calls; error messages surface via <code>t.codeViewer.*</code> strings.  </li>
-<li><strong>Maintainability</strong> – Centralizes file‑view logic; reusable utilities and interfaces.  </li>
-<li><strong>Performance</strong> – Prism rendering may be heavy for large files; selection state updates trigger re‑renders.  </li>
-<li><strong>Compatibility</strong> – Requires <code>react-dom</code> and <code>prism-react-renderer</code>; missing dependencies will break the build.  </li>
-<li><strong>Observability</strong> – Uses <code>useI18n</code> for all UI text; errors are shown in the UI.</li>
+<li><strong>Correctness</strong>: Asynchronous loading and error handling are present; errors are displayed in a styled card.  </li>
+<li><strong>Maintainability</strong>: All logic resides in a single file; helper functions and interfaces keep the component readable.  </li>
+<li><strong>Performance</strong>: Rendering large files may be heavy due to Prism tokenization; selection updates are memoized.  </li>
+<li><strong>Compatibility</strong>: The component is isolated but requires the <code>useNovaDiffEmbed</code> and <code>useDashboardStore</code> contexts to be provided.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Dependency availability</strong> – Verify that <code>react-dom</code> and <code>prism-react-renderer</code> are listed in the package’s <code>package.json</code>.  </li>
-<li><strong>Portal target</strong> – <code>createPortal</code> renders into <code>document.body</code>; confirm this is acceptable for the host environment (e.g., SSR).  </li>
-<li><strong>Selection logic</strong> – Rapid clicks could produce inconsistent ranges; test shift‑click behavior.  </li>
-<li><strong>NovaDiff embed</strong> – The component assumes <code>embed.readFile</code> and <code>embed.explainCode</code> exist; test with demo and production tokens.</li>
+<li><strong>No tests</strong>: The diff shows no new tests; coverage for loading, error states, and explain flow is unknown.  </li>
+<li><strong>Large file rendering</strong>: Potential performance impact from Prism tokenization is unknown from the diff.  </li>
+<li><strong>Context availability</strong>: The component assumes <code>useNovaDiffEmbed</code> and <code>useDashboardStore</code> are present; verify that these contexts are provided in all relevant routes.  </li>
+<li><strong>Demo mode guard</strong>: The <code>__demo__</code> token check may block legitimate use cases; confirm demo environment configuration.</li>
 </ul>
 </article>
   </main>

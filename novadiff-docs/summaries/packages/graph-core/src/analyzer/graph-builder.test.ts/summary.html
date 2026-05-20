@@ -26,33 +26,38 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/analyzer/graph-builder.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:54:19.558Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:40:26.009Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/analyzer/graph-builder.test.ts</code> (lines 1‑404) has been added. It imports <code>vitest</code>, <code>GraphBuilder</code>, and <code>StructuralAnalysis</code> (R1‑R3) and exercises the public API of <code>GraphBuilder</code>.</p>
+<p>A new test file <code>packages/graph-core/src/analyzer/graph-builder.test.ts</code> (lines R1‑R404) has been added. It imports <code>vitest</code> helpers, <code>GraphBuilder</code>, and the <code>StructuralAnalysis</code> type, and exercises the builder’s public API.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File node creation</strong> – <code>addFile</code> is tested to produce nodes with IDs like <code>file:src/index.ts</code> (R7‑R13).  </li>
-<li><strong>Function &amp; class nodes</strong> – <code>addFileWithAnalysis</code> creates nodes for functions (<code>function:src/service.ts:processData</code>) and classes (<code>class:src/service.ts:DataStore</code>) (R41‑R92).  </li>
-<li><strong>Edge generation</strong> – tests confirm <code>contains</code>, <code>imports</code>, and <code>calls</code> edges are added with correct source/target IDs and weights (R95‑R178).  </li>
-<li><strong>Project metadata</strong> – the builder sets <code>name</code>, <code>gitCommitHash</code>, <code>languages</code>, <code>analyzedAt</code>, <code>layers</code>, and <code>tour</code> (R180‑R203).  </li>
-<li><strong>Language detection</strong> – file extensions (<code>go</code>, <code>rust</code>, <code>javascript</code>) and non‑code extensions (<code>yaml</code>, <code>graphql</code>, <code>terraform</code>, <code>protobuf</code>) are inferred (R205‑R339).  </li>
-<li><strong>Non‑code file support</strong> – <code>addNonCodeFile</code> and <code>addNonCodeFileWithAnalysis</code> create nodes for documents, tables, services, endpoints, resources, and pipeline steps, and generate corresponding <code>contains</code> edges (R216‑R321).  </li>
-<li><strong>Warning logic</strong> – unknown definition kinds trigger a console warning and default to <code>concept</code> (R341‑R360); duplicate node IDs are skipped with a warning (R363‑R383).  </li>
-<li><strong>Node type usage</strong> – <code>nodeType</code> is incorporated into file IDs for contains edges (R386‑R402).</li>
+<li><strong>Imports added</strong> (R1‑R3):```ts
+import { describe, it, expect, vi } from &quot;vitest&quot;;
+import { GraphBuilder } from &quot;./graph-builder.js&quot;;
+import type { StructuralAnalysis } from &quot;../types.js&quot;;</li>
+</ul>
+<p>```- **File node tests** (R5‑R23): verify <code>addFile</code> creates nodes with correct <code>id</code>, <code>type</code>, <code>name</code>, <code>filePath</code>, <code>summary</code>, <code>tags</code>, and <code>complexity</code>.</p>
+<ul>
+<li><strong>Structural analysis tests</strong> (R41‑R93): <code>addFileWithAnalysis</code> is exercised for functions, classes, and the resulting <code>contains</code> edges.</li>
+<li><strong>Edge tests</strong> (R95‑R178): import, call, and contains edges are asserted for correct source/target IDs and types.</li>
+<li><strong>Project metadata</strong> (R180‑R203): <code>build()</code> populates <code>project</code> fields (<code>name</code>, <code>gitCommitHash</code>, <code>languages</code>, <code>analyzedAt</code>) and defaults (<code>version</code>, <code>layers</code>, <code>tour</code>).</li>
+<li><strong>Language detection</strong> (R205‑R214, R216‑R339): tests cover polyglot projects, non‑code extensions, and the <code>EXTENSION_LANGUAGE</code> map.</li>
+<li><strong>Non‑code file support</strong> (R216‑R403): tests for documents, definitions, services, endpoints, resources, steps, duplicate ID handling, and console warnings.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong> – the tests validate that <code>GraphBuilder</code> handles a wide range of node types and relationships.  </li>
-<li><strong>Maintainability</strong> – any change to the builder’s API or internal logic will surface as test failures.  </li>
-<li><strong>Observability</strong> – warnings for unknown kinds and duplicate IDs are explicitly asserted, ensuring predictable console output.</li>
+<li><strong>Correctness</strong>: The tests assert the expected graph structure for a wide range of inputs, providing a safety net for future changes.  </li>
+<li><strong>Documentation</strong>: The test file serves as living documentation of the <code>GraphBuilder</code> API.  </li>
+<li><strong>Observability</strong>: Console warnings for unknown kinds or duplicate IDs are explicitly verified.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression risk</strong> – modifications to <code>GraphBuilder</code> may break multiple tests; run the full suite after refactors.  </li>
-<li><strong>Console warnings</strong> – ensure <code>console.warn</code> is not suppressed elsewhere, as tests spy on it.  </li>
-<li><strong>CI load</strong> – the expanded test suite may increase execution time; monitor and consider parallelization if necessary.</li>
+<li><strong>Test failures</strong>: Any change to the builder’s logic may cause many assertions to fail; run the suite and adjust implementation or tests.  </li>
+<li><strong>Ordering sensitivity</strong>: The tests rely on specific node/edge ordering; changes could affect stability.  </li>
+<li><strong>Linting</strong>: Ensure the new file passes the repository’s TypeScript linting rules (<code>npm run lint</code>).  </li>
+<li><strong>Performance</strong>: The suite is large; monitor CI run times and consider splitting it if build times grow.</li>
 </ul>
 </article>
   </main>

@@ -1,23 +1,25 @@
 ### Overview  
-`src/app/workspaceTypes.ts` now exports a new `WorkspaceUiState` interface and adds an optional `uiState` property to `NovaWorkspace`. The comment at R33 notes that this UI state is restored and not shown verbatim in the main app.
+`src/app/workspaceTypes.ts` now exports several TypeScript interfaces that describe Git user profiles, workspace snapshots, and tooling status. The file contains only type declarations, so it does not alter runtime behavior.
 
 ### Key changes  
-- **Exported `WorkspaceUiState` (R37‑R41)** – defines  
-  - `workspacePage?: "compare" | "history" | "docs" | "prs" | "publish"`  
-  - `leftRoot?: string`  
-  - `rightRoot?: string`  
-  - `compared?: boolean`  
-- **Extended `NovaWorkspace` (R34)** – `uiState?: WorkspaceUiState | null;`  
-- **Documentation comment (R33)** – indicates restoration of UI state.
+- **`GitUserProfile`** – added at R1 (lines 1‑6).  
+- **`WorkspaceCommitSnapshot`** – added at R9 (lines 9‑17).  
+- **`NovaWorkspace`** – added at R19 (lines 19‑35).  
+- **`WorkspaceUiState`** – added at R37 (lines 37‑42).  
+- **`GitHistoryCompareOptions`** – added at R44 (lines 44‑47).  
+- **`GhToolingStatus`** – added at R49 (lines 49‑60).  
+- **`WorkspaceSessionState`** – added at R62 (lines 62‑67).  
+
+Each interface is exported and can be imported by other modules.
 
 ### Impact  
-- **Serialization** – any code that writes or reads `NovaWorkspace` must accommodate the optional `uiState` field.  
-- **Type safety** – consumers can now type‑check UI state via the exported interface.  
-- **Backward compatibility** – the field is optional, so existing workspace data remains valid.  
-- **UI logic** – components can read `workspacePage` and root paths directly from the workspace model.
+- **Type safety** – the new interfaces enforce stricter typing for workspace‑related data.  
+- **Imports** – any module that previously used raw objects for these concepts must now import the corresponding interface; missing imports will cause compile‑time errors.  
+- **Runtime** – the file contains only type definitions, so the bundle size and execution performance are unchanged.  
+- **Documentation** – existing docs should reference these interfaces to clarify data contracts.
 
 ### Risks & follow‑ups  
-- **Data migration** – ensure older workspace JSON files deserialize correctly when `uiState` is absent.  
-- **Test coverage** – update unit tests that construct `NovaWorkspace` objects to include or ignore `uiState`.  
-- **Documentation** – expose the new `WorkspaceUiState` interface in API docs.  
-- **Linting & build** – run `tsc`, lint, and build to confirm no type errors introduced by the new export.
+- **Unused exports** – verify that all new interfaces are referenced; otherwise linting may flag them.  
+- **Naming collisions** – ensure no other module exports identically named interfaces that could cause import ambiguity.  
+- **Data consistency** – confirm that objects constructed elsewhere match the new shapes, especially optional fields such as `uiState`.  
+- **Future refactors** – if workspace structures evolve, these interfaces may need updates; track changes in the `src/app` module.

@@ -1,23 +1,20 @@
-### Overview
-New file `packages/graph-view/src/contexts/I18nContext.tsx` adds a lightweight i18n context for the graph‑view package.
+### Overview  
+A new i18n context module was added at `packages/graph-view/src/contexts/I18nContext.tsx`. It introduces a `useI18n` hook and an `I18nProvider` component for locale handling.
 
-### Key changes
-- Imports: `createContext, useContext, useMemo, ReactNode` from `react` (line 1) and `getLocale, resolveLocaleKey, Locale, LocaleKey` from `../locales` (line 2).  
-- `interface I18nContextValue` (lines 4‑7) defines `locale`, `localeKey`, and `t`.  
-- `I18nContext` created with `createContext<I18nContextValue | null>(null)` (line 10).  
-- `useI18n` hook (lines 12‑18) throws if the provider is missing.  
-- `I18nProvider` component (lines 20‑44) accepts optional `language` and `children`.  
-- Inside the provider: `localeKey` memoized via `resolveLocaleKey(language)` (line 27); `locale` memoized via `getLocale(localeKey)` (line 28).  
-- Provider value: `{ locale, localeKey, t: locale }` (lines 32‑34).
+### Key changes  
+- **Imports** (lines 1‑2): `createContext`, `useContext`, `useMemo`, `ReactNode` from *react*; `getLocale`, `resolveLocaleKey`, `Locale`, `LocaleKey` from `../locales`.  
+- **Interface** (lines 4‑7): `I18nContextValue` exposes `locale: Locale`, `localeKey: LocaleKey`, and `t: Locale`.  
+- **Context** (line 10): `I18nContext` initialized with `null`.  
+- **Hook** (lines 12‑18): `useI18n()` retrieves the context and throws if called outside a provider.  
+- **Provider** (lines 20‑44): accepts optional `language` and `children`, memoizes `localeKey` and `locale`, and supplies `{ locale, localeKey, t: locale }` to the context.
 
-### Impact
-- The hook guarantees a context value, throwing when used outside `I18nProvider`.  
-- Locale logic is centralized, reducing duplication.  
-- Memoization limits recomputation when `language` or `locale` does not change.  
-- Components must be wrapped in `I18nProvider` to access `useI18n`.
+### Impact  
+- Components must be wrapped in `I18nProvider`; otherwise `useI18n` throws an error.  
+- Locale logic is centralized, simplifying future changes to language resolution.  
+- `useMemo` keeps `localeKey`, `locale`, and the context value stable across renders, reducing unnecessary re‑renders.
 
-### Risks & follow‑ups
-- Verify all consumers of `useI18n` are inside an `I18nProvider`; otherwise an error will surface.  
-- Ensure `getLocale` and `resolveLocaleKey` return consistent results for the optional `language` prop; mismatches could break translation lookup.  
-- Test that the `t` field (currently set to `locale`) behaves as intended in downstream components.  
-- Confirm that the new context does not cause unnecessary re‑renders when `children` change but locale remains the same.
+### Risks & follow‑ups  
+- `t` is currently the locale object; if a translation function is intended, the implementation should be updated.  
+- Verify that `getLocale` and `resolveLocaleKey` return correct values for all supported languages.  
+- Run lint, tests, and a production build to confirm no type or runtime errors.  
+- Add unit tests for `useI18n` throwing behavior and provider value correctness.

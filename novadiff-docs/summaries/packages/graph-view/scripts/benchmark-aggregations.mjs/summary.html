@@ -26,33 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/scripts/benchmark-aggregations.mjs</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:24:12.555Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:07:26.220Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new Node‑only script <code>packages/graph-view/scripts/benchmark-aggregations.mjs</code> is added to compare the performance of two graph‑aggregation strategies used in the dashboard.</p>
+<p>A new benchmark script <code>packages/graph-view/scripts/benchmark-aggregations.mjs</code> (diff R1‑99) has been added to measure the performance difference between the legacy and refactored graph‑aggregation logic used in `use</p>
+<h3>Overview</h3>
+<p>Graph`.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import</strong> <code>performance</code> from <code>node:perf_hooks</code> (line 16) to time operations.  </li>
-<li><strong><code>makeGraph(layerCount, nodesPerLayer)</code></strong> (lines 18‑32) builds a synthetic graph with layers and nodes of three complexity levels.  </li>
-<li><strong><code>aggregateBefore(graph)</code></strong> (lines 35‑49) implements the legacy O(N × K × L) algorithm that filters nodes per layer with <code>Array.filter</code> and <code>Array.includes</code>.  </li>
-<li><strong><code>aggregateAfter(graph, nodesById)</code></strong> (lines 53‑73) implements the optimized O(N 
-+ ΣKᵢ) algorithm that looks up nodes via a <code>Map</code>.  </li>
-<li><strong><code>bench(label, layerCount, nodesPerLayer)</code></strong> (lines 75‑94) runs both algorithms, logs elapsed time, computes speed‑up, and checks that the outputs are identical.  </li>
-<li>Four benchmark runs are executed at the bottom of the file (lines 96‑99): <em>small</em>, <em>medium</em>, <em>large</em>, and <em>issue#102 shape</em>.</li>
+<li>Import added: <code>import { performance } from &quot;node:perf_hooks&quot;;</code> (R16).  </li>
+<li>Graph construction helper <code>makeGraph(layerCount, nodesPerLayer)</code> (lines 18‑31).  </li>
+<li>Legacy aggregation <code>aggregateBefore(graph)</code> (lines 35‑49).  </li>
+<li>Optimized aggregation <code>aggregateAfter(graph, nodesById)</code> (lines 53‑72).  </li>
+<li>Benchmark runner <code>bench(label, layerCount, nodesPerLayer)</code> (lines 75‑93) times both algorithms, logs speed‑up and parity.  </li>
+<li>Four benchmark runs executed at the bottom of the file (lines 96‑99).</li>
 </ul>
 <h3>Impact</h3>
-<ul>
-<li>The script is isolated in the <code>scripts</code> folder and does not modify any production code or public APIs.  </li>
-<li>It introduces a runtime dependency on <code>node:perf_hooks</code> only when the script is executed, so it does not affect the Vite bundle.  </li>
-<li>The parity check gives confidence that the refactor preserves functional correctness.</li>
-</ul>
+<p>The script outputs console logs with timing, speed‑up factor, and parity check, providing a way to verify correctness and performance of the aggregation logic without altering production code.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Build exclusion</strong>: confirm that the <code>scripts</code> folder is excluded from the Vite build (e.g., via <code>vite.config.js</code> or <code>.gitignore</code>).  </li>
-<li><strong>Environment guard</strong>: consider adding a check to skip execution in non‑development environments to avoid accidental runs in CI.  </li>
-<li><strong>Duplicate ID safety</strong>: the synthetic data guarantees unique node IDs; if reused elsewhere, ensure uniqueness before constructing <code>nodesById</code>.  </li>
-<li><strong>Performance sanity</strong>: run the script locally to verify realistic <code>speedup</code> values and that parity is always <code>true</code>.</li>
+<li>Node compatibility: relies on <code>node:perf_hooks</code>; ensure the target runtime supports it.  </li>
+<li>Benchmark reliability: timings can vary with CPU load and V8 optimizations; consider multiple runs for precise numbers.  </li>
+<li>Future refactors: if aggregation logic changes again, update the benchmark accordingly.  </li>
+<li>Documentation: add instructions on running the script and interpreting results for future maintainers.</li>
 </ul>
 </article>
   </main>

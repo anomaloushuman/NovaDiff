@@ -26,38 +26,28 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/ignore-filter.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:07:57.797Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:55:16.315Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test suite <code>packages/graph-core/src/__tests__/ignore-filter.test.ts</code> (lines R1‑R155) has been added. It exercises the <code>ignore-filter</code> module, validating default ignore patterns, the filter’s behavior without a user file, and its handling of <code>.novadiffignore</code> files in both the graph directory and the project root.</p>
+<p>A new test suite <code>packages/graph-core/src/__tests__/ignore-filter.test.ts</code> was added (lines R1‑155). It imports vitest helpers (R1), ignore‑filter utilities (R2), and Node’s <code>fs</code>, <code>path</code>, <code>os</code> modules (R3‑R5). The suite creates a temporary directory with <code>tmpdir()</code> and removes it after each test.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (<code>R1‑R5</code>): Vitest helpers, <code>createIgnoreFilter</code>, <code>DEFAULT_IGNORE_PATTERNS</code>, and Node fs/path/os utilities.  </li>
-<li><strong>Test setup</strong> (<code>R7‑R18</code>): Creates a temporary directory per test, writes a <code>.novadiff-graph</code> folder, and cleans up with <code>rmSync</code>.  </li>
-<li><strong>Default pattern checks</strong> (<code>R20‑R42</code>): Asserts that <code>DEFAULT_IGNORE_PATTERNS</code> contains <code>node_modules/</code>, <code>.git/</code>, <code>obj/</code>, <code>dist/</code>, <code>build/</code>, <code>out/</code>, <code>coverage/</code> and does not contain <code>bin/</code>.  </li>
-<li><strong>Filter behavior tests</strong> (<code>R45‑R86</code>): Verify that <code>createIgnoreFilter</code> ignores default patterns, lock files, binaries, generated files, and IDE directories.  </li>
-<li><strong>User ignore file tests</strong> (<code>R89‑R154</code>):  <ul>
-<li>Reads patterns from <code>/.novadiff-graph/.novadiffignore</code> and the project root.  </li>
-<li>Handles comments, blank lines, negation (<code>!dist/</code>), recursive <code>**/snapshots/</code>.  </li>
-<li>Merges both ignore files.</li>
-</ul>
-</li>
-<li><strong>Teardown</strong> (<code>R16‑R18</code>): Uses <code>rmSync(testDir, { recursive: true, force: true })</code> to ensure cleanup.</li>
+<li><strong>Default pattern checks</strong> – <code>DEFAULT_IGNORE_PATTERNS</code> (imported in R2) is asserted to contain <code>&quot;node_modules/&quot;</code>, <code>&quot;.git/&quot;</code>, <code>&quot;obj/&quot;</code>, <code>&quot;dist/&quot;</code>, <code>&quot;build/&quot;</code>, <code>&quot;out/&quot;</code>, <code>&quot;coverage/&quot;</code> and to omit <code>&quot;bin/&quot;</code> (lines 20‑42).  </li>
+<li><strong>Filter behavior without user file</strong> – <code>createIgnoreFilter(testDir)</code> is exercised to confirm it ignores default patterns, lock files, binary/asset files, generated files, and IDE directories while leaving source files untouched (lines 45‑86).  </li>
+<li><strong>User ignore file handling</strong> – Tests read <code>.novadiff-graph/.novadiffignore</code> and root <code>.novadiffignore</code>, verifying support for comments, blank lines, negation (<code>!dist/</code>), recursive patterns (<code>**/snapshots/</code>), and merging of both files (lines 89‑154).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: The tests confirm that the ignore filter honors expected patterns and user overrides.  </li>
-<li><strong>Maintainability</strong>: Future changes to ignore logic or defaults will be caught by the suite.  </li>
-<li><strong>Observability</strong>: Failures surface immediately during test runs.  </li>
-<li><strong>Compatibility</strong>: No API changes; tests rely only on existing exports.</li>
+<li><strong>Compatibility</strong> – The test suite uses only vitest and Node’s built‑in modules; no new dependencies are introduced.  </li>
+<li><strong>Observability</strong> – Each assertion targets a specific pattern or file type, so failures directly indicate the mismatched rule.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression if defaults change</strong>: Modifying <code>DEFAULT_IGNORE_PATTERNS</code> will cause failures; review intentional changes.  </li>
-<li><strong>Cleanup reliability</strong>: <code>rmSync</code> is invoked in <code>afterEach</code>; ensure it runs even on test failures to avoid stale state.  </li>
-<li><strong>Test environment</strong>: Verify Vitest is configured to run these tests; missing configuration could hide failures.  </li>
-<li><strong>Performance</strong>: The suite creates and deletes directories per test; monitor CI runtime for any slowdown.</li>
+<li><strong>Regression risk</strong> – Any change to <code>createIgnoreFilter</code> or <code>DEFAULT_IGNORE_PATTERNS</code> may cause failures; run the suite after modifications.  </li>
+<li><strong>Parsing edge cases</strong> – Ensure the ignore parser handles comments, blank lines, and negation as exercised by the tests.  </li>
+<li><strong>Recursive pattern support</strong> – Verify that <code>**/snapshots/</code> matches nested directories as expected.  </li>
+<li><strong>Merge precedence</strong> – Confirm that patterns from <code>.novadiff-graph/.novadiffignore</code> and root <code>.novadiffignore</code> are combined without unintended overrides.</li>
 </ul>
 </article>
   </main>

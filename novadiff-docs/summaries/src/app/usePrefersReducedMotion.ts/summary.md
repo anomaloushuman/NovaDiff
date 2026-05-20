@@ -1,22 +1,21 @@
 ### Overview  
-A new React hook `usePrefersReducedMotion` was added in `src/app/usePrefersReducedMotion.ts`. It returns a boolean indicating whether the user prefers reduced motion and updates reactively.
+A new hook `usePrefersReducedMotion` was added to **src/app/usePrefersReducedMotion.ts** (lines R1‑R19). It exposes a boolean that reflects the user’s “prefers‑reduced‑motion” media query, using the browser’s `matchMedia` API.
 
 ### Key changes  
-- New file `src/app/usePrefersReducedMotion.ts` (lines 1‑19 added).  
-- Imports `useEffect` and `useState` from React (R1).  
-- Exports `function usePrefersReducedMotion(): boolean` (R3).  
-- Initializes state with `useState(() => { … })` (R4‑8).  
-- SSR guard: `typeof window === "undefined" || !window.matchMedia` → `false` (R5‑6).  
-- Initial value from `window.matchMedia("(prefers-reduced-motion: reduce)").matches` (R8).  
-- `useEffect` adds a `"change"` listener on `mq` and updates state via `setReduced(mq.matches)` (R11‑15).  
-- Cleanup removes the listener on unmount (R15‑16).  
-- Hook returns the `reduced` state (R18‑19).
+- **Import** – `useEffect` and `useState` from React are imported (R1).  
+- **Export** – `export function usePrefersReducedMotion(): boolean` is added (R3).  
+- **State init** – `useState` is seeded with a function that checks `window.matchMedia("(prefers-reduced-motion: reduce)")` and falls back to `false` when `window` or `matchMedia` is unavailable (R4‑R7).  
+- **Effect** – `useEffect` registers a `change` listener on the media query and updates state accordingly, cleaning up on unmount (R11‑R16).  
+- **Return** – The hook returns the current `reduced` state (R18).
 
 ### Impact  
-- Provides a reusable, SSR‑safe hook for reduced‑motion preference.  
-- Adds a single event listener per mount; cleanup is handled.
+- **SSR safety** – The initial state guard (`typeof window === "undefined"`) prevents errors during server‑side rendering.  
+- **Encapsulation** – Media‑query logic is isolated in a reusable hook, improving maintainability.  
+- **Performance** – Only one event listener is attached per component instance.  
+- **Compatibility** – Uses standard `matchMedia`; safe when `window` is absent.
 
 ### Risks & follow‑ups  
-- Verify that the default `false` during SSR matches hydration expectations.  
-- Ensure `matchMedia` and `"change"` events are supported in target browsers; consider polyfills if needed.  
-- Confirm that `removeEventListener` is invoked correctly on unmount.
+- Verify that the hook does not throw during SSR (the guard is present but should be tested).  
+- Ensure `matchMedia` is supported in target browsers; consider a polyfill if needed.  
+- Run unit tests to confirm initial state and change‑event updates behave as expected.  
+- Confirm that the empty dependency array in `useEffect` is appropriate and does not miss updates if the media query changes before mount.

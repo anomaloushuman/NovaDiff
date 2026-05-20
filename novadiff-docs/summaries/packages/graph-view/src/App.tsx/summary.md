@@ -1,23 +1,31 @@
-### Overview
-`packages/graph-view/src/App.tsx` is a new root component that orchestrates token handling, demo mode, data fetching, and the dashboard UI. It imports React hooks, validation utilities, and the dashboard store, and lazy‑loads heavy components.
+### Overview  
+`packages/graph-view/src/App.tsx` replaces the previous bootstrap.  
+The file now imports React hooks (`useEffect`, `useState`, `useMemo`, `useCallback`, `lazy`, `Suspense`) and validation utilities (`validateGraph`, `GraphIssue`) – see lines 1‑6.  
+A demo flag (`DEMO_MODE`) and session‑storage token logic are added in `dataUrl` (lines 41‑55) and `resolveInitialToken` (lines 61‑75).  
+`App` (lines 78‑97) renders a `TokenGate` when no token is present, otherwise passes the token to `Dashboard`.  
+`Dashboard` (lines 99‑210) fetches meta, config, knowledge, diff‑overlay, and domain graphs, validates them, and updates the global store via `useDashboardStore`.  
+`DashboardContent` (lines 211‑735) orchestrates the UI: header, sidebar, graph view, code viewer, inspector, and modals, with mobile‑aware layout and keyboard shortcuts.  
+Heavy components (`CodeViewer`, `LearnPanel`, `PathFinderModal`, `KeyboardShortcutsHelp`) are lazy‑loaded (lines 28‑34).  
+The file ends with `export default App;` (line 735).
 
-### Key changes
-- **Imports** (R1‑R6): added React hooks, `validateGraph` and `GraphIssue` from `@novadiff/graph-core/schema`, `useDashboardStore`, and core view components (`GraphView`, `DomainGraphView`, etc.).  
-- **Lazy loading** (R28‑R34): `CodeViewer`, `LearnPanel`, `PathFinderModal`, and `KeyboardShortcutsHelp` are loaded with `React.lazy`.  
-- **Demo mode** (R36): `DEMO_MODE` flag controls URL resolution.  
-- **URL resolution** (R41‑R55): `dataUrl` returns env‑var URLs in demo mode or token‑appended paths otherwise.  
-- **Token logic** (R61‑R76): `resolveInitialToken` reads `token` from the query string or `sessionStorage`, clears the param, and persists the token.  
-- **App component** (R78‑R97): shows `TokenGate` until a token is available; in demo mode it bypasses the gate.  
-- **Dashboard** (R99‑R210): fetches `meta.json`, `config.json`, `knowledge-graph.json`, `diff-overlay.json`, and `domain-graph.json`; validates graphs with `validateGraph`; updates store view mode and error state.  
-- **DashboardContent** (R211‑R709): consumes store state, registers keyboard shortcuts via `useKeyboardShortcuts` (disabled in embed mode), renders header, sidebar, and graph views, and conditionally shows overlays.  
-- **Export** (R709): `export default App;`.
+### Key changes  
+- **Imports**: added React hooks and validation utilities (lines 1‑6).  
+- **Token logic**: `dataUrl` and `resolveInitialToken` build URLs based on `DEMO_MODE` and session storage (lines 41‑75).  
+- **App**: renders `TokenGate` or `Dashboard` depending on token presence (lines 78‑97).  
+- **Dashboard**: fetches and validates data, updates store (lines 99‑210).  
+- **DashboardContent**: full UI composition, keyboard shortcuts, mobile layout (lines 211‑735).  
+- **Lazy loading**: heavy modules imported with `lazy` (lines 28‑34).  
+- **Export**: `export default App;` (line 735).
 
-### Impact
-- Centralized data fetching simplifies future updates but ties the component to `@novadiff/graph-core`.  
-- Multiple fetches on mount may increase network traffic; lazy loading reduces initial bundle size.  
-- Error handling surfaces load and validation issues through banners.
+### Impact  
+- **Token handling**: centralizes token acquisition and persistence.  
+- **Validation**: errors surface via `WarningBanner` (lines 626‑628).  
+- **Performance**: lazy loading reduces initial bundle size.  
+- **Demo mode**: bypasses token gate when `VITE_DEMO_MODE=true`.  
+- **UI**: single file contains all layout logic, easing navigation.
 
-### Risks & follow‑ups
-- `DEMO_MODE` must be correctly set in CI; otherwise URLs resolve incorrectly.  
-- `resolveInitialToken` clears the URL query param; verify it does not leave stale tokens.  
-- Lazy‑loaded chunks (`CodeViewer`, `LearnPanel`, etc.) must be present in production builds; missing files could break the UI.
+### Risks & follow‑ups  
+- **Token persistence**: verify `resolveInitialToken` clears the URL and stores the token (lines 61‑75).  
+- **Lazy‑load failures**: ensure missing chunks (e.g., `CodeViewer`) are handled gracefully.  
+- **Demo mode flag**: confirm `VITE_DEMO_MODE` is set correctly; otherwise the token gate may be skipped.  
+- **Store updates**: check that `setGraph`, `setDomainGraph`, etc., are called only after successful validation (lines 123‑149, 180‑196).

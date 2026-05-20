@@ -1,21 +1,20 @@
 ### Overview  
-A new test file `packages/graph-core/src/__tests__/staleness.test.ts` validates the staleness utilities (`getChangedFiles`, `isStale`, `mergeGraphUpdate`). It mocks `child_process.execFileSync` (lines 1‑6) and uses helper constructors (`makeGraph`, `makeNode`, `makeEdge` – lines 14‑32) to build deterministic graph fixtures.
+A new test file `packages/graph-core/src/__tests__/staleness.test.ts` (R1‑253) is added.  
+It imports `vitest` helpers and the `KnowledgeGraph` types, mocks `child_process.execFileSync` (R4‑6), and defines `makeNode`, `makeEdge`, and `makeGraph` helpers (R14‑49).  
+The suite exercises `getChangedFiles`, `isStale`, and `mergeGraphUpdate` with a variety of scenarios.
 
 ### Key changes  
-- **Imports & mocking** – added Vitest imports and a mock for `child_process` (lines 1‑6).  
-- **Graph helpers** – `makeGraph`, `makeNode`, `makeEdge` provide reusable fixtures (lines 14‑32).  
-- **`getChangedFiles` tests** – verify git diff parsing, empty results, and error handling (lines 56‑86).  
-- **`isStale` tests** – confirm stale flag and changed file list (lines 89‑110).  
-- **`mergeGraphUpdate` tests** – cover node replacement, edge pruning, and metadata updates (lines 113‑252).  
-- **Timestamp validation** – checks that `project.analyzedAt` falls between two timestamps (lines 242‑251).
+- **Imports & mock setup** – `vitest` utilities and type imports are added (R1‑2). `child_process` is mocked with `vi.mock` (R4‑6) and the mock is cleared before each test (R52‑54).  
+- **Helper constructors** – `makeNode`, `makeEdge`, and `makeGraph` build minimal graph objects for assertions (R14‑49).  
+- **`getChangedFiles` tests** – Verify parsing of git diff output, handling of empty diffs, and graceful error handling (R56‑87).  
+- **`isStale` tests** – Confirm stale detection when files change and non‑stale when no changes (R89‑110).  
+- **`mergeGraphUpdate` tests** – Cover node replacement, edge pruning, dangling edge removal, and updates to `analyzedAt` and `gitCommitHash` (R113‑253).  
+- **Mocked execFileSync** – Typed via `vi.mocked(execFileSync)` (R12).
 
 ### Impact  
-- Adds explicit unit tests for staleness logic, reducing ambiguity around expected behavior.  
-- Centralizes graph construction helpers, lowering duplication in future tests.  
-- Provides concrete assertions on edge removal and timestamp updates, aiding debugging.
+The added tests provide concrete coverage for the staleness utilities, ensuring that git diff parsing, stale detection, and graph merging behave as expected. They also expose edge cases such as empty diffs, git errors, and dangling edges.
 
 ### Risks & follow‑ups  
-- The global `child_process` mock may affect other tests; run the full suite to confirm isolation.  
-- The timestamp test assumes `analyzedAt` is set to the current time; if the implementation changes to a fixed value, the test will fail.  
-- Current tests cover typical scenarios; consider adding cases for circular dependencies or missing nodes.  
-- Unknown from the available diff/scan evidence whether the mock interferes with other test suites.
+- **Mock leakage** – `vi.clearAllMocks()` is called before each test, but any future test that omits this could inherit stale mock state.  
+- **Edge‑case depth** – Current tests use small graphs; larger or deeply nested graphs may reveal additional issues.  
+- **Timestamp precision** – The `analyzedAt` test compares two `Date` calls; on very fast systems the timestamps could be identical, potentially causing intermittent failures. A mock clock could mitigate this.

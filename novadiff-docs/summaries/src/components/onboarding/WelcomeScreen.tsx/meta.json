@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/onboarding/WelcomeScreen.tsx",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:44:41.506Z",
+  "generatedAt": "2026-05-20T05:09:29.737Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,33 +20,30 @@
       }
     ],
     "changed_exports": [
-      "L10 removed: export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {",
+      "R5 added: export interface WelcomeScreenProps {",
       "R11 added: export function WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly }: WelcomeScreenProps) {"
     ],
-    "changed_imports": [],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
+      "R2 added: import { Copy, Download, ExternalLink, FolderOpen, Loader2, User } from \"lucide-react\";",
+      "R3 added: import type { GhToolingStatus, GitUserProfile } from \"../../app/workspaceTypes\";"
+    ],
     "changed_line_ranges": [
-      "R6",
-      "L10 / R11",
-      "L55 / R56-58",
-      "L64 / R67",
-      "L363 / R366",
-      "R370-387",
-      "L376 / R397"
+      "R1-420"
     ],
     "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useState } from \"react\";",
+      "R2 added: import { Copy, Download, ExternalLink, FolderOpen, Loader2, User } from \"lucide-react\";",
+      "R3 added: import type { GhToolingStatus, GitUserProfile } from \"../../app/workspaceTypes\";",
+      "R5 added: export interface WelcomeScreenProps {",
       "R6 added: cachedGitUser?: GitUserProfile | null;",
-      "L10 removed: export function WelcomeScreen({ onComplete, onLocalOnly }: WelcomeScreenProps) {",
-      "R11 added: export function WelcomeScreen({ cachedGitUser, onComplete, onLocalOnly }: WelcomeScreenProps) {",
-      "L55 removed: if (list.length === 1) {",
-      "R56 added: if (cachedGitUser && list.some((u) => u.login === cachedGitUser.login)) {",
-      "R57 added: setSelected(cachedGitUser.login);"
+      "R7 added: onComplete: (user: GitUserProfile) => void;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function WelcomeScreen (10-399)",
       "right function WelcomeScreen (11-420)",
       "right interface WelcomeScreenProps (5-10)"
     ],

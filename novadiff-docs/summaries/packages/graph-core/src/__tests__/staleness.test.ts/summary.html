@@ -26,32 +26,27 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/__tests__/staleness.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:14:40.369Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:01:12.688Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test file <code>packages/graph-core/src/__tests__/staleness.test.ts</code> validates the staleness utilities (<code>getChangedFiles</code>, <code>isStale</code>, <code>mergeGraphUpdate</code>). It mocks <code>child_process.execFileSync</code> (lines 1‑6) and uses helper constructors (<code>makeGraph</code>, <code>makeNode</code>, <code>makeEdge</code> – lines 14‑32) to build deterministic graph fixtures.</p>
+<p>A new test file <code>packages/graph-core/src/__tests__/staleness.test.ts</code> (R1‑253) is added.<br>It imports <code>vitest</code> helpers and the <code>KnowledgeGraph</code> types, mocks <code>child_process.execFileSync</code> (R4‑6), and defines <code>makeNode</code>, <code>makeEdge</code>, and <code>makeGraph</code> helpers (R14‑49).<br>The suite exercises <code>getChangedFiles</code>, <code>isStale</code>, and <code>mergeGraphUpdate</code> with a variety of scenarios.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports &amp; mocking</strong> – added Vitest imports and a mock for <code>child_process</code> (lines 1‑6).  </li>
-<li><strong>Graph helpers</strong> – <code>makeGraph</code>, <code>makeNode</code>, <code>makeEdge</code> provide reusable fixtures (lines 14‑32).  </li>
-<li><strong><code>getChangedFiles</code> tests</strong> – verify git diff parsing, empty results, and error handling (lines 56‑86).  </li>
-<li><strong><code>isStale</code> tests</strong> – confirm stale flag and changed file list (lines 89‑110).  </li>
-<li><strong><code>mergeGraphUpdate</code> tests</strong> – cover node replacement, edge pruning, and metadata updates (lines 113‑252).  </li>
-<li><strong>Timestamp validation</strong> – checks that <code>project.analyzedAt</code> falls between two timestamps (lines 242‑251).</li>
+<li><strong>Imports &amp; mock setup</strong> – <code>vitest</code> utilities and type imports are added (R1‑2). <code>child_process</code> is mocked with <code>vi.mock</code> (R4‑6) and the mock is cleared before each test (R52‑54).  </li>
+<li><strong>Helper constructors</strong> – <code>makeNode</code>, <code>makeEdge</code>, and <code>makeGraph</code> build minimal graph objects for assertions (R14‑49).  </li>
+<li><strong><code>getChangedFiles</code> tests</strong> – Verify parsing of git diff output, handling of empty diffs, and graceful error handling (R56‑87).  </li>
+<li><strong><code>isStale</code> tests</strong> – Confirm stale detection when files change and non‑stale when no changes (R89‑110).  </li>
+<li><strong><code>mergeGraphUpdate</code> tests</strong> – Cover node replacement, edge pruning, dangling edge removal, and updates to <code>analyzedAt</code> and <code>gitCommitHash</code> (R113‑253).  </li>
+<li><strong>Mocked execFileSync</strong> – Typed via <code>vi.mocked(execFileSync)</code> (R12).</li>
 </ul>
 <h3>Impact</h3>
-<ul>
-<li>Adds explicit unit tests for staleness logic, reducing ambiguity around expected behavior.  </li>
-<li>Centralizes graph construction helpers, lowering duplication in future tests.  </li>
-<li>Provides concrete assertions on edge removal and timestamp updates, aiding debugging.</li>
-</ul>
+<p>The added tests provide concrete coverage for the staleness utilities, ensuring that git diff parsing, stale detection, and graph merging behave as expected. They also expose edge cases such as empty diffs, git errors, and dangling edges.</p>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>The global <code>child_process</code> mock may affect other tests; run the full suite to confirm isolation.  </li>
-<li>The timestamp test assumes <code>analyzedAt</code> is set to the current time; if the implementation changes to a fixed value, the test will fail.  </li>
-<li>Current tests cover typical scenarios; consider adding cases for circular dependencies or missing nodes.  </li>
-<li>Unknown from the available diff/scan evidence whether the mock interferes with other test suites.</li>
+<li><strong>Mock leakage</strong> – <code>vi.clearAllMocks()</code> is called before each test, but any future test that omits this could inherit stale mock state.  </li>
+<li><strong>Edge‑case depth</strong> – Current tests use small graphs; larger or deeply nested graphs may reveal additional issues.  </li>
+<li><strong>Timestamp precision</strong> – The <code>analyzedAt</code> test compares two <code>Date</code> calls; on very fast systems the timestamps could be identical, potentially causing intermittent failures. A mock clock could mitigate this.</li>
 </ul>
 </article>
   </main>

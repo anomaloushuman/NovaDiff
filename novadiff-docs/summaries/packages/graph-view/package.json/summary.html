@@ -26,39 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/package.json</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:18:02.519Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:02:10.559Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<ul>
-<li>A new package <code>@novadiff/graph-view</code> was added under <code>packages/graph-view</code>.  </li>
-<li>The added file <code>packages/graph-view/package.json</code> contains 47 new lines (R1‑47).  </li>
-<li>It declares the package name, marks it <code>private</code>, sets version <code>0.1.0</code>, and uses <code>&quot;type&quot;: &quot;module&quot;</code>.</li>
-</ul>
+<p>A new <code>packages/graph-view/package.json</code> (added lines R1‑47) introduces the <code>@novadiff/graph-view</code> library. It is marked <code>private</code>, uses <code>&quot;type&quot;: &quot;module&quot;</code>, and exports its public API from <code>./src/index.ts</code> and <code>./src/index.css</code> (lines 6‑9).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Exports</strong> (lines 6‑9):  <ul>
-<li><code>&quot;.&quot;</code> → <code>./src/index.ts</code>  </li>
-<li><code>&quot;./styles.css&quot;</code> → <code>./src/index.css</code></li>
-</ul>
-</li>
-<li><strong>Scripts</strong> (lines 10‑16):  <ul>
-<li><code>dev</code>, <code>build</code>, <code>build:demo</code>, <code>preview</code>, <code>test</code>, <code>test:watch</code> – all invoke Vite, TypeScript, or Vitest.</li>
-</ul>
-</li>
-<li><strong>Dependencies</strong> (lines 18‑33): includes <code>@dagrejs/dagre</code>, <code>@novadiff/graph-core</code> (file:../graph-core), <code>@xyflow/react</code>, <code>d3-force</code>, <code>elkjs</code>, <code>graphology</code>, <code>graphology-communities-louvain</code>, <code>graphology-types</code>, <code>hast-util-to-jsx-runtime</code>, <code>prism-react-renderer</code>, <code>react</code>, <code>react-dom</code>, <code>react-markdown</code>, <code>zustand</code>.  </li>
-<li><strong>DevDependencies</strong> (lines 35‑46): Tailwind, TypeScript, Vite, Vitest, and related plugins.</li>
+<li><strong>Package metadata</strong> – <code>name</code>, <code>private</code>, <code>version</code>, and <code>type</code> are set (lines 2‑5).  </li>
+<li><strong>Exports</strong> – <code>&quot;.&quot;: &quot;./src/index.ts&quot;</code> and <code>&quot;./styles.css&quot;: &quot;./src/index.css&quot;</code> (lines 6‑9).  </li>
+<li><strong>Scripts</strong> – <code>dev</code>, <code>build</code>, <code>build:demo</code>, <code>preview</code>, <code>test</code>, and <code>test:watch</code> invoke Vite, TypeScript, and Vitest (lines 10‑17).  </li>
+<li><strong>Dependencies</strong> – includes a local link to <code>@novadiff/graph-core</code> (<code>file:../graph-core</code>) and libraries such as <code>@dagrejs/dagre</code>, <code>@xyflow/react</code>, <code>d3-force</code>, <code>elkjs</code>, and <code>graphology</code> (lines 18‑34).  </li>
+<li><strong>DevDependencies</strong> – adds Tailwind, TypeScript, Vite, Vitest, and type definitions (lines 35‑46).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The monorepo build must now resolve and compile <code>graph-view</code>.  </li>
-<li>Tests for this package use Vitest; coverage is enabled via <code>@vitest/coverage-v8</code>.  </li>
-<li>The local reference <code>file:../graph-core</code> creates a tight coupling; changes to <code>graph-core</code> may affect this package.  </li>
-<li>Importing <code>@novadiff/graph-view</code> will expose the TS entry point and CSS file as defined in the exports.</li>
+<li><strong>Build</strong> – The package requires running <code>tsc -b</code> followed by <code>vite build</code> (as per the <code>build</code> script).  </li>
+<li><strong>Testing</strong> – Vitest tests will execute in the context of this package (<code>test</code> and <code>test:watch</code> scripts).  </li>
+<li><strong>Workspace</strong> – The local dependency on <code>graph-core</code> (<code>file:../graph-core</code>) means the monorepo must expose both packages; otherwise resolution fails.  </li>
+<li><strong>Import paths</strong> – The <code>exports</code> field restricts consumers to import from <code>@novadiff/graph-view</code> or its sub‑paths.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Dependency resolution</strong> – verify that <code>file:../graph-core</code> resolves in CI; missing symlinks could break installation.</li>
+<li><strong>Missing workspace config</strong> – If <code>packages/graph-view</code> is not listed in the monorepo workspace, installation will break.  </li>
+<li><strong>Dependency conflicts</strong> – Shared dependencies (e.g., React, TypeScript) may clash with root versions; verify compatibility.  </li>
+<li><strong>Build failures</strong> – Ensure <code>tsc</code> and Vite configurations are correct; run <code>npm run build</code> locally.  </li>
+<li><strong>Test coverage</strong> – Run <code>npm run test</code> to confirm that the new package’s tests pass and coverage thresholds are met.</li>
 </ul>
 </article>
   </main>

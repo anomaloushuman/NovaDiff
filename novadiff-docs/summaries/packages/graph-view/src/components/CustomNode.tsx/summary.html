@@ -26,34 +26,33 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/CustomNode.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T20:18:20.868Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T06:04:40.442Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>CustomNode</code> component is added to <code>packages/graph-view/src/components/CustomNode.tsx</code>. It renders a custom node for XYFlow with color bars, handles, and diff/selection overlays.</p>
+<p>A new <code>CustomNode</code> component is added to <code>packages/graph-view/src/components/CustomNode.tsx</code>. It renders a node with a colored side bar, type label, complexity badge, optional test icon, and supports diff overlays, selection glow, and neighbor highlighting.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑5): <code>memo</code> from <code>react</code>; <code>Handle</code>, <code>Position</code> from <code>@xyflow/react</code>; type imports for <code>NodeProps</code>, <code>Node</code>, <code>NodeType</code>; <code>useI18n</code> from context.  </li>
-<li><strong>Color maps</strong> (lines 8‑30 and 32‑54) keyed by <code>NodeType</code> to keep styling consistent with the core union.  </li>
-<li><strong>Data contract</strong> (<code>CustomNodeData</code>, lines 62‑80) defines node metadata and UI flags.  </li>
-<li><strong>Node type alias</strong> (<code>CustomFlowNode</code>, line 82) registers the <code>&quot;custom&quot;</code> node with XYFlow.  </li>
-<li><strong>Component logic</strong> (<code>CustomNodeComponent</code>, lines 84‑187) renders the card, applies classes based on flags, and uses <code>useI18n</code> for labels.  </li>
-<li><strong>Memoization</strong> (line 189) wraps the component with <code>memo</code> to avoid unnecessary re‑renders.  </li>
-<li><strong>Export</strong> (line 190) exposes <code>CustomNode</code> as the default export.</li>
+<li><strong>Imports</strong> (lines 1‑5): <code>memo</code> from React; <code>Handle</code>, <code>Position</code>, <code>NodeProps</code>, <code>Node</code> from <code>@xyflow/react</code>; <code>NodeType</code> from <code>@novadiff/graph-core/types</code>; <code>useI18n</code> from the local context.  </li>
+<li><strong>Color maps</strong> (lines 7‑30, 32‑54, 56‑60): <code>typeColors</code>, <code>typeTextColors</code>, and <code>complexityColors</code> keyed by <code>NodeType</code> or complexity string.  </li>
+<li><strong><code>CustomNodeData</code> interface</strong> (lines 62‑80): defines node metadata, flags for selection, diff state, and an optional click callback.  </li>
+<li><strong><code>CustomFlowNode</code> type</strong> (line 82): <code>Node&lt;CustomNodeData, &quot;custom&quot;&gt;</code>.  </li>
+<li><strong><code>CustomNodeComponent</code></strong> (lines 84‑187): renders the node, applies dynamic classes for selection, diff, and neighbor states, and uses <code>Handle</code> for XYFlow connections.  </li>
+<li><strong>Memoization</strong> (line 189): <code>const CustomNode = memo(CustomNodeComponent);</code>.  </li>
+<li><strong>Default export</strong> (line 190): <code>export default CustomNode;</code>.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides type safety for node data via <code>CustomNodeData</code>.  </li>
-<li>Emits a dev‑time warning for unknown <code>nodeType</code> values (lines 94‑96).  </li>
-<li>Diff overlay classes (<code>diff-changed-glow</code>, <code>diff-affected-glow</code>) give visual cues for changes.  </li>
-<li>Memoization improves rendering performance for unchanged nodes.</li>
+<li>The component now supports the <code>&quot;custom&quot;</code> node type with diff overlays and selection logic.  </li>
+<li>Centralized color maps and a dedicated interface simplify future style or data changes.  </li>
+<li>A dev‑mode warning (<code>console.warn</code>) flags unknown <code>nodeType</code> values, aiding debugging.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Color maps must stay in sync with the core <code>NodeType</code> union; update after core changes.  </li>
-<li>Unknown <code>nodeType</code> values trigger a warning; consider stricter validation or a fallback.  </li>
-<li>i18n keys <code>t.customNode.tested</code> and <code>t.customNode.hasTests</code> must exist; run extraction to confirm.  </li>
-<li>No unit tests exist for this component yet; add snapshot and interaction tests to guard against regressions.</li>
+<li><strong>Unknown <code>NodeType</code> values</strong>: The dev‑mode warning may surface if the core union and the color map diverge; verify sync after core updates.  </li>
+<li><strong>Memoization</strong>: Ensure that <code>data</code> props are stable; otherwise, memo may not prevent unnecessary renders.  </li>
+<li><strong>Diff overlay styling</strong>: Confirm that CSS variables (<code>--color-diff-changed</code>, <code>--color-diff-affected</code>) exist in the theme.  </li>
+<li><strong>Test icon rendering</strong>: Verify that <code>t.customNode.tested</code> and <code>t.customNode.hasTests</code> keys are present in the i18n bundle.</li>
 </ul>
 </article>
   </main>

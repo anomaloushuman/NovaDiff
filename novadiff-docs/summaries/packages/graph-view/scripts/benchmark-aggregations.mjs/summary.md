@@ -1,21 +1,19 @@
 ### Overview
-A new Node‑only script `packages/graph-view/scripts/benchmark-aggregations.mjs` is added to compare the performance of two graph‑aggregation strategies used in the dashboard.
+A new benchmark script `packages/graph-view/scripts/benchmark-aggregations.mjs` (diff R1‑99) has been added to measure the performance difference between the legacy and refactored graph‑aggregation logic used in `useOverviewGraph`.
 
 ### Key changes
-- **Import** `performance` from `node:perf_hooks` (line 16) to time operations.  
-- **`makeGraph(layerCount, nodesPerLayer)`** (lines 18‑32) builds a synthetic graph with layers and nodes of three complexity levels.  
-- **`aggregateBefore(graph)`** (lines 35‑49) implements the legacy O(N × K × L) algorithm that filters nodes per layer with `Array.filter` and `Array.includes`.  
-- **`aggregateAfter(graph, nodesById)`** (lines 53‑73) implements the optimized O(N + ΣKᵢ) algorithm that looks up nodes via a `Map`.  
-- **`bench(label, layerCount, nodesPerLayer)`** (lines 75‑94) runs both algorithms, logs elapsed time, computes speed‑up, and checks that the outputs are identical.  
-- Four benchmark runs are executed at the bottom of the file (lines 96‑99): *small*, *medium*, *large*, and *issue#102 shape*.
+- Import added: `import { performance } from "node:perf_hooks";` (R16).  
+- Graph construction helper `makeGraph(layerCount, nodesPerLayer)` (lines 18‑31).  
+- Legacy aggregation `aggregateBefore(graph)` (lines 35‑49).  
+- Optimized aggregation `aggregateAfter(graph, nodesById)` (lines 53‑72).  
+- Benchmark runner `bench(label, layerCount, nodesPerLayer)` (lines 75‑93) times both algorithms, logs speed‑up and parity.  
+- Four benchmark runs executed at the bottom of the file (lines 96‑99).
 
 ### Impact
-- The script is isolated in the `scripts` folder and does not modify any production code or public APIs.  
-- It introduces a runtime dependency on `node:perf_hooks` only when the script is executed, so it does not affect the Vite bundle.  
-- The parity check gives confidence that the refactor preserves functional correctness.
+The script outputs console logs with timing, speed‑up factor, and parity check, providing a way to verify correctness and performance of the aggregation logic without altering production code.
 
 ### Risks & follow‑ups
-- **Build exclusion**: confirm that the `scripts` folder is excluded from the Vite build (e.g., via `vite.config.js` or `.gitignore`).  
-- **Environment guard**: consider adding a check to skip execution in non‑development environments to avoid accidental runs in CI.  
-- **Duplicate ID safety**: the synthetic data guarantees unique node IDs; if reused elsewhere, ensure uniqueness before constructing `nodesById`.  
-- **Performance sanity**: run the script locally to verify realistic `speedup` values and that parity is always `true`.
+- Node compatibility: relies on `node:perf_hooks`; ensure the target runtime supports it.  
+- Benchmark reliability: timings can vary with CPU load and V8 optimizations; consider multiple runs for precise numbers.  
+- Future refactors: if aggregation logic changes again, update the benchmark accordingly.  
+- Documentation: add instructions on running the script and interpreting results for future maintainers.

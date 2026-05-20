@@ -26,32 +26,54 @@
 <body>
   <header class="top">
     <h1>packages/graph-core/src/embedding-search.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:39:06.806Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:23:53.210Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-core/src/embedding-search.ts</code> adds a lightweight semantic search engine that operates on pre‑computed vector embeddings of graph nodes.</p>
+<p>A new module <code>packages/graph-core/src/embedding-search.ts</code> is added.<br>It introduces a semantic search engine that operates on graph nodes using pre‑computed vector embeddings.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – <code>GraphNode</code> from <code>./types.js</code> and <code>SearchResult</code> from <code>./search.js</code> (lines 1‑2).  </li>
-<li><strong><code>SemanticSearchOptions</code></strong> (lines 4‑7) introduces optional <code>limit</code>, <code>threshold</code>, and <code>types</code>.  </li>
-<li><strong><code>cosineSimilarity</code></strong> (lines 14‑30) computes dot product and magnitudes, returning <code>0</code> when either vector has zero magnitude.  </li>
-<li><strong><code>SemanticSearchEngine</code></strong> (lines 37‑83) stores nodes and embeddings, and exposes <code>hasEmbeddings</code>, <code>addEmbedding</code>, <code>search</code>, and <code>updateNodes</code>.  </li>
-<li><strong>Search logic</strong> (lines 54‑78) filters by node type, applies a similarity threshold, scores as <code>1 – similarity</code>, sorts ascending, and slices to the requested limit.</li>
+<li><strong>Imports</strong> (lines 1‑2)```ts
+import type { GraphNode } from &quot;./types.js&quot;;
+import type { SearchResult } from &quot;./search.js&quot;;</li>
+</ul>
+<p><code>- **`SemanticSearchOptions` interface** (lines 4‑7)</code>ts
+export interface SemanticSearchOptions {
+    limit?: number;
+    threshold?: number;
+    types?: string[];
+  }
+```- <strong><code>cosineSimilarity</code> function</strong> (lines 14‑29) – computes dot product, magnitudes, returns 0 for zero‑magnitude vectors.</p>
+<ul>
+<li><strong><code>SemanticSearchEngine</code> class</strong> (lines 37‑83)  <ul>
+<li>Stores <code>nodes: GraphNode[]</code> and <code>embeddings: Map&lt;string, number[]&gt;</code>.  </li>
+<li>Methods: <code>hasEmbeddings</code>, <code>addEmbedding</code>, <code>updateNodes</code>.  </li>
+<li><code>search(queryEmbedding, options?)</code></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>Applies optional <code>types</code> filter, <code>threshold</code> (default 0), and <code>limit</code> (default 10).  </p>
+</li>
+<li><p>Computes similarity via <code>cosineSimilarity</code>.  </p>
+</li>
+<li><p>Pushes <code>{ nodeId, score: 1 - similarity }</code> for matches.  </p>
+</li>
+<li><p>Sorts ascending by <code>score</code> (lower = higher similarity) and slices to <code>limit</code>.</p>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Deterministic similarity scoring; zero‑magnitude vectors return <code>0</code>, avoiding NaNs.  </li>
-<li>Encapsulates search logic in a single class; the options interface centralizes configuration.  </li>
-<li>Performs a linear scan over all nodes; suitable for small graphs but may need optimization for larger datasets.  </li>
-<li>No changes to existing public APIs; the new module is isolated.</li>
+<li>New public API: <code>SemanticSearchEngine</code> and <code>cosineSimilarity</code>.  </li>
+<li>Existing code remains unchanged; backward compatibility is preserved.  </li>
+<li>Callers must import the new module and ensure that <code>SearchResult</code> matches the <code>{ nodeId, score }</code> shape returned by <code>search</code>.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>No unit tests cover the new engine; run <code>npm test</code> to confirm no accidental breakage.  </li>
-<li>Linear search could become a bottleneck; benchmark against the current search implementation.  </li>
-<li>Embedding keys must match <code>node.id</code>; mismatches will silently skip nodes.  </li>
-<li>Build verification: run <code>npm run build</code> to confirm the new file is included.</li>
+<li><strong><code>SearchResult</code> type alignment</strong> – the diff shows <code>SearchResult</code> imported but its definition is not visible; mismatch could cause type errors.  </li>
+<li><strong>Default parameters</strong> – <code>threshold = 0</code> and <code>limit = 10</code> are hard‑coded; verify they meet use cases.  </li>
+<li><strong>Zero‑magnitude handling</strong> – <code>cosineSimilarity</code> returns 0; confirm this behavior is acceptable in all contexts.  </li>
+<li><strong>Sorting logic</strong> – uses <code>a.score - b.score</code>; ensure that lower <code>score</code> indeed corresponds to higher similarity as intended.</li>
 </ul>
 </article>
   </main>

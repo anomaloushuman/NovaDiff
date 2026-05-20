@@ -1,23 +1,22 @@
 ### Overview  
-A new file `packages/graph-view/src/utils/elk-bundled.ts` (R1‑R35) adds a Vite/Electron‑friendly shim for the ELK layout engine. It declares typed constructors, resolves the UMD bundle’s export, and lazily loads the engine and its instance.
+New file `packages/graph-view/src/utils/elk-bundled.ts` (lines 1‑35) adds an ESM‑compatible shim for the ELK layout engine’s UMD bundle, enabling lazy loading in Vite/Electron contexts.
 
 ### Key changes  
-- **Type definitions** (`R3‑R7`):  
-  - `ElkLayoutInstance` with a `layout(graph: unknown): Promise<unknown>` method.  
-  - `ElkConstructor` as `new () => ElkLayoutInstance`.  
-- **`resolveElkConstructor`** (`R9‑R14`): inspects the imported module for `default` or `ELK`; throws an error if neither is a function.  
-- **`loadElkConstructor`** (`R19‑R25`): imports `elkjs/lib/elk.bundled.js` once, caches the constructor promise, and returns it.  
-- **`loadElk`** (`R30‑R35`): creates a single `ElkLayoutInstance` from the cached constructor, caching the instance promise.  
-- **Shim comment** (`R1`): explains the need for this file in Vite/Electron contexts where the UMD bundle lacks an ESM default export.
+- **Exported types**  
+  - `ElkLayoutInstance` (lines 3‑5) – interface with `layout(graph: unknown): Promise<unknown>`.  
+  - `ElkConstructor` (line 7) – constructor type returning `ElkLayoutInstance`.  
+- **`resolveElkConstructor`** (lines 9‑14) checks `mod.default` or `mod.ELK`; throws if neither is a function.  
+- **`loadElkConstructor`** (lines 19‑25) performs a single dynamic import of `"elkjs/lib/elk.bundled.js"` and caches the resulting promise (`ctorPromise`).  
+- **`loadElk`** (lines 30‑35) creates an `ElkLayoutInstance` by invoking the cached constructor and caches the instance promise (`instancePromise`).
 
 ### Impact  
-- **Correctness**: ensures the ELK constructor is resolved from the UMD bundle, throwing a clear error if missing.  
-- **Performance**: caches both constructor and instance promises, avoiding repeated imports or instantiations.  
-- **Maintainability**: centralizes ELK loading logic; other modules can import `loadElk` without bundler quirks.  
-- **Compatibility**: works with Vite/Electron setups that otherwise cannot import the UMD bundle as an ES module.
+- **Correctness**: `resolveElkConstructor` validates the constructor before use, preventing silent failures.  
+- **Performance**: Caching (`ctorPromise`, `instancePromise`) avoids repeated bundle loads, reducing startup time and memory usage.  
+- **Maintainability**: Centralizes ELK loading logic; other modules can `import { loadElk }` without handling UMD quirks.  
+- **Compatibility**: The file is a pure TS module with no side effects, suitable for both browser and Node environments.
 
 ### Risks & follow‑ups  
-- **Import path resolution**: verify that `elkjs/lib/elk.bundled.js` resolves correctly in all target environments.  
-- **Error handling**: ensure the thrown error message is surfaced to users when the bundle is missing or malformed.  
-- **Caching correctness**: test that repeated calls to `loadElk` return the same instance and that promise rejection propagates properly.  
-- **Type safety**: run TypeScript linting to confirm that the new types integrate cleanly with existing graph‑view code.
+- Runtime failure if `"elkjs/lib/elk.bundled.js"` is missing or corrupted; callers should handle promise rejection.  
+- Verify that the caching logic correctly prevents multiple imports across the application.  
+- Ensure that the returned `ElkLayoutInstance` satisfies downstream expectations.  
+- Test dynamic import behavior in Electron’s preload script.

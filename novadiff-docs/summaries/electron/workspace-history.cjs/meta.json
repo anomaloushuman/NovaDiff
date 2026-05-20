@@ -1,9 +1,9 @@
 {
   "relPath": "electron/workspace-history.cjs",
-  "kind": "modified",
-  "leftTitle": "46a8da0664d1",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T22:37:52.217Z",
+  "generatedAt": "2026-05-20T04:33:10.403Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,21 +21,22 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "L6 removed: const { runGit } = require(\"./git-service.cjs\");",
-      "R6 added: const { runGit, tryRunGit } = require(\"./git-service.cjs\");"
+      "R3 added: const fsp = require(\"node:fs/promises\");",
+      "R4 added: const fssync = require(\"node:fs\");",
+      "R5 added: const path = require(\"node:path\");",
+      "R6 added: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
+      "R33 added: const { upsertWorkspace, getWorkspace } = require(\"./workspace-store.cjs\");"
     ],
     "changed_line_ranges": [
-      "L6 / R6",
-      "R185-292",
-      "R296"
+      "R1-300"
     ],
     "cited_changed_lines": [
-      "L6 removed: const { runGit } = require(\"./git-service.cjs\");",
+      "R1 added: \"use strict\";",
+      "R3 added: const fsp = require(\"node:fs/promises\");",
+      "R4 added: const fssync = require(\"node:fs\");",
+      "R5 added: const path = require(\"node:path\");",
       "R6 added: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
-      "R185 added: /**",
-      "R186 added: * Re-read git log (optional fetch), snapshot only new commits, keep existing snapshots.",
-      "R187 added: */",
-      "R188 added: async function refreshWorkspaceHistory(userData, workspaceId, sendProgress, opts = {}) {"
+      "R8 added: function removeDirSafe(dir) {"
     ],
     "evidence_limits": [],
     "file_roles": [
@@ -43,7 +44,12 @@
     ],
     "touched_symbols": [
       "right function refreshWorkspaceHistory (188-300)",
-      "right function indexWorkspaceHistory (100-187)"
+      "right function indexWorkspaceHistory (100-187)",
+      "right function listCommitsOldestFirst (35-60)",
+      "right function ensureCommitSnapshot (80-99)",
+      "right function snapshotCommit (61-79)",
+      "right function isUsableSnapshotDir (18-34)",
+      "right function removeDirSafe (8-17)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

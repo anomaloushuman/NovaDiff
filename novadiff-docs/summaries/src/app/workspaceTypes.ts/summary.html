@@ -26,36 +26,35 @@
 <body>
   <header class="top">
     <h1>src/app/workspaceTypes.ts</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Generated: 2026-05-19T22:41:46.097Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:49:13.730Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/app/workspaceTypes.ts</code> now exports a new <code>WorkspaceUiState</code> interface and adds an optional <code>uiState</code> property to <code>NovaWorkspace</code>. The comment at R33 notes that this UI state is restored and not shown verbatim in the main app.</p>
+<p><code>src/app/workspaceTypes.ts</code> now exports several TypeScript interfaces that describe Git user profiles, workspace snapshots, and tooling status. The file contains only type declarations, so it does not alter runtime behavior.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Exported <code>WorkspaceUiState</code> (R37‑R41)</strong> – defines  <ul>
-<li><code>workspacePage?: &quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</code>  </li>
-<li><code>leftRoot?: string</code>  </li>
-<li><code>rightRoot?: string</code>  </li>
-<li><code>compared?: boolean</code></li>
+<li><strong><code>GitUserProfile</code></strong> – added at R1 (lines 1‑6).  </li>
+<li><strong><code>WorkspaceCommitSnapshot</code></strong> – added at R9 (lines 9‑17).  </li>
+<li><strong><code>NovaWorkspace</code></strong> – added at R19 (lines 19‑35).  </li>
+<li><strong><code>WorkspaceUiState</code></strong> – added at R37 (lines 37‑42).  </li>
+<li><strong><code>GitHistoryCompareOptions</code></strong> – added at R44 (lines 44‑47).  </li>
+<li><strong><code>GhToolingStatus</code></strong> – added at R49 (lines 49‑60).  </li>
+<li><strong><code>WorkspaceSessionState</code></strong> – added at R62 (lines 62‑67).</li>
 </ul>
-</li>
-<li><strong>Extended <code>NovaWorkspace</code> (R34)</strong> – <code>uiState?: WorkspaceUiState | null;</code>  </li>
-<li><strong>Documentation comment (R33)</strong> – indicates restoration of UI state.</li>
-</ul>
+<p>Each interface is exported and can be imported by other modules.</p>
 <h3>Impact</h3>
 <ul>
-<li><strong>Serialization</strong> – any code that writes or reads <code>NovaWorkspace</code> must accommodate the optional <code>uiState</code> field.  </li>
-<li><strong>Type safety</strong> – consumers can now type‑check UI state via the exported interface.  </li>
-<li><strong>Backward compatibility</strong> – the field is optional, so existing workspace data remains valid.  </li>
-<li><strong>UI logic</strong> – components can read <code>workspacePage</code> and root paths directly from the workspace model.</li>
+<li><strong>Type safety</strong> – the new interfaces enforce stricter typing for workspace‑related data.  </li>
+<li><strong>Imports</strong> – any module that previously used raw objects for these concepts must now import the corresponding interface; missing imports will cause compile‑time errors.  </li>
+<li><strong>Runtime</strong> – the file contains only type definitions, so the bundle size and execution performance are unchanged.  </li>
+<li><strong>Documentation</strong> – existing docs should reference these interfaces to clarify data contracts.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Data migration</strong> – ensure older workspace JSON files deserialize correctly when <code>uiState</code> is absent.  </li>
-<li><strong>Test coverage</strong> – update unit tests that construct <code>NovaWorkspace</code> objects to include or ignore <code>uiState</code>.  </li>
-<li><strong>Documentation</strong> – expose the new <code>WorkspaceUiState</code> interface in API docs.  </li>
-<li><strong>Linting &amp; build</strong> – run <code>tsc</code>, lint, and build to confirm no type errors introduced by the new export.</li>
+<li><strong>Unused exports</strong> – verify that all new interfaces are referenced; otherwise linting may flag them.  </li>
+<li><strong>Naming collisions</strong> – ensure no other module exports identically named interfaces that could cause import ambiguity.  </li>
+<li><strong>Data consistency</strong> – confirm that objects constructed elsewhere match the new shapes, especially optional fields such as <code>uiState</code>.  </li>
+<li><strong>Future refactors</strong> – if workspace structures evolve, these interfaces may need updates; track changes in the <code>src/app</code> module.</li>
 </ul>
 </article>
   </main>

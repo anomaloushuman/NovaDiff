@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>tests/smoke.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>tests/smoke.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:12:53.485Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>tests/smoke.test.ts</code> has been added to the repository. It contains a basic Vitest smoke test that verifies a simple arithmetic operation.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import added</strong> at line 1: <code>import { describe, expect, it } from &quot;vitest&quot;;</code> (R1 added).  </li>
+<li><strong>Test suite defined</strong> at lines 3‑7: <code>describe(&quot;toolchain&quot;, () =&gt; { … });</code> (R3 added).  </li>
+<li><strong>Single test case</strong> at lines 4‑5: `it(&quot;runs tests&quot;, () =&gt; { expect(1</li>
+</ul>
+<ul>
+<li>1).toBe(2); });` (R4‑5 added).</li>
+</ul>
+<ul>
+<li>The file resides in the <code>tests/</code> directory, following existing test conventions.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Adds a sanity check that the test runner and JavaScript engine are functioning; unlikely to affect production code.  </li>
+<li>Provides a minimal example for future test writers, demonstrating Vitest syntax and project structure.  </li>
+<li>Running the test suite will now include this smoke test, giving quick feedback if the test environment is misconfigured.  </li>
+<li>Runtime impact negligible; the test executes instantly.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Ensure Vitest is installed and configured; otherwise the test will fail to run.  </li>
+<li>Run <code>npm run lint</code> to confirm the new file passes linting rules.  </li>
+<li>No snapshots are involved, so no refresh is needed.  </li>
+<li>Verify that the CI pipeline picks up the new test file and that it passes on all target platforms.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

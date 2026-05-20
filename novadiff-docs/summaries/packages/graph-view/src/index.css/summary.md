@@ -1,24 +1,24 @@
 ### Overview  
-`packages/graph-view/src/index.css` now defines legacy gold color aliases, hides the noise‑grain overlay for NovaDiff embeds, and removes several React‑Flow styling rules that were previously applied only in the embedded context.
+A new file `packages/graph-view/src/index.css` (lines 1‑484) has been added.  
+It imports Tailwind, declares a `@theme` block with many CSS custom properties, and scopes a wide range of base, component, and utility styles for the Graph View UI.
 
 ### Key changes  
-- **Gold aliases** added at lines 15‑18:  
-  ```css
-  --color-gold: var(--color-accent);
-  --color-gold-dim: var(--color-accent-dim);
-  --color-gold-bright: var(--color-accent-bright);
-  ```  
-- **Noise overlay** for embeds is now hidden: the comment at line 125 is replaced by a new comment at line 130, and the `.novadiff-graph-embed.noise-overlay::before` block (lines 126‑128) is removed and replaced with `display: none` at line 132.  
-- **React‑Flow canvas overrides**: the comment at line 253 (“Override React Flow dark theme”) is removed, and a new comment at line 265 (“Override React Flow canvas”) is added.  
-- **Embedded‑specific React‑Flow styles** (background pattern, edges, node container, controls, minimap) are all removed (lines 270‑315).  
+- `@import "tailwindcss";` – pulls Tailwind utilities into the bundle. (R1)  
+- `@theme { … }` – defines ~70 CSS variables for colors, typography, glass effects, scrollbars, and node‑type hues. (R3‑89)  
+- Global styles for `html`, `body`, `#root`, and the `.novadiff-graph-explorer-root/.novadiff-graph-theme-host` containers, isolating the graph view from the host app. (R93‑110)  
+- Utility classes such as `.glass`, `.glass-heavy`, `.kbd`, and animation helpers (`.animate-fade-slide-in`, `.animate-slide-up`, `.animate-accent-pulse`). (R135‑217)  
+- React‑Flow overrides (`.react-flow__background`, `.react-flow__edge-path`, etc.) to match the new theme. (R266‑290)  
+- Light/dark theme overrides via `[data-theme="light"]` and `[data-theme="dark"]`. (R316‑337)  
+- Modal and button styles for the “Explain Code” feature, including keyframes for a pulsing effect. (R339‑480)
 
 ### Impact  
-- Embedded graphs no longer show film‑grain noise, matching the host’s clean surface.  
-- Removing unused React‑Flow rules for embeds reduces stylesheet size and selector conflicts.  
-- Gold aliases centralize color mapping, easing future theme updates.  
+- **Styling scope** – selectors are scoped to the graph view containers, so they should not repaint the entire NovaDiff app.  
+- **Maintainability** – centralizing theme variables in `@theme` simplifies future color or typography updates.  
+- **Compatibility** – the Tailwind import must resolve in the build pipeline; missing it will break the stylesheet.  
+- **Performance** – the stylesheet size increases with the added file; it is only loaded when the graph view is rendered. (unknown from the diff)
 
 ### Risks & follow‑ups  
-- Verify that the hidden noise overlay does not break any legacy tests that expect the overlay in embedded mode.  
-- Ensure that removing React‑Flow edge/background styles does not affect edge visibility or interaction in the embedded explorer.  
-- Run the `graph-view` smoke test in NovaDiff to confirm that the new gold aliases render correctly.  
-- Check that the new comment for “Override React Flow canvas” does not conflict with future canvas‑specific overrides.
+- **CSS conflicts** – generic selectors such as `.novadiff-graph-embed` or `.react-flow__background` could clash with existing global styles.  
+- **Build integration** – verify that the Tailwind import resolves correctly in the current build config.  
+- **Visual regressions** – run graph‑view smoke tests to confirm node colors, borders, and glass effects render as intended. (unknown from the diff)  
+- **Accessibility** – contrast ratios for the new color variables, especially in light mode, are not verified. (unknown from the diff)

@@ -1,24 +1,21 @@
-### Overview
-A new utility `packages/graph-view/src/utils/louvain.ts` introduces Louvain community detection for a subset of graph nodes and edges. It exports `detectCommunities`, which builds an undirected graph, runs `graphology-communities-louvain`, and returns a `Map<string, number>` of node‑to‑community assignments.
+### Overview  
+A new utility `detectCommunities` is added to `packages/graph-view/src/utils/louvain.ts` (lines 1‑47). It performs Louvain community detection on a user‑supplied subset of nodes and edges.
 
-### Key changes
-- **New imports**: `Graph` from `graphology`, `louvain` from `graphology-communities-louvain`, and `GraphEdge` type from `@novadiff/graph-core/types`.  
-- **`detectCommunities` implementation**:  
-  - Builds a graph with `new Graph({ type: "undirected", multi: false })`.  
-  - Adds only nodes in `nodeIds` and edges whose endpoints are both in that set, filtering out self‑loops and duplicates.  
-  - Calls `louvain(g)` and maps the result to a `Map`.  
-  - Defensive reassignment: any `-1` sentinels are replaced with unique IDs beyond the current maximum.  
-- **Export**: The function is exported for external use.
+### Key changes  
+- **Imports** added at the top: `Graph` from `graphology`, `louvain` from `graphology-communities-louvain`, and `GraphEdge` type from `@novadiff/graph-core/types` (R1‑R3).  
+- **Exported function** `detectCommunities(nodeIds: string[], edges: GraphEdge[]): Map<string, number>` (R17‑R20).  
+- **Graph construction**: creates an undirected, non‑multigraph; adds only nodes in `nodeIds` and edges whose both endpoints are in that set; skips self‑loops and duplicate edges (R21‑R29).  
+- **Community assignment**: calls `louvain(g)` (returns `Record<string, number>`), maps results, defaults missing nodes to `-1`, then reassigns any `-1` sentinels to unique ids beyond the current maximum to guarantee distinct communities for disconnected nodes (R30‑R46).  
+- **JSDoc** explains the defensive reassignment and future‑proofing against library changes (R5‑R16).
 
-### Impact
-- **Correctness**: Guarantees unique community IDs even if the underlying library omits nodes or returns `-1`.  
-- **Performance**: Graph construction and edge filtering add O(|E|) overhead; acceptable for moderate graph sizes but may impact large datasets.  
-- **Maintainability**: Centralizes community detection logic; future updates to `graphology-communities-louvain` can be isolated here.  
-- **Compatibility**: No changes to existing APIs; simply adds a new helper.  
-- **Observability**: No logging; consumers should handle the returned `Map` directly.
+### Impact  
+- Adds community‑detection capability to graph‑view without altering existing APIs.  
+- Graph construction is linear in the number of provided nodes and edges; Louvain runtime dominates.  
+- Guarantees unique community ids for disconnected nodes, preventing accidental merging.  
+- Pure function with no side effects or logging.
 
-### Risks & follow‑ups
-- **Library version drift**: Verify that `graphology-communities-louvain` v2 still returns `Record<string, number>` and that the defensive logic remains necessary.  
-- **Edge cases**: Test with disconnected nodes, self‑loops, and duplicate edges to ensure the filtering logic behaves as intended.  
-- **Performance regression**: Benchmark on large node sets to confirm the graph construction cost is acceptable.  
-- **Type safety**: Ensure `GraphEdge` type aligns with the edges passed to `detectCommunities`; mismatches could cause runtime errors.
+### Risks & follow‑ups  
+- Verify that `graphology-communities-louvain` is installed and compatible.  
+- Test edge‑filtering logic with mixed edge sets to ensure only valid edges are added.  
+- Confirm that defensive reassignment does not alter expected community ids for connected components; add regression tests.  
+- Ensure graceful handling of empty `nodeIds` or `edges`; add edge‑case tests.

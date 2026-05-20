@@ -1,9 +1,9 @@
 {
   "relPath": "cli/Cargo.toml",
-  "kind": "modified",
-  "leftTitle": "8e0dc031dcfc",
+  "kind": "added",
+  "leftTitle": "a9c34bfb03fe",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-19T10:36:01.537Z",
+  "generatedAt": "2026-05-20T04:15:00.147Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,8 +21,17 @@
     ],
     "changed_exports": [],
     "changed_imports": [],
-    "changed_line_ranges": [],
-    "cited_changed_lines": [],
+    "changed_line_ranges": [
+      "R1-19"
+    ],
+    "cited_changed_lines": [
+      "R1 added: [package]",
+      "R2 added: name = \"novadiff-cli\"",
+      "R3 added: version = \"0.1.0\"",
+      "R4 added: edition = \"2021\"",
+      "R5 added: description = \"Folder compare + file diff engine for NovaDiff (Electron shell)\"",
+      "R7 added: [[bin]]"
+    ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."
     ],

@@ -26,33 +26,34 @@
 <body>
   <header class="top">
     <h1>package.json</h1>
-    <div class="meta">Kind: modified · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T21:04:04.221Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:09:39.017Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The root <code>package.json</code> now declares a monorepo with two workspaces: <code>packages/graph-core</code> and <code>packages/graph-view</code> (added in lines 7‑10). Build and dev scripts delegate to these workspaces, and the Electron build config references the workspace outputs.</p>
+<p>A new <code>package.json</code> (added at the repository root, lines R1‑R100) establishes the NovaDiff monorepo. It declares workspaces, build scripts, dependencies, and an Electron build configuration.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Workspaces</strong>: <code>&quot;workspaces&quot;: [&quot;packages/graph-core&quot;,&quot;packages/graph-view&quot;]</code> (R7‑R10).  </li>
-<li><strong>Scripts</strong>: old <code>electron:dev</code> and <code>build</code> removed (L10‑L11). New workspace‑aware scripts added: <code>graph:core-build</code>, <code>graph:catalog:generate</code>, <code>graph:build</code>, and a new <code>electron:dev</code> that runs <code>graph:build</code> before the Electron dev server (R14‑R18).  </li>
-<li><strong>Dependencies</strong>: local package references added: <code>&quot;@novadiff/graph-core&quot;:&quot;file:packages/graph-core&quot;</code> and <code>&quot;@novadiff/graph-view&quot;:&quot;file:packages/graph-view&quot;</code> (R24‑R26). <code>three</code> restored to dependencies (R26 removed, R43‑R44 added).  </li>
-<li><strong>DevDependencies</strong>: <code>tailwindcss</code> added (R58).  </li>
-<li><strong>Electron build</strong>: <code>files</code> array expanded to include <code>packages/graph-core/dist/**/*</code> and <code>packages/graph-core/package.json</code> (R74‑R75). The exclusion <code>node_modules/marked/**/*</code> removed and replaced by a blanket <code>node_modules/**/*</code> (L55 removed, R78 added).  </li>
-<li><strong>extraResources</strong>: new block pointing to <code>cli/target/release</code> (R81‑R86).  </li>
-<li><strong>Targets</strong>: mac, win, linux targets set to <code>nsis</code> and <code>AppImage</code> (R90‑R98).</li>
+<li><strong>Workspaces</strong> – <code>packages/graph-core</code> and <code>packages/graph-view</code> are added (lines R7‑R10).  </li>
+<li><strong>Scripts</strong> – New commands (<code>dev</code>, <code>rust:build</code>, <code>graph:core-build</code>, <code>graph:catalog:generate</code>, <code>graph:build</code>, <code>electron:dev</code>, <code>build</code>, <code>electron:build</code>, <code>preview</code>, <code>test</code>) appear in lines R12‑R21.  </li>
+<li><strong>Dependencies</strong> – Core libraries (<code>@dagrejs/dagre</code>, <code>@xyflow/react</code>, <code>d3-force</code>, <code>graphology</code>, etc.) and workspace references (<code>@novadiff/graph-core</code>, <code>@novadiff/graph-view</code>) are listed (lines R23‑R44).  </li>
+<li><strong>DevDependencies</strong> – Electron tooling (<code>electron</code>, <code>electron-builder</code>), Vite, TypeScript, Tailwind, and concurrency utilities are added (lines R46‑R62).  </li>
+<li><strong>Electron build config</strong> – The <code>build</code> section (lines R64‑R99) specifies <code>appId</code>, <code>productName</code>, <code>icon</code>, output directories, included files, extra resources, and platform targets (<code>mac</code>, <code>win</code>, <code>linux</code>).  </li>
+<li><strong>Module type</strong> – <code>&quot;type&quot;: &quot;module&quot;</code> and <code>&quot;main&quot;: &quot;electron/main.cjs&quot;</code> set the entry point for the Electron main process (lines R5‑R6).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Workspace scripts must resolve correctly; failures will break Electron dev/build.  </li>
-<li>The broader <code>node_modules/**/*</code> inclusion may increase bundle size; verify packaging.  </li>
-<li>Local package references (<code>file:</code>) require <code>npm ci</code> to resolve properly.</li>
+<li><strong>Build pipeline</strong> – <code>npm run build</code> orchestrates graph build, TypeScript compilation, and Vite bundling before Electron packaging.  </li>
+<li><strong>Workspace resolution</strong> – Local package references (<code>file:</code>) require <code>npm install</code> to hoist dependencies correctly.  </li>
+<li><strong>Electron packaging</strong> – <code>electron-builder</code> will generate installers for the specified platforms; missing assets (e.g., <code>nova-diff-icon.png</code>) will break packaging.  </li>
+<li><strong>Testing</strong> – <code>vitest</code> is now a devDependency; existing test suites must run under the new workspace context.  </li>
+<li><strong>CLI integration</strong> – <code>rust:build</code> points to <code>cli/Cargo.toml</code>; ensure the Rust target is available before Electron dev.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Run <code>npm run graph:core-build</code> and <code>npm run graph:build</code> locally before building Electron.  </li>
-<li>Verify <code>npm ci</code> in root and each workspace resolves <code>file:</code> dependencies.  </li>
-<li>Test Electron builds on macOS, Windows, and Linux to confirm <code>extraResources</code> and target settings.  </li>
-<li>Check that the new <code>node_modules/**/*</code> inclusion does not package unnecessary files.</li>
+<li><strong>Dependency resolution</strong> – Verify that workspace packages resolve without conflicts; run <code>npm install</code> and <code>npm dedupe</code>.  </li>
+<li><strong>Electron dev</strong> – Test <code>npm run electron:dev</code> locally; confirm that the Vite dev server and Electron process start without errors.  </li>
+<li><strong>Build artifacts</strong> – Ensure <code>electron-builder</code> produces installers for all target platforms; check <code>build.files</code> paths.  </li>
+<li><strong>CI pipeline</strong> – Update CI scripts to include <code>npm run build</code> and <code>npm run test</code>; confirm that the new <code>vitest</code> configuration passes.</li>
 </ul>
 </article>
   </main>

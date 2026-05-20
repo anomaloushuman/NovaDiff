@@ -26,34 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/contexts/I18nContext.tsx</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:46:15.076Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:31:33.446Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>New file <code>packages/graph-view/src/contexts/I18nContext.tsx</code> adds a lightweight i18n context for the graph‑view package.</p>
+<p>A new i18n context module was added at <code>packages/graph-view/src/contexts/I18nContext.tsx</code>. It introduces a <code>useI18n</code> hook and an <code>I18nProvider</code> component for locale handling.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Imports: <code>createContext, useContext, useMemo, ReactNode</code> from <code>react</code> (line 1) and <code>getLocale, resolveLocaleKey, Locale, LocaleKey</code> from <code>../locales</code> (line 2).  </li>
-<li><code>interface I18nContextValue</code> (lines 4‑7) defines <code>locale</code>, <code>localeKey</code>, and <code>t</code>.  </li>
-<li><code>I18nContext</code> created with <code>createContext&lt;I18nContextValue | null&gt;(null)</code> (line 10).  </li>
-<li><code>useI18n</code> hook (lines 12‑18) throws if the provider is missing.  </li>
-<li><code>I18nProvider</code> component (lines 20‑44) accepts optional <code>language</code> and <code>children</code>.  </li>
-<li>Inside the provider: <code>localeKey</code> memoized via <code>resolveLocaleKey(language)</code> (line 27); <code>locale</code> memoized via <code>getLocale(localeKey)</code> (line 28).  </li>
-<li>Provider value: <code>{ locale, localeKey, t: locale }</code> (lines 32‑34).</li>
+<li><strong>Imports</strong> (lines 1‑2): <code>createContext</code>, <code>useContext</code>, <code>useMemo</code>, <code>ReactNode</code> from <em>react</em>; <code>getLocale</code>, <code>resolveLocaleKey</code>, <code>Locale</code>, <code>LocaleKey</code> from <code>../locales</code>.  </li>
+<li><strong>Interface</strong> (lines 4‑7): <code>I18nContextValue</code> exposes <code>locale: Locale</code>, <code>localeKey: LocaleKey</code>, and <code>t: Locale</code>.  </li>
+<li><strong>Context</strong> (line 10): <code>I18nContext</code> initialized with <code>null</code>.  </li>
+<li><strong>Hook</strong> (lines 12‑18): <code>useI18n()</code> retrieves the context and throws if called outside a provider.  </li>
+<li><strong>Provider</strong> (lines 20‑44): accepts optional <code>language</code> and <code>children</code>, memoizes <code>localeKey</code> and <code>locale</code>, and supplies <code>{ locale, localeKey, t: locale }</code> to the context.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The hook guarantees a context value, throwing when used outside <code>I18nProvider</code>.  </li>
-<li>Locale logic is centralized, reducing duplication.  </li>
-<li>Memoization limits recomputation when <code>language</code> or <code>locale</code> does not change.  </li>
-<li>Components must be wrapped in <code>I18nProvider</code> to access <code>useI18n</code>.</li>
+<li>Components must be wrapped in <code>I18nProvider</code>; otherwise <code>useI18n</code> throws an error.  </li>
+<li>Locale logic is centralized, simplifying future changes to language resolution.  </li>
+<li><code>useMemo</code> keeps <code>localeKey</code>, <code>locale</code>, and the context value stable across renders, reducing unnecessary re‑renders.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify all consumers of <code>useI18n</code> are inside an <code>I18nProvider</code>; otherwise an error will surface.  </li>
-<li>Ensure <code>getLocale</code> and <code>resolveLocaleKey</code> return consistent results for the optional <code>language</code> prop; mismatches could break translation lookup.  </li>
-<li>Test that the <code>t</code> field (currently set to <code>locale</code>) behaves as intended in downstream components.  </li>
-<li>Confirm that the new context does not cause unnecessary re‑renders when <code>children</code> change but locale remains the same.</li>
+<li><code>t</code> is currently the locale object; if a translation function is intended, the implementation should be updated.  </li>
+<li>Verify that <code>getLocale</code> and <code>resolveLocaleKey</code> return correct values for all supported languages.  </li>
+<li>Run lint, tests, and a production build to confirm no type or runtime errors.  </li>
+<li>Add unit tests for <code>useI18n</code> throwing behavior and provider value correctness.</li>
 </ul>
 </article>
   </main>

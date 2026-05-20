@@ -1,27 +1,25 @@
 ### Overview  
-A new component `GraphMetricsStrip` is added at `src/components/GraphMetricsStrip.tsx`.  
-It renders a toggleable strip that visualizes workspace metrics (change mix, depth, imports, calls) and tables for the top extensions and roots.
+A new component `src/components/GraphMetricsStrip.tsx` (lines 1‑134) has been added.  
+It exports an interface `GraphMetricsStripProps` (lines 5‑15) and a function component `GraphMetricsStrip` (lines 17‑134) that renders a toggleable metrics strip.
 
 ### Key changes  
-- **File added**: `src/components/GraphMetricsStrip.tsx` (lines 1‑134).  
-- **Imports** (lines 1‑3): `useState` from React, `DocWorkspaceMetrics` type, and `DocMermaidMount`.  
-- **Props interface** (lines 5‑15): `metrics`, `pieDef`, `depthDef`, `importDef`, `callDef`, `metricsChartsLoading`, `outlineLoading`, `topExtensions`, `topRoots`.  
-- **Component implementation** (lines 17‑134):  
-  - Uses `useState` to track `open`.  
-  - Renders a button that toggles the strip (`aria-expanded={open}`).  
-  - When open, shows four `DocMermaidMount` charts with `definition`, `loading`, and `loadingLabel` props.  
-  - Displays two tables for `topExtensions` and `topRoots`.  
-  - Footer shows a count derived from `metrics.byKind`.  
-- **Styling**: relies on CSS classes such as `kg-metrics-strip`, `kg-metrics-strip-toggle`, `kg-metrics-strip-body`, `kg-metrics-charts`, and `kg-metrics-tables`.
+- **Imports** – `useState` from React, `DocWorkspaceMetrics` type, and `DocMermaidMount` component are added (lines 1‑3).  
+- **Props** – `GraphMetricsStripProps` requires `metrics`, `pieDef`, `depthDef`, `importDef`, `callDef`, `metricsChartsLoading`, `outlineLoading`, `topExtensions`, and `topRoots`.  
+- **State** – local `open` state controls the strip’s visibility.  
+- **Rendering** –  
+  - Two chart sections use `DocMermaidMount` with `pieDef` and `depthDef`.  
+  - Two additional charts use `importDef` and `callDef` with loading flags.  
+  - Two tables display the top 10 extensions and path roots.  
+- **Footer** – shows the total paths from `metrics.byKind` (line 127).
 
 ### Impact  
-- **No existing component is modified**; the addition is non‑breaking.  
-- **Data contract**: callers must provide a `DocWorkspaceMetrics` object matching the expected shape; mismatches will surface at runtime.  
-- **Dependencies**: requires `DocMermaidMount` and the referenced CSS classes; missing assets will affect layout or chart rendering.  
-- **Render cost**: the strip is hidden by default, so the four Mermaid charts are only rendered after the user toggles it open.
+- **UI** – introduces an interactive metrics panel that can be toggled by users.  
+- **Dependencies** – requires the `DocMermaidMount` component and CSS classes such as `kg-metrics-strip`, `doc-workspace-chart`, etc.  
+- **Performance** – rendering multiple `DocMermaidMount` instances may increase load time; loading flags are provided.  
+- **Type safety** – the new interface ensures callers supply a `DocWorkspaceMetrics` object and string definitions.
 
 ### Risks & follow‑ups  
-- Verify that `DocMermaidMount` correctly handles the `loading` and `loadingLabel` props; otherwise charts may not appear.  
-- Ensure the footer’s `metrics.byKind` aggregation matches the actual `metrics` structure; a mismatch will break the path count.  
-- Test the toggle logic for accessibility (e.g., `aria-expanded` state).  
-- Confirm that the CSS classes (`kg-metrics-strip`, `kg-metrics-charts`, etc.) exist in the global stylesheet; missing classes will break layout.
+- Unknown from the available diff whether `DocMermaidMount` exists and accepts the used props.  
+- Unknown if `metrics.byKind` contains numeric values; otherwise the footer may display `NaN`.  
+- Unknown if the referenced CSS classes are defined, which could affect layout.  
+- Unknown if the toggle behavior updates state correctly and unmounts cleanly.

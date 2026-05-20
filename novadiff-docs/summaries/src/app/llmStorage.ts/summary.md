@@ -1,21 +1,19 @@
 ### Overview  
-`src/app/llmStorage.ts` extends the `LlmSummarizePayload` interface with five optional properties that provide richer context for LLM summarization. The additions appear at lines 56‑61 of the file.
+`src/app/llmStorage.ts` introduces LLM configuration types and persistence helpers.
 
 ### Key changes  
-- `explainCode?: boolean` – flag to request a code explanation.  
-- `codeExcerpt?: string` – raw code snippet.  
-- `lineStart?: number` – start line of the excerpt.  
-- `lineEnd?: number` – end line of the excerpt.  
-- `symbolName?: string` – name of the symbol to explain.  
-These fields are added after the existing `selectionSymbol` property in the interface.
+- **Imports** – `FileSummaryEvidence`, `DiffSelectionLineRange`, `DiffSelectionSymbolMatch`, `RiskSignal`, `SelectionDocMode` from `./types` (R1‑R6).  
+- **Provider & settings** – `export type LlmProvider = "ollama" | "lmstudio"` (R9) and `export interface LlmSettings` with `provider`, `baseUrl`, `model` (R11‑R15).  
+- **Payload** – `export interface LlmSummarizePayload extends LlmSettings` adds many fields for diff context and summarization metadata (R17‑R62).  
+- **Defaults** – `defaultBase` and `defaultModel` return provider‑specific URLs and model names (R66‑R73).  
+- **Lifecycle** – `defaultLlmSettings` (R74‑R80), `loadLlmSettings` (R82‑R104) reads from `localStorage` key `novadiff_llm_settings_v1` with JSON parsing and fallbacks, and `saveLlmSettings` (R106‑R108) writes the JSON string.
 
 ### Impact  
-- **Compatibility**: Existing payloads remain valid because the new fields are optional.  
-- **Functionality**: Callers can now supply additional context, potentially improving LLM responses.  
-- **Performance**: Adding optional properties does not alter runtime behavior.
+- Centralizes LLM configuration and persistence; future provider changes can be added in one place.  
+- Uses synchronous `localStorage` access; invoked during initialization or settings changes.
 
 ### Risks & follow‑ups  
-- Verify that modules importing `LlmSummarizePayload` compile after the change.  
-- Update any test fixtures or mocks that construct `LlmSummarizePayload` to include the new optional fields if desired.  
-- Ensure JSON serialization logic (e.g., `JSON.stringify`) handles the new fields without affecting existing output.  
-- Run `npm run lint`, `npm test`, and the production build to confirm no new warnings or errors.
+- **Environment safety** – `localStorage` may be unavailable in non‑browser contexts; guard usage or provide fallback (unknown from the available diff/scan evidence).  
+- **JSON schema drift** – mismatched stored objects may silently default; ensure stored shape matches `LlmSettings`.  
+- **Provider defaults** – verify that `defaultBase` and `defaultModel` match actual server endpoints.  
+- **Type coverage** – extensive `LlmSummarizePayload` fields are not yet exercised; add unit tests for serialization/deserialization.

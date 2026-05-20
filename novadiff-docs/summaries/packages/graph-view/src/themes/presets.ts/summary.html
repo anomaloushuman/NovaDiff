@@ -26,39 +26,34 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/themes/presets.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:49:36.049Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:38:57.879Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/themes/presets.ts</code> is a new module that defines theme data and helper functions. The file adds imports, two accent swatch arrays, a preset collection, and lookup utilities.</p>
+<p>A new file <code>packages/graph-view/src/themes/presets.ts</code> was added. It defines theme presets and helper functions for the graph view component.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File added</strong>: <code>packages/graph-view/src/themes/presets.ts</code> (lines 1‑183).  </li>
-<li><strong>Imports</strong>: <code>import type { AccentSwatch, ThemePreset } from &quot;./types.ts&quot;;</code> (line 1).  </li>
-<li><strong>Accent swatches</strong>:  <ul>
-<li><code>DARK_ACCENT_SWATCHES</code> (lines 3‑12).  </li>
-<li><code>LIGHT_ACCENT_SWATCHES</code> (lines 14‑23).</li>
-</ul>
-</li>
-<li><strong>Preset collection</strong>: <code>export const PRESETS: ThemePreset[] = [...]</code> (lines 25‑171) contains dark and light presets with color palettes.  </li>
-<li><strong>Lookup helpers</strong>:  <ul>
-<li><code>export function getPreset(id: string)</code> (lines 173‑175) returns the preset matching <code>id</code> or the first preset if none match.  </li>
-<li><code>export function getAccent(preset, accentId)</code> (lines 177‑183) returns an accent swatch by <code>accentId</code>, falling back to the preset’s default or the first swatch.</li>
+<li>Import of types: <code>import type { AccentSwatch, ThemePreset } from &quot;./types.ts&quot;;</code> (line 1).  </li>
+<li>Accent swatch constants: <code>DARK_ACCENT_SWATCHES</code> and <code>LIGHT_ACCENT_SWATCHES</code> (lines 3‑23).  </li>
+<li>Preset collection: <code>export const PRESETS: ThemePreset[]</code> (lines 25‑171) lists eight presets with dark/light variants and associated accent swatches.  </li>
+<li>Utility functions:  <ul>
+<li><code>export function getPreset(id: string)</code> (lines 173‑175) returns the preset with the given id or falls back to the first preset.  </li>
+<li><code>export function getAccent(preset: ThemePreset, accentId: string)</code> (lines 177‑183) returns the matching accent swatch, or falls back to the preset’s default accent, or the first swatch.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Deterministic fallback</strong>: Both helpers guarantee a return value, preventing <code>undefined</code> results.  </li>
-<li><strong>Centralized data</strong>: All theme definitions live in a single array, simplifying future additions.  </li>
-<li><strong>Linear lookup</strong>: Uses <code>Array.find</code>, which is acceptable for the small preset set shown.</li>
+<li>The fallback logic in <code>getPreset</code> and <code>getAccent</code> prevents undefined values when an id is missing.  </li>
+<li>Centralizing theme data reduces duplication; new themes can be added by extending <code>PRESETS</code>.  </li>
+<li>No existing modules are modified; the file is purely additive.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Duplicate IDs</strong>: The code does not check for duplicate <code>id</code> values; duplicates could cause unexpected fallbacks.  </li>
-<li><strong>Test coverage</strong>: No tests are present for <code>getPreset</code> or <code>getAccent</code>; adding unit tests would confirm fallback behavior.  </li>
-<li><strong>Build validation</strong>: Run lint, TypeScript compilation, and the production build to ensure the new imports resolve correctly.  </li>
-<li><strong>Scalability</strong>: If the preset list grows, consider indexing by <code>id</code> for O(1) lookup.</li>
+<li>Verify that other modules import the correct relative path (<code>./themes/presets.ts</code>).  </li>
+<li>Add unit tests for <code>getPreset</code> and <code>getAccent</code> to confirm fallback behavior.  </li>
+<li>If the preset list grows, consider memoizing lookups to avoid repeated linear scans.  </li>
+<li>Ensure <code>ThemePreset</code> and <code>AccentSwatch</code> definitions in <code>./types.ts</code> remain compatible with the new data structure.</li>
 </ul>
 </article>
   </main>

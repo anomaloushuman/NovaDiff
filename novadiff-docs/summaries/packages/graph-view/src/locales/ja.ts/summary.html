@@ -26,33 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/locales/ja.ts</h1>
-    <div class="meta">Kind: added · Baseline: 8e0dc031dcfc · Target: NovaDiff · Generated: 2026-05-19T19:52:29.767Z</div>
+    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:35:39.969Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Adds a Japanese locale file for the graph‑view component, enabling UI text in Japanese.</p>
+<p>A new file <code>packages/graph-view/src/locales/ja.ts</code> was added. It defines a <code>ja</code> object containing translated UI strings for the graph‑view module, with nested sections such as <code>common</code>, `project</p>
+<h3>Overview</h3>
+<p><code>, </code>nodeInfo<code>, etc. The file ends with </code>export default ja;`.</p>
 <h3>Key changes</h3>
 <ul>
-<li>New file <strong>packages/graph-view/src/locales/ja.ts</strong> added.  </li>
-<li>Lines 1–272 contain <code>export const ja = { … }</code> with nested translation objects (<code>common</code>, `project</li>
-</ul>
-<h3>Overview</h3>
-<p><code>, </code>nodeInfo`, etc.).  </p>
-<ul>
-<li>Line 272 ends with <code>export default ja;</code>.</li>
+<li>File addition: <code>packages/graph-view/src/locales/ja.ts</code> (lines 1‑272).  </li>
+<li>Export: <code>export default ja;</code> at line 272.  </li>
+<li>No modifications to existing files.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The application can display Japanese text when the locale is set to <code>ja</code>.  </li>
-<li>Only string data is added; runtime impact is minimal.  </li>
-<li>No existing source files are modified.</li>
+<li>Provides Japanese translations for all UI components that consume the <code>ja</code> locale.  </li>
+<li>Centralizes Japanese strings, simplifying future updates.  </li>
+<li>No breaking changes to existing code paths.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the i18n loader imports and registers the <code>ja</code> locale so keys resolve.  </li>
-<li>Ensure every UI key used in the application exists in this file; missing keys will fall back to defaults.  </li>
-<li>Confirm the file is included in the TypeScript compilation and bundled output.  </li>
-<li>Run UI tests with the locale set to Japanese to validate that all strings render correctly.</li>
+<li><strong>Import</strong>: It is unknown from the diff whether the i18n loader imports this file; verify that <code>ja</code> is registered.  </li>
+<li><strong>Key coverage</strong>: Unknown if every UI string used in the app has a corresponding key in <code>ja</code>.  </li>
+<li><strong>Build inclusion</strong>: Unknown if the new file is included in the production bundle; check the build configuration.  </li>
+<li><strong>Test coverage</strong>: No evidence of tests referencing the new locale; consider adding tests for Japanese rendering.</li>
 </ul>
 </article>
   </main>
