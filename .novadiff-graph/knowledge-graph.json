@@ -16,8 +16,8 @@
     ],
     "frameworks": [],
     "description": "Deterministic NovaDiff knowledge graph (Tree-sitter structure, imports, and compare overlay).",
-    "analyzedAt": "2026-05-19T22:44:50.121Z",
-    "gitCommitHash": "46a8da0664d1dce2715e93ec6698cf67012b963f"
+    "analyzedAt": "2026-05-20T01:19:05.922Z",
+    "gitCommitHash": "6c333f6cf037bf75318c26081cae3324fdb89c64"
   },
   "nodes": [
     {
@@ -9222,7 +9222,7 @@
       "type": "file",
       "name": "App.tsx",
       "filePath": "packages/graph-view/src/App.tsx",
-      "summary": "App.tsx — 5 functions, 0 classes, 709 lines",
+      "summary": "App.tsx — 5 functions, 0 classes, 735 lines",
       "tags": [
         "typescript",
         "code"
@@ -9293,9 +9293,9 @@
       "filePath": "packages/graph-view/src/App.tsx",
       "lineRange": [
         211,
-        707
+        733
       ],
-      "summary": "Function DashboardContent (L211-707)",
+      "summary": "Function DashboardContent (L211-733)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9838,7 +9838,7 @@
       "type": "file",
       "name": "GraphView.tsx",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "summary": "GraphView.tsx — 8 functions, 0 classes, 1788 lines",
+      "summary": "GraphView.tsx — 8 functions, 0 classes, 1805 lines",
       "tags": [
         "typescript",
         "code"
@@ -9937,9 +9937,9 @@
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
         1433,
-        1776
+        1793
       ],
-      "summary": "Function GraphViewInner (L1433-1776)",
+      "summary": "Function GraphViewInner (L1433-1793)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9950,10 +9950,10 @@
       "name": "GraphView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1778,
-        1788
+        1795,
+        1805
       ],
-      "summary": "Function GraphView (L1778-1788)",
+      "summary": "Function GraphView (L1795-1805)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -12400,7 +12400,7 @@
       "type": "file",
       "name": "App.css",
       "filePath": "src/App.css",
-      "summary": "App.css — 0 functions, 0 classes, 4292 lines",
+      "summary": "App.css — 0 functions, 0 classes, 4331 lines",
       "tags": [
         "css",
         "code"

@@ -1,8 +1,8 @@
 {
-  "relPath": "cli/src/main.rs",
+  "relPath": "electron/novadiff-docs-pdf.cjs",
   "kind": "modified",
-  "label": "Code explanation (L250-317)",
-  "selectionKey": "lines-250-317",
+  "label": "Code explanation (L142-164)",
+  "selectionKey": "lines-142-164",
   "requestedMode": "exact",
   "effectiveMode": "exact",
   "lineRanges": [
@@ -11,12 +11,12 @@
       "endRow": 0,
       "leftStart": null,
       "leftEnd": null,
-      "rightStart": 250,
-      "rightEnd": 317
+      "rightStart": 142,
+      "rightEnd": 164
     }
   ],
   "symbol": null,
   "leftTitle": "46a8da0664d1",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T01:25:24.966Z"
+  "generatedAt": "2026-05-20T01:26:54.977Z"
 }

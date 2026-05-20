@@ -26,21 +26,34 @@
 <body>
   <header class="top">
     <h1>cli/src/main.rs · Code explanation (L250-317)</h1>
-    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-19T23:15:04.721Z</div>
+    <div class="meta">Kind: modified · Baseline: 46a8da0664d1 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-20T01:25:24.966Z</div>
   </header>
   <main>
-    <article class="md"><h3>What it does<code>prefetch_summary_queue</code> builds a limited list of pre‑fetch jobs from a set of file changes.It first filters the changes by <code>.gitignore</code> rules, reserved “novadiff” documents, and non‑text files.After filtering, it computes a subtree weight for each path, sorts the eligible changes by depth, weight, and path, and then takes up to <code>limit</code> (but at least one) to create <code>PrefetchSummaryJob</code> entries.The function returns a <code>PrefetchSummaryQueueOut</code> that includes the queue, counts of input and skipped changes, and how many jobs were actually returned.</h3>
+    <article class="md"><h3>What it does<code>prefetch_summary_queue</code> builds a limited queue of <code>PrefetchSummaryJob</code>s from a list of file changes.It filters out changes that should be ignored by <code>.gitignore</code>, removes “novadiff” documents, discards non‑text files, then orders the remaining changes by depth, subtree weight, and path. The resulting jobs contain the original path, kind, depth, and the weight of the parent subtree.</h3>
 <h3>How it works1. <strong>Initial counts</strong> – <code>input_changes</code> records the total number of changes.2. *<em>Gitignore filtering</em></h3>
 <ul>
-<li>– if <code>gitignore_roots</code> is provided, <code>filter_changes_for_prefetch_gitignore</code> is called; otherwise all changes are kept.3. *<em>Reserved docs filtering</em></li>
-<li>– <code>filter_out_novadiff_docs_changes</code> removes any “novadiff” documents.4. *<em>Non‑text filtering</em></li>
-<li>– again conditioned on <code>gitignore_roots</code>, <code>filter_out_non_text_changes</code> removes binary files.5. *<em>Weight calculation</em></li>
-<li>– <code>subtree_change_counts</code> tallies how many changes exist under each parent directory.6. *<em>Sorting</em></li>
-<li>– eligible changes are sorted by path depth, then by the weight of their parent subtree, and finally lexicographically.7. *<em>Queue construction</em></li>
-<li>– the first <code>cap</code> (max of <code>limit</code> and1) sorted changes are mapped to <code>PrefetchSummaryJob</code> structs, capturing the original path, kind, depth, and parent subtree weight.8. *<em>Return</em></li>
-<li>– a <code>PrefetchSummaryQueueOut</code> is assembled with all counts and the job queue.</li>
+<li><p>– If <code>gitignore_roots</code> is provided, <code>filter_changes_for_prefetch_gitignore</code> returns a tuple <code>(after_gitignore, skipped_gitignore)</code>; otherwise all changes are kept and <code>skipped_gitignore</code> is <code>0</code>.3. *<em>Reserved docs filtering</em></p>
+</li>
+<li><p>– <code>filter_out_novadiff_docs_changes</code> removes “novadiff” docs, yielding <code>(after_reserved, skipped_novadiff_docs)</code>.4. *<em>Non‑text filtering</em></p>
+</li>
+<li><p>– When <code>gitignore_roots</code> is present, <code>filter_out_non_text_changes</code> removes non‑text files, producing <code>(eligible, skipped_non_text)</code>; otherwise <code>eligible</code> is <code>after_reserved</code>.5. *<em>Weight calculation</em></p>
+</li>
+<li><p>– <code>eligible</code> paths are converted to Unix style (<code>replace(&#39;\\&#39;, &quot;/&quot;)</code>) and <code>subtree_change_counts</code> builds a map of parent‑directory weights.6. *<em>Sorting</em></p>
+</li>
+<li><p>– <code>eligible</code> is sorted by: </p>
+</li>
+<li><p>path depth (<code>path_depth</code>), </p>
+</li>
+<li><p>weight of the parent directory (<code>weights[parent_dir]</code>), </p>
+</li>
+<li><p>lexicographic path order.7. *<em>Queue construction</em></p>
+</li>
+<li><p>– Up to <code>limit</code> (at least1) sorted changes are turned into <code>PrefetchSummaryJob</code>s, each carrying the original path, kind, depth, and the parent subtree weight.8. *<em>Return</em></p>
+</li>
+<li><p>– A <code>PrefetchSummaryQueueOut</code> struct records the queue and all skip counts.</p>
+</li>
 </ul>
-<h3>Notes for reviewers- The use of <code>unwrap_or(&amp;0)</code> assumes every parent directory will have a weight entry; if <code>subtree_change_counts</code> can omit a key, this may silently default to zero.- <code>limit.max(1)</code> guarantees at least one job, even if no changes remain after filtering; confirm this is intended behavior.- Path normalization replaces backslashes with slashes; ensure this matches the rest of the codebase’s path handling.- The sorting logic prioritizes depth before weight; consider whether this ordering aligns with pre‑fetch performance goals.- The function returns counts of skipped items; verify that these metrics are used elsewhere for diagnostics.</h3>
+<h3>Notes for reviewers- The function assumes <code>filter_changes_for_prefetch_gitignore</code>, <code>filter_out_novadiff_docs_changes</code>, <code>filter_out_non_text_changes</code>, <code>subtree_change_counts</code>, <code>path_depth</code>, and <code>parent_dir</code> are defined elsewhere; their behavior is inferred only from usage.- The <code>limit.max(1)</code> guard ensures at least one job is considered, even if <code>limit</code> is zero.- All string manipulations use <code>replace(&#39;\\&#39;, &quot;/&quot;)</code> to normalise Windows paths before sorting.- The returned struct contains both the raw counts and the derived queue, facilitating downstream diagnostics.</h3>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>
