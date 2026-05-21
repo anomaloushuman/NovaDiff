@@ -1,9 +1,9 @@
 {
   "relPath": "vite.config.ts",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:11:23.370Z",
+  "generatedAt": "2026-05-21T10:38:14.511Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,33 +11,20 @@
         "key": "config",
         "label": "Config-adjacent path",
         "tone": "warn"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R9 added: export default defineConfig(() => ({"
-    ],
-    "changed_imports": [
-      "R1 added: import path from \"node:path\";",
-      "R2 added: import { defineConfig } from \"vite\";",
-      "R3 added: import react from \"@vitejs/plugin-react\";",
-      "R4 added: import tailwindcss from \"@tailwindcss/vite\";"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-49"
+      "L15 / R15-26"
     ],
     "cited_changed_lines": [
-      "R1 added: import path from \"node:path\";",
-      "R2 added: import { defineConfig } from \"vite\";",
-      "R3 added: import react from \"@vitejs/plugin-react\";",
-      "R4 added: import tailwindcss from \"@tailwindcss/vite\";",
-      "R6 added: const repoRoot = path.resolve(__dirname);",
-      "R8 added: // https://vite.dev/config/"
+      "L15 removed: \"@novadiff/graph-core\": path.resolve(__dirname, \"packages/graph-core/src\"),",
+      "R15 added: \"@novadiff/graph-core/types\": path.resolve(",
+      "R16 added: __dirname,",
+      "R17 added: \"packages/graph-core/src/types.ts\",",
+      "R18 added: ),",
+      "R19 added: \"@novadiff/graph-core/schema\": path.resolve("
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -26,35 +26,43 @@
 <body>
   <header class="top">
     <h1>src/components/AutoCommitWorkspace.tsx</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:50:01.559Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:58:38.199Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/components/AutoCommitWorkspace.tsx</code> (lines 1‑387) introduces a React component that combines Git status, LLM‑generated commit messages, optional documentation bundles, and GitHub PR creation into a single UI.</p>
+<p><code>AutoCommitWorkspace.tsx</code> now exposes a staging‑scope UI, an optional “Review in City” callback, and richer commit‑message context that includes structural classification and knowledge‑graph symbols. The component’s state and UI have been extended accordingly.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑9): React hooks, Lucide icons, and app modules (<code>commitMessage</code>, <code>docWorkspaceMetrics</code>, <code>llmStorage</code>, <code>types</code>, <code>gitTypes</code>).  </li>
-<li><strong>Props interface</strong> <code>AutoCommitWorkspaceProps</code> (lines 12‑21) declares <code>suggestedRepoPath</code>, <code>compared</code>, <code>compareRows</code>, <code>leftRoot</code>, <code>rightRoot</code>, <code>leftTitle</code>, <code>rightTitle</code>, and <code>llmSettings</code>.  </li>
-<li><strong>Component</strong> <code>AutoCommitWorkspace</code> (lines 25‑381) manages state for repo root, Git status, preview, draft generation, publishing, and UI step (<code>draft</code>, <code>review</code>, <code>done</code>). It uses <code>window.electronAPI</code> methods:  <ul>
-<li><code>refreshRepo</code> calls <code>api.gitRepoStatus</code> (line 67) and <code>api.gitPublishPreview</code> (line 70).  </li>
-<li><code>generateDraft</code> calls <code>api.llmSummarize</code> (line 112) and optionally <code>api.writeNovadiffDocs</code> (line 129).  </li>
-<li><code>executePublish</code> calls <code>api.gitPublishExecute</code> (line 168).</li>
+<li><strong>Imports</strong> – <code>classifyCompareRows</code> and <code>graphSymbolsContext</code> added (R6‑7).  </li>
+<li><strong>Props</strong> – <code>onReviewInCity?: (paths: string[]) =&gt; void</code> added to <code>AutoCommitWorkspaceProps</code> (R23).  </li>
+<li><strong>State</strong> – <code>stageSelection</code> (<code>Set&lt;string&gt;</code>) and <code>stageAllFiles</code> (<code>boolean</code>) introduced (R55‑56).  </li>
+<li><strong>UI</strong> –  <ul>
+<li>Staging‑scope panel with a “Stage all changed files” checkbox and per‑file checkboxes (R298‑355).  </li>
+<li>“Review in City” button that calls <code>onReviewInCity</code> with the selected paths (R339‑353).  </li>
+<li>Docs note area shows the generated documentation bundle path (R129‑138).</li>
 </ul>
 </li>
-<li><strong>Helper</strong> <code>pathBasename</code> (lines 383‑387) extracts the last segment of a path for labeling.</li>
+<li><strong>Logic</strong> –  <ul>
+<li><code>generateDraft</code> builds <code>classification</code> via <code>classifyCompareRows</code> and <code>graphContext</code> via <code>graphSymbolsContext</code> (R110‑127).  </li>
+<li><code>executePublish</code> accepts an optional <code>stagePaths</code> array derived from <code>stageSelection</code>/<code>stageAllFiles</code> (R193‑194).  </li>
+<li>Commit‑message context (<code>buildCommitMessageContext</code>) now receives <code>{ classification, graphContext }</code> (R135).</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Adds runtime dependencies on <code>window.electronAPI</code>; missing any of the referenced APIs will surface as runtime errors.  </li>
-<li>Heavy work (LLM summarization, metric calculation) runs inside callbacks; if these operations block the event loop, the UI may freeze until completion.</li>
+<li><strong>Correctness</strong> – Commit messages now incorporate file classification and graph symbols, improving semantic accuracy.  </li>
+<li><strong>Maintainability</strong> – New props and state are typed; UI logic is modularized into separate panels.  </li>
+<li><strong>Performance</strong> – Additional state updates and context calculations add minor overhead only when staging or publishing.  </li>
+<li><strong>Compatibility</strong> – Existing consumers may ignore <code>onReviewInCity</code>; it is optional.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ol>
-<li><strong>API availability</strong> – Verify that <code>gitRepoStatus</code>, <code>gitPublishPreview</code>, <code>llmSummarize</code>, <code>writeNovadiffDocs</code>, and <code>gitPublishExecute</code> exist on <code>window.electronAPI</code>.  </li>
-<li><strong>Type mismatches</strong> – Ensure <code>GitRepoStatus</code>, <code>PublishPreview</code>, and <code>FileChange</code> types match the actual API responses.  </li>
-<li><strong>LLM failure</strong> – <code>parseCommitMessageOutput</code> (imported from <code>commitMessage</code>) may throw; confirm graceful error handling.  </li>
-<li><strong>UI blocking</strong> – Monitor for freezes during draft generation; consider adding a spinner or off‑loading heavy work.</li>
-</ol>
+<ul>
+<li><strong>Regression</strong> – Verify that <code>stageSelection</code> persists correctly across repo refreshes.  </li>
+<li><strong>API contract</strong> – <code>api.readKnowledgeGraph</code> and <code>api.writeNovadiffDocs</code> must be available; otherwise the component should fail gracefully.  </li>
+<li><strong>UI layout</strong> – The added staging panel may affect responsive design; run visual regression tests.  </li>
+<li><strong>Prop usage</strong> – Ensure that spreading <code>AutoCommitWorkspaceProps</code> does not unintentionally pass <code>onReviewInCity</code>.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

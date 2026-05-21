@@ -1,21 +1,19 @@
 ### Overview  
-A new file `packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx` introduces an **embed‑only graph explorer** component that loads a `KnowledgeGraph` into the dashboard store, validates it, and renders an `EmbedDashboardPanel` without the full dashboard chrome.
+`NovaDiffGraphExplorerEmbed` now imports and renders `GraphEmbedSyncBridge` to expose embed‑specific controls. The component’s props interface has been extended with optional fields for node selection, file path, focus mode, and a selection‑change callback.
 
 ### Key changes  
-- **Imports**: Adds React hooks, `validateGraph` from `@novadiff/graph-core/schema`, `KnowledgeGraph` type, `useDashboardStore`, context utilities, and `I18nProvider`.  
-- **API surface**: Exports `NovaDiffGraphExplorerEmbedProps` and the `NovaDiffGraphExplorerEmbed` function.  
-- **Graph fingerprinting**: Implements `graphFingerprint` (lines 23‑32) to avoid re‑loading identical graphs.  
-- **Store interaction**: On mount, validates the graph, sets it in the store, configures view mode (`knowledge` vs `structural`), and enters embed depth. On unmount, cleans up tour, overlays, layout issues, and resets embed depth.  
-- **Rendering logic**: Shows a validation error, a skeleton while the store loads the graph, or the `EmbedDashboardPanel` wrapped in `NovaDiffEmbedContext.Provider` and `I18nProvider`.  
+- **Import added**: `GraphEmbedSyncBridge` from `./GraphEmbedSyncBridge` (line 12).  
+- **Props extended**: `controlledNodeId`, `enteredFilePath`, `focusMode`, `onSelectionChange` (lines 22‑25).  
+- **Signature updated** to accept the new props (lines 46‑49).  
+- **Bridge rendered** inside the provider, passing the new props (lines 118‑123).  
 
 ### Impact  
-- **Correctness**: Validates incoming graphs before use, preventing malformed data from propagating.  
-- **Maintainability**: Centralizes embed‑specific store actions; future changes to embed behavior can be made in this file.  
-- **Performance**: Fingerprinting reduces unnecessary store updates when the same graph is re‑passed.  
-- **Observability**: Provides clear error messages (`novadiff-graph-load-error`) and a skeleton UI during loading.  
+- **Backward compatibility**: All new props are optional; existing consumers compile unchanged.  
+- **Build requirement**: `GraphEmbedSyncBridge` must be exported from its module; otherwise the import fails.  
+- **Testing**: Existing tests that render the embed without the new props should still pass; new tests should verify bridge interaction.  
 
 ### Risks & follow‑ups  
-- **Store API compatibility**: Ensure `useDashboardStore` exposes `stopTour`, `resetEmbedOverlays`, `clearLayoutIssues`, `setGraph`, `setViewMode`, `setIsKnowledgeGraph`, and `enterNovaDiffEmbedDepth`.  
-- **Validation side‑effects**: Verify that `validateGraph` does not mutate the graph and that its `issues` are correctly passed to `EmbedDashboardPanel`.  
-- **Cleanup correctness**: Confirm that the unmount effect restores the store to a clean state, especially `enterNovaDiffEmbedDepth` which may alter navigation depth.  
-- **Internationalization**: Test that `I18nProvider` correctly applies `outputLanguage` and that the component renders in non‑English locales.
+- **Missing export**: Verify `GraphEmbedSyncBridge` is correctly exported.  
+- **Prop misuse**: Clarify whether `controlledNodeId` and `enteredFilePath` are mutually exclusive or how they are handled by the bridge.  
+- **Bridge side‑effects**: Ensure the bridge does not unintentionally alter global state or interfere with other components.  
+- **Lint & build**: Run `npm run lint`, `npm test`, and `npm run build` to catch any type or runtime errors introduced by the new imports and props.

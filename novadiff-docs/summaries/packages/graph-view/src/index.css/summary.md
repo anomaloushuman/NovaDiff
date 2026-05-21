@@ -1,24 +1,33 @@
 ### Overview  
-A new file `packages/graph-view/src/index.css` (lines 1‑484) has been added.  
-It imports Tailwind, declares a `@theme` block with many CSS custom properties, and scopes a wide range of base, component, and utility styles for the Graph View UI.
+The `packages/graph-view/src/index.css` file was updated to modify the layout of React‑Flow controls when the CodeCity minimap is present. The changes add a grid‑based layout for the control panel, reposition the minimap and its button, and introduce light‑theme overrides. No JavaScript was touched.
 
 ### Key changes  
-- `@import "tailwindcss";` – pulls Tailwind utilities into the bundle. (R1)  
-- `@theme { … }` – defines ~70 CSS variables for colors, typography, glass effects, scrollbars, and node‑type hues. (R3‑89)  
-- Global styles for `html`, `body`, `#root`, and the `.novadiff-graph-explorer-root/.novadiff-graph-theme-host` containers, isolating the graph view from the host app. (R93‑110)  
-- Utility classes such as `.glass`, `.glass-heavy`, `.kbd`, and animation helpers (`.animate-fade-slide-in`, `.animate-slide-up`, `.animate-accent-pulse`). (R135‑217)  
-- React‑Flow overrides (`.react-flow__background`, `.react-flow__edge-path`, etc.) to match the new theme. (R266‑290)  
-- Light/dark theme overrides via `[data-theme="light"]` and `[data-theme="dark"]`. (R316‑337)  
-- Modal and button styles for the “Explain Code” feature, including keyframes for a pulsing effect. (R339‑480)
+- **Grid layout for controls** – Lines 301‑340 add  
+  ```css
+  .novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host { … }
+  ```  
+  turning the panel into a grid, removing borders, and making the background transparent.  
+- **Minimap & button positioning** – Lines 315‑329 set  
+  ```css
+  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap]) { … }
+  ```  
+  with `grid-column: 1 / -1` for the minimap and `grid-row: 2` for the button.  
+- **Control button styling** – Lines 341‑349 update  
+  ```css
+  .novadiff-graph-embed .react-flow__controls-button { … }
+  ```  
+  to match the new layout.  
+- **Minimap appearance** – Lines 351‑355 keep the border radius and subtle border.  
+- **Light‑theme overrides** – Lines 357‑364 adjust `.diff-faded`, scrollbar track, and `.warning-banner` for better contrast on light backgrounds.
 
 ### Impact  
-- **Styling scope** – selectors are scoped to the graph view containers, so they should not repaint the entire NovaDiff app.  
-- **Maintainability** – centralizing theme variables in `@theme` simplifies future color or typography updates.  
-- **Compatibility** – the Tailwind import must resolve in the build pipeline; missing it will break the stylesheet.  
-- **Performance** – the stylesheet size increases with the added file; it is only loaded when the graph view is rendered. (unknown from the diff)
+- **UI** – The minimap docks beside the zoom controls instead of overlaying them, improving usability in the NovaDiff embed.  
+- **Scope** – All new selectors are prefixed with `.novadiff-graph-embed`, limiting side effects.  
+- **Performance** – Pure CSS changes; no runtime cost.  
+- **Compatibility** – Existing React‑Flow components render normally; only the control layout changes.
 
 ### Risks & follow‑ups  
-- **CSS conflicts** – generic selectors such as `.novadiff-graph-embed` or `.react-flow__background` could clash with existing global styles.  
-- **Build integration** – verify that the Tailwind import resolves correctly in the current build config.  
-- **Visual regressions** – run graph‑view smoke tests to confirm node colors, borders, and glass effects render as intended. (unknown from the diff)  
-- **Accessibility** – contrast ratios for the new color variables, especially in light mode, are not verified. (unknown from the diff)
+- **Layout regression** – Verify the grid layout on very small viewports or when the minimap is hidden.  
+- **Specificity conflicts** – Ensure the new rules override any global React‑Flow styles; a visual check is recommended.  
+- **Light‑theme consistency** – Test the overrides on both dark and light themes to confirm contrast and readability.  
+- **Documentation** – Update any style guides that reference the old control layout.

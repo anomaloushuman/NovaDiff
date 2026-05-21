@@ -758,6 +758,50 @@ const SHARED_CSS = `
   .release-card[hidden] {
     display: none !important;
   }
+  .global-search-bar {
+    padding: 0 28px 12px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .global-search-input {
+    width: min(480px, 100%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--page-border);
+    background: var(--page-card);
+    color: var(--page-text);
+  }
+  .global-search-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .global-search-hit {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--page-card);
+    border: 1px solid var(--page-border);
+    text-decoration: none;
+    color: var(--page-link);
+  }
+  .impact-heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .impact-heatmap td, .impact-heatmap th {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--page-border);
+    text-align: left;
+  }
+  .impact-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #38d9ff, #9b7dff);
+    min-width: 4px;
+  }
   .release-link {
     font-weight: 700;
   }
@@ -792,6 +836,74 @@ function navHtml(active) {
       return `<a href="${escapeHtml(href)}"${cls}>${escapeHtml(label)}</a>`;
     })
     .join("\n    ");
+}
+
+function topDirectory(filePath) {
+  const parts = String(filePath ?? "")
+    .split("/")
+    .filter(Boolean);
+  return parts.length > 1 ? parts[0] : "(root)";
+}
+
+function buildImpactHeatmapHtml(bundle) {
+  const scores = new Map();
+  const bump = (district, delta) => {
+    const entry = scores.get(district) ?? {
+      district,
+      score: 0,
+      changedPaths: 0,
+      riskCount: 0,
+    };
+    entry.changedPaths += delta.paths ?? 0;
+    entry.riskCount += delta.risk ?? 0;
+    entry.score += delta.score ?? 0;
+    scores.set(district, entry);
+  };
+  for (const row of Array.isArray(bundle.summaryIndex) ? bundle.summaryIndex : []) {
+    bump(topDirectory(row.relPath), { paths: 1, score: 2 });
+  }
+  for (const signal of Array.isArray(bundle.riskSignals) ? bundle.riskSignals : []) {
+    const district = signal.rel_path ? topDirectory(signal.rel_path) : "(root)";
+    const weight = signal.severity === "high" ? 8 : signal.severity === "medium" ? 4 : 2;
+    bump(district, { risk: 1, score: weight });
+  }
+  const rows = [...scores.values()].sort((a, b) => b.score - a.score);
+  if (rows.length === 0) {
+    return "";
+  }
+  const max = Math.max(...rows.map((r) => r.score), 1);
+  const tableRows = rows
+    .slice(0, 16)
+    .map((r) => {
+      const pct = Math.round((r.score / max) * 100);
+      return `<tr><td>${escapeHtml(r.district)}</td><td><div class="impact-bar" style="width:${pct}%"></div></td><td>${r.score}</td><td>${r.changedPaths}</td><td>${r.riskCount}</td></tr>`;
+    })
+    .join("");
+  return `<section class="viz-card"><h2 id="impact-heatmap">District impact heatmap</h2><table class="impact-heatmap"><thead><tr><th>District</th><th>Impact</th><th>Score</th><th>Paths</th><th>Risks</th></tr></thead><tbody>${tableRows}</tbody></table></section>`;
+}
+
+function buildSearchIndex(bundle) {
+  const entries = [];
+  for (const row of Array.isArray(bundle.summaryIndex) ? bundle.summaryIndex : []) {
+    entries.push({
+      title: row.relPath,
+      href: row.htmlPath || `summaries/${row.relPath}/summary.html`,
+      text: `${row.relPath} ${row.kind ?? ""} ${String(row.markdown ?? "").slice(0, 400)}`,
+    });
+  }
+  for (const row of Array.isArray(bundle.selectionIndex) ? bundle.selectionIndex : []) {
+    entries.push({
+      title: `${row.relPath} (selection)`,
+      href: row.htmlPath || "",
+      text: `${row.relPath} ${row.selectionKey ?? ""}`,
+    });
+  }
+  entries.push({
+    title: "Release overview",
+    href: "release.html",
+    text: String(bundle.releaseOverviewMd ?? "").slice(0, 2000),
+  });
+  return entries;
 }
 
 function buildEnhancementScript({ runMermaid, withToc }) {
@@ -841,6 +953,36 @@ function buildEnhancementScript({ runMermaid, withToc }) {
     };
     filterInput.addEventListener("input", applyFilter);
     applyFilter();
+  }
+  const globalSearch = document.querySelector("[data-global-search]");
+  const globalResults = document.querySelector("[data-global-search-results]");
+  if (globalSearch instanceof HTMLInputElement && globalResults) {
+    fetch("search-index.json")
+      .then((r) => r.json())
+      .then((entries) => {
+        const list = Array.isArray(entries) ? entries : [];
+        const render = () => {
+          const q = globalSearch.value.trim().toLowerCase();
+          if (!q) {
+            globalResults.innerHTML = "";
+            return;
+          }
+          const hits = list
+            .filter((e) => String(e.text || e.title || "").toLowerCase().includes(q))
+            .slice(0, 24);
+          globalResults.innerHTML = hits
+            .map((e) => {
+              const a = document.createElement("a");
+              a.className = "global-search-hit";
+              a.href = String(e.href || "#");
+              a.textContent = String(e.title || "");
+              return a.outerHTML;
+            })
+            .join("");
+        };
+        globalSearch.addEventListener("input", render);
+      })
+      .catch(() => {});
   }`;
   return `<script type="module">${mermaidBlock}${tocBlock}${filterBlock}
 </script>`;
@@ -879,6 +1021,10 @@ function wrapPage({ title, activeNav, bodyInner, runMermaid, withToc = false, su
   <nav class="page-nav">
     ${navHtml(activeNav)}
   </nav>
+  <div class="global-search-bar">
+    <input type="search" class="global-search-input" data-global-search placeholder="Search this bundle (summaries, release)…" />
+    <div class="global-search-results" data-global-search-results></div>
+  </div>
   <main class="content${withToc ? "" : " no-toc"}">
     <div class="content-main">
       ${bodyInner}
@@ -982,7 +1128,7 @@ function buildMetricsHtml(bundle) {
     rightTitle: bundle.rightTitle || "",
     generatedAt: bundle.generatedAt || "",
   };
-  const inner = `<article class="content-card md">${markdownToHtml(bundle.compareMetricsMd)}</article>`;
+  const inner = `${buildImpactHeatmapHtml(bundle)}<article class="content-card md">${markdownToHtml(bundle.compareMetricsMd)}</article>`;
   return wrapPage({
     title: mode.metricsTitle,
     activeNav: "metrics.html",
@@ -1139,6 +1285,7 @@ function buildReleaseHtml(bundle) {
     : `<div class="empty-state">No saved selected-diff documents were stored for this bundle.</div>`;
   const inner = [
     `<article class="content-card md">${markdownToHtml(bundle.releaseOverviewMd)}</article>`,
+    buildImpactHeatmapHtml(bundle),
     `<section class="content-card">
       <h2>Interactive release explorer</h2>
       <div class="filter-bar">
@@ -1299,6 +1446,11 @@ async function writeNovadiffDocsHtml(bundle) {
   for (const [name, html] of files) {
     await fs.writeFile(path.join(base, name), html, "utf8");
   }
+  await fs.writeFile(
+    path.join(base, "search-index.json"),
+    JSON.stringify(buildSearchIndex(bundle), null, 2),
+    "utf8",
+  );
 }
 
 module.exports = {

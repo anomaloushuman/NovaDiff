@@ -1,21 +1,21 @@
 {
   "relPath": ".novadiff-graph/config.json",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "removed",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:15:25.949Z",
+  "generatedAt": "2026-05-21T10:40:07.759Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-4"
+      "L1-4"
     ],
     "cited_changed_lines": [
-      "R1 added: {",
-      "R2 added: \"autoUpdate\": false,",
-      "R3 added: \"outputLanguage\": \"en\"",
-      "R4 added: }"
+      "L1 removed: {",
+      "L2 removed: \"autoUpdate\": false,",
+      "L3 removed: \"outputLanguage\": \"en\"",
+      "L4 removed: }"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

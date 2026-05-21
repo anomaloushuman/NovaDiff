@@ -35,7 +35,7 @@ export interface NovaWorkspace {
 }
 
 export interface WorkspaceUiState {
-  workspacePage?: "compare" | "history" | "docs" | "prs" | "publish";
+  workspacePage?: "compare" | "history" | "docs" | "docReports" | "prs" | "publish";
   leftRoot?: string;
   rightRoot?: string;
   compared?: boolean;

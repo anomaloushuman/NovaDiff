@@ -1,23 +1,24 @@
 {
   "relPath": "packages/graph-view/src/index.css",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T05:20:03.959Z",
+  "generatedAt": "2026-05-21T11:12:49.973Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-484"
+      "R301-340",
+      "R351"
     ],
     "cited_changed_lines": [
-      "R1 added: @import \"tailwindcss\";",
-      "R3 added: @theme {",
-      "R4 added: /* Base */",
-      "R5 added: --color-root: #0a0a0a;",
-      "R6 added: --color-surface: #111111;",
-      "R7 added: --color-elevated: #1a1a1a;"
+      "R301 added: .novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host,",
+      "R302 added: .novadiff-graph-embed",
+      "R303 added: .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap]) {",
+      "R304 added: display: grid !important;",
+      "R305 added: grid-template-columns: repeat(4, 26px);",
+      "R306 added: grid-template-rows: auto auto;"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

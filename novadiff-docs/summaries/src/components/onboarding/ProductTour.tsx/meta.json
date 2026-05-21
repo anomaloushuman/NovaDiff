@@ -1,0 +1,51 @@
+{
+  "relPath": "src/components/onboarding/ProductTour.tsx",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:09:41.529Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R23 added: export function ProductTour({ onDone }: { onDone: () => void }) {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useState } from \"react\";",
+      "R2 added: import { saveProductTourCompleted } from \"../../app/workspaceStorage\";"
+    ],
+    "changed_line_ranges": [
+      "R1-65"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useState } from \"react\";",
+      "R2 added: import { saveProductTourCompleted } from \"../../app/workspaceStorage\";",
+      "R4 added: const STEPS = [",
+      "R5 added: {",
+      "R6 added: title: \"Compare folders\",",
+      "R7 added: body: \"Pick baseline and target trees to see path-level diffs and AI summaries.\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function ProductTour (23-65)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

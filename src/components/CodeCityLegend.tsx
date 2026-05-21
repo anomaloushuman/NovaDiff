@@ -8,6 +8,9 @@ export function CodeCityLegend({
   districtCount,
   changedBuildingCount,
   onOpenDiff,
+  repoRoot,
+  onStageFile,
+  onStageDistrict,
 }: {
   selected: CodeCityRenderableBuilding | null;
   blameOverlay: boolean;
@@ -16,6 +19,9 @@ export function CodeCityLegend({
   districtCount: number;
   changedBuildingCount: number;
   onOpenDiff?: (path: string) => void;
+  repoRoot?: string;
+  onStageFile?: (path: string) => void;
+  onStageDistrict?: (topDir: string) => void;
 }) {
   return (
     <aside className="code-city-legend">
@@ -86,15 +92,35 @@ export function CodeCityLegend({
                 L{selected.startLine}-{selected.endLine}
               </span>
             </div>
-            {onOpenDiff ? (
-              <button
-                type="button"
-                className="doc-workspace-copy-btn"
-                onClick={() => onOpenDiff(selected.path)}
-              >
-                Open diff
-              </button>
-            ) : null}
+            <div className="code-city-selected-actions">
+              {onOpenDiff ? (
+                <button
+                  type="button"
+                  className="doc-workspace-copy-btn"
+                  onClick={() => onOpenDiff(selected.path)}
+                >
+                  Open diff
+                </button>
+              ) : null}
+              {repoRoot && onStageFile ? (
+                <button
+                  type="button"
+                  className="doc-workspace-copy-btn"
+                  onClick={() => onStageFile(selected.path)}
+                >
+                  Stage file
+                </button>
+              ) : null}
+              {repoRoot && onStageDistrict && selected.topDirectory ? (
+                <button
+                  type="button"
+                  className="doc-workspace-copy-btn"
+                  onClick={() => onStageDistrict(selected.topDirectory)}
+                >
+                  Stage district
+                </button>
+              ) : null}
+            </div>
             {selected.dominantAuthor ? <p>Dominant author: {selected.dominantAuthor}</p> : null}
             {selected.owners.length > 0 ? (
               <ul className="code-city-owner-list">

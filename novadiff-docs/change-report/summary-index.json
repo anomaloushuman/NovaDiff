@@ -1,1 +1,825 @@
-[]
+[
+  {
+    "relPath": ".novadiff-graph/config.json",
+    "kind": "removed",
+    "markdown": "### Overview  \nThe file `./.novadiff-graph/config.json` has been removed from the repository.  \nIt previously contained two configuration flags: `autoUpdate` and `outputLanguage`.\n\n### Key changes  \n- Entire file `./.novadiff-graph/config.json` deleted (lines 1‑4 removed).  \n- The `autoUpdate` flag (`false`) and `outputLanguage` (`\"en\"`) are no longer persisted.\n\n### Impact  \n- Any code that previously parsed this JSON will no longer find the file, potentially causing a file‑not‑found error unless guarded.  \n- Tests that mock or assert the presence of this config may now fail.  \n- Documentation or code that references the config file should be updated.\n\n### Risks & follow‑ups  \n- Verify that no modules import or read `./.novadiff-graph/config.json`.  \n- Run the targeted unit tests that involve graph configuration to ensure no regressions.  \n- Check the build pipeline for any steps that generate or consume this file.  \n- Update any README or internal docs that mention the config file.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/.novadiff-graph/config.json/summary.html"
+  },
+  {
+    "relPath": ".novadiff-graph/diff-overlay.json",
+    "kind": "removed",
+    "markdown": "### Overview  \nThe file `.novadiff-graph/diff-overlay.json` has been deleted entirely (lines 1‑156). It previously stored metadata for the diff overlay, including the version, base branch, generation timestamp, lists of changed files, changed node IDs, and affected node IDs.\n\n### Key changes  \n- Removal of the JSON file at `.novadiff-graph/diff-overlay.json`.  \n- All persisted data (`\"changedFiles\"`, `\"changedNodeIds\"`, `\"affectedNodeIds\"`) is no longer available.  \n- No new file or alternative storage was added in this commit.\n\n### Impact  \n- Code that reads or writes this file (e.g., `fs.readFileSync('.novadiff-graph/diff-overlay.json')`) will now throw an `ENOENT` error.  \n- Tests that depend on the presence of this file will fail unless updated.  \n- The version (`\"version\": \"1.0.0\"`) and timestamp (`\"generatedAt\"`) information are lost, reducing auditability of overlay generation.  \n- Components that previously loaded this data for rendering (such as the graph view) must be updated to use an alternative source or handle the missing file gracefully.\n\n### Risks & follow‑ups  \n- **Regression risk**: Any path that assumes the file exists will crash. Run targeted tests that touch diff‑overlay logic.  \n- **Compatibility risk**: External tooling importing this JSON for configuration will break. Verify that no such imports remain.  \n- **Observability risk**: Loss of the `\"generatedAt\"` timestamp may hinder debugging of stale overlays. Consider adding a fallback logging mechanism.  \n- **Documentation**: Update any docs or README sections that reference the diff overlay file.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/.novadiff-graph/diff-overlay.json/summary.html"
+  },
+  {
+    "relPath": ".novadiff-graph/meta.json",
+    "kind": "removed",
+    "markdown": "### Overview  \nThe file `.novadiff-graph/meta.json` was removed from the repository.  \nAll six lines of JSON content—`lastAnalyzedAt`, `gitCommitHash`, `version`, and `analyzedFiles`—were deleted (lines 1‑6 in the diff).\n\n### Key changes  \n- **File deletion**: `.novadiff-graph/meta.json` no longer exists in the tree.  \n- **Metadata loss**: The six lines of JSON that tracked analysis timestamp, commit hash, version, and file count are gone.  \n- **No other source changes**: The diff shows only the removal of this file.\n\n### Impact  \n- **Runtime behavior**: Any code that attempts to read `.novadiff-graph/meta.json` will now encounter a missing‑file error unless it handles the absence.  \n- **Build artifacts**: The build pipeline no longer generates or consumes this metadata file.  \n- **Documentation**: References to the metadata file in docs or comments should be updated to avoid confusion.\n\n### Risks & follow‑ups  \n- **Reference breakage**: Search the codebase for `meta.json` or `analyzedFiles`; failing to update them could cause crashes.  \n- **Test coverage**: Run the nearest targeted tests (e.g., analysis pipeline tests) and a quick manual smoke test to confirm no runtime errors.  \n- **CI pipeline**: Verify that any CI steps that previously relied on the metadata file (e.g., publishing version info) are updated.  \n- **Documentation audit**: Remove or revise any README or internal docs mentioning the metadata file.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/.novadiff-graph/meta.json/summary.html"
+  },
+  {
+    "relPath": "electron/export-snapshot.cjs",
+    "kind": "added",
+    "markdown": "### Overview  \nA new CommonJS module `electron/export-snapshot.cjs` is added. It exposes a single function, `exportProjectSnapshotZip`, that zips a given bundle directory into a specified output path using the system `zip` utility.\n\n### Key changes  \n- **Imports added**: `node:fs`, `node:path`, and `node:child_process` (`spawnSync`).  \n- **Function `exportProjectSnapshotZip(bundleDir, outZipPath)`**:  \n  - Resolves and validates `bundleDir`.  \n  - Ensures the output directory exists (`mkdirSync` with `recursive`).  \n  - Removes any pre‑existing zip file at `outZipPath`.  \n  - Executes `zip -r -q out .` with `cwd` set to the bundle directory.  \n  - Throws detailed errors on missing directory or zip failure.  \n  - Returns `{ zipPath: out, bytes: size }`.  \n- **Export statement**: `module.exports = { exportProjectSnapshotZip };`.\n\n### Impact  \n- **Correctness**: Adds robust validation and error handling for snapshot creation.  \n- **Maintainability**: Centralizes snapshot logic in a single module, simplifying future updates.  \n- **Performance**: Uses synchronous I/O and `spawnSync`, blocking the event loop; acceptable for build scripts but not for long‑running processes.  \n- **Compatibility**: Requires the external `zip` binary; absence will cause runtime errors.  \n- **Observability**: Errors surface as thrown exceptions, making failures visible during CI or manual runs.\n\n### Risks & follow‑ups  \n- **Missing `zip` binary**: Verify availability on all target environments; consider bundling a fallback or documenting the requirement.  \n- **Blocking I/O**: Ensure this module is only invoked in non‑interactive contexts; otherwise, refactor to async.  \n- **Path resolution edge cases**: Test with relative, absolute, and empty `bundleDir`/`outZipPath` values to confirm correct behavior.  \n- **Race conditions**: When multiple processes target the same `outZipPath`, concurrent unlink/mkdir may fail; add locking or unique temp names if needed.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/export-snapshot.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/git-commit.cjs",
+    "kind": "added",
+    "markdown": "### Overview  \nA new module `electron/git-commit.cjs` is added. It exports a `getCommitDetail` helper that retrieves commit metadata and statistics by invoking Git commands.\n\n### Key changes  \n- Import added at line 3: `const { runGit, tryRunGit } = require(\"./git-service.cjs\");`  \n- Function `getCommitDetail(repoRoot, hash)` added (lines 1‑69):  \n  - Validates `repoRoot` and `hash` (lines 12‑14).  \n  - Runs `git log -1 <hash>` with a custom format to capture hash, short hash, subject, author, email, date, and parents (lines 16‑21).  \n  - Retrieves the commit body via `git log -1 <hash> --format=%B` (line 23).  \n  - Calls `git show --stat` (line 28) and parses the summary for `filesChanged`, `insertions`, and `deletions` (lines 30‑43). Falls back to line count if the summary is missing (lines 44‑46).  \n- Export added at line 69: `module.exports = { getCommitDetail };`\n\n### Impact  \n- Provides a single public API for commit detail retrieval.  \n- Throws an error if `repoRoot` or `hash` is missing (lines 12‑14).  \n- Requires three Git commands per call; performance impact is unknown from the diff.\n\n### Risks & follow‑ups  \n- Verify that `runGit`/`tryRunGit` in `git-service.cjs` return the expected `stdout`/`ok` flags.  \n- The regexes used to parse the stat summary may fail on edge cases (e.g., commits with no file changes).  \n- Test with repositories containing non‑ASCII commit messages to confirm UTF‑8 handling (unknown from diff).  \n- Monitor latency in CI pipelines; consider caching or batching if call frequency is high (unknown from diff).",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/git-commit.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/git-publish.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \n`electron/git-publish.cjs` now stages a user‑supplied list of paths instead of always staging the entire repository. The change adds `stagePaths` to the import from `./git-service.cjs` (line 4) and rewrites the staging logic in `executePublish`.\n\n### Key changes  \n- **Import update** – `stagePaths` is added to the destructured import from `./git-service.cjs` (line 4).  \n- **Conditional staging** – `stageAll(root)` is replaced by logic that builds `stagePathsList` from `opts.stagePaths` (lines 63‑70).  \n- **Branching** – If `stagePathsList` is non‑empty, `stagePaths(root, stagePathsList)` runs; otherwise the original `stageAll(root)` is executed.  \n- **No other functional changes** – commit, push, and PR creation remain unchanged.\n\n### Impact  \n- **Selective staging** – allows committing only specified files, preventing accidental inclusion of unrelated changes.  \n- **Maintainability** – staging logic is now isolated; future extensions can modify `stagePaths` without touching `executePublish`.  \n- **Performance** – staging fewer files can reduce I/O when `opts.stagePaths` is small.  \n- **Compatibility** – callers that omit `stagePaths` continue to stage all files, preserving current behavior.\n\n### Risks & follow‑ups  \n- **Missing `stagePaths` export** – verify that `./git-service.cjs` actually exports `stagePaths`; otherwise the import will fail at runtime.  \n- **Invalid `opts.stagePaths` values** – if callers pass a non‑array (e.g., a string), the code falls back to `stageAll`, which may be unintended. Add validation or document the expected type.  \n- **Ignored paths** – ensure `stagePaths` respects `.gitignore`; otherwise staged files might be ignored by Git, leading to silent failures.  \n- **Test coverage** – add unit tests for both branches (with and without `stagePaths`) to confirm behavior and guard against regressions.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/git-publish.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/git-service.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \nThree new helper functions were added to `electron/git-service.cjs` to give callers finer control over staging:\n\n* `stagePaths(repoRoot, paths)` – normalises a list of paths, runs `git add -- <paths>`, and returns `{ staged: N }`.  \n* `unstagePaths(repoRoot, paths)` – runs `git reset HEAD -- <paths>` and returns `{ unstaged: N }`.  \n* `stageDistrict(repoRoot, topDir, statusFiles?)` – filters the repository’s status files to those under `topDir` (or its sub‑directories) and delegates to `stagePaths`.  \n\nThe module export list was extended (lines 253‑255) to expose these utilities.\n\n### Key changes  \n* **`stagePaths`** – added at lines 142‑149.  \n* **`unstagePaths`** – added at lines 152‑159.  \n* **`stageDistrict`** – added at lines 162‑169.  \n* Export list updated to include the three new functions (lines 253‑255).  \n* No other logic was modified.\n\n### Impact  \n* **API surface** – callers can now stage or unstage specific files or a whole directory without affecting the rest of the working tree.  \n* **Implementation** – each helper invokes a single `runGit` call, so the runtime cost is minimal compared to existing helpers.  \n* **Compatibility** – existing consumers of `stageAll`, `commit`, `push`, etc. remain unchanged.\n\n### Risks & follow‑ups  \n* The behavior of `stageDistrict` when `topDir` is empty or malformed is not documented; the current logic may match many files.  \n* `unstagePaths` propagates any `git` error; tests should cover failure scenarios.  \n* Documentation or type definitions should be updated to expose the new helpers.  \n* Run the full lint, test, and build suite to confirm no regressions in the new code paths.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/git-service.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/github-commit-context.cjs",
+    "kind": "added",
+    "markdown": "### Overview\nAdds `electron/github-commit-context.cjs` exposing `getGithubCommitContext(fullName, sha)` to gather pull requests, issues, and comment threads for a commit using the GitHub CLI.\n\n### Key changes\n- Added `parseJsonSafe(raw, fallback)` (lines 5‑12) to safely parse JSON, returning `fallback` on error.  \n- Added `shortGhError(message)` (lines 13‑22) to normalize CLI error messages.  \n- Added `normalizeThread(entry)` (lines 25‑33) to standardize thread objects with defaults.  \n- Implemented `getGithubCommitContext(fullName, sha)` (lines 40‑242) that:\n  - Validates `fullName` and `sha`.  \n  - Checks auth via `getAuthStatus()` (line 52).  \n  - Executes `gh` commands through `tryRunGh` (line 3) to fetch pulls, issues, PR views, review comments, and issue comments.  \n  - Aggregates results into `pullRequests`, `issues`, `threads`, and an `error` string.  \n- Exported via `module.exports = { getGithubCommitContext }` (line 245).\n\n### Impact\n- Requires the GitHub CLI; errors from `gh` are captured and formatted by `shortGhError`.  \n- Up to six `gh` calls per commit (pulls, issues, PR view, review comments, issue comments, fallback search).  \n- Normalized thread objects simplify downstream rendering.  \n- Errors are concatenated into a single string, allowing callers to display multiple failures.\n\n### Risks & follow‑ups\n- **CLI availability**: If `gh` is not installed or not in PATH, calls will fail.  \n- **Auth state**: `getAuthStatus` must correctly report login status; otherwise the function returns empty arrays with an error message.  \n- **Rate limits**: Multiple paginated requests may hit GitHub API limits; monitor for throttling.  \n- **Parsing edge cases**: `parseJsonSafe` defaults to `fallback` on malformed JSON; callers should handle empty arrays.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/github-commit-context.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/github-service.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \nA new export `getGithubCommitContext` has been added to `electron/github-service.cjs`.  \nThe export forwards all arguments to the helper defined in `./github-commit-context.cjs`:\n\n```js\ngetGithubCommitContext: (...args) =>\n  require(\"./github-commit-context.cjs\").getGithubCommitContext(...args)\n```\n\nThis change appears in the diff at lines 224‑225 of the file.\n\n### Key changes  \n- **Export addition** – `module.exports` now contains the `getGithubCommitContext` property (lines 224‑225).  \n- **No other functional changes** – All existing functions (`slugFromRepoRoot`, `listRepos`, etc.) remain unchanged.  \n- **Import path** – The helper is required from `./github-commit-context.cjs`, preserving the original runtime behavior.\n\n### Impact  \n- **API surface** – Callers can now invoke `githubService.getGithubCommitContext(...)` directly, without importing the helper module.  \n- **Maintainability** – The commit‑context logic stays in a single module; updates to `github-commit-context.cjs` automatically affect this export.  \n- **Performance** – The function simply forwards arguments; no measurable change is expected.  \n- **Compatibility** – Existing code continues to work unchanged; the new export is additive.\n\n### Risks & follow‑ups  \n- **Missing module** – Verify that `github-commit-context.cjs` exists and exports `getGithubCommitContext`; otherwise the new export will fail.  \n- **Circular dependency** – Ensure that requiring `github-commit-context.cjs` from this module does not create a cycle that could delay initialization.  \n- **Documentation** – Update README/API docs to expose the new helper; otherwise callers may be unaware.  \n- **Testing** – Add unit tests to confirm that `getGithubCommitContext` forwards arguments correctly and handles edge cases.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/github-service.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/prefetch-summaries.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \n`electron/prefetch-summaries.cjs` now runs prefetch jobs with a configurable worker pool instead of a single sequential loop. The change replaces the old `for (let i = 0; i < jobs.length; i++)` block (lines 116‑120) with a concurrency‑controlled loop (lines 116‑122 and 214‑226).\n\n### Key changes  \n- **Concurrency calculation** – `concurrency` is set to  \n  `Math.min(3, Math.max(1, Number(process.env.NOVADIFF_PREFETCH_CONCURRENCY) || 2))` (added lines 116‑122).  \n- **Worker pool** – an async `worker` pulls jobs from a shared `nextIndex` counter; `Promise.all` launches `concurrency` workers (added lines 214‑226).  \n- **Abort handling** – the loop now checks `signal.aborted` at the start of each worker iteration, removing the per‑iteration abort check inside the old for‑loop.  \n- **Job dispatch** – the old job extraction (`const job = jobs[i]`) is removed.  \n- **Error flow** – the `continue` after a non‑text error is replaced with `return` from `runJob`, exiting the current worker early.  \n- **Progress reporting** – IPC events (`summary-prefetch-progress`) remain unchanged.\n\n### Impact  \n- **Performance** – concurrent prefetching can reduce total runtime on multi‑core systems.  \n- **Correctness** – abort now stops all workers cleanly; no new jobs start after abort.  \n- **Maintainability** – clearer separation of job dispatch logic; easier to adjust concurrency.  \n- **Observability** – progress events remain the same; no change in external behavior.  \n- **Compatibility** – no API changes; only internal implementation differs.\n\n### Risks & follow‑ups  \n- **Race safety** – `nextIndex++` is safe in Node’s single‑threaded event loop, but confirm no hidden race conditions.  \n- **Worker exit** – verify that `return` after a non‑text error does not prematurely terminate the entire worker pool.  \n- **Abort mid‑run** – test that aborting while a worker is processing a job stops subsequent workers as intended.  \n- **Env var parsing** – ensure that invalid or unset `NOVADIFF_PREFETCH_CONCURRENCY` falls back to the default (3) without throwing.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/prefetch-summaries.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/preload.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe preload script now exposes five new IPC‑invoked methods via `contextBridge`. These extend the Git and GitHub tooling API surface.\n\n### Key changes  \n- `gitStagePaths` (`ipcRenderer.invoke(\"git-stage-paths\")`) added at line 129.  \n- `gitStageDistrict` (`ipcRenderer.invoke(\"git-stage-district\")`) added at line 130.  \n- `exportProjectSnapshot` (`ipcRenderer.invoke(\"export-project-snapshot\")`) added at line 131.  \n- `gitCommitDetail` (`ipcRenderer.invoke(\"git-commit-detail\")`) added at line 146.  \n- `githubCommitContext` (`ipcRenderer.invoke(\"github-commit-context\")`) added at line 147.  \n\nThese entries appear in the `electronAPI` object immediately after the existing workspace‑related methods.\n\n### Impact  \n- The API surface now includes calls for staging specific paths or districts, exporting project snapshots, and retrieving commit details from Git and GitHub.  \n- No existing symbols were removed; the change is additive.  \n- Consumers can invoke these methods via `window.electronAPI.<method>`.\n\n### Risks & follow‑ups  \n- Verify that the main process registers listeners for the channels `\"git-stage-paths\"`, `\"git-stage-district\"`, `\"export-project-snapshot\"`, `\"git-commit-detail\"`, and `\"github-commit-context\"`. Missing handlers will surface as IPC errors.  \n- Add unit tests to confirm that the preload methods forward payloads correctly.  \n- Run `npm run lint` and `npm run build` to ensure no syntax or type errors were introduced.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/electron/preload.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/workspace-history.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe file `electron/workspace-history.cjs` was modified to change how workspace state is persisted during history indexing.  \nIn both `indexWorkspaceHistory` (lines 100‑174) and `refreshWorkspaceHistory` (lines 188‑292) the unconditional `await upsertWorkspace(userData, workspace);` that previously ran on every commit was removed (diff lines 135 and 240).  \nInstead, a `persistSession` flag is computed:\n\n```js\ni === 0 || i === commits.length - 1 || (i + 1) % 10 === 0\n```\n\nand passed to `upsertWorkspace` as `{ touchSession: persistSession }` (added lines 135‑136 and 241‑242).  \nThis throttles session updates to the first, last, and every tenth commit.\n\n### Key changes  \n- **Persist‑session logic** – `persistSession` is evaluated per commit and supplied to `upsertWorkspace`.  \n- **Removed redundant writes** – the earlier write at line 135 (and line 240) is deleted, reducing intermediate writes.  \n- **No API surface change** – function signatures, imports, and exports remain unchanged.  \n- **Documentation** – module comments still describe the same high‑level behavior; no new external API is introduced.\n\n### Impact  \n- **Write reduction** – the number of calls to `upsertWorkspace` during a history build is lowered to roughly 10 % of the previous count.  \n- **Session persistence** – sessions are now updated only at key points, which may affect metrics that count session touches.  \n- **Test expectations** – any tests asserting a write per commit may need to be updated to account for the throttling.\n\n### Risks & follow‑ups  \n- **Session handling regression** – verify that sessions still expire correctly after the new throttling logic.  \n- **Test failures** – adjust unit/integration tests that rely on a write per commit.  \n- **Concurrency** – ensure that reduced write frequency does not cause stale state when multiple indexing jobs run concurrently.  \n- **Documentation** – consider adding a note in the README or docs about the new session‑touching behavior for future maintainers.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/workspace-history.cjs/summary.html"
+  },
+  {
+    "relPath": "electron/workspace-store.cjs",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe workspace store now serializes session writes, uses atomic file writes, and simplifies the `upsertWorkspace` flow. The public API remains unchanged.\n\n### Key changes  \n- **Session write queue** – a global `sessionWriteChain` (L25‑32) and `withSessionWriteLock(task)` (L27‑31) serialize updates to the session file.  \n- **Atomic writes** – `writeJsonAtomic` (L33‑63) writes to a temporary file, renames it, and falls back to `copyFile` on rename errors (lines 47‑50, 55‑58).  \n- **`writeJson`** now delegates to `writeJsonAtomic` (L64‑67).  \n- **`saveSession`** wraps its write in the lock (L101‑102).  \n- **`upsertWorkspace`** signature changed to `upsertWorkspace(userData, workspace, opts = {})` (L110‑111). It writes the workspace meta first (`writeJson(path.join(workspace.dataDir, \"meta.json\"), workspace)` – L112‑113), then updates the session inside the lock (L116‑129). The old implementation (L74‑86) was removed.  \n- **Error handling** – `writeJsonAtomic` now checks `fssync.existsSync(tmp)` before attempting `copyFile` and `unlink` (lines 47‑50).  \n\n### Impact  \n- **Correctness** – atomic writes and the write lock prevent partial or corrupted session files, especially under concurrent operations.  \n- **Maintainability** – centralizing write logic reduces duplication and clarifies persistence flow.  \n- **Compatibility** – exported API unchanged; callers use the same functions.  \n\n### Risks & follow‑ups  \n- Verify that `withSessionWriteLock` propagates rejections and that `sessionWriteChain` resets after a failure.  \n- Run concurrent stress tests on `saveSession` and `upsertWorkspace` to ensure no data loss.  \n- Confirm the rename‑fallback logic works on Windows and other filesystems where `rename` may fail.  \n- Ensure `writeJsonAtomic` still appends a newline (`\\n`) to JSON files, preserving the original formatting.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/electron/workspace-store.cjs/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \nA new React component `GraphEmbedSyncBridge` is added to `packages/graph-view/src/GraphEmbedSyncBridge.tsx` (lines 1‑71). It synchronizes embed‑graph selection and navigation state with the NovaDiff documentation workspace.\n\n### Key changes  \n- **Imports** (R1‑R8):  \n  ```ts\n  import { useEffect, useRef } from \"react\";\n  import { useDashboardStore } from \"./store\";\n  import {\n    applyGraphCityRoot,\n    applyGraphEnterFile,\n    applyGraphFocusSelection,\n    type GraphCityNavStore,\n  } from \"./utils/graphCityNavigation\";\n  ```\n- **Exported API** (R11‑R20):  \n  ```ts\n  export function GraphEmbedSyncBridge({\n    controlledNodeId,\n    enteredFilePath,\n    focusMode,\n    onSelectionChange,\n  }: {\n    controlledNodeId?: string | null;\n    enteredFilePath?: string | null;\n    focusMode?: boolean;\n    onSelectionChange?: (nodeId: string | null) => void;\n  }) { … }\n  ```\n- **State access** (R22‑R24): reads `selectedNodeId` and `graph` from `useDashboardStore`.\n- **Store API helper** (R27‑R36): `storeApi()` returns navigation functions from the global store state.\n- **Navigation effect** (R39‑R57): watches `enteredFilePath`, `controlledNodeId`, `focusMode`, and `graph`. Builds a `navKey` and calls the appropriate helper (`applyGraphEnterFile`, `applyGraphFocusSelection`, or `applyGraphCityRoot`).\n- **Selection emission** (R59‑R67): emits `selectedNodeId` changes via `onSelectionChange`, guarded by a `lastEmitted` ref.\n- **Return value** (R70‑R71): renders `null`.\n\n### Impact  \n- The component introduces a side‑effect path that depends on the presence of `useDashboardStore` in the component’s context.  \n- Navigation helpers are invoked with `controlledNodeId ?? null`; callers must ensure these helpers handle `null` values.  \n- The `navKey` logic prevents redundant navigation when props remain unchanged.\n\n### Risks & follow‑ups  \n- Verify that `useDashboardStore` is available; otherwise the hook will throw.  \n- Confirm that `applyGraphEnterFile`, `applyGraphFocusSelection`, and `applyGraphCityRoot` correctly handle `null`/`undefined` arguments.  \n- Test the `navKey` logic with rapid prop changes to ensure no unnecessary navigation occurs.  \n- Add unit tests for the two `useEffect` branches to guard against regressions in dependency arrays or ref updates.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/GraphEmbedSyncBridge.tsx/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \nIn `packages/graph-view/src/NovaDiffGraphExplorer.tsx` the `NovaDiffGraphExplorerProps` interface was extended with four optional fields: `controlledNodeId`, `focusMode`, `enteredFilePath`, and `onSelectionChange`. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.\n\n### Key changes  \n- **Interface augmentation** – the new props are declared in lines 31‑37 of the interface.  \n- **Documentation comments** – JSDoc comments describe each prop’s intent.  \n- **Prop propagation** – the spread `...props` in the component’s signature passes the new fields unchanged to either `NovaDiffGraphExplorerEmbed` or `NovaDiffGraphExplorerFull`.  \n- **No runtime changes** – the component’s effect hooks, state handling, and JSX output are identical to the pre‑change version.\n\n### Impact  \n- **Non‑breaking** – all existing consumers compile without modification because the new props are optional.  \n- **Extensibility** – downstream code can now supply node‑selection or focus‑mode hints without altering the explorer internals.  \n- **No performance change** – the diff adds only type information and comments.  \n- **Documentation** – the added comments improve developer understanding but require no code changes elsewhere.\n\n### Risks & follow‑ups  \n- **Type‑checking regressions** – any code that destructures `NovaDiffGraphExplorerProps` must still satisfy the updated type; run `tsc` to confirm.  \n- **Test coverage** – existing tests may need to be updated or new tests added to verify that the new props can be passed without breaking the component (unknown from the available diff).  \n- **Build validation** – run lint, `tsc`, and the production build to ensure no type errors.  \n- **Documentation sync** – update public API docs to reflect the new optional props.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/NovaDiffGraphExplorer.tsx/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`NovaDiffGraphExplorerEmbed` now imports and renders `GraphEmbedSyncBridge` to expose embed‑specific controls. The component’s props interface has been extended with optional fields for node selection, file path, focus mode, and a selection‑change callback.\n\n### Key changes  \n- **Import added**: `GraphEmbedSyncBridge` from `./GraphEmbedSyncBridge` (line 12).  \n- **Props extended**: `controlledNodeId`, `enteredFilePath`, `focusMode`, `onSelectionChange` (lines 22‑25).  \n- **Signature updated** to accept the new props (lines 46‑49).  \n- **Bridge rendered** inside the provider, passing the new props (lines 118‑123).  \n\n### Impact  \n- **Backward compatibility**: All new props are optional; existing consumers compile unchanged.  \n- **Build requirement**: `GraphEmbedSyncBridge` must be exported from its module; otherwise the import fails.  \n- **Testing**: Existing tests that render the embed without the new props should still pass; new tests should verify bridge interaction.  \n\n### Risks & follow‑ups  \n- **Missing export**: Verify `GraphEmbedSyncBridge` is correctly exported.  \n- **Prop misuse**: Clarify whether `controlledNodeId` and `enteredFilePath` are mutually exclusive or how they are handled by the bridge.  \n- **Bridge side‑effects**: Ensure the bridge does not unintentionally alter global state or interfere with other components.  \n- **Lint & build**: Run `npm run lint`, `npm test`, and `npm run build` to catch any type or runtime errors introduced by the new imports and props.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/__tests__/selectionCluster.test.ts",
+    "kind": "added",
+    "markdown": "### Overview\nA new test file `packages/graph-view/src/__tests__/selectionCluster.test.ts` was added. It imports `vitest` helpers, the `KnowledgeGraph` type, and the two functions under test.\n\n### Key changes\n- **Imports** added at lines 1‑3: `vitest` helpers, `KnowledgeGraph`, and `graphNodeIdsInFile`, `graphSelectionCluster`.  \n- **Mock graph** defined at lines 5‑45: two file nodes (`file:src/a.ts`, `file:src/b.ts`) and two function nodes (`function:src/a.ts:foo`, `function:src/a.ts:bar`). Edges include containment, calls, and imports.  \n- **Tests** at lines 47‑61:  \n  - `graphSelectionCluster` is called with a file node and the test asserts that the returned cluster contains the file and both functions.  \n  - `graphNodeIdsInFile` is called for `src/a.ts` and the test checks that the returned array includes the file and its functions.\n\n### Impact\nAdds unit coverage for the selection utilities, ensuring that changes to graph traversal logic are detected during CI. The mock graph is self‑contained, making future updates straightforward.\n\n### Risks & follow‑ups\n- **Schema drift**: If the `KnowledgeGraph` shape changes, the mock will need updating; run `vitest` to confirm.  \n- **Edge‑case coverage**: Only file‑level selection is tested; consider adding tests for function‑level selection and nested imports.  \n- **Linting/build**: Verify that the new file passes `tsc`, `eslint`, and the repository’s build pipeline.  \n- **Snapshot drift**: No snapshots are used, so no risk of stale snapshots.",
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/__tests__/selectionCluster.test.ts/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/index.css",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe `packages/graph-view/src/index.css` file was updated to modify the layout of React‑Flow controls when the CodeCity minimap is present. The changes add a grid‑based layout for the control panel, reposition the minimap and its button, and introduce light‑theme overrides. No JavaScript was touched.\n\n### Key changes  \n- **Grid layout for controls** – Lines 301‑340 add  \n  ```css\n  .novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host { … }\n  ```  \n  turning the panel into a grid, removing borders, and making the background transparent.  \n- **Minimap & button positioning** – Lines 315‑329 set  \n  ```css\n  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap]) { … }\n  ```  \n  with `grid-column: 1 / -1` for the minimap and `grid-row: 2` for the button.  \n- **Control button styling** – Lines 341‑349 update  \n  ```css\n  .novadiff-graph-embed .react-flow__controls-button { … }\n  ```  \n  to match the new layout.  \n- **Minimap appearance** – Lines 351‑355 keep the border radius and subtle border.  \n- **Light‑theme overrides** – Lines 357‑364 adjust `.diff-faded`, scrollbar track, and `.warning-banner` for better contrast on light backgrounds.\n\n### Impact  \n- **UI** – The minimap docks beside the zoom controls instead of overlaying them, improving usability in the NovaDiff embed.  \n- **Scope** – All new selectors are prefixed with `.novadiff-graph-embed`, limiting side effects.  \n- **Performance** – Pure CSS changes; no runtime cost.  \n- **Compatibility** – Existing React‑Flow components render normally; only the control layout changes.\n\n### Risks & follow‑ups  \n- **Layout regression** – Verify the grid layout on very small viewports or when the minimap is hidden.  \n- **Specificity conflicts** – Ensure the new rules override any global React‑Flow styles; a visual check is recommended.  \n- **Light‑theme consistency** – Test the overrides on both dark and light themes to confirm contrast and readability.  \n- **Documentation** – Update any style guides that reference the old control layout.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/index.css/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new utility module `packages/graph-view/src/utils/graphCityNavigation.ts` (lines R1‑R71) adds navigation helpers for the city view of the knowledge graph.\n\n### Key changes  \n- **Imports** – added at R1‑R2  \n  ```ts\n  import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";\n  import { resolveGraphNodeFilePath } from \"./selectionCluster\";\n  ```\n- **`containerIdForFilePath`** – exported at R5; returns `\"container:~\"` for paths without a slash or `\"container:<top>\"` for the first folder segment.  \n- **`GraphCityNavStore` interface** – defined at R14‑R22; requires callbacks for depth entry, node navigation, selection, focus, container expansion, and collapsing all containers.  \n- **`applyGraphCityRoot`** – exported at R23; resets the store to the city root by calling `enterNovaDiffEmbedDepth`, `collapseAllContainers`, `selectNode(null)`, and `setFocusNode(null)`.  \n- **`expandFileContainer`** – internal helper at R30‑R38; expands the container derived from a file path via `containerIdForFilePath`.  \n- **`applyGraphEnterFile`** – exported at R40; enters a file node, expands its container, navigates to the target node (`nodeId` or `\"file:<path>\"`), and sets focus if a node ID is supplied.  \n- **`applyGraphFocusSelection`** – exported at R56; synchronizes a graph selection with the city view. It resolves the file path of `nodeId`, expands the relevant container(s), navigates to the node, and sets focus.\n\n### Impact  \n- Centralizes navigation side‑effects in a single module, reducing duplication.  \n- No existing APIs are altered; consumers must implement `GraphCityNavStore` to use these helpers.  \n- Behavior is deterministic; no new logs or metrics are introduced.\n\n### Risks & follow‑ups  \n- **Store implementation** – any missing method in `GraphCityNavStore` will cause runtime errors.  \n- **`resolveGraphNodeFilePath`** – called with `graph: KnowledgeGraph | null`; ensure it handles `null` safely.  \n- **Edge cases** – test `containerIdForFilePath` with paths lacking slashes or empty strings to confirm correct container IDs.  \n- **Container expansion** – `expandFileContainer` only expands; verify it does not unintentionally collapse unrelated containers.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/utils/graphCityNavigation.ts/summary.html"
+  },
+  {
+    "relPath": "packages/graph-view/src/utils/selectionCluster.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new file `packages/graph-view/src/utils/selectionCluster.ts` (lines R1‑87) adds utilities for working with graph nodes and file paths. It imports `GraphEdge` and `KnowledgeGraph` from `@novadiff/graph-core/types` (R1) and defines a set of link‑relevant edge types (R3).\n\n### Key changes  \n- **`filePathFromNodeId`** (R5‑14) parses a node ID to extract a file path for `file:`, `function:`, or `class:` prefixes.  \n- **`resolveGraphNodeFilePath`** (R17‑29) returns a node’s `filePath` from the graph or falls back to `filePathFromNodeId`.  \n- **`graphNodeIdsInFile`** (R32‑49) collects all symbol and file node IDs belonging to a given file path, deduplicating with a `Set`.  \n- **`graphSelectionCluster`** (R56‑87) builds a cluster that includes the target node, all nodes in the same file, and one‑hop neighbors over `imports`, `calls`, or `contains` edges.  \n- The `LINK_EDGE_TYPES` set (R3) filters edges used in the cluster calculation.\n\n### Impact  \n- **Correctness**: deterministic file‑path resolution and cluster calculation.  \n- **Maintainability**: centralizes node‑path logic, reducing duplication.  \n- **Performance**: linear scans over `graph.nodes` and `edges`; caching could be added if profiling shows bottlenecks.  \n- **Compatibility**: no existing API changes; the new file only adds exports.\n\n### Risks & follow‑ups  \n- **Parsing assumptions**: verify that all node ID formats in the repo match the patterns handled by `filePathFromNodeId`.  \n- **Edge filtering**: ensure `LINK_EDGE_TYPES` includes all edge types that should contribute to a selection cluster.  \n- **Duplicate handling**: `graphNodeIdsInFile` uses a `Set`; confirm this matches downstream expectations.  \n- **Test coverage**: add unit tests for each helper, covering edge cases such as missing `filePath` or empty graphs.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/packages/graph-view/src/utils/selectionCluster.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/DocsViewSyncContext.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \n`src/app/DocsViewSyncContext.tsx` adds a React context that synchronizes documentation view state with the CodeCity graph. It exports an interface, a provider component, and three hooks for consuming the context.\n\n### Key changes  \n- **Imports** (`R1‑R10`): React hooks and `CodeCityRenderableBuilding`.  \n- **`DocsViewSyncState` interface** (`R12‑R25`): flags for linking and focus, selected node/building, and mutation callbacks.  \n- **Context creation** (`R27`): `createContext<DocsViewSyncState | null>(null)`.  \n- **`DocsViewSyncProvider`** (`R29‑R124`): initializes state with `useState`, exposes setters, and memoizes the value (`R92‑R118`).  \n- **`useDocsViewSync`** (`R126‑R131`): throws if the provider is missing (`R128‑R130`).  \n- **`useDocsViewSyncOptional`** (`R134‑R136`): returns the context or `null`.  \n- **`useDocsViewSyncExternalNode`** (`R138‑R149`): when `enabled` and `linkViews` are true, calls `sync.setSelectionFromGraph(nodeId)` inside a `useEffect` (`R143‑R148`).  \n\nNo existing files are modified; the module is entirely new.\n\n### Impact  \n- **Correctness**: state mutations are confined to the provider; consumers must be wrapped.  \n- **Maintainability**: all sync logic resides in one place, easing future updates.  \n- **Performance**: `useMemo` and `useCallback` keep the context value stable, reducing unnecessary re‑renders.  \n- **Compatibility**: components that previously relied on implicit sync must now import and use the new hooks.\n\n### Risks & follow‑ups  \n- **Provider omission**: `useDocsViewSync` throws if used outside the provider (`R128‑R130`). Verify all consumers are wrapped.  \n- **Null context**: `useDocsViewSyncOptional` may return `null` (`R134‑R136`); callers must handle this case.  \n- **Effect dependencies**: `useDocsViewSyncExternalNode` depends on `sync` (`R143‑R148`); ensure the context reference does not change unexpectedly.  \n- **Lint & build**: run `npm run lint`, `npm test`, and `npm run build` to confirm no TypeScript or ESLint errors.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/DocsViewSyncContext.tsx/summary.html"
+  },
+  {
+    "relPath": "src/app/codeCityChromeInsets.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new file `src/app/codeCityChromeInsets.ts` (added, change kind: added, line range R1‑92) introduces utilities for computing the insets required by the CodeCity UI.\n\n### Key changes  \n- **`export interface CodeCityChromeInsets`** (lines 1‑6) defines `bottom`, `right`, `left`, and `hidden`.  \n- **`export interface MeasureCodeCityChromeOptions`** (lines 40‑43) adds an optional `dockedControls` flag.  \n- **`rectsOverlap(a, b)`** (lines 10‑12) checks whether two `DOMRect`s overlap.  \n- **`liftForObstruction(hostRect, obstruction, bottom)`** (lines 14‑22) returns a new bottom inset when an obstruction overlaps the host.  \n- **`isBlockingModalOpen()`** (lines 24‑38) scans for several modal/backdrop selectors to short‑circuit inset calculation.  \n- **`measureCodeCityChromeInsets(host, options)`** (lines 49‑92) orchestrates the logic: early exit on blocking modal, gathers obstructions (sheet, activity bar), lifts the bottom inset, caps it, and returns a `CodeCityChromeInsets` object.\n\n### Impact  \n- Provides a typed contract for inset values.  \n- Early exit on modal sets `hidden: true`, allowing callers to suppress the UI when a modal is open.  \n- Obstruction handling lifts the bottom inset based on overlapping elements.  \n- The module is additive; existing exports remain unchanged.\n\n### Risks & follow‑ups  \n- **Modal detection** – verify that all selectors in `isBlockingModalOpen` still match the current DOM; a missing selector could cause the UI to render while a modal is open.  \n- **Layout row query** – the fallback to `.novadiff-graph-embed` may fail if the layout changes; test both paths.  \n- **Hidden flag usage** – callers must interpret `hidden: true` correctly to avoid rendering the UI when a modal is open.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/codeCityChromeInsets.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/commitChangeAnalysis.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new file `src/app/commitChangeAnalysis.ts` (lines 1–209) introduces browser‑safe utilities for classifying commit changes. It replaces external graph‑core types with local interfaces and removes `node:fs` dependencies.\n\n### Key changes  \n- **Interfaces** (`ChangeAnalysis`, `UpdateDecision`) defined at lines 4–19.  \n- **`topDirectory`** (lines 21–27) extracts the first path segment or returns `null`.  \n- **`detectDirectoryChanges`** (lines 29–49) flags structural changes when new or deleted files add previously unknown top‑level directories.  \n- **`summarizeChanges`** (lines 52–63) builds a concise string of new, deleted, and modified file counts.  \n- **`classifyUpdate`** (lines 67–129) implements decision logic:  \n  - `SKIP` if no structural changes.  \n  - `FULL_UPDATE` when structural changes exceed 30 files or 50 % of the graph.  \n  - `ARCHITECTURE_UPDATE` if directory changes or >10 structural files.  \n  - `PARTIAL_UPDATE` otherwise.  \n- **`buildChangeAnalysisFromRows`** (lines 132–152) converts `FileChange` rows into a `ChangeAnalysis`.  \n- **`classifyCompareRows`** (lines 155–163) wraps the above for direct use.  \n- **`districtBreakdown`** (lines 165–185) aggregates changes by top‑level directory and sorts by count.  \n- **`graphSymbolsContext`** (lines 188–209) lists affected functions/classes from a graph, limited to 12 entries.\n\n### Impact  \n- New public API: modules can import `classifyCompareRows` or `districtBreakdown` without pulling in Node‑specific code.  \n- No existing code is altered; the file is entirely new.  \n- `detectDirectoryChanges` runs in O(n) over file lists, suitable for typical commit sizes.  \n- Human‑readable summaries (`summarizeChanges`, `graphSymbolsContext`) aid UI or log output.\n\n### Risks & follow‑ups  \n- **Threshold correctness**: the >30 and >50 % rules are hard‑coded; verify they match project policy.  \n- **Directory detection**: `topDirectory` may mis‑handle paths with leading slashes or empty segments.  \n- **Graph node filtering**: `graphSymbolsContext` may miss symbols when `changedPaths` contains nested files.  \n- **Test coverage**: add unit tests for all decision branches and for `districtBreakdown` aggregation to guard against regressions.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/commitChangeAnalysis.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/commitMessage.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/app/commitMessage.ts` now accepts an options object, adds classification helpers, and includes a district‑level breakdown in the LLM prompt. Two utilities from `./commitChangeAnalysis` are re‑exported for external use.\n\n### Key changes  \n- **Imports** (`R3‑8`): added `classifyCompareRows`, `districtBreakdown`, `graphSymbolsContext`, and `UpdateDecision`.  \n- **New interface** (`R12‑17`): `CommitMessageContextOptions` with optional `classification`, `graphContext`, and `githubContext`.  \n- **Function signature** (`R26`): `buildCommitMessageContext` now takes `options: CommitMessageContextOptions = {}`.  \n- **Classification logic** (`R28‑29`): uses `options.classification ?? classifyCompareRows(docRows)` to set `classification`.  \n- **District breakdown** (`L21 / R36‑40`): inserts a “By district” section listing up to 24 top‑level folders.  \n- **Context injection** (`R42‑51`): appends optional `graphContext` and trimmed `githubContext` when provided.  \n- **Export** (`R67‑68`): re‑exports `graphSymbolsContext` and `classifyCompareRows`.  \n- **No change** to `parseCommitMessageOutput` (lines 69‑96 remain unchanged).\n\n### Impact  \n- **Backward compatibility**: default options preserve existing behavior; callers may supply richer context without breaking.  \n- **API surface**: `buildCommitMessageContext` now exposes an options parameter and the file re‑exports expose helper utilities.  \n- **Prompt content**: added sections (classification, district breakdown, optional contexts) may increase prompt length but provide more detail for LLMs.\n\n### Risks & follow‑ups  \n- Verify that `classifyCompareRows` and `districtBreakdown` handle empty `docRows` without throwing.  \n- Ensure the `githubContext` trimming (`slice(0, 2000)`) does not truncate essential URLs.  \n- Run the existing test suite to confirm that added sections do not affect downstream parsing logic.  \n- Monitor LLM output quality after the new context is introduced; the added “By district” section may influence prompt length limits.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/commitMessage.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/fileTree.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new module `src/app/fileTree.ts` is added. It defines the `FileTreeNode` interface (lines 1‑6) and provides functions to build, sort, filter, and collect folder paths from a list of relative paths.\n\n### Key changes  \n- **`FileTreeNode` interface** (lines 1‑6): `name`, `path`, `type` (`\"file\"` | `\"dir\"`), and `children`.  \n- **`insertPath`** (lines 8‑31): builds a tree by splitting a path on `/` and creating nodes on demand.  \n- **`sortNodes` / `sortTree`** (lines 32‑47): sort children so directories precede files and names are alphabetically ordered.  \n- **`buildFileTree`** (lines 48‑54): constructs a sorted tree from an array of paths.  \n- **`cloneFiltered`** (lines 56‑67): recursively clones nodes whose `path` contains a query string (case‑insensitive).  \n- **`filterFileTree`** (lines 69‑75): public API that returns the filtered tree or an empty root when no matches.  \n- **`collectFolderPaths`** (lines 78‑90): returns an array of all directory paths in the tree.\n\n### Impact  \n- **Public API**: `buildFileTree`, `filterFileTree`, and `collectFolderPaths` are exported; consumers can build or query a file tree.  \n- **Maintainability**: Centralizes tree logic, reducing duplication across the codebase.  \n- **Correctness**: Path handling uses `split(\"/\")` and `filter(Boolean)`, ignoring leading/trailing slashes; input paths should conform to this expectation.  \n- **Compatibility**: No existing modules are modified, so backward compatibility is preserved.\n\n### Risks & follow‑ups  \n- **Integration**: Ensure imports reference `src/app/fileTree.ts`.  \n- **Testing**: Add unit tests for edge cases (empty paths, duplicates, case sensitivity).  \n- **Linting & Build**: Run the repository’s lint, test, and production build scripts to confirm no TypeScript errors.  \n- **Performance**: `cloneFiltered` performs a recursive clone; unknown from the available diff/scan evidence whether this is a bottleneck.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/fileTree.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/gitTypes.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/app/gitTypes.ts` now includes a set of commit‑detail and GitHub‑context interfaces and adds an optional `stagePaths` flag to `PublishExecutePayload`. The changes span lines 125‑172 of the file.\n\n### Key changes  \n- **`PublishExecutePayload`** (lines 125‑127) now accepts an optional `stagePaths?: string[]` to specify which paths to stage.  \n- **`GitCommitDetail`** (lines 129‑142) exposes commit metadata: `hash`, `shortHash`, `subject`, `body`, `authorName`, `authorEmail`, `authoredAt`, `parentHashes`, `filesChanged`, `insertions`, `deletions`.  \n- **`GithubCommitPullRequest`** (lines 143‑149) and **`GithubCommitIssue`** (lines 150‑158) provide minimal PR/issue info (`number`, `title`, `state`, `url`).  \n- **`GithubCommitThreadKind`** (line 157) is a union of `\"pr_review\" | \"pr_comment\" | \"issue_comment\"`.  \n- **`GithubCommitThread`** (lines 159‑166) records a thread’s `kind`, `number`, `author`, `body`, `createdAt`, and `url`.  \n- **`GithubCommitContext`** (lines 168‑172) aggregates arrays of pull requests, issues, threads, and an optional `error` string.\n\n### Impact  \n- Modules importing `gitTypes` now have access to the new interfaces, enabling richer commit and GitHub context handling.  \n- The `stagePaths` option gives callers finer control over staged files before publishing, potentially improving workflow flexibility.  \n- No existing exports were removed, so backward compatibility is preserved.  \n- TypeScript consumers may need to adjust type assertions if they previously relied on the exact shape of `PublishExecutePayload`.\n\n### Risks & follow‑ups  \n- Verify that code constructing `PublishExecutePayload` still functions; the new optional field should not break existing logic.  \n- Ensure downstream modules that consume `GitCommitDetail` or `GithubCommitContext` are updated to use the new interfaces.  \n- Run the full test suite to catch any lint or type‑checking regressions introduced by the added types.  \n- Confirm that documentation and generated type definitions include the new interfaces for developer visibility.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/gitTypes.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/graphCityBridge.ts",
+    "kind": "added",
+    "markdown": "### Overview  \n`src/app/graphCityBridge.ts` adds utilities that translate between the knowledge‑graph model and the CodeCity layout. It parses graph node IDs, maps them to city building IDs, and generates edge overlays and highlight sets for linked selections.\n\n### Key changes  \n- **Imports** – pulls `GraphEdge`, `KnowledgeGraph` from `@novadiff/graph-core/types` and local layout types (`CodeCityLayoutResult`, `CodeCityRenderableBuilding`, `CodeCityRootSide`) (lines 1‑6).  \n- **`CityEdgeOverlay` interface** – defines overlay payload (lines 10‑14).  \n- **Node‑to‑building mapping** – `graphNodeToCityBuildingIds` parses node IDs, matches buildings by kind and symbol, and falls back to file‑level matches (lines 74‑114).  \n- **Reverse mapping** – `cityBuildingToGraphNodeId` resolves a building back to the best graph node ID, handling file, function, and class kinds (lines 117‑146).  \n- **Batch mapping** – `buildBuildingIdByGraphNode` pre‑computes a map of node IDs to building ID arrays (lines 148‑164).  \n- **Edge overlay generation** – `graphEdgesToCityPairs` filters link‑relevant edges, caps results, and deduplicates by source/target pair (lines 167‑205).  \n- **Neighbor discovery** – `graphNeighborNodeIds` returns one‑hop neighbors via link edges (lines 208‑226).  \n- **Highlight logic** – `cityBuildingIdsForHighlight` combines node mapping, file‑path resolution, and focus‑mode neighbor expansion to produce a primary building and a set of highlight IDs (lines 250‑307).\n\n### Impact  \n- **Correctness** – new mapping logic aligns graph nodes with city buildings, reducing visual mismatches.  \n- **Maintainability** – centralizes graph‑city translation; future changes to node ID formats or building kinds can be localized.  \n- **Performance** – pre‑computing `buildBuildingIdByGraphNode` and caching neighbor sets keeps per‑render overhead low.  \n- **Compatibility** – no API changes to existing modules; the new file is purely additive.\n\n### Risks & follow‑ups  \n- **Edge‑case mapping** – verify that `parseGraphNodeId` handles malformed IDs; unit tests should cover all prefixes.  \n- **Duplicate overlays** – ensure `graphEdgesToCityPairs`’ deduplication logic (`seen` set) behaves as intended when multiple edges share the same source/target pair.  \n- **Focus mode expansion** – confirm that neighbor traversal does not introduce cycles or excessive highlight sets in dense graphs.  \n- **Type safety** – the new imports rely on `@novadiff/graph-core/types`; ensure those types are exported correctly and that future version changes do not break the bridge.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/graphCityBridge.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/helpCopy.ts",
+    "kind": "added",
+    "markdown": "### Overview\nA new file `src/app/helpCopy.ts` (lines 1‑10) has been added. It exports a constant\n\n```ts\nexport const HELP_COPY: Record<string, string> = {\n  \"link-views\": \"When enabled, selecting a node in the knowledge graph highlights the matching building in Code City (and vice versa).\",\n  \"focus-mode\": \"Focus mode dims unrelated symbols and flies the camera to the linked selection in both views.\",\n  \"stage-district\": \"Stages all changed files under the selected top-level folder (district) for the next commit.\",\n  \"auto-commit\": \"Generates commit messages from structural classification, districts, and knowledge‑graph symbols.\"\n};\n```\n\nThe record maps feature identifiers to user‑facing help strings.\n\n### Key changes\n- **File addition**: `src/app/helpCopy.ts` now exists in the repository.\n- **Exported constant**: `HELP_COPY` is defined as a `Record<string, string>`.\n- **Help entries**: four keys (`link-views`, `focus-mode`, `stage-district`, `auto-commit`) with descriptive strings.\n\n### Impact\n- **Static data only**: No runtime logic is altered; the file only provides constants.\n- **Centralization**: Help text is now in a single location, reducing duplication across the codebase.\n- **Compatibility**: Adding a new export does not break existing modules unless they expect a different shape for `HELP_COPY`. Usage of the new constant is not evident from the diff.\n\n### Risks & follow‑ups\n- **Import usage**: Verify that components needing help text import `HELP_COPY` from `src/app/helpCopy.ts`.\n- **Key consistency**: UI labels must reference the exact keys (`link-views`, `focus-mode`, etc.) to avoid undefined lookups.\n- **Testing**: Add unit tests to confirm each key returns the expected string and that no extraneous keys exist.\n- **Build validation**: Run `tsc`, lint, and test suites to ensure the new file passes all checks.",
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/helpCopy.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/impactHeatmap.ts",
+    "kind": "added",
+    "markdown": "### Overview  \n`src/app/impactHeatmap.ts` adds a heat‑map generator for district impact data.  \n* Imports `RiskSignal` from `./types` (line 1).  \n* Declares `DistrictImpactScore` (lines 3‑10) with `district`, `score`, `changedPaths`, `riskCount`, and `highSeverity`.  \n* Provides `buildDistrictImpactHeatmap` (lines 17‑67) to aggregate scores from changed paths, risk signals, and affected node IDs.  \n* Exposes `heatmapMermaid` (lines 68‑79) and `heatmapHtmlTable` (lines 80‑93) for visual output.  \n* Includes `escapeHtml` (lines 94‑100) for safe HTML rendering.\n\n### Key changes  \n* **Interface** – `DistrictImpactScore` now tracks `highSeverity` and `riskCount` (lines 3‑10).  \n* **Scoring logic** –  \n  * Each changed path adds 2 points and increments `changedPaths` (line 40).  \n  * Risk signals are weighted: high = 8, medium = 4, low = 2; they increment `riskCount` and `highSeverity` (lines 46‑50).  \n  * Affected node IDs add 1 point per node (lines 55‑61).  \n  * Results are sorted by descending `score` (line 65).  \n* **Visualization** –  \n  * `heatmapMermaid` builds a Mermaid flowchart, limiting to `maxRows` districts (lines 68‑79).  \n  * `heatmapHtmlTable` renders an HTML table with a proportional impact bar (lines 80‑93).  \n* **Safety** – `escapeHtml` sanitizes district names for HTML output (lines 94‑100).\n\n### Impact  \n* **Granularity** – Explicit risk‑severity weighting (lines 46‑50) provides finer impact distinctions.  \n* **Centralization** – Aggregation logic resides in a single function (`buildDistrictImpactHeatmap`), reducing duplication.  \n* **Observability** – Mermaid and HTML outputs enable quick visual checks in dashboards or docs.  \n* **Performance** – Operations are linear or n log n over the number of districts, suitable for typical data sizes.\n\n### Risks & follow‑ups  \n* `highSeverity` is recorded but not displayed; confirm if downstream consumers need this field.  \n* Node‑ID parsing assumes `file:` prefixes or colon‑separated paths (lines 55‑58); test against all node‑ID formats.  \n* Existing components that consume district impact data must import the new interface and functions.  \n* Add unit tests for edge cases (e.g., no changed paths, all high‑severity risks) to guard against regressions.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/impactHeatmap.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/workspaceStorage.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/app/workspaceStorage.ts` now tracks product‑tour completion.  \nA new key `PRODUCT_TOUR_KEY` and two helper functions were added.\n\n### Key changes  \n- **Line 6**: `const PRODUCT_TOUR_KEY = \"novadiff_product_tour_v1\"` (R6).  \n- **Lines 8‑12**: `export function loadProductTourCompleted(): boolean` (R8‑R12).  \n  * Reads `localStorage.getItem(PRODUCT_TOUR_KEY)` inside a `try/catch`.  \n  * Returns `true` only when the stored value is `\"1\"`.  \n- **Lines 16‑22**: `export function saveProductTourCompleted(): void` (R16‑R22).  \n  * Writes `\"1\"` to `localStorage` inside a `try/catch`.  \n  * Errors are silently ignored.\n\n### Impact  \n- Adds a dedicated API for persisting the tour‑completion flag.  \n- Centralizes the key and storage logic; future changes can be made in one place.  \n- No existing exports are removed, so the change is additive.\n\n### Risks & follow‑ups  \n- **Environment safety**: The `try/catch` guards are intended to prevent crashes when `localStorage` is unavailable (e.g., SSR or Node). Verify that this guard behaves as expected in all target environments.  \n- **Test coverage**: Add unit tests for `loadProductTourCompleted` and `saveProductTourCompleted` to confirm correct behavior when storage is present, missing, or throws.  \n- **Key collision**: Ensure `PRODUCT_TOUR_KEY` does not clash with other keys in the application.  \n- **Regression**: Confirm that existing code paths that interact with `localStorage` continue to work after these additions.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/workspaceStorage.ts/summary.html"
+  },
+  {
+    "relPath": "src/app/workspaceTypes.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe `WorkspaceUiState` interface in `src/app/workspaceTypes.ts` now includes a new `workspacePage` option: `\"docReports\"`. This change is confined to line 38 of the file.\n\n### Key changes  \n- `WorkspaceUiState.workspacePage` union expanded from  \n  ```ts\n  \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\"\n  ```  \n  to  \n  ```ts\n  \"compare\" | \"history\" | \"docs\" | \"docReports\" | \"prs\" | \"publish\"\n  ```  \n  (diff: L38 removed, R38 added).  \n- No other properties or interfaces were modified.\n\n### Impact  \n- Type safety: code that assigns or checks `workspacePage` must now consider `\"docReports\"`.  \n- UI routing: components that render based on `workspacePage` may need an additional case.  \n- Tests: assertions enumerating allowed values may need updating.  \n- Runtime behavior remains unchanged.\n\n### Risks & follow‑ups  \n- Unhandled page value: components switching on `workspacePage` without a default or missing `\"docReports\"` could render incorrectly.  \n- Test failures: existing unit tests that validate the union type may fail.  \n- Documentation: any docs listing valid `workspacePage` options should be updated.  \n- Linting: custom rules or type guards enforcing the allowed set must include the new value.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/app/workspaceTypes.ts/summary.html"
+  },
+  {
+    "relPath": "src/components/AutoCommitWorkspace.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`AutoCommitWorkspace.tsx` now exposes a staging‑scope UI, an optional “Review in City” callback, and richer commit‑message context that includes structural classification and knowledge‑graph symbols. The component’s state and UI have been extended accordingly.\n\n### Key changes  \n- **Imports** – `classifyCompareRows` and `graphSymbolsContext` added (R6‑7).  \n- **Props** – `onReviewInCity?: (paths: string[]) => void` added to `AutoCommitWorkspaceProps` (R23).  \n- **State** – `stageSelection` (`Set<string>`) and `stageAllFiles` (`boolean`) introduced (R55‑56).  \n- **UI** –  \n  - Staging‑scope panel with a “Stage all changed files” checkbox and per‑file checkboxes (R298‑355).  \n  - “Review in City” button that calls `onReviewInCity` with the selected paths (R339‑353).  \n  - Docs note area shows the generated documentation bundle path (R129‑138).  \n- **Logic** –  \n  - `generateDraft` builds `classification` via `classifyCompareRows` and `graphContext` via `graphSymbolsContext` (R110‑127).  \n  - `executePublish` accepts an optional `stagePaths` array derived from `stageSelection`/`stageAllFiles` (R193‑194).  \n  - Commit‑message context (`buildCommitMessageContext`) now receives `{ classification, graphContext }` (R135).  \n\n### Impact  \n- **Correctness** – Commit messages now incorporate file classification and graph symbols, improving semantic accuracy.  \n- **Maintainability** – New props and state are typed; UI logic is modularized into separate panels.  \n- **Performance** – Additional state updates and context calculations add minor overhead only when staging or publishing.  \n- **Compatibility** – Existing consumers may ignore `onReviewInCity`; it is optional.  \n\n### Risks & follow‑ups  \n- **Regression** – Verify that `stageSelection` persists correctly across repo refreshes.  \n- **API contract** – `api.readKnowledgeGraph` and `api.writeNovadiffDocs` must be available; otherwise the component should fail gracefully.  \n- **UI layout** – The added staging panel may affect responsive design; run visual regression tests.  \n- **Prop usage** – Ensure that spreading `AutoCommitWorkspaceProps` does not unintentionally pass `onReviewInCity`.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/AutoCommitWorkspace.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/CodeCityLegend.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`CodeCityLegend` now accepts three optional props—`repoRoot?: string`, `onStageFile?: (path: string) => void`, and `onStageDistrict?: (topDir: string) => void`—and renders additional action buttons for the selected building. The component’s signature now spans lines 3‑147 instead of 3‑121 (see diff lines R11‑R13 and R22‑R24).\n\n### Key changes  \n- **Props API** – new optional props added at the top of the function signature (diff lines R11‑R13, R22‑R24).  \n- **UI actions** – the former “Open diff” block (lines 89‑97) was removed and replaced by a `<div className=\"code-city-selected-actions\">` (lines 95‑123). Inside this div:  \n  - “Open diff” button appears whenever `onOpenDiff` is supplied.  \n  - “Stage file” button appears when both `repoRoot` and `onStageFile` are present.  \n  - “Stage district” button appears when `repoRoot`, `onStageDistrict`, and `selected.topDirectory` are all defined.  \n  Each button’s `onClick` calls the corresponding callback with `selected.path` or `selected.topDirectory`.  \n\n### Impact  \n- **Backward compatibility** – all new props are optional, so existing callers compile unchanged.  \n- **Type safety** – callers who wish to use staging features must provide the matching callbacks.  \n- **UI consistency** – the legend now offers staging actions, improving workflow for users working with a local repository.  \n- **Performance** – negligible; only a few conditional renders were added.  \n\n### Risks & follow‑ups  \n- **Missing callbacks** – if `repoRoot` is omitted, the “Stage file” and “Stage district” buttons will not appear, potentially confusing users who expect staging actions.  \n- **Test coverage** – unit tests should be updated to cover the new action buttons and verify that callbacks receive the correct arguments.  \n- **Accessibility** – no evidence in the diff indicates ARIA labels or keyboard focus handling; confirm that the added buttons are accessible.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/CodeCityLegend.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/CodeCityMinimapPortal.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \n`src/components/CodeCityMinimapPortal.tsx` introduces a React portal that mounts a custom minimap into the react‑flow controls host. The component hides the built‑in minimap, attaches itself to the host, and emits a `code-city-dock-host-ready` event when the attachment succeeds. The implementation relies on DOM queries, a `MutationObserver`, and a retry interval to locate the host element.\n\n### Key changes  \n- **Imports** (R1‑R3): `useLayoutEffect`, `useRef`, `useState`, `ReactNode` from *react*; `createPortal` from *react-dom*; `CodeCityMinimapSlot` from the local slot component.  \n- **Constants** (R5‑R6): `COVER_ROOT = \".knowledge-graph-cover-stage\"` and `DOCK_HOST_CLASS = \"code-city-graph-dock-host\"`.  \n- **Helper functions** (R9‑R22):  \n  - `findControlsHost()` locates the controls panel in the cover stage.  \n  - `hideBuiltInMinimap()` sets the built‑in minimap’s display to `none`.  \n- **Exported component** (R27‑R102):  \n  - Uses `useState` to track the host element.  \n  - `tryAttach()` performs host lookup, hides the built‑in minimap, adds a CSS class, and dispatches the custom event.  \n  - `useLayoutEffect` sets up the attachment logic, a retry interval, and a `MutationObserver` to react to DOM changes.  \n  - Cleanup removes the class, restores the minimap display, and disconnects observers.  \n  - Renders a `<CodeCityMinimapSlot>` inside a portal when the host is available; otherwise falls back to an anchored `<div>`.\n\n### Impact  \nThe portal replaces the default minimap with a custom one, ensuring it appears in the bottom‑left controls area. It also signals readiness via a custom event, allowing other parts of the application to react once the minimap is docked.\n\n### Risks & follow‑ups  \n- **Host element missing**: If the selector `${COVER_ROOT} .react-flow__controls.react-flow__panel.bottom.left` does not match, the component will never attach.  \n- **Event name collision**: The custom event `code-city-dock-host-ready` could clash with other listeners.  \n- **Cleanup reliability**: The interval and observer must be cleared on unmount; any failure could leave stale listeners.  \n- **Styling side‑effects**: Hiding the built‑in minimap via `display: none !important` may interfere with other CSS rules.  \nFollow‑up actions include adding unit tests for host detection, verifying event dispatch, and ensuring the cleanup logic runs under all unmount scenarios.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/CodeCityMinimapPortal.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/CodeCityMinimapSlot.tsx",
+    "kind": "added",
+    "markdown": "### Overview\nA new component, `CodeCityMinimapSlot`, is added in **src/components/CodeCityMinimapSlot.tsx** (lines R1‑R94). It renders a minimap slot that measures Chrome insets and updates its layout in response to DOM changes.\n\n### Key changes\n- **Imports** – React hooks (`useLayoutEffect`, `useRef`, `useState`) and types (`CSSProperties`, `ReactNode`) plus `measureCodeCityChromeInsets` and `CodeCityChromeInsets` from `../app/codeCityChromeInsets` (lines R1‑R5).  \n- **DEFAULT_INSETS** – a default `CodeCityChromeInsets` object (lines R7‑R12).  \n- **Component export** – `export function CodeCityMinimapSlot({ children, dockedControls = false }: { children: ReactNode; dockedControls?: boolean; })` (lines R14‑R20).  \n- **Layout effect** – `useLayoutEffect` locates the host element, then sets up a `ResizeObserver`, a `MutationObserver`, and a window resize listener to call `measureCodeCityChromeInsets(host, { dockedControls })` (lines R24‑R78).  \n- **Styling** – applies a CSS variable `--code-city-lift` from `insets.bottom` and conditionally adds classes for docked controls or hidden chrome (lines R80‑R88).  \n- **Cleanup** – cancels animation frames, disconnects observers, and removes the resize listener on unmount (lines R72‑R77).\n\n### Impact\nThe component now tracks layout changes and applies Chrome insets dynamically. It exposes `--code-city-lift` for styling and debugging. The implementation relies on `ResizeObserver` and `MutationObserver`; browsers without support may need polyfills.\n\n### Risks & follow‑ups\n- **Export visibility** – confirm `CodeCityMinimapSlot` is re‑exported from the component index if required.  \n- **Observer cleanup** – ensure `cancelAnimationFrame`, `ro.disconnect()`, and `mo.disconnect()` run on unmount to avoid leaks.  \n- **Host element resolution** – verify the logic for `host` (docked vs. non‑docked) correctly selects the intended element in both modes.  \n- **CSS variable usage** – consuming styles must reference `--code-city-lift` to apply the visual lift effect.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/CodeCityMinimapSlot.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/DocsGraphExploreChrome.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \n`src/components/DocsGraphExploreChrome.tsx` is a new component that renders a Code City settings UI in a portal and can be docked to the graph minimap. It introduces two prop interfaces (`GraphBuildBarProps` lines 18‑31, `CityExploreBarProps` lines 33‑59), helper logic (`countActiveCityFilters` lines 61‑87, `ExpandCornerIcon` lines 90‑120), and several UI panels (`CityFiltersPanel`, `CityLinkPanel`, `GraphBuildPanel`, `GraphStatsPanel` lines 122‑374). The floating shell (`CodeCityFloatShell` lines 376‑439) manages docked/expanded state with `useLayoutEffect`, `ResizeObserver`, and `MutationObserver`. The top‑level `CodeCityExploreSettings` component (lines 444‑639) mounts the shell into `document.body`, creates an overlay via `createPortal`, and exposes an `expanded` state. A deprecated wrapper `DocsGraphActionBar` (lines 641‑648) forwards props to `CodeCityExploreSettings`. New imports include `createPortal`, `AnimatedOverlay`, `CodeCityGraphToolbar`, `DocsLinkToolbar`, and `CodeCityLayoutResult`.\n\n### Key changes  \n- Added interfaces `GraphBuildBarProps` and `CityExploreBarProps`.  \n- Implemented `countActiveCityFilters` and `ExpandCornerIcon`.  \n- Created panels for filters, linking, build controls, and statistics.  \n- Built a dockable shell that updates position with `ResizeObserver` and `MutationObserver`.  \n- Mounted the shell into `document.body` and added an overlay portal.  \n- Provided a deprecated wrapper for backward compatibility.\n\n### Impact  \n- **UI/UX**: Offers filter, linking, and build controls that can be toggled and docked.  \n- **Build size**: Adds JSX and portal logic; bundle size increases modestly.  \n- **Performance**: Uses continuous `ResizeObserver`/`MutationObserver` callbacks; runtime overhead may be noticeable on large graphs.  \n- **Compatibility**: `DocsGraphActionBar` keeps older imports functional; migration to `CodeCityExploreSettings` is recommended.  \n- **Observability**: No console logs; layout issues would surface as CSS or positioning glitches.\n\n### Risks & follow‑ups  \n- **Layout regressions**: Verify CSS classes (`code-city-float`, `code-city-float--chrome`, etc.) and that the minimap slot receives `data-code-city-expanded`.  \n- **Observer leaks**: Ensure observers are disconnected on unmount; current cleanup paths cover most cases but should be validated in edge scenarios.  \n- **Portal mounting**: Confirm `document.body` is available in SSR or test environments; the `code-city-body-mount` div should be appended only once.  \n- **Deprecated API**: Update documentation and search for remaining `DocsGraphActionBar` imports to avoid accidental use.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/DocsGraphExploreChrome.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/DocumentationWorkspaceLinked.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \nA new `src/components/DocumentationWorkspaceLinked.tsx` file introduces a set of utilities that bind the documentation workspace to the Code City graph. It adds a sync root component, a bootstrap helper, a custom hook `useLinkedCityState`, and two toolbar components.\n\n### Key changes  \n- **`InitialDocsFocus` interface** (lines 16‑22) defines optional props for initial focus state.  \n- **`DocumentationWorkspaceSyncRoot`** (lines 24‑37) wraps children in `DocsViewSyncProvider` and injects `DocsFocusBootstrap`.  \n- **`DocsFocusBootstrap`** (lines 39‑42) registers an external node with `useDocsViewSyncExternalNode`.  \n- **`useLinkedCityState`** (lines 44‑174) computes filtered layout, building mappings, highlights, and exposes callbacks for graph/city selection and entry/exit.  \n- **`CodeCityGraphToolbar`** (lines 176‑206) renders a toolbar that shows the current file context and an exit button.  \n- **`DocsLinkToolbar`** (lines 208‑215) displays a hint that the city and graph stay linked.\n\n### Impact  \n- **Correctness**: The hook centralizes sync logic; any misuse of `sync` or missing context will surface at runtime.  \n- **Maintainability**: New exports are self‑contained; future refactors can target this file without touching other modules.  \n- **Performance**: Heavy `useMemo` chains (e.g., `filteredLayout`, `buildingByNode`) may add overhead; monitor rendering times when the graph payload is large.  \n- **Compatibility**: As a new file, it does not break existing code but requires importing the new components where needed.\n\n### Risks & follow‑ups  \n- **Context availability**: Verify that `DocsViewSyncProvider` is rendered above any consumer of `useLinkedCityState`.  \n- **Type safety**: Ensure `GraphPayload` and `CodeCityLayoutResult` types align with actual payloads; mismatches will cause runtime errors.  \n- **Performance regression**: Benchmark `useLinkedCityState` with a large graph to confirm memoization thresholds are adequate.  \n- **UI consistency**: Confirm that `CodeCityGraphToolbar` and `DocsLinkToolbar` integrate visually with existing toolbars and do not duplicate functionality.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/DocumentationWorkspaceLinked.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/GitBlameLineModal.tsx",
+    "kind": "added",
+    "markdown": "### Overview\nA new modal component `GitBlameLineModal` is added at `src/components/GitBlameLineModal.tsx` (lines 1‑115). It displays line‑by‑line Git blame for a file and can be toggled via an `open` prop.\n\n### Key changes\n- **Imports** (lines 1‑3): `useEffect` from React, `Loader2` & `X` from `lucide-react`, and `GitBlameAtRefResult` type from `../app/gitTypes`.\n- **Props interface** (lines 5‑13): `GitBlameLineModalProps` defines `open`, `relPath`, `blame`, `fileContent`, `loading`, `error`, `onClose`.\n- **Component** (lines 15‑115): registers a `keydown` listener that calls `onClose` when `Escape` is pressed (lines 24‑35). Returns `null` when `open` is `false` (lines 37‑39). Splits `fileContent` into lines (line 41) and renders a modal with a backdrop, header, close button, error message, loading spinner, owners list, blame error, and a `<pre>` block mapping each line to its author badge and text (lines 43‑114).\n\n### Impact\n- Adds a UI element that can be shown or hidden via the `open` prop; no existing components are modified.\n- Requires `lucide-react` icons; ensure the package is listed in `package.json`.\n- Uses `role=\"dialog\"` and `aria-modal=\"true\"` for accessibility, but no focus trap is implemented.\n\n### Risks & follow‑ups\n- Verify that the `keydown` listener is removed when the modal closes or the component unmounts (lines 33‑34).\n- Confirm callers pass a valid `GitBlameAtRefResult` or `null`; otherwise `blame?.owners` may be `undefined`.\n- If `fileContent` contains more lines than `blame.lineAuthors`, the author will default to an empty string (line 94).\n- Ensure CSS classes such as `git-blame-modal-backdrop` and `git-blame-owners` exist; otherwise the modal will appear unstyled.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/GitBlameLineModal.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/GitBlamePanel.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`GitBlamePanel` now uses a tree‑view for file navigation and a modal for line‑by‑line blame. The component was split into a new `TreeRows` helper (lines 14‑100) and a `GitBlameLineModal` (rendered after the panel). File‑tree logic is memoized and the UI layout has been reorganized into a card‑style panel.\n\n### Key changes  \n- **Imports** – `ChevronDown`, `ChevronRight`, `Folder` icons and file‑tree helpers (`buildFileTree`, `collectFolderPaths`, `filterFileTree`) were added; `GitBlameLineModal` was imported. The original `FileText`, `Loader2`, `Search` import was replaced.  \n- **State** – `relPath` was removed; `expanded` (`Set<string>`) and `selectedPath` were added.  \n- **TreeRows** – renders recursive file/folder rows, handles expand/collapse, and calls `onSelectFile`.  \n- **File‑tree logic** (lines 137‑152) builds a tree from `files`, filters it by `fileQuery`, and auto‑expands folders that match the filter.  \n- **Blame loading** (lines 166‑192) sets `selectedPath`, opens the modal, clears `fileContent`, then fetches blame and file content.  \n- **UI** – the old list was replaced by a card layout (`git-blame-files-card`) and a scrollable tree (`git-blame-tree-scroll`). The modal is rendered after the panel.  \n- **Error handling** – errors are shown only when the modal is closed (`error && !blameModalOpen`).\n\n### Impact  \n- **Maintainability** – `TreeRows` isolates tree logic; the modal decouples blame display.  \n- **Performance** – memoized tree building and filtering reduce re‑renders.  \n- **UX** – clearer navigation, modal for detailed blame, consistent loading indicators.  \n- **Compatibility** – no API changes; only UI refactor.\n\n### Risks & follow‑ups  \n- Verify that `collectFolderPaths` expands all matching folders; otherwise files may be hidden.  \n- Ensure `GitBlameLineModal` receives correct `relPath` and `blame` props; missing data could crash the modal.  \n- Confirm that the `expanded` state syncs with user interactions; stale state could leave folders collapsed.  \n- Run lint, unit, and integration tests to catch any missing imports or type errors introduced by the new helpers.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/GitBlamePanel.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/GitHistoryContextPanel.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \nA new `GitHistoryContextPanel` component is added at `src/components/GitHistoryContextPanel.tsx` (≈587 lines). It renders a three‑tab panel for commit details, GitHub context, and actions, and includes helper utilities for date formatting, GitHub URL parsing, and error normalisation.\n\n### Key changes  \n- **Imports** (lines 1‑19): React hooks, `createPortal` from `react-dom`, icons from `lucide-react`, types from `../app/gitTypes` and `../app/workspaceTypes`, and `GitBlamePanel`.  \n- **Exported interface** `GitHistoryContextPanelProps` (lines 23‑38) defines workspace data, commit references, flags, and callbacks.  \n- **Utility functions** (lines 40‑88): `formatDate`, `slugFromRemoteUrl`, `friendlyGhError`, `threadKindLabel`.  \n- **Component** `GitHistoryContextPanel` (lines 89‑587) manages state for commit detail, GitHub context, blame overlay, and tab selection.  \n- **UI**: three tabs—Details, GitHub, Actions—rendered conditionally.  \n- **GitHub integration**: fetches context via `window.electronAPI.githubCommitContext`, displays PRs, issues, and discussion threads.  \n- **Blame overlay**: uses `createPortal` to render a `GitBlamePanel` over `document.body`.  \n- **Action buttons**: set base/head, run semantic compare, review in City, generate docs, and line blame.\n\n### Impact  \n- **API surface**: relies on `window.electronAPI` functions (`gitCommitDetail`, `githubCommitContext`, `gitRepoStatus`). Missing or mis‑typed APIs will break the panel.  \n- **UI**: new CSS classes (`git-history-context`, `git-blame-overlay`) must coexist with existing styles; potential layout interference.  \n- **Testing**: no existing tests cover this component; unit and integration tests are required.\n\n### Risks & follow‑ups  \n- **API availability**: verify that `githubCommitContext` and `gitRepoStatus` exist in the Electron preload; otherwise the panel falls back to error messages.  \n- **Null handling**: `slugFromRemoteUrl` may return `null`; ensure `repository` state is set before GitHub calls.  \n- **Portal cleanup**: confirm that `createPortal` is unmounted properly when the component unmounts to avoid memory leaks.  \n- **Accessibility**: check that tabs and buttons have appropriate ARIA roles; the overlay uses `role=\"presentation\"` but tabs lack explicit roles.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/GitHistoryContextPanel.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/HistoryCompareStrip.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`HistoryCompareStrip` was refactored to improve the Git history comparison panel.  \nKey UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.\n\n### Key changes  \n- **Title** – lines L71‑73 replaced plain text with  \n  ```tsx\n  <h1 className=\"git-history-title\">\n    Git history <span className=\"git-history-title-accent\">compare</span>\n  </h1>\n  ```  \n- **Wrapper** – line R79 added `git-history-compare-card` to the `workspace-setup-strip` container.  \n- **Labels** – lines R83 and R90 added `git-history-field-label` to the Base/Head labels.  \n- **Badges** – lines R85 and R92‑96 insert conditional `<span className=\"git-history-badge …\">` elements next to the selectors.  \n- **Selector segment** – line R137 added `git-history-selector-segment` to the segment class list.  \n- **Live‑head input** – lines R145‑161 replace the head selector with an input + browse button when `useLiveHead` is true.  \n- **Live toggle** – lines R180‑185 introduce a checkbox labeled “Compare base against live dev folder”.  \n- **Compare button** – lines R190‑205 update the button’s classes, disabled state, and tooltip logic.\n\nThe logic that determines `canCompare` (lines 62‑66) remains unchanged.\n\n### Impact  \n- **UI consistency** – new class names (`git-history-compare-card`, `git-history-field-label`, etc.) match the existing design system.  \n- **Accessibility** – added `aria-label` attributes and descriptive labels for interactive elements.  \n- **No functional regression** – only presentation layers were altered.\n\n### Risks & follow‑ups  \n- **Missing CSS** – verify that the new classes exist in the stylesheet.  \n- **Badge rendering** – ensure badges do not appear when `base` or `head` is null; run unit tests for edge cases.  \n- **Live‑head toggle** – confirm that toggling updates `useLiveHead` correctly and that the input behaves as expected.  \n- **Lint & build** – run `npm run lint`, `npm test`, and `npm run build` to catch any syntax or type errors introduced by the JSX changes.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/HistoryCompareStrip.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/KeyboardShortcutsHelp.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \nA new React component `KeyboardShortcutsHelp` is added in `src/components/KeyboardShortcutsHelp.tsx`. It renders a modal overlay that lists common shortcuts and closes when the user presses **Escape** or clicks the close button.\n\n### Key changes  \n- **Import** `useEffect` from `react` (R1).  \n- **Define** a `SHORTCUTS` constant array (R3‑R8) with key–description pairs.  \n- **Export** `KeyboardShortcutsHelp` (R10) accepting `open: boolean` and `onClose: () => void`.  \n- **Hook** `useEffect` (R17‑R28) attaches a `keydown` listener that calls `onClose` on **Escape** and removes the listener when the component unmounts or `open` changes.  \n- **Conditional rendering**: returns `null` when `open` is false (R30‑R32).  \n- **Markup** (R34‑R52): an overlay with `role=\"dialog\"` containing a list of shortcuts rendered with `<kbd>` tags and a close button wired to `onClose`.\n\n### Impact  \n- **Correctness**: Provides a self‑contained shortcut help panel with no side effects beyond the key listener.  \n- **Maintainability**: Shortcuts are stored in a constant array, making future extensions straightforward.  \n- **Performance**: The event listener is added only while the panel is open, minimizing runtime overhead.  \n- **Compatibility**: No existing APIs are modified; the component is purely additive.\n\n### Risks & follow‑ups  \n- Verify that the CSS classes (`shortcuts-help-overlay`, `shortcuts-help-panel`, etc.) are defined to avoid layout issues.  \n- Ensure the component is rendered only when needed to prevent unnecessary listeners.  \n- Confirm that the `onClose` callback correctly updates parent state; otherwise the panel may remain open.  \n- Test that the **Escape** key does not interfere with other global shortcuts in the application.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/KeyboardShortcutsHelp.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/SidebarNav.tsx",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/components/SidebarNav.tsx` was refactored to add a compact UI mode, a new `NavLink` helper component, and an expanded `WorkspacePage` enum. The brand‑reveal animation logic was removed, and the feature list and navigation links were reorganized.\n\n### Key changes  \n- Added `import type { ReactNode } from \"react\";` (line 1).  \n- Removed `BookOpen` icon import (line 5).  \n- Expanded `WorkspacePage` enum to include `\"docReports\"` (lines 18‑24).  \n- Added `compact?: boolean` to `SidebarNavProps` (line 33).  \n- Added `icCompact` constant for compact icon sizing (line 41).  \n- Created `NavLink` helper component (lines 43‑77) replacing inline button markup.  \n- Updated `<aside>` and `<nav>` to be compact‑aware (lines 86‑140).  \n- Updated `showLaunchBrand` to `brandReveal && !skipSequence && !compact` (lines 94‑95).  \n- Rewrote feature list and navigation links to use `NavLink` and new icon props (lines 142‑260).  \n- Conditionally rendered compact avatar and text in user section (lines 287‑312).  \n- Updated `onOpenSettings` button to disable when absent (lines 276‑280).\n\n### Impact  \n- `NavLink` centralizes link styling, reducing duplication.  \n- Compact mode changes layout; tests should cover both modes.  \n- Expanded `WorkspacePage` requires callers to handle `\"docReports\"`.  \n- Removing the brand‑reveal animation may slightly improve initial render time.  \n- No other modules reference `BookOpen`, so its removal is safe.\n\n### Risks & follow‑ups  \n- Verify all `NavLink` instances forward props correctly and that the `\"docReports\"` route is wired.  \n- Run visual regression tests for `compact` true/false.  \n- Ensure any tests or analytics tied to the removed brand‑reveal animation are updated.  \n- Confirm avatar fallback and compact text render correctly when `compact` is true.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/SidebarNav.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/onboarding/ProductTour.tsx",
+    "kind": "added",
+    "markdown": "### Overview  \nA new onboarding component `ProductTour` was added at `src/components/onboarding/ProductTour.tsx` (lines 1‑65). It renders a dialog overlay that walks the user through four instructional steps and records completion.\n\n### Key changes  \n- **Imports** – added `useCallback` and `useState` from `react` (line 1) and `saveProductTourCompleted` from `../../app/workspaceStorage` (line 2).  \n- **Export** – `export function ProductTour({ onDone }: { onDone: () => void })` (line 23).  \n- **State** – `const [step, setStep] = useState(0)` and `const current = STEPS[step]` (lines 24‑25).  \n- **Finish logic** – `const finish = useCallback(() => { saveProductTourCompleted(); onDone(); }, [onDone]);` (lines 27‑30).  \n- **UI** – dialog overlay with `role=\"dialog\" aria-modal=\"true\" aria-label=\"Product tour\"`, step counter, title, body, and buttons: “Skip tour”, “Next”, or “Get started” (lines 32‑63).  \n- **Steps** – `const STEPS = [...] as const;` defines four steps: “Compare folders”, “Documentation & knowledge graph”, “3D Code City”, “Publish with review” (lines 4‑21).\n\n### Impact  \nThe component introduces a new user flow that persists completion via `saveProductTourCompleted` and signals the parent through the required `onDone` callback. It adds minimal runtime overhead: a single state variable and a few re-renders per step. No new external APIs are invoked beyond the existing storage helper.\n\n### Risks & follow‑ups  \n- **Missing CSS** – classes `product-tour-overlay`, `product-tour-card`, etc., are referenced but not defined in this diff.  \n- **Callback requirement** – `onDone` is mandatory; callers must provide a function.  \n- **Side‑effect reliability** – verify that `saveProductTourCompleted` writes correctly and is called once per finish.  \n- **Accessibility** – the dialog uses ARIA attributes; confirm focus trapping and screen‑reader announcements.  \n- **Telemetry** – no analytics are emitted; consider adding logging if needed.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/onboarding/ProductTour.tsx/summary.html"
+  },
+  {
+    "relPath": "src/components/onboarding/onboarding.css",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/components/onboarding/onboarding.css` now expands the commit list to full height, adjusts row padding, and introduces new overlay styles for a product tour and shortcuts help panel.\n\n### Key changes  \n- **Commit list sizing** – `.git-history-commit-list` `max-height` changed from `320px` (line 194 removed) to `100%` (line 194 added).  \n- **Row padding** – `.git-history-commit-row` padding updated from `8px 0` (line 202 removed) to `10px` (line 202 added).  \n- **Product tour UI** – new `.product-tour-overlay` and `.product-tour-card` blocks added (lines 264‑282).  \n- **Shortcuts help UI** – new `.shortcuts-help-overlay` and `.shortcuts-help-panel` styles added (lines 309‑326).  \n- **Overlay styling** – new overlays use `z-index: 12000` and `11000`, with `backdrop-filter: blur(4px)` for the product tour overlay (line 272).\n\n### Impact  \n- The commit list now occupies the full available height, which may affect scrolling in narrow viewports.  \n- Padding change improves spacing between commit rows, aligning with the updated design language.  \n- The new overlay classes must be rendered by corresponding components; otherwise the styles will have no effect.  \n- High z‑indices may unintentionally cover unrelated UI elements if not scoped correctly.\n\n### Risks & follow‑ups  \n- Verify that the expanded commit list does not overflow the viewport on mobile devices.  \n- Run smoke tests for the onboarding flow to confirm the new overlays appear and dismiss correctly.  \n- Check that the new `.product-tour-*` and `.shortcuts-help-*` classes do not clash with existing global styles.  \n- Ensure that the updated padding does not break any existing layout assumptions in the commit list component.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/onboarding/onboarding.css/summary.html"
+  },
+  {
+    "relPath": "src/components/ui/ui-transitions.css",
+    "kind": "modified",
+    "markdown": "### Overview  \n`src/components/ui/ui-transitions.css` replaces the hard‑coded `flex: 1` on `.workspace-stage` and `.workspace-stage-inner` with `flex: 1 1 0`. A new rule for `.launch-panel--main .workspace-stage` is added. The change is limited to layout properties; no animation or transition rules are modified.\n\n### Key changes  \n- **New selector**: `.launch-panel--main .workspace-stage` (lines 47‑50)  \n  ```css\n  .launch-panel--main .workspace-stage {\n    flex: 1 1 0;\n    min-height: 0;\n  }\n  ```  \n- **Updated flex**:  \n  - `.workspace-stage` (line 48) changed from `flex: 1;` to `flex: 1 1 0;` (diff: L48 removed, R48 added).  \n  - `.workspace-stage-inner` (line 57) changed similarly (diff: L57 removed, R62 added).  \n- **Additional flex**: `.workspace-stage-inner > .workspace` now has `flex: 1 1 0; min-height: 0;` (lines 70‑71).  \n- No other CSS properties were altered.\n\n### Impact  \n- **Layout**: The workspace stages now grow and shrink with a basis of 0, allowing more flexible height distribution within the launch panel.  \n- **Maintainability**: The new selector isolates the launch‑panel layout, reducing accidental style bleed.  \n- **Compatibility**: No new CSS features or vendor prefixes were introduced; the change should work in all supported browsers.  \n- **Performance**: unknown from the available diff/scan evidence.\n\n### Risks & follow‑ups  \n- **Regression**: Verify that the launch panel still occupies the intended space and that no content is clipped.  \n- **Overflow**: Ensure that `overflow: hidden` on `.workspace-stage-inner` behaves correctly with the new flex basis.  \n- **Test coverage**: Run the targeted UI tests for the launch panel and workspace stage; add a smoke test if none exist.  \n- **Visual consistency**: Manually inspect the layout on different viewport sizes to confirm that the new flex values do not cause unintended stretching or shrinking.",
+    "badges": [],
+    "htmlRelPath": "novadiff-docs/summaries/src/components/ui/ui-transitions.css/summary.html"
+  },
+  {
+    "relPath": "src/vite-env.d.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe `ElectronAPI` interface in `src/vite-env.d.ts` has been extended with five new methods that expose additional Git and snapshot functionality to the renderer process. The changes are located in the file’s latter section (lines 293‑301 and 347‑354).\n\n### Key changes  \n- **`gitStagePaths`** (lines 293‑294) – stages a list of file paths in a repository and returns the number of files staged.  \n- **`gitStageDistrict`** (lines 295‑297) – stages all files under a specified directory subtree and reports the staged count.  \n- **`exportProjectSnapshot`** (lines 298‑301) – creates a ZIP archive of a project snapshot, returning the ZIP path and byte size.  \n- **`gitCommitDetail`** (lines 347‑350) – retrieves detailed commit information for a given hash.  \n- **`githubCommitContext`** (lines 351‑354) – fetches GitHub commit context data for a repository and SHA.\n\n### Impact  \nThese additions give the renderer process direct access to:\n- Programmatic staging of files or directories, enabling UI‑driven Git workflows.  \n- Exporting a project snapshot for backup or sharing.  \n- Inspecting commit metadata and GitHub context without additional API calls.  \nThe interface changes are purely type declarations; actual implementation must exist in the main process to make the calls functional.\n\n### Risks & follow‑ups  \n- **Implementation gap** – the new methods are only declared; if the main process lacks corresponding handlers, calls will fail.  \n- **Security** – exposing Git staging and snapshot export may require permission checks; review access controls.  \n- **Testing** – add unit and integration tests to verify that the renderer can invoke these methods and that the returned data matches expectations.  \n- **Documentation** – update API docs and example usage to reflect the new capabilities.  \n\nUnknown from the available diff/scan evidence: whether the main process has been updated to support these calls.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/src/vite-env.d.ts/summary.html"
+  },
+  {
+    "relPath": "tests/graphCityBridge.test.ts",
+    "kind": "added",
+    "markdown": "### Overview  \nA new test suite `tests/graphCityBridge.test.ts` has been added to validate the mapping utilities in `graphCityBridge`. The file imports Vitest, `KnowledgeGraph`, and several helper functions (`cityBuildingIdsForHighlight`, `cityBuildingToGraphNodeId`, `graphEdgesToCityPairs`, `graphNodeToCityBuildingIds`) along with CodeCity layout types.\n\n### Key changes  \n- **Test file added**: `tests/graphCityBridge.test.ts` (≈121 lines).  \n- **Imports**: `vitest` helpers, `KnowledgeGraph` type, and the four mapping functions from `../src/app/graphCityBridge`.  \n- **Helper `building()`**: constructs `CodeCityRenderableBuilding` objects with default geometry and overrides.  \n- **Sample layout & graph**: a minimal `CodeCityLayoutResult` with two buildings (function `foo` and class `Bar`) and a corresponding `KnowledgeGraph` containing nodes and a single `calls` edge.  \n- **Four test cases**:  \n  1. `graphNodeToCityBuildingIds` maps a function node to its city building ID.  \n  2. `cityBuildingToGraphNodeId` reverses the mapping.  \n  3. `cityBuildingIdsForHighlight` returns all building IDs for a file node.  \n  4. `graphEdgesToCityPairs` produces overlay pairs for a selected node.\n\n### Impact  \n- **Correctness**: Provides concrete assertions for the mapping logic, reducing silent regressions.  \n- **Maintainability**: Centralizes test data; future changes to node/building IDs must update this file.  \n- **Observability**: Test failures will surface mapping mismatches immediately during CI.  \n- **Compatibility**: No changes to production code; only test additions.\n\n### Risks & follow-ups  \n- **Regression risk**: If `graphCityBridge` functions change signatures or ID conventions, tests will fail; verify that the mapping logic remains stable.  \n- **Snapshot drift**: No snapshots used, but any change to default geometry in `building()` may require test updates.  \n- **Linting**: Ensure the new file passes the repo’s TS lint rules (`tsc`, `eslint`).  \n- **Build impact**: Run `npm run build` to confirm the added test does not introduce build-time errors.",
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/tests/graphCityBridge.test.ts/summary.html"
+  },
+  {
+    "relPath": "vite.config.ts",
+    "kind": "modified",
+    "markdown": "### Overview  \nThe Vite configuration now replaces the single `@novadiff/graph-core` alias with three granular aliases for the core package’s types, schema, and search modules.  \nThe change occurs in the `resolve.alias` section (lines 15‑26 of `vite.config.ts`).\n\n### Key changes  \n- **Removed** the old alias `@novadiff/graph-core` that pointed to `packages/graph-core/src`.  \n- **Added**  \n  - `@novadiff/graph-core/types` → `packages/graph-core/src/types.ts`  \n  - `@novadiff/graph-core/schema` → `packages/graph-core/src/schema.ts`  \n  - `@novadiff/graph-core/search` → `packages/graph-core/src/search.ts`  \n- The `@novadiff/graph-view` alias remains unchanged.  \n- No other configuration sections were modified.\n\n### Impact  \n- **Module resolution**: Imports that previously used `@novadiff/graph-core` must now target the specific sub‑modules (`types`, `schema`, `search`).  \n- **Build correctness**: The new aliases point to individual source files, which is likely to reduce bundle size and avoid accidental exposure of internal files.  \n- **Maintainability**: Explicit aliases clarify intent and make refactoring of the core package easier.  \n- **Compatibility**: Existing code that imports `@novadiff/graph-core` will break unless updated; this change is a breaking API shift for consumers of the Vite config.\n\n### Risks & follow‑ups  \n- **Import regressions**: Verify that all internal imports now reference the new aliases; run `npm run lint` and `npm test` to catch unresolved imports.  \n- **Build failures**: Ensure the TypeScript compiler resolves the new paths; run `npm run build` to confirm.  \n- **Documentation**: Update any README or docs that mention the old alias.  \n- **CI pipelines**: Confirm that the updated config does not affect server watch ignore patterns or dev server behavior.",
+    "badges": [
+      {
+        "description": "Runtime configuration or environment behavior may shift.",
+        "key": "config",
+        "label": "Config-adjacent path",
+        "tone": "warn"
+      }
+    ],
+    "htmlRelPath": "novadiff-docs/summaries/vite.config.ts/summary.html"
+  }
+]

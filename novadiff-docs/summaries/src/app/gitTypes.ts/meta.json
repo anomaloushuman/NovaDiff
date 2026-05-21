@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/gitTypes.ts",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:43:27.664Z",
+  "generatedAt": "2026-05-21T10:55:17.352Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,38 +20,36 @@
       }
     ],
     "changed_exports": [
-      "R1 added: export interface GitToolingStatus {",
-      "R10 added: export interface GithubAuthStatus {",
-      "R19 added: export interface GithubRepoSummary {",
-      "R30 added: export interface GithubPullRequestSummary {",
-      "R43 added: export interface LocalRepoMatch {",
-      "R50 added: export interface GitBlameOwner {"
+      "R129 added: export interface GitCommitDetail {",
+      "R143 added: export interface GithubCommitPullRequest {",
+      "R150 added: export interface GithubCommitIssue {",
+      "R157 added: export type GithubCommitThreadKind = \"pr_review\" | \"pr_comment\" | \"issue_comment\";",
+      "R159 added: export interface GithubCommitThread {",
+      "R168 added: export interface GithubCommitContext {"
     ],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-125"
+      "R125-172"
     ],
     "cited_changed_lines": [
-      "R1 added: export interface GitToolingStatus {",
-      "R2 added: git: {",
-      "R3 added: gitAvailable: boolean;",
-      "R4 added: gitVersion: string | null;",
-      "R5 added: gitError: string | null;",
-      "R6 added: };"
+      "R125 added: /** When set, only these paths are staged (instead of git add -A). */",
+      "R126 added: stagePaths?: string[];",
+      "R127 added: }",
+      "R129 added: export interface GitCommitDetail {",
+      "R130 added: hash: string;",
+      "R131 added: shortHash: string;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface GitRepoStatus (71-83)",
-      "right interface GithubPullRequestSummary (30-42)",
-      "right interface PublishExecutePayload (113-125)",
-      "right interface PublishPreview (91-103)",
-      "right interface GithubRepoSummary (19-29)",
-      "right interface GitToolingStatus (1-9)",
-      "right interface GithubAuthStatus (10-18)",
-      "right interface PublishExecuteResult (104-112)"
+      "right interface GitCommitDetail (129-142)",
+      "right interface GithubCommitIssue (150-158)",
+      "right interface GithubCommitThread (159-167)",
+      "right interface GithubCommitPullRequest (143-149)",
+      "right interface GithubCommitContext (168-173)",
+      "right interface PublishExecutePayload (113-128)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

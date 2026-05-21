@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/CodeCityLegend.tsx",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:51:33.709Z",
+  "generatedAt": "2026-05-21T10:58:52.589Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,37 +11,30 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R3 added: export function CodeCityLegend({"
-    ],
-    "changed_imports": [
-      "R1 added: import type { CodeCityRenderableBuilding } from \"../app/codeCityLayout\";"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-121"
+      "R11-13",
+      "R22-24",
+      "L89-97 / R95-123"
     ],
     "cited_changed_lines": [
-      "R1 added: import type { CodeCityRenderableBuilding } from \"../app/codeCityLayout\";",
-      "R3 added: export function CodeCityLegend({",
-      "R4 added: selected,",
-      "R5 added: blameOverlay,",
-      "R6 added: rootSide,",
-      "R7 added: visibleBuildingCount,"
+      "R11 added: repoRoot,",
+      "R12 added: onStageFile,",
+      "R13 added: onStageDistrict,",
+      "R22 added: repoRoot?: string;",
+      "R23 added: onStageFile?: (path: string) => void;",
+      "R24 added: onStageDistrict?: (topDir: string) => void;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function CodeCityLegend (3-121)"
+      "left function CodeCityLegend (3-121)",
+      "right function CodeCityLegend (3-147)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

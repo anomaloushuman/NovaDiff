@@ -26,33 +26,39 @@
 <body>
   <header class="top">
     <h1>src/components/SidebarNav.tsx</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:00:48.227Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:08:07.935Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>SidebarNav</code> component is added at <code>src/components/SidebarNav.tsx</code> (lines 1‑238). It renders a navigation sidebar that reacts to launch state, local‑only mode, and GitHub user data.</p>
+<p><code>src/components/SidebarNav.tsx</code> was refactored to add a compact UI mode, a new <code>NavLink</code> helper component, and an expanded <code>WorkspacePage</code> enum. The brand‑reveal animation logic was removed, and the feature list and navigation links were reorganized.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: <code>appMark</code> image, <code>useLaunch</code> hook, <code>TypewriterText</code>, and several <code>lucide-react</code> icons (e.g., <code>BookOpen</code>, <code>Brain</code>, <code>Columns2</code>) are added at lines 1‑16.  </li>
-<li><strong>Exported type</strong>: <code>WorkspacePage = &quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</code> (line 18).  </li>
-<li><strong>Props interface</strong>: <code>SidebarNavProps</code> defined lines 20‑31; component signature at line 35.  </li>
-<li><strong>Launch branding</strong>: <code>useLaunch</code> provides <code>brandReveal</code> and <code>skipSequence</code> (line 48); a typewriter animation is rendered conditionally (lines 47‑79).  </li>
-<li><strong>Navigation links</strong>: buttons (lines 133‑190) use <code>workspacePage</code> to set an active class and disable themselves when <code>active</code> is false or <code>gitLocked</code> (derived from <code>localOnlyMode</code>).  </li>
-<li><strong>User avatar</strong>: shows <code>gitUser.avatarUrl</code> if present, otherwise a default icon (lines 210‑222).  </li>
-<li><strong>Settings button</strong>: enabled only when <code>onOpenSettings</code> is supplied (lines 196‑204).</li>
+<li>Added <code>import type { ReactNode } from &quot;react&quot;;</code> (line 1).  </li>
+<li>Removed <code>BookOpen</code> icon import (line 5).  </li>
+<li>Expanded <code>WorkspacePage</code> enum to include <code>&quot;docReports&quot;</code> (lines 18‑24).  </li>
+<li>Added <code>compact?: boolean</code> to <code>SidebarNavProps</code> (line 33).  </li>
+<li>Added <code>icCompact</code> constant for compact icon sizing (line 41).  </li>
+<li>Created <code>NavLink</code> helper component (lines 43‑77) replacing inline button markup.  </li>
+<li>Updated <code>&lt;aside&gt;</code> and <code>&lt;nav&gt;</code> to be compact‑aware (lines 86‑140).  </li>
+<li>Updated <code>showLaunchBrand</code> to <code>brandReveal &amp;&amp; !skipSequence &amp;&amp; !compact</code> (lines 94‑95).  </li>
+<li>Rewrote feature list and navigation links to use <code>NavLink</code> and new icon props (lines 142‑260).  </li>
+<li>Conditionally rendered compact avatar and text in user section (lines 287‑312).  </li>
+<li>Updated <code>onOpenSettings</code> button to disable when absent (lines 276‑280).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The sidebar now displays a launch brand animation and disables Git‑dependent actions when <code>localOnlyMode</code> is true, altering user flow.  </li>
-<li>Parent components must provide <code>workspacePage</code>, <code>onWorkspacePage</code>, and optionally <code>onOpenSettings</code>; missing props will break rendering.  </li>
-<li>Adding an image and several icon imports increases the client bundle, but tree‑shaking will remove unused icons.</li>
+<li><code>NavLink</code> centralizes link styling, reducing duplication.  </li>
+<li>Compact mode changes layout; tests should cover both modes.  </li>
+<li>Expanded <code>WorkspacePage</code> requires callers to handle <code>&quot;docReports&quot;</code>.  </li>
+<li>Removing the brand‑reveal animation may slightly improve initial render time.  </li>
+<li>No other modules reference <code>BookOpen</code>, so its removal is safe.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong><code>useLaunch</code> contract</strong>: if its API changes, the brand reveal logic may fail; verify <code>brandReveal</code> and <code>skipSequence</code>.  </li>
-<li><strong>Local‑only mode gating</strong>: test scenarios where <code>localOnlyMode</code> is true to confirm button disabling.  </li>
-<li><strong>Icon imports</strong>: any missing or renamed lucide icons will cause build errors; run <code>npm run build</code> to confirm.  </li>
-<li><strong><code>onOpenSettings</code></strong>: ensure a handler is passed or the UI degrades gracefully.</li>
+<li>Verify all <code>NavLink</code> instances forward props correctly and that the <code>&quot;docReports&quot;</code> route is wired.  </li>
+<li>Run visual regression tests for <code>compact</code> true/false.  </li>
+<li>Ensure any tests or analytics tied to the removed brand‑reveal animation are updated.  </li>
+<li>Confirm avatar fallback and compact text render correctly when <code>compact</code> is true.</li>
 </ul>
 </article>
   </main>

@@ -3,6 +3,23 @@ import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from "./wor
 const USER_KEY = "novadiff_git_user_v1";
 const ACTIVE_WS_KEY = "novadiff_active_workspace_v1";
 const LOCAL_ONLY_KEY = "novadiff_local_only_v1";
+const PRODUCT_TOUR_KEY = "novadiff_product_tour_v1";
+
+export function loadProductTourCompleted(): boolean {
+  try {
+    return localStorage.getItem(PRODUCT_TOUR_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function saveProductTourCompleted(): void {
+  try {
+    localStorage.setItem(PRODUCT_TOUR_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
 
 export function loadCachedGitUser(): GitUserProfile | null {
   try {

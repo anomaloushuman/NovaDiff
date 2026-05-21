@@ -451,7 +451,9 @@ function buildCommitMessagePrompt(payload) {
   const ctx = String(commitContext || "").trim().slice(0, 12_000);
   return `You write git commit messages for a folder diff between two directory trees.
 
-Use ONLY the change list below (paths and kinds). Do not invent files, tickets, or features not implied by the list. Subject line must be imperative mood and at most 72 characters.
+Use ONLY the change list below (paths, kinds, structural classification, districts). Do not invent files, tickets, or features not implied by the list. Subject line must be imperative mood and at most 72 characters.
+
+When "Structural classification" shows ARCHITECTURE_UPDATE or FULL_UPDATE, prefer Conventional Commits: type(scope): subject (types: feat, fix, refactor, chore, docs; scope = dominant district folder).
 
 Output plain text only — no Markdown code fences, no surrounding quotes.
 

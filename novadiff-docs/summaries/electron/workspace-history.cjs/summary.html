@@ -26,35 +26,30 @@
 <body>
   <header class="top">
     <h1>electron/workspace-history.cjs</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:33:10.403Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:49:31.961Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new module <code>electron/workspace-history.cjs</code> is added to the Electron side of the repo. It implements snapshotting of Git commits, indexing of workspace history, and a refresh routine that re‑reads the log and re‑creates missing snapshots.</p>
+<p>The file <code>electron/workspace-history.cjs</code> was modified to change how workspace state is persisted during history indexing.<br>In both <code>indexWorkspaceHistory</code> (lines 100‑174) and <code>refreshWorkspaceHistory</code> (lines 188‑292) the unconditional <code>await upsertWorkspace(userData, workspace);</code> that previously ran on every commit was removed (diff lines 135 and 240).<br>Instead, a <code>persistSession</code> flag is computed:<code>js i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0 </code>and passed to <code>upsertWorkspace</code> as <code>{ touchSession: persistSession }</code> (added lines 135‑136 and 241‑242).<br>This throttles session updates to the first, last, and every tenth commit.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong>: added <code>fsp</code>, <code>fssync</code>, <code>path</code>, <code>runGit/tryRunGit</code>, and <code>upsertWorkspace/getWorkspace</code> (lines 3‑6, 33).  </li>
-<li><strong>Utility helpers</strong>: <code>removeDirSafe</code> (lines 8‑16) and <code>isUsableSnapshotDir</code> (lines 18‑32) guard filesystem operations.  </li>
-<li><strong>Commit enumeration</strong>: <code>listCommitsOldestFirst</code> (lines 35‑58) runs <code>git log</code> and returns an array of commit objects.  </li>
-<li><strong>Snapshot creation</strong>: <code>snapshotCommit</code> (lines 61‑78) materializes a detached worktree, validates it, and returns the path.  </li>
-<li><strong>Single‑commit snapshot</strong>: <code>ensureCommitSnapshot</code> (lines 80‑98) ties a snapshot to a workspace record via <code>upsertWorkspace</code>.  </li>
-<li><strong>Full history indexing</strong>: <code>indexWorkspaceHistory</code> (lines 100‑183) walks all commits, creates snapshots, writes metadata, and updates workspace state.  </li>
-<li><strong>Refresh logic</strong>: <code>refreshWorkspaceHistory</code> (lines 188‑291) optionally fetches remote refs, re‑reads the log, re‑uses existing snapshots, and updates the workspace.  </li>
-<li><strong>Exports</strong>: all public functions are exported (lines 293‑300).</li>
+<li><strong>Persist‑session logic</strong> – <code>persistSession</code> is evaluated per commit and supplied to <code>upsertWorkspace</code>.  </li>
+<li><strong>Removed redundant writes</strong> – the earlier write at line 135 (and line 240) is deleted, reducing intermediate writes.  </li>
+<li><strong>No API surface change</strong> – function signatures, imports, and exports remain unchanged.  </li>
+<li><strong>Documentation</strong> – module comments still describe the same high‑level behavior; no new external API is introduced.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>New API surface</strong>: callers can now trigger history indexing or refresh via the exported functions.  </li>
-<li><strong>Filesystem side‑effects</strong>: the module creates/clears directories under <code>workspace.dataDir</code>, which may affect disk usage and performance.  </li>
-<li><strong>Git dependency</strong>: relies on <code>git</code> being available; errors are surfaced through <code>runGit</code>/<code>tryRunGit</code>.  </li>
-<li><strong>State persistence</strong>: uses <code>upsertWorkspace</code>/<code>getWorkspace</code>, so existing workspace records must be compatible with the new <code>commits</code> structure.</li>
+<li><strong>Write reduction</strong> – the number of calls to <code>upsertWorkspace</code> during a history build is lowered to roughly 10 % of the previous count.  </li>
+<li><strong>Session persistence</strong> – sessions are now updated only at key points, which may affect metrics that count session touches.  </li>
+<li><strong>Test expectations</strong> – any tests asserting a write per commit may need to be updated to account for the throttling.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>workspace.dataDir</code> paths are correctly resolved on all OSes; path handling is critical.  </li>
-<li>Ensure <code>runGit</code> and <code>tryRunGit</code> correctly propagate errors; missing Git binaries could crash the process.  </li>
-<li>Performance regression: snapshotting every commit can be expensive; benchmark on large repos.  </li>
-<li>Test that <code>refreshWorkspaceHistory</code> correctly re‑uses existing snapshots and does not overwrite them inadvertently.</li>
+<li><strong>Session handling regression</strong> – verify that sessions still expire correctly after the new throttling logic.  </li>
+<li><strong>Test failures</strong> – adjust unit/integration tests that rely on a write per commit.  </li>
+<li><strong>Concurrency</strong> – ensure that reduced write frequency does not cause stale state when multiple indexing jobs run concurrently.  </li>
+<li><strong>Documentation</strong> – consider adding a note in the README or docs about the new session‑touching behavior for future maintainers.</li>
 </ul>
 </article>
   </main>

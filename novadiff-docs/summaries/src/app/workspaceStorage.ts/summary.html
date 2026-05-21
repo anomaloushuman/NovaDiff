@@ -26,64 +26,44 @@
 <body>
   <header class="top">
     <h1>src/app/workspaceStorage.ts</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:48:44.598Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:57:08.342Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/app/workspaceStorage.ts</code> is a new module that centralises local‑storage access for Git user data, active workspace ID, and a local‑only flag. It also supplies utilities for onboarding gate resolution, session merging, and workspace lookup.</p>
+<p><code>src/app/workspaceStorage.ts</code> now tracks product‑tour completion.<br>A new key <code>PRODUCT_TOUR_KEY</code> and two helper functions were added.</p>
 <h3>Key changes</h3>
 <ul>
-<li>*<em>Imports &amp; constants</em></li>
-<li>– added at line 1:```ts
-import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from &quot;./workspaceTypes&quot;;
-const USER_KEY = &quot;novadiff_git_user_v1&quot;;
-const ACTIVE_WS_KEY = &quot;novadiff_active_workspace_v1&quot;;
-const LOCAL_ONLY_KEY = &quot;novadiff_local_only_v1&quot;;</li>
+<li><strong>Line 6</strong>: <code>const PRODUCT_TOUR_KEY = &quot;novadiff_product_tour_v1&quot;</code> (R6).  </li>
+<li><strong>Lines 8‑12</strong>: <code>export function loadProductTourCompleted(): boolean</code> (R8‑R12).</li>
 </ul>
-<pre><code class="language-*">* – functions at lines 7‑16, 19‑25, 27‑32, 35‑41, 45‑50, 53‑62 provide safe `get`, `set`, and `remove` operations for the three keys.  
-
-* **Onboarding gate*
-* – `export type OnboardingGate = &quot;boot&quot; | &quot;welcome&quot; | &quot;hub&quot; | &quot;app&quot;` (line 43) and `resolveOnboardingGate(opts)` (lines 65‑94) decide the next UI step based on flags such as `skipBoot`, `localOnlyMode`, and confirmation flags.  
-
-* **Session merging*
-* – `mergeSession(partial, current)` (lines 95‑109) returns a new `WorkspaceSessionState` by overriding only supplied fields.  
-
-* **Workspace lookup*
-* – `findWorkspace(workspaces, id)` (lines 111‑119) returns the matching `NovaWorkspace` or `null`.
-
-### Impact
-
-  
-
-* **Persistence*
-* – state is now stored in `localStorage`; code that previously held state in memory must use these helpers.  
-
-* **Error handling*
-* – each load function catches errors and returns a safe default, preventing crashes when `localStorage` is unavailable.  
-
-* **Onboarding flow*
-* – gate logic is now a single, testable function, simplifying UI decision making.  
-
-* **Session consistency*
-* – `mergeSession` preserves untouched fields, reducing accidental data loss.  
-
-* **Compatibility*
-* – the module only adds exports; existing imports remain valid.
-
-### Risks &amp; follow‑ups  
-
-* **LocalStorage availability*
-* – verify that the runtime defines `localStorage` (e.g., SSR or private mode).  
-
-* **Data format changes*
-* – ensure `GitUserProfile` and `WorkspaceSessionState` serialisations remain compatible; otherwise `JSON.parse` may fail.  
-
-* **Onboarding logic correctness*
-* – run integration tests for all gate combinations (`boot`, `welcome`, `hub`, `app`).  
-
-* **Duplicate keys*
-* – confirm that `novadiff_git_user_v1`, `novadiff_active_workspace_v1`, and `novadiff_local_only_v1` do not clash with other modules.
-</code></pre>
+<ul>
+<li><p>Reads <code>localStorage.getItem(PRODUCT_TOUR_KEY)</code> inside a <code>try/catch</code>.  </p>
+</li>
+<li><p>Returns <code>true</code> only when the stored value is <code>&quot;1&quot;</code>.</p>
+</li>
+</ul>
+<ul>
+<li><strong>Lines 16‑22</strong>: <code>export function saveProductTourCompleted(): void</code> (R16‑R22).</li>
+</ul>
+<ul>
+<li><p>Writes <code>&quot;1&quot;</code> to <code>localStorage</code> inside a <code>try/catch</code>.  </p>
+</li>
+<li><p>Errors are silently ignored.</p>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Adds a dedicated API for persisting the tour‑completion flag.  </li>
+<li>Centralizes the key and storage logic; future changes can be made in one place.  </li>
+<li>No existing exports are removed, so the change is additive.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Environment safety</strong>: The <code>try/catch</code> guards are intended to prevent crashes when <code>localStorage</code> is unavailable (e.g., SSR or Node). Verify that this guard behaves as expected in all target environments.  </li>
+<li><strong>Test coverage</strong>: Add unit tests for <code>loadProductTourCompleted</code> and <code>saveProductTourCompleted</code> to confirm correct behavior when storage is present, missing, or throws.  </li>
+<li><strong>Key collision</strong>: Ensure <code>PRODUCT_TOUR_KEY</code> does not clash with other keys in the application.  </li>
+<li><strong>Regression</strong>: Confirm that existing code paths that interact with <code>localStorage</code> continue to work after these additions.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

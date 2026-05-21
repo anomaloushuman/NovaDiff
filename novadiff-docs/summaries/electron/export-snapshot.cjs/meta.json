@@ -1,0 +1,50 @@
+{
+  "relPath": "electron/export-snapshot.cjs",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T10:42:41.187Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { spawnSync } = require(\"node:child_process\");"
+    ],
+    "changed_line_ranges": [
+      "R1-24"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fssync = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { spawnSync } = require(\"node:child_process\");",
+      "R7 added: function exportProjectSnapshotZip(bundleDir, outZipPath) {",
+      "R8 added: const dir = path.resolve(String(bundleDir ?? \"\").trim());"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function exportProjectSnapshotZip (7-24)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,9 +1,9 @@
 {
   "relPath": "electron/workspace-store.cjs",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:33:45.931Z",
+  "generatedAt": "2026-05-21T10:49:58.075Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,45 +11,38 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: const fssync = require(\"node:fs\");",
-      "R4 added: const fsp = require(\"node:fs/promises\");",
-      "R5 added: const path = require(\"node:path\");",
-      "R6 added: const { randomUUID } = require(\"node:crypto\");"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-193"
+      "L25-27 / R25-37",
+      "L29-30 / R39-65",
+      "L66 / R101-102",
+      "L74-81 / R110-114",
+      "L83-86 / R116-129"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const fssync = require(\"node:fs\");",
-      "R4 added: const fsp = require(\"node:fs/promises\");",
-      "R5 added: const path = require(\"node:path\");",
-      "R6 added: const { randomUUID } = require(\"node:crypto\");",
-      "R8 added: function sessionPath(userData) {"
+      "L25 removed: async function writeJson(filePath, data) {",
+      "L26 removed: await fsp.mkdir(path.dirname(filePath), { recursive: true });",
+      "L27 removed: const tmp = `${filePath}.${process.pid}.${Date.now()}.tmp`;",
+      "R25 added: let sessionWriteChain = Promise.resolve();",
+      "R27 added: function withSessionWriteLock(task) {",
+      "R28 added: const next = sessionWriteChain.then(task, task);"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function createWorkspace (147-193)",
-      "right function loadSession (33-53)",
-      "right function updateWorkspaceLiveRepo (127-146)",
-      "right function updateWorkspaceUiState (108-126)",
-      "right function upsertWorkspace (74-88)",
-      "right function setLocalOnlyMode (54-64)",
-      "right function readJson (16-24)",
-      "right function writeJson (25-32)"
+      "left function upsertWorkspace (74-88)",
+      "left function writeJson (25-32)",
+      "left function saveSession (65-68)",
+      "right function writeJsonAtomic (33-63)",
+      "right function upsertWorkspace (110-131)",
+      "right function withSessionWriteLock (27-32)",
+      "right function writeJson (64-67)",
+      "right function saveSession (100-104)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

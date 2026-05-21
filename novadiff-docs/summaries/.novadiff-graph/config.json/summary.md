@@ -1,19 +1,18 @@
-### Overview
-A new file `.novadiff-graph/config.json` has been added. It contains a minimal JSON object with two properties.
+### Overview  
+The file `./.novadiff-graph/config.json` has been removed from the repository.  
+It previously contained two configuration flags: `autoUpdate` and `outputLanguage`.
 
-### Key changes
-- File addition: `.novadiff-graph/config.json` (lines R1‑R4 added).  
-- `autoUpdate`: set to `false` (line R2).  
-- `outputLanguage`: set to `"en"` (line R3).  
-- JSON structure: `{ "autoUpdate": false, "outputLanguage": "en" }` (lines R1‑R4).
+### Key changes  
+- Entire file `./.novadiff-graph/config.json` deleted (lines 1‑4 removed).  
+- The `autoUpdate` flag (`false`) and `outputLanguage` (`"en"`) are no longer persisted.
 
-### Impact
-- The presence of this file may affect components that load configuration from this path.  
-- The default values are explicitly defined; previously implicit defaults may no longer apply.  
-- Unknown from the available diff/scan evidence whether any runtime behavior changes.
+### Impact  
+- Any code that previously parsed this JSON will no longer find the file, potentially causing a file‑not‑found error unless guarded.  
+- Tests that mock or assert the presence of this config may now fail.  
+- Documentation or code that references the config file should be updated.
 
-### Risks & follow‑ups
-- Verify that consumers of this config handle the `false` value for `autoUpdate`.  
-- Ensure older deployments that did not ship this file still function, or provide a fallback.  
-- Update documentation to list the new config file and its purpose.  
-- Run targeted tests that load the config and confirm the default language is `"en"`.
+### Risks & follow‑ups  
+- Verify that no modules import or read `./.novadiff-graph/config.json`.  
+- Run the targeted unit tests that involve graph configuration to ensure no regressions.  
+- Check the build pipeline for any steps that generate or consume this file.  
+- Update any README or internal docs that mention the config file.

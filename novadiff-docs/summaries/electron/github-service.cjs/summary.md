@@ -1,24 +1,27 @@
-### Overview
-A new module `electron/github-service.cjs` is added. It wraps the GitHub CLI (`gh`) and exposes functions for authentication status, repository and pull‑request listing, PR creation, and account detection.
+### Overview  
+A new export `getGithubCommitContext` has been added to `electron/github-service.cjs`.  
+The export forwards all arguments to the helper defined in `./github-commit-context.cjs`:
 
-### Key changes
-- **Imports added** (diff lines R3‑R9):  
-  `spawnSync` from `node:child_process`, `parseGithubSlugFromUrl` from `./git-service.cjs`, and `augmentPathForCli`, `resolveGhExecutable`, `ghNotFoundError` from `./gh-path.cjs`.  
-- **CLI helpers** (lines 11‑29): `runGh` executes a command via `spawnSync`; `tryRunGh` wraps it in a try/catch.  
-- **Auth & user** (lines 43‑76, 163‑177): `getAuthStatus`, `getUserProfile`.  
-- **Repository & PR utilities** (lines 77‑128, 129‑161): `listRepos`, `listPullRequests`, `viewPullRequest`, `createPullRequest`.  
-- **Account detection** (lines 179‑200): `listDetectedAccounts`.  
-- **Slug extraction** (lines 203‑210): `slugFromRepoRoot`.  
-- **Exports** (lines 213‑224): all functions are exported via `module.exports`.
+```js
+getGithubCommitContext: (...args) =>
+  require("./github-commit-context.cjs").getGithubCommitContext(...args)
+```
 
-### Impact
-- Provides runtime checks for CLI availability and authentication state, reducing silent failures.  
-- Centralizes all `gh` interactions, simplifying future flag or command changes.  
-- Each call spawns a new process (`spawnSync`), which may add overhead for bulk operations but is acceptable for UI‑driven actions.  
-- Requires the `gh` executable; when missing, functions return informative messages (e.g., `getAuthStatus`).
+This change appears in the diff at lines 224‑225 of the file.
 
-### Risks & follow‑ups
-- **Missing tests**: No unit tests cover the new module; add tests for `getAuthStatus` and `listRepos`.  
-- **Error handling**: `runGh` throws generic errors; ensure callers handle them gracefully.  
-- **Platform differences**: `spawnSync` and CLI path resolution may behave differently on Windows; verify across all target OSes.  
-- **Security**: `createPullRequest` builds CLI arguments from user input; review for potential injection vulnerabilities.
+### Key changes  
+- **Export addition** – `module.exports` now contains the `getGithubCommitContext` property (lines 224‑225).  
+- **No other functional changes** – All existing functions (`slugFromRepoRoot`, `listRepos`, etc.) remain unchanged.  
+- **Import path** – The helper is required from `./github-commit-context.cjs`, preserving the original runtime behavior.
+
+### Impact  
+- **API surface** – Callers can now invoke `githubService.getGithubCommitContext(...)` directly, without importing the helper module.  
+- **Maintainability** – The commit‑context logic stays in a single module; updates to `github-commit-context.cjs` automatically affect this export.  
+- **Performance** – The function simply forwards arguments; no measurable change is expected.  
+- **Compatibility** – Existing code continues to work unchanged; the new export is additive.
+
+### Risks & follow‑ups  
+- **Missing module** – Verify that `github-commit-context.cjs` exists and exports `getGithubCommitContext`; otherwise the new export will fail.  
+- **Circular dependency** – Ensure that requiring `github-commit-context.cjs` from this module does not create a cycle that could delay initialization.  
+- **Documentation** – Update README/API docs to expose the new helper; otherwise callers may be unaware.  
+- **Testing** – Add unit tests to confirm that `getGithubCommitContext` forwards arguments correctly and handles edge cases.

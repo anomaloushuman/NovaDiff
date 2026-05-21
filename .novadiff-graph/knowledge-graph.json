@@ -16,8 +16,8 @@
     ],
     "frameworks": [],
     "description": "Deterministic NovaDiff knowledge graph (Tree-sitter structure, imports, and compare overlay).",
-    "analyzedAt": "2026-05-20T01:19:05.922Z",
-    "gitCommitHash": "6c333f6cf037bf75318c26081cae3324fdb89c64"
+    "analyzedAt": "2026-05-21T10:37:57.180Z",
+    "gitCommitHash": "f7c2bfd81af2a1f3646b51b2533210ec972d65d7"
   },
   "nodes": [
     {
@@ -1399,6 +1399,33 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "file:electron/export-snapshot.cjs",
+      "type": "file",
+      "name": "export-snapshot.cjs",
+      "filePath": "electron/export-snapshot.cjs",
+      "summary": "export-snapshot.cjs — 1 functions, 0 classes, 24 lines",
+      "tags": [
+        "javascript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/export-snapshot.cjs:exportProjectSnapshotZip",
+      "type": "function",
+      "name": "exportProjectSnapshotZip",
+      "filePath": "electron/export-snapshot.cjs",
+      "lineRange": [
+        7,
+        22
+      ],
+      "summary": "Function exportProjectSnapshotZip (L7-22)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "file:electron/file-summary-export.cjs",
       "type": "file",
       "name": "file-summary-export.cjs",
@@ -1955,11 +1982,38 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "file:electron/git-commit.cjs",
+      "type": "file",
+      "name": "git-commit.cjs",
+      "filePath": "electron/git-commit.cjs",
+      "summary": "git-commit.cjs — 1 functions, 0 classes, 69 lines",
+      "tags": [
+        "javascript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/git-commit.cjs:getCommitDetail",
+      "type": "function",
+      "name": "getCommitDetail",
+      "filePath": "electron/git-commit.cjs",
+      "lineRange": [
+        9,
+        67
+      ],
+      "summary": "Function getCommitDetail (L9-67)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "file:electron/git-publish.cjs",
       "type": "file",
       "name": "git-publish.cjs",
       "filePath": "electron/git-publish.cjs",
-      "summary": "git-publish.cjs — 3 functions, 0 classes, 108 lines",
+      "summary": "git-publish.cjs — 3 functions, 0 classes, 115 lines",
       "tags": [
         "javascript",
         "code"
@@ -2002,9 +2056,9 @@
       "filePath": "electron/git-publish.cjs",
       "lineRange": [
         48,
-        102
+        109
       ],
-      "summary": "Function executePublish (L48-102)",
+      "summary": "Function executePublish (L48-109)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:electron"
@@ -2014,7 +2068,7 @@
       "type": "file",
       "name": "git-service.cjs",
       "filePath": "electron/git-service.cjs",
-      "summary": "git-service.cjs — 16 functions, 0 classes, 229 lines",
+      "summary": "git-service.cjs — 19 functions, 0 classes, 262 lines",
       "tags": [
         "javascript",
         "code"
@@ -2135,15 +2189,57 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "function:electron/git-service.cjs:stagePaths",
+      "type": "function",
+      "name": "stagePaths",
+      "filePath": "electron/git-service.cjs",
+      "lineRange": [
+        142,
+        150
+      ],
+      "summary": "Function stagePaths (L142-150)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/git-service.cjs:unstagePaths",
+      "type": "function",
+      "name": "unstagePaths",
+      "filePath": "electron/git-service.cjs",
+      "lineRange": [
+        152,
+        160
+      ],
+      "summary": "Function unstagePaths (L152-160)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/git-service.cjs:stageDistrict",
+      "type": "function",
+      "name": "stageDistrict",
+      "filePath": "electron/git-service.cjs",
+      "lineRange": [
+        162,
+        170
+      ],
+      "summary": "Function stageDistrict (L162-170)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "function:electron/git-service.cjs:commit",
       "type": "function",
       "name": "commit",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        142,
-        146
+        172,
+        176
       ],
-      "summary": "Function commit (L142-146)",
+      "summary": "Function commit (L172-176)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2154,10 +2250,10 @@
       "name": "push",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        148,
-        154
+        178,
+        184
       ],
-      "summary": "Function push (L148-154)",
+      "summary": "Function push (L178-184)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2168,10 +2264,10 @@
       "name": "ensureWorktreeBase",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        156,
-        160
+        186,
+        190
       ],
-      "summary": "Function ensureWorktreeBase (L156-160)",
+      "summary": "Function ensureWorktreeBase (L186-190)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2182,10 +2278,10 @@
       "name": "removeDirSafe",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        162,
-        168
+        192,
+        198
       ],
-      "summary": "Function removeDirSafe (L162-168)",
+      "summary": "Function removeDirSafe (L192-198)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2196,10 +2292,10 @@
       "name": "checkoutRefWorktree",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        174,
-        182
+        204,
+        212
       ],
-      "summary": "Function checkoutRefWorktree (L174-182)",
+      "summary": "Function checkoutRefWorktree (L204-212)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2210,10 +2306,10 @@
       "name": "cleanupNovadiffWorktrees",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        184,
-        186
+        214,
+        216
       ],
-      "summary": "Function cleanupNovadiffWorktrees (L184-186)",
+      "summary": "Function cleanupNovadiffWorktrees (L214-216)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2224,10 +2320,10 @@
       "name": "preparePrCompareRoots",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        191,
-        205
+        221,
+        235
       ],
-      "summary": "Function preparePrCompareRoots (L191-205)",
+      "summary": "Function preparePrCompareRoots (L221-235)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2238,10 +2334,10 @@
       "name": "detectGitTooling",
       "filePath": "electron/git-service.cjs",
       "lineRange": [
-        207,
-        214
+        237,
+        244
       ],
-      "summary": "Function detectGitTooling (L207-214)",
+      "summary": "Function detectGitTooling (L237-244)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -2302,11 +2398,80 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "file:electron/github-commit-context.cjs",
+      "type": "file",
+      "name": "github-commit-context.cjs",
+      "filePath": "electron/github-commit-context.cjs",
+      "summary": "github-commit-context.cjs — 4 functions, 0 classes, 245 lines",
+      "tags": [
+        "javascript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/github-commit-context.cjs:parseJsonSafe",
+      "type": "function",
+      "name": "parseJsonSafe",
+      "filePath": "electron/github-commit-context.cjs",
+      "lineRange": [
+        5,
+        11
+      ],
+      "summary": "Function parseJsonSafe (L5-11)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/github-commit-context.cjs:shortGhError",
+      "type": "function",
+      "name": "shortGhError",
+      "filePath": "electron/github-commit-context.cjs",
+      "lineRange": [
+        13,
+        23
+      ],
+      "summary": "Function shortGhError (L13-23)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/github-commit-context.cjs:normalizeThread",
+      "type": "function",
+      "name": "normalizeThread",
+      "filePath": "electron/github-commit-context.cjs",
+      "lineRange": [
+        25,
+        34
+      ],
+      "summary": "Function normalizeThread (L25-34)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/github-commit-context.cjs:getGithubCommitContext",
+      "type": "function",
+      "name": "getGithubCommitContext",
+      "filePath": "electron/github-commit-context.cjs",
+      "lineRange": [
+        40,
+        243
+      ],
+      "summary": "Function getGithubCommitContext (L40-243)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "file:electron/github-service.cjs",
       "type": "file",
       "name": "github-service.cjs",
       "filePath": "electron/github-service.cjs",
-      "summary": "github-service.cjs — 11 functions, 0 classes, 224 lines",
+      "summary": "github-service.cjs — 11 functions, 0 classes, 226 lines",
       "tags": [
         "javascript",
         "code"
@@ -2835,7 +3000,7 @@
       "type": "file",
       "name": "llm.cjs",
       "filePath": "electron/llm.cjs",
-      "summary": "llm.cjs — 34 functions, 0 classes, 1180 lines",
+      "summary": "llm.cjs — 34 functions, 0 classes, 1182 lines",
       "tags": [
         "javascript",
         "code"
@@ -3060,9 +3225,9 @@
       "filePath": "electron/llm.cjs",
       "lineRange": [
         449,
-        477
+        479
       ],
-      "summary": "Function buildCommitMessagePrompt (L449-477)",
+      "summary": "Function buildCommitMessagePrompt (L449-479)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3073,10 +3238,10 @@
       "name": "buildSelectionDocPrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        479,
-        561
+        481,
+        563
       ],
-      "summary": "Function buildSelectionDocPrompt (L479-561)",
+      "summary": "Function buildSelectionDocPrompt (L481-563)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3087,10 +3252,10 @@
       "name": "bulletBlock",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        563,
-        574
+        565,
+        576
       ],
-      "summary": "Function bulletBlock (L563-574)",
+      "summary": "Function bulletBlock (L565-576)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3101,10 +3266,10 @@
       "name": "renderSummaryEvidenceBlock",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        576,
-        595
+        578,
+        597
       ],
-      "summary": "Function renderSummaryEvidenceBlock (L576-595)",
+      "summary": "Function renderSummaryEvidenceBlock (L578-597)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3115,10 +3280,10 @@
       "name": "buildExplainCodePrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        597,
-        623
+        599,
+        625
       ],
-      "summary": "Function buildExplainCodePrompt (L597-623)",
+      "summary": "Function buildExplainCodePrompt (L599-625)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3129,10 +3294,10 @@
       "name": "buildGroundingContext",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        625,
-        670
+        627,
+        672
       ],
-      "summary": "Function buildGroundingContext (L625-670)",
+      "summary": "Function buildGroundingContext (L627-672)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3143,10 +3308,10 @@
       "name": "verifierWordLimit",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        672,
-        682
+        674,
+        684
       ],
-      "summary": "Function verifierWordLimit (L672-682)",
+      "summary": "Function verifierWordLimit (L674-684)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3157,10 +3322,10 @@
       "name": "buildGroundedRevisionPrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        684,
-        745
+        686,
+        747
       ],
-      "summary": "Function buildGroundedRevisionPrompt (L684-745)",
+      "summary": "Function buildGroundedRevisionPrompt (L686-747)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3171,10 +3336,10 @@
       "name": "shouldRunVerifier",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        747,
-        758
+        749,
+        760
       ],
-      "summary": "Function shouldRunVerifier (L747-758)",
+      "summary": "Function shouldRunVerifier (L749-760)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3185,10 +3350,10 @@
       "name": "reviseGroundedMarkdown",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        760,
-        778
+        762,
+        780
       ],
-      "summary": "Function reviseGroundedMarkdown (L760-778)",
+      "summary": "Function reviseGroundedMarkdown (L762-780)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3199,10 +3364,10 @@
       "name": "buildPerFileSummarizePrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        780,
-        838
+        782,
+        840
       ],
-      "summary": "Function buildPerFileSummarizePrompt (L780-838)",
+      "summary": "Function buildPerFileSummarizePrompt (L782-840)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3213,10 +3378,10 @@
       "name": "buildChunkExtractionPrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        840,
-        881
+        842,
+        883
       ],
-      "summary": "Function buildChunkExtractionPrompt (L840-881)",
+      "summary": "Function buildChunkExtractionPrompt (L842-883)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3227,10 +3392,10 @@
       "name": "buildChunkSynthesisPrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        883,
-        925
+        885,
+        927
       ],
-      "summary": "Function buildChunkSynthesisPrompt (L883-925)",
+      "summary": "Function buildChunkSynthesisPrompt (L885-927)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3241,10 +3406,10 @@
       "name": "buildSummarizePrompt",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        927,
-        944
+        929,
+        946
       ],
-      "summary": "Function buildSummarizePrompt (L927-944)",
+      "summary": "Function buildSummarizePrompt (L929-946)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3255,10 +3420,10 @@
       "name": "summarizeFileChangeChunked",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        946,
-        979
+        948,
+        981
       ],
-      "summary": "Function summarizeFileChangeChunked (L946-979)",
+      "summary": "Function summarizeFileChangeChunked (L948-981)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3269,10 +3434,10 @@
       "name": "summarizeChangeStream",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        986,
-        1030
+        988,
+        1032
       ],
-      "summary": "Function summarizeChangeStream (L986-1030)",
+      "summary": "Function summarizeChangeStream (L988-1032)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3283,10 +3448,10 @@
       "name": "completeChat",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        1035,
-        1105
+        1037,
+        1107
       ],
-      "summary": "Function completeChat (L1035-1105)",
+      "summary": "Function completeChat (L1037-1107)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3297,10 +3462,10 @@
       "name": "summarizeChange",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        1107,
-        1158
+        1109,
+        1160
       ],
-      "summary": "Function summarizeChange (L1107-1158)",
+      "summary": "Function summarizeChange (L1109-1160)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3311,10 +3476,10 @@
       "name": "probeProvider",
       "filePath": "electron/llm.cjs",
       "lineRange": [
-        1160,
-        1173
+        1162,
+        1175
       ],
-      "summary": "Function probeProvider (L1160-1173)",
+      "summary": "Function probeProvider (L1162-1175)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3324,7 +3489,7 @@
       "type": "file",
       "name": "main.cjs",
       "filePath": "electron/main.cjs",
-      "summary": "main.cjs — 10 functions, 0 classes, 1090 lines",
+      "summary": "main.cjs — 10 functions, 0 classes, 1150 lines",
       "tags": [
         "javascript",
         "code"
@@ -3352,10 +3517,10 @@
       "name": "getTargetWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        108,
-        113
+        110,
+        115
       ],
-      "summary": "Function getTargetWindow (L108-113)",
+      "summary": "Function getTargetWindow (L110-115)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3366,10 +3531,10 @@
       "name": "windowStatePayload",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        118,
-        124
+        120,
+        126
       ],
-      "summary": "Function windowStatePayload (L118-124)",
+      "summary": "Function windowStatePayload (L120-126)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3380,10 +3545,10 @@
       "name": "emitWindowState",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        129,
-        134
+        131,
+        136
       ],
-      "summary": "Function emitWindowState (L129-134)",
+      "summary": "Function emitWindowState (L131-136)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3394,10 +3559,10 @@
       "name": "iconPath",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        136,
-        142
+        138,
+        144
       ],
-      "summary": "Function iconPath (L136-142)",
+      "summary": "Function iconPath (L138-144)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3408,10 +3573,10 @@
       "name": "buildMenu",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        144,
-        162
+        146,
+        164
       ],
-      "summary": "Function buildMenu (L144-162)",
+      "summary": "Function buildMenu (L146-164)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3422,10 +3587,10 @@
       "name": "createWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        164,
-        203
+        166,
+        205
       ],
-      "summary": "Function createWindow (L164-203)",
+      "summary": "Function createWindow (L166-205)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3436,10 +3601,10 @@
       "name": "sendKnowledgeGraphProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        571,
-        587
+        573,
+        589
       ],
-      "summary": "Function sendKnowledgeGraphProgress (L571-587)",
+      "summary": "Function sendKnowledgeGraphProgress (L573-589)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3450,10 +3615,10 @@
       "name": "sendWorkspaceHistoryProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        806,
-        812
+        843,
+        849
       ],
-      "summary": "Function sendWorkspaceHistoryProgress (L806-812)",
+      "summary": "Function sendWorkspaceHistoryProgress (L843-849)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3464,10 +3629,10 @@
       "name": "sendGithubAuthProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        838,
-        844
+        875,
+        881
       ],
-      "summary": "Function sendGithubAuthProgress (L838-844)",
+      "summary": "Function sendGithubAuthProgress (L875-881)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3477,7 +3642,7 @@
       "type": "file",
       "name": "novadiff-docs-html.cjs",
       "filePath": "electron/novadiff-docs-html.cjs",
-      "summary": "novadiff-docs-html.cjs — 32 functions, 0 classes, 1309 lines",
+      "summary": "novadiff-docs-html.cjs — 35 functions, 0 classes, 1461 lines",
       "tags": [
         "javascript",
         "code"
@@ -3743,10 +3908,52 @@
       "name": "navHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        781,
-        795
+        825,
+        839
       ],
-      "summary": "Function navHtml (L781-795)",
+      "summary": "Function navHtml (L825-839)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/novadiff-docs-html.cjs:topDirectory",
+      "type": "function",
+      "name": "topDirectory",
+      "filePath": "electron/novadiff-docs-html.cjs",
+      "lineRange": [
+        841,
+        846
+      ],
+      "summary": "Function topDirectory (L841-846)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/novadiff-docs-html.cjs:buildImpactHeatmapHtml",
+      "type": "function",
+      "name": "buildImpactHeatmapHtml",
+      "filePath": "electron/novadiff-docs-html.cjs",
+      "lineRange": [
+        848,
+        883
+      ],
+      "summary": "Function buildImpactHeatmapHtml (L848-883)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/novadiff-docs-html.cjs:buildSearchIndex",
+      "type": "function",
+      "name": "buildSearchIndex",
+      "filePath": "electron/novadiff-docs-html.cjs",
+      "lineRange": [
+        885,
+        907
+      ],
+      "summary": "Function buildSearchIndex (L885-907)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3757,10 +3964,10 @@
       "name": "buildEnhancementScript",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        797,
-        847
+        909,
+        989
       ],
-      "summary": "Function buildEnhancementScript (L797-847)",
+      "summary": "Function buildEnhancementScript (L909-989)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3771,10 +3978,10 @@
       "name": "wrapPage",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        849,
-        896
+        991,
+        1042
       ],
-      "summary": "Function wrapPage (L849-896)",
+      "summary": "Function wrapPage (L991-1042)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3785,10 +3992,10 @@
       "name": "bundleMetaLine",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        901,
-        903
+        1047,
+        1049
       ],
-      "summary": "Function bundleMetaLine (L901-903)",
+      "summary": "Function bundleMetaLine (L1047-1049)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3799,10 +4006,10 @@
       "name": "buildIndexHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        908,
-        956
+        1054,
+        1102
       ],
-      "summary": "Function buildIndexHtml (L908-956)",
+      "summary": "Function buildIndexHtml (L1054-1102)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3813,10 +4020,10 @@
       "name": "buildNarrativeHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        958,
-        975
+        1104,
+        1121
       ],
-      "summary": "Function buildNarrativeHtml (L958-975)",
+      "summary": "Function buildNarrativeHtml (L1104-1121)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3827,10 +4034,10 @@
       "name": "buildMetricsHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        977,
-        994
+        1123,
+        1140
       ],
-      "summary": "Function buildMetricsHtml (L977-994)",
+      "summary": "Function buildMetricsHtml (L1123-1140)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3841,10 +4048,10 @@
       "name": "buildDiagramsHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        996,
-        1022
+        1142,
+        1168
       ],
-      "summary": "Function buildDiagramsHtml (L996-1022)",
+      "summary": "Function buildDiagramsHtml (L1142-1168)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3855,10 +4062,10 @@
       "name": "buildReleaseHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1024,
-        1170
+        1170,
+        1317
       ],
-      "summary": "Function buildReleaseHtml (L1024-1170)",
+      "summary": "Function buildReleaseHtml (L1170-1317)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3869,10 +4076,10 @@
       "name": "readIfExists",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1172,
-        1181
+        1319,
+        1328
       ],
-      "summary": "Function readIfExists (L1172-1181)",
+      "summary": "Function readIfExists (L1319-1328)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3883,10 +4090,10 @@
       "name": "readBundleMetaFromReadme",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1183,
-        1195
+        1330,
+        1342
       ],
-      "summary": "Function readBundleMetaFromReadme (L1183-1195)",
+      "summary": "Function readBundleMetaFromReadme (L1330-1342)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3897,10 +4104,10 @@
       "name": "readNovadiffDocsBundle",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1197,
-        1273
+        1344,
+        1420
       ],
-      "summary": "Function readNovadiffDocsBundle (L1197-1273)",
+      "summary": "Function readNovadiffDocsBundle (L1344-1420)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3911,10 +4118,10 @@
       "name": "refreshNovadiffDocsHtmlFromDisk",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1275,
-        1278
+        1422,
+        1425
       ],
-      "summary": "Function refreshNovadiffDocsHtmlFromDisk (L1275-1278)",
+      "summary": "Function refreshNovadiffDocsHtmlFromDisk (L1422-1425)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3925,10 +4132,10 @@
       "name": "writeNovadiffDocsHtml",
       "filePath": "electron/novadiff-docs-html.cjs",
       "lineRange": [
-        1284,
-        1302
+        1431,
+        1454
       ],
-      "summary": "Function writeNovadiffDocsHtml (L1284-1302)",
+      "summary": "Function writeNovadiffDocsHtml (L1431-1454)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -4244,7 +4451,7 @@
       "type": "file",
       "name": "prefetch-summaries.cjs",
       "filePath": "electron/prefetch-summaries.cjs",
-      "summary": "prefetch-summaries.cjs — 6 functions, 0 classes, 241 lines",
+      "summary": "prefetch-summaries.cjs — 6 functions, 0 classes, 256 lines",
       "tags": [
         "javascript",
         "code"
@@ -4315,9 +4522,9 @@
       "filePath": "electron/prefetch-summaries.cjs",
       "lineRange": [
         64,
-        216
+        231
       ],
-      "summary": "Function runSummaryPrefetchLoop (L64-216)",
+      "summary": "Function runSummaryPrefetchLoop (L64-231)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4328,10 +4535,10 @@
       "name": "startSummaryPrefetchWorker",
       "filePath": "electron/prefetch-summaries.cjs",
       "lineRange": [
-        222,
-        233
+        237,
+        248
       ],
-      "summary": "Function startSummaryPrefetchWorker (L222-233)",
+      "summary": "Function startSummaryPrefetchWorker (L237-248)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4341,7 +4548,7 @@
       "type": "file",
       "name": "preload.cjs",
       "filePath": "electron/preload.cjs",
-      "summary": "preload.cjs — 0 functions, 0 classes, 183 lines",
+      "summary": "preload.cjs — 0 functions, 0 classes, 188 lines",
       "tags": [
         "javascript",
         "code"
@@ -4478,7 +4685,7 @@
       "type": "file",
       "name": "workspace-history.cjs",
       "filePath": "electron/workspace-history.cjs",
-      "summary": "workspace-history.cjs — 7 functions, 0 classes, 300 lines",
+      "summary": "workspace-history.cjs — 7 functions, 0 classes, 302 lines",
       "tags": [
         "javascript",
         "code"
@@ -4563,9 +4770,9 @@
       "filePath": "electron/workspace-history.cjs",
       "lineRange": [
         100,
-        183
+        184
       ],
-      "summary": "Function indexWorkspaceHistory (L100-183)",
+      "summary": "Function indexWorkspaceHistory (L100-184)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4576,10 +4783,10 @@
       "name": "refreshWorkspaceHistory",
       "filePath": "electron/workspace-history.cjs",
       "lineRange": [
-        188,
-        291
+        189,
+        293
       ],
-      "summary": "Function refreshWorkspaceHistory (L188-291)",
+      "summary": "Function refreshWorkspaceHistory (L189-293)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4589,7 +4796,7 @@
       "type": "file",
       "name": "workspace-store.cjs",
       "filePath": "electron/workspace-store.cjs",
-      "summary": "workspace-store.cjs — 15 functions, 0 classes, 193 lines",
+      "summary": "workspace-store.cjs — 17 functions, 0 classes, 236 lines",
       "tags": [
         "javascript",
         "code"
@@ -4640,15 +4847,43 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "function:electron/workspace-store.cjs:withSessionWriteLock",
+      "type": "function",
+      "name": "withSessionWriteLock",
+      "filePath": "electron/workspace-store.cjs",
+      "lineRange": [
+        27,
+        31
+      ],
+      "summary": "Function withSessionWriteLock (L27-31)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/workspace-store.cjs:writeJsonAtomic",
+      "type": "function",
+      "name": "writeJsonAtomic",
+      "filePath": "electron/workspace-store.cjs",
+      "lineRange": [
+        33,
+        62
+      ],
+      "summary": "Function writeJsonAtomic (L33-62)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "function:electron/workspace-store.cjs:writeJson",
       "type": "function",
       "name": "writeJson",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        25,
-        31
+        64,
+        66
       ],
-      "summary": "Function writeJson (L25-31)",
+      "summary": "Function writeJson (L64-66)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4659,10 +4894,10 @@
       "name": "loadSession",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        33,
-        52
+        68,
+        87
       ],
-      "summary": "Function loadSession (L33-52)",
+      "summary": "Function loadSession (L68-87)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4673,10 +4908,10 @@
       "name": "setLocalOnlyMode",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        54,
-        63
+        89,
+        98
       ],
-      "summary": "Function setLocalOnlyMode (L54-63)",
+      "summary": "Function setLocalOnlyMode (L89-98)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4687,10 +4922,10 @@
       "name": "saveSession",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        65,
-        67
+        100,
+        103
       ],
-      "summary": "Function saveSession (L65-67)",
+      "summary": "Function saveSession (L100-103)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4701,10 +4936,10 @@
       "name": "listWorkspaces",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        69,
-        72
+        105,
+        108
       ],
-      "summary": "Function listWorkspaces (L69-72)",
+      "summary": "Function listWorkspaces (L105-108)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4715,10 +4950,10 @@
       "name": "upsertWorkspace",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        74,
-        87
+        110,
+        130
       ],
-      "summary": "Function upsertWorkspace (L74-87)",
+      "summary": "Function upsertWorkspace (L110-130)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4729,10 +4964,10 @@
       "name": "setActiveWorkspace",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        89,
-        94
+        132,
+        137
       ],
-      "summary": "Function setActiveWorkspace (L89-94)",
+      "summary": "Function setActiveWorkspace (L132-137)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4743,10 +4978,10 @@
       "name": "setGitUser",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        96,
-        101
+        139,
+        144
       ],
-      "summary": "Function setGitUser (L96-101)",
+      "summary": "Function setGitUser (L139-144)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4757,10 +4992,10 @@
       "name": "getWorkspace",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        103,
-        106
+        146,
+        149
       ],
-      "summary": "Function getWorkspace (L103-106)",
+      "summary": "Function getWorkspace (L146-149)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4771,10 +5006,10 @@
       "name": "updateWorkspaceUiState",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        108,
-        125
+        151,
+        168
       ],
-      "summary": "Function updateWorkspaceUiState (L108-125)",
+      "summary": "Function updateWorkspaceUiState (L151-168)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4785,10 +5020,10 @@
       "name": "updateWorkspaceLiveRepo",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        127,
-        145
+        170,
+        188
       ],
-      "summary": "Function updateWorkspaceLiveRepo (L127-145)",
+      "summary": "Function updateWorkspaceLiveRepo (L170-188)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -4799,10 +5034,10 @@
       "name": "createWorkspace",
       "filePath": "electron/workspace-store.cjs",
       "lineRange": [
-        147,
-        178
+        190,
+        221
       ],
-      "summary": "Function createWorkspace (L147-178)",
+      "summary": "Function createWorkspace (L190-221)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:electron"
@@ -9218,11 +9453,24 @@
       "layerId": "layer:packages"
     },
     {
+      "id": "file:packages/graph-view/src/__tests__/selectionCluster.test.ts",
+      "type": "file",
+      "name": "selectionCluster.test.ts",
+      "filePath": "packages/graph-view/src/__tests__/selectionCluster.test.ts",
+      "summary": "selectionCluster.test.ts — 0 functions, 0 classes, 61 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
       "id": "file:packages/graph-view/src/App.tsx",
       "type": "file",
       "name": "App.tsx",
       "filePath": "packages/graph-view/src/App.tsx",
-      "summary": "App.tsx — 5 functions, 0 classes, 735 lines",
+      "summary": "App.tsx — 5 functions, 0 classes, 746 lines",
       "tags": [
         "typescript",
         "code"
@@ -9293,9 +9541,9 @@
       "filePath": "packages/graph-view/src/App.tsx",
       "lineRange": [
         211,
-        733
+        744
       ],
-      "summary": "Function DashboardContent (L211-733)",
+      "summary": "Function DashboardContent (L211-744)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9838,7 +10086,7 @@
       "type": "file",
       "name": "GraphView.tsx",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "summary": "GraphView.tsx — 8 functions, 0 classes, 1805 lines",
+      "summary": "GraphView.tsx — 8 functions, 0 classes, 1793 lines",
       "tags": [
         "typescript",
         "code"
@@ -9852,10 +10100,10 @@
       "name": "TourFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        100,
-        184
+        101,
+        185
       ],
-      "summary": "Function TourFitView (L100-184)",
+      "summary": "Function TourFitView (L101-185)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9866,10 +10114,10 @@
       "name": "SelectedNodeFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        187,
-        212
+        188,
+        213
       ],
-      "summary": "Function SelectedNodeFitView (L187-212)",
+      "summary": "Function SelectedNodeFitView (L188-213)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9880,10 +10128,10 @@
       "name": "useOverviewGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        218,
-        356
+        219,
+        357
       ],
-      "summary": "Function useOverviewGraph (L218-356)",
+      "summary": "Function useOverviewGraph (L219-357)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9894,10 +10142,10 @@
       "name": "useLayerDetailTopology",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        392,
-        931
+        393,
+        932
       ],
-      "summary": "Function useLayerDetailTopology (L392-931)",
+      "summary": "Function useLayerDetailTopology (L393-932)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9908,10 +10156,10 @@
       "name": "buildCustomFlowNode",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        939,
-        973
+        940,
+        974
       ],
-      "summary": "Function buildCustomFlowNode (L939-973)",
+      "summary": "Function buildCustomFlowNode (L940-974)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9922,10 +10170,10 @@
       "name": "useLayerDetailGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        989,
-        1429
+        990,
+        1416
       ],
-      "summary": "Function useLayerDetailGraph (L989-1429)",
+      "summary": "Function useLayerDetailGraph (L990-1416)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9936,10 +10184,10 @@
       "name": "GraphViewInner",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1433,
-        1793
+        1420,
+        1781
       ],
-      "summary": "Function GraphViewInner (L1433-1793)",
+      "summary": "Function GraphViewInner (L1420-1781)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9950,10 +10198,10 @@
       "name": "GraphView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1795,
-        1805
+        1783,
+        1793
       ],
-      "summary": "Function GraphView (L1795-1805)",
+      "summary": "Function GraphView (L1783-1793)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10762,6 +11010,33 @@
       "layerId": "layer:packages"
     },
     {
+      "id": "file:packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+      "type": "file",
+      "name": "GraphEmbedSyncBridge.tsx",
+      "filePath": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+      "summary": "GraphEmbedSyncBridge.tsx — 1 functions, 0 classes, 71 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/GraphEmbedSyncBridge.tsx:GraphEmbedSyncBridge",
+      "type": "function",
+      "name": "GraphEmbedSyncBridge",
+      "filePath": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+      "lineRange": [
+        11,
+        71
+      ],
+      "summary": "Function GraphEmbedSyncBridge (L11-71)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
       "id": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
       "type": "file",
       "name": "useEmbedAutoExpand.ts",
@@ -10889,7 +11164,7 @@
       "type": "file",
       "name": "index.css",
       "filePath": "packages/graph-view/src/index.css",
-      "summary": "index.css — 0 functions, 0 classes, 484 lines",
+      "summary": "index.css — 0 functions, 0 classes, 525 lines",
       "tags": [
         "css",
         "code"
@@ -11034,7 +11309,7 @@
       "type": "file",
       "name": "NovaDiffGraphExplorer.tsx",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
-      "summary": "NovaDiffGraphExplorer.tsx — 3 functions, 0 classes, 146 lines",
+      "summary": "NovaDiffGraphExplorer.tsx — 3 functions, 0 classes, 153 lines",
       "tags": [
         "typescript",
         "code"
@@ -11048,10 +11323,10 @@
       "name": "NovaDiffGraphExplorer",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
       "lineRange": [
-        34,
-        42
+        41,
+        49
       ],
-      "summary": "Function NovaDiffGraphExplorer (L34-42)",
+      "summary": "Function NovaDiffGraphExplorer (L41-49)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11062,10 +11337,10 @@
       "name": "graphFingerprint",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
       "lineRange": [
-        44,
-        54
+        51,
+        61
       ],
-      "summary": "Function graphFingerprint (L44-54)",
+      "summary": "Function graphFingerprint (L51-61)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11076,10 +11351,10 @@
       "name": "NovaDiffGraphExplorerFull",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
       "lineRange": [
-        56,
-        146
+        63,
+        153
       ],
-      "summary": "Function NovaDiffGraphExplorerFull (L56-146)",
+      "summary": "Function NovaDiffGraphExplorerFull (L63-153)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -11089,12 +11364,12 @@
       "type": "file",
       "name": "NovaDiffGraphExplorerEmbed.tsx",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
-      "summary": "NovaDiffGraphExplorerEmbed.tsx — 2 functions, 0 classes, 113 lines",
+      "summary": "NovaDiffGraphExplorerEmbed.tsx — 2 functions, 0 classes, 128 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11103,12 +11378,12 @@
       "name": "graphFingerprint",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
       "lineRange": [
-        23,
-        33
+        28,
+        38
       ],
-      "summary": "Function graphFingerprint (L23-33)",
+      "summary": "Function graphFingerprint (L28-38)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11117,12 +11392,12 @@
       "name": "NovaDiffGraphExplorerEmbed",
       "filePath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
       "lineRange": [
-        36,
-        113
+        41,
+        128
       ],
-      "summary": "Function NovaDiffGraphExplorerEmbed (L36-113)",
+      "summary": "Function NovaDiffGraphExplorerEmbed (L41-128)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11130,7 +11405,7 @@
       "type": "file",
       "name": "store.ts",
       "filePath": "packages/graph-view/src/store.ts",
-      "summary": "store.ts — 4 functions, 0 classes, 859 lines",
+      "summary": "store.ts — 4 functions, 0 classes, 870 lines",
       "tags": [
         "typescript",
         "code"
@@ -11144,10 +11419,10 @@
       "name": "buildGraphIndexes",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        75,
-        96
+        77,
+        98
       ],
-      "summary": "Function buildGraphIndexes (L75-96)",
+      "summary": "Function buildGraphIndexes (L77-98)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11158,10 +11433,10 @@
       "name": "getSortedTour",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        249,
-        252
+        251,
+        254
       ],
-      "summary": "Function getSortedTour (L249-252)",
+      "summary": "Function getSortedTour (L251-254)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11172,10 +11447,10 @@
       "name": "navigateTourToLayer",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        255,
-        268
+        257,
+        270
       ],
-      "summary": "Function navigateTourToLayer (L255-268)",
+      "summary": "Function navigateTourToLayer (L257-270)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11186,10 +11461,10 @@
       "name": "layerResetIfChanged",
       "filePath": "packages/graph-view/src/store.ts",
       "lineRange": [
-        279,
-        294
+        281,
+        296
       ],
-      "summary": "Function layerResetIfChanged (L279-294)",
+      "summary": "Function layerResetIfChanged (L281-296)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11989,6 +12264,89 @@
       "layerId": "layer:packages"
     },
     {
+      "id": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "type": "file",
+      "name": "graphCityNavigation.ts",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "summary": "graphCityNavigation.ts — 5 functions, 0 classes, 71 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/graphCityNavigation.ts:containerIdForFilePath",
+      "type": "function",
+      "name": "containerIdForFilePath",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "lineRange": [
+        5,
+        12
+      ],
+      "summary": "Function containerIdForFilePath (L5-12)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphCityRoot",
+      "type": "function",
+      "name": "applyGraphCityRoot",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "lineRange": [
+        23,
+        28
+      ],
+      "summary": "Function applyGraphCityRoot (L23-28)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/graphCityNavigation.ts:expandFileContainer",
+      "type": "function",
+      "name": "expandFileContainer",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "lineRange": [
+        30,
+        38
+      ],
+      "summary": "Function expandFileContainer (L30-38)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphEnterFile",
+      "type": "function",
+      "name": "applyGraphEnterFile",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "lineRange": [
+        40,
+        53
+      ],
+      "summary": "Function applyGraphEnterFile (L40-53)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphFocusSelection",
+      "type": "function",
+      "name": "applyGraphFocusSelection",
+      "filePath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "lineRange": [
+        56,
+        71
+      ],
+      "summary": "Function applyGraphFocusSelection (L56-71)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
       "id": "file:packages/graph-view/src/utils/layerStats.ts",
       "type": "file",
       "name": "layerStats.ts",
@@ -12120,6 +12478,75 @@
         47
       ],
       "summary": "Function detectCommunities (L17-47)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "file:packages/graph-view/src/utils/selectionCluster.ts",
+      "type": "file",
+      "name": "selectionCluster.ts",
+      "filePath": "packages/graph-view/src/utils/selectionCluster.ts",
+      "summary": "selectionCluster.ts — 4 functions, 0 classes, 87 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/selectionCluster.ts:filePathFromNodeId",
+      "type": "function",
+      "name": "filePathFromNodeId",
+      "filePath": "packages/graph-view/src/utils/selectionCluster.ts",
+      "lineRange": [
+        5,
+        15
+      ],
+      "summary": "Function filePathFromNodeId (L5-15)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/selectionCluster.ts:resolveGraphNodeFilePath",
+      "type": "function",
+      "name": "resolveGraphNodeFilePath",
+      "filePath": "packages/graph-view/src/utils/selectionCluster.ts",
+      "lineRange": [
+        17,
+        29
+      ],
+      "summary": "Function resolveGraphNodeFilePath (L17-29)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/selectionCluster.ts:graphNodeIdsInFile",
+      "type": "function",
+      "name": "graphNodeIdsInFile",
+      "filePath": "packages/graph-view/src/utils/selectionCluster.ts",
+      "lineRange": [
+        32,
+        50
+      ],
+      "summary": "Function graphNodeIdsInFile (L32-50)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/utils/selectionCluster.ts:graphSelectionCluster",
+      "type": "function",
+      "name": "graphSelectionCluster",
+      "filePath": "packages/graph-view/src/utils/selectionCluster.ts",
+      "lineRange": [
+        56,
+        87
+      ],
+      "summary": "Function graphSelectionCluster (L56-87)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -12400,7 +12827,7 @@
       "type": "file",
       "name": "App.css",
       "filePath": "src/App.css",
-      "summary": "App.css — 0 functions, 0 classes, 4331 lines",
+      "summary": "App.css — 0 functions, 0 classes, 5934 lines",
       "tags": [
         "css",
         "code"
@@ -12413,7 +12840,7 @@
       "type": "file",
       "name": "App.tsx",
       "filePath": "src/App.tsx",
-      "summary": "App.tsx — 9 functions, 0 classes, 1679 lines",
+      "summary": "App.tsx — 9 functions, 0 classes, 1752 lines",
       "tags": [
         "typescript",
         "code"
@@ -12427,10 +12854,10 @@
       "name": "isElectron",
       "filePath": "src/App.tsx",
       "lineRange": [
-        56,
-        58
+        60,
+        62
       ],
-      "summary": "Function isElectron (L56-58)",
+      "summary": "Function isElectron (L60-62)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12441,10 +12868,10 @@
       "name": "pickDirectory",
       "filePath": "src/App.tsx",
       "lineRange": [
-        60,
-        65
+        64,
+        69
       ],
-      "summary": "Function pickDirectory (L60-65)",
+      "summary": "Function pickDirectory (L64-69)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12455,10 +12882,10 @@
       "name": "baseName",
       "filePath": "src/App.tsx",
       "lineRange": [
-        67,
-        72
+        71,
+        76
       ],
-      "summary": "Function baseName (L67-72)",
+      "summary": "Function baseName (L71-76)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12469,10 +12896,10 @@
       "name": "isBinaryOrNonTextError",
       "filePath": "src/App.tsx",
       "lineRange": [
-        77,
-        79
+        81,
+        83
       ],
-      "summary": "Function isBinaryOrNonTextError (L77-79)",
+      "summary": "Function isBinaryOrNonTextError (L81-83)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12483,10 +12910,10 @@
       "name": "clampInsightsWidth",
       "filePath": "src/App.tsx",
       "lineRange": [
-        86,
-        95
+        90,
+        99
       ],
-      "summary": "Function clampInsightsWidth (L86-95)",
+      "summary": "Function clampInsightsWidth (L90-99)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12497,10 +12924,10 @@
       "name": "loadInsightsWidth",
       "filePath": "src/App.tsx",
       "lineRange": [
-        107,
-        121
+        111,
+        125
       ],
-      "summary": "Function loadInsightsWidth (L107-121)",
+      "summary": "Function loadInsightsWidth (L111-125)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12511,10 +12938,10 @@
       "name": "AppMain",
       "filePath": "src/App.tsx",
       "lineRange": [
-        123,
-        1577
+        127,
+        1650
       ],
-      "summary": "Function AppMain (L123-1577)",
+      "summary": "Function AppMain (L127-1650)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12525,10 +12952,10 @@
       "name": "WindowChrome",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1579,
-        1670
+        1652,
+        1743
       ],
-      "summary": "Function WindowChrome (L1579-1670)",
+      "summary": "Function WindowChrome (L1652-1743)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12539,10 +12966,10 @@
       "name": "App",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1672,
-        1679
+        1745,
+        1752
       ],
-      "summary": "Function App (L1672-1679)",
+      "summary": "Function App (L1745-1752)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -12867,6 +13294,75 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/app/codeCityChromeInsets.ts",
+      "type": "file",
+      "name": "codeCityChromeInsets.ts",
+      "filePath": "src/app/codeCityChromeInsets.ts",
+      "summary": "codeCityChromeInsets.ts — 4 functions, 0 classes, 92 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/codeCityChromeInsets.ts:rectsOverlap",
+      "type": "function",
+      "name": "rectsOverlap",
+      "filePath": "src/app/codeCityChromeInsets.ts",
+      "lineRange": [
+        10,
+        12
+      ],
+      "summary": "Function rectsOverlap (L10-12)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/codeCityChromeInsets.ts:liftForObstruction",
+      "type": "function",
+      "name": "liftForObstruction",
+      "filePath": "src/app/codeCityChromeInsets.ts",
+      "lineRange": [
+        14,
+        22
+      ],
+      "summary": "Function liftForObstruction (L14-22)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/codeCityChromeInsets.ts:isBlockingModalOpen",
+      "type": "function",
+      "name": "isBlockingModalOpen",
+      "filePath": "src/app/codeCityChromeInsets.ts",
+      "lineRange": [
+        24,
+        38
+      ],
+      "summary": "Function isBlockingModalOpen (L24-38)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/codeCityChromeInsets.ts:measureCodeCityChromeInsets",
+      "type": "function",
+      "name": "measureCodeCityChromeInsets",
+      "filePath": "src/app/codeCityChromeInsets.ts",
+      "lineRange": [
+        49,
+        92
+      ],
+      "summary": "Function measureCodeCityChromeInsets (L49-92)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/app/codeCityLayout.ts",
       "type": "file",
       "name": "codeCityLayout.ts",
@@ -12964,11 +13460,136 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/app/commitChangeAnalysis.ts",
+      "type": "file",
+      "name": "commitChangeAnalysis.ts",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "summary": "commitChangeAnalysis.ts — 8 functions, 0 classes, 209 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:topDirectory",
+      "type": "function",
+      "name": "topDirectory",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        21,
+        27
+      ],
+      "summary": "Function topDirectory (L21-27)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:detectDirectoryChanges",
+      "type": "function",
+      "name": "detectDirectoryChanges",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        29,
+        50
+      ],
+      "summary": "Function detectDirectoryChanges (L29-50)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:summarizeChanges",
+      "type": "function",
+      "name": "summarizeChanges",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        52,
+        64
+      ],
+      "summary": "Function summarizeChanges (L52-64)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:classifyUpdate",
+      "type": "function",
+      "name": "classifyUpdate",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        67,
+        129
+      ],
+      "summary": "Function classifyUpdate (L67-129)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:buildChangeAnalysisFromRows",
+      "type": "function",
+      "name": "buildChangeAnalysisFromRows",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        132,
+        153
+      ],
+      "summary": "Function buildChangeAnalysisFromRows (L132-153)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:classifyCompareRows",
+      "type": "function",
+      "name": "classifyCompareRows",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        155,
+        163
+      ],
+      "summary": "Function classifyCompareRows (L155-163)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:districtBreakdown",
+      "type": "function",
+      "name": "districtBreakdown",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        165,
+        186
+      ],
+      "summary": "Function districtBreakdown (L165-186)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/commitChangeAnalysis.ts:graphSymbolsContext",
+      "type": "function",
+      "name": "graphSymbolsContext",
+      "filePath": "src/app/commitChangeAnalysis.ts",
+      "lineRange": [
+        188,
+        209
+      ],
+      "summary": "Function graphSymbolsContext (L188-209)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/app/commitMessage.ts",
       "type": "file",
       "name": "commitMessage.ts",
       "filePath": "src/app/commitMessage.ts",
-      "summary": "commitMessage.ts — 2 functions, 0 classes, 59 lines",
+      "summary": "commitMessage.ts — 2 functions, 0 classes, 96 lines",
       "tags": [
         "typescript",
         "code"
@@ -12982,10 +13603,10 @@
       "name": "buildCommitMessageContext",
       "filePath": "src/app/commitMessage.ts",
       "lineRange": [
-        7,
-        30
+        19,
+        65
       ],
-      "summary": "Function buildCommitMessageContext (L7-30)",
+      "summary": "Function buildCommitMessageContext (L19-65)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:src"
@@ -12996,10 +13617,10 @@
       "name": "parseCommitMessageOutput",
       "filePath": "src/app/commitMessage.ts",
       "lineRange": [
-        33,
-        59
+        70,
+        96
       ],
-      "summary": "Function parseCommitMessageOutput (L33-59)",
+      "summary": "Function parseCommitMessageOutput (L70-96)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:src"
@@ -13171,6 +13792,75 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/app/DocsViewSyncContext.tsx",
+      "type": "file",
+      "name": "DocsViewSyncContext.tsx",
+      "filePath": "src/app/DocsViewSyncContext.tsx",
+      "summary": "DocsViewSyncContext.tsx — 4 functions, 0 classes, 149 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/DocsViewSyncContext.tsx:DocsViewSyncProvider",
+      "type": "function",
+      "name": "DocsViewSyncProvider",
+      "filePath": "src/app/DocsViewSyncContext.tsx",
+      "lineRange": [
+        29,
+        124
+      ],
+      "summary": "Function DocsViewSyncProvider (L29-124)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSync",
+      "type": "function",
+      "name": "useDocsViewSync",
+      "filePath": "src/app/DocsViewSyncContext.tsx",
+      "lineRange": [
+        126,
+        132
+      ],
+      "summary": "Function useDocsViewSync (L126-132)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncOptional",
+      "type": "function",
+      "name": "useDocsViewSyncOptional",
+      "filePath": "src/app/DocsViewSyncContext.tsx",
+      "lineRange": [
+        134,
+        136
+      ],
+      "summary": "Function useDocsViewSyncOptional (L134-136)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncExternalNode",
+      "type": "function",
+      "name": "useDocsViewSyncExternalNode",
+      "filePath": "src/app/DocsViewSyncContext.tsx",
+      "lineRange": [
+        138,
+        149
+      ],
+      "summary": "Function useDocsViewSyncExternalNode (L138-149)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/app/docWorkspaceMetrics.ts",
       "type": "file",
       "name": "docWorkspaceMetrics.ts",
@@ -13279,6 +13969,117 @@
       "summary": "Function depthBarMermaid (L188-204)",
       "tags": [],
       "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/app/fileTree.ts",
+      "type": "file",
+      "name": "fileTree.ts",
+      "filePath": "src/app/fileTree.ts",
+      "summary": "fileTree.ts — 7 functions, 0 classes, 90 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:insertPath",
+      "type": "function",
+      "name": "insertPath",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        8,
+        30
+      ],
+      "summary": "Function insertPath (L8-30)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:sortNodes",
+      "type": "function",
+      "name": "sortNodes",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        32,
+        39
+      ],
+      "summary": "Function sortNodes (L32-39)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:sortTree",
+      "type": "function",
+      "name": "sortTree",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        41,
+        46
+      ],
+      "summary": "Function sortTree (L41-46)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:buildFileTree",
+      "type": "function",
+      "name": "buildFileTree",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        48,
+        54
+      ],
+      "summary": "Function buildFileTree (L48-54)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:cloneFiltered",
+      "type": "function",
+      "name": "cloneFiltered",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        56,
+        67
+      ],
+      "summary": "Function cloneFiltered (L56-67)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:filterFileTree",
+      "type": "function",
+      "name": "filterFileTree",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        69,
+        76
+      ],
+      "summary": "Function filterFileTree (L69-76)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/fileTree.ts:collectFolderPaths",
+      "type": "function",
+      "name": "collectFolderPaths",
+      "filePath": "src/app/fileTree.ts",
+      "lineRange": [
+        78,
+        90
+      ],
+      "summary": "Function collectFolderPaths (L78-90)",
+      "tags": [],
+      "complexity": "simple",
       "layerId": "layer:src"
     },
     {
@@ -13439,12 +14240,247 @@
       "type": "file",
       "name": "gitTypes.ts",
       "filePath": "src/app/gitTypes.ts",
-      "summary": "gitTypes.ts — 0 functions, 0 classes, 125 lines",
+      "summary": "gitTypes.ts — 0 functions, 0 classes, 173 lines",
       "tags": [
         "typescript",
         "code"
       ],
       "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/app/graphCityBridge.ts",
+      "type": "file",
+      "name": "graphCityBridge.ts",
+      "filePath": "src/app/graphCityBridge.ts",
+      "summary": "graphCityBridge.ts — 9 functions, 0 classes, 307 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:parseGraphNodeId",
+      "type": "function",
+      "name": "parseGraphNodeId",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        16,
+        49
+      ],
+      "summary": "Function parseGraphNodeId (L16-49)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:buildingMatchesSymbol",
+      "type": "function",
+      "name": "buildingMatchesSymbol",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        51,
+        71
+      ],
+      "summary": "Function buildingMatchesSymbol (L51-71)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:graphNodeToCityBuildingIds",
+      "type": "function",
+      "name": "graphNodeToCityBuildingIds",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        74,
+        114
+      ],
+      "summary": "Function graphNodeToCityBuildingIds (L74-114)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:cityBuildingToGraphNodeId",
+      "type": "function",
+      "name": "cityBuildingToGraphNodeId",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        117,
+        146
+      ],
+      "summary": "Function cityBuildingToGraphNodeId (L117-146)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:buildBuildingIdByGraphNode",
+      "type": "function",
+      "name": "buildBuildingIdByGraphNode",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        148,
+        164
+      ],
+      "summary": "Function buildBuildingIdByGraphNode (L148-164)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:graphEdgesToCityPairs",
+      "type": "function",
+      "name": "graphEdgesToCityPairs",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        167,
+        205
+      ],
+      "summary": "Function graphEdgesToCityPairs (L167-205)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:graphNeighborNodeIds",
+      "type": "function",
+      "name": "graphNeighborNodeIds",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        208,
+        227
+      ],
+      "summary": "Function graphNeighborNodeIds (L208-227)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:filePathForLinkedSelection",
+      "type": "function",
+      "name": "filePathForLinkedSelection",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        229,
+        248
+      ],
+      "summary": "Function filePathForLinkedSelection (L229-248)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/graphCityBridge.ts:cityBuildingIdsForHighlight",
+      "type": "function",
+      "name": "cityBuildingIdsForHighlight",
+      "filePath": "src/app/graphCityBridge.ts",
+      "lineRange": [
+        250,
+        307
+      ],
+      "summary": "Function cityBuildingIdsForHighlight (L250-307)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/app/helpCopy.ts",
+      "type": "file",
+      "name": "helpCopy.ts",
+      "filePath": "src/app/helpCopy.ts",
+      "summary": "helpCopy.ts — 0 functions, 0 classes, 10 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/app/impactHeatmap.ts",
+      "type": "file",
+      "name": "impactHeatmap.ts",
+      "filePath": "src/app/impactHeatmap.ts",
+      "summary": "impactHeatmap.ts — 5 functions, 0 classes, 100 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/impactHeatmap.ts:topDirectory",
+      "type": "function",
+      "name": "topDirectory",
+      "filePath": "src/app/impactHeatmap.ts",
+      "lineRange": [
+        11,
+        14
+      ],
+      "summary": "Function topDirectory (L11-14)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/impactHeatmap.ts:buildDistrictImpactHeatmap",
+      "type": "function",
+      "name": "buildDistrictImpactHeatmap",
+      "filePath": "src/app/impactHeatmap.ts",
+      "lineRange": [
+        17,
+        66
+      ],
+      "summary": "Function buildDistrictImpactHeatmap (L17-66)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/impactHeatmap.ts:heatmapMermaid",
+      "type": "function",
+      "name": "heatmapMermaid",
+      "filePath": "src/app/impactHeatmap.ts",
+      "lineRange": [
+        68,
+        78
+      ],
+      "summary": "Function heatmapMermaid (L68-78)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/impactHeatmap.ts:heatmapHtmlTable",
+      "type": "function",
+      "name": "heatmapHtmlTable",
+      "filePath": "src/app/impactHeatmap.ts",
+      "lineRange": [
+        80,
+        92
+      ],
+      "summary": "Function heatmapHtmlTable (L80-92)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/impactHeatmap.ts:escapeHtml",
+      "type": "function",
+      "name": "escapeHtml",
+      "filePath": "src/app/impactHeatmap.ts",
+      "lineRange": [
+        94,
+        100
+      ],
+      "summary": "Function escapeHtml (L94-100)",
+      "tags": [],
+      "complexity": "simple",
       "layerId": "layer:src"
     },
     {
@@ -14017,12 +15053,40 @@
       "type": "file",
       "name": "workspaceStorage.ts",
       "filePath": "src/app/workspaceStorage.ts",
-      "summary": "workspaceStorage.ts — 10 functions, 0 classes, 119 lines",
+      "summary": "workspaceStorage.ts — 12 functions, 0 classes, 136 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "simple",
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/workspaceStorage.ts:loadProductTourCompleted",
+      "type": "function",
+      "name": "loadProductTourCompleted",
+      "filePath": "src/app/workspaceStorage.ts",
+      "lineRange": [
+        8,
+        14
+      ],
+      "summary": "Function loadProductTourCompleted (L8-14)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/app/workspaceStorage.ts:saveProductTourCompleted",
+      "type": "function",
+      "name": "saveProductTourCompleted",
+      "filePath": "src/app/workspaceStorage.ts",
+      "lineRange": [
+        16,
+        22
+      ],
+      "summary": "Function saveProductTourCompleted (L16-22)",
+      "tags": [],
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14031,12 +15095,12 @@
       "name": "loadCachedGitUser",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        7,
-        17
+        24,
+        34
       ],
-      "summary": "Function loadCachedGitUser (L7-17)",
+      "summary": "Function loadCachedGitUser (L24-34)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14045,12 +15109,12 @@
       "name": "saveCachedGitUser",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        19,
-        21
+        36,
+        38
       ],
-      "summary": "Function saveCachedGitUser (L19-21)",
+      "summary": "Function saveCachedGitUser (L36-38)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14059,12 +15123,12 @@
       "name": "clearCachedGitUser",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        23,
-        25
+        40,
+        42
       ],
-      "summary": "Function clearCachedGitUser (L23-25)",
+      "summary": "Function clearCachedGitUser (L40-42)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14073,12 +15137,12 @@
       "name": "loadCachedActiveWorkspaceId",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        27,
-        33
+        44,
+        50
       ],
-      "summary": "Function loadCachedActiveWorkspaceId (L27-33)",
+      "summary": "Function loadCachedActiveWorkspaceId (L44-50)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14087,12 +15151,12 @@
       "name": "saveCachedActiveWorkspaceId",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        35,
-        41
+        52,
+        58
       ],
-      "summary": "Function saveCachedActiveWorkspaceId (L35-41)",
+      "summary": "Function saveCachedActiveWorkspaceId (L52-58)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14101,12 +15165,12 @@
       "name": "loadCachedLocalOnly",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        45,
-        51
+        62,
+        68
       ],
-      "summary": "Function loadCachedLocalOnly (L45-51)",
+      "summary": "Function loadCachedLocalOnly (L62-68)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14115,12 +15179,12 @@
       "name": "saveCachedLocalOnly",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        53,
-        63
+        70,
+        80
       ],
-      "summary": "Function saveCachedLocalOnly (L53-63)",
+      "summary": "Function saveCachedLocalOnly (L70-80)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14129,12 +15193,12 @@
       "name": "resolveOnboardingGate",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        65,
-        93
+        82,
+        110
       ],
-      "summary": "Function resolveOnboardingGate (L65-93)",
+      "summary": "Function resolveOnboardingGate (L82-110)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14143,12 +15207,12 @@
       "name": "mergeSession",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        95,
-        109
+        112,
+        126
       ],
-      "summary": "Function mergeSession (L95-109)",
+      "summary": "Function mergeSession (L112-126)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14157,12 +15221,12 @@
       "name": "findWorkspace",
       "filePath": "src/app/workspaceStorage.ts",
       "lineRange": [
-        111,
-        119
+        128,
+        136
       ],
-      "summary": "Function findWorkspace (L111-119)",
+      "summary": "Function findWorkspace (L128-136)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -14196,12 +15260,12 @@
       "type": "file",
       "name": "AutoCommitWorkspace.tsx",
       "filePath": "src/components/AutoCommitWorkspace.tsx",
-      "summary": "AutoCommitWorkspace.tsx — 2 functions, 0 classes, 387 lines",
+      "summary": "AutoCommitWorkspace.tsx — 2 functions, 0 classes, 474 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14210,12 +15274,12 @@
       "name": "AutoCommitWorkspace",
       "filePath": "src/components/AutoCommitWorkspace.tsx",
       "lineRange": [
-        25,
-        381
+        28,
+        468
       ],
-      "summary": "Function AutoCommitWorkspace (L25-381)",
+      "summary": "Function AutoCommitWorkspace (L28-468)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14224,12 +15288,12 @@
       "name": "pathBasename",
       "filePath": "src/components/AutoCommitWorkspace.tsx",
       "lineRange": [
-        383,
-        387
+        470,
+        474
       ],
-      "summary": "Function pathBasename (L383-387)",
+      "summary": "Function pathBasename (L470-474)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14319,7 +15383,7 @@
       "type": "file",
       "name": "CodeCityLegend.tsx",
       "filePath": "src/components/CodeCityLegend.tsx",
-      "summary": "CodeCityLegend.tsx — 1 functions, 0 classes, 121 lines",
+      "summary": "CodeCityLegend.tsx — 1 functions, 0 classes, 147 lines",
       "tags": [
         "typescript",
         "code"
@@ -14334,11 +15398,93 @@
       "filePath": "src/components/CodeCityLegend.tsx",
       "lineRange": [
         3,
-        121
+        147
       ],
-      "summary": "Function CodeCityLegend (L3-121)",
+      "summary": "Function CodeCityLegend (L3-147)",
       "tags": [],
       "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/CodeCityMinimapPortal.tsx",
+      "type": "file",
+      "name": "CodeCityMinimapPortal.tsx",
+      "filePath": "src/components/CodeCityMinimapPortal.tsx",
+      "summary": "CodeCityMinimapPortal.tsx — 3 functions, 0 classes, 102 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityMinimapPortal.tsx:findControlsHost",
+      "type": "function",
+      "name": "findControlsHost",
+      "filePath": "src/components/CodeCityMinimapPortal.tsx",
+      "lineRange": [
+        9,
+        13
+      ],
+      "summary": "Function findControlsHost (L9-13)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityMinimapPortal.tsx:hideBuiltInMinimap",
+      "type": "function",
+      "name": "hideBuiltInMinimap",
+      "filePath": "src/components/CodeCityMinimapPortal.tsx",
+      "lineRange": [
+        15,
+        22
+      ],
+      "summary": "Function hideBuiltInMinimap (L15-22)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityMinimapPortal.tsx:CodeCityMinimapPortal",
+      "type": "function",
+      "name": "CodeCityMinimapPortal",
+      "filePath": "src/components/CodeCityMinimapPortal.tsx",
+      "lineRange": [
+        27,
+        102
+      ],
+      "summary": "Function CodeCityMinimapPortal (L27-102)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/CodeCityMinimapSlot.tsx",
+      "type": "file",
+      "name": "CodeCityMinimapSlot.tsx",
+      "filePath": "src/components/CodeCityMinimapSlot.tsx",
+      "summary": "CodeCityMinimapSlot.tsx — 1 functions, 0 classes, 94 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityMinimapSlot.tsx:CodeCityMinimapSlot",
+      "type": "function",
+      "name": "CodeCityMinimapSlot",
+      "filePath": "src/components/CodeCityMinimapSlot.tsx",
+      "lineRange": [
+        14,
+        94
+      ],
+      "summary": "Function CodeCityMinimapSlot (L14-94)",
+      "tags": [],
+      "complexity": "simple",
       "layerId": "layer:src"
     },
     {
@@ -14346,12 +15492,12 @@
       "type": "file",
       "name": "CodeCityView.tsx",
       "filePath": "src/components/CodeCityView.tsx",
-      "summary": "CodeCityView.tsx — 2 functions, 0 classes, 263 lines",
+      "summary": "CodeCityView.tsx — 12 functions, 0 classes, 841 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14360,12 +15506,152 @@
       "name": "attachSelectable",
       "filePath": "src/components/CodeCityView.tsx",
       "lineRange": [
-        9,
-        14
+        42,
+        47
       ],
-      "summary": "Function attachSelectable (L9-14)",
+      "summary": "Function attachSelectable (L42-47)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:buildingCenter",
+      "type": "function",
+      "name": "buildingCenter",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        49,
+        51
+      ],
+      "summary": "Function buildingCenter (L49-51)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:computeLayoutBounds",
+      "type": "function",
+      "name": "computeLayoutBounds",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        53,
+        75
+      ],
+      "summary": "Function computeLayoutBounds (L53-75)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:framingForAllBuildings",
+      "type": "function",
+      "name": "framingForAllBuildings",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        81,
+        116
+      ],
+      "summary": "Function framingForAllBuildings (L81-116)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:orbitFocusForBuildings",
+      "type": "function",
+      "name": "orbitFocusForBuildings",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        118,
+        151
+      ],
+      "summary": "Function orbitFocusForBuildings (L118-151)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:visualStateForBuilding",
+      "type": "function",
+      "name": "visualStateForBuilding",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        153,
+        172
+      ],
+      "summary": "Function visualStateForBuilding (L153-172)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:applyBuildingVisual",
+      "type": "function",
+      "name": "applyBuildingVisual",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        174,
+        234
+      ],
+      "summary": "Function applyBuildingVisual (L174-234)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:disposeObject3D",
+      "type": "function",
+      "name": "disposeObject3D",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        236,
+        255
+      ],
+      "summary": "Function disposeObject3D (L236-255)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:createBuildingGroup",
+      "type": "function",
+      "name": "createBuildingGroup",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        257,
+        319
+      ],
+      "summary": "Function createBuildingGroup (L257-319)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:syncDistrictMeshes",
+      "type": "function",
+      "name": "syncDistrictMeshes",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        321,
+        353
+      ],
+      "summary": "Function syncDistrictMeshes (L321-353)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/CodeCityView.tsx:syncBuildingMeshes",
+      "type": "function",
+      "name": "syncBuildingMeshes",
+      "filePath": "src/components/CodeCityView.tsx",
+      "lineRange": [
+        355,
+        382
+      ],
+      "summary": "Function syncBuildingMeshes (L355-382)",
+      "tags": [],
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14374,12 +15660,12 @@
       "name": "CodeCityView",
       "filePath": "src/components/CodeCityView.tsx",
       "lineRange": [
-        16,
-        263
+        384,
+        841
       ],
-      "summary": "Function CodeCityView (L16-263)",
+      "summary": "Function CodeCityView (L384-841)",
       "tags": [],
-      "complexity": "moderate",
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14451,11 +15737,150 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/components/DocsGraphExploreChrome.tsx",
+      "type": "file",
+      "name": "DocsGraphExploreChrome.tsx",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "summary": "DocsGraphExploreChrome.tsx — 9 functions, 0 classes, 648 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:countActiveCityFilters",
+      "type": "function",
+      "name": "countActiveCityFilters",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        61,
+        88
+      ],
+      "summary": "Function countActiveCityFilters (L61-88)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:ExpandCornerIcon",
+      "type": "function",
+      "name": "ExpandCornerIcon",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        90,
+        120
+      ],
+      "summary": "Function ExpandCornerIcon (L90-120)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:CityFiltersPanel",
+      "type": "function",
+      "name": "CityFiltersPanel",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        122,
+        267
+      ],
+      "summary": "Function CityFiltersPanel (L122-267)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:CityLinkPanel",
+      "type": "function",
+      "name": "CityLinkPanel",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        269,
+        287
+      ],
+      "summary": "Function CityLinkPanel (L269-287)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:GraphBuildPanel",
+      "type": "function",
+      "name": "GraphBuildPanel",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        289,
+        342
+      ],
+      "summary": "Function GraphBuildPanel (L289-342)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:GraphStatsPanel",
+      "type": "function",
+      "name": "GraphStatsPanel",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        344,
+        374
+      ],
+      "summary": "Function GraphStatsPanel (L344-374)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:CodeCityFloatShell",
+      "type": "function",
+      "name": "CodeCityFloatShell",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        376,
+        439
+      ],
+      "summary": "Function CodeCityFloatShell (L376-439)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:CodeCityExploreSettings",
+      "type": "function",
+      "name": "CodeCityExploreSettings",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        444,
+        639
+      ],
+      "summary": "Function CodeCityExploreSettings (L444-639)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocsGraphExploreChrome.tsx:DocsGraphActionBar",
+      "type": "function",
+      "name": "DocsGraphActionBar",
+      "filePath": "src/components/DocsGraphExploreChrome.tsx",
+      "lineRange": [
+        642,
+        648
+      ],
+      "summary": "Function DocsGraphActionBar (L642-648)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/components/DocumentationWorkspace.tsx",
       "type": "file",
       "name": "DocumentationWorkspace.tsx",
       "filePath": "src/components/DocumentationWorkspace.tsx",
-      "summary": "DocumentationWorkspace.tsx — 4 functions, 0 classes, 2390 lines",
+      "summary": "DocumentationWorkspace.tsx — 5 functions, 0 classes, 2345 lines",
       "tags": [
         "typescript",
         "code"
@@ -14469,10 +15894,10 @@
       "name": "mergeSummaryEntries",
       "filePath": "src/components/DocumentationWorkspace.tsx",
       "lineRange": [
-        62,
-        71
+        67,
+        76
       ],
-      "summary": "Function mergeSummaryEntries (L62-71)",
+      "summary": "Function mergeSummaryEntries (L67-76)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14483,10 +15908,10 @@
       "name": "mergeSelectionEntries",
       "filePath": "src/components/DocumentationWorkspace.tsx",
       "lineRange": [
-        73,
-        88
+        78,
+        93
       ],
-      "summary": "Function mergeSelectionEntries (L73-88)",
+      "summary": "Function mergeSelectionEntries (L78-93)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14497,10 +15922,10 @@
       "name": "yieldToBrowser",
       "filePath": "src/components/DocumentationWorkspace.tsx",
       "lineRange": [
-        90,
-        94
+        95,
+        99
       ],
-      "summary": "Function yieldToBrowser (L90-94)",
+      "summary": "Function yieldToBrowser (L95-99)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14511,12 +15936,136 @@
       "name": "DocumentationWorkspace",
       "filePath": "src/components/DocumentationWorkspace.tsx",
       "lineRange": [
-        113,
-        2390
+        123,
+        129
       ],
-      "summary": "Function DocumentationWorkspace (L113-2390)",
+      "summary": "Function DocumentationWorkspace (L123-129)",
       "tags": [],
       "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspace.tsx:DocumentationWorkspaceBody",
+      "type": "function",
+      "name": "DocumentationWorkspaceBody",
+      "filePath": "src/components/DocumentationWorkspace.tsx",
+      "lineRange": [
+        131,
+        2345
+      ],
+      "summary": "Function DocumentationWorkspaceBody (L131-2345)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "type": "file",
+      "name": "DocumentationWorkspaceLinked.tsx",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "summary": "DocumentationWorkspaceLinked.tsx — 5 functions, 0 classes, 215 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspaceLinked.tsx:DocumentationWorkspaceSyncRoot",
+      "type": "function",
+      "name": "DocumentationWorkspaceSyncRoot",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "lineRange": [
+        24,
+        37
+      ],
+      "summary": "Function DocumentationWorkspaceSyncRoot (L24-37)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspaceLinked.tsx:DocsFocusBootstrap",
+      "type": "function",
+      "name": "DocsFocusBootstrap",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "lineRange": [
+        39,
+        42
+      ],
+      "summary": "Function DocsFocusBootstrap (L39-42)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspaceLinked.tsx:useLinkedCityState",
+      "type": "function",
+      "name": "useLinkedCityState",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "lineRange": [
+        44,
+        174
+      ],
+      "summary": "Function useLinkedCityState (L44-174)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspaceLinked.tsx:CodeCityGraphToolbar",
+      "type": "function",
+      "name": "CodeCityGraphToolbar",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "lineRange": [
+        176,
+        206
+      ],
+      "summary": "Function CodeCityGraphToolbar (L176-206)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/DocumentationWorkspaceLinked.tsx:DocsLinkToolbar",
+      "type": "function",
+      "name": "DocsLinkToolbar",
+      "filePath": "src/components/DocumentationWorkspaceLinked.tsx",
+      "lineRange": [
+        208,
+        215
+      ],
+      "summary": "Function DocsLinkToolbar (L208-215)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/GitBlameLineModal.tsx",
+      "type": "file",
+      "name": "GitBlameLineModal.tsx",
+      "filePath": "src/components/GitBlameLineModal.tsx",
+      "summary": "GitBlameLineModal.tsx — 1 functions, 0 classes, 115 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitBlameLineModal.tsx:GitBlameLineModal",
+      "type": "function",
+      "name": "GitBlameLineModal",
+      "filePath": "src/components/GitBlameLineModal.tsx",
+      "lineRange": [
+        15,
+        115
+      ],
+      "summary": "Function GitBlameLineModal (L15-115)",
+      "tags": [],
+      "complexity": "simple",
       "layerId": "layer:src"
     },
     {
@@ -14524,11 +16073,25 @@
       "type": "file",
       "name": "GitBlamePanel.tsx",
       "filePath": "src/components/GitBlamePanel.tsx",
-      "summary": "GitBlamePanel.tsx — 1 functions, 0 classes, 159 lines",
+      "summary": "GitBlamePanel.tsx — 2 functions, 0 classes, 277 lines",
       "tags": [
         "typescript",
         "code"
       ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitBlamePanel.tsx:TreeRows",
+      "type": "function",
+      "name": "TreeRows",
+      "filePath": "src/components/GitBlamePanel.tsx",
+      "lineRange": [
+        14,
+        99
+      ],
+      "summary": "Function TreeRows (L14-99)",
+      "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
     },
@@ -14538,12 +16101,95 @@
       "name": "GitBlamePanel",
       "filePath": "src/components/GitBlamePanel.tsx",
       "lineRange": [
-        12,
-        159
+        101,
+        277
       ],
-      "summary": "Function GitBlamePanel (L12-159)",
+      "summary": "Function GitBlamePanel (L101-277)",
       "tags": [],
       "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/GitHistoryContextPanel.tsx",
+      "type": "file",
+      "name": "GitHistoryContextPanel.tsx",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "summary": "GitHistoryContextPanel.tsx — 5 functions, 0 classes, 587 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitHistoryContextPanel.tsx:formatDate",
+      "type": "function",
+      "name": "formatDate",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "lineRange": [
+        40,
+        52
+      ],
+      "summary": "Function formatDate (L40-52)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitHistoryContextPanel.tsx:slugFromRemoteUrl",
+      "type": "function",
+      "name": "slugFromRemoteUrl",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "lineRange": [
+        54,
+        60
+      ],
+      "summary": "Function slugFromRemoteUrl (L54-60)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitHistoryContextPanel.tsx:friendlyGhError",
+      "type": "function",
+      "name": "friendlyGhError",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "lineRange": [
+        62,
+        74
+      ],
+      "summary": "Function friendlyGhError (L62-74)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitHistoryContextPanel.tsx:threadKindLabel",
+      "type": "function",
+      "name": "threadKindLabel",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "lineRange": [
+        76,
+        87
+      ],
+      "summary": "Function threadKindLabel (L76-87)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/GitHistoryContextPanel.tsx:GitHistoryContextPanel",
+      "type": "function",
+      "name": "GitHistoryContextPanel",
+      "filePath": "src/components/GitHistoryContextPanel.tsx",
+      "lineRange": [
+        89,
+        587
+      ],
+      "summary": "Function GitHistoryContextPanel (L89-587)",
+      "tags": [],
+      "complexity": "complex",
       "layerId": "layer:src"
     },
     {
@@ -14551,7 +16197,7 @@
       "type": "file",
       "name": "GitHistoryWorkspace.tsx",
       "filePath": "src/components/GitHistoryWorkspace.tsx",
-      "summary": "GitHistoryWorkspace.tsx — 1 functions, 0 classes, 269 lines",
+      "summary": "GitHistoryWorkspace.tsx — 1 functions, 0 classes, 258 lines",
       "tags": [
         "typescript",
         "code"
@@ -14565,10 +16211,10 @@
       "name": "GitHistoryWorkspace",
       "filePath": "src/components/GitHistoryWorkspace.tsx",
       "lineRange": [
-        25,
-        269
+        28,
+        258
       ],
-      "summary": "Function GitHistoryWorkspace (L25-269)",
+      "summary": "Function GitHistoryWorkspace (L28-258)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14605,7 +16251,7 @@
       "type": "file",
       "name": "HistoryCompareStrip.tsx",
       "filePath": "src/components/HistoryCompareStrip.tsx",
-      "summary": "HistoryCompareStrip.tsx — 3 functions, 0 classes, 212 lines",
+      "summary": "HistoryCompareStrip.tsx — 3 functions, 0 classes, 220 lines",
       "tags": [
         "typescript",
         "code"
@@ -14648,9 +16294,9 @@
       "filePath": "src/components/HistoryCompareStrip.tsx",
       "lineRange": [
         42,
-        212
+        220
       ],
-      "summary": "Function HistoryCompareStrip (L42-212)",
+      "summary": "Function HistoryCompareStrip (L42-220)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -14697,11 +16343,38 @@
       "layerId": "layer:src"
     },
     {
+      "id": "file:src/components/KeyboardShortcutsHelp.tsx",
+      "type": "file",
+      "name": "KeyboardShortcutsHelp.tsx",
+      "filePath": "src/components/KeyboardShortcutsHelp.tsx",
+      "summary": "KeyboardShortcutsHelp.tsx — 1 functions, 0 classes, 54 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/KeyboardShortcutsHelp.tsx:KeyboardShortcutsHelp",
+      "type": "function",
+      "name": "KeyboardShortcutsHelp",
+      "filePath": "src/components/KeyboardShortcutsHelp.tsx",
+      "lineRange": [
+        10,
+        54
+      ],
+      "summary": "Function KeyboardShortcutsHelp (L10-54)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
       "id": "file:src/components/KnowledgeGraphPanel.tsx",
       "type": "file",
       "name": "KnowledgeGraphPanel.tsx",
       "filePath": "src/components/KnowledgeGraphPanel.tsx",
-      "summary": "KnowledgeGraphPanel.tsx — 3 functions, 1 classes, 692 lines",
+      "summary": "KnowledgeGraphPanel.tsx — 4 functions, 1 classes, 787 lines",
       "tags": [
         "typescript",
         "code"
@@ -14715,10 +16388,10 @@
       "name": "parseProgressMessage",
       "filePath": "src/components/KnowledgeGraphPanel.tsx",
       "lineRange": [
-        62,
-        68
+        78,
+        84
       ],
-      "summary": "Function parseProgressMessage (L62-68)",
+      "summary": "Function parseProgressMessage (L78-84)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14729,10 +16402,24 @@
       "name": "buildAutoKey",
       "filePath": "src/components/KnowledgeGraphPanel.tsx",
       "lineRange": [
-        70,
-        77
+        86,
+        93
       ],
-      "summary": "Function buildAutoKey (L70-77)",
+      "summary": "Function buildAutoKey (L86-93)",
+      "tags": [],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/KnowledgeGraphPanel.tsx:fingerprintDocRows",
+      "type": "function",
+      "name": "fingerprintDocRows",
+      "filePath": "src/components/KnowledgeGraphPanel.tsx",
+      "lineRange": [
+        95,
+        104
+      ],
+      "summary": "Function fingerprintDocRows (L95-104)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14743,10 +16430,10 @@
       "name": "KnowledgeGraphPanel",
       "filePath": "src/components/KnowledgeGraphPanel.tsx",
       "lineRange": [
-        117,
-        692
+        144,
+        787
       ],
-      "summary": "Function KnowledgeGraphPanel (L117-692)",
+      "summary": "Function KnowledgeGraphPanel (L144-787)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14757,10 +16444,10 @@
       "name": "GraphExplorerErrorBoundary",
       "filePath": "src/components/KnowledgeGraphPanel.tsx",
       "lineRange": [
-        79,
-        115
+        106,
+        142
       ],
-      "summary": "Class GraphExplorerErrorBoundary (L79-115)",
+      "summary": "Class GraphExplorerErrorBoundary (L106-142)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -14973,12 +16660,39 @@
       "type": "file",
       "name": "onboarding.css",
       "filePath": "src/components/onboarding/onboarding.css",
-      "summary": "onboarding.css — 0 functions, 0 classes, 262 lines",
+      "summary": "onboarding.css — 0 functions, 0 classes, 361 lines",
       "tags": [
         "css",
         "code"
       ],
       "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:src/components/onboarding/ProductTour.tsx",
+      "type": "file",
+      "name": "ProductTour.tsx",
+      "filePath": "src/components/onboarding/ProductTour.tsx",
+      "summary": "ProductTour.tsx — 1 functions, 0 classes, 65 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/onboarding/ProductTour.tsx:ProductTour",
+      "type": "function",
+      "name": "ProductTour",
+      "filePath": "src/components/onboarding/ProductTour.tsx",
+      "lineRange": [
+        23,
+        65
+      ],
+      "summary": "Function ProductTour (L23-65)",
+      "tags": [],
+      "complexity": "simple",
       "layerId": "layer:src"
     },
     {
@@ -15094,11 +16808,25 @@
       "type": "file",
       "name": "SidebarNav.tsx",
       "filePath": "src/components/SidebarNav.tsx",
-      "summary": "SidebarNav.tsx — 1 functions, 0 classes, 238 lines",
+      "summary": "SidebarNav.tsx — 2 functions, 0 classes, 318 lines",
       "tags": [
         "typescript",
         "code"
       ],
+      "complexity": "moderate",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "function:src/components/SidebarNav.tsx:NavLink",
+      "type": "function",
+      "name": "NavLink",
+      "filePath": "src/components/SidebarNav.tsx",
+      "lineRange": [
+        43,
+        77
+      ],
+      "summary": "Function NavLink (L43-77)",
+      "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
     },
@@ -15108,10 +16836,10 @@
       "name": "SidebarNav",
       "filePath": "src/components/SidebarNav.tsx",
       "lineRange": [
-        35,
-        238
+        79,
+        318
       ],
-      "summary": "Function SidebarNav (L35-238)",
+      "summary": "Function SidebarNav (L79-318)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:src"
@@ -15148,12 +16876,12 @@
       "type": "file",
       "name": "ui-transitions.css",
       "filePath": "src/components/ui/ui-transitions.css",
-      "summary": "ui-transitions.css — 0 functions, 0 classes, 120 lines",
+      "summary": "ui-transitions.css — 0 functions, 0 classes, 131 lines",
       "tags": [
         "css",
         "code"
       ],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:src"
     },
     {
@@ -15201,13 +16929,40 @@
       "type": "file",
       "name": "vite-env.d.ts",
       "filePath": "src/vite-env.d.ts",
-      "summary": "vite-env.d.ts — 0 functions, 0 classes, 391 lines",
+      "summary": "vite-env.d.ts — 0 functions, 0 classes, 408 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "complex",
+      "layerId": "layer:src"
+    },
+    {
+      "id": "file:tests/graphCityBridge.test.ts",
+      "type": "file",
+      "name": "graphCityBridge.test.ts",
+      "filePath": "tests/graphCityBridge.test.ts",
+      "summary": "graphCityBridge.test.ts — 1 functions, 0 classes, 121 lines",
       "tags": [
         "typescript",
         "code"
       ],
       "complexity": "moderate",
-      "layerId": "layer:src"
+      "layerId": "layer:tests"
+    },
+    {
+      "id": "function:tests/graphCityBridge.test.ts:building",
+      "type": "function",
+      "name": "building",
+      "filePath": "tests/graphCityBridge.test.ts",
+      "lineRange": [
+        11,
+        34
+      ],
+      "summary": "Function building (L11-34)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:tests"
     },
     {
       "id": "file:tests/smoke.test.ts",
@@ -15266,7 +17021,7 @@
       "type": "file",
       "name": "vite.config.ts",
       "filePath": "vite.config.ts",
-      "summary": "vite.config.ts — 0 functions, 0 classes, 49 lines",
+      "summary": "vite.config.ts — 0 functions, 0 classes, 60 lines",
       "tags": [
         "typescript",
         "code"
@@ -15927,6 +17682,13 @@
       "weight": 1
     },
     {
+      "source": "file:electron/export-snapshot.cjs",
+      "target": "function:electron/export-snapshot.cjs:exportProjectSnapshotZip",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:electron/file-summary-export.cjs",
       "target": "function:electron/file-summary-export.cjs:escapeHtml",
       "type": "contains",
@@ -16179,6 +17941,13 @@
       "weight": 1
     },
     {
+      "source": "file:electron/git-commit.cjs",
+      "target": "function:electron/git-commit.cjs:getCommitDetail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:electron/git-publish.cjs",
       "target": "function:electron/git-publish.cjs:buildFullCommitMessage",
       "type": "contains",
@@ -16257,6 +18026,27 @@
     },
     {
       "source": "file:electron/git-service.cjs",
+      "target": "function:electron/git-service.cjs:stagePaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/git-service.cjs",
+      "target": "function:electron/git-service.cjs:unstagePaths",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/git-service.cjs",
+      "target": "function:electron/git-service.cjs:stageDistrict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/git-service.cjs",
       "target": "function:electron/git-service.cjs:commit",
       "type": "contains",
       "direction": "forward",
@@ -16328,6 +18118,34 @@
     {
       "source": "file:electron/github-auth-flow.cjs",
       "target": "function:electron/github-auth-flow.cjs:startGithubDeviceAuth",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/github-commit-context.cjs",
+      "target": "function:electron/github-commit-context.cjs:parseJsonSafe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/github-commit-context.cjs",
+      "target": "function:electron/github-commit-context.cjs:shortGhError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/github-commit-context.cjs",
+      "target": "function:electron/github-commit-context.cjs:normalizeThread",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/github-commit-context.cjs",
+      "target": "function:electron/github-commit-context.cjs:getGithubCommitContext",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -17020,6 +18838,27 @@
     },
     {
       "source": "file:electron/novadiff-docs-html.cjs",
+      "target": "function:electron/novadiff-docs-html.cjs:topDirectory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/novadiff-docs-html.cjs",
+      "target": "function:electron/novadiff-docs-html.cjs:buildImpactHeatmapHtml",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/novadiff-docs-html.cjs",
+      "target": "function:electron/novadiff-docs-html.cjs:buildSearchIndex",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/novadiff-docs-html.cjs",
       "target": "function:electron/novadiff-docs-html.cjs:buildEnhancementScript",
       "type": "contains",
       "direction": "forward",
@@ -17406,6 +19245,20 @@
     {
       "source": "file:electron/workspace-store.cjs",
       "target": "function:electron/workspace-store.cjs:readJson",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/workspace-store.cjs",
+      "target": "function:electron/workspace-store.cjs:withSessionWriteLock",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/workspace-store.cjs",
+      "target": "function:electron/workspace-store.cjs:writeJsonAtomic",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -19224,6 +21077,13 @@
       "weight": 1
     },
     {
+      "source": "file:packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+      "target": "function:packages/graph-view/src/GraphEmbedSyncBridge.tsx:GraphEmbedSyncBridge",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
       "target": "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:containersFullyLaidOut",
       "type": "contains",
@@ -19623,6 +21483,41 @@
       "weight": 1
     },
     {
+      "source": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "target": "function:packages/graph-view/src/utils/graphCityNavigation.ts:containerIdForFilePath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "target": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphCityRoot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "target": "function:packages/graph-view/src/utils/graphCityNavigation.ts:expandFileContainer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "target": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphEnterFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+      "target": "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphFocusSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:packages/graph-view/src/utils/layerStats.ts",
       "target": "function:packages/graph-view/src/utils/layerStats.ts:computeLayerStats",
       "type": "contains",
@@ -19660,6 +21555,34 @@
     {
       "source": "file:packages/graph-view/src/utils/louvain.ts",
       "target": "function:packages/graph-view/src/utils/louvain.ts:detectCommunities",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/selectionCluster.ts",
+      "target": "function:packages/graph-view/src/utils/selectionCluster.ts:filePathFromNodeId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/selectionCluster.ts",
+      "target": "function:packages/graph-view/src/utils/selectionCluster.ts:resolveGraphNodeFilePath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/selectionCluster.ts",
+      "target": "function:packages/graph-view/src/utils/selectionCluster.ts:graphNodeIdsInFile",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/utils/selectionCluster.ts",
+      "target": "function:packages/graph-view/src/utils/selectionCluster.ts:graphSelectionCluster",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -19945,6 +21868,34 @@
       "weight": 1
     },
     {
+      "source": "file:src/app/codeCityChromeInsets.ts",
+      "target": "function:src/app/codeCityChromeInsets.ts:rectsOverlap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/codeCityChromeInsets.ts",
+      "target": "function:src/app/codeCityChromeInsets.ts:liftForObstruction",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/codeCityChromeInsets.ts",
+      "target": "function:src/app/codeCityChromeInsets.ts:isBlockingModalOpen",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/codeCityChromeInsets.ts",
+      "target": "function:src/app/codeCityChromeInsets.ts:measureCodeCityChromeInsets",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/app/codeCityLayout.ts",
       "target": "function:src/app/codeCityLayout.ts:hashColor",
       "type": "contains",
@@ -19982,6 +21933,62 @@
     {
       "source": "file:src/app/codeCityLayout.ts",
       "target": "function:src/app/codeCityLayout.ts:buildCodeCityLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:topDirectory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:detectDirectoryChanges",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:summarizeChanges",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:classifyUpdate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:buildChangeAnalysisFromRows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:classifyCompareRows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:districtBreakdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/commitChangeAnalysis.ts",
+      "target": "function:src/app/commitChangeAnalysis.ts:graphSymbolsContext",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20071,6 +22078,34 @@
       "weight": 1
     },
     {
+      "source": "file:src/app/DocsViewSyncContext.tsx",
+      "target": "function:src/app/DocsViewSyncContext.tsx:DocsViewSyncProvider",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/DocsViewSyncContext.tsx",
+      "target": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSync",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/DocsViewSyncContext.tsx",
+      "target": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncOptional",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/DocsViewSyncContext.tsx",
+      "target": "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncExternalNode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/app/docWorkspaceMetrics.ts",
       "target": "function:src/app/docWorkspaceMetrics.ts:fileExtension",
       "type": "contains",
@@ -20115,6 +22150,55 @@
     {
       "source": "file:src/app/docWorkspaceMetrics.ts",
       "target": "function:src/app/docWorkspaceMetrics.ts:depthBarMermaid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:insertPath",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:sortNodes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:sortTree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:buildFileTree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:cloneFiltered",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:filterFileTree",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/fileTree.ts",
+      "target": "function:src/app/fileTree.ts:collectFolderPaths",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20185,6 +22269,104 @@
     {
       "source": "file:src/app/generatedMarkdown.ts",
       "target": "function:src/app/generatedMarkdown.ts:normalizeGeneratedMarkdown",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:parseGraphNodeId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:buildingMatchesSymbol",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:graphNodeToCityBuildingIds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:cityBuildingToGraphNodeId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:buildBuildingIdByGraphNode",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:graphEdgesToCityPairs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:graphNeighborNodeIds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:filePathForLinkedSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/graphCityBridge.ts",
+      "target": "function:src/app/graphCityBridge.ts:cityBuildingIdsForHighlight",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/impactHeatmap.ts",
+      "target": "function:src/app/impactHeatmap.ts:topDirectory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/impactHeatmap.ts",
+      "target": "function:src/app/impactHeatmap.ts:buildDistrictImpactHeatmap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/impactHeatmap.ts",
+      "target": "function:src/app/impactHeatmap.ts:heatmapMermaid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/impactHeatmap.ts",
+      "target": "function:src/app/impactHeatmap.ts:heatmapHtmlTable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/impactHeatmap.ts",
+      "target": "function:src/app/impactHeatmap.ts:escapeHtml",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20415,6 +22597,20 @@
     },
     {
       "source": "file:src/app/workspaceStorage.ts",
+      "target": "function:src/app/workspaceStorage.ts:loadProductTourCompleted",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/workspaceStorage.ts",
+      "target": "function:src/app/workspaceStorage.ts:saveProductTourCompleted",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/app/workspaceStorage.ts",
       "target": "function:src/app/workspaceStorage.ts:loadCachedGitUser",
       "type": "contains",
       "direction": "forward",
@@ -20533,8 +22729,106 @@
       "weight": 1
     },
     {
+      "source": "file:src/components/CodeCityMinimapPortal.tsx",
+      "target": "function:src/components/CodeCityMinimapPortal.tsx:findControlsHost",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityMinimapPortal.tsx",
+      "target": "function:src/components/CodeCityMinimapPortal.tsx:hideBuiltInMinimap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityMinimapPortal.tsx",
+      "target": "function:src/components/CodeCityMinimapPortal.tsx:CodeCityMinimapPortal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityMinimapSlot.tsx",
+      "target": "function:src/components/CodeCityMinimapSlot.tsx:CodeCityMinimapSlot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/components/CodeCityView.tsx",
       "target": "function:src/components/CodeCityView.tsx:attachSelectable",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:buildingCenter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:computeLayoutBounds",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:framingForAllBuildings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:orbitFocusForBuildings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:visualStateForBuilding",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:applyBuildingVisual",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:disposeObject3D",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:createBuildingGroup",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:syncDistrictMeshes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/CodeCityView.tsx",
+      "target": "function:src/components/CodeCityView.tsx:syncBuildingMeshes",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20568,6 +22862,69 @@
       "weight": 1
     },
     {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:countActiveCityFilters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:ExpandCornerIcon",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:CityFiltersPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:CityLinkPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:GraphBuildPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:GraphStatsPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:CodeCityFloatShell",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:CodeCityExploreSettings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocsGraphExploreChrome.tsx",
+      "target": "function:src/components/DocsGraphExploreChrome.tsx:DocsGraphActionBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/components/DocumentationWorkspace.tsx",
       "target": "function:src/components/DocumentationWorkspace.tsx:mergeSummaryEntries",
       "type": "contains",
@@ -20596,8 +22953,99 @@
       "weight": 1
     },
     {
+      "source": "file:src/components/DocumentationWorkspace.tsx",
+      "target": "function:src/components/DocumentationWorkspace.tsx:DocumentationWorkspaceBody",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "target": "function:src/components/DocumentationWorkspaceLinked.tsx:DocumentationWorkspaceSyncRoot",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "target": "function:src/components/DocumentationWorkspaceLinked.tsx:DocsFocusBootstrap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "target": "function:src/components/DocumentationWorkspaceLinked.tsx:useLinkedCityState",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "target": "function:src/components/DocumentationWorkspaceLinked.tsx:CodeCityGraphToolbar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/DocumentationWorkspaceLinked.tsx",
+      "target": "function:src/components/DocumentationWorkspaceLinked.tsx:DocsLinkToolbar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitBlameLineModal.tsx",
+      "target": "function:src/components/GitBlameLineModal.tsx:GitBlameLineModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitBlamePanel.tsx",
+      "target": "function:src/components/GitBlamePanel.tsx:TreeRows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/components/GitBlamePanel.tsx",
       "target": "function:src/components/GitBlamePanel.tsx:GitBlamePanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitHistoryContextPanel.tsx",
+      "target": "function:src/components/GitHistoryContextPanel.tsx:formatDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitHistoryContextPanel.tsx",
+      "target": "function:src/components/GitHistoryContextPanel.tsx:slugFromRemoteUrl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitHistoryContextPanel.tsx",
+      "target": "function:src/components/GitHistoryContextPanel.tsx:friendlyGhError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitHistoryContextPanel.tsx",
+      "target": "function:src/components/GitHistoryContextPanel.tsx:threadKindLabel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/GitHistoryContextPanel.tsx",
+      "target": "function:src/components/GitHistoryContextPanel.tsx:GitHistoryContextPanel",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20652,6 +23100,13 @@
       "weight": 1
     },
     {
+      "source": "file:src/components/KeyboardShortcutsHelp.tsx",
+      "target": "function:src/components/KeyboardShortcutsHelp.tsx:KeyboardShortcutsHelp",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/components/KnowledgeGraphPanel.tsx",
       "target": "function:src/components/KnowledgeGraphPanel.tsx:parseProgressMessage",
       "type": "contains",
@@ -20661,6 +23116,13 @@
     {
       "source": "file:src/components/KnowledgeGraphPanel.tsx",
       "target": "function:src/components/KnowledgeGraphPanel.tsx:buildAutoKey",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/KnowledgeGraphPanel.tsx",
+      "target": "function:src/components/KnowledgeGraphPanel.tsx:fingerprintDocRows",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -20736,6 +23198,13 @@
       "weight": 1
     },
     {
+      "source": "file:src/components/onboarding/ProductTour.tsx",
+      "target": "function:src/components/onboarding/ProductTour.tsx:ProductTour",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:src/components/onboarding/WelcomeScreen.tsx",
       "target": "function:src/components/onboarding/WelcomeScreen.tsx:WelcomeScreen",
       "type": "contains",
@@ -20765,6 +23234,13 @@
     },
     {
       "source": "file:src/components/SidebarNav.tsx",
+      "target": "function:src/components/SidebarNav.tsx:NavLink",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:src/components/SidebarNav.tsx",
       "target": "function:src/components/SidebarNav.tsx:SidebarNav",
       "type": "contains",
       "direction": "forward",
@@ -20783,13 +23259,20 @@
       "type": "contains",
       "direction": "forward",
       "weight": 1
+    },
+    {
+      "source": "file:tests/graphCityBridge.test.ts",
+      "target": "function:tests/graphCityBridge.test.ts:building",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
     }
   ],
   "layers": [
     {
       "id": "layer:packages",
       "name": "packages",
-      "description": "230 files in this area",
+      "description": "234 files in this area",
       "order": 0,
       "color": null,
       "nodeIds": [
@@ -21115,6 +23598,7 @@
         "function:packages/graph-view/scripts/benchmark-layout.mjs:applyElkLayout",
         "function:packages/graph-view/scripts/benchmark-layout.mjs:makeGraph",
         "function:packages/graph-view/scripts/benchmark-layout.mjs:bench",
+        "file:packages/graph-view/src/__tests__/selectionCluster.test.ts",
         "file:packages/graph-view/src/App.tsx",
         "function:packages/graph-view/src/App.tsx:dataUrl",
         "function:packages/graph-view/src/App.tsx:resolveInitialToken",
@@ -21228,6 +23712,8 @@
         "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedEscapeToOverview",
         "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedSizedInteractiveGraph",
         "function:packages/graph-view/src/EmbedGraphPanel.tsx:EmbedGraphPanel",
+        "file:packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+        "function:packages/graph-view/src/GraphEmbedSyncBridge.tsx:GraphEmbedSyncBridge",
         "file:packages/graph-view/src/hooks/useEmbedAutoExpand.ts",
         "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:containersFullyLaidOut",
         "function:packages/graph-view/src/hooks/useEmbedAutoExpand.ts:waitForContainerLayouts",
@@ -21318,6 +23804,12 @@
         "function:packages/graph-view/src/utils/filters.ts:filterNodes",
         "function:packages/graph-view/src/utils/filters.ts:filterEdges",
         "function:packages/graph-view/src/utils/filters.ts:getEdgeCategory",
+        "file:packages/graph-view/src/utils/graphCityNavigation.ts",
+        "function:packages/graph-view/src/utils/graphCityNavigation.ts:containerIdForFilePath",
+        "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphCityRoot",
+        "function:packages/graph-view/src/utils/graphCityNavigation.ts:expandFileContainer",
+        "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphEnterFile",
+        "function:packages/graph-view/src/utils/graphCityNavigation.ts:applyGraphFocusSelection",
         "file:packages/graph-view/src/utils/layerStats.ts",
         "function:packages/graph-view/src/utils/layerStats.ts:computeLayerStats",
         "file:packages/graph-view/src/utils/layout.ts",
@@ -21328,6 +23820,11 @@
         "file:packages/graph-view/src/utils/layout.worker.ts",
         "file:packages/graph-view/src/utils/louvain.ts",
         "function:packages/graph-view/src/utils/louvain.ts:detectCommunities",
+        "file:packages/graph-view/src/utils/selectionCluster.ts",
+        "function:packages/graph-view/src/utils/selectionCluster.ts:filePathFromNodeId",
+        "function:packages/graph-view/src/utils/selectionCluster.ts:resolveGraphNodeFilePath",
+        "function:packages/graph-view/src/utils/selectionCluster.ts:graphNodeIdsInFile",
+        "function:packages/graph-view/src/utils/selectionCluster.ts:graphSelectionCluster",
         "file:packages/graph-view/src/vite-env.d.ts",
         "config:packages/graph-view/tsconfig.app.json",
         "config:packages/graph-view/tsconfig.json",
@@ -21347,7 +23844,7 @@
     {
       "id": "layer:src",
       "name": "src",
-      "description": "56 files in this area",
+      "description": "71 files in this area",
       "order": 1,
       "color": null,
       "nodeIds": [
@@ -21385,6 +23882,11 @@
         "function:src/app/codebaseDocs.ts:buildCodebaseMetricsMarkdown",
         "function:src/app/codebaseDocs.ts:codebaseExtensionPieMermaid",
         "function:src/app/codebaseDocs.ts:codebaseDepthMermaid",
+        "file:src/app/codeCityChromeInsets.ts",
+        "function:src/app/codeCityChromeInsets.ts:rectsOverlap",
+        "function:src/app/codeCityChromeInsets.ts:liftForObstruction",
+        "function:src/app/codeCityChromeInsets.ts:isBlockingModalOpen",
+        "function:src/app/codeCityChromeInsets.ts:measureCodeCityChromeInsets",
         "file:src/app/codeCityLayout.ts",
         "function:src/app/codeCityLayout.ts:hashColor",
         "function:src/app/codeCityLayout.ts:kindColor",
@@ -21392,6 +23894,15 @@
         "function:src/app/codeCityLayout.ts:buildingHeight",
         "function:src/app/codeCityLayout.ts:visibleForRoot",
         "function:src/app/codeCityLayout.ts:buildCodeCityLayout",
+        "file:src/app/commitChangeAnalysis.ts",
+        "function:src/app/commitChangeAnalysis.ts:topDirectory",
+        "function:src/app/commitChangeAnalysis.ts:detectDirectoryChanges",
+        "function:src/app/commitChangeAnalysis.ts:summarizeChanges",
+        "function:src/app/commitChangeAnalysis.ts:classifyUpdate",
+        "function:src/app/commitChangeAnalysis.ts:buildChangeAnalysisFromRows",
+        "function:src/app/commitChangeAnalysis.ts:classifyCompareRows",
+        "function:src/app/commitChangeAnalysis.ts:districtBreakdown",
+        "function:src/app/commitChangeAnalysis.ts:graphSymbolsContext",
         "file:src/app/commitMessage.ts",
         "function:src/app/commitMessage.ts:buildCommitMessageContext",
         "function:src/app/commitMessage.ts:parseCommitMessageOutput",
@@ -21407,6 +23918,11 @@
         "function:src/app/docsQuality.ts:buildRiskPromptContext",
         "function:src/app/docsQuality.ts:deriveConfidenceBadges",
         "function:src/app/docsQuality.ts:buildReleaseOverviewMarkdown",
+        "file:src/app/DocsViewSyncContext.tsx",
+        "function:src/app/DocsViewSyncContext.tsx:DocsViewSyncProvider",
+        "function:src/app/DocsViewSyncContext.tsx:useDocsViewSync",
+        "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncOptional",
+        "function:src/app/DocsViewSyncContext.tsx:useDocsViewSyncExternalNode",
         "file:src/app/docWorkspaceMetrics.ts",
         "function:src/app/docWorkspaceMetrics.ts:fileExtension",
         "function:src/app/docWorkspaceMetrics.ts:firstSegment",
@@ -21415,6 +23931,14 @@
         "function:src/app/docWorkspaceMetrics.ts:buildCompareMetricsMarkdown",
         "function:src/app/docWorkspaceMetrics.ts:changeKindPieMermaid",
         "function:src/app/docWorkspaceMetrics.ts:depthBarMermaid",
+        "file:src/app/fileTree.ts",
+        "function:src/app/fileTree.ts:insertPath",
+        "function:src/app/fileTree.ts:sortNodes",
+        "function:src/app/fileTree.ts:sortTree",
+        "function:src/app/fileTree.ts:buildFileTree",
+        "function:src/app/fileTree.ts:cloneFiltered",
+        "function:src/app/fileTree.ts:filterFileTree",
+        "function:src/app/fileTree.ts:collectFolderPaths",
         "file:src/app/generatedMarkdown.ts",
         "function:src/app/generatedMarkdown.ts:escapeRegex",
         "function:src/app/generatedMarkdown.ts:countMatches",
@@ -21427,6 +23951,23 @@
         "function:src/app/generatedMarkdown.ts:normalizeMarkdownChunk",
         "function:src/app/generatedMarkdown.ts:normalizeGeneratedMarkdown",
         "file:src/app/gitTypes.ts",
+        "file:src/app/graphCityBridge.ts",
+        "function:src/app/graphCityBridge.ts:parseGraphNodeId",
+        "function:src/app/graphCityBridge.ts:buildingMatchesSymbol",
+        "function:src/app/graphCityBridge.ts:graphNodeToCityBuildingIds",
+        "function:src/app/graphCityBridge.ts:cityBuildingToGraphNodeId",
+        "function:src/app/graphCityBridge.ts:buildBuildingIdByGraphNode",
+        "function:src/app/graphCityBridge.ts:graphEdgesToCityPairs",
+        "function:src/app/graphCityBridge.ts:graphNeighborNodeIds",
+        "function:src/app/graphCityBridge.ts:filePathForLinkedSelection",
+        "function:src/app/graphCityBridge.ts:cityBuildingIdsForHighlight",
+        "file:src/app/helpCopy.ts",
+        "file:src/app/impactHeatmap.ts",
+        "function:src/app/impactHeatmap.ts:topDirectory",
+        "function:src/app/impactHeatmap.ts:buildDistrictImpactHeatmap",
+        "function:src/app/impactHeatmap.ts:heatmapMermaid",
+        "function:src/app/impactHeatmap.ts:heatmapHtmlTable",
+        "function:src/app/impactHeatmap.ts:escapeHtml",
         "file:src/app/launchSequence.ts",
         "function:src/app/launchSequence.ts:readLaunchSkipped",
         "function:src/app/launchSequence.ts:markLaunchComplete",
@@ -21469,6 +24010,8 @@
         "file:src/app/usePrefersReducedMotion.ts",
         "function:src/app/usePrefersReducedMotion.ts:usePrefersReducedMotion",
         "file:src/app/workspaceStorage.ts",
+        "function:src/app/workspaceStorage.ts:loadProductTourCompleted",
+        "function:src/app/workspaceStorage.ts:saveProductTourCompleted",
         "function:src/app/workspaceStorage.ts:loadCachedGitUser",
         "function:src/app/workspaceStorage.ts:saveCachedGitUser",
         "function:src/app/workspaceStorage.ts:clearCachedGitUser",
@@ -21492,21 +24035,63 @@
         "function:src/components/ChangedFilesTree.tsx:ChangedFilesTree",
         "file:src/components/CodeCityLegend.tsx",
         "function:src/components/CodeCityLegend.tsx:CodeCityLegend",
+        "file:src/components/CodeCityMinimapPortal.tsx",
+        "function:src/components/CodeCityMinimapPortal.tsx:findControlsHost",
+        "function:src/components/CodeCityMinimapPortal.tsx:hideBuiltInMinimap",
+        "function:src/components/CodeCityMinimapPortal.tsx:CodeCityMinimapPortal",
+        "file:src/components/CodeCityMinimapSlot.tsx",
+        "function:src/components/CodeCityMinimapSlot.tsx:CodeCityMinimapSlot",
         "file:src/components/CodeCityView.tsx",
         "function:src/components/CodeCityView.tsx:attachSelectable",
+        "function:src/components/CodeCityView.tsx:buildingCenter",
+        "function:src/components/CodeCityView.tsx:computeLayoutBounds",
+        "function:src/components/CodeCityView.tsx:framingForAllBuildings",
+        "function:src/components/CodeCityView.tsx:orbitFocusForBuildings",
+        "function:src/components/CodeCityView.tsx:visualStateForBuilding",
+        "function:src/components/CodeCityView.tsx:applyBuildingVisual",
+        "function:src/components/CodeCityView.tsx:disposeObject3D",
+        "function:src/components/CodeCityView.tsx:createBuildingGroup",
+        "function:src/components/CodeCityView.tsx:syncDistrictMeshes",
+        "function:src/components/CodeCityView.tsx:syncBuildingMeshes",
         "function:src/components/CodeCityView.tsx:CodeCityView",
         "file:src/components/DiffWorkspace.tsx",
         "function:src/components/DiffWorkspace.tsx:DiffWorkspace",
         "function:src/components/DiffWorkspace.tsx:DiffTableRow",
         "file:src/components/DocMermaidMount.tsx",
         "function:src/components/DocMermaidMount.tsx:DocMermaidMount",
+        "file:src/components/DocsGraphExploreChrome.tsx",
+        "function:src/components/DocsGraphExploreChrome.tsx:countActiveCityFilters",
+        "function:src/components/DocsGraphExploreChrome.tsx:ExpandCornerIcon",
+        "function:src/components/DocsGraphExploreChrome.tsx:CityFiltersPanel",
+        "function:src/components/DocsGraphExploreChrome.tsx:CityLinkPanel",
+        "function:src/components/DocsGraphExploreChrome.tsx:GraphBuildPanel",
+        "function:src/components/DocsGraphExploreChrome.tsx:GraphStatsPanel",
+        "function:src/components/DocsGraphExploreChrome.tsx:CodeCityFloatShell",
+        "function:src/components/DocsGraphExploreChrome.tsx:CodeCityExploreSettings",
+        "function:src/components/DocsGraphExploreChrome.tsx:DocsGraphActionBar",
         "file:src/components/DocumentationWorkspace.tsx",
         "function:src/components/DocumentationWorkspace.tsx:mergeSummaryEntries",
         "function:src/components/DocumentationWorkspace.tsx:mergeSelectionEntries",
         "function:src/components/DocumentationWorkspace.tsx:yieldToBrowser",
         "function:src/components/DocumentationWorkspace.tsx:DocumentationWorkspace",
+        "function:src/components/DocumentationWorkspace.tsx:DocumentationWorkspaceBody",
+        "file:src/components/DocumentationWorkspaceLinked.tsx",
+        "function:src/components/DocumentationWorkspaceLinked.tsx:DocumentationWorkspaceSyncRoot",
+        "function:src/components/DocumentationWorkspaceLinked.tsx:DocsFocusBootstrap",
+        "function:src/components/DocumentationWorkspaceLinked.tsx:useLinkedCityState",
+        "function:src/components/DocumentationWorkspaceLinked.tsx:CodeCityGraphToolbar",
+        "function:src/components/DocumentationWorkspaceLinked.tsx:DocsLinkToolbar",
+        "file:src/components/GitBlameLineModal.tsx",
+        "function:src/components/GitBlameLineModal.tsx:GitBlameLineModal",
         "file:src/components/GitBlamePanel.tsx",
+        "function:src/components/GitBlamePanel.tsx:TreeRows",
         "function:src/components/GitBlamePanel.tsx:GitBlamePanel",
+        "file:src/components/GitHistoryContextPanel.tsx",
+        "function:src/components/GitHistoryContextPanel.tsx:formatDate",
+        "function:src/components/GitHistoryContextPanel.tsx:slugFromRemoteUrl",
+        "function:src/components/GitHistoryContextPanel.tsx:friendlyGhError",
+        "function:src/components/GitHistoryContextPanel.tsx:threadKindLabel",
+        "function:src/components/GitHistoryContextPanel.tsx:GitHistoryContextPanel",
         "file:src/components/GitHistoryWorkspace.tsx",
         "function:src/components/GitHistoryWorkspace.tsx:GitHistoryWorkspace",
         "file:src/components/GraphMetricsStrip.tsx",
@@ -21518,9 +24103,12 @@
         "file:src/components/InsightsColumn.tsx",
         "function:src/components/InsightsColumn.tsx:InsightsColumn",
         "function:src/components/InsightsColumn.tsx:MetricPill",
+        "file:src/components/KeyboardShortcutsHelp.tsx",
+        "function:src/components/KeyboardShortcutsHelp.tsx:KeyboardShortcutsHelp",
         "file:src/components/KnowledgeGraphPanel.tsx",
         "function:src/components/KnowledgeGraphPanel.tsx:parseProgressMessage",
         "function:src/components/KnowledgeGraphPanel.tsx:buildAutoKey",
+        "function:src/components/KnowledgeGraphPanel.tsx:fingerprintDocRows",
         "function:src/components/KnowledgeGraphPanel.tsx:KnowledgeGraphPanel",
         "class:src/components/KnowledgeGraphPanel.tsx:GraphExplorerErrorBoundary",
         "file:src/components/launch/AppLaunchShell.tsx",
@@ -21539,6 +24127,8 @@
         "function:src/components/LlmSummaryMarkdown.tsx:MermaidBlock",
         "function:src/components/LlmSummaryMarkdown.tsx:LlmSummaryMarkdownInner",
         "file:src/components/onboarding/onboarding.css",
+        "file:src/components/onboarding/ProductTour.tsx",
+        "function:src/components/onboarding/ProductTour.tsx:ProductTour",
         "file:src/components/onboarding/WelcomeScreen.tsx",
         "function:src/components/onboarding/WelcomeScreen.tsx:WelcomeScreen",
         "file:src/components/onboarding/WorkspaceHub.tsx",
@@ -21548,6 +24138,7 @@
         "file:src/components/SelectedDiffSummaryModal.tsx",
         "function:src/components/SelectedDiffSummaryModal.tsx:SelectedDiffSummaryModal",
         "file:src/components/SidebarNav.tsx",
+        "function:src/components/SidebarNav.tsx:NavLink",
         "function:src/components/SidebarNav.tsx:SidebarNav",
         "file:src/components/ui/AnimatedOverlay.tsx",
         "function:src/components/ui/AnimatedOverlay.tsx:AnimatedOverlay",
@@ -21561,7 +24152,7 @@
     {
       "id": "layer:electron",
       "name": "electron",
-      "description": "24 files in this area",
+      "description": "27 files in this area",
       "order": 2,
       "color": null,
       "nodeIds": [
@@ -21584,6 +24175,8 @@
         "file:electron/diff-excerpt.cjs",
         "function:electron/diff-excerpt.cjs:buildDiffExcerpt",
         "function:electron/diff-excerpt.cjs:buildDiffExcerptChunks",
+        "file:electron/export-snapshot.cjs",
+        "function:electron/export-snapshot.cjs:exportProjectSnapshotZip",
         "file:electron/file-summary-export.cjs",
         "function:electron/file-summary-export.cjs:escapeHtml",
         "function:electron/file-summary-export.cjs:escapeMermaidForHtml",
@@ -21624,6 +24217,8 @@
         "function:electron/git-blame.cjs:parseBlamePorcelain",
         "function:electron/git-blame.cjs:blameFileAtRef",
         "function:electron/git-blame.cjs:blameFileOwnership",
+        "file:electron/git-commit.cjs",
+        "function:electron/git-commit.cjs:getCommitDetail",
         "file:electron/git-publish.cjs",
         "function:electron/git-publish.cjs:buildFullCommitMessage",
         "function:electron/git-publish.cjs:previewPublish",
@@ -21637,6 +24232,9 @@
         "function:electron/git-service.cjs:getRepoStatus",
         "function:electron/git-service.cjs:parseGithubSlugFromUrl",
         "function:electron/git-service.cjs:stageAll",
+        "function:electron/git-service.cjs:stagePaths",
+        "function:electron/git-service.cjs:unstagePaths",
+        "function:electron/git-service.cjs:stageDistrict",
         "function:electron/git-service.cjs:commit",
         "function:electron/git-service.cjs:push",
         "function:electron/git-service.cjs:ensureWorktreeBase",
@@ -21649,6 +24247,11 @@
         "function:electron/github-auth-flow.cjs:stripAnsi",
         "function:electron/github-auth-flow.cjs:cancelGithubDeviceAuth",
         "function:electron/github-auth-flow.cjs:startGithubDeviceAuth",
+        "file:electron/github-commit-context.cjs",
+        "function:electron/github-commit-context.cjs:parseJsonSafe",
+        "function:electron/github-commit-context.cjs:shortGhError",
+        "function:electron/github-commit-context.cjs:normalizeThread",
+        "function:electron/github-commit-context.cjs:getGithubCommitContext",
         "file:electron/github-service.cjs",
         "function:electron/github-service.cjs:runGh",
         "function:electron/github-service.cjs:tryRunGh",
@@ -21753,6 +24356,9 @@
         "function:electron/novadiff-docs-html.cjs:markdownToHtml",
         "function:electron/novadiff-docs-html.cjs:mermaidSection",
         "function:electron/novadiff-docs-html.cjs:navHtml",
+        "function:electron/novadiff-docs-html.cjs:topDirectory",
+        "function:electron/novadiff-docs-html.cjs:buildImpactHeatmapHtml",
+        "function:electron/novadiff-docs-html.cjs:buildSearchIndex",
         "function:electron/novadiff-docs-html.cjs:buildEnhancementScript",
         "function:electron/novadiff-docs-html.cjs:wrapPage",
         "function:electron/novadiff-docs-html.cjs:bundleMetaLine",
@@ -21817,6 +24423,8 @@
         "function:electron/workspace-store.cjs:sessionPath",
         "function:electron/workspace-store.cjs:workspacesRoot",
         "function:electron/workspace-store.cjs:readJson",
+        "function:electron/workspace-store.cjs:withSessionWriteLock",
+        "function:electron/workspace-store.cjs:writeJsonAtomic",
         "function:electron/workspace-store.cjs:writeJson",
         "function:electron/workspace-store.cjs:loadSession",
         "function:electron/workspace-store.cjs:setLocalOnlyMode",
@@ -21951,25 +24559,27 @@
       ]
     },
     {
+      "id": "layer:tests",
+      "name": "tests",
+      "description": "2 files in this area",
+      "order": 6,
+      "color": null,
+      "nodeIds": [
+        "file:tests/graphCityBridge.test.ts",
+        "function:tests/graphCityBridge.test.ts:building",
+        "file:tests/smoke.test.ts"
+      ]
+    },
+    {
       "id": "layer:scripts",
       "name": "scripts",
       "description": "1 files in this area",
-      "order": 6,
+      "order": 7,
       "color": null,
       "nodeIds": [
         "file:scripts/run-electron.cjs",
         "function:scripts/run-electron.cjs:cleanEnv",
         "function:scripts/run-electron.cjs:resolveElectronBinary"
-      ]
-    },
-    {
-      "id": "layer:tests",
-      "name": "tests",
-      "description": "1 files in this area",
-      "order": 7,
-      "color": null,
-      "nodeIds": [
-        "file:tests/smoke.test.ts"
       ]
     }
   ],

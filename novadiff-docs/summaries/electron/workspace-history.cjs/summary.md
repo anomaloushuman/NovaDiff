@@ -1,24 +1,28 @@
 ### Overview  
-A new module `electron/workspace-history.cjs` is added to the Electron side of the repo. It implements snapshotting of Git commits, indexing of workspace history, and a refresh routine that re‑reads the log and re‑creates missing snapshots.
+The file `electron/workspace-history.cjs` was modified to change how workspace state is persisted during history indexing.  
+In both `indexWorkspaceHistory` (lines 100‑174) and `refreshWorkspaceHistory` (lines 188‑292) the unconditional `await upsertWorkspace(userData, workspace);` that previously ran on every commit was removed (diff lines 135 and 240).  
+Instead, a `persistSession` flag is computed:
+
+```js
+i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0
+```
+
+and passed to `upsertWorkspace` as `{ touchSession: persistSession }` (added lines 135‑136 and 241‑242).  
+This throttles session updates to the first, last, and every tenth commit.
 
 ### Key changes  
-- **Imports**: added `fsp`, `fssync`, `path`, `runGit/tryRunGit`, and `upsertWorkspace/getWorkspace` (lines 3‑6, 33).  
-- **Utility helpers**: `removeDirSafe` (lines 8‑16) and `isUsableSnapshotDir` (lines 18‑32) guard filesystem operations.  
-- **Commit enumeration**: `listCommitsOldestFirst` (lines 35‑58) runs `git log` and returns an array of commit objects.  
-- **Snapshot creation**: `snapshotCommit` (lines 61‑78) materializes a detached worktree, validates it, and returns the path.  
-- **Single‑commit snapshot**: `ensureCommitSnapshot` (lines 80‑98) ties a snapshot to a workspace record via `upsertWorkspace`.  
-- **Full history indexing**: `indexWorkspaceHistory` (lines 100‑183) walks all commits, creates snapshots, writes metadata, and updates workspace state.  
-- **Refresh logic**: `refreshWorkspaceHistory` (lines 188‑291) optionally fetches remote refs, re‑reads the log, re‑uses existing snapshots, and updates the workspace.  
-- **Exports**: all public functions are exported (lines 293‑300).
+- **Persist‑session logic** – `persistSession` is evaluated per commit and supplied to `upsertWorkspace`.  
+- **Removed redundant writes** – the earlier write at line 135 (and line 240) is deleted, reducing intermediate writes.  
+- **No API surface change** – function signatures, imports, and exports remain unchanged.  
+- **Documentation** – module comments still describe the same high‑level behavior; no new external API is introduced.
 
 ### Impact  
-- **New API surface**: callers can now trigger history indexing or refresh via the exported functions.  
-- **Filesystem side‑effects**: the module creates/clears directories under `workspace.dataDir`, which may affect disk usage and performance.  
-- **Git dependency**: relies on `git` being available; errors are surfaced through `runGit`/`tryRunGit`.  
-- **State persistence**: uses `upsertWorkspace`/`getWorkspace`, so existing workspace records must be compatible with the new `commits` structure.  
+- **Write reduction** – the number of calls to `upsertWorkspace` during a history build is lowered to roughly 10 % of the previous count.  
+- **Session persistence** – sessions are now updated only at key points, which may affect metrics that count session touches.  
+- **Test expectations** – any tests asserting a write per commit may need to be updated to account for the throttling.
 
 ### Risks & follow‑ups  
-- Verify that `workspace.dataDir` paths are correctly resolved on all OSes; path handling is critical.  
-- Ensure `runGit` and `tryRunGit` correctly propagate errors; missing Git binaries could crash the process.  
-- Performance regression: snapshotting every commit can be expensive; benchmark on large repos.  
-- Test that `refreshWorkspaceHistory` correctly re‑uses existing snapshots and does not overwrite them inadvertently.
+- **Session handling regression** – verify that sessions still expire correctly after the new throttling logic.  
+- **Test failures** – adjust unit/integration tests that rely on a write per commit.  
+- **Concurrency** – ensure that reduced write frequency does not cause stale state when multiple indexing jobs run concurrently.  
+- **Documentation** – consider adding a note in the README or docs about the new session‑touching behavior for future maintainers.

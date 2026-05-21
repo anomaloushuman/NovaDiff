@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/KeyboardShortcutsHelp.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/KeyboardShortcutsHelp.tsx</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:06:43.551Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new React component <code>KeyboardShortcutsHelp</code> is added in <code>src/components/KeyboardShortcutsHelp.tsx</code>. It renders a modal overlay that lists common shortcuts and closes when the user presses <strong>Escape</strong> or clicks the close button.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import</strong> <code>useEffect</code> from <code>react</code> (R1).  </li>
+<li><strong>Define</strong> a <code>SHORTCUTS</code> constant array (R3‑R8) with key–description pairs.  </li>
+<li><strong>Export</strong> <code>KeyboardShortcutsHelp</code> (R10) accepting <code>open: boolean</code> and <code>onClose: () =&gt; void</code>.  </li>
+<li><strong>Hook</strong> <code>useEffect</code> (R17‑R28) attaches a <code>keydown</code> listener that calls <code>onClose</code> on *<em>Escape</em></li>
+</ul>
+<ul>
+<li>and removes the listener when the component unmounts or <code>open</code> changes.</li>
+</ul>
+<ul>
+<li><strong>Conditional rendering</strong>: returns <code>null</code> when <code>open</code> is false (R30‑R32).  </li>
+<li><strong>Markup</strong> (R34‑R52): an overlay with <code>role=&quot;dialog&quot;</code> containing a list of shortcuts rendered with <code>&lt;kbd&gt;</code> tags and a close button wired to <code>onClose</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Provides a self‑contained shortcut help panel with no side effects beyond the key listener.  </li>
+<li><strong>Maintainability</strong>: Shortcuts are stored in a constant array, making future extensions straightforward.  </li>
+<li><strong>Performance</strong>: The event listener is added only while the panel is open, minimizing runtime overhead.  </li>
+<li><strong>Compatibility</strong>: No existing APIs are modified; the component is purely additive.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that the CSS classes (<code>shortcuts-help-overlay</code>, <code>shortcuts-help-panel</code>, etc.) are defined to avoid layout issues.  </li>
+<li>Ensure the component is rendered only when needed to prevent unnecessary listeners.  </li>
+<li>Confirm that the <code>onClose</code> callback correctly updates parent state; otherwise the panel may remain open.  </li>
+<li>Test that the <strong>Escape</strong> key does not interfere with other global shortcuts in the application.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,252 @@
+[
+  {
+    "title": ".novadiff-graph/config.json",
+    "href": "summaries/.novadiff-graph/config.json/summary.html",
+    "text": ".novadiff-graph/config.json removed ### Overview  \nThe file `./.novadiff-graph/config.json` has been removed from the repository.  \nIt previously contained two configuration flags: `autoUpdate` and `outputLanguage`.\n\n### Key changes  \n- Entire file `./.novadiff-graph/config.json` deleted (lines 1‑4 removed).  \n- The `autoUpdate` flag (`false`) and `outputLanguage` (`\"en\"`) are no longer persisted.\n\n### Impact  \n- Any code that previ"
+  },
+  {
+    "title": ".novadiff-graph/diff-overlay.json",
+    "href": "summaries/.novadiff-graph/diff-overlay.json/summary.html",
+    "text": ".novadiff-graph/diff-overlay.json removed ### Overview  \nThe file `.novadiff-graph/diff-overlay.json` has been deleted entirely (lines 1‑156). It previously stored metadata for the diff overlay, including the version, base branch, generation timestamp, lists of changed files, changed node IDs, and affected node IDs.\n\n### Key changes  \n- Removal of the JSON file at `.novadiff-graph/diff-overlay.json`.  \n- All persisted data (`\"changedFiles"
+  },
+  {
+    "title": ".novadiff-graph/meta.json",
+    "href": "summaries/.novadiff-graph/meta.json/summary.html",
+    "text": ".novadiff-graph/meta.json removed ### Overview  \nThe file `.novadiff-graph/meta.json` was removed from the repository.  \nAll six lines of JSON content—`lastAnalyzedAt`, `gitCommitHash`, `version`, and `analyzedFiles`—were deleted (lines 1‑6 in the diff).\n\n### Key changes  \n- **File deletion**: `.novadiff-graph/meta.json` no longer exists in the tree.  \n- **Metadata loss**: The six lines of JSON that tracked analysis timestamp, com"
+  },
+  {
+    "title": "electron/export-snapshot.cjs",
+    "href": "summaries/electron/export-snapshot.cjs/summary.html",
+    "text": "electron/export-snapshot.cjs added ### Overview  \nA new CommonJS module `electron/export-snapshot.cjs` is added. It exposes a single function, `exportProjectSnapshotZip`, that zips a given bundle directory into a specified output path using the system `zip` utility.\n\n### Key changes  \n- **Imports added**: `node:fs`, `node:path`, and `node:child_process` (`spawnSync`).  \n- **Function `exportProjectSnapshotZip(bundleDir, outZipPath)`"
+  },
+  {
+    "title": "electron/git-commit.cjs",
+    "href": "summaries/electron/git-commit.cjs/summary.html",
+    "text": "electron/git-commit.cjs added ### Overview  \nA new module `electron/git-commit.cjs` is added. It exports a `getCommitDetail` helper that retrieves commit metadata and statistics by invoking Git commands.\n\n### Key changes  \n- Import added at line 3: `const { runGit, tryRunGit } = require(\"./git-service.cjs\");`  \n- Function `getCommitDetail(repoRoot, hash)` added (lines 1‑69):  \n  - Validates `repoRoot` and `hash` (lines 12‑14)."
+  },
+  {
+    "title": "electron/git-publish.cjs",
+    "href": "summaries/electron/git-publish.cjs/summary.html",
+    "text": "electron/git-publish.cjs modified ### Overview  \n`electron/git-publish.cjs` now stages a user‑supplied list of paths instead of always staging the entire repository. The change adds `stagePaths` to the import from `./git-service.cjs` (line 4) and rewrites the staging logic in `executePublish`.\n\n### Key changes  \n- **Import update** – `stagePaths` is added to the destructured import from `./git-service.cjs` (line 4).  \n- **Conditio"
+  },
+  {
+    "title": "electron/git-service.cjs",
+    "href": "summaries/electron/git-service.cjs/summary.html",
+    "text": "electron/git-service.cjs modified ### Overview  \nThree new helper functions were added to `electron/git-service.cjs` to give callers finer control over staging:\n\n* `stagePaths(repoRoot, paths)` – normalises a list of paths, runs `git add -- <paths>`, and returns `{ staged: N }`.  \n* `unstagePaths(repoRoot, paths)` – runs `git reset HEAD -- <paths>` and returns `{ unstaged: N }`.  \n* `stageDistrict(repoRoot, topDir, statusFiles?)` "
+  },
+  {
+    "title": "electron/github-commit-context.cjs",
+    "href": "summaries/electron/github-commit-context.cjs/summary.html",
+    "text": "electron/github-commit-context.cjs added ### Overview\nAdds `electron/github-commit-context.cjs` exposing `getGithubCommitContext(fullName, sha)` to gather pull requests, issues, and comment threads for a commit using the GitHub CLI.\n\n### Key changes\n- Added `parseJsonSafe(raw, fallback)` (lines 5‑12) to safely parse JSON, returning `fallback` on error.  \n- Added `shortGhError(message)` (lines 13‑22) to normalize CLI error messages.  \n- A"
+  },
+  {
+    "title": "electron/github-service.cjs",
+    "href": "summaries/electron/github-service.cjs/summary.html",
+    "text": "electron/github-service.cjs modified ### Overview  \nA new export `getGithubCommitContext` has been added to `electron/github-service.cjs`.  \nThe export forwards all arguments to the helper defined in `./github-commit-context.cjs`:\n\n```js\ngetGithubCommitContext: (...args) =>\n  require(\"./github-commit-context.cjs\").getGithubCommitContext(...args)\n```\n\nThis change appears in the diff at lines 224‑225 of the file.\n\n### Key changes  \n- *"
+  },
+  {
+    "title": "electron/prefetch-summaries.cjs",
+    "href": "summaries/electron/prefetch-summaries.cjs/summary.html",
+    "text": "electron/prefetch-summaries.cjs modified ### Overview  \n`electron/prefetch-summaries.cjs` now runs prefetch jobs with a configurable worker pool instead of a single sequential loop. The change replaces the old `for (let i = 0; i < jobs.length; i++)` block (lines 116‑120) with a concurrency‑controlled loop (lines 116‑122 and 214‑226).\n\n### Key changes  \n- **Concurrency calculation** – `concurrency` is set to  \n  `Math.min(3, Math.max(1, N"
+  },
+  {
+    "title": "electron/preload.cjs",
+    "href": "summaries/electron/preload.cjs/summary.html",
+    "text": "electron/preload.cjs modified ### Overview  \nThe preload script now exposes five new IPC‑invoked methods via `contextBridge`. These extend the Git and GitHub tooling API surface.\n\n### Key changes  \n- `gitStagePaths` (`ipcRenderer.invoke(\"git-stage-paths\")`) added at line 129.  \n- `gitStageDistrict` (`ipcRenderer.invoke(\"git-stage-district\")`) added at line 130.  \n- `exportProjectSnapshot` (`ipcRenderer.invoke(\"export-project-s"
+  },
+  {
+    "title": "electron/workspace-history.cjs",
+    "href": "summaries/electron/workspace-history.cjs/summary.html",
+    "text": "electron/workspace-history.cjs modified ### Overview  \nThe file `electron/workspace-history.cjs` was modified to change how workspace state is persisted during history indexing.  \nIn both `indexWorkspaceHistory` (lines 100‑174) and `refreshWorkspaceHistory` (lines 188‑292) the unconditional `await upsertWorkspace(userData, workspace);` that previously ran on every commit was removed (diff lines 135 and 240).  \nInstead, a `persistSession"
+  },
+  {
+    "title": "electron/workspace-store.cjs",
+    "href": "summaries/electron/workspace-store.cjs/summary.html",
+    "text": "electron/workspace-store.cjs modified ### Overview  \nThe workspace store now serializes session writes, uses atomic file writes, and simplifies the `upsertWorkspace` flow. The public API remains unchanged.\n\n### Key changes  \n- **Session write queue** – a global `sessionWriteChain` (L25‑32) and `withSessionWriteLock(task)` (L27‑31) serialize updates to the session file.  \n- **Atomic writes** – `writeJsonAtomic` (L33‑63) writes to a tem"
+  },
+  {
+    "title": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+    "href": "summaries/packages/graph-view/src/GraphEmbedSyncBridge.tsx/summary.html",
+    "text": "packages/graph-view/src/GraphEmbedSyncBridge.tsx added ### Overview  \nA new React component `GraphEmbedSyncBridge` is added to `packages/graph-view/src/GraphEmbedSyncBridge.tsx` (lines 1‑71). It synchronizes embed‑graph selection and navigation state with the NovaDiff documentation workspace.\n\n### Key changes  \n- **Imports** (R1‑R8):  \n  ```ts\n  import { useEffect, useRef } from \"react\";\n  import { useDashboardStore } from \"./store\";\n  import {\n    ap"
+  },
+  {
+    "title": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
+    "href": "summaries/packages/graph-view/src/NovaDiffGraphExplorer.tsx/summary.html",
+    "text": "packages/graph-view/src/NovaDiffGraphExplorer.tsx modified ### Overview  \nIn `packages/graph-view/src/NovaDiffGraphExplorer.tsx` the `NovaDiffGraphExplorerProps` interface was extended with four optional fields: `controlledNodeId`, `focusMode`, `enteredFilePath`, and `onSelectionChange`. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.\n\n### Key changes  \n- **Interface augmenta"
+  },
+  {
+    "title": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+    "href": "summaries/packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx/summary.html",
+    "text": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx modified ### Overview  \n`NovaDiffGraphExplorerEmbed` now imports and renders `GraphEmbedSyncBridge` to expose embed‑specific controls. The component’s props interface has been extended with optional fields for node selection, file path, focus mode, and a selection‑change callback.\n\n### Key changes  \n- **Import added**: `GraphEmbedSyncBridge` from `./GraphEmbedSyncBridge` (line 12).  \n- **Props extended**: "
+  },
+  {
+    "title": "packages/graph-view/src/__tests__/selectionCluster.test.ts",
+    "href": "summaries/packages/graph-view/src/__tests__/selectionCluster.test.ts/summary.html",
+    "text": "packages/graph-view/src/__tests__/selectionCluster.test.ts added ### Overview\nA new test file `packages/graph-view/src/__tests__/selectionCluster.test.ts` was added. It imports `vitest` helpers, the `KnowledgeGraph` type, and the two functions under test.\n\n### Key changes\n- **Imports** added at lines 1‑3: `vitest` helpers, `KnowledgeGraph`, and `graphNodeIdsInFile`, `graphSelectionCluster`.  \n- **Mock graph** defined at lines 5‑45: two file nodes (`file:src/a.t"
+  },
+  {
+    "title": "packages/graph-view/src/index.css",
+    "href": "summaries/packages/graph-view/src/index.css/summary.html",
+    "text": "packages/graph-view/src/index.css modified ### Overview  \nThe `packages/graph-view/src/index.css` file was updated to modify the layout of React‑Flow controls when the CodeCity minimap is present. The changes add a grid‑based layout for the control panel, reposition the minimap and its button, and introduce light‑theme overrides. No JavaScript was touched.\n\n### Key changes  \n- **Grid layout for controls** – Lines 301‑340 add  \n  ```css\n  ."
+  },
+  {
+    "title": "packages/graph-view/src/utils/graphCityNavigation.ts",
+    "href": "summaries/packages/graph-view/src/utils/graphCityNavigation.ts/summary.html",
+    "text": "packages/graph-view/src/utils/graphCityNavigation.ts added ### Overview  \nA new utility module `packages/graph-view/src/utils/graphCityNavigation.ts` (lines R1‑R71) adds navigation helpers for the city view of the knowledge graph.\n\n### Key changes  \n- **Imports** – added at R1‑R2  \n  ```ts\n  import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";\n  import { resolveGraphNodeFilePath } from \"./selectionCluster\";\n  ```\n- **`containerIdForFilePath`*"
+  },
+  {
+    "title": "packages/graph-view/src/utils/selectionCluster.ts",
+    "href": "summaries/packages/graph-view/src/utils/selectionCluster.ts/summary.html",
+    "text": "packages/graph-view/src/utils/selectionCluster.ts added ### Overview  \nA new file `packages/graph-view/src/utils/selectionCluster.ts` (lines R1‑87) adds utilities for working with graph nodes and file paths. It imports `GraphEdge` and `KnowledgeGraph` from `@novadiff/graph-core/types` (R1) and defines a set of link‑relevant edge types (R3).\n\n### Key changes  \n- **`filePathFromNodeId`** (R5‑14) parses a node ID to extract a file path for `file:`, `funct"
+  },
+  {
+    "title": "src/app/DocsViewSyncContext.tsx",
+    "href": "summaries/src/app/DocsViewSyncContext.tsx/summary.html",
+    "text": "src/app/DocsViewSyncContext.tsx added ### Overview  \n`src/app/DocsViewSyncContext.tsx` adds a React context that synchronizes documentation view state with the CodeCity graph. It exports an interface, a provider component, and three hooks for consuming the context.\n\n### Key changes  \n- **Imports** (`R1‑R10`): React hooks and `CodeCityRenderableBuilding`.  \n- **`DocsViewSyncState` interface** (`R12‑R25`): flags for linking and focus, s"
+  },
+  {
+    "title": "src/app/codeCityChromeInsets.ts",
+    "href": "summaries/src/app/codeCityChromeInsets.ts/summary.html",
+    "text": "src/app/codeCityChromeInsets.ts added ### Overview  \nA new file `src/app/codeCityChromeInsets.ts` (added, change kind: added, line range R1‑92) introduces utilities for computing the insets required by the CodeCity UI.\n\n### Key changes  \n- **`export interface CodeCityChromeInsets`** (lines 1‑6) defines `bottom`, `right`, `left`, and `hidden`.  \n- **`export interface MeasureCodeCityChromeOptions`** (lines 40‑43) adds an optional `docke"
+  },
+  {
+    "title": "src/app/commitChangeAnalysis.ts",
+    "href": "summaries/src/app/commitChangeAnalysis.ts/summary.html",
+    "text": "src/app/commitChangeAnalysis.ts added ### Overview  \nA new file `src/app/commitChangeAnalysis.ts` (lines 1–209) introduces browser‑safe utilities for classifying commit changes. It replaces external graph‑core types with local interfaces and removes `node:fs` dependencies.\n\n### Key changes  \n- **Interfaces** (`ChangeAnalysis`, `UpdateDecision`) defined at lines 4–19.  \n- **`topDirectory`** (lines 21–27) extracts the first path segment"
+  },
+  {
+    "title": "src/app/commitMessage.ts",
+    "href": "summaries/src/app/commitMessage.ts/summary.html",
+    "text": "src/app/commitMessage.ts modified ### Overview  \n`src/app/commitMessage.ts` now accepts an options object, adds classification helpers, and includes a district‑level breakdown in the LLM prompt. Two utilities from `./commitChangeAnalysis` are re‑exported for external use.\n\n### Key changes  \n- **Imports** (`R3‑8`): added `classifyCompareRows`, `districtBreakdown`, `graphSymbolsContext`, and `UpdateDecision`.  \n- **New interface** ("
+  },
+  {
+    "title": "src/app/fileTree.ts",
+    "href": "summaries/src/app/fileTree.ts/summary.html",
+    "text": "src/app/fileTree.ts added ### Overview  \nA new module `src/app/fileTree.ts` is added. It defines the `FileTreeNode` interface (lines 1‑6) and provides functions to build, sort, filter, and collect folder paths from a list of relative paths.\n\n### Key changes  \n- **`FileTreeNode` interface** (lines 1‑6): `name`, `path`, `type` (`\"file\"` | `\"dir\"`), and `children`.  \n- **`insertPath`** (lines 8‑31): builds a tree by splitting"
+  },
+  {
+    "title": "src/app/gitTypes.ts",
+    "href": "summaries/src/app/gitTypes.ts/summary.html",
+    "text": "src/app/gitTypes.ts modified ### Overview  \n`src/app/gitTypes.ts` now includes a set of commit‑detail and GitHub‑context interfaces and adds an optional `stagePaths` flag to `PublishExecutePayload`. The changes span lines 125‑172 of the file.\n\n### Key changes  \n- **`PublishExecutePayload`** (lines 125‑127) now accepts an optional `stagePaths?: string[]` to specify which paths to stage.  \n- **`GitCommitDetail`** (lines 129‑142"
+  },
+  {
+    "title": "src/app/graphCityBridge.ts",
+    "href": "summaries/src/app/graphCityBridge.ts/summary.html",
+    "text": "src/app/graphCityBridge.ts added ### Overview  \n`src/app/graphCityBridge.ts` adds utilities that translate between the knowledge‑graph model and the CodeCity layout. It parses graph node IDs, maps them to city building IDs, and generates edge overlays and highlight sets for linked selections.\n\n### Key changes  \n- **Imports** – pulls `GraphEdge`, `KnowledgeGraph` from `@novadiff/graph-core/types` and local layout types (`CodeCityL"
+  },
+  {
+    "title": "src/app/helpCopy.ts",
+    "href": "summaries/src/app/helpCopy.ts/summary.html",
+    "text": "src/app/helpCopy.ts added ### Overview\nA new file `src/app/helpCopy.ts` (lines 1‑10) has been added. It exports a constant\n\n```ts\nexport const HELP_COPY: Record<string, string> = {\n  \"link-views\": \"When enabled, selecting a node in the knowledge graph highlights the matching building in Code City (and vice versa).\",\n  \"focus-mode\": \"Focus mode dims unrelated symbols and flies the camera to the linked selection in both view"
+  },
+  {
+    "title": "src/app/impactHeatmap.ts",
+    "href": "summaries/src/app/impactHeatmap.ts/summary.html",
+    "text": "src/app/impactHeatmap.ts added ### Overview  \n`src/app/impactHeatmap.ts` adds a heat‑map generator for district impact data.  \n* Imports `RiskSignal` from `./types` (line 1).  \n* Declares `DistrictImpactScore` (lines 3‑10) with `district`, `score`, `changedPaths`, `riskCount`, and `highSeverity`.  \n* Provides `buildDistrictImpactHeatmap` (lines 17‑67) to aggregate scores from changed paths, risk signals, and affected node IDs. "
+  },
+  {
+    "title": "src/app/workspaceStorage.ts",
+    "href": "summaries/src/app/workspaceStorage.ts/summary.html",
+    "text": "src/app/workspaceStorage.ts modified ### Overview  \n`src/app/workspaceStorage.ts` now tracks product‑tour completion.  \nA new key `PRODUCT_TOUR_KEY` and two helper functions were added.\n\n### Key changes  \n- **Line 6**: `const PRODUCT_TOUR_KEY = \"novadiff_product_tour_v1\"` (R6).  \n- **Lines 8‑12**: `export function loadProductTourCompleted(): boolean` (R8‑R12).  \n  * Reads `localStorage.getItem(PRODUCT_TOUR_KEY)` inside a `try/catch`."
+  },
+  {
+    "title": "src/app/workspaceTypes.ts",
+    "href": "summaries/src/app/workspaceTypes.ts/summary.html",
+    "text": "src/app/workspaceTypes.ts modified ### Overview  \nThe `WorkspaceUiState` interface in `src/app/workspaceTypes.ts` now includes a new `workspacePage` option: `\"docReports\"`. This change is confined to line 38 of the file.\n\n### Key changes  \n- `WorkspaceUiState.workspacePage` union expanded from  \n  ```ts\n  \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\"\n  ```  \n  to  \n  ```ts\n  \"compare\" | \"history\" | \"docs\" | \"docReports\" | \"prs"
+  },
+  {
+    "title": "src/components/AutoCommitWorkspace.tsx",
+    "href": "summaries/src/components/AutoCommitWorkspace.tsx/summary.html",
+    "text": "src/components/AutoCommitWorkspace.tsx modified ### Overview  \n`AutoCommitWorkspace.tsx` now exposes a staging‑scope UI, an optional “Review in City” callback, and richer commit‑message context that includes structural classification and knowledge‑graph symbols. The component’s state and UI have been extended accordingly.\n\n### Key changes  \n- **Imports** – `classifyCompareRows` and `graphSymbolsContext` added (R6‑7).  \n- **Props** – `onReviewIn"
+  },
+  {
+    "title": "src/components/CodeCityLegend.tsx",
+    "href": "summaries/src/components/CodeCityLegend.tsx/summary.html",
+    "text": "src/components/CodeCityLegend.tsx modified ### Overview  \n`CodeCityLegend` now accepts three optional props—`repoRoot?: string`, `onStageFile?: (path: string) => void`, and `onStageDistrict?: (topDir: string) => void`—and renders additional action buttons for the selected building. The component’s signature now spans lines 3‑147 instead of 3‑121 (see diff lines R11‑R13 and R22‑R24).\n\n### Key changes  \n- **Props API** – new optional props a"
+  },
+  {
+    "title": "src/components/CodeCityMinimapPortal.tsx",
+    "href": "summaries/src/components/CodeCityMinimapPortal.tsx/summary.html",
+    "text": "src/components/CodeCityMinimapPortal.tsx added ### Overview  \n`src/components/CodeCityMinimapPortal.tsx` introduces a React portal that mounts a custom minimap into the react‑flow controls host. The component hides the built‑in minimap, attaches itself to the host, and emits a `code-city-dock-host-ready` event when the attachment succeeds. The implementation relies on DOM queries, a `MutationObserver`, and a retry interval to locate the host e"
+  },
+  {
+    "title": "src/components/CodeCityMinimapSlot.tsx",
+    "href": "summaries/src/components/CodeCityMinimapSlot.tsx/summary.html",
+    "text": "src/components/CodeCityMinimapSlot.tsx added ### Overview\nA new component, `CodeCityMinimapSlot`, is added in **src/components/CodeCityMinimapSlot.tsx** (lines R1‑R94). It renders a minimap slot that measures Chrome insets and updates its layout in response to DOM changes.\n\n### Key changes\n- **Imports** – React hooks (`useLayoutEffect`, `useRef`, `useState`) and types (`CSSProperties`, `ReactNode`) plus `measureCodeCityChromeInsets` and `Cod"
+  },
+  {
+    "title": "src/components/DocsGraphExploreChrome.tsx",
+    "href": "summaries/src/components/DocsGraphExploreChrome.tsx/summary.html",
+    "text": "src/components/DocsGraphExploreChrome.tsx added ### Overview  \n`src/components/DocsGraphExploreChrome.tsx` is a new component that renders a Code City settings UI in a portal and can be docked to the graph minimap. It introduces two prop interfaces (`GraphBuildBarProps` lines 18‑31, `CityExploreBarProps` lines 33‑59), helper logic (`countActiveCityFilters` lines 61‑87, `ExpandCornerIcon` lines 90‑120), and several UI panels (`CityFiltersPanel`,"
+  },
+  {
+    "title": "src/components/DocumentationWorkspaceLinked.tsx",
+    "href": "summaries/src/components/DocumentationWorkspaceLinked.tsx/summary.html",
+    "text": "src/components/DocumentationWorkspaceLinked.tsx added ### Overview  \nA new `src/components/DocumentationWorkspaceLinked.tsx` file introduces a set of utilities that bind the documentation workspace to the Code City graph. It adds a sync root component, a bootstrap helper, a custom hook `useLinkedCityState`, and two toolbar components.\n\n### Key changes  \n- **`InitialDocsFocus` interface** (lines 16‑22) defines optional props for initial focus state.  "
+  },
+  {
+    "title": "src/components/GitBlameLineModal.tsx",
+    "href": "summaries/src/components/GitBlameLineModal.tsx/summary.html",
+    "text": "src/components/GitBlameLineModal.tsx added ### Overview\nA new modal component `GitBlameLineModal` is added at `src/components/GitBlameLineModal.tsx` (lines 1‑115). It displays line‑by‑line Git blame for a file and can be toggled via an `open` prop.\n\n### Key changes\n- **Imports** (lines 1‑3): `useEffect` from React, `Loader2` & `X` from `lucide-react`, and `GitBlameAtRefResult` type from `../app/gitTypes`.\n- **Props interface** (lines 5‑13)"
+  },
+  {
+    "title": "src/components/GitBlamePanel.tsx",
+    "href": "summaries/src/components/GitBlamePanel.tsx/summary.html",
+    "text": "src/components/GitBlamePanel.tsx modified ### Overview  \n`GitBlamePanel` now uses a tree‑view for file navigation and a modal for line‑by‑line blame. The component was split into a new `TreeRows` helper (lines 14‑100) and a `GitBlameLineModal` (rendered after the panel). File‑tree logic is memoized and the UI layout has been reorganized into a card‑style panel.\n\n### Key changes  \n- **Imports** – `ChevronDown`, `ChevronRight`, `Folder` ico"
+  },
+  {
+    "title": "src/components/GitHistoryContextPanel.tsx",
+    "href": "summaries/src/components/GitHistoryContextPanel.tsx/summary.html",
+    "text": "src/components/GitHistoryContextPanel.tsx added ### Overview  \nA new `GitHistoryContextPanel` component is added at `src/components/GitHistoryContextPanel.tsx` (≈587 lines). It renders a three‑tab panel for commit details, GitHub context, and actions, and includes helper utilities for date formatting, GitHub URL parsing, and error normalisation.\n\n### Key changes  \n- **Imports** (lines 1‑19): React hooks, `createPortal` from `react-dom`, icons f"
+  },
+  {
+    "title": "src/components/HistoryCompareStrip.tsx",
+    "href": "summaries/src/components/HistoryCompareStrip.tsx/summary.html",
+    "text": "src/components/HistoryCompareStrip.tsx modified ### Overview  \n`HistoryCompareStrip` was refactored to improve the Git history comparison panel.  \nKey UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.\n\n### Key changes  \n- **Title** – lines L71‑73 replaced plain text with  \n  ```tsx\n  <h1 className=\"git-history-title\">\n    Git history <span className=\"git-hist"
+  },
+  {
+    "title": "src/components/KeyboardShortcutsHelp.tsx",
+    "href": "summaries/src/components/KeyboardShortcutsHelp.tsx/summary.html",
+    "text": "src/components/KeyboardShortcutsHelp.tsx added ### Overview  \nA new React component `KeyboardShortcutsHelp` is added in `src/components/KeyboardShortcutsHelp.tsx`. It renders a modal overlay that lists common shortcuts and closes when the user presses **Escape** or clicks the close button.\n\n### Key changes  \n- **Import** `useEffect` from `react` (R1).  \n- **Define** a `SHORTCUTS` constant array (R3‑R8) with key–description pairs.  \n- **Export*"
+  },
+  {
+    "title": "src/components/SidebarNav.tsx",
+    "href": "summaries/src/components/SidebarNav.tsx/summary.html",
+    "text": "src/components/SidebarNav.tsx modified ### Overview  \n`src/components/SidebarNav.tsx` was refactored to add a compact UI mode, a new `NavLink` helper component, and an expanded `WorkspacePage` enum. The brand‑reveal animation logic was removed, and the feature list and navigation links were reorganized.\n\n### Key changes  \n- Added `import type { ReactNode } from \"react\";` (line 1).  \n- Removed `BookOpen` icon import (line 5).  \n- Expand"
+  },
+  {
+    "title": "src/components/onboarding/ProductTour.tsx",
+    "href": "summaries/src/components/onboarding/ProductTour.tsx/summary.html",
+    "text": "src/components/onboarding/ProductTour.tsx added ### Overview  \nA new onboarding component `ProductTour` was added at `src/components/onboarding/ProductTour.tsx` (lines 1‑65). It renders a dialog overlay that walks the user through four instructional steps and records completion.\n\n### Key changes  \n- **Imports** – added `useCallback` and `useState` from `react` (line 1) and `saveProductTourCompleted` from `../../app/workspaceStorage` (line 2).  "
+  },
+  {
+    "title": "src/components/onboarding/onboarding.css",
+    "href": "summaries/src/components/onboarding/onboarding.css/summary.html",
+    "text": "src/components/onboarding/onboarding.css modified ### Overview  \n`src/components/onboarding/onboarding.css` now expands the commit list to full height, adjusts row padding, and introduces new overlay styles for a product tour and shortcuts help panel.\n\n### Key changes  \n- **Commit list sizing** – `.git-history-commit-list` `max-height` changed from `320px` (line 194 removed) to `100%` (line 194 added).  \n- **Row padding** – `.git-history-commit-r"
+  },
+  {
+    "title": "src/components/ui/ui-transitions.css",
+    "href": "summaries/src/components/ui/ui-transitions.css/summary.html",
+    "text": "src/components/ui/ui-transitions.css modified ### Overview  \n`src/components/ui/ui-transitions.css` replaces the hard‑coded `flex: 1` on `.workspace-stage` and `.workspace-stage-inner` with `flex: 1 1 0`. A new rule for `.launch-panel--main .workspace-stage` is added. The change is limited to layout properties; no animation or transition rules are modified.\n\n### Key changes  \n- **New selector**: `.launch-panel--main .workspace-stage` (lines 4"
+  },
+  {
+    "title": "src/vite-env.d.ts",
+    "href": "summaries/src/vite-env.d.ts/summary.html",
+    "text": "src/vite-env.d.ts modified ### Overview  \nThe `ElectronAPI` interface in `src/vite-env.d.ts` has been extended with five new methods that expose additional Git and snapshot functionality to the renderer process. The changes are located in the file’s latter section (lines 293‑301 and 347‑354).\n\n### Key changes  \n- **`gitStagePaths`** (lines 293‑294) – stages a list of file paths in a repository and returns the number of file"
+  },
+  {
+    "title": "tests/graphCityBridge.test.ts",
+    "href": "summaries/tests/graphCityBridge.test.ts/summary.html",
+    "text": "tests/graphCityBridge.test.ts added ### Overview  \nA new test suite `tests/graphCityBridge.test.ts` has been added to validate the mapping utilities in `graphCityBridge`. The file imports Vitest, `KnowledgeGraph`, and several helper functions (`cityBuildingIdsForHighlight`, `cityBuildingToGraphNodeId`, `graphEdgesToCityPairs`, `graphNodeToCityBuildingIds`) along with CodeCity layout types.\n\n### Key changes  \n- **Test file added**: `"
+  },
+  {
+    "title": "vite.config.ts",
+    "href": "summaries/vite.config.ts/summary.html",
+    "text": "vite.config.ts modified ### Overview  \nThe Vite configuration now replaces the single `@novadiff/graph-core` alias with three granular aliases for the core package’s types, schema, and search modules.  \nThe change occurs in the `resolve.alias` section (lines 15‑26 of `vite.config.ts`).\n\n### Key changes  \n- **Removed** the old alias `@novadiff/graph-core` that pointed to `packages/graph-core/src`.  \n- **Added**  \n  - `@no"
+  },
+  {
+    "title": "Release overview",
+    "href": "release.html",
+    "text": "# Release overview\n\n**Baseline:** f7c2bfd81af2\n\n**Target:** NovaDiff\n\n## Readiness signals\n\n| Signal | Count |\n| --- | --- |\n| Changed files | 62 |\n| Saved file summaries | 49 |\n| Saved selection docs | 0 |\n| High-risk signals | 0 |\n| Medium-risk signals | 1 |\n| Low-risk signals | 0 |\n\n## Confidence badges\n\n- **Partial summary coverage**: Some file-level summaries are available, but the narrative still covers unsummarized paths.\n- **Deterministic risk signals available**: Risk sections can reference offline heuristic signals instead of only free-form LLM claims.\n- **Heuristic scan data**: Imports, calls, and symbol spans come from bounded heuristics rather than a full AST index.\n\n## Top changed files\n\n- **removed** `.novadiff-graph/config.json`\n- **removed** `.novadiff-graph/diff-overlay.json`\n- **removed** `.novadiff-graph/knowledge-graph.json`\n- **removed** `.novadiff-graph/meta.json`\n- **added** `electron/export-snapshot.cjs`\n- **added** `electron/git-commit.cjs`\n- **modified** `electron/git-publish.cjs`\n- **modified** `electron/git-service.cjs`\n- **added** `electron/github-commit-context.cjs`\n- **modified** `electron/github-service.cjs`\n- **modified** `electron/llm.cjs`\n- **modified** `electron/main.cjs`\n- **modified** `electron/novadiff-docs-html.cjs`\n- **modified** `electron/prefetch-summaries.cjs`\n- **modified** `electron/preload.cjs`\n- **modified** `electron/workspace-history.cjs`\n- **modified** `electron/workspace-store.cjs`\n- **modified** `packages/graph-view/src/App.tsx`\n- **added** `packages/graph-view/src/GraphEmbedSyncBridge.tsx`\n- **modified** `packages/graph-view/src/NovaDiffGraphExplorer.tsx`\n\n## Deterministic risk review\n\n### High severity\n\n_None detected._\n\n### Medium severity\n\n- **Config-adjacent file touched: `vite.config.ts`** (`vite.config.ts`)\n  - Configuration or environment behavior may change across deploy targets.\n\n### Low severity\n\n_None detected._\n\n## Summary rollup\n\n### `.novadiff-graph/config.json`\n\n### Overview The file `./.novadiff-"
+  }
+]

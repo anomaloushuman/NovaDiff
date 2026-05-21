@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/src/__tests__/selectionCluster.test.ts",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:13:50.622Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, expect, it } from \"vitest\";",
+      "R2 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R3 added: import { graphNodeIdsInFile, graphSelectionCluster } from \"./selectionCluster\";"
+    ],
+    "changed_line_ranges": [
+      "R1-61"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, expect, it } from \"vitest\";",
+      "R2 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R3 added: import { graphNodeIdsInFile, graphSelectionCluster } from \"./selectionCluster\";",
+      "R5 added: const graph: KnowledgeGraph = {",
+      "R6 added: version: \"1\",",
+      "R7 added: project: { name: \"t\", path: \"/\", gitCommitHash: null },"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

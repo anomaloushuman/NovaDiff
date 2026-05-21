@@ -113,11 +113,13 @@ async function runSummaryPrefetchLoop(opts, signal) {
     eligibleChanges: eligible,
   });
 
-  for (let i = 0; i < jobs.length; i++) {
-    if (signal.aborted) {
-      break;
-    }
-    const job = jobs[i];
+  const concurrency = Math.min(
+    3,
+    Math.max(1, Number(process.env.NOVADIFF_PREFETCH_CONCURRENCY) || 2),
+  );
+  let nextIndex = 0;
+
+  async function runJob(job, i) {
     const relPath = job.path;
     const kind = typeof job.kind === "string" ? job.kind : "modified";
     try {
@@ -197,7 +199,7 @@ async function runSummaryPrefetchLoop(opts, signal) {
           index: i + 1,
           total: jobs.length,
         });
-        continue;
+        return;
       }
       webContents?.send("summary-prefetch-progress", {
         state: "file-error",
@@ -208,6 +210,19 @@ async function runSummaryPrefetchLoop(opts, signal) {
       });
     }
   }
+
+  async function worker() {
+    while (!signal.aborted) {
+      const i = nextIndex;
+      nextIndex += 1;
+      if (i >= jobs.length) {
+        return;
+      }
+      await runJob(jobs[i], i);
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency }, () => worker()));
 
   webContents?.send("summary-prefetch-progress", {
     state: "finished",

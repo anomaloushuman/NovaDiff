@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T05:18:23.750Z",
+  "generatedAt": "2026-05-21T11:11:40.481Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,48 +11,27 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R16 added: export interface NovaDiffGraphDiffOverlay {",
-      "R21 added: export interface NovaDiffGraphExplorerProps {",
-      "R34 added: export function NovaDiffGraphExplorer({"
-    ],
-    "changed_imports": [
-      "R1 added: import { useEffect, useMemo, useRef, useState } from \"react\";",
-      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
-      "R3 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
-      "R4 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R5 added: import { useDashboardStore } from \"./store\";",
-      "R6 added: import {"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-146"
+      "R31-37"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useEffect, useMemo, useRef, useState } from \"react\";",
-      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
-      "R3 added: import type { GraphIssue } from \"@novadiff/graph-core/schema\";",
-      "R4 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R5 added: import { useDashboardStore } from \"./store\";",
-      "R6 added: import {"
+      "R31 added: /** When set, graph selection follows this node id (Documentation ↔ City sync). */",
+      "R32 added: controlledNodeId?: string | null;",
+      "R33 added: /** When true with controlledNodeId, enables graph focus neighborhood mode. */",
+      "R34 added: focusMode?: boolean;",
+      "R35 added: /** When set, graph drills into this file path (city \"enter building\"). */",
+      "R36 added: enteredFilePath?: string | null;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function NovaDiffGraphExplorerFull (56-146)",
-      "right interface NovaDiffGraphExplorerProps (21-33)",
-      "right function graphFingerprint (44-55)",
-      "right function NovaDiffGraphExplorer (34-43)",
-      "right interface NovaDiffGraphDiffOverlay (16-20)"
+      "right interface NovaDiffGraphExplorerProps (21-40)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

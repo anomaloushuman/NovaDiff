@@ -22,12 +22,47 @@ async function readJson(filePath, fallback) {
   }
 }
 
-async function writeJson(filePath, data) {
-  await fsp.mkdir(path.dirname(filePath), { recursive: true });
-  const tmp = `${filePath}.${process.pid}.${Date.now()}.tmp`;
+let sessionWriteChain = Promise.resolve();
+
+function withSessionWriteLock(task) {
+  const next = sessionWriteChain.then(task, task);
+  sessionWriteChain = next.catch(() => {});
+  return next;
+}
+
+async function writeJsonAtomic(filePath, data) {
+  const dir = path.dirname(filePath);
+  await fsp.mkdir(dir, { recursive: true });
+  const base = path.basename(filePath);
+  const tmp = path.join(dir, `${base}.${process.pid}.${Date.now()}.tmp`);
   const body = `${JSON.stringify(data, null, 2)}\n`;
-  await fsp.writeFile(tmp, body, "utf8");
-  await fsp.rename(tmp, filePath);
+  await fsp.writeFile(tmp, body, { encoding: "utf8" });
+
+  try {
+    await fsp.rename(tmp, filePath);
+    return;
+  } catch (err) {
+    const code = err && typeof err === "object" ? err.code : "";
+    try {
+      if (fssync.existsSync(tmp)) {
+        await fsp.copyFile(tmp, filePath);
+        await fsp.unlink(tmp).catch(() => {});
+        return;
+      }
+    } catch {
+      // fall through
+    }
+    if (code === "ENOENT") {
+      await fsp.writeFile(filePath, body, { encoding: "utf8" });
+      await fsp.unlink(tmp).catch(() => {});
+      return;
+    }
+    throw err;
+  }
+}
+
+async function writeJson(filePath, data) {
+  await writeJsonAtomic(filePath, data);
 }
 
 async function loadSession(userData) {
@@ -63,7 +98,8 @@ async function setLocalOnlyMode(userData, enabled) {
 }
 
 async function saveSession(userData, session) {
-  await writeJson(sessionPath(userData), session);
+  const file = sessionPath(userData);
+  return withSessionWriteLock(() => writeJsonAtomic(file, session));
 }
 
 async function listWorkspaces(userData) {
@@ -71,19 +107,26 @@ async function listWorkspaces(userData) {
   return session.workspaces;
 }
 
-async function upsertWorkspace(userData, workspace) {
-  const session = await loadSession(userData);
-  const preservedActiveId = session.activeWorkspaceId;
-  const idx = session.workspaces.findIndex((w) => w.id === workspace.id);
-  if (idx >= 0) {
-    session.workspaces[idx] = workspace;
-  } else {
-    session.workspaces.push(workspace);
+async function upsertWorkspace(userData, workspace, opts = {}) {
+  const touchSession = opts.touchSession !== false;
+  await writeJson(path.join(workspace.dataDir, "meta.json"), workspace);
+  if (!touchSession) {
+    return workspace;
   }
-  session.activeWorkspaceId = preservedActiveId ?? workspace.id;
-  session.updatedAt = new Date().toISOString();
-  await saveSession(userData, session);
-  return workspace;
+  return withSessionWriteLock(async () => {
+    const session = await loadSession(userData);
+    const preservedActiveId = session.activeWorkspaceId;
+    const idx = session.workspaces.findIndex((w) => w.id === workspace.id);
+    if (idx >= 0) {
+      session.workspaces[idx] = workspace;
+    } else {
+      session.workspaces.push(workspace);
+    }
+    session.activeWorkspaceId = preservedActiveId ?? workspace.id;
+    session.updatedAt = new Date().toISOString();
+    await writeJsonAtomic(sessionPath(userData), session);
+    return workspace;
+  });
 }
 
 async function setActiveWorkspace(userData, workspaceId) {

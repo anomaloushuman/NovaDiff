@@ -1,21 +1,23 @@
 ### Overview  
-A new file `src/app/commitMessage.ts` adds two exported helpers:  
-- `buildCommitMessageContext` (lines 7‑30) builds a concise diff summary for an LLM prompt.  
-- `parseCommitMessageOutput` (lines 33‑59) extracts `SUBJECT:` and `BODY:` from an LLM reply, with fall‑backs.
+`src/app/commitMessage.ts` now accepts an options object, adds classification helpers, and includes a district‑level breakdown in the LLM prompt. Two utilities from `./commitChangeAnalysis` are re‑exported for external use.
 
 ### Key changes  
-- Imports added: `DocWorkspaceMetrics` (line 1) and `FileChange` (line 2).  
-- Constant `MAX_PATHS = 90` (line 4) limits the number of paths listed.  
-- `buildCommitMessageContext` returns a string capped at 12 000 characters (line 29) and includes up to `MAX_PATHS` paths (lines 23‑27).  
-- `parseCommitMessageOutput` normalises CRLF to LF, trims whitespace, and if `SUBJECT:` or `BODY:` are missing it falls back to the first non‑empty line or the remaining text (lines 37‑54). The returned `subject` is truncated to 100 characters and collapsed whitespace (line 56).
+- **Imports** (`R3‑8`): added `classifyCompareRows`, `districtBreakdown`, `graphSymbolsContext`, and `UpdateDecision`.  
+- **New interface** (`R12‑17`): `CommitMessageContextOptions` with optional `classification`, `graphContext`, and `githubContext`.  
+- **Function signature** (`R26`): `buildCommitMessageContext` now takes `options: CommitMessageContextOptions = {}`.  
+- **Classification logic** (`R28‑29`): uses `options.classification ?? classifyCompareRows(docRows)` to set `classification`.  
+- **District breakdown** (`L21 / R36‑40`): inserts a “By district” section listing up to 24 top‑level folders.  
+- **Context injection** (`R42‑51`): appends optional `graphContext` and trimmed `githubContext` when provided.  
+- **Export** (`R67‑68`): re‑exports `graphSymbolsContext` and `classifyCompareRows`.  
+- **No change** to `parseCommitMessageOutput` (lines 69‑96 remain unchanged).
 
 ### Impact  
-- The new helpers centralise prompt construction and parsing logic, keeping related code in one module.  
-- Truncation limits prompt size, preventing excessively large inputs.  
-- The parsing logic now tolerates missing headers, reducing runtime errors when the LLM omits them.
+- **Backward compatibility**: default options preserve existing behavior; callers may supply richer context without breaking.  
+- **API surface**: `buildCommitMessageContext` now exposes an options parameter and the file re‑exports expose helper utilities.  
+- **Prompt content**: added sections (classification, district breakdown, optional contexts) may increase prompt length but provide more detail for LLMs.
 
 ### Risks & follow‑ups  
-- Verify that `DocWorkspaceMetrics` and `FileChange` types are exported correctly elsewhere.  
-- The 12 000‑character limit may truncate important information in very large diffs; review with realistic diff sizes.  
-- Run integration tests to confirm that `parseCommitMessageOutput` handles multiline bodies and absent headers as intended.  
-- Ensure the new file is included in the build pipeline and that linting passes without new warnings.
+- Verify that `classifyCompareRows` and `districtBreakdown` handle empty `docRows` without throwing.  
+- Ensure the `githubContext` trimming (`slice(0, 2000)`) does not truncate essential URLs.  
+- Run the existing test suite to confirm that added sections do not affect downstream parsing logic.  
+- Monitor LLM output quality after the new context is introduced; the added “By district” section may influence prompt length limits.

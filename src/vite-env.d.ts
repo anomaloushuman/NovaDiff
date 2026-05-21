@@ -290,6 +290,15 @@ export interface ElectronAPI {
   }) => Promise<Record<string, unknown>>;
   gitPublishPreview?: (payload: { repoRoot: string }) => Promise<PublishPreview>;
   gitPublishExecute?: (payload: PublishExecutePayload) => Promise<PublishExecuteResult>;
+  gitStagePaths?: (payload: { repoRoot: string; paths: string[] }) => Promise<{ staged: number }>;
+  gitStageDistrict?: (payload: {
+    repoRoot: string;
+    topDir: string;
+  }) => Promise<{ staged: number }>;
+  exportProjectSnapshot?: (payload: {
+    bundleDir: string;
+    outZipPath: string;
+  }) => Promise<{ zipPath: string; bytes: number }>;
   workspaceSessionLoad?: () => Promise<import("./app/workspaceTypes").WorkspaceSessionState>;
   workspaceSetGitUser?: (
     user: import("./app/workspaceTypes").GitUserProfile,
@@ -335,6 +344,14 @@ export interface ElectronAPI {
     ref: string;
     relPath: string;
   }) => Promise<import("./app/gitTypes").GitBlameAtRefResult>;
+  gitCommitDetail?: (payload: {
+    repoRoot: string;
+    hash: string;
+  }) => Promise<import("./app/gitTypes").GitCommitDetail>;
+  githubCommitContext?: (payload: {
+    repository: string;
+    sha: string;
+  }) => Promise<import("./app/gitTypes").GithubCommitContext>;
   workspaceEnsureCommitSnapshot?: (payload: {
     workspaceId: string;
     hash: string;

@@ -1,27 +1,31 @@
 ### Overview  
-A new component `HistoryCompareStrip` is added at `src/components/HistoryCompareStrip.tsx` (lines 1‑212). It renders a header strip that lets the user pick a base commit, a head commit or a live repository folder, swap the two, and trigger a comparison.
+`HistoryCompareStrip` was refactored to improve the Git history comparison panel.  
+Key UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.
 
 ### Key changes  
-- **Imports** (lines 1‑7): icons `ArrowLeftRight`, `ChevronDown`, `GitBranch`, `GitCompareArrows`, `Loader2` from *lucide-react*.  
-- **Type imports** (lines 8‑9): `WorkspaceCommitSnapshot` from `../app/workspaceTypes` and `pathDisplayLabel` from `../app/pathDisplay`.  
-- **Props interface** (lines 11‑28): `HistoryCompareStripProps` defines arrays of commits, hash strings, live‑repo flags, busy/error states, and callbacks for every user action.  
-- **Helpers** (lines 30‑36, 38‑40): `truncateSubject` trims a commit subject to 48 chars; `commitLabel` builds the display string.  
-- **Component** (lines 42‑212):  
-  - Renders a title and description.  
-  - Provides a base‑commit `<select>` (lines 98‑110) and a head‑commit `<select>` or live‑repo `<input>` (lines 134‑170).  
-  - Swap button (lines 118‑126) and live‑repo toggle checkbox (lines 180‑186).  
-  - Compare button (lines 191‑205) is disabled until `canCompare` (lines 62‑66) is true.  
-  - Shows a loader icon when `busy` is true (lines 199‑203).  
-  - Displays an error message if `error` is set (line 207).  
-  - All interactive elements include `aria-label` or `aria-hidden` attributes as shown in the diff.
+- **Title** – lines L71‑73 replaced plain text with  
+  ```tsx
+  <h1 className="git-history-title">
+    Git history <span className="git-history-title-accent">compare</span>
+  </h1>
+  ```  
+- **Wrapper** – line R79 added `git-history-compare-card` to the `workspace-setup-strip` container.  
+- **Labels** – lines R83 and R90 added `git-history-field-label` to the Base/Head labels.  
+- **Badges** – lines R85 and R92‑96 insert conditional `<span className="git-history-badge …">` elements next to the selectors.  
+- **Selector segment** – line R137 added `git-history-selector-segment` to the segment class list.  
+- **Live‑head input** – lines R145‑161 replace the head selector with an input + browse button when `useLiveHead` is true.  
+- **Live toggle** – lines R180‑185 introduce a checkbox labeled “Compare base against live dev folder”.  
+- **Compare button** – lines R190‑205 update the button’s classes, disabled state, and tooltip logic.
+
+The logic that determines `canCompare` (lines 62‑66) remains unchanged.
 
 ### Impact  
-- Adds a self‑contained UI for commit comparison; no changes to existing components.  
-- Requires parent components to provide the full set of callbacks and state values.  
-- No new runtime dependencies beyond the imported icons and types.
+- **UI consistency** – new class names (`git-history-compare-card`, `git-history-field-label`, etc.) match the existing design system.  
+- **Accessibility** – added `aria-label` attributes and descriptive labels for interactive elements.  
+- **No functional regression** – only presentation layers were altered.
 
 ### Risks & follow‑ups  
-- **Regression**: unknown from the available diff/scan evidence whether the new strip interferes with existing commit‑selection logic.  
-- **Accessibility**: the component includes `aria-label` attributes, but comprehensive testing is not shown in the diff.  
-- **Testing**: unit tests for `truncateSubject`, `commitLabel`, and the enable/disable logic are not present in the current diff.  
-- **Linting**: running `tsc`, ESLint, and Prettier should confirm no type or style errors.
+- **Missing CSS** – verify that the new classes exist in the stylesheet.  
+- **Badge rendering** – ensure badges do not appear when `base` or `head` is null; run unit tests for edge cases.  
+- **Live‑head toggle** – confirm that toggling updates `useLiveHead` correctly and that the input behaves as expected.  
+- **Lint & build** – run `npm run lint`, `npm test`, and `npm run build` to catch any syntax or type errors introduced by the JSX changes.

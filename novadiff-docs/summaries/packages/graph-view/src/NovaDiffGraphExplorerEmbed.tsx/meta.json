@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T05:19:22.061Z",
+  "generatedAt": "2026-05-21T11:12:29.390Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,37 +19,31 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R13 added: export interface NovaDiffGraphExplorerEmbedProps {",
-      "R36 added: export function NovaDiffGraphExplorerEmbed({"
-    ],
+    "changed_exports": [],
     "changed_imports": [
-      "R1 added: import { useEffect, useMemo, useRef } from \"react\";",
-      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
-      "R3 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R4 added: import { useDashboardStore } from \"./store\";",
-      "R5 added: import {",
-      "R10 added: import { I18nProvider } from \"./contexts/I18nContext\";"
+      "R12 added: import { GraphEmbedSyncBridge } from \"./GraphEmbedSyncBridge\";"
     ],
     "changed_line_ranges": [
-      "R1-113"
+      "R12",
+      "R22-25",
+      "R46-49",
+      "R118-123"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useEffect, useMemo, useRef } from \"react\";",
-      "R2 added: import { validateGraph } from \"@novadiff/graph-core/schema\";",
-      "R3 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R4 added: import { useDashboardStore } from \"./store\";",
-      "R5 added: import {",
-      "R6 added: NovaDiffEmbedContext,"
+      "R12 added: import { GraphEmbedSyncBridge } from \"./GraphEmbedSyncBridge\";",
+      "R22 added: controlledNodeId?: string | null;",
+      "R23 added: enteredFilePath?: string | null;",
+      "R24 added: focusMode?: boolean;",
+      "R25 added: onSelectionChange?: (nodeId: string | null) => void;",
+      "R46 added: controlledNodeId,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function NovaDiffGraphExplorerEmbed (36-113)",
-      "right function graphFingerprint (23-35)",
-      "right interface NovaDiffGraphExplorerEmbedProps (13-22)"
+      "right function NovaDiffGraphExplorerEmbed (41-128)",
+      "right interface NovaDiffGraphExplorerEmbedProps (14-27)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

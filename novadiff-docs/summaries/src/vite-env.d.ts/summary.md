@@ -1,19 +1,24 @@
-### Overview
-A new `src/vite-env.d.ts` file (added at line 1) declares TypeScript typings for the Electron API and several payload interfaces used across the project.
+### Overview  
+The `ElectronAPI` interface in `src/vite-env.d.ts` has been extended with five new methods that expose additional Git and snapshot functionality to the renderer process. The changes are located in the file’s latter section (lines 293‑301 and 347‑354).
 
-### Key changes
-- **Imports** – type definitions are pulled from `./app/types`, `./app/llmStorage`, and `./app/gitTypes` (diff lines 3‑16).  
-- **Payload interfaces** – added `SummaryPrefetchPayload`, `FileSummaryExportPayload`, `FileSummaryMarkdownReadPayload`, `SelectionSummaryExportPayload`, `SelectionSummaryMarkdownReadPayload`, `NovadiffDocsWritePayload`, and `NovadiffDocsReadPayload` (lines 33‑104).  
-- **ElectronAPI interface** – declares a comprehensive set of methods for folder comparison, file diffing, window control, summary prefetching, artifact persistence, codebase scanning, LLM interactions, Git tooling, workspace management, and more (lines 104‑383).  
-- **Global augmentation** – extends `Window` with an optional `electronAPI` property (lines 385‑388).  
-- **Module export** – exports an empty object to satisfy module resolution (line 391).
+### Key changes  
+- **`gitStagePaths`** (lines 293‑294) – stages a list of file paths in a repository and returns the number of files staged.  
+- **`gitStageDistrict`** (lines 295‑297) – stages all files under a specified directory subtree and reports the staged count.  
+- **`exportProjectSnapshot`** (lines 298‑301) – creates a ZIP archive of a project snapshot, returning the ZIP path and byte size.  
+- **`gitCommitDetail`** (lines 347‑350) – retrieves detailed commit information for a given hash.  
+- **`githubCommitContext`** (lines 351‑354) – fetches GitHub commit context data for a repository and SHA.
 
-### Impact
-- **Type safety** – compile‑time checks and IDE autocompletion for all Electron API calls are now available.  
-- **Consistency** – payload shapes are centralized, reducing duplication.  
-- **Consumer updates** – modules that use `electronAPI` must import the new types and adjust method calls to match the declared signatures.
+### Impact  
+These additions give the renderer process direct access to:
+- Programmatic staging of files or directories, enabling UI‑driven Git workflows.  
+- Exporting a project snapshot for backup or sharing.  
+- Inspecting commit metadata and GitHub context without additional API calls.  
+The interface changes are purely type declarations; actual implementation must exist in the main process to make the calls functional.
 
-### Risks & follow‑ups
-- **Signature mismatches** – verify that the runtime Electron implementation matches the declared `ElectronAPI` methods; mismatches will surface at runtime.  
-- **Global conflicts** – ensure no other global declarations clash with the added `Window` augmentation.  
-- **Testing** – run the full test suite and the TypeScript compiler to confirm no new type errors or runtime failures.
+### Risks & follow‑ups  
+- **Implementation gap** – the new methods are only declared; if the main process lacks corresponding handlers, calls will fail.  
+- **Security** – exposing Git staging and snapshot export may require permission checks; review access controls.  
+- **Testing** – add unit and integration tests to verify that the renderer can invoke these methods and that the returned data matches expectations.  
+- **Documentation** – update API docs and example usage to reflect the new capabilities.  
+
+Unknown from the available diff/scan evidence: whether the main process has been updated to support these calls.

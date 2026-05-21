@@ -1,0 +1,58 @@
+{
+  "relPath": "src/app/fileTree.ts",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T10:54:23.237Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export interface FileTreeNode {",
+      "R48 added: export function buildFileTree(paths: string[]): FileTreeNode {",
+      "R69 added: export function filterFileTree(root: FileTreeNode, query: string): FileTreeNode {",
+      "R78 added: export function collectFolderPaths(node: FileTreeNode): string[] {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-90"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export interface FileTreeNode {",
+      "R2 added: name: string;",
+      "R3 added: path: string;",
+      "R4 added: type: \"file\" | \"dir\";",
+      "R5 added: children: FileTreeNode[];",
+      "R6 added: }"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function insertPath (8-31)",
+      "right function cloneFiltered (56-68)",
+      "right function collectFolderPaths (78-90)",
+      "right function filterFileTree (69-77)",
+      "right function sortNodes (32-40)",
+      "right function buildFileTree (48-55)",
+      "right function sortTree (41-47)",
+      "right interface FileTreeNode (1-7)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

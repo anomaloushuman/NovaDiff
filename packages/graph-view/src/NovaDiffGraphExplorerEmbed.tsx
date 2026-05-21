@@ -9,6 +9,7 @@ import {
 } from "./contexts/NovaDiffEmbedContext";
 import { I18nProvider } from "./contexts/I18nContext";
 import { EmbedDashboardPanel } from "./EmbedDashboardPanel";
+import { GraphEmbedSyncBridge } from "./GraphEmbedSyncBridge";
 
 export interface NovaDiffGraphExplorerEmbedProps {
   graph: KnowledgeGraph;
@@ -18,6 +19,10 @@ export interface NovaDiffGraphExplorerEmbedProps {
     onChunk: (text: string) => void,
   ) => Promise<string>;
   outputLanguage?: string;
+  controlledNodeId?: string | null;
+  enteredFilePath?: string | null;
+  focusMode?: boolean;
+  onSelectionChange?: (nodeId: string | null) => void;
 }
 
 function graphFingerprint(graph: KnowledgeGraph): string {
@@ -38,6 +43,10 @@ export function NovaDiffGraphExplorerEmbed({
   readFile,
   explainCode,
   outputLanguage = "en",
+  controlledNodeId,
+  enteredFilePath,
+  focusMode,
+  onSelectionChange,
 }: NovaDiffGraphExplorerEmbedProps) {
   const validation = useMemo(() => validateGraph(graph), [graph]);
   const storeGraph = useDashboardStore((s) => s.graph);
@@ -106,6 +115,12 @@ export function NovaDiffGraphExplorerEmbed({
   return (
     <NovaDiffEmbedContext.Provider value={embedValue}>
       <I18nProvider language={outputLanguage}>
+        <GraphEmbedSyncBridge
+          controlledNodeId={controlledNodeId}
+          enteredFilePath={enteredFilePath}
+          focusMode={focusMode}
+          onSelectionChange={onSelectionChange}
+        />
         <EmbedDashboardPanel graphIssues={validation.issues} />
       </I18nProvider>
     </NovaDiffEmbedContext.Provider>

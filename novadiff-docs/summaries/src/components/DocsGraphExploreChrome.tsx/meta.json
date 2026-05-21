@@ -1,0 +1,64 @@
+{
+  "relPath": "src/components/DocsGraphExploreChrome.tsx",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:01:39.505Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R18 added: export interface GraphBuildBarProps {",
+      "R33 added: export interface CityExploreBarProps {",
+      "R444 added: export function CodeCityExploreSettings({",
+      "R642 added: export function DocsGraphActionBar(props: {"
+    ],
+    "changed_imports": [
+      "R1 added: import {",
+      "R13 added: import { createPortal } from \"react-dom\";",
+      "R14 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";",
+      "R15 added: import { CodeCityGraphToolbar, DocsLinkToolbar } from \"./DocumentationWorkspaceLinked\";",
+      "R16 added: import type { CodeCityLayoutResult } from \"../app/codeCityLayout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-648"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import {",
+      "R2 added: useCallback,",
+      "R3 added: useEffect,",
+      "R4 added: useLayoutEffect,",
+      "R5 added: useMemo,",
+      "R6 added: useRef,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function CodeCityExploreSettings (444-641)",
+      "right function CityFiltersPanel (122-268)",
+      "right function CodeCityFloatShell (376-443)",
+      "right function GraphBuildPanel (289-343)",
+      "right function ExpandCornerIcon (90-121)",
+      "right function GraphStatsPanel (344-375)",
+      "right function countActiveCityFilters (61-89)",
+      "right interface CityExploreBarProps (33-60)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

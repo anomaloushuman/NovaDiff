@@ -1,0 +1,60 @@
+{
+  "relPath": "packages/graph-view/src/utils/graphCityNavigation.ts",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:14:50.578Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export function containerIdForFilePath(filePath: string): string | null {",
+      "R14 added: export interface GraphCityNavStore {",
+      "R23 added: export function applyGraphCityRoot(store: GraphCityNavStore): void {",
+      "R40 added: export function applyGraphEnterFile(",
+      "R56 added: export function applyGraphFocusSelection("
+    ],
+    "changed_imports": [
+      "R1 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R2 added: import { resolveGraphNodeFilePath } from \"./selectionCluster\";"
+    ],
+    "changed_line_ranges": [
+      "R1-71"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R2 added: import { resolveGraphNodeFilePath } from \"./selectionCluster\";",
+      "R4 added: /** Folder container id for a file path (matches folder grouping in containers.ts). */",
+      "R5 added: export function containerIdForFilePath(filePath: string): string | null {",
+      "R6 added: const slash = filePath.indexOf(\"/\");",
+      "R7 added: if (slash < 0) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function applyGraphEnterFile (40-55)",
+      "right function applyGraphFocusSelection (56-71)",
+      "right function expandFileContainer (30-39)",
+      "right function containerIdForFilePath (5-13)",
+      "right interface GraphCityNavStore (14-22)",
+      "right function applyGraphCityRoot (23-29)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -26,28 +26,38 @@
 <body>
   <header class="top">
     <h1>src/components/ui/ui-transitions.css</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:12:41.223Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:09:11.877Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new stylesheet <code>src/components/ui/ui-transitions.css</code> (added lines R1‑120) introduces CSS‑only transition rules for overlays, panels, and view animations, with a media query for reduced‑motion users.</p>
+<p><code>src/components/ui/ui-transitions.css</code> replaces the hard‑coded <code>flex: 1</code> on <code>.workspace-stage</code> and <code>.workspace-stage-inner</code> with <code>flex: 1 1 0</code>. A new rule for <code>.launch-panel--main .workspace-stage</code> is added. The change is limited to layout properties; no animation or transition rules are modified.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Overlay</strong> – <code>.ui-overlay</code> (lines 3‑6) starts with <code>opacity: 0</code> and a 0.28 s transition.<br><code>.ui-overlay.is-open</code> (lines 8‑10) sets <code>opacity: 1</code>.<br><code>.ui-overlay.is-closing</code> (lines 12‑15) fades to <code>opacity: 0</code> and disables pointer events.  </li>
-<li><strong>Panel</strong> – <code>.ui-overlay-panel</code> (lines 17‑25) uses <code>transform</code>, <code>filter</code>, and a 0.32 s cubic‑bezier transition.<br><code>.ui-overlay-panel.is-open</code> (lines 27‑31) restores full opacity, scale, and blur.<br><code>.ui-overlay-panel.is-closing</code> (lines 33‑37) reduces opacity, shifts, and blurs.  </li>
-<li><strong>View animations</strong> – <code>.ui-view-enter</code> (line 39) triggers <code>ui-view-enter</code> keyframes (lines 80‑90).<br><code>.ui-view-fade</code> (line 43) triggers <code>ui-view-fade</code> keyframes (lines 93‑101).  </li>
-<li><strong>Tabs &amp; panels</strong> – <code>.insights-tab</code> (lines 63‑70) and <code>.insights-panel-enter</code> (line 76) add subtle transitions.  </li>
-<li><strong>Reduced‑motion</strong> – media query (lines 104‑120) disables all animations and sets a 0.15 s opacity transition for users preferring reduced motion.</li>
+<li><strong>New selector</strong>: <code>.launch-panel--main .workspace-stage</code> (lines 47‑50)```css
+.launch-panel--main .workspace-stage {
+  flex: 1 1 0;
+  min-height: 0;
+}</li>
 </ul>
-<h3>Impact</h3>
-<p>The changes are purely CSS; no JavaScript logic is altered. If the file is omitted from the bundle, the UI will remain static. The reduced‑motion media query respects user preferences.</p>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Build inclusion</strong> – verify that <code>ui-transitions.css</code> is imported into the component bundle.  </li>
-<li><strong>Smoke test</strong> – confirm overlay open/close and panel animations work as defined.  </li>
-<li><strong>Reduced‑motion test</strong> – ensure animations are disabled when the media query matches.  </li>
-<li><strong>Name collisions</strong> – check that keyframe names (<code>ui-view-enter</code>, <code>ui-view-fade</code>) do not clash with existing animations.</li>
-</ul>
+<pre><code class="language--">  - `.workspace-stage` (line 48) changed from `flex: 1;` to `flex: 1 1 0;` (diff: L48 removed, R48 added).  
+  - `.workspace-stage-inner` (line 57) changed similarly (diff: L57 removed, R62 added).  
+- **Additional flex**: `.workspace-stage-inner &gt; .workspace` now has `flex: 1 1 0; min-height: 0;` (lines 70‑71).  
+- No other CSS properties were altered.
+
+### Impact
+
+  
+- **Layout**: The workspace stages now grow and shrink with a basis of 0, allowing more flexible height distribution within the launch panel.  
+- **Maintainability**: The new selector isolates the launch‑panel layout, reducing accidental style bleed.  
+- **Compatibility**: No new CSS features or vendor prefixes were introduced; the change should work in all supported browsers.  
+- **Performance**: unknown from the available diff/scan evidence.
+
+### Risks &amp; follow‑ups  
+- **Regression**: Verify that the launch panel still occupies the intended space and that no content is clipped.  
+- **Overflow**: Ensure that `overflow: hidden` on `.workspace-stage-inner` behaves correctly with the new flex basis.  
+- **Test coverage**: Run the targeted UI tests for the launch panel and workspace stage; add a smoke test if none exist.  
+- **Visual consistency**: Manually inspect the layout on different viewport sizes to confirm that the new flex values do not cause unintended stretching or shrinking.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

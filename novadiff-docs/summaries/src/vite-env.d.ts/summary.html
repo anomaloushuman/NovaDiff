@@ -26,31 +26,34 @@
 <body>
   <header class="top">
     <h1>src/vite-env.d.ts</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:36:22.688Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:51:47.483Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>src/vite-env.d.ts</code> file (added at line 1) declares TypeScript typings for the Electron API and several payload interfaces used across the project.</p>
+<p>The <code>ElectronAPI</code> interface in <code>src/vite-env.d.ts</code> has been extended with five new methods that expose additional Git and snapshot functionality to the renderer process. The changes are located in the file’s latter section (lines 293‑301 and 347‑354).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – type definitions are pulled from <code>./app/types</code>, <code>./app/llmStorage</code>, and <code>./app/gitTypes</code> (diff lines 3‑16).  </li>
-<li><strong>Payload interfaces</strong> – added <code>SummaryPrefetchPayload</code>, <code>FileSummaryExportPayload</code>, <code>FileSummaryMarkdownReadPayload</code>, <code>SelectionSummaryExportPayload</code>, <code>SelectionSummaryMarkdownReadPayload</code>, <code>NovadiffDocsWritePayload</code>, and <code>NovadiffDocsReadPayload</code> (lines 33‑104).  </li>
-<li><strong>ElectronAPI interface</strong> – declares a comprehensive set of methods for folder comparison, file diffing, window control, summary prefetching, artifact persistence, codebase scanning, LLM interactions, Git tooling, workspace management, and more (lines 104‑383).  </li>
-<li><strong>Global augmentation</strong> – extends <code>Window</code> with an optional <code>electronAPI</code> property (lines 385‑388).  </li>
-<li><strong>Module export</strong> – exports an empty object to satisfy module resolution (line 391).</li>
+<li><strong><code>gitStagePaths</code></strong> (lines 293‑294) – stages a list of file paths in a repository and returns the number of files staged.  </li>
+<li><strong><code>gitStageDistrict</code></strong> (lines 295‑297) – stages all files under a specified directory subtree and reports the staged count.  </li>
+<li><strong><code>exportProjectSnapshot</code></strong> (lines 298‑301) – creates a ZIP archive of a project snapshot, returning the ZIP path and byte size.  </li>
+<li><strong><code>gitCommitDetail</code></strong> (lines 347‑350) – retrieves detailed commit information for a given hash.  </li>
+<li><strong><code>githubCommitContext</code></strong> (lines 351‑354) – fetches GitHub commit context data for a repository and SHA.</li>
 </ul>
 <h3>Impact</h3>
+<p>These additions give the renderer process direct access to:</p>
 <ul>
-<li><strong>Type safety</strong> – compile‑time checks and IDE autocompletion for all Electron API calls are now available.  </li>
-<li><strong>Consistency</strong> – payload shapes are centralized, reducing duplication.  </li>
-<li><strong>Consumer updates</strong> – modules that use <code>electronAPI</code> must import the new types and adjust method calls to match the declared signatures.</li>
+<li>Programmatic staging of files or directories, enabling UI‑driven Git workflows.  </li>
+<li>Exporting a project snapshot for backup or sharing.  </li>
+<li>Inspecting commit metadata and GitHub context without additional API calls.<br>The interface changes are purely type declarations; actual implementation must exist in the main process to make the calls functional.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Signature mismatches</strong> – verify that the runtime Electron implementation matches the declared <code>ElectronAPI</code> methods; mismatches will surface at runtime.  </li>
-<li><strong>Global conflicts</strong> – ensure no other global declarations clash with the added <code>Window</code> augmentation.  </li>
-<li><strong>Testing</strong> – run the full test suite and the TypeScript compiler to confirm no new type errors or runtime failures.</li>
+<li><strong>Implementation gap</strong> – the new methods are only declared; if the main process lacks corresponding handlers, calls will fail.  </li>
+<li><strong>Security</strong> – exposing Git staging and snapshot export may require permission checks; review access controls.  </li>
+<li><strong>Testing</strong> – add unit and integration tests to verify that the renderer can invoke these methods and that the returned data matches expectations.  </li>
+<li><strong>Documentation</strong> – update API docs and example usage to reflect the new capabilities.</li>
 </ul>
+<p>Unknown from the available diff/scan evidence: whether the main process has been updated to support these calls.</p>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

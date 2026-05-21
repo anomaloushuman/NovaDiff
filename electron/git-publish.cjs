@@ -1,7 +1,7 @@
 "use strict";
 
 const path = require("node:path");
-const { getRepoStatus, stageAll, commit, push, isGitRepo } = require("./git-service.cjs");
+const { getRepoStatus, stageAll, stagePaths, commit, push, isGitRepo } = require("./git-service.cjs");
 const { createPullRequest, getAuthStatus, slugFromRepoRoot } = require("./github-service.cjs");
 
 function buildFullCommitMessage(subject, body) {
@@ -60,7 +60,14 @@ async function executePublish(repoRoot, opts = {}) {
     throw new Error("Not a git repository");
   }
 
-  stageAll(root);
+  const stagePathsList = Array.isArray(opts.stagePaths)
+    ? opts.stagePaths.map((p) => String(p ?? "").trim()).filter(Boolean)
+    : [];
+  if (stagePathsList.length > 0) {
+    stagePaths(root, stagePathsList);
+  } else {
+    stageAll(root);
+  }
   const message = buildFullCommitMessage(subject, body);
   const commitHash = commit(root, message);
 

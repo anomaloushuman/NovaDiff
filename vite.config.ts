@@ -12,7 +12,18 @@ export default defineConfig(() => ({
   clearScreen: false,
   resolve: {
     alias: {
-      "@novadiff/graph-core": path.resolve(__dirname, "packages/graph-core/src"),
+      "@novadiff/graph-core/types": path.resolve(
+        __dirname,
+        "packages/graph-core/src/types.ts",
+      ),
+      "@novadiff/graph-core/schema": path.resolve(
+        __dirname,
+        "packages/graph-core/src/schema.ts",
+      ),
+      "@novadiff/graph-core/search": path.resolve(
+        __dirname,
+        "packages/graph-core/src/search.ts",
+      ),
       "@novadiff/graph-view": path.resolve(__dirname, "packages/graph-view/src"),
     },
   },

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>tests/graphCityBridge.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>tests/graphCityBridge.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:39:08.656Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test suite <code>tests/graphCityBridge.test.ts</code> has been added to validate the mapping utilities in <code>graphCityBridge</code>. The file imports Vitest, <code>KnowledgeGraph</code>, and several helper functions (<code>cityBuildingIdsForHighlight</code>, <code>cityBuildingToGraphNodeId</code>, <code>graphEdgesToCityPairs</code>, <code>graphNodeToCityBuildingIds</code>) along with CodeCity layout types.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Test file added</strong>: <code>tests/graphCityBridge.test.ts</code> (≈121 lines).  </li>
+<li><strong>Imports</strong>: <code>vitest</code> helpers, <code>KnowledgeGraph</code> type, and the four mapping functions from <code>../src/app/graphCityBridge</code>.  </li>
+<li><strong>Helper <code>building()</code></strong>: constructs <code>CodeCityRenderableBuilding</code> objects with default geometry and overrides.  </li>
+<li><strong>Sample layout &amp; graph</strong>: a minimal <code>CodeCityLayoutResult</code> with two buildings (function <code>foo</code> and class <code>Bar</code>) and a corresponding <code>KnowledgeGraph</code> containing nodes and a single <code>calls</code> edge.  </li>
+<li><strong>Four test cases</strong>:  <ol>
+<li><code>graphNodeToCityBuildingIds</code> maps a function node to its city building ID.  </li>
+<li><code>cityBuildingToGraphNodeId</code> reverses the mapping.  </li>
+<li><code>cityBuildingIdsForHighlight</code> returns all building IDs for a file node.  </li>
+<li><code>graphEdgesToCityPairs</code> produces overlay pairs for a selected node.</li>
+</ol>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Provides concrete assertions for the mapping logic, reducing silent regressions.  </li>
+<li><strong>Maintainability</strong>: Centralizes test data; future changes to node/building IDs must update this file.  </li>
+<li><strong>Observability</strong>: Test failures will surface mapping mismatches immediately during CI.  </li>
+<li><strong>Compatibility</strong>: No changes to production code; only test additions.</li>
+</ul>
+<h3>Risks &amp; follow-ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: If <code>graphCityBridge</code> functions change signatures or ID conventions, tests will fail; verify that the mapping logic remains stable.  </li>
+<li><strong>Snapshot drift</strong>: No snapshots used, but any change to default geometry in <code>building()</code> may require test updates.  </li>
+<li><strong>Linting</strong>: Ensure the new file passes the repo’s TS lint rules (<code>tsc</code>, <code>eslint</code>).  </li>
+<li><strong>Build impact</strong>: Run <code>npm run build</code> to confirm the added test does not introduce build-time errors.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

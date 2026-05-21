@@ -1,23 +1,24 @@
 ### Overview  
-A new module `electron/prefetch-summaries.cjs` (lines 1‑241) adds background pre‑fetching of LLM‑generated file summaries. It orchestrates a Rust CLI queue via `runCompareEngine(..., cmd:"prefetch-summary-queue")` and streams progress through IPC events `summary-prefetch-progress`.
+`electron/prefetch-summaries.cjs` now runs prefetch jobs with a configurable worker pool instead of a single sequential loop. The change replaces the old `for (let i = 0; i < jobs.length; i++)` block (lines 116‑120) with a concurrency‑controlled loop (lines 116‑122 and 214‑226).
 
 ### Key changes  
-- **Imports** (lines 9‑12): `runCompareEngine`, `summarizeChange`, `buildDiffExcerpt*`, `exportFileSummaryArtifacts`.  
-- **Cache & abort**: `summaryByPath` (Map, line 14) and `prefetchAbort` (AbortController, line 17). Functions `clearSummaryPrefetchCache()` (lines 20‑22) and `stopSummaryPrefetchWorker()` (lines 24‑28) manage state.  
-- **Prefetch loop** (`runSummaryPrefetchLoop`, lines 64‑216): builds a job queue, iterates over jobs, obtains a diff payload, builds chunks, calls `summarizeChange`, stores the result, optionally exports artifacts, and emits IPC states (`started`, `file-done`, `file-skipped`, `file-error`, `finished`).  
-- **Worker control** (`startSummaryPrefetchWorker`, lines 222‑232): starts the loop with a new `AbortController`, returns a promise that resolves on completion.  
-- **Default limit** (`defaultPrefetchLimit`, lines 39‑47): reads `NOVADIFF_PREFETCH_MAX`, clamps 1–5000, defaults to 200.  
-- **Exports** (lines 235‑241): all public helpers.
+- **Concurrency calculation** – `concurrency` is set to  
+  `Math.min(3, Math.max(1, Number(process.env.NOVADIFF_PREFETCH_CONCURRENCY) || 2))` (added lines 116‑122).  
+- **Worker pool** – an async `worker` pulls jobs from a shared `nextIndex` counter; `Promise.all` launches `concurrency` workers (added lines 214‑226).  
+- **Abort handling** – the loop now checks `signal.aborted` at the start of each worker iteration, removing the per‑iteration abort check inside the old for‑loop.  
+- **Job dispatch** – the old job extraction (`const job = jobs[i]`) is removed.  
+- **Error flow** – the `continue` after a non‑text error is replaced with `return` from `runJob`, exiting the current worker early.  
+- **Progress reporting** – IPC events (`summary-prefetch-progress`) remain unchanged.
 
 ### Impact  
-- **Performance**: Background worker may increase CPU/memory during large diff sets; aborting mitigates runaway jobs.  
-- **Observability**: `summary-prefetch-progress` IPC channel provides fine‑grained progress for UI/debugging.  
-- **Configuration**: `NOVADIFF_PREFETCH_MAX` controls queue size.  
-- **Packaging**: Additional JS dependencies and exported artifacts increase bundle size; consider lazy loading.  
-- **Error handling**: Errors are caught and reported via IPC, preventing crashes but requiring UI handling of `file-error`.
+- **Performance** – concurrent prefetching can reduce total runtime on multi‑core systems.  
+- **Correctness** – abort now stops all workers cleanly; no new jobs start after abort.  
+- **Maintainability** – clearer separation of job dispatch logic; easier to adjust concurrency.  
+- **Observability** – progress events remain the same; no change in external behavior.  
+- **Compatibility** – no API changes; only internal implementation differs.
 
 ### Risks & follow‑ups  
-- **Race conditions**: Verify `prefetchAbort` cancels in‑flight jobs and `stopSummaryPrefetchWorker` cleans the controller.  
-- **Cache leakage**: Ensure `clearSummaryPrefetchCache()` runs on worker restart and app shutdown.  
-- **IPC reliability**: Test that all `summary-prefetch-progress` messages reach the renderer, especially when `webContents` is null.  
-- **Environment variable parsing**: Confirm non‑numeric or negative values fall back to 200 and clamping to 5000 works as intended.
+- **Race safety** – `nextIndex++` is safe in Node’s single‑threaded event loop, but confirm no hidden race conditions.  
+- **Worker exit** – verify that `return` after a non‑text error does not prematurely terminate the entire worker pool.  
+- **Abort mid‑run** – test that aborting while a worker is processing a job stops subsequent workers as intended.  
+- **Env var parsing** – ensure that invalid or unset `NOVADIFF_PREFETCH_CONCURRENCY` falls back to the default (3) without throwing.

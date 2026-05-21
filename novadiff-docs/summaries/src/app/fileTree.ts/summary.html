@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/fileTree.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/fileTree.ts</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:54:23.237Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>src/app/fileTree.ts</code> is added. It defines the <code>FileTreeNode</code> interface (lines 1‑6) and provides functions to build, sort, filter, and collect folder paths from a list of relative paths.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>FileTreeNode</code> interface</strong> (lines 1‑6): <code>name</code>, <code>path</code>, <code>type</code> (<code>&quot;file&quot;</code> | <code>&quot;dir&quot;</code>), and <code>children</code>.  </li>
+<li><strong><code>insertPath</code></strong> (lines 8‑31): builds a tree by splitting a path on <code>/</code> and creating nodes on demand.  </li>
+<li><strong><code>sortNodes</code> / <code>sortTree</code></strong> (lines 32‑47): sort children so directories precede files and names are alphabetically ordered.  </li>
+<li><strong><code>buildFileTree</code></strong> (lines 48‑54): constructs a sorted tree from an array of paths.  </li>
+<li><strong><code>cloneFiltered</code></strong> (lines 56‑67): recursively clones nodes whose <code>path</code> contains a query string (case‑insensitive).  </li>
+<li><strong><code>filterFileTree</code></strong> (lines 69‑75): public API that returns the filtered tree or an empty root when no matches.  </li>
+<li><strong><code>collectFolderPaths</code></strong> (lines 78‑90): returns an array of all directory paths in the tree.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Public API</strong>: <code>buildFileTree</code>, <code>filterFileTree</code>, and <code>collectFolderPaths</code> are exported; consumers can build or query a file tree.  </li>
+<li><strong>Maintainability</strong>: Centralizes tree logic, reducing duplication across the codebase.  </li>
+<li><strong>Correctness</strong>: Path handling uses <code>split(&quot;/&quot;)</code> and <code>filter(Boolean)</code>, ignoring leading/trailing slashes; input paths should conform to this expectation.  </li>
+<li><strong>Compatibility</strong>: No existing modules are modified, so backward compatibility is preserved.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Integration</strong>: Ensure imports reference <code>src/app/fileTree.ts</code>.  </li>
+<li><strong>Testing</strong>: Add unit tests for edge cases (empty paths, duplicates, case sensitivity).  </li>
+<li><strong>Linting &amp; Build</strong>: Run the repository’s lint, test, and production build scripts to confirm no TypeScript errors.  </li>
+<li><strong>Performance</strong>: <code>cloneFiltered</code> performs a recursive clone; unknown from the available diff/scan evidence whether this is a bottleneck.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -17,6 +17,11 @@ import type { DocWorkspaceMetrics } from "../app/docWorkspaceMetrics";
 import { isNovadiffDocsReservedPath } from "../app/novadiffPaths";
 import { useBackgroundActivityActionsOptional } from "../app/BackgroundActivityContext";
 import { GraphMetricsStrip } from "./GraphMetricsStrip";
+import { CodeCityMinimapPortal } from "./CodeCityMinimapPortal";
+import {
+  CodeCityExploreSettings,
+  type CityExploreBarProps,
+} from "./DocsGraphExploreChrome";
 import "../../packages/graph-view/src/index.css";
 
 const NovaDiffGraphExplorer = lazy(() =>
@@ -38,13 +43,24 @@ export interface KnowledgeGraphPanelProps {
   callDef: string;
   metricsChartsLoading: boolean;
   outlineLoading: boolean;
+  controlledNodeId?: string | null;
+  enteredFilePath?: string | null;
+  focusMode?: boolean;
+  onSelectionChange?: (nodeId: string | null) => void;
+  onGraphPayloadChange?: (payload: GraphPayload | null) => void;
+  /** When true, explorer is rendered by parent in a combined city+graph layout. */
+  combinedLayout?: boolean;
+  /** Floating code city overlay when combinedLayout is true. */
+  cityFloatingPane?: React.ReactNode;
+  /** City filter/link state for the combined action bar. */
+  cityExploreBar?: CityExploreBarProps;
 }
 
 type BuildSide = "target" | "baseline";
 
 type KnowledgeGraph = import("@novadiff/graph-core/types").KnowledgeGraph;
 
-type GraphPayload = {
+export type GraphPayload = {
   graph: KnowledgeGraph;
   diffOverlay: {
     changedNodeIds: string[];
@@ -71,9 +87,20 @@ function buildAutoKey(
   activeRoot: string,
   buildSide: BuildSide,
   compared: boolean,
-  changeCount: number,
+  pathFingerprint: string,
 ) {
-  return `${activeRoot}::${buildSide}::${compared ? changeCount : 0}`;
+  return `${activeRoot}::${buildSide}::${compared ? pathFingerprint : "0"}`;
+}
+
+function fingerprintDocRows(rows: FileChange[]): string {
+  if (rows.length === 0) {
+    return "0";
+  }
+  const sample = rows
+    .slice(0, 40)
+    .map((r) => `${r.kind}:${r.path}`)
+    .join("|");
+  return `${rows.length}:${sample}`;
 }
 
 class GraphExplorerErrorBoundary extends Component<
@@ -129,6 +156,14 @@ export function KnowledgeGraphPanel({
   callDef,
   metricsChartsLoading,
   outlineLoading,
+  controlledNodeId,
+  enteredFilePath,
+  focusMode,
+  onSelectionChange,
+  onGraphPayloadChange,
+  combinedLayout = false,
+  cityFloatingPane = null,
+  cityExploreBar,
 }: KnowledgeGraphPanelProps) {
   const [buildSide, setBuildSide] = useState<BuildSide>("target");
   const [building, setBuilding] = useState(false);
@@ -141,7 +176,11 @@ export function KnowledgeGraphPanel({
     hasDiffOverlay: boolean;
   } | null>(null);
   const [graphPayload, setGraphPayload] = useState<GraphPayload | null>(null);
-  const [viewerOpen, setViewerOpen] = useState(false);
+
+  useEffect(() => {
+    onGraphPayloadChange?.(graphPayload);
+  }, [graphPayload, onGraphPayloadChange]);
+  const [viewerOpen, setViewerOpen] = useState(combinedLayout);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [explorerMounted, setExplorerMounted] = useState(false);
   const [statusLine, setStatusLine] = useState<string | null>(null);
@@ -151,7 +190,7 @@ export function KnowledgeGraphPanel({
 
   const activeRoot = buildSide === "baseline" ? leftRoot.trim() : rightRoot.trim();
   const autoKey = useMemo(
-    () => buildAutoKey(activeRoot, buildSide, compared, docRows.length),
+    () => buildAutoKey(activeRoot, buildSide, compared, fingerprintDocRows(docRows)),
     [activeRoot, buildSide, compared, docRows.length],
   );
 
@@ -378,10 +417,10 @@ export function KnowledgeGraphPanel({
   );
 
   useEffect(() => {
-    if (graphPayload) {
+    if (graphPayload && (combinedLayout || viewerOpen)) {
       setViewerOpen(true);
     }
-  }, [graphPayload]);
+  }, [graphPayload, combinedLayout, viewerOpen]);
 
   useEffect(() => {
     if (!graphPayload || !viewerOpen) {
@@ -466,37 +505,9 @@ export function KnowledgeGraphPanel({
     [activeRoot, leftTitle, llmSettings, rightTitle],
   );
 
-  const viewerShell =
+  const explorerCore =
     graphPayload && viewerOpen ? (
-      <div
-        className={`novadiff-graph-shell knowledge-graph-viewer${isFullscreen ? " is-fullscreen" : ""}`}
-        role="region"
-        aria-label="Knowledge graph explorer"
-      >
-        {isFullscreen ? (
-          <div className="knowledge-graph-fullscreen-bar">
-            <span className="knowledge-graph-fullscreen-title">Knowledge graph</span>
-            <button
-              type="button"
-              className="doc-workspace-copy-btn"
-              onClick={() => setIsFullscreen(false)}
-            >
-              Exit fullscreen
-            </button>
-          </div>
-        ) : null}
-        <GraphMetricsStrip
-          metrics={metrics}
-          pieDef={pieDef}
-          depthDef={depthDef}
-          importDef={importDef}
-          callDef={callDef}
-          metricsChartsLoading={metricsChartsLoading}
-          outlineLoading={outlineLoading}
-          topExtensions={metrics.extensionCounts}
-          topRoots={metrics.topRoots}
-        />
-        {explorerMounted ? (
+      explorerMounted ? (
           <div className="novadiff-graph-explorer-slot">
           <GraphExplorerErrorBoundary
             onReset={() => {
@@ -519,46 +530,88 @@ export function KnowledgeGraphPanel({
                 readFile={readFile}
                 explainCode={explainCode}
                 embedMode
+                controlledNodeId={controlledNodeId}
+                enteredFilePath={enteredFilePath}
+                focusMode={focusMode}
+                onSelectionChange={onSelectionChange}
               />
             </Suspense>
           </GraphExplorerErrorBoundary>
           </div>
-        ) : (
-          <div className="knowledge-graph-skeleton">
-            <div className="knowledge-graph-skeleton-bar" />
-            <p>Opening explorer…</p>
+      ) : (
+        <div className="knowledge-graph-skeleton">
+          <div className="knowledge-graph-skeleton-bar" />
+          <p>Opening explorer…</p>
+        </div>
+      )
+    ) : null;
+
+  const viewerShell =
+    explorerCore && graphPayload && viewerOpen ? (
+      <div
+        className={`novadiff-graph-shell knowledge-graph-viewer${combinedLayout ? " knowledge-graph-viewer--cover" : ""}${isFullscreen ? " is-fullscreen" : ""}`}
+        role="region"
+        aria-label="Knowledge graph explorer"
+      >
+        {isFullscreen && !combinedLayout ? (
+          <div className="knowledge-graph-fullscreen-bar">
+            <span className="knowledge-graph-fullscreen-title">Knowledge graph</span>
+            <button
+              type="button"
+              className="doc-workspace-copy-btn"
+              onClick={() => setIsFullscreen(false)}
+            >
+              Exit fullscreen
+            </button>
           </div>
-        )}
+        ) : null}
+        {!combinedLayout ? (
+          <GraphMetricsStrip
+            metrics={metrics}
+            pieDef={pieDef}
+            depthDef={depthDef}
+            importDef={importDef}
+            callDef={callDef}
+            metricsChartsLoading={metricsChartsLoading}
+            outlineLoading={outlineLoading}
+            topExtensions={metrics.extensionCounts}
+            topRoots={metrics.topRoots}
+          />
+        ) : null}
+        {explorerCore}
       </div>
     ) : null;
 
   return (
     <section
-      className={`doc-workspace-panel knowledge-graph-panel${building ? " is-building" : ""}${viewerOpen ? " has-viewer" : ""}`}
+      className={`doc-workspace-panel knowledge-graph-panel${building ? " is-building" : ""}${viewerOpen ? " has-viewer" : ""}${combinedLayout ? " knowledge-graph-panel--cover" : ""}`}
     >
-      <div className="knowledge-graph-head">
-        <div>
-          <h2 className="doc-workspace-h2">Code knowledge graph</h2>
-          <p className="doc-workspace-prose">
-            Primary documentation view: structure map, compare metrics, imports, and cross-file
-            calls. Select line numbers in Open code, then Explain code to stream AI notes into{" "}
-            <code>novadiff-docs/selections/</code>.
-          </p>
+      {!combinedLayout ? (
+        <div className="knowledge-graph-head">
+          <div>
+            <h2 className="doc-workspace-h2">Code knowledge graph</h2>
+            <p className="doc-workspace-prose">
+              Primary documentation view: structure map, compare metrics, imports, and cross-file
+              calls. Select line numbers in Open code, then Explain code to stream AI notes into code
+              selections.
+            </p>
+          </div>
+          {statusLine ? (
+            <span className={`knowledge-graph-status${building ? " is-live" : ""}`}>
+              {building ? <span className="knowledge-graph-pulse" aria-hidden /> : null}
+              {statusLine}
+            </span>
+          ) : null}
         </div>
-        {statusLine ? (
-          <span className={`knowledge-graph-status${building ? " is-live" : ""}`}>
-            {building ? <span className="knowledge-graph-pulse" aria-hidden /> : null}
-            {statusLine}
-          </span>
-        ) : null}
-      </div>
+      ) : null}
 
-      {!compared ? (
+      {!combinedLayout && !compared ? (
         <p className="doc-workspace-muted">
           Run a folder comparison to enable diff highlighting on the target graph.
         </p>
       ) : null}
 
+      {!combinedLayout ? (
       <div className="doc-workspace-commit-actions knowledge-graph-toolbar">
         <div className="code-city-segmented">
           <button
@@ -592,7 +645,7 @@ export function KnowledgeGraphPanel({
         >
           {building ? "Rebuilding…" : "Rebuild graph"}
         </button>
-        {graphPayload && !viewerOpen ? (
+        {graphPayload && !viewerOpen && !combinedLayout ? (
           <button
             type="button"
             className="doc-workspace-copy-btn"
@@ -601,7 +654,7 @@ export function KnowledgeGraphPanel({
             Show explorer
           </button>
         ) : null}
-        {viewerOpen && graphPayload ? (
+        {viewerOpen && graphPayload && !combinedLayout ? (
           <button
             type="button"
             className="doc-workspace-copy-btn"
@@ -611,7 +664,7 @@ export function KnowledgeGraphPanel({
             {isFullscreen ? "Exit fullscreen" : "Fullscreen"}
           </button>
         ) : null}
-        {viewerOpen ? (
+        {viewerOpen && !combinedLayout ? (
           <button
             type="button"
             className="doc-workspace-copy-btn"
@@ -624,8 +677,9 @@ export function KnowledgeGraphPanel({
           </button>
         ) : null}
       </div>
+      ) : null}
 
-      {(building || progress) && (
+      {(building || progress) && !combinedLayout && (
         <div className="knowledge-graph-progress-card doc-state-enter" aria-live="polite">
           <div className="knowledge-graph-progress-top">
             <span className="knowledge-graph-progress-label">
@@ -650,9 +704,9 @@ export function KnowledgeGraphPanel({
         </div>
       )}
 
-      {error ? <p className="doc-workspace-alert">{error}</p> : null}
+      {error && !combinedLayout ? <p className="doc-workspace-alert">{error}</p> : null}
 
-      {stats ? (
+      {stats && !combinedLayout ? (
         <div className="code-city-stat-grid knowledge-graph-stats doc-state-enter">
           <div className="code-city-stat-card">
             <span className="code-city-stat-label">Nodes</span>
@@ -673,7 +727,46 @@ export function KnowledgeGraphPanel({
         </div>
       ) : null}
 
-      {viewerShell &&
+      {combinedLayout && viewerShell ? (
+        <div className="knowledge-graph-cover-stage doc-state-enter">
+          <div className="knowledge-graph-cover-graph">{viewerShell}</div>
+          {cityFloatingPane || cityExploreBar ? (
+            <CodeCityMinimapPortal>
+              {cityExploreBar ? (
+                <CodeCityExploreSettings
+                  city={cityExploreBar}
+                  graph={{
+                    buildSide,
+                    setBuildSide,
+                    onRebuild: () => void runBuild({ force: true }),
+                    building,
+                    compared,
+                    stats,
+                    progressLabel: progress?.message ?? null,
+                  }}
+                >
+                  {cityFloatingPane}
+                </CodeCityExploreSettings>
+              ) : (
+                <div className="code-city-float" aria-label="Code city">
+                  {cityFloatingPane}
+                </div>
+              )}
+            </CodeCityMinimapPortal>
+          ) : null}
+          {(building || progress) ? (
+            <div className="knowledge-graph-cover-progress" aria-live="polite">
+              <span>{progress?.message ?? "Building graph…"}</span>
+              {progressPercent != null ? (
+                <span className="knowledge-graph-progress-pct">{progressPercent}%</span>
+              ) : null}
+            </div>
+          ) : null}
+          {error ? <p className="knowledge-graph-cover-error doc-workspace-alert">{error}</p> : null}
+        </div>
+      ) : null}
+
+      {viewerShell && !combinedLayout &&
         (isFullscreen && typeof document !== "undefined"
           ? createPortal(viewerShell, document.body)
           : viewerShell)}
@@ -684,9 +777,11 @@ export function KnowledgeGraphPanel({
         </div>
       ) : null}
 
-      <p className="doc-workspace-muted knowledge-graph-artifacts">
-        <code>{activeRoot || "…"}/.novadiff-graph/</code>
-      </p>
+      {!combinedLayout ? (
+        <p className="doc-workspace-muted knowledge-graph-artifacts">
+          <code>{activeRoot || "…"}/.novadiff-graph/</code>
+        </p>
+      ) : null}
     </section>
   );
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/DocsViewSyncContext.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/DocsViewSyncContext.tsx</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:52:05.049Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/app/DocsViewSyncContext.tsx</code> adds a React context that synchronizes documentation view state with the CodeCity graph. It exports an interface, a provider component, and three hooks for consuming the context.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (<code>R1‑R10</code>): React hooks and <code>CodeCityRenderableBuilding</code>.  </li>
+<li><strong><code>DocsViewSyncState</code> interface</strong> (<code>R12‑R25</code>): flags for linking and focus, selected node/building, and mutation callbacks.  </li>
+<li><strong>Context creation</strong> (<code>R27</code>): <code>createContext&lt;DocsViewSyncState | null&gt;(null)</code>.  </li>
+<li><strong><code>DocsViewSyncProvider</code></strong> (<code>R29‑R124</code>): initializes state with <code>useState</code>, exposes setters, and memoizes the value (<code>R92‑R118</code>).  </li>
+<li><strong><code>useDocsViewSync</code></strong> (<code>R126‑R131</code>): throws if the provider is missing (<code>R128‑R130</code>).  </li>
+<li><strong><code>useDocsViewSyncOptional</code></strong> (<code>R134‑R136</code>): returns the context or <code>null</code>.  </li>
+<li><strong><code>useDocsViewSyncExternalNode</code></strong> (<code>R138‑R149</code>): when <code>enabled</code> and <code>linkViews</code> are true, calls <code>sync.setSelectionFromGraph(nodeId)</code> inside a <code>useEffect</code> (<code>R143‑R148</code>).</li>
+</ul>
+<p>No existing files are modified; the module is entirely new.</p>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: state mutations are confined to the provider; consumers must be wrapped.  </li>
+<li><strong>Maintainability</strong>: all sync logic resides in one place, easing future updates.  </li>
+<li><strong>Performance</strong>: <code>useMemo</code> and <code>useCallback</code> keep the context value stable, reducing unnecessary re‑renders.  </li>
+<li><strong>Compatibility</strong>: components that previously relied on implicit sync must now import and use the new hooks.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Provider omission</strong>: <code>useDocsViewSync</code> throws if used outside the provider (<code>R128‑R130</code>). Verify all consumers are wrapped.  </li>
+<li><strong>Null context</strong>: <code>useDocsViewSyncOptional</code> may return <code>null</code> (<code>R134‑R136</code>); callers must handle this case.  </li>
+<li><strong>Effect dependencies</strong>: <code>useDocsViewSyncExternalNode</code> depends on <code>sync</code> (<code>R143‑R148</code>); ensure the context reference does not change unexpectedly.  </li>
+<li><strong>Lint &amp; build</strong>: run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to confirm no TypeScript or ESLint errors.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -26,33 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/onboarding/onboarding.css</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:10:29.544Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:10:23.865Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/components/onboarding/onboarding.css</code> has been added.<br>The file contains 262 new lines that style the onboarding overlay, welcome screens, workspace hub, and related UI components.</p>
+<p><code>src/components/onboarding/onboarding.css</code> now expands the commit list to full height, adjusts row padding, and introduces new overlay styles for a product tour and shortcuts help panel.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Overlay</strong> – <code>.onboarding-overlay</code> (lines 1‑12) is defined with <code>position: fixed; inset: 0; z-index: 12000;</code> and flex centering.  </li>
-<li><strong>Screen layout</strong> – <code>.welcome-screen</code> and <code>.workspace-hub</code> (lines 14‑18) share a max‑width of <code>min(720px, 100%)</code> and are centered.  </li>
-<li><strong>Cards &amp; avatars</strong> – <code>.welcome-user-card</code>, <code>.welcome-user-avatar</code>, and related classes (lines 50‑70) set flex layouts, padding, borders, and hover effects.  </li>
-<li><strong>Responsive grid</strong> – <code>.git-history-pickers</code> (lines 177‑182) switches from two columns to one on screens ≤640 px (media query lines 184‑188).  </li>
-<li><strong>Animation</strong> – <code>.spin-ic</code> (lines 221‑225) uses a <code>spin-ic</code> keyframe animation (lines 227‑231).  </li>
-<li><strong>Additional UI</strong> – New classes for device code blocks, consent prompts, and local‑only dividers appear (lines 126‑262).</li>
+<li><strong>Commit list sizing</strong> – <code>.git-history-commit-list</code> <code>max-height</code> changed from <code>320px</code> (line 194 removed) to <code>100%</code> (line 194 added).  </li>
+<li><strong>Row padding</strong> – <code>.git-history-commit-row</code> padding updated from <code>8px 0</code> (line 202 removed) to <code>10px</code> (line 202 added).  </li>
+<li><strong>Product tour UI</strong> – new <code>.product-tour-overlay</code> and <code>.product-tour-card</code> blocks added (lines 264‑282).  </li>
+<li><strong>Shortcuts help UI</strong> – new <code>.shortcuts-help-overlay</code> and <code>.shortcuts-help-panel</code> styles added (lines 309‑326).  </li>
+<li><strong>Overlay styling</strong> – new overlays use <code>z-index: 12000</code> and <code>11000</code>, with <code>backdrop-filter: blur(4px)</code> for the product tour overlay (line 272).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>UI correctness</strong> – The overlay’s high <code>z-index</code> (12000) may cover other elements; no evidence of interaction handling is present.  </li>
-<li><strong>Maintainability</strong> – Styles are scoped to component classes, limiting global leakage.  </li>
-<li><strong>Performance</strong> – No heavy selectors or animations that could degrade rendering; the file is ~262 lines of straightforward CSS.  </li>
-<li><strong>Compatibility</strong> – Uses modern CSS (<code>color-mix</code>, <code>inset</code>) without fallbacks; support depends on target browsers.</li>
+<li>The commit list now occupies the full available height, which may affect scrolling in narrow viewports.  </li>
+<li>Padding change improves spacing between commit rows, aligning with the updated design language.  </li>
+<li>The new overlay classes must be rendered by corresponding components; otherwise the styles will have no effect.  </li>
+<li>High z‑indices may unintentionally cover unrelated UI elements if not scoped correctly.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong> – Unknown from the diff; run onboarding flow tests to ensure the overlay does not interfere with existing modals or tooltips.  </li>
-<li><strong>Responsiveness</strong> – Verify the two‑column to single‑column transition at 640 px (media query lines 184‑188).  </li>
-<li><strong>Browser support</strong> – Confirm <code>color-mix</code> and <code>inset</code> are supported or polyfilled in the target browsers.  </li>
-<li><strong>Test coverage</strong> – Execute the nearest targeted tests and perform a manual smoke test for the overlay area.</li>
+<li>Verify that the expanded commit list does not overflow the viewport on mobile devices.  </li>
+<li>Run smoke tests for the onboarding flow to confirm the new overlays appear and dismiss correctly.  </li>
+<li>Check that the new <code>.product-tour-*</code> and <code>.shortcuts-help-*</code> classes do not clash with existing global styles.  </li>
+<li>Ensure that the updated padding does not break any existing layout assumptions in the commit list component.</li>
 </ul>
 </article>
   </main>

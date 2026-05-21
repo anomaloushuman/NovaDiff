@@ -1,21 +1,27 @@
 ### Overview  
-A new file `src/components/AutoCommitWorkspace.tsx` (lines 1‑387) introduces a React component that combines Git status, LLM‑generated commit messages, optional documentation bundles, and GitHub PR creation into a single UI.
+`AutoCommitWorkspace.tsx` now exposes a staging‑scope UI, an optional “Review in City” callback, and richer commit‑message context that includes structural classification and knowledge‑graph symbols. The component’s state and UI have been extended accordingly.
 
 ### Key changes  
-- **Imports** (lines 1‑9): React hooks, Lucide icons, and app modules (`commitMessage`, `docWorkspaceMetrics`, `llmStorage`, `types`, `gitTypes`).  
-- **Props interface** `AutoCommitWorkspaceProps` (lines 12‑21) declares `suggestedRepoPath`, `compared`, `compareRows`, `leftRoot`, `rightRoot`, `leftTitle`, `rightTitle`, and `llmSettings`.  
-- **Component** `AutoCommitWorkspace` (lines 25‑381) manages state for repo root, Git status, preview, draft generation, publishing, and UI step (`draft`, `review`, `done`). It uses `window.electronAPI` methods:  
-  - `refreshRepo` calls `api.gitRepoStatus` (line 67) and `api.gitPublishPreview` (line 70).  
-  - `generateDraft` calls `api.llmSummarize` (line 112) and optionally `api.writeNovadiffDocs` (line 129).  
-  - `executePublish` calls `api.gitPublishExecute` (line 168).  
-- **Helper** `pathBasename` (lines 383‑387) extracts the last segment of a path for labeling.
+- **Imports** – `classifyCompareRows` and `graphSymbolsContext` added (R6‑7).  
+- **Props** – `onReviewInCity?: (paths: string[]) => void` added to `AutoCommitWorkspaceProps` (R23).  
+- **State** – `stageSelection` (`Set<string>`) and `stageAllFiles` (`boolean`) introduced (R55‑56).  
+- **UI** –  
+  - Staging‑scope panel with a “Stage all changed files” checkbox and per‑file checkboxes (R298‑355).  
+  - “Review in City” button that calls `onReviewInCity` with the selected paths (R339‑353).  
+  - Docs note area shows the generated documentation bundle path (R129‑138).  
+- **Logic** –  
+  - `generateDraft` builds `classification` via `classifyCompareRows` and `graphContext` via `graphSymbolsContext` (R110‑127).  
+  - `executePublish` accepts an optional `stagePaths` array derived from `stageSelection`/`stageAllFiles` (R193‑194).  
+  - Commit‑message context (`buildCommitMessageContext`) now receives `{ classification, graphContext }` (R135).  
 
 ### Impact  
-- Adds runtime dependencies on `window.electronAPI`; missing any of the referenced APIs will surface as runtime errors.  
-- Heavy work (LLM summarization, metric calculation) runs inside callbacks; if these operations block the event loop, the UI may freeze until completion.
+- **Correctness** – Commit messages now incorporate file classification and graph symbols, improving semantic accuracy.  
+- **Maintainability** – New props and state are typed; UI logic is modularized into separate panels.  
+- **Performance** – Additional state updates and context calculations add minor overhead only when staging or publishing.  
+- **Compatibility** – Existing consumers may ignore `onReviewInCity`; it is optional.  
 
 ### Risks & follow‑ups  
-1. **API availability** – Verify that `gitRepoStatus`, `gitPublishPreview`, `llmSummarize`, `writeNovadiffDocs`, and `gitPublishExecute` exist on `window.electronAPI`.  
-2. **Type mismatches** – Ensure `GitRepoStatus`, `PublishPreview`, and `FileChange` types match the actual API responses.  
-3. **LLM failure** – `parseCommitMessageOutput` (imported from `commitMessage`) may throw; confirm graceful error handling.  
-4. **UI blocking** – Monitor for freezes during draft generation; consider adding a spinner or off‑loading heavy work.
+- **Regression** – Verify that `stageSelection` persists correctly across repo refreshes.  
+- **API contract** – `api.readKnowledgeGraph` and `api.writeNovadiffDocs` must be available; otherwise the component should fail gracefully.  
+- **UI layout** – The added staging panel may affect responsive design; run visual regression tests.  
+- **Prop usage** – Ensure that spreading `AutoCommitWorkspaceProps` does not unintentionally pass `onReviewInCity`.

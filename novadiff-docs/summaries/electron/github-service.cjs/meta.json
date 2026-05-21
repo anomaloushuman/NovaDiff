@@ -1,9 +1,9 @@
 {
   "relPath": "electron/github-service.cjs",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:25:24.629Z",
+  "generatedAt": "2026-05-21T10:45:33.300Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,34 +21,21 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "R3 added: const { spawnSync } = require(\"node:child_process\");",
-      "R4 added: const { parseGithubSlugFromUrl } = require(\"./git-service.cjs\");",
-      "R9 added: } = require(\"./gh-path.cjs\");"
+      "R225 added: require(\"./github-commit-context.cjs\").getGithubCommitContext(...args),"
     ],
     "changed_line_ranges": [
-      "R1-224"
+      "R224-225"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const { spawnSync } = require(\"node:child_process\");",
-      "R4 added: const { parseGithubSlugFromUrl } = require(\"./git-service.cjs\");",
-      "R5 added: const {",
-      "R6 added: augmentPathForCli,",
-      "R7 added: resolveGhExecutable,"
+      "R224 added: getGithubCommitContext: (...args) =>",
+      "R225 added: require(\"./github-commit-context.cjs\").getGithubCommitContext(...args),"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function getAuthStatus (43-76)",
-      "right function listPullRequests (98-128)",
-      "right function listDetectedAccounts (179-202)",
-      "right function slugFromRepoRoot (203-224)",
-      "right function createPullRequest (142-162)",
-      "right function listRepos (77-97)",
-      "right function runGh (11-29)",
-      "right function getUserProfile (163-178)"
+      "right function slugFromRepoRoot (203-226)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

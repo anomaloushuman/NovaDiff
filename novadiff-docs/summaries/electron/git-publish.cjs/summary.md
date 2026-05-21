@@ -1,21 +1,20 @@
 ### Overview  
-`electron/git-publish.cjs` adds publish‑related utilities to the Electron app. It exports three functions—`buildFullCommitMessage`, `previewPublish`, and `executePublish`—and imports Git and GitHub helpers from `git-service.cjs` and `github-service.cjs` (see R3–R5).
+`electron/git-publish.cjs` now stages a user‑supplied list of paths instead of always staging the entire repository. The change adds `stagePaths` to the import from `./git-service.cjs` (line 4) and rewrites the staging logic in `executePublish`.
 
 ### Key changes  
-- **Imports** (R3–R5): `path`, `git-service` functions (`getRepoStatus`, `stageAll`, `commit`, `push`, `isGitRepo`), and `github-service` helpers (`createPullRequest`, `getAuthStatus`, `slugFromRepoRoot`).  
-- **`buildFullCommitMessage`** (R7–R13): Trims `subject` and `body`; returns `subject` alone if `body` is empty, otherwise inserts a blank line between them.  
-- **`previewPublish`** (R19–R42): Resolves `repoRoot`, verifies it is a Git repo, collects status, auth, and slug data, and returns a preview object containing repo details, branch, upstream, dirty files, remotes, GitHub auth status, and a flag indicating if a push is possible.  
-- **`executePublish`** (R48–R101): Validates inputs, stages all changes (`stageAll`), commits with the built message, optionally pushes to a remote, and optionally creates a PR via the GitHub CLI. The returned result includes `commitHash`, `branch`, `pushed`, `pushRemote`, and `prUrl`.  
-- **Exports** (R104–R108): All three functions are exported.
+- **Import update** – `stagePaths` is added to the destructured import from `./git-service.cjs` (line 4).  
+- **Conditional staging** – `stageAll(root)` is replaced by logic that builds `stagePathsList` from `opts.stagePaths` (lines 63‑70).  
+- **Branching** – If `stagePathsList` is non‑empty, `stagePaths(root, stagePathsList)` runs; otherwise the original `stageAll(root)` is executed.  
+- **No other functional changes** – commit, push, and PR creation remain unchanged.
 
 ### Impact  
-- **Correctness**: Provides a clear commit‑message builder and a publish workflow that respects `.gitignore`.  
-- **Maintainability**: Centralizes publish logic; changes to Git or GitHub interactions can be made in the service modules.  
-- **Performance**: `stageAll` may be costly on large repos; caching or incremental staging could be considered.  
-- **Compatibility**: Requires a Git repo; PR creation requires a logged‑in `gh` CLI; errors are thrown explicitly.
+- **Selective staging** – allows committing only specified files, preventing accidental inclusion of unrelated changes.  
+- **Maintainability** – staging logic is now isolated; future extensions can modify `stagePaths` without touching `executePublish`.  
+- **Performance** – staging fewer files can reduce I/O when `opts.stagePaths` is small.  
+- **Compatibility** – callers that omit `stagePaths` continue to stage all files, preserving current behavior.
 
 ### Risks & follow‑ups  
-- Verify that `buildFullCommitMessage` omits the newline when the body is empty (tests for empty body).  
-- Ensure `previewPublish` throws the expected error for non‑Git directories.  
-- Test `executePublish` with `push` and `createPullRequest` flags separately to confirm error handling for missing remotes or unauthenticated GitHub sessions.  
-- Confirm that the returned `result` object contains accurate `branch`, `pushed`, and `prUrl` fields across different repo states.
+- **Missing `stagePaths` export** – verify that `./git-service.cjs` actually exports `stagePaths`; otherwise the import will fail at runtime.  
+- **Invalid `opts.stagePaths` values** – if callers pass a non‑array (e.g., a string), the code falls back to `stageAll`, which may be unintended. Add validation or document the expected type.  
+- **Ignored paths** – ensure `stagePaths` respects `.gitignore`; otherwise staged files might be ignored by Git, leading to silent failures.  
+- **Test coverage** – add unit tests for both branches (with and without `stagePaths`) to confirm behavior and guard against regressions.

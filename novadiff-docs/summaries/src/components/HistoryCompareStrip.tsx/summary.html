@@ -26,40 +26,40 @@
 <body>
   <header class="top">
     <h1>src/components/HistoryCompareStrip.tsx</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:56:00.210Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:06:29.384Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component <code>HistoryCompareStrip</code> is added at <code>src/components/HistoryCompareStrip.tsx</code> (lines 1‑212). It renders a header strip that lets the user pick a base commit, a head commit or a live repository folder, swap the two, and trigger a comparison.</p>
+<p><code>HistoryCompareStrip</code> was refactored to improve the Git history comparison panel.<br>Key UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (lines 1‑7): icons <code>ArrowLeftRight</code>, <code>ChevronDown</code>, <code>GitBranch</code>, <code>GitCompareArrows</code>, <code>Loader2</code> from <em>lucide-react</em>.  </li>
-<li><strong>Type imports</strong> (lines 8‑9): <code>WorkspaceCommitSnapshot</code> from <code>../app/workspaceTypes</code> and <code>pathDisplayLabel</code> from <code>../app/pathDisplay</code>.  </li>
-<li><strong>Props interface</strong> (lines 11‑28): <code>HistoryCompareStripProps</code> defines arrays of commits, hash strings, live‑repo flags, busy/error states, and callbacks for every user action.  </li>
-<li><strong>Helpers</strong> (lines 30‑36, 38‑40): <code>truncateSubject</code> trims a commit subject to 48 chars; <code>commitLabel</code> builds the display string.  </li>
-<li><strong>Component</strong> (lines 42‑212):  <ul>
-<li>Renders a title and description.  </li>
-<li>Provides a base‑commit <code>&lt;select&gt;</code> (lines 98‑110) and a head‑commit <code>&lt;select&gt;</code> or live‑repo <code>&lt;input&gt;</code> (lines 134‑170).  </li>
-<li>Swap button (lines 118‑126) and live‑repo toggle checkbox (lines 180‑186).  </li>
-<li>Compare button (lines 191‑205) is disabled until <code>canCompare</code> (lines 62‑66) is true.  </li>
-<li>Shows a loader icon when <code>busy</code> is true (lines 199‑203).  </li>
-<li>Displays an error message if <code>error</code> is set (line 207).  </li>
-<li>All interactive elements include <code>aria-label</code> or <code>aria-hidden</code> attributes as shown in the diff.</li>
+<li><strong>Title</strong> – lines L71‑73 replaced plain text with```tsx</li>
 </ul>
-</li>
-</ul>
+<h1 className="git-history-title">
+    Git history <span className="git-history-title-accent">compare</span>
+  </h1>
+```- **Wrapper** – line R79 added `git-history-compare-card` to the `workspace-setup-strip` container.  
+- **Labels** – lines R83 and R90 added `git-history-field-label` to the Base/Head labels.  
+- **Badges** – lines R85 and R92‑96 insert conditional `<span className="git-history-badge …">` elements next to the selectors.  
+- **Selector segment** – line R137 added `git-history-selector-segment` to the segment class list.  
+- **Live‑head input** – lines R145‑161 replace the head selector with an input 
++ browse button when `useLiveHead` is true.  
+- **Live toggle** – lines R180‑185 introduce a checkbox labeled “Compare base against live dev folder”.  
+- **Compare button** – lines R190‑205 update the button’s classes, disabled state, and tooltip logic.
+
+<p>The logic that determines <code>canCompare</code> (lines 62‑66) remains unchanged.</p>
 <h3>Impact</h3>
 <ul>
-<li>Adds a self‑contained UI for commit comparison; no changes to existing components.  </li>
-<li>Requires parent components to provide the full set of callbacks and state values.  </li>
-<li>No new runtime dependencies beyond the imported icons and types.</li>
+<li><strong>UI consistency</strong> – new class names (<code>git-history-compare-card</code>, <code>git-history-field-label</code>, etc.) match the existing design system.  </li>
+<li><strong>Accessibility</strong> – added <code>aria-label</code> attributes and descriptive labels for interactive elements.  </li>
+<li><strong>No functional regression</strong> – only presentation layers were altered.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression</strong>: unknown from the available diff/scan evidence whether the new strip interferes with existing commit‑selection logic.  </li>
-<li><strong>Accessibility</strong>: the component includes <code>aria-label</code> attributes, but comprehensive testing is not shown in the diff.  </li>
-<li><strong>Testing</strong>: unit tests for <code>truncateSubject</code>, <code>commitLabel</code>, and the enable/disable logic are not present in the current diff.  </li>
-<li><strong>Linting</strong>: running <code>tsc</code>, ESLint, and Prettier should confirm no type or style errors.</li>
+<li><strong>Missing CSS</strong> – verify that the new classes exist in the stylesheet.  </li>
+<li><strong>Badge rendering</strong> – ensure badges do not appear when <code>base</code> or <code>head</code> is null; run unit tests for edge cases.  </li>
+<li><strong>Live‑head toggle</strong> – confirm that toggling updates <code>useLiveHead</code> correctly and that the input behaves as expected.  </li>
+<li><strong>Lint &amp; build</strong> – run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to catch any syntax or type errors introduced by the JSX changes.</li>
 </ul>
 </article>
   </main>

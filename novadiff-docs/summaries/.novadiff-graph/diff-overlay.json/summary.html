@@ -26,42 +26,30 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/diff-overlay.json</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:16:01.179Z</div>
+    <div class="meta">Kind: removed · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:40:21.610Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file, <code>.novadiff-graph/diff-overlay.json</code>, was added to the repository (change kind: added, lines 1‑156). It contains metadata for the current diff run.</p>
+<p>The file <code>.novadiff-graph/diff-overlay.json</code> has been deleted entirely (lines 1‑156). It previously stored metadata for the diff overlay, including the version, base branch, generation timestamp, lists of changed files, changed node IDs, and affected node IDs.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File addition</strong>: <code>.novadiff-graph/diff-overlay.json</code> now exists.  </li>
-<li><strong>Metadata fields</strong>:  <ul>
-<li><code>&quot;version&quot;: &quot;1.0.0&quot;</code> (R2)  </li>
-<li><code>&quot;baseBranch&quot;: &quot;novadiff-compare&quot;</code> (R3)  </li>
-<li><code>&quot;generatedAt&quot;: &quot;2026-05-20T01:19:05.929Z&quot;</code> (R4)</li>
-</ul>
-</li>
-<li><strong>Changed files list</strong> (<code>&quot;changedFiles&quot;</code> array, R5‑6): includes entries such as  <ul>
-<li><code>electron/main.cjs</code>  </li>
-<li><code>packages/graph-view/src/App.tsx</code>  </li>
-<li><code>src/App.tsx</code><br>(the array lists all files touched in this diff).</li>
-</ul>
-</li>
-<li><strong>Changed node IDs</strong> (<code>&quot;changedNodeIds&quot;</code> array, R36‑154): a comprehensive list of file‑ and function‑level identifiers that were affected.  </li>
-<li><strong>Affected node IDs</strong> (<code>&quot;affectedNodeIds&quot;</code> array, R155‑156): empty, indicating no nodes were explicitly marked beyond the changed ones.</li>
+<li>Removal of the JSON file at <code>.novadiff-graph/diff-overlay.json</code>.  </li>
+<li>All persisted data (<code>&quot;changedFiles&quot;</code>, <code>&quot;changedNodeIds&quot;</code>, <code>&quot;affectedNodeIds&quot;</code>) is no longer available.  </li>
+<li>No new file or alternative storage was added in this commit.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Data source</strong>: Consumers can read this JSON to determine which files and nodes changed.  </li>
-<li><strong>Versioning</strong>: The <code>&quot;version&quot;</code> field allows future consumers to adapt to schema changes.  </li>
-<li><strong>Timestamping</strong>: <code>&quot;generatedAt&quot;</code> provides a deterministic point for caching or debugging.  </li>
-<li><strong>Backward compatibility</strong>: Existing code that ignores this file remains unaffected; new consumers must handle its absence gracefully.</li>
+<li>Code that reads or writes this file (e.g., <code>fs.readFileSync(&#39;.novadiff-graph/diff-overlay.json&#39;)</code>) will now throw an <code>ENOENT</code> error.  </li>
+<li>Tests that depend on the presence of this file will fail unless updated.  </li>
+<li>The version (<code>&quot;version&quot;: &quot;1.0.0&quot;</code>) and timestamp (<code>&quot;generatedAt&quot;</code>) information are lost, reducing auditability of overlay generation.  </li>
+<li>Components that previously loaded this data for rendering (such as the graph view) must be updated to use an alternative source or handle the missing file gracefully.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Consumer compatibility</strong>: Verify that modules expecting a pre‑existing overlay file handle the new file correctly.  </li>
-<li><strong>Performance</strong>: Loading a large <code>&quot;changedNodeIds&quot;</code> array could impact startup; benchmark if necessary.  </li>
-<li><strong>Test coverage</strong>: Run targeted tests that read <code>diff-overlay.json</code> and confirm the node lists match expectations.  </li>
-<li><strong>Documentation</strong>: Update any README or API docs that reference diff metadata to include the new file and its schema.</li>
+<li><strong>Regression risk</strong>: Any path that assumes the file exists will crash. Run targeted tests that touch diff‑overlay logic.  </li>
+<li><strong>Compatibility risk</strong>: External tooling importing this JSON for configuration will break. Verify that no such imports remain.  </li>
+<li><strong>Observability risk</strong>: Loss of the <code>&quot;generatedAt&quot;</code> timestamp may hinder debugging of stale overlays. Consider adding a fallback logging mechanism.  </li>
+<li><strong>Documentation</strong>: Update any docs or README sections that reference the diff overlay file.</li>
 </ul>
 </article>
   </main>

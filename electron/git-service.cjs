@@ -139,6 +139,36 @@ function stageAll(repoRoot) {
   runGit(root, ["add", "-A"]);
 }
 
+function stagePaths(repoRoot, paths) {
+  const root = path.resolve(repoRoot);
+  const list = Array.isArray(paths) ? paths.map((p) => String(p ?? "").trim()).filter(Boolean) : [];
+  if (list.length === 0) {
+    return { staged: 0 };
+  }
+  runGit(root, ["add", "--", ...list]);
+  return { staged: list.length };
+}
+
+function unstagePaths(repoRoot, paths) {
+  const root = path.resolve(repoRoot);
+  const list = Array.isArray(paths) ? paths.map((p) => String(p ?? "").trim()).filter(Boolean) : [];
+  if (list.length === 0) {
+    return { unstaged: 0 };
+  }
+  runGit(root, ["reset", "HEAD", "--", ...list]);
+  return { unstaged: list.length };
+}
+
+function stageDistrict(repoRoot, topDir, statusFiles) {
+  const district = String(topDir ?? "").trim();
+  const files = Array.isArray(statusFiles) ? statusFiles : getRepoStatus(repoRoot).files;
+  const prefix = district.endsWith("/") ? district : `${district}/`;
+  const paths = files
+    .filter((f) => f.path === district || f.path.startsWith(prefix) || f.path.split("/")[0] === district)
+    .map((f) => f.path);
+  return stagePaths(repoRoot, paths);
+}
+
 function commit(repoRoot, message) {
   const root = path.resolve(repoRoot);
   runGit(root, ["commit", "-m", message]);
@@ -220,6 +250,9 @@ module.exports = {
   getRepoStatus,
   parseGithubSlugFromUrl,
   stageAll,
+  stagePaths,
+  unstagePaths,
+  stageDistrict,
   commit,
   push,
   checkoutRefWorktree,

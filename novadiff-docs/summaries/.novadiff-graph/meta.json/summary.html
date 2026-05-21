@@ -26,34 +26,29 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/meta.json</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:17:36.797Z</div>
+    <div class="meta">Kind: removed · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:41:14.448Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file, <code>.novadiff-graph/meta.json</code>, has been added to the repository. It contains a flat JSON object with metadata about the current diff‑graph snapshot.</p>
+<p>The file <code>.novadiff-graph/meta.json</code> was removed from the repository.<br>All six lines of JSON content—<code>lastAnalyzedAt</code>, <code>gitCommitHash</code>, <code>version</code>, and <code>analyzedFiles</code>—were deleted (lines 1‑6 in the diff).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File addition</strong>: <code>.novadiff-graph/meta.json</code> (lines 1‑6).  </li>
-<li><strong>Metadata fields</strong>:  <ul>
-<li><code>lastAnalyzedAt</code>: <code>2026-05-20T01:19:05.928Z</code> (line 2).  </li>
-<li><code>gitCommitHash</code>: <code>6c333f6cf037bf75318c26081cae3324fdb89c64</code> (line 3).  </li>
-<li><code>version</code>: <code>1.0.0</code> (line 4).  </li>
-<li><code>analyzedFiles</code>: <code>329</code> (line 5).</li>
-</ul>
-</li>
+<li><strong>File deletion</strong>: <code>.novadiff-graph/meta.json</code> no longer exists in the tree.  </li>
+<li><strong>Metadata loss</strong>: The six lines of JSON that tracked analysis timestamp, commit hash, version, and file count are gone.  </li>
+<li><strong>No other source changes</strong>: The diff shows only the removal of this file.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Observability</strong>: The timestamp and commit hash allow tools to report when the graph was last updated and which commit it represents.  </li>
-<li><strong>Versioning</strong>: The <code>version</code> field provides a simple schema version that can be checked by consumers.  </li>
-<li><strong>Data integrity</strong>: The commit hash ties the metadata to a specific repository state, aiding reproducibility.</li>
+<li><strong>Runtime behavior</strong>: Any code that attempts to read <code>.novadiff-graph/meta.json</code> will now encounter a missing‑file error unless it handles the absence.  </li>
+<li><strong>Build artifacts</strong>: The build pipeline no longer generates or consumes this metadata file.  </li>
+<li><strong>Documentation</strong>: References to the metadata file in docs or comments should be updated to avoid confusion.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Missing file handling</strong>: Verify that consumers of the graph handle the absence of <code>meta.json</code> gracefully.  </li>
-<li><strong>Timestamp format</strong>: Ensure downstream consumers parse the ISO‑8601 timestamp correctly.  </li>
-<li><strong>Commit hash consistency</strong>: Confirm that the hash matches the current HEAD of the repository.  </li>
-<li><strong>File size</strong>: The file is tiny, but check that adding it does not trigger any size limits in CI or packaging scripts.</li>
+<li><strong>Reference breakage</strong>: Search the codebase for <code>meta.json</code> or <code>analyzedFiles</code>; failing to update them could cause crashes.  </li>
+<li><strong>Test coverage</strong>: Run the nearest targeted tests (e.g., analysis pipeline tests) and a quick manual smoke test to confirm no runtime errors.  </li>
+<li><strong>CI pipeline</strong>: Verify that any CI steps that previously relied on the metadata file (e.g., publishing version info) are updated.  </li>
+<li><strong>Documentation audit</strong>: Remove or revise any README or internal docs mentioning the metadata file.</li>
 </ul>
 </article>
   </main>

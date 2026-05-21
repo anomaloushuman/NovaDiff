@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/workspaceStorage.ts",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:48:44.598Z",
+  "generatedAt": "2026-05-21T10:57:08.342Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,40 +20,28 @@
       }
     ],
     "changed_exports": [
-      "R7 added: export function loadCachedGitUser(): GitUserProfile | null {",
-      "R19 added: export function saveCachedGitUser(user: GitUserProfile): void {",
-      "R23 added: export function clearCachedGitUser(): void {",
-      "R27 added: export function loadCachedActiveWorkspaceId(): string | null {",
-      "R35 added: export function saveCachedActiveWorkspaceId(id: string | null): void {",
-      "R43 added: export type OnboardingGate = \"boot\" | \"welcome\" | \"hub\" | \"app\";"
+      "R8 added: export function loadProductTourCompleted(): boolean {",
+      "R16 added: export function saveProductTourCompleted(): void {"
     ],
-    "changed_imports": [
-      "R1 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"./workspaceTypes\";"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-119"
+      "R6-22"
     ],
     "cited_changed_lines": [
-      "R1 added: import type { GitUserProfile, NovaWorkspace, WorkspaceSessionState } from \"./workspaceTypes\";",
-      "R3 added: const USER_KEY = \"novadiff_git_user_v1\";",
-      "R4 added: const ACTIVE_WS_KEY = \"novadiff_active_workspace_v1\";",
-      "R5 added: const LOCAL_ONLY_KEY = \"novadiff_local_only_v1\";",
-      "R7 added: export function loadCachedGitUser(): GitUserProfile | null {",
-      "R8 added: try {"
+      "R6 added: const PRODUCT_TOUR_KEY = \"novadiff_product_tour_v1\";",
+      "R8 added: export function loadProductTourCompleted(): boolean {",
+      "R9 added: try {",
+      "R10 added: return localStorage.getItem(PRODUCT_TOUR_KEY) === \"1\";",
+      "R11 added: } catch {",
+      "R12 added: return false;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function resolveOnboardingGate (65-94)",
-      "right function mergeSession (95-110)",
-      "right function loadCachedGitUser (7-18)",
-      "right function saveCachedLocalOnly (53-64)",
-      "right function saveCachedActiveWorkspaceId (35-44)",
-      "right function findWorkspace (111-119)",
-      "right function loadCachedActiveWorkspaceId (27-34)",
-      "right function loadCachedLocalOnly (45-52)"
+      "right function loadProductTourCompleted (8-15)",
+      "right function saveProductTourCompleted (16-23)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

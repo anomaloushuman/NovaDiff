@@ -26,43 +26,33 @@
 <body>
   <header class="top">
     <h1>src/components/CodeCityLegend.tsx</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:51:33.708Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:58:52.589Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component, <code>CodeCityLegend</code>, has been added to <code>src/components</code>. It renders a sidebar that displays current view metrics, a legend, and details for a selected building.</p>
+<p><code>CodeCityLegend</code> now accepts three optional props—<code>repoRoot?: string</code>, <code>onStageFile?: (path: string) =&gt; void</code>, and <code>onStageDistrict?: (topDir: string) =&gt; void</code>—and renders additional action buttons for the selected building. The component’s signature now spans lines 3‑147 instead of 3‑121 (see diff lines R11‑R13 and R22‑R24).</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Import</strong> – <code>import type { CodeCityRenderableBuilding } from &quot;../app/codeCityLayout&quot;;</code> (R1).  </li>
-<li><strong>Export</strong> – <code>export function CodeCityLegend({ … })</code> (R3).  </li>
-<li><strong>Props</strong> –  <ul>
-<li><code>selected: CodeCityRenderableBuilding | null</code> (R12).  </li>
-<li><code>blameOverlay: boolean</code> (R13).  </li>
-<li><code>rootSide: &quot;baseline&quot; | &quot;target&quot;</code> (R14).  </li>
-<li><code>visibleBuildingCount</code>, <code>districtCount</code>, <code>changedBuildingCount</code> (R15‑17).  </li>
-<li>Optional <code>onOpenDiff?: (path: string) =&gt; void</code> (R18).</li>
-</ul>
-</li>
-<li><strong>UI</strong> – Aside element containing:  <ul>
-<li>A metrics grid (root side, building count, district count, changed count).  </li>
-<li>A legend list with swatches for added, modified, removed, kind, and blame overlay toggle.  </li>
-<li>A selected‑building card showing name, kind, path, tags, optional diff button, author info, and owners list (R20‑121).</li>
+<li><strong>Props API</strong> – new optional props added at the top of the function signature (diff lines R11‑R13, R22‑R24).  </li>
+<li><strong>UI actions</strong> – the former “Open diff” block (lines 89‑97) was removed and replaced by a <code>&lt;div className=&quot;code-city-selected-actions&quot;&gt;</code> (lines 95‑123). Inside this div:  <ul>
+<li>“Open diff” button appears whenever <code>onOpenDiff</code> is supplied.  </li>
+<li>“Stage file” button appears when both <code>repoRoot</code> and <code>onStageFile</code> are present.  </li>
+<li>“Stage district” button appears when <code>repoRoot</code>, <code>onStageDistrict</code>, and <code>selected.topDirectory</code> are all defined.<br>Each button’s <code>onClick</code> calls the corresponding callback with <code>selected.path</code> or <code>selected.topDirectory</code>.</li>
 </ul>
 </li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The component is self‑contained; no existing files are altered.  </li>
-<li>It is a pure functional component, so it re‑renders only when its props change.  </li>
-<li>No new runtime side effects or logs are introduced.  </li>
-<li>It depends on the <code>CodeCityRenderableBuilding</code> type; the import path must resolve.</li>
+<li><strong>Backward compatibility</strong> – all new props are optional, so existing callers compile unchanged.  </li>
+<li><strong>Type safety</strong> – callers who wish to use staging features must provide the matching callbacks.  </li>
+<li><strong>UI consistency</strong> – the legend now offers staging actions, improving workflow for users working with a local repository.  </li>
+<li><strong>Performance</strong> – negligible; only a few conditional renders were added.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import resolution</strong> – confirm that <code>../app/codeCityLayout</code> exports <code>CodeCityRenderableBuilding</code>.  </li>
-<li><strong>Prop shape</strong> – callers must supply a <code>selected</code> object that matches the expected structure; TypeScript will flag mismatches.  </li>
-<li><strong>Optional callback</strong> – consuming components should handle the absence of <code>onOpenDiff</code>.  </li>
-<li><strong>Styling</strong> – the new CSS classes (<code>code‑city‑legend</code>, <code>code‑city‑swatch‑–added</code>, etc.) could clash with existing styles; visual regression tests are advised.</li>
+<li><strong>Missing callbacks</strong> – if <code>repoRoot</code> is omitted, the “Stage file” and “Stage district” buttons will not appear, potentially confusing users who expect staging actions.  </li>
+<li><strong>Test coverage</strong> – unit tests should be updated to cover the new action buttons and verify that callbacks receive the correct arguments.  </li>
+<li><strong>Accessibility</strong> – no evidence in the diff indicates ARIA labels or keyboard focus handling; confirm that the added buttons are accessible.</li>
 </ul>
 </article>
   </main>

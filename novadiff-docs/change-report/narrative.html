@@ -449,6 +449,50 @@
   .release-card[hidden] {
     display: none !important;
   }
+  .global-search-bar {
+    padding: 0 28px 12px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .global-search-input {
+    width: min(480px, 100%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--page-border);
+    background: var(--page-card);
+    color: var(--page-text);
+  }
+  .global-search-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .global-search-hit {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--page-card);
+    border: 1px solid var(--page-border);
+    text-decoration: none;
+    color: var(--page-link);
+  }
+  .impact-heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .impact-heatmap td, .impact-heatmap th {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--page-border);
+    text-align: left;
+  }
+  .impact-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #38d9ff, #9b7dff);
+    min-width: 4px;
+  }
   .release-link {
     font-weight: 700;
   }
@@ -478,7 +522,7 @@
         <h1>AI project narrative</h1>
         <p class="top-subtitle">Readable long-form documentation for the compare, with section navigation and cleaner Markdown rendering.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 46a8da0664d1</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: </span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: f7c2bfd81af2</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-21T11:28:43.155Z</span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -488,9 +532,115 @@
     <a href="diagrams.html">Diagrams</a>
     <a href="release.html">Release</a>
   </nav>
+  <div class="global-search-bar">
+    <input type="search" class="global-search-input" data-global-search placeholder="Search this bundle (summaries, release)…" />
+    <div class="global-search-results" data-global-search-results></div>
+  </div>
   <main class="content">
     <div class="content-main">
-      <article class="content-card md"><p><em>Empty.</em></p>
+      <article class="content-card md"><h2 id="workspace-overview-roots-comparison-intent-scale-of-change"><a class="heading-anchor" href="#workspace-overview-roots-comparison-intent-scale-of-change" aria-label="Link to Workspace overview — roots, comparison intent, scale of change">#</a>Workspace overview — roots, comparison intent, scale of change</h2>
+<p>The diff compares a snapshot stored under<br><code>/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/f7c2bfd81af2</code><br>with the current repository at<br><code>/Users/iamgroot/Documents/GitHub/NovaDiff</code>.<br>A total of <strong>62</strong> paths were touched: <strong>35 modified</strong>, <strong>23 added</strong>, <strong>4 removed</strong>.<br>The majority of changes cluster in the <code>src/</code>, <code>electron/</code>, and <code>packages/graph-view/</code> directories, indicating a focus on UI, Electron integration, and graph‑view logic.</p>
+<h2 id="change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit"><a class="heading-anchor" href="#change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit" aria-label="Link to Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition">#</a>Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition</h2>
+<ul>
+<li><strong>File types</strong>  <ul>
+<li><code>.tsx</code> (24) and <code>.ts</code> (17) dominate, reflecting UI and core logic updates.  </li>
+<li><code>.cjs</code> (13) shows new CommonJS modules for Electron.  </li>
+<li><code>.json</code> and <code>.css</code> changes are minimal.</li>
+</ul>
+</li>
+<li><strong>Path depth</strong>  <ul>
+<li>27 paths at depth 3, 9 at depth 4, 4 at depth 5.  </li>
+<li>Depth‑4 changes are mainly in <code>electron/</code> and <code>packages/graph-view/</code>.</li>
+</ul>
+</li>
+<li><strong>Risk signals</strong>  <ul>
+<li><code>vite.config.ts</code> was modified (deterministic risk: medium).  </li>
+<li>Removal of <code>.novadiff-graph/config.json</code>, <code>diff-overlay.json</code>, and <code>meta.json</code> may break legacy graph‑generation workflows.  </li>
+<li>New Electron modules (<code>export-snapshot.cjs</code>, <code>git-commit.cjs</code>, <code>git-publish.cjs</code>) introduce runtime dependencies on Git and GitHub, raising security and authentication concerns.</li>
+</ul>
+</li>
+</ul>
+<h2 id="subsystem-map-group-paths-into-coherent-areas"><a class="heading-anchor" href="#subsystem-map-group-paths-into-coherent-areas" aria-label="Link to Subsystem map — group paths into coherent areas">#</a>Subsystem map — group paths into coherent areas</h2>
+<ul>
+<li><strong>Electron core</strong> (<code>electron/</code>)  <ul>
+<li>New modules: <code>export-snapshot.cjs</code>, <code>git-commit.cjs</code>, <code>git-publish.cjs</code>.  </li>
+<li>Updated <code>git-service.cjs</code> and <code>github-service.cjs</code> to support staged paths.</li>
+</ul>
+</li>
+<li><strong>Graph view UI</strong> (<code>packages/graph-view/src/</code>)  <ul>
+<li>Updated explorer components (<code>NovaDiffGraphExplorer.tsx</code>, <code>NovaDiffGraphExplorerEmbed.tsx</code>).  </li>
+<li>Added selection clustering utilities (<code>selectionCluster.ts</code>) and tests (<code>selectionCluster.test.ts</code>).</li>
+</ul>
+</li>
+<li><strong>Application logic</strong> (<code>src/</code>)  <ul>
+<li>Commit analysis (<code>commitChangeAnalysis.ts</code>), file tree (<code>fileTree.ts</code>), workspace storage (<code>workspaceStorage.ts</code>).  </li>
+<li>New UI helpers: <code>DocsViewSyncContext.tsx</code>, <code>DocumentationWorkspace.tsx</code>.</li>
+</ul>
+</li>
+<li><strong>Configuration &amp; tooling</strong>  <ul>
+<li><code>vite.config.ts</code> change.  </li>
+<li>Removal of legacy <code>.novadiff-graph</code> config files.  </li>
+<li>New <code>novadiff-docs-html.cjs</code> for HTML rendering of docs.</li>
+</ul>
+</li>
+<li><strong>Testing</strong>  <ul>
+<li>Single test file <code>graphCityBridge.test.ts</code> added.</li>
+</ul>
+</li>
+</ul>
+<h2 id="cross-cutting-concerns-security-build-release-migrations-observability"><a class="heading-anchor" href="#cross-cutting-concerns-security-build-release-migrations-observability" aria-label="Link to Cross-cutting concerns — security, build/release, migrations, observability">#</a>Cross-cutting concerns — security, build/release, migrations, observability</h2>
+<ul>
+<li><strong>Security</strong>  <ul>
+<li>GitHub authentication flows (<code>github-auth-flow.cjs</code>, <code>github-commit-context.cjs</code>) now exposed in the main process; ensure tokens are not logged.  </li>
+<li>LLM module (<code>llm.cjs</code>) may send user code to external services; verify compliance with privacy policies.</li>
+</ul>
+</li>
+<li><strong>Build/Release</strong>  <ul>
+<li><code>vite.config.ts</code> alteration could affect asset bundling; run a full build test.  </li>
+<li>Electron packaging must include new <code>.cjs</code> modules; update <code>package.json</code> scripts accordingly.</li>
+</ul>
+</li>
+<li><strong>Migrations</strong>  <ul>
+<li>Deletion of <code>.novadiff-graph/config.json</code> and related files requires updating any scripts that load graph configuration.  </li>
+<li>Existing snapshots may need regeneration to include new snapshot export format.</li>
+</ul>
+</li>
+<li><strong>Observability</strong>  <ul>
+<li>New modules lack explicit logging; consider adding console traces for debugging.  </li>
+<li>No new metrics are introduced, but the LLM module may benefit from response‑time monitoring.</li>
+</ul>
+</li>
+</ul>
+<h2 id="documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-"><a class="heading-anchor" href="#documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-" aria-label="Link to Documentation &amp;amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate">#</a>Documentation &amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate</h2>
+<ul>
+<li><strong>CJS modules</strong>: Added CommonJS files lack type declarations; static analysis tools (e.g., TypeScript’s <code>--allowJs</code>) could flag missing exports.  </li>
+<li><strong>LLM integration</strong>: Runtime profiling is needed to measure latency and token usage; no compile‑time checks exist.  </li>
+<li><strong>Graph view utilities</strong>: The selection clustering logic (<code>utils/selectionCluster.ts</code>) is complex; unit tests cover basic cases but deeper integration tests would confirm correctness.  </li>
+<li><strong>GitHub API usage</strong>: Mocking of GitHub responses is not present; integration tests should verify error handling for rate limits.</li>
+</ul>
+<h2 id="suggested-verification-tests-manual-checks-staged-rollout"><a class="heading-anchor" href="#suggested-verification-tests-manual-checks-staged-rollout" aria-label="Link to Suggested verification — tests, manual checks, staged rollout">#</a>Suggested verification — tests, manual checks, staged rollout</h2>
+<ul>
+<li><strong>Unit tests</strong>  <ul>
+<li>Run <code>npm test</code> to cover new <code>selectionCluster.test.ts</code> and existing tests.  </li>
+<li>Add tests for <code>git-publish.cjs</code> staged‑path logic.</li>
+</ul>
+</li>
+<li><strong>Integration tests</strong>  <ul>
+<li>Spin up a local Electron instance to exercise snapshot export and commit detail retrieval.  </li>
+<li>Mock GitHub responses to validate authentication flows.</li>
+</ul>
+</li>
+<li><strong>Manual checks</strong>  <ul>
+<li>Verify that the UI still renders the graph view correctly after the component updates.  </li>
+<li>Confirm that the <code>vite</code> build produces the expected assets.</li>
+</ul>
+</li>
+<li><strong>Staged rollout</strong>  <ul>
+<li>Deploy to a staging environment first; monitor LLM response times and GitHub API usage.  </li>
+<li>Use feature flags for the new snapshot export to enable rollback if issues arise.</li>
+</ul>
+</li>
+</ul>
 </article>
     </div>
     <aside class="content-side"><section class="toc-card"><div class="toc-title">On this page</div><nav class="toc" data-toc></nav></section></aside>
@@ -536,6 +686,36 @@
     };
     filterInput.addEventListener("input", applyFilter);
     applyFilter();
+  }
+  const globalSearch = document.querySelector("[data-global-search]");
+  const globalResults = document.querySelector("[data-global-search-results]");
+  if (globalSearch instanceof HTMLInputElement && globalResults) {
+    fetch("search-index.json")
+      .then((r) => r.json())
+      .then((entries) => {
+        const list = Array.isArray(entries) ? entries : [];
+        const render = () => {
+          const q = globalSearch.value.trim().toLowerCase();
+          if (!q) {
+            globalResults.innerHTML = "";
+            return;
+          }
+          const hits = list
+            .filter((e) => String(e.text || e.title || "").toLowerCase().includes(q))
+            .slice(0, 24);
+          globalResults.innerHTML = hits
+            .map((e) => {
+              const a = document.createElement("a");
+              a.className = "global-search-hit";
+              a.href = String(e.href || "#");
+              a.textContent = String(e.title || "");
+              return a.outerHTML;
+            })
+            .join("");
+        };
+        globalSearch.addEventListener("input", render);
+      })
+      .catch(() => {});
   }
 </script>
 </body>

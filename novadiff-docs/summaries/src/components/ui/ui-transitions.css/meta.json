@@ -1,23 +1,26 @@
 {
   "relPath": "src/components/ui/ui-transitions.css",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T05:12:41.223Z",
+  "generatedAt": "2026-05-21T11:09:11.877Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-120"
+      "R47-51",
+      "L48 / R53",
+      "L57 / R62",
+      "R66-71"
     ],
     "cited_changed_lines": [
-      "R1 added: /* Shared overlay + view transition effects */",
-      "R3 added: .ui-overlay {",
-      "R4 added: opacity: 0;",
-      "R5 added: transition: opacity 0.28s ease;",
-      "R6 added: }",
-      "R8 added: .ui-overlay.is-open {"
+      "R47 added: .launch-panel--main .workspace-stage {",
+      "R48 added: flex: 1 1 0;",
+      "R49 added: min-height: 0;",
+      "R50 added: }",
+      "L48 removed: flex: 1;",
+      "R53 added: flex: 1 1 0;"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

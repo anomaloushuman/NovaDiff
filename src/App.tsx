@@ -20,6 +20,7 @@ import {
 import { BackgroundActivityBar } from "./components/BackgroundActivityBar";
 import { DiffWorkspace } from "./components/DiffWorkspace";
 import { DocumentationWorkspace } from "./components/DocumentationWorkspace";
+import type { InitialDocsFocus } from "./components/DocumentationWorkspaceLinked";
 import { InsightsColumn } from "./components/InsightsColumn";
 import { LlmSettingsModal } from "./components/LlmSettingsModal";
 import { AppLaunchShell } from "./components/launch/AppLaunchShell";
@@ -45,6 +46,9 @@ import { AutoCommitWorkspace } from "./components/AutoCommitWorkspace";
 import { GitHistoryWorkspace } from "./components/GitHistoryWorkspace";
 import { PullRequestsWorkspace } from "./components/PullRequestsWorkspace";
 import { WelcomeScreen } from "./components/onboarding/WelcomeScreen";
+import { ProductTour } from "./components/onboarding/ProductTour";
+import { KeyboardShortcutsHelp } from "./components/KeyboardShortcutsHelp";
+import { loadProductTourCompleted } from "./app/workspaceStorage";
 import { WorkspaceHub } from "./components/onboarding/WorkspaceHub";
 import { SidebarNav, type WorkspacePage } from "./components/SidebarNav";
 import { isNovadiffDocsReservedPath } from "./app/novadiffPaths";
@@ -170,6 +174,9 @@ function AppMain() {
     }
   });
   const [docGenTrigger, setDocGenTrigger] = useState(0);
+  const [initialDocsFocus, setInitialDocsFocus] = useState<InitialDocsFocus | undefined>(
+    undefined,
+  );
   const [windowChrome, setWindowChrome] = useState<WindowChromeState>({
     platform: "web",
     isMaximized: false,
@@ -180,6 +187,10 @@ function AppMain() {
   const [launchPhase, setLaunchPhase] = useState<LaunchPhase>("boot");
   const [launchAuthConfirmed, setLaunchAuthConfirmed] = useState(false);
   const [launchWorkspaceConfirmed, setLaunchWorkspaceConfirmed] = useState(false);
+  const [productTourOpen, setProductTourOpen] = useState(
+    () => !loadProductTourCompleted(),
+  );
+  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
 
   const setWorkspaceDocAutoPersist = useCallback((v: boolean) => {
     setWorkspaceDocAuto(v);
@@ -191,10 +202,25 @@ function AppMain() {
   }, []);
 
   useEffect(() => {
-    if (workspacePage !== "docs") {
+    if (workspacePage !== "docs" && workspacePage !== "docReports") {
       setDocsInsightsOpen(false);
     }
   }, [workspacePage]);
+
+  const reviewInCity = useCallback((paths: string[]) => {
+    setInitialDocsFocus({
+      paths,
+      openCity: true,
+      changedOnly: paths.length > 0,
+      linkViews: true,
+    });
+    setWorkspacePage("docs");
+  }, []);
+
+  const reviewInCityFromHistory = useCallback(() => {
+    const paths = rows.map((r) => r.path);
+    reviewInCity(paths.length > 0 ? paths : ["."]);
+  }, [rows, reviewInCity]);
 
   const jumpToComparePath = useCallback((path: string) => {
     const relPath = String(path ?? "").trim();
@@ -406,6 +432,14 @@ function AppMain() {
       return;
     }
     const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "?" && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const tag = (e.target as HTMLElement)?.tagName?.toLowerCase();
+        if (tag !== "input" && tag !== "textarea") {
+          e.preventDefault();
+          setShortcutsHelpOpen((v) => !v);
+        }
+        return;
+      }
       if (e.key === "F11") {
         e.preventDefault();
         toggleFullscreen();
@@ -622,6 +656,8 @@ function AppMain() {
   ]);
 
   const showMainApp = onboardingGate === "app";
+  const sideNavCompact =
+    workspacePage === "history" || workspacePage === "docs" || workspacePage === "docReports";
   const localOnlyMode = Boolean(session?.localOnlyMode);
 
   useEffect(() => {
@@ -1372,8 +1408,11 @@ function AppMain() {
         onClose={() => setSettingsOpen(false)}
         onSaved={(s) => setLlmSettings(s)}
       />
-      <div className="launch-panel launch-panel--side">
+      <div
+        className={`launch-panel launch-panel--side${sideNavCompact ? " launch-panel--side-compact" : ""}`}
+      >
         <SidebarNav
+          compact={sideNavCompact}
           active={compared && rows.length > 0}
           workspacePage={workspacePage}
           onWorkspacePage={setWorkspacePage}
@@ -1454,13 +1493,17 @@ function AppMain() {
           workspace={activeWorkspace}
           busy={busy}
           error={error}
+          localOnlyMode={Boolean(session?.localOnlyMode)}
+          onOpenSettings={() => setSettingsOpen(true)}
           onCompareCommits={compareHistoryCommits}
           onDocumentCommit={documentHistoryCommits}
           onLiveRepoPersist={persistLiveDevRepo}
           onRefreshHistory={refreshWorkspaceHistory}
+          onReviewInCity={reviewInCityFromHistory}
         />
       ) : workspacePage === "docs" ? (
         <DocumentationWorkspace
+          view="explore"
           compared={compared}
           leftRoot={left}
           rightRoot={right}
@@ -1475,6 +1518,27 @@ function AppMain() {
           onJumpToCompare={jumpToComparePath}
           onOpenInsightsDock={() => setDocsInsightsOpen(true)}
           insightsDockOpen={docsInsightsOpen}
+          initialDocsFocus={initialDocsFocus}
+          onOpenReports={() => setWorkspacePage("docReports")}
+        />
+      ) : workspacePage === "docReports" ? (
+        <DocumentationWorkspace
+          view="reports"
+          compared={compared}
+          leftRoot={left}
+          rightRoot={right}
+          leftTitle={leftTitle}
+          rightTitle={rightTitle}
+          rows={rows}
+          fileStats={fileStats}
+          llmSettings={llmSettings}
+          docGenTrigger={docGenTrigger}
+          workspaceDocAuto={workspaceDocAuto}
+          onWorkspaceDocAutoChange={setWorkspaceDocAutoPersist}
+          onJumpToCompare={jumpToComparePath}
+          onOpenInsightsDock={() => setDocsInsightsOpen(true)}
+          insightsDockOpen={docsInsightsOpen}
+          initialDocsFocus={initialDocsFocus}
         />
       ) : workspacePage === "prs" ? (
         <PullRequestsWorkspace
@@ -1492,11 +1556,13 @@ function AppMain() {
           leftTitle={leftTitle}
           rightTitle={rightTitle}
           llmSettings={llmSettings}
+          onReviewInCity={reviewInCity}
         />
       )}
         </WorkspaceStage>
       </div>
-      {workspacePage !== "docs" || docsInsightsOpen ? (
+      {workspacePage !== "history" &&
+      ((workspacePage !== "docs" && workspacePage !== "docReports") || docsInsightsOpen) ? (
       <div className="launch-panel launch-panel--insights">
       <div className="insights-dock" style={{ width: insightsWidth }}>
         <div
@@ -1569,6 +1635,13 @@ function AppMain() {
       </div>
       </div>
       ) : null}
+      {showMainApp && productTourOpen ? (
+        <ProductTour onDone={() => setProductTourOpen(false)} />
+      ) : null}
+      <KeyboardShortcutsHelp
+        open={shortcutsHelpOpen}
+        onClose={() => setShortcutsHelpOpen(false)}
+      />
       </>
       ) : null}
       </AppLaunchShell>

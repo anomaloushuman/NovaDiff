@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/commitMessage.ts",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:40:40.684Z",
+  "generatedAt": "2026-05-21T10:53:59.902Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,31 +20,38 @@
       }
     ],
     "changed_exports": [
-      "R7 added: export function buildCommitMessageContext(",
-      "R33 added: export function parseCommitMessageOutput(raw: string): {"
+      "R12 added: export interface CommitMessageContextOptions {",
+      "R67 added: export { graphSymbolsContext, classifyCompareRows };"
     ],
     "changed_imports": [
-      "R1 added: import type { DocWorkspaceMetrics } from \"./docWorkspaceMetrics\";",
-      "R2 added: import type { FileChange } from \"./types\";"
+      "R3 added: import {"
     ],
     "changed_line_ranges": [
-      "R1-59"
+      "R3-8",
+      "R12-17",
+      "R26",
+      "R28-29",
+      "L21 / R36-40",
+      "R42-51",
+      "R58-63",
+      "R67-68"
     ],
     "cited_changed_lines": [
-      "R1 added: import type { DocWorkspaceMetrics } from \"./docWorkspaceMetrics\";",
-      "R2 added: import type { FileChange } from \"./types\";",
-      "R4 added: const MAX_PATHS = 90;",
-      "R6 added: /** Compact change list for the commit-message LLM prompt. */",
-      "R7 added: export function buildCommitMessageContext(",
-      "R8 added: metrics: DocWorkspaceMetrics,"
+      "R3 added: import {",
+      "R4 added: classifyCompareRows,",
+      "R5 added: districtBreakdown,",
+      "R6 added: graphSymbolsContext,",
+      "R7 added: type UpdateDecision,",
+      "R8 added: } from \"./commitChangeAnalysis\";"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function parseCommitMessageOutput (33-59)",
-      "right function buildCommitMessageContext (7-32)"
+      "left function buildCommitMessageContext (7-32)",
+      "right function buildCommitMessageContext (19-69)",
+      "right interface CommitMessageContextOptions (12-18)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

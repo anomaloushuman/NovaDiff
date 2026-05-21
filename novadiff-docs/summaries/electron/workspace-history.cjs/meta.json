@@ -1,9 +1,9 @@
 {
   "relPath": "electron/workspace-history.cjs",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:33:10.403Z",
+  "generatedAt": "2026-05-21T10:49:31.961Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,45 +11,31 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: const fsp = require(\"node:fs/promises\");",
-      "R4 added: const fssync = require(\"node:fs\");",
-      "R5 added: const path = require(\"node:path\");",
-      "R6 added: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
-      "R33 added: const { upsertWorkspace, getWorkspace } = require(\"./workspace-store.cjs\");"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-300"
+      "L135 / R135-136",
+      "L240 / R241-242"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const fsp = require(\"node:fs/promises\");",
-      "R4 added: const fssync = require(\"node:fs\");",
-      "R5 added: const path = require(\"node:path\");",
-      "R6 added: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
-      "R8 added: function removeDirSafe(dir) {"
+      "L135 removed: await upsertWorkspace(userData, workspace);",
+      "R135 added: const persistSession = i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0;",
+      "R136 added: await upsertWorkspace(userData, workspace, { touchSession: persistSession });",
+      "L240 removed: await upsertWorkspace(userData, workspace);",
+      "R241 added: const persistSession = i === 0 || i === allCommits.length - 1 || (i + 1) % 10 === 0;",
+      "R242 added: await upsertWorkspace(userData, workspace, { touchSession: persistSession });"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function refreshWorkspaceHistory (188-300)",
-      "right function indexWorkspaceHistory (100-187)",
-      "right function listCommitsOldestFirst (35-60)",
-      "right function ensureCommitSnapshot (80-99)",
-      "right function snapshotCommit (61-79)",
-      "right function isUsableSnapshotDir (18-34)",
-      "right function removeDirSafe (8-17)"
+      "left function indexWorkspaceHistory (100-187)",
+      "left function refreshWorkspaceHistory (188-300)",
+      "right function indexWorkspaceHistory (100-188)",
+      "right function refreshWorkspaceHistory (189-302)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

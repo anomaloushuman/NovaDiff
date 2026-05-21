@@ -1,23 +1,25 @@
 {
   "relPath": "src/components/onboarding/onboarding.css",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T05:10:29.544Z",
+  "generatedAt": "2026-05-21T11:10:23.865Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-262"
+      "L194 / R194",
+      "L202 / R202",
+      "R263-361"
     ],
     "cited_changed_lines": [
-      "R1 added: .onboarding-overlay {",
-      "R2 added: position: fixed;",
-      "R3 added: inset: 0;",
-      "R4 added: z-index: 12000;",
-      "R5 added: display: flex;",
-      "R6 added: align-items: center;"
+      "L194 removed: max-height: 320px;",
+      "R194 added: max-height: 100%;",
+      "L202 removed: padding: 8px 0;",
+      "R202 added: padding: 10px;",
+      "R264 added: .product-tour-overlay {",
+      "R265 added: position: fixed;"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

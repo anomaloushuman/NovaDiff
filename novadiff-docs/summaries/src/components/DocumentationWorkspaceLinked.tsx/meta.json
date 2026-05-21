@@ -1,0 +1,63 @@
+{
+  "relPath": "src/components/DocumentationWorkspaceLinked.tsx",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:03:08.220Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R16 added: export interface InitialDocsFocus {",
+      "R24 added: export function DocumentationWorkspaceSyncRoot({",
+      "R44 added: export function useLinkedCityState(",
+      "R176 added: export function CodeCityGraphToolbar({",
+      "R208 added: export function DocsLinkToolbar() {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useMemo, type ReactNode } from \"react\";",
+      "R2 added: import type { GraphPayload } from \"./KnowledgeGraphPanel\";",
+      "R3 added: import {",
+      "R9 added: import {",
+      "R14 added: import type { CodeCityLayoutResult, CodeCityRenderableBuilding } from \"../app/codeCityLayout\";"
+    ],
+    "changed_line_ranges": [
+      "R1-215"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useMemo, type ReactNode } from \"react\";",
+      "R2 added: import type { GraphPayload } from \"./KnowledgeGraphPanel\";",
+      "R3 added: import {",
+      "R4 added: buildBuildingIdByGraphNode,",
+      "R5 added: cityBuildingIdsForHighlight,",
+      "R6 added: cityBuildingToGraphNodeId,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useLinkedCityState (44-175)",
+      "right function CodeCityGraphToolbar (176-207)",
+      "right function DocumentationWorkspaceSyncRoot (24-38)",
+      "right function DocsLinkToolbar (208-215)",
+      "right interface InitialDocsFocus (16-23)",
+      "right function DocsFocusBootstrap (39-43)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

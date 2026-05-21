@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/codeCityChromeInsets.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/codeCityChromeInsets.ts</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:52:53.459Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>src/app/codeCityChromeInsets.ts</code> (added, change kind: added, line range R1‑92) introduces utilities for computing the insets required by the CodeCity UI.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>export interface CodeCityChromeInsets</code></strong> (lines 1‑6) defines <code>bottom</code>, <code>right</code>, <code>left</code>, and <code>hidden</code>.  </li>
+<li><strong><code>export interface MeasureCodeCityChromeOptions</code></strong> (lines 40‑43) adds an optional <code>dockedControls</code> flag.  </li>
+<li><strong><code>rectsOverlap(a, b)</code></strong> (lines 10‑12) checks whether two <code>DOMRect</code>s overlap.  </li>
+<li><strong><code>liftForObstruction(hostRect, obstruction, bottom)</code></strong> (lines 14‑22) returns a new bottom inset when an obstruction overlaps the host.  </li>
+<li><strong><code>isBlockingModalOpen()</code></strong> (lines 24‑38) scans for several modal/backdrop selectors to short‑circuit inset calculation.  </li>
+<li><strong><code>measureCodeCityChromeInsets(host, options)</code></strong> (lines 49‑92) orchestrates the logic: early exit on blocking modal, gathers obstructions (sheet, activity bar), lifts the bottom inset, caps it, and returns a <code>CodeCityChromeInsets</code> object.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a typed contract for inset values.  </li>
+<li>Early exit on modal sets <code>hidden: true</code>, allowing callers to suppress the UI when a modal is open.  </li>
+<li>Obstruction handling lifts the bottom inset based on overlapping elements.  </li>
+<li>The module is additive; existing exports remain unchanged.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Modal detection</strong> – verify that all selectors in <code>isBlockingModalOpen</code> still match the current DOM; a missing selector could cause the UI to render while a modal is open.  </li>
+<li><strong>Layout row query</strong> – the fallback to <code>.novadiff-graph-embed</code> may fail if the layout changes; test both paths.  </li>
+<li><strong>Hidden flag usage</strong> – callers must interpret <code>hidden: true</code> correctly to avoid rendering the UI when a modal is open.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

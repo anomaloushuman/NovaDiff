@@ -3,6 +3,8 @@ import { Check, GitBranch, Loader2, Upload } from "lucide-react";
 import type { LlmSettings } from "../app/llmStorage";
 import {
   buildCommitMessageContext,
+  classifyCompareRows,
+  graphSymbolsContext,
   parseCommitMessageOutput,
 } from "../app/commitMessage";
 import { buildDocWorkspaceMetrics } from "../app/docWorkspaceMetrics";
@@ -18,6 +20,7 @@ export interface AutoCommitWorkspaceProps {
   leftTitle: string;
   rightTitle: string;
   llmSettings: LlmSettings;
+  onReviewInCity?: (paths: string[]) => void;
 }
 
 type ReviewStep = "draft" | "review" | "done";
@@ -31,6 +34,7 @@ export function AutoCommitWorkspace({
   leftTitle,
   rightTitle,
   llmSettings,
+  onReviewInCity,
 }: AutoCommitWorkspaceProps) {
   const api = window.electronAPI;
   const [repoRoot, setRepoRoot] = useState(suggestedRepoPath.trim());
@@ -48,6 +52,8 @@ export function AutoCommitWorkspace({
   const [openPr, setOpenPr] = useState(false);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [docsNote, setDocsNote] = useState<string | null>(null);
+  const [stageSelection, setStageSelection] = useState<Set<string>>(() => new Set());
+  const [stageAllFiles, setStageAllFiles] = useState(true);
 
   const metrics = useMemo(
     () => (compareRows.length > 0 ? buildDocWorkspaceMetrics(compareRows) : null),
@@ -101,6 +107,24 @@ export function AutoCommitWorkspace({
             ? filesForPrompt
             : [{ path: ".", kind: "modified" }],
         );
+      const classification = classifyCompareRows(
+        compared && compareRows.length > 0 ? compareRows : filesForPrompt,
+      );
+      let graphContext = "";
+      if (api.readKnowledgeGraph && repoRoot.trim()) {
+        try {
+          const kg = await api.readKnowledgeGraph({ projectRoot: repoRoot.trim() });
+          const graph = kg?.graph as
+            | { nodes: { id: string; name: string; type: string; filePath?: string }[] }
+            | undefined;
+          if (graph?.nodes?.length) {
+            const paths = new Set(filesForPrompt.map((f) => f.path));
+            graphContext = graphSymbolsContext(graph, paths);
+          }
+        } catch {
+          /* optional */
+        }
+      }
       const ctx = buildCommitMessageContext(
         m,
         filesForPrompt,
@@ -108,6 +132,7 @@ export function AutoCommitWorkspace({
         rightTitle || pathBasename(repoRoot),
         leftRoot || repoRoot,
         rightRoot || repoRoot,
+        { classification, graphContext },
       );
       const raw = await api.llmSummarize({
         ...llmSettings,
@@ -165,6 +190,8 @@ export function AutoCommitWorkspace({
     setPublishing(true);
     setError(null);
     try {
+      const stagePaths =
+        !stageAllFiles && stageSelection.size > 0 ? [...stageSelection] : undefined;
       const out = await api.gitPublishExecute({
         repoRoot: repoRoot.trim(),
         subject: subject.trim(),
@@ -173,6 +200,7 @@ export function AutoCommitWorkspace({
         createPullRequest: openPr,
         prBody: prBody.trim(),
         draftPr: false,
+        stagePaths,
       });
       setResultUrl(out.prUrl);
       setStep("done");
@@ -267,13 +295,72 @@ export function AutoCommitWorkspace({
         ) : null}
       </section>
 
+      {status && status.files.length > 0 ? (
+        <section className="doc-workspace-panel">
+          <h2 className="doc-workspace-h2">Staging scope</h2>
+          <p className="doc-workspace-prose">
+            Choose which paths to <code>git add</code> before commit. Default is all
+            changed files.
+          </p>
+          <label className="docs-link-toggle">
+            <input
+              type="checkbox"
+              checked={stageAllFiles}
+              onChange={(e) => setStageAllFiles(e.target.checked)}
+            />
+            Stage all changed files
+          </label>
+          {!stageAllFiles ? (
+            <ul className="git-stage-path-list">
+              {status.files.map((f) => (
+                <li key={f.path}>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={stageSelection.has(f.path)}
+                      onChange={(e) => {
+                        setStageSelection((prev) => {
+                          const next = new Set(prev);
+                          if (e.target.checked) {
+                            next.add(f.path);
+                          } else {
+                            next.delete(f.path);
+                          }
+                          return next;
+                        });
+                      }}
+                    />
+                    <code>{f.path}</code>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {compared && compareRows.length > 0 && onReviewInCity ? (
+            <button
+              type="button"
+              className="doc-workspace-copy-btn"
+              onClick={() =>
+                onReviewInCity(
+                  stageAllFiles
+                    ? compareRows.map((r) => r.path)
+                    : [...stageSelection],
+                )
+              }
+            >
+              Review in City
+            </button>
+          ) : null}
+        </section>
+      ) : null}
+
       {step === "draft" ? (
         <section className="doc-workspace-panel ui-view-enter">
           <h2 className="doc-workspace-h2">1. Generate draft</h2>
           <p className="doc-workspace-prose">
-            Builds a commit message from git status (and compare data when available). A
-            documentation bundle is written under <code>novadiff-docs/</code> when a
-            folder compare is active for this repo.
+            Builds a commit message from git status, structural classification, districts,
+            and knowledge-graph symbols when available. A documentation bundle is written
+            under <code>novadiff-docs/</code> when a folder compare is active.
           </p>
           <button
             type="button"

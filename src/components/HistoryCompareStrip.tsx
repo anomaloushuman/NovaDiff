@@ -68,29 +68,37 @@ export function HistoryCompareStrip({
   return (
     <header className="git-history-header">
       <div className="git-history-header-copy">
-        <h1 className="git-history-title">Git history compare</h1>
+        <h1 className="git-history-title">
+          Git history <span className="git-history-title-accent">compare</span>
+        </h1>
         <p className="git-history-lead">
           Compare indexed commits semantically, or diff a commit against your live working tree.
         </p>
       </div>
 
-      <div className="workspace-setup-strip git-history-setup-strip">
+      <div className="workspace-setup-strip git-history-setup-strip git-history-compare-card">
         <div className="workspace-setup git-history-setup">
           <div className="path-selectors-group">
             <div className="path-selectors-labels" aria-hidden>
-              <span className="path-field-label">
+              <span className="path-field-label git-history-field-label">
                 Base <span className="path-field-hint">commit</span>
+                {base ? <span className="git-history-badge git-history-label-badge">Base</span> : null}
               </span>
               <span className="path-field-label path-swap-label-filler" aria-hidden="true">
                 &nbsp;
               </span>
-              <span className="path-field-label">
+              <span className="path-field-label git-history-field-label">
                 Head <span className="path-field-hint">{useLiveHead ? "folder" : "commit"}</span>
+                {head && !useLiveHead ? (
+                  <span className="git-history-badge git-history-badge--head git-history-label-badge">
+                    Head
+                  </span>
+                ) : null}
               </span>
             </div>
 
             <div className="path-selectors-combined">
-              <div className="path-selector-segment path-selector-segment--select">
+              <div className="path-selector-segment path-selector-segment--select git-history-selector-segment">
                 <span className="path-selector-lead-icon" aria-hidden>
                   <GitBranch size={17} strokeWidth={2} />
                 </span>
@@ -126,7 +134,7 @@ export function HistoryCompareStrip({
               </button>
 
               <div
-                className={`path-selector-segment${useLiveHead ? "" : " path-selector-segment--select"}`}
+                className={`path-selector-segment git-history-selector-segment${useLiveHead ? "" : " path-selector-segment--select"}`}
               >
                 <span className="path-selector-lead-icon" aria-hidden>
                   <GitBranch size={17} strokeWidth={2} />

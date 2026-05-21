@@ -9,6 +9,8 @@ import type {
 } from "@novadiff/graph-core/types";
 import type { ReactFlowInstance } from "@xyflow/react";
 import { PROJECT_WIDE_LAYER_ID } from "./utils/activeLayer";
+import { containerIdForFilePath } from "./utils/graphCityNavigation";
+import { resolveGraphNodeFilePath } from "./utils/selectionCluster";
 
 export type Persona = "non-technical" | "junior" | "experienced";
 export type NavigationLevel = "overview" | "layer-detail";
@@ -544,18 +546,27 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       pendingFocusContainer: null,
     }),
 
-  setFocusNode: (nodeId) =>
+  setFocusNode: (nodeId) => {
+    const { graph } = get();
+    const expandedContainers = new Set<string>();
+    if (nodeId && graph) {
+      const filePath = resolveGraphNodeFilePath(graph, nodeId);
+      if (filePath) {
+        const containerId = containerIdForFilePath(filePath);
+        if (containerId) {
+          expandedContainers.add(containerId);
+        }
+      }
+    }
     set({
       focusNodeId: nodeId,
       selectedNodeId: nodeId,
-      // Focus mode narrows filteredGraphNodes to focus + 1-hop; the
-      // surviving containers have a subset of their original children,
-      // and the cache must not return positions for filtered-out ids.
       containerLayoutCache: new Map(),
       containerSizeMemory: new Map(),
-      expandedContainers: new Set(),
+      expandedContainers,
       pendingFocusContainer: null,
-    }),
+    });
+  },
   setSearchMode: (mode) => set({ searchMode: mode }),
   setSearchQuery: (query) => {
     const engine = get().searchEngine;

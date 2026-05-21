@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "advisory": null,
+    "category": "config",
+    "confidence": "medium",
+    "evidence": [
+      "Configuration or environment behavior may change across deploy targets."
+    ],
+    "id": "config:medium:vite.config.ts",
+    "rel_path": "vite.config.ts",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Config-adjacent file touched: `vite.config.ts`"
+  }
+]

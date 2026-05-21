@@ -1,33 +1,24 @@
 ### Overview  
-A new `vite.config.ts` (lines 1‑49) bootstraps the NovaDiff dev server. It imports Vite helpers, React and Tailwind plugins, and sets up path resolution, aliases, server options, and dependency optimization.
+The Vite configuration now replaces the single `@novadiff/graph-core` alias with three granular aliases for the core package’s types, schema, and search modules.  
+The change occurs in the `resolve.alias` section (lines 15‑26 of `vite.config.ts`).
 
 ### Key changes  
-- **Imports**  
-  - `import path from "node:path";` (R1)  
-  - `import { defineConfig } from "vite";` (R2)  
-  - `import react from "@vitejs/plugin-react";` (R3)  
-  - `import tailwindcss from "@tailwindcss/vite";` (R4)  
-- **Root resolution**  
-  - `const repoRoot = path.resolve(__dirname);` (R6) – used for watch‑ignore paths.  
-- **Export**  
-  - `export default defineConfig(() => ({ … }))` (R9) – Vite configuration.  
-- **Aliases**  
-  - `@novadiff/graph-core` → `packages/graph-core/src` (R15)  
-  - `@novadiff/graph-view` → `packages/graph-view/src` (R16)  
-- **Server**  
-  - `port: 1420`, `strictPort: true`, `host: "127.0.0.1"` (R20‑22)  
-  - Extensive `watch.ignored` patterns (R26‑35) to avoid reloads on generated artifacts.  
-- **OptimizeDeps**  
-  - Pre‑bundles `@xyflow/react`, `zustand`, `d3-force`, `@dagrejs/dagre`, `graphology`, `elkjs/lib/elk.bundled.js` (R39‑46)  
-  - Marks `elkjs` for interop (R47).
+- **Removed** the old alias `@novadiff/graph-core` that pointed to `packages/graph-core/src`.  
+- **Added**  
+  - `@novadiff/graph-core/types` → `packages/graph-core/src/types.ts`  
+  - `@novadiff/graph-core/schema` → `packages/graph-core/src/schema.ts`  
+  - `@novadiff/graph-core/search` → `packages/graph-core/src/search.ts`  
+- The `@novadiff/graph-view` alias remains unchanged.  
+- No other configuration sections were modified.
 
 ### Impact  
-- **Developer experience** – `clearScreen: false` keeps console logs visible; `strictPort` prevents silent port fallback.  
-- **Performance** – `optimizeDeps` speeds up dev builds by pre‑bundling heavy libraries.  
-- **Observability** – Watch‑ignore list reduces unnecessary reloads, keeping the dev server responsive.
+- **Module resolution**: Imports that previously used `@novadiff/graph-core` must now target the specific sub‑modules (`types`, `schema`, `search`).  
+- **Build correctness**: The new aliases point to individual source files, which is likely to reduce bundle size and avoid accidental exposure of internal files.  
+- **Maintainability**: Explicit aliases clarify intent and make refactoring of the core package easier.  
+- **Compatibility**: Existing code that imports `@novadiff/graph-core` will break unless updated; this change is a breaking API shift for consumers of the Vite config.
 
 ### Risks & follow‑ups  
-- Verify that `repoRoot` resolves correctly on all CI environments; failing to do so may break ignored paths.  
-- Ensure port 1420 is available; otherwise Vite will error due to `strictPort: true`.  
-- Confirm that the alias paths match the actual package locations; mismatches will cause import failures.  
-- Test that the `optimizeDeps` list covers all runtime dependencies; missing entries could lead to slower hot‑reloads.
+- **Import regressions**: Verify that all internal imports now reference the new aliases; run `npm run lint` and `npm test` to catch unresolved imports.  
+- **Build failures**: Ensure the TypeScript compiler resolves the new paths; run `npm run build` to confirm.  
+- **Documentation**: Update any README or docs that mention the old alias.  
+- **CI pipelines**: Confirm that the updated config does not affect server watch ignore patterns or dev server behavior.

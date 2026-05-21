@@ -45,9 +45,14 @@ import {
   deriveConfidenceBadges,
   relPathAnchorId,
 } from "../app/docsQuality";
-import { CodeCityLegend } from "./CodeCityLegend";
 import { CodeCityView } from "./CodeCityView";
-import { KnowledgeGraphPanel } from "./KnowledgeGraphPanel";
+import { KnowledgeGraphPanel, type GraphPayload } from "./KnowledgeGraphPanel";
+import type { CityExploreBarProps } from "./DocsGraphExploreChrome";
+import {
+  DocumentationWorkspaceSyncRoot,
+  useLinkedCityState,
+  type InitialDocsFocus,
+} from "./DocumentationWorkspaceLinked";
 import { useBackgroundActivityActionsOptional } from "../app/BackgroundActivityContext";
 import { LlmSummaryMarkdown } from "./LlmSummaryMarkdown";
 
@@ -93,7 +98,11 @@ function yieldToBrowser(): Promise<void> {
   });
 }
 
+export type DocumentationWorkspaceView = "explore" | "reports";
+
 export interface DocumentationWorkspaceProps {
+  view?: DocumentationWorkspaceView;
+  onOpenReports?: () => void;
   compared: boolean;
   leftRoot: string;
   rightRoot: string;
@@ -108,9 +117,20 @@ export interface DocumentationWorkspaceProps {
   onJumpToCompare: (path: string) => void;
   onOpenInsightsDock?: () => void;
   insightsDockOpen?: boolean;
+  initialDocsFocus?: InitialDocsFocus;
 }
 
-export function DocumentationWorkspace({
+export function DocumentationWorkspace(props: DocumentationWorkspaceProps) {
+  return (
+    <DocumentationWorkspaceSyncRoot initialDocsFocus={props.initialDocsFocus}>
+      <DocumentationWorkspaceBody {...props} />
+    </DocumentationWorkspaceSyncRoot>
+  );
+}
+
+function DocumentationWorkspaceBody({
+  view = "explore",
+  onOpenReports: _onOpenReports,
   compared,
   leftRoot,
   rightRoot,
@@ -125,6 +145,7 @@ export function DocumentationWorkspace({
   onJumpToCompare,
   onOpenInsightsDock,
   insightsDockOpen = false,
+  initialDocsFocus,
 }: DocumentationWorkspaceProps) {
   const { upsertActivity, removeActivity } = useBackgroundActivityActionsOptional() ?? {};
   const [asyncFiltered, setAsyncFiltered] = useState<FileChange[] | null>(null);
@@ -144,6 +165,7 @@ export function DocumentationWorkspace({
   const [activeBundleKey, setActiveBundleKey] =
     useState<NovadiffDocsBundleKey>("change-report");
   const [docWriteNote, setDocWriteNote] = useState<string | null>(null);
+  const [lastBundleDir, setLastBundleDir] = useState<string | null>(null);
   const [docPreviewHtml, setDocPreviewHtml] = useState<string | null>(null);
   const [docPreviewPage, setDocPreviewPage] = useState<DocPreviewPage>("index.html");
   const [docPreviewError, setDocPreviewError] = useState<string | null>(null);
@@ -173,6 +195,8 @@ export function DocumentationWorkspace({
   const previewFrameRef = useRef<HTMLIFrameElement>(null);
   const summarySectionRef = useRef<HTMLElement>(null);
   const citySectionRef = useRef<HTMLElement>(null);
+  const cityDetailsRef = useRef<HTMLDetailsElement>(null);
+  const [graphPayload, setGraphPayload] = useState<GraphPayload | null>(null);
 
   const focusSummaryQuery = useCallback((value: string) => {
     setSummarySearch(value);
@@ -217,6 +241,7 @@ export function DocumentationWorkspace({
   }, [compared, leftRoot, rightRoot]);
 
   useEffect(() => {
+    setCityVisible(true);
     const el = citySectionRef.current;
     if (!el) {
       return;
@@ -225,7 +250,6 @@ export function DocumentationWorkspace({
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
           setCityVisible(true);
-          observer.disconnect();
         }
       },
       { rootMargin: "300px 0px" },
@@ -642,15 +666,27 @@ export function DocumentationWorkspace({
   const [cityRootSide, setCityRootSide] = useState<"baseline" | "target">("target");
   const [cityCompareOverlay, setCityCompareOverlay] = useState(true);
   const [cityBlameOverlay, setCityBlameOverlay] = useState(false);
-  const [cityChangedOnly, setCityChangedOnly] = useState(false);
+  const [cityChangedOnly, setCityChangedOnly] = useState(
+    initialDocsFocus?.changedOnly ?? false,
+  );
   const [citySubsystem, setCitySubsystem] = useState("all");
   const [cityExtension, setCityExtension] = useState("all");
   const [citySymbolKind, setCitySymbolKind] = useState("all");
   const [cityAuthor, setCityAuthor] = useState("all");
   const [citySearch, setCitySearch] = useState("");
-  const [selectedCityBuilding, setSelectedCityBuilding] = useState<ReturnType<
-    typeof buildCodeCityLayout
-  >["buildings"][number] | null>(null);
+  useEffect(() => {
+    if (!initialDocsFocus?.paths?.length) {
+      return;
+    }
+    const top = initialDocsFocus.paths[0].split("/")[0];
+    if (top && top !== ".") {
+      setCitySubsystem(top);
+    }
+    if (initialDocsFocus.changedOnly) {
+      setCityChangedOnly(true);
+    }
+  }, [initialDocsFocus]);
+
   useEffect(() => {
     if (docFilterLoading) {
       upsertActivity?.({
@@ -733,39 +769,18 @@ export function DocumentationWorkspace({
     ],
   );
 
+  const linkedCity = useLinkedCityState(graphPayload, cityLayout, cityRootSide);
+
   useEffect(() => {
-    if (!selectedCityBuilding) {
+    if (!initialDocsFocus?.openCity) {
       return;
     }
-    if (!cityLayout.buildings.some((building) => building.id === selectedCityBuilding.id)) {
-      setSelectedCityBuilding(null);
-    }
-  }, [cityLayout.buildings, selectedCityBuilding]);
-
-  const cityStats = useMemo(() => {
-    let added = 0;
-    let modified = 0;
-    let removed = 0;
-    let unchanged = 0;
-    for (const building of cityLayout.buildings) {
-      if (building.changeState === "added") {
-        added += 1;
-      } else if (building.changeState === "modified") {
-        modified += 1;
-      } else if (building.changeState === "removed") {
-        removed += 1;
-      } else {
-        unchanged += 1;
-      }
-    }
-    return {
-      added,
-      modified,
-      removed,
-      unchanged,
-      changed: added + modified + removed,
-    };
-  }, [cityLayout.buildings]);
+    setCityVisible(true);
+    const timer = window.setTimeout(() => {
+      citySectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, [initialDocsFocus?.openCity]);
 
   const resetCityFilters = useCallback(() => {
     setCityRootSide("target");
@@ -777,8 +792,103 @@ export function DocumentationWorkspace({
     setCitySymbolKind("all");
     setCityAuthor("all");
     setCitySearch("");
-    setSelectedCityBuilding(null);
-  }, []);
+    linkedCity.sync.clearSelection();
+  }, [linkedCity.sync]);
+
+  const api = window.electronAPI;
+
+  const cityExploreBar = useMemo(
+    (): CityExploreBarProps => ({
+      cityLayout,
+      cityRootSide,
+      setCityRootSide,
+      cityCompareOverlay,
+      setCityCompareOverlay,
+      cityBlameOverlay,
+      setCityBlameOverlay,
+      cityChangedOnly,
+      setCityChangedOnly,
+      citySubsystem,
+      setCitySubsystem,
+      cityExtension,
+      setCityExtension,
+      citySymbolKind,
+      setCitySymbolKind,
+      cityAuthor,
+      setCityAuthor,
+      citySearch,
+      setCitySearch,
+      cityAuthors: cityModel?.authors ?? [],
+      visibleBuildingCount: linkedCity.filteredLayout.buildings.length,
+      onResetFilters: resetCityFilters,
+      inFileMode: linkedCity.inFileMode,
+      enteredLabel: linkedCity.sync.enteredFilePath,
+      onExitBuilding: linkedCity.onCityExit,
+    }),
+    [
+      cityLayout,
+      cityRootSide,
+      cityCompareOverlay,
+      cityBlameOverlay,
+      cityChangedOnly,
+      citySubsystem,
+      cityExtension,
+      citySymbolKind,
+      cityAuthor,
+      citySearch,
+      cityModel?.authors,
+      linkedCity.filteredLayout.buildings.length,
+      linkedCity.inFileMode,
+      linkedCity.sync.enteredFilePath,
+      linkedCity.onCityExit,
+      resetCityFilters,
+    ],
+  );
+
+  const cityFloatingPane = useMemo(
+    () => (
+      <>
+        {!cityVisible ? (
+          <p className="doc-workspace-muted code-city-float-status">Loading city…</p>
+        ) : null}
+        {cityLoading ? (
+          <p className="doc-workspace-muted code-city-float-status">Building city model…</p>
+        ) : null}
+        {cityError ? <p className="doc-workspace-alert code-city-float-status">{cityError}</p> : null}
+        {!cityError && cityModel ? (
+          <CodeCityView
+            layout={linkedCity.filteredLayout}
+            rootSide={cityRootSide}
+            compareOverlay={cityCompareOverlay}
+            blameOverlay={cityBlameOverlay}
+            selectedBuildingId={linkedCity.primaryBuildingId}
+            highlightBuildingIds={linkedCity.highlightBuildingIds}
+            focusBuildingId={linkedCity.focusBuildingId}
+            edgeOverlays={linkedCity.edgeOverlays}
+            focusMode={Boolean(linkedCity.sync.linkedNodeId) || linkedCity.inFileMode}
+            onSelect={linkedCity.onCitySelect}
+            onEnterBuilding={linkedCity.onCityEnter}
+            floatChrome
+          />
+        ) : null}
+        {!cityError && !cityLoading && !cityModel ? (
+          <p className="doc-workspace-muted code-city-float-status">
+            City model unavailable.
+          </p>
+        ) : null}
+      </>
+    ),
+    [
+      linkedCity,
+      cityRootSide,
+      cityCompareOverlay,
+      cityBlameOverlay,
+      cityVisible,
+      cityLoading,
+      cityError,
+      cityModel,
+    ],
+  );
 
   const [commitSubject, setCommitSubject] = useState("");
   const [commitBody, setCommitBody] = useState("");
@@ -1310,6 +1420,9 @@ export function DocumentationWorkspace({
             msg += ` PDF: ${res.pdfWarning}`;
           }
           setDocWriteNote(msg);
+          if (typeof res?.dir === "string") {
+            setLastBundleDir(res.dir);
+          }
           await loadDocPreviewPage(bundleKey, "index.html");
         } catch (e) {
           setDocWriteNote(
@@ -1396,11 +1509,44 @@ export function DocumentationWorkspace({
     );
   }
 
+  const explorePanel = (
+    <section ref={citySectionRef} className="doc-workspace-combined-explore">
+        <KnowledgeGraphPanel
+          compared={compared}
+          leftRoot={leftRoot}
+          rightRoot={rightRoot}
+          leftTitle={leftTitle}
+          rightTitle={rightTitle}
+          docRows={docRows}
+          llmSettings={llmSettings}
+          metrics={metrics}
+          pieDef={pieDef}
+          depthDef={depthDef}
+          importDef={importDef}
+          callDef={callDef}
+          metricsChartsLoading={metricsChartsLoading}
+          outlineLoading={outlineLoading}
+          combinedLayout
+          cityExploreBar={cityExploreBar}
+          cityFloatingPane={cityFloatingPane}
+          controlledNodeId={linkedCity.sync.linkedNodeId}
+          enteredFilePath={linkedCity.sync.enteredFilePath}
+          focusMode={Boolean(linkedCity.sync.linkedNodeId) || linkedCity.inFileMode}
+          onSelectionChange={linkedCity.onGraphSelectionChange}
+          onGraphPayloadChange={setGraphPayload}
+        />
+      </section>
+  );
+
   return (
-    <main className="doc-workspace">
+    <main
+      className={`doc-workspace${view === "explore" ? " doc-workspace--graph-cover" : " doc-workspace--reports"}`}
+    >
+      {view === "explore" ? explorePanel : (
+        <>
       <header className="doc-workspace-header">
         <div>
-          <h1 className="doc-workspace-title">Documentation workspace</h1>
+          <h1 className="doc-workspace-title">Documentation reports</h1>
           <p className="doc-workspace-sub">
             Baseline <strong>{leftTitle}</strong> → Target <strong>{rightTitle}</strong>
             <span className="doc-workspace-meta">
@@ -1421,8 +1567,7 @@ export function DocumentationWorkspace({
                     typeof codebaseOutline.total_files === "number"
                   ? ` · target scan: ${String(codebaseOutline.total_files)} files`
                   : ""}{" "}
-              · auto metrics (Doxygen-style indexing is roadmap; today: path statistics
-              + LLM narrative + on-disk bundle).
+              · summaries, risk signals, bundles, and structural metrics.
             </span>
           </p>
         </div>
@@ -1437,29 +1582,15 @@ export function DocumentationWorkspace({
         ) : null}
       </header>
 
-      <KnowledgeGraphPanel
-        compared={compared}
-        leftRoot={leftRoot}
-        rightRoot={rightRoot}
-        leftTitle={leftTitle}
-        rightTitle={rightTitle}
-        docRows={docRows}
-        llmSettings={llmSettings}
-        metrics={metrics}
-        pieDef={pieDef}
-        depthDef={depthDef}
-        importDef={importDef}
-        callDef={callDef}
-        metricsChartsLoading={metricsChartsLoading}
-        outlineLoading={outlineLoading}
-      />
-
-      <details className="doc-workspace-panel doc-workspace-details-secondary">
+      <details
+        ref={cityDetailsRef}
+        className="doc-workspace-panel doc-workspace-details-secondary"
+      >
         <summary className="doc-workspace-h2 doc-workspace-details-summary">
-          Additional workspace panels (risk, summaries, bundles, code city)
+          Additional workspace panels (risk, summaries, bundles)
         </summary>
 
-      <section ref={citySectionRef} className="doc-workspace-panel doc-workspace-panel--nested">
+      <section className="doc-workspace-panel doc-workspace-panel--nested">
         <h2 className="doc-workspace-h2">Structural metrics (reference)</h2>
         <p className="doc-workspace-prose">
           Derived from the compare result (relative paths), using the same root-level
@@ -2091,6 +2222,23 @@ export function DocumentationWorkspace({
         {docWriteNote && !docError ? (
           <p className="doc-workspace-muted">{docWriteNote}</p>
         ) : null}
+        {lastBundleDir && api?.exportProjectSnapshot ? (
+          <button
+            type="button"
+            className="doc-workspace-copy-btn"
+            onClick={() => {
+              const outZip = `${lastBundleDir}/novadiff-snapshot.zip`;
+              void api.exportProjectSnapshot?.({
+                bundleDir: lastBundleDir,
+                outZipPath: outZip,
+              }).then((r: { bytes: number; zipPath: string }) => {
+                setDocWriteNote(`Exported snapshot zip (${r.bytes} bytes): ${r.zipPath}`);
+              });
+            }}
+          >
+            Export whole project snapshot (zip)
+          </button>
+        ) : null}
         {docPreviewHtml && !docError ? (
           <div className="doc-workspace-html-preview">
             <div className="doc-workspace-html-preview-bar">
@@ -2189,202 +2337,9 @@ export function DocumentationWorkspace({
           </p>
         ) : null}
       </section>
-
-      <section className="doc-workspace-panel doc-workspace-panel--nested">
-        <h2 className="doc-workspace-h2">3D code city</h2>
-        <p className="doc-workspace-prose">
-          The city lays out districts by top-level subsystem, files as blocks, and
-          symbol spans as buildings. Compare-state drives emissive window colors, while
-          the optional blame overlay tints buildings by dominant author for the bounded
-          set of files the backend sampled.
-        </p>
-        <div className="code-city-toolbar">
-          <div className="code-city-toolbar-row">
-            <div className="code-city-toolbar-group">
-              <span className="code-city-toolbar-label">View</span>
-              <div className="code-city-segmented">
-                <button
-                  type="button"
-                  className={
-                    cityRootSide === "baseline"
-                      ? "code-city-control-btn active"
-                      : "code-city-control-btn"
-                  }
-                  onClick={() => setCityRootSide("baseline")}
-                >
-                  Baseline city
-                </button>
-                <button
-                  type="button"
-                  className={
-                    cityRootSide === "target"
-                      ? "code-city-control-btn active"
-                      : "code-city-control-btn"
-                  }
-                  onClick={() => setCityRootSide("target")}
-                >
-                  Target city
-                </button>
-              </div>
-            </div>
-            <div className="code-city-toolbar-group">
-              <span className="code-city-toolbar-label">Overlays</span>
-              <div className="code-city-toggle-row">
-                <button
-                  type="button"
-                  className={
-                    cityCompareOverlay
-                      ? "code-city-control-btn active"
-                      : "code-city-control-btn"
-                  }
-                  onClick={() => setCityCompareOverlay((value) => !value)}
-                >
-                  Compare overlay
-                </button>
-                <button
-                  type="button"
-                  className={
-                    cityBlameOverlay
-                      ? "code-city-control-btn active"
-                      : "code-city-control-btn"
-                  }
-                  onClick={() => setCityBlameOverlay((value) => !value)}
-                >
-                  Git blame overlay
-                </button>
-                <button
-                  type="button"
-                  className={
-                    cityChangedOnly
-                      ? "code-city-control-btn active"
-                      : "code-city-control-btn"
-                  }
-                  onClick={() => setCityChangedOnly((value) => !value)}
-                >
-                  Changed only
-                </button>
-              </div>
-            </div>
-            <button
-              type="button"
-              className="doc-workspace-copy-btn"
-              onClick={resetCityFilters}
-            >
-              Reset filters
-            </button>
-          </div>
-          <div className="code-city-toolbar-row">
-            <select
-              className="doc-workspace-select"
-              value={citySubsystem}
-              onChange={(e) => setCitySubsystem(e.target.value)}
-            >
-              <option value="all">All subsystems</option>
-              {cityLayout.subsystems.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <select
-              className="doc-workspace-select"
-              value={cityExtension}
-              onChange={(e) => setCityExtension(e.target.value)}
-            >
-              <option value="all">All extensions</option>
-              {cityLayout.extensions.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <select
-              className="doc-workspace-select"
-              value={citySymbolKind}
-              onChange={(e) => setCitySymbolKind(e.target.value)}
-            >
-              <option value="all">All symbol kinds</option>
-              {cityLayout.symbolKinds.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <select
-              className="doc-workspace-select"
-              value={cityAuthor}
-              onChange={(e) => setCityAuthor(e.target.value)}
-            >
-              <option value="all">All authors</option>
-              {(cityModel?.authors ?? []).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-            <input
-              type="search"
-              className="doc-workspace-search"
-              placeholder="Search file or symbol"
-              value={citySearch}
-              onChange={(e) => setCitySearch(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="code-city-stat-grid">
-          <div className="code-city-stat-card">
-            <span className="code-city-stat-label">Visible buildings</span>
-            <strong>{cityLayout.buildings.length}</strong>
-          </div>
-          <div className="code-city-stat-card">
-            <span className="code-city-stat-label">Districts</span>
-            <strong>{cityLayout.districts.length}</strong>
-          </div>
-          <div className="code-city-stat-card">
-            <span className="code-city-stat-label">Changed</span>
-            <strong>{cityStats.changed}</strong>
-          </div>
-          <div className="code-city-stat-card">
-            <span className="code-city-stat-label">Authors sampled</span>
-            <strong>{cityModel?.authors.length ?? 0}</strong>
-          </div>
-        </div>
-        {!cityVisible ? (
-          <p className="doc-workspace-muted">
-            City model loading is deferred until this section scrolls near view to keep the
-            workspace responsive.
-          </p>
-        ) : null}
-        {cityLoading ? <p className="doc-workspace-muted">Building city model…</p> : null}
-        {cityError ? <p className="doc-workspace-alert">{cityError}</p> : null}
-        {!cityError && cityModel ? (
-          <div className="code-city-layout">
-            <CodeCityView
-              layout={cityLayout}
-              rootSide={cityRootSide}
-              compareOverlay={cityCompareOverlay}
-              blameOverlay={cityBlameOverlay}
-              selectedBuildingId={selectedCityBuilding?.id ?? null}
-              onSelect={setSelectedCityBuilding}
-            />
-            <CodeCityLegend
-              selected={selectedCityBuilding}
-              blameOverlay={cityBlameOverlay}
-              rootSide={cityRootSide}
-              visibleBuildingCount={cityLayout.buildings.length}
-              districtCount={cityLayout.districts.length}
-              changedBuildingCount={cityStats.changed}
-              onOpenDiff={(path) => onJumpToCompare(path)}
-            />
-          </div>
-        ) : null}
-        {!cityError && !cityLoading && !cityModel ? (
-          <div className="code-city-empty">
-            Build the city model to explore the repository structure in 3D.
-          </div>
-        ) : null}
-      </section>
       </details>
+        </>
+      )}
     </main>
   );
 }

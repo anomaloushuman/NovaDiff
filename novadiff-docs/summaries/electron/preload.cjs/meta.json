@@ -1,32 +1,23 @@
 {
   "relPath": "electron/preload.cjs",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:31:04.198Z",
+  "generatedAt": "2026-05-21T10:48:01.058Z",
   "summaryEvidence": {
-    "badges": [
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
-      }
-    ],
+    "badges": [],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: const { contextBridge, ipcRenderer } = require(\"electron\");"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-183"
+      "R129-131",
+      "R146-147"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const { contextBridge, ipcRenderer } = require(\"electron\");",
-      "R5 added: const LLM_STREAM = \"llm-stream-token\";",
-      "R6 added: const WINDOW_STATE = \"window-state-changed\";",
-      "R8 added: contextBridge.exposeInMainWorld(\"electronAPI\", {",
-      "R9 added: compareFolders: (left, right) =>"
+      "R129 added: gitStagePaths: (payload) => ipcRenderer.invoke(\"git-stage-paths\", payload),",
+      "R130 added: gitStageDistrict: (payload) => ipcRenderer.invoke(\"git-stage-district\", payload),",
+      "R131 added: exportProjectSnapshot: (payload) => ipcRenderer.invoke(\"export-project-snapshot\", payload),",
+      "R146 added: gitCommitDetail: (payload) => ipcRenderer.invoke(\"git-commit-detail\", payload),",
+      "R147 added: githubCommitContext: (payload) => ipcRenderer.invoke(\"github-commit-context\", payload),"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

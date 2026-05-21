@@ -122,4 +122,52 @@ export interface PublishExecutePayload {
   prBase?: string;
   prHead?: string;
   draftPr?: boolean;
+  /** When set, only these paths are staged (instead of git add -A). */
+  stagePaths?: string[];
+}
+
+export interface GitCommitDetail {
+  hash: string;
+  shortHash: string;
+  subject: string;
+  body: string;
+  authorName: string;
+  authorEmail: string;
+  authoredAt: string;
+  parentHashes: string[];
+  filesChanged: number;
+  insertions: number;
+  deletions: number;
+}
+
+export interface GithubCommitPullRequest {
+  number: number;
+  title: string;
+  state: string;
+  url: string;
+}
+
+export interface GithubCommitIssue {
+  number: number;
+  title: string;
+  state: string;
+  url: string;
+}
+
+export type GithubCommitThreadKind = "pr_review" | "pr_comment" | "issue_comment";
+
+export interface GithubCommitThread {
+  kind: GithubCommitThreadKind;
+  number: number;
+  author: string;
+  body: string;
+  createdAt: string | null;
+  url: string | null;
+}
+
+export interface GithubCommitContext {
+  pullRequests: GithubCommitPullRequest[];
+  issues: GithubCommitIssue[];
+  threads: GithubCommitThread[];
+  error: string | null;
 }

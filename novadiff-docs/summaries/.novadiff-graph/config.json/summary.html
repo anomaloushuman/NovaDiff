@@ -26,30 +26,28 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/config.json</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:15:25.949Z</div>
+    <div class="meta">Kind: removed · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:40:07.759Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>.novadiff-graph/config.json</code> has been added. It contains a minimal JSON object with two properties.</p>
+<p>The file <code>./.novadiff-graph/config.json</code> has been removed from the repository.<br>It previously contained two configuration flags: <code>autoUpdate</code> and <code>outputLanguage</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li>File addition: <code>.novadiff-graph/config.json</code> (lines R1‑R4 added).  </li>
-<li><code>autoUpdate</code>: set to <code>false</code> (line R2).  </li>
-<li><code>outputLanguage</code>: set to <code>&quot;en&quot;</code> (line R3).  </li>
-<li>JSON structure: <code>{ &quot;autoUpdate&quot;: false, &quot;outputLanguage&quot;: &quot;en&quot; }</code> (lines R1‑R4).</li>
+<li>Entire file <code>./.novadiff-graph/config.json</code> deleted (lines 1‑4 removed).  </li>
+<li>The <code>autoUpdate</code> flag (<code>false</code>) and <code>outputLanguage</code> (<code>&quot;en&quot;</code>) are no longer persisted.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The presence of this file may affect components that load configuration from this path.  </li>
-<li>The default values are explicitly defined; previously implicit defaults may no longer apply.  </li>
-<li>Unknown from the available diff/scan evidence whether any runtime behavior changes.</li>
+<li>Any code that previously parsed this JSON will no longer find the file, potentially causing a file‑not‑found error unless guarded.  </li>
+<li>Tests that mock or assert the presence of this config may now fail.  </li>
+<li>Documentation or code that references the config file should be updated.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that consumers of this config handle the <code>false</code> value for <code>autoUpdate</code>.  </li>
-<li>Ensure older deployments that did not ship this file still function, or provide a fallback.  </li>
-<li>Update documentation to list the new config file and its purpose.  </li>
-<li>Run targeted tests that load the config and confirm the default language is <code>&quot;en&quot;</code>.</li>
+<li>Verify that no modules import or read <code>./.novadiff-graph/config.json</code>.  </li>
+<li>Run the targeted unit tests that involve graph configuration to ensure no regressions.  </li>
+<li>Check the build pipeline for any steps that generate or consume this file.  </li>
+<li>Update any README or internal docs that mention the config file.</li>
 </ul>
 </article>
   </main>

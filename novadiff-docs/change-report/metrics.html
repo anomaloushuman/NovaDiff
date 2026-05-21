@@ -449,6 +449,50 @@
   .release-card[hidden] {
     display: none !important;
   }
+  .global-search-bar {
+    padding: 0 28px 12px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .global-search-input {
+    width: min(480px, 100%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--page-border);
+    background: var(--page-card);
+    color: var(--page-text);
+  }
+  .global-search-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .global-search-hit {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--page-card);
+    border: 1px solid var(--page-border);
+    text-decoration: none;
+    color: var(--page-link);
+  }
+  .impact-heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .impact-heatmap td, .impact-heatmap th {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--page-border);
+    text-align: left;
+  }
+  .impact-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #38d9ff, #9b7dff);
+    min-width: 4px;
+  }
   .release-link {
     font-weight: 700;
   }
@@ -478,7 +522,7 @@
         <h1>Compare metrics</h1>
         <p class="top-subtitle">Quantitative signals for the compare, styled for quicker scanning and anchored navigation.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 46a8da0664d1</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: </span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: f7c2bfd81af2</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-21T11:28:43.155Z</span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -488,9 +532,100 @@
     <a href="diagrams.html">Diagrams</a>
     <a href="release.html">Release</a>
   </nav>
+  <div class="global-search-bar">
+    <input type="search" class="global-search-input" data-global-search placeholder="Search this bundle (summaries, release)…" />
+    <div class="global-search-results" data-global-search-results></div>
+  </div>
   <main class="content">
     <div class="content-main">
-      <article class="content-card md"><p>Auto-publish draft for 133 compared paths.</p>
+      <section class="viz-card"><h2 id="impact-heatmap">District impact heatmap</h2><table class="impact-heatmap"><thead><tr><th>District</th><th>Impact</th><th>Score</th><th>Paths</th><th>Risks</th></tr></thead><tbody><tr><td>src</td><td><div class="impact-bar" style="width:100%"></div></td><td>54</td><td>27</td><td>0</td></tr><tr><td>electron</td><td><div class="impact-bar" style="width:37%"></div></td><td>20</td><td>10</td><td>0</td></tr><tr><td>packages</td><td><div class="impact-bar" style="width:26%"></div></td><td>14</td><td>7</td><td>0</td></tr><tr><td>.novadiff-graph</td><td><div class="impact-bar" style="width:11%"></div></td><td>6</td><td>3</td><td>0</td></tr><tr><td>(root)</td><td><div class="impact-bar" style="width:11%"></div></td><td>6</td><td>1</td><td>1</td></tr><tr><td>tests</td><td><div class="impact-bar" style="width:4%"></div></td><td>2</td><td>1</td><td>0</td></tr></tbody></table></section><article class="content-card md"><h1 id="compare-metrics"><a class="heading-anchor" href="#compare-metrics" aria-label="Link to Compare metrics">#</a>Compare metrics</h1>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Added</td>
+<td>23</td>
+</tr>
+<tr>
+<td>Removed</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Modified</td>
+<td>35</td>
+</tr>
+</tbody></table>
+<p><strong>Baseline:</strong> f7c2bfd81af2</p>
+<p><strong>Target:</strong> NovaDiff</p>
+<h2 id="changed-paths-sample-up-to-80"><a class="heading-anchor" href="#changed-paths-sample-up-to-80" aria-label="Link to Changed paths (sample, up to 80)">#</a>Changed paths (sample, up to 80)</h2>
+<ul>
+<li><strong>removed</strong> <code>.novadiff-graph/config.json</code></li>
+<li><strong>removed</strong> <code>.novadiff-graph/diff-overlay.json</code></li>
+<li><strong>removed</strong> <code>.novadiff-graph/knowledge-graph.json</code></li>
+<li><strong>removed</strong> <code>.novadiff-graph/meta.json</code></li>
+<li><strong>added</strong> <code>electron/export-snapshot.cjs</code></li>
+<li><strong>added</strong> <code>electron/git-commit.cjs</code></li>
+<li><strong>modified</strong> <code>electron/git-publish.cjs</code></li>
+<li><strong>modified</strong> <code>electron/git-service.cjs</code></li>
+<li><strong>added</strong> <code>electron/github-commit-context.cjs</code></li>
+<li><strong>modified</strong> <code>electron/github-service.cjs</code></li>
+<li><strong>modified</strong> <code>electron/llm.cjs</code></li>
+<li><strong>modified</strong> <code>electron/main.cjs</code></li>
+<li><strong>modified</strong> <code>electron/novadiff-docs-html.cjs</code></li>
+<li><strong>modified</strong> <code>electron/prefetch-summaries.cjs</code></li>
+<li><strong>modified</strong> <code>electron/preload.cjs</code></li>
+<li><strong>modified</strong> <code>electron/workspace-history.cjs</code></li>
+<li><strong>modified</strong> <code>electron/workspace-store.cjs</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/App.tsx</code></li>
+<li><strong>added</strong> <code>packages/graph-view/src/GraphEmbedSyncBridge.tsx</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx</code></li>
+<li><strong>added</strong> <code>packages/graph-view/src/__tests__/selectionCluster.test.ts</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/components/GraphView.tsx</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/index.css</code></li>
+<li><strong>modified</strong> <code>packages/graph-view/src/store.ts</code></li>
+<li><strong>added</strong> <code>packages/graph-view/src/utils/graphCityNavigation.ts</code></li>
+<li><strong>added</strong> <code>packages/graph-view/src/utils/selectionCluster.ts</code></li>
+<li><strong>modified</strong> <code>src/App.css</code></li>
+<li><strong>modified</strong> <code>src/App.tsx</code></li>
+<li><strong>added</strong> <code>src/app/DocsViewSyncContext.tsx</code></li>
+<li><strong>added</strong> <code>src/app/codeCityChromeInsets.ts</code></li>
+<li><strong>added</strong> <code>src/app/commitChangeAnalysis.ts</code></li>
+<li><strong>modified</strong> <code>src/app/commitMessage.ts</code></li>
+<li><strong>added</strong> <code>src/app/fileTree.ts</code></li>
+<li><strong>modified</strong> <code>src/app/gitTypes.ts</code></li>
+<li><strong>added</strong> <code>src/app/graphCityBridge.ts</code></li>
+<li><strong>added</strong> <code>src/app/helpCopy.ts</code></li>
+<li><strong>added</strong> <code>src/app/impactHeatmap.ts</code></li>
+<li><strong>modified</strong> <code>src/app/workspaceStorage.ts</code></li>
+<li><strong>modified</strong> <code>src/app/workspaceTypes.ts</code></li>
+<li><strong>modified</strong> <code>src/components/AutoCommitWorkspace.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/CodeCityLegend.tsx</code></li>
+<li><strong>added</strong> <code>src/components/CodeCityMinimapPortal.tsx</code></li>
+<li><strong>added</strong> <code>src/components/CodeCityMinimapSlot.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/CodeCityView.tsx</code></li>
+<li><strong>added</strong> <code>src/components/DocsGraphExploreChrome.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/DocumentationWorkspace.tsx</code></li>
+<li><strong>added</strong> <code>src/components/DocumentationWorkspaceLinked.tsx</code></li>
+<li><strong>added</strong> <code>src/components/GitBlameLineModal.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/GitBlamePanel.tsx</code></li>
+<li><strong>added</strong> <code>src/components/GitHistoryContextPanel.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/GitHistoryWorkspace.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/HistoryCompareStrip.tsx</code></li>
+<li><strong>added</strong> <code>src/components/KeyboardShortcutsHelp.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/KnowledgeGraphPanel.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/SidebarNav.tsx</code></li>
+<li><strong>added</strong> <code>src/components/onboarding/ProductTour.tsx</code></li>
+<li><strong>modified</strong> <code>src/components/onboarding/onboarding.css</code></li>
+<li><strong>modified</strong> <code>src/components/ui/ui-transitions.css</code></li>
+<li><strong>modified</strong> <code>src/vite-env.d.ts</code></li>
+<li><strong>added</strong> <code>tests/graphCityBridge.test.ts</code></li>
+<li><strong>modified</strong> <code>vite.config.ts</code></li>
+</ul>
 </article>
     </div>
     <aside class="content-side"><section class="toc-card"><div class="toc-title">On this page</div><nav class="toc" data-toc></nav></section></aside>
@@ -523,6 +658,36 @@
     };
     filterInput.addEventListener("input", applyFilter);
     applyFilter();
+  }
+  const globalSearch = document.querySelector("[data-global-search]");
+  const globalResults = document.querySelector("[data-global-search-results]");
+  if (globalSearch instanceof HTMLInputElement && globalResults) {
+    fetch("search-index.json")
+      .then((r) => r.json())
+      .then((entries) => {
+        const list = Array.isArray(entries) ? entries : [];
+        const render = () => {
+          const q = globalSearch.value.trim().toLowerCase();
+          if (!q) {
+            globalResults.innerHTML = "";
+            return;
+          }
+          const hits = list
+            .filter((e) => String(e.text || e.title || "").toLowerCase().includes(q))
+            .slice(0, 24);
+          globalResults.innerHTML = hits
+            .map((e) => {
+              const a = document.createElement("a");
+              a.className = "global-search-hit";
+              a.href = String(e.href || "#");
+              a.textContent = String(e.title || "");
+              return a.outerHTML;
+            })
+            .join("");
+        };
+        globalSearch.addEventListener("input", render);
+      })
+      .catch(() => {});
   }
 </script>
 </body>

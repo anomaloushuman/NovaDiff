@@ -132,7 +132,8 @@ async function indexWorkspaceHistory(userData, workspaceId, sendProgress) {
       hash: c.hash,
     });
     workspace.historyProgress = { current: i + 1, total, message: msg };
-    await upsertWorkspace(userData, workspace);
+    const persistSession = i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0;
+    await upsertWorkspace(userData, workspace, { touchSession: persistSession });
 
     await snapshotCommit(repoRoot, c.hash, snapDir);
     await fsp.mkdir(docsDir, { recursive: true });
@@ -237,7 +238,8 @@ async function refreshWorkspaceHistory(userData, workspaceId, sendProgress, opts
       hash: c.hash,
     });
     workspace.historyProgress = { current: i + 1, total, message: msg };
-    await upsertWorkspace(userData, workspace);
+    const persistSession = i === 0 || i === allCommits.length - 1 || (i + 1) % 10 === 0;
+    await upsertWorkspace(userData, workspace, { touchSession: persistSession });
 
     if (!existingSnap) {
       await snapshotCommit(repoRoot, c.hash, snapDir);

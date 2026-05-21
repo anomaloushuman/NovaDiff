@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/DocumentationWorkspaceLinked.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/DocumentationWorkspaceLinked.tsx</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:03:08.220Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new <code>src/components/DocumentationWorkspaceLinked.tsx</code> file introduces a set of utilities that bind the documentation workspace to the Code City graph. It adds a sync root component, a bootstrap helper, a custom hook <code>useLinkedCityState</code>, and two toolbar components.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>InitialDocsFocus</code> interface</strong> (lines 16‑22) defines optional props for initial focus state.  </li>
+<li><strong><code>DocumentationWorkspaceSyncRoot</code></strong> (lines 24‑37) wraps children in <code>DocsViewSyncProvider</code> and injects <code>DocsFocusBootstrap</code>.  </li>
+<li><strong><code>DocsFocusBootstrap</code></strong> (lines 39‑42) registers an external node with <code>useDocsViewSyncExternalNode</code>.  </li>
+<li><strong><code>useLinkedCityState</code></strong> (lines 44‑174) computes filtered layout, building mappings, highlights, and exposes callbacks for graph/city selection and entry/exit.  </li>
+<li><strong><code>CodeCityGraphToolbar</code></strong> (lines 176‑206) renders a toolbar that shows the current file context and an exit button.  </li>
+<li><strong><code>DocsLinkToolbar</code></strong> (lines 208‑215) displays a hint that the city and graph stay linked.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: The hook centralizes sync logic; any misuse of <code>sync</code> or missing context will surface at runtime.  </li>
+<li><strong>Maintainability</strong>: New exports are self‑contained; future refactors can target this file without touching other modules.  </li>
+<li><strong>Performance</strong>: Heavy <code>useMemo</code> chains (e.g., <code>filteredLayout</code>, <code>buildingByNode</code>) may add overhead; monitor rendering times when the graph payload is large.  </li>
+<li><strong>Compatibility</strong>: As a new file, it does not break existing code but requires importing the new components where needed.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Context availability</strong>: Verify that <code>DocsViewSyncProvider</code> is rendered above any consumer of <code>useLinkedCityState</code>.  </li>
+<li><strong>Type safety</strong>: Ensure <code>GraphPayload</code> and <code>CodeCityLayoutResult</code> types align with actual payloads; mismatches will cause runtime errors.  </li>
+<li><strong>Performance regression</strong>: Benchmark <code>useLinkedCityState</code> with a large graph to confirm memoization thresholds are adequate.  </li>
+<li><strong>UI consistency</strong>: Confirm that <code>CodeCityGraphToolbar</code> and <code>DocsLinkToolbar</code> integrate visually with existing toolbars and do not duplicate functionality.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

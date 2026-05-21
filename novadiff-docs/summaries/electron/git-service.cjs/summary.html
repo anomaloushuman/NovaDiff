@@ -26,36 +26,65 @@
 <body>
   <header class="top">
     <h1>electron/git-service.cjs</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:24:04.525Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:44:21.856Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>electron/git-service.cjs</code> is a new CommonJS module that bundles synchronous Git helpers for the Electron renderer. It centralises Git interactions that were previously scattered across the codebase.</p>
+<p>Three new helper functions were added to <code>electron/git-service.cjs</code> to give callers finer control over staging:</p>
+<ul>
+<li><p><code>stagePaths(repoRoot, paths)</code> – normalises a list of paths, runs <code>git add -- &lt;paths&gt;</code>, and returns <code>{ staged: N }</code>.  </p>
+</li>
+<li><p><code>unstagePaths(repoRoot, paths)</code> – runs <code>git reset HEAD -- &lt;paths&gt;</code> and returns <code>{ unstaged: N }</code>.  </p>
+</li>
+<li><p><code>stageDistrict(repoRoot, topDir, statusFiles?)</code> – filters the repository’s status files to those under <code>topDir</code> (or its sub‑directories) and delegates to <code>stagePaths</code>.</p>
+</li>
+</ul>
+<p>The module export list was extended (lines 253‑255) to expose these utilities.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (<code>R3‑R6</code>): <code>node:fs</code>, <code>node:path</code>, <code>node:os</code>, <code>node:child_process</code>.  </li>
-<li><strong>Command wrappers</strong> (<code>R12‑R36</code>): <code>runGit</code> and <code>tryRunGit</code> use <code>spawnSync</code> to execute Git, surface errors, and trim stdout.  </li>
-<li><strong>Repository introspection</strong> (<code>R38‑R120</code>): <code>isGitRepo</code>, <code>getRepoStatus</code>, and <code>parsePorcelainStatus</code> collect branch, upstream, file status, and remote data.  </li>
-<li><strong>Common Git ops</strong> (<code>R137‑R154</code>): <code>stageAll</code>, <code>commit</code>, and <code>push</code> expose <code>git add -A</code>, <code>git commit</code>, and <code>git push</code>.  </li>
-<li><strong>Worktree utilities</strong> (<code>R156‑R182</code>): <code>ensureWorktreeBase</code>, <code>removeDirSafe</code>, <code>checkoutRefWorktree</code>, and <code>cleanupNovadiffWorktrees</code> manage temporary detached worktrees for PR comparisons.  </li>
-<li><strong>PR comparison setup</strong> (<code>R191‑R205</code>): <code>preparePrCompareRoots</code> creates left/right roots for a PR diff.  </li>
-<li><strong>Tooling detection</strong> (<code>R207‑R214</code>): <code>detectGitTooling</code> reports Git availability and version.  </li>
-<li><strong>Exports</strong> (<code>R216‑R229</code>): All helpers are exported for external use.</li>
+<li><p>**<code>stagePaths</code>*</p>
+</li>
+<li><p>– added at lines 142‑149.  </p>
+</li>
+<li><p>**<code>unstagePaths</code>*</p>
+</li>
+<li><p>– added at lines 152‑159.  </p>
+</li>
+<li><p>**<code>stageDistrict</code>*</p>
+</li>
+<li><p>– added at lines 162‑169.  </p>
+</li>
+<li><p>Export list updated to include the three new functions (lines 253‑255).  </p>
+</li>
+<li><p>No other logic was modified.</p>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Error handling</strong>: <code>runGit</code> throws on non‑zero exit or spawn errors; callers must catch these.  </li>
-<li><strong>Synchronous execution</strong>: <code>spawnSync</code> blocks the event loop; acceptable for small scripts but may stall the UI during heavy Git operations.  </li>
-<li><strong>Node compatibility</strong>: Relies only on Node 14+ core modules; no external dependencies.  </li>
-<li><strong>Observability</strong>: Errors surface with messages like <code>git exited X</code> or <code>Failed to run git</code>.</li>
+<li><p>*<em>API surface</em></p>
+</li>
+<li><p>– callers can now stage or unstage specific files or a whole directory without affecting the rest of the working tree.  </p>
+</li>
+<li><p>*<em>Implementation</em></p>
+</li>
+<li><p>– each helper invokes a single <code>runGit</code> call, so the runtime cost is minimal compared to existing helpers.  </p>
+</li>
+<li><p>*<em>Compatibility</em></p>
+</li>
+<li><p>– existing consumers of <code>stageAll</code>, <code>commit</code>, <code>push</code>, etc. remain unchanged.</p>
+</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ol>
-<li><strong>Git absence</strong> – <code>detectGitTooling</code> must be checked before using any helper; otherwise, an exception will crash the renderer.  </li>
-<li><strong>Worktree cleanup</strong> – <code>cleanupNovadiffWorktrees</code> should run on app exit to avoid accumulating temp directories.  </li>
-<li><strong>Path sanitization</strong> – <code>checkoutRefWorktree</code> sanitises labels but still uses <code>path.basename</code>; verify no edge‑case injection.  </li>
-<li><strong>Build inclusion</strong> – Ensure the new <code>.cjs</code> file is referenced in the Electron build config; otherwise, runtime imports will fail.</li>
-</ol>
+<ul>
+<li><p>The behavior of <code>stageDistrict</code> when <code>topDir</code> is empty or malformed is not documented; the current logic may match many files.  </p>
+</li>
+<li><p><code>unstagePaths</code> propagates any <code>git</code> error; tests should cover failure scenarios.  </p>
+</li>
+<li><p>Documentation or type definitions should be updated to expose the new helpers.  </p>
+</li>
+<li><p>Run the full lint, test, and build suite to confirm no regressions in the new code paths.</p>
+</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

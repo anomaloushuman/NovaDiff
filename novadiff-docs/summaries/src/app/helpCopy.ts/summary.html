@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/helpCopy.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/helpCopy.ts</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:56:13.903Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>src/app/helpCopy.ts</code> (lines 1‑10) has been added. It exports a constant```ts
+export const HELP_COPY: Record&lt;string, string&gt; = {
+  &quot;link-views&quot;: &quot;When enabled, selecting a node in the knowledge graph highlights the matching building in Code City (and vice versa).&quot;,
+  &quot;focus-mode&quot;: &quot;Focus mode dims unrelated symbols and flies the camera to the linked selection in both views.&quot;,
+  &quot;stage-district&quot;: &quot;Stages all changed files under the selected top-level folder (district) for the next commit.&quot;,
+  &quot;auto-commit&quot;: &quot;Generates commit messages from structural classification, districts, and knowledge‑graph symbols.&quot;
+};</p>
+<pre><code class="language-The">
+### Key changes
+
+- **File addition**: `src/app/helpCopy.ts` now exists in the repository.
+- **Exported constant**: `HELP_COPY` is defined as a `Record&lt;string, string&gt;`.
+- **Help entries**: four keys (`link-views`, `focus-mode`, `stage-district`, `auto-commit`) with descriptive strings.
+
+### Impact
+
+- **Static data only**: No runtime logic is altered; the file only provides constants.
+- **Centralization**: Help text is now in a single location, reducing duplication across the codebase.
+- **Compatibility**: Adding a new export does not break existing modules unless they expect a different shape for `HELP_COPY`. Usage of the new constant is not evident from the diff.
+
+### Risks &amp; follow‑ups
+- **Import usage**: Verify that components needing help text import `HELP_COPY` from `src/app/helpCopy.ts`.
+- **Key consistency**: UI labels must reference the exact keys (`link-views`, `focus-mode`, etc.) to avoid undefined lookups.
+- **Testing**: Add unit tests to confirm each key returns the expected string and that no extraneous keys exist.
+- **Build validation**: Run `tsc`, lint, and test suites to ensure the new file passes all checks.
+</code></pre>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

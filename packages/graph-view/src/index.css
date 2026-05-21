@@ -298,6 +298,46 @@ html {
   box-shadow: 0 8px 24px color-mix(in srgb, var(--color-root) 55%, transparent);
 }
 
+.novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host,
+.novadiff-graph-embed
+  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap]) {
+  display: grid !important;
+  grid-template-columns: repeat(4, 26px);
+  grid-template-rows: auto auto;
+  row-gap: 10px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host [data-code-city-minimap],
+.novadiff-graph-embed
+  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap])
+  [data-code-city-minimap] {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host .react-flow__controls-button,
+.novadiff-graph-embed
+  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap])
+  .react-flow__controls-button {
+  grid-row: 2;
+  border-bottom: none;
+  border-right: 1px solid var(--color-border-subtle);
+}
+
+.novadiff-graph-embed
+  .react-flow__controls.code-city-graph-dock-host
+  .react-flow__controls-interactive,
+.novadiff-graph-embed
+  .react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap])
+  .react-flow__controls-interactive {
+  border-right: none;
+}
+
 .novadiff-graph-embed .react-flow__controls-button {
   background: var(--color-surface);
   border-bottom-color: var(--color-border-subtle);
@@ -308,6 +348,7 @@ html {
   background: var(--color-elevated);
 }
 
+/* NovaDiff docs explore hides minimap; code city docks beside zoom controls (CodeCityMinimapPortal). */
 .novadiff-graph-embed .react-flow__minimap {
   border-radius: 10px;
   border: 1px solid var(--color-border-subtle);

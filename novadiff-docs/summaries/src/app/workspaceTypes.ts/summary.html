@@ -26,36 +26,34 @@
 <body>
   <header class="top">
     <h1>src/app/workspaceTypes.ts</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:49:13.730Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:57:25.816Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/app/workspaceTypes.ts</code> now exports several TypeScript interfaces that describe Git user profiles, workspace snapshots, and tooling status. The file contains only type declarations, so it does not alter runtime behavior.</p>
+<p>The <code>WorkspaceUiState</code> interface in <code>src/app/workspaceTypes.ts</code> now includes a new <code>workspacePage</code> option: <code>&quot;docReports&quot;</code>. This change is confined to line 38 of the file.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>GitUserProfile</code></strong> – added at R1 (lines 1‑6).  </li>
-<li><strong><code>WorkspaceCommitSnapshot</code></strong> – added at R9 (lines 9‑17).  </li>
-<li><strong><code>NovaWorkspace</code></strong> – added at R19 (lines 19‑35).  </li>
-<li><strong><code>WorkspaceUiState</code></strong> – added at R37 (lines 37‑42).  </li>
-<li><strong><code>GitHistoryCompareOptions</code></strong> – added at R44 (lines 44‑47).  </li>
-<li><strong><code>GhToolingStatus</code></strong> – added at R49 (lines 49‑60).  </li>
-<li><strong><code>WorkspaceSessionState</code></strong> – added at R62 (lines 62‑67).</li>
+<li><code>WorkspaceUiState.workspacePage</code> union expanded from```ts
+&quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</li>
 </ul>
-<p>Each interface is exported and can be imported by other modules.</p>
-<h3>Impact</h3>
-<ul>
-<li><strong>Type safety</strong> – the new interfaces enforce stricter typing for workspace‑related data.  </li>
-<li><strong>Imports</strong> – any module that previously used raw objects for these concepts must now import the corresponding interface; missing imports will cause compile‑time errors.  </li>
-<li><strong>Runtime</strong> – the file contains only type definitions, so the bundle size and execution performance are unchanged.  </li>
-<li><strong>Documentation</strong> – existing docs should reference these interfaces to clarify data contracts.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Unused exports</strong> – verify that all new interfaces are referenced; otherwise linting may flag them.  </li>
-<li><strong>Naming collisions</strong> – ensure no other module exports identically named interfaces that could cause import ambiguity.  </li>
-<li><strong>Data consistency</strong> – confirm that objects constructed elsewhere match the new shapes, especially optional fields such as <code>uiState</code>.  </li>
-<li><strong>Future refactors</strong> – if workspace structures evolve, these interfaces may need updates; track changes in the <code>src/app</code> module.</li>
-</ul>
+<p><code>to</code>ts
+&quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;docReports&quot; | &quot;prs&quot; | &quot;publish&quot;</p>
+<pre><code class="language-(diff:">- No other properties or interfaces were modified.
+
+### Impact
+
+  
+- Type safety: code that assigns or checks `workspacePage` must now consider `&quot;docReports&quot;`.  
+- UI routing: components that render based on `workspacePage` may need an additional case.  
+- Tests: assertions enumerating allowed values may need updating.  
+- Runtime behavior remains unchanged.
+
+### Risks &amp; follow‑ups  
+- Unhandled page value: components switching on `workspacePage` without a default or missing `&quot;docReports&quot;` could render incorrectly.  
+- Test failures: existing unit tests that validate the union type may fail.  
+- Documentation: any docs listing valid `workspacePage` options should be updated.  
+- Linting: custom rules or type guards enforcing the allowed set must include the new value.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

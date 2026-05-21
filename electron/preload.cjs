@@ -126,6 +126,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   githubPrView: (payload) => ipcRenderer.invoke("github-pr-view", payload),
   gitPublishPreview: (payload) => ipcRenderer.invoke("git-publish-preview", payload),
   gitPublishExecute: (payload) => ipcRenderer.invoke("git-publish-execute", payload),
+  gitStagePaths: (payload) => ipcRenderer.invoke("git-stage-paths", payload),
+  gitStageDistrict: (payload) => ipcRenderer.invoke("git-stage-district", payload),
+  exportProjectSnapshot: (payload) => ipcRenderer.invoke("export-project-snapshot", payload),
   workspaceSessionLoad: () => ipcRenderer.invoke("workspace-session-load"),
   workspaceSetGitUser: (user) => ipcRenderer.invoke("workspace-set-git-user", user),
   workspaceCreate: (payload) => ipcRenderer.invoke("workspace-create", payload),
@@ -140,6 +143,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
   workspaceUpdateUiState: (payload) =>
     ipcRenderer.invoke("workspace-update-ui-state", payload),
   gitBlameAtRef: (payload) => ipcRenderer.invoke("git-blame-at-ref", payload),
+  gitCommitDetail: (payload) => ipcRenderer.invoke("git-commit-detail", payload),
+  githubCommitContext: (payload) => ipcRenderer.invoke("github-commit-context", payload),
   workspaceEnsureCommitSnapshot: (payload) =>
     ipcRenderer.invoke("workspace-ensure-commit-snapshot", payload),
   workspaceSnapshotListFiles: (payload) =>

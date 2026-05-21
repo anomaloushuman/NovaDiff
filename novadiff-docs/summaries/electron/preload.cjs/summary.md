@@ -1,20 +1,21 @@
 ### Overview  
-A new file `electron/preload.cjs` (lines 1‑183) is added. It imports `contextBridge` and `ipcRenderer` from Electron and exposes a global `electronAPI` object to the renderer via `contextBridge.exposeInMainWorld`.
+The preload script now exposes five new IPC‑invoked methods via `contextBridge`. These extend the Git and GitHub tooling API surface.
 
 ### Key changes  
-- **API surface** – `electronAPI` now contains many `ipcRenderer.invoke` wrappers (e.g., `compareFolders`, `getFileDiff`, `pickDirectory`, `gitRepoStatus`, `workspaceCreate`, `llmSummarize`, etc.) as shown in the added lines 9‑52, 58‑71, 73‑80, 82‑84, 88‑116, 117‑120, 122‑128, 130‑140, 142‑149, 151‑158, 160‑172, 174‑181.  
-- **Event listeners** – Added helpers such as `onWindowStateChanged`, `onKnowledgeGraphProgress`, `onEngineProgress`, `onSummaryPrefetchProgress`, `onGithubGhInstallProgress`, `onGithubAuthProgress`, `onWorkspaceHistoryProgress` (lines 19‑27, 55‑62, 64‑71, 73‑80, 151‑158, 165‑172, 174‑181) that register IPC listeners and return cleanup callbacks.  
-- **Constants** – Introduced `LLM_STREAM` and `WINDOW_STATE` tokens (lines 5‑6).  
-- **LLM streaming** – Implemented `llmSummarizeStream` (lines 88‑116) that aborts any previous stream, listens on `LLM_STREAM`, and streams accumulated text via a callback.  
-- **Context isolation** – Uses `require("electron")` and `contextBridge` to safely expose APIs.
+- `gitStagePaths` (`ipcRenderer.invoke("git-stage-paths")`) added at line 129.  
+- `gitStageDistrict` (`ipcRenderer.invoke("git-stage-district")`) added at line 130.  
+- `exportProjectSnapshot` (`ipcRenderer.invoke("export-project-snapshot")`) added at line 131.  
+- `gitCommitDetail` (`ipcRenderer.invoke("git-commit-detail")`) added at line 146.  
+- `githubCommitContext` (`ipcRenderer.invoke("github-commit-context")`) added at line 147.  
+
+These entries appear in the `electronAPI` object immediately after the existing workspace‑related methods.
 
 ### Impact  
-- **Renderer access** – Front‑end code can call backend features directly; corresponding main‑process handlers must exist.  
-- **Preload linkage** – The script must be referenced in `webPreferences.preload` for all renderer windows; tests should verify this configuration.  
-- **Security** – Exposing many APIs requires strict context isolation and input validation to prevent misuse.  
+- The API surface now includes calls for staging specific paths or districts, exporting project snapshots, and retrieving commit details from Git and GitHub.  
+- No existing symbols were removed; the change is additive.  
+- Consumers can invoke these methods via `window.electronAPI.<method>`.
 
 ### Risks & follow‑ups  
-- **Missing handlers** – If any invoked channel lacks a main‑process handler, renderer calls will fail; run integration tests to confirm all handlers exist.  
-- **Listener leaks** – Ensure cleanup callbacks returned by the `on…` helpers are invoked; otherwise listeners may accumulate.  
-- **Performance** – Unknown from the available diff/scan evidence; monitor IPC traffic for large file diffs or LLM streams.  
-- **Compatibility** – Existing renderer code that does not expect `electronAPI` should handle its absence gracefully; add defensive checks if needed.
+- Verify that the main process registers listeners for the channels `"git-stage-paths"`, `"git-stage-district"`, `"export-project-snapshot"`, `"git-commit-detail"`, and `"github-commit-context"`. Missing handlers will surface as IPC errors.  
+- Add unit tests to confirm that the preload methods forward payloads correctly.  
+- Run `npm run lint` and `npm run build` to ensure no syntax or type errors were introduced.

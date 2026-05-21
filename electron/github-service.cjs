@@ -221,4 +221,6 @@ module.exports = {
   createPullRequest,
   slugFromRepoRoot,
   tryRunGh,
+  getGithubCommitContext: (...args) =>
+    require("./github-commit-context.cjs").getGithubCommitContext(...args),
 };

@@ -44,8 +44,13 @@
   animation: ui-view-fade 0.32s ease both;
 }
 
+.launch-panel--main .workspace-stage {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
 .workspace-stage {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
   min-height: 0;
   display: flex;
@@ -54,10 +59,16 @@
 }
 
 .workspace-stage-inner {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.workspace-stage-inner > .workspace {
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 .insights-tab {

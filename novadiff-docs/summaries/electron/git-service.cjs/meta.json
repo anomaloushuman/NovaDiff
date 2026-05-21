@@ -1,9 +1,9 @@
 {
   "relPath": "electron/git-service.cjs",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:24:04.525Z",
+  "generatedAt": "2026-05-21T10:44:21.856Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,45 +11,31 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R3 added: const fssync = require(\"node:fs\");",
-      "R4 added: const path = require(\"node:path\");",
-      "R5 added: const os = require(\"node:os\");",
-      "R6 added: const { spawnSync } = require(\"node:child_process\");"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-229"
+      "R142-171",
+      "R253-255"
     ],
     "cited_changed_lines": [
-      "R1 added: \"use strict\";",
-      "R3 added: const fssync = require(\"node:fs\");",
-      "R4 added: const path = require(\"node:path\");",
-      "R5 added: const os = require(\"node:os\");",
-      "R6 added: const { spawnSync } = require(\"node:child_process\");",
-      "R8 added: function gitExecutable() {"
+      "R142 added: function stagePaths(repoRoot, paths) {",
+      "R143 added: const root = path.resolve(repoRoot);",
+      "R144 added: const list = Array.isArray(paths) ? paths.map((p) => String(p ?? \"\").trim()).filter(Boolean) : [];",
+      "R145 added: if (list.length === 0) {",
+      "R146 added: return { staged: 0 };",
+      "R147 added: }"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function getRepoStatus (75-123)",
-      "right function parsePorcelainStatus (47-74)",
-      "right function detectGitTooling (207-229)",
-      "right function runGit (12-29)",
-      "right function preparePrCompareRoots (191-206)",
-      "right function parseGithubSlugFromUrl (124-136)",
-      "right function removeDirSafe (162-173)",
-      "right function checkoutRefWorktree (174-183)"
+      "right function stageDistrict (162-171)",
+      "right function stagePaths (142-151)",
+      "right function unstagePaths (152-161)",
+      "right function detectGitTooling (237-262)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

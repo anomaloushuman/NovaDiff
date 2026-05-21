@@ -1,21 +1,19 @@
 ### Overview  
-A new file, `.novadiff-graph/meta.json`, has been added to the repository. It contains a flat JSON object with metadata about the current diff‑graph snapshot.
+The file `.novadiff-graph/meta.json` was removed from the repository.  
+All six lines of JSON content—`lastAnalyzedAt`, `gitCommitHash`, `version`, and `analyzedFiles`—were deleted (lines 1‑6 in the diff).
 
 ### Key changes  
-- **File addition**: `.novadiff-graph/meta.json` (lines 1‑6).  
-- **Metadata fields**:  
-  - `lastAnalyzedAt`: `2026-05-20T01:19:05.928Z` (line 2).  
-  - `gitCommitHash`: `6c333f6cf037bf75318c26081cae3324fdb89c64` (line 3).  
-  - `version`: `1.0.0` (line 4).  
-  - `analyzedFiles`: `329` (line 5).  
+- **File deletion**: `.novadiff-graph/meta.json` no longer exists in the tree.  
+- **Metadata loss**: The six lines of JSON that tracked analysis timestamp, commit hash, version, and file count are gone.  
+- **No other source changes**: The diff shows only the removal of this file.
 
 ### Impact  
-- **Observability**: The timestamp and commit hash allow tools to report when the graph was last updated and which commit it represents.  
-- **Versioning**: The `version` field provides a simple schema version that can be checked by consumers.  
-- **Data integrity**: The commit hash ties the metadata to a specific repository state, aiding reproducibility.  
+- **Runtime behavior**: Any code that attempts to read `.novadiff-graph/meta.json` will now encounter a missing‑file error unless it handles the absence.  
+- **Build artifacts**: The build pipeline no longer generates or consumes this metadata file.  
+- **Documentation**: References to the metadata file in docs or comments should be updated to avoid confusion.
 
 ### Risks & follow‑ups  
-- **Missing file handling**: Verify that consumers of the graph handle the absence of `meta.json` gracefully.  
-- **Timestamp format**: Ensure downstream consumers parse the ISO‑8601 timestamp correctly.  
-- **Commit hash consistency**: Confirm that the hash matches the current HEAD of the repository.  
-- **File size**: The file is tiny, but check that adding it does not trigger any size limits in CI or packaging scripts.
+- **Reference breakage**: Search the codebase for `meta.json` or `analyzedFiles`; failing to update them could cause crashes.  
+- **Test coverage**: Run the nearest targeted tests (e.g., analysis pipeline tests) and a quick manual smoke test to confirm no runtime errors.  
+- **CI pipeline**: Verify that any CI steps that previously relied on the metadata file (e.g., publishing version info) are updated.  
+- **Documentation audit**: Remove or revise any README or internal docs mentioning the metadata file.

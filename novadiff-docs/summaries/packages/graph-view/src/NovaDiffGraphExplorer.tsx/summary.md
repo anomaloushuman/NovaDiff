@@ -1,24 +1,20 @@
 ### Overview  
-A new `NovaDiffGraphExplorer.tsx` component is added to `packages/graph-view/src`. It exposes the public API `NovaDiffGraphExplorerProps` (lines 21‑33) and `NovaDiffGraphDiffOverlay` (lines 16‑20), and implements both an embedded and a full graph explorer mode.
+In `packages/graph-view/src/NovaDiffGraphExplorer.tsx` the `NovaDiffGraphExplorerProps` interface was extended with four optional fields: `controlledNodeId`, `focusMode`, `enteredFilePath`, and `onSelectionChange`. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.
 
 ### Key changes  
-- **Imports** (R1‑R6): added React hooks, `validateGraph`, type imports (`GraphIssue`, `KnowledgeGraph`), and the local `useDashboardStore`.  
-- **Public interfaces** (R16‑R21): declare the overlay and props shapes.  
-- **Entry point** (R34‑R42): `NovaDiffGraphExplorer` dispatches to `NovaDiffGraphExplorerEmbed` or `NovaDiffGraphExplorerFull` based on `embedMode`.  
-- **Fingerprinting** (R44‑R53): `graphFingerprint` builds a deterministic string to skip re‑validation when the graph hasn’t changed.  
-- **Full explorer logic** (R56‑R146):  
-  - Validates the graph with `validateGraph`; updates the store (`setGraph`, `setDiffOverlay`) and view mode.  
-  - Handles diff overlay updates, load errors, hydration state, and skeleton UI.  
-  - Provides `NovaDiffEmbedContext` and `ThemeProvider` to child components.
+- **Interface augmentation** – the new props are declared in lines 31‑37 of the interface.  
+- **Documentation comments** – JSDoc comments describe each prop’s intent.  
+- **Prop propagation** – the spread `...props` in the component’s signature passes the new fields unchanged to either `NovaDiffGraphExplorerEmbed` or `NovaDiffGraphExplorerFull`.  
+- **No runtime changes** – the component’s effect hooks, state handling, and JSX output are identical to the pre‑change version.
 
 ### Impact  
-- Immediate validation of incoming graphs; clear error messages for invalid data.  
-- Centralizes graph handling; separates embed logic.  
-- Fingerprint caching avoids redundant validation on unchanged graphs.  
-- Skeleton UI and error paragraph give users feedback during loading or failure.
+- **Non‑breaking** – all existing consumers compile without modification because the new props are optional.  
+- **Extensibility** – downstream code can now supply node‑selection or focus‑mode hints without altering the explorer internals.  
+- **No performance change** – the diff adds only type information and comments.  
+- **Documentation** – the added comments improve developer understanding but require no code changes elsewhere.
 
 ### Risks & follow‑ups  
-- **Validation contract**: ensure `validateGraph` returns the expected shape; otherwise store updates may fail.  
-- **Store side‑effects**: `useDashboardStore` mutations (`setGraph`, `setDiffOverlay`, view mode switches) must be idempotent; test repeated renders.  
-- **Embed mode toggle**: verify `embedMode` correctly routes to `NovaDiffGraphExplorerEmbed`; regression could break embedded deployments.  
-- **Type safety**: `Omit<NovaDiffGraphExplorerProps, "embedMode">` assumes no other required props are omitted; future prop additions could break the signature.
+- **Type‑checking regressions** – any code that destructures `NovaDiffGraphExplorerProps` must still satisfy the updated type; run `tsc` to confirm.  
+- **Test coverage** – existing tests may need to be updated or new tests added to verify that the new props can be passed without breaking the component (unknown from the available diff).  
+- **Build validation** – run lint, `tsc`, and the production build to ensure no type errors.  
+- **Documentation sync** – update public API docs to reflect the new optional props.

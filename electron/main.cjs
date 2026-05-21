@@ -56,7 +56,9 @@ const {
   viewPullRequest,
   getUserProfile,
   listDetectedAccounts,
+  getGithubCommitContext,
 } = require("./github-service.cjs");
+const { getCommitDetail } = require("./git-commit.cjs");
 const { discoverRepos, matchRepoForGithubRepo } = require("./repo-discovery.cjs");
 const { previewPublish, executePublish } = require("./git-publish.cjs");
 const {
@@ -803,6 +805,41 @@ ipcMain.handle("git-publish-execute", async (_evt, payload) => {
   }
 });
 
+ipcMain.handle("git-stage-paths", async (_evt, payload) => {
+  try {
+    const { stagePaths } = require("./git-service.cjs");
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    return stagePaths(repoRoot, payload?.paths ?? []);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("export-project-snapshot", async (_evt, payload) => {
+  try {
+    const { exportProjectSnapshotZip } = require("./export-snapshot.cjs");
+    const bundleDir = String(payload?.bundleDir ?? "").trim();
+    const outZip = String(payload?.outZipPath ?? "").trim();
+    if (!bundleDir || !outZip) {
+      throw new Error("bundleDir and outZipPath are required");
+    }
+    return exportProjectSnapshotZip(bundleDir, outZip);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-stage-district", async (_evt, payload) => {
+  try {
+    const { stageDistrict, getRepoStatus } = require("./git-service.cjs");
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    const status = getRepoStatus(repoRoot);
+    return stageDistrict(repoRoot, payload?.topDir ?? "", status.files);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
 function sendWorkspaceHistoryProgress(event, payload) {
   const wc = event?.sender;
   if (!wc || wc.isDestroyed()) {
@@ -1019,6 +1056,29 @@ ipcMain.handle("git-blame-at-ref", async (_evt, payload) => {
       throw new Error("Not a git repository");
     }
     return blameFileAtRef(repoRoot, ref, relPath);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-commit-detail", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    const hash = String(payload?.hash ?? "").trim();
+    if (!isGitRepo(repoRoot)) {
+      throw new Error("Not a git repository");
+    }
+    return getCommitDetail(repoRoot, hash);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("github-commit-context", async (_evt, payload) => {
+  try {
+    const repository = String(payload?.repository ?? "").trim();
+    const sha = String(payload?.sha ?? "").trim();
+    return getGithubCommitContext(repository, sha);
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
   }

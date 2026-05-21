@@ -449,6 +449,50 @@
   .release-card[hidden] {
     display: none !important;
   }
+  .global-search-bar {
+    padding: 0 28px 12px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .global-search-input {
+    width: min(480px, 100%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--page-border);
+    background: var(--page-card);
+    color: var(--page-text);
+  }
+  .global-search-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .global-search-hit {
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: var(--page-card);
+    border: 1px solid var(--page-border);
+    text-decoration: none;
+    color: var(--page-link);
+  }
+  .impact-heatmap {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  .impact-heatmap td, .impact-heatmap th {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--page-border);
+    text-align: left;
+  }
+  .impact-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #38d9ff, #9b7dff);
+    min-width: 4px;
+  }
   .release-link {
     font-weight: 700;
   }
@@ -478,7 +522,7 @@
         <h1>Change report bundle</h1>
         <p class="top-subtitle">A polished overview of the generated bundle and the quickest paths into the report.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 46a8da0664d1</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-20T01:32:19.398Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: f7c2bfd81af2</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-21T11:28:43.155Z</span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -488,6 +532,10 @@
     <a href="diagrams.html">Diagrams</a>
     <a href="release.html">Release</a>
   </nav>
+  <div class="global-search-bar">
+    <input type="search" class="global-search-input" data-global-search placeholder="Search this bundle (summaries, release)…" />
+    <div class="global-search-results" data-global-search-results></div>
+  </div>
   <main class="content no-toc">
     <div class="content-main">
       <section class="hero-card">
@@ -539,6 +587,36 @@
     };
     filterInput.addEventListener("input", applyFilter);
     applyFilter();
+  }
+  const globalSearch = document.querySelector("[data-global-search]");
+  const globalResults = document.querySelector("[data-global-search-results]");
+  if (globalSearch instanceof HTMLInputElement && globalResults) {
+    fetch("search-index.json")
+      .then((r) => r.json())
+      .then((entries) => {
+        const list = Array.isArray(entries) ? entries : [];
+        const render = () => {
+          const q = globalSearch.value.trim().toLowerCase();
+          if (!q) {
+            globalResults.innerHTML = "";
+            return;
+          }
+          const hits = list
+            .filter((e) => String(e.text || e.title || "").toLowerCase().includes(q))
+            .slice(0, 24);
+          globalResults.innerHTML = hits
+            .map((e) => {
+              const a = document.createElement("a");
+              a.className = "global-search-hit";
+              a.href = String(e.href || "#");
+              a.textContent = String(e.title || "");
+              return a.outerHTML;
+            })
+            .join("");
+        };
+        globalSearch.addEventListener("input", render);
+      })
+      .catch(() => {});
   }
 </script>
 </body>

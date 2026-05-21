@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/git-commit.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/git-commit.cjs</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:43:02.263Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>electron/git-commit.cjs</code> is added. It exports a <code>getCommitDetail</code> helper that retrieves commit metadata and statistics by invoking Git commands.</p>
+<h3>Key changes</h3>
+<ul>
+<li>Import added at line 3: <code>const { runGit, tryRunGit } = require(&quot;./git-service.cjs&quot;);</code>  </li>
+<li>Function <code>getCommitDetail(repoRoot, hash)</code> added (lines 1‑69):  <ul>
+<li>Validates <code>repoRoot</code> and <code>hash</code> (lines 12‑14).  </li>
+<li>Runs <code>git log -1 &lt;hash&gt;</code> with a custom format to capture hash, short hash, subject, author, email, date, and parents (lines 16‑21).  </li>
+<li>Retrieves the commit body via <code>git log -1 &lt;hash&gt; --format=%B</code> (line 23).  </li>
+<li>Calls <code>git show --stat</code> (line 28) and parses the summary for <code>filesChanged</code>, <code>insertions</code>, and <code>deletions</code> (lines 30‑43). Falls back to line count if the summary is missing (lines 44‑46).</li>
+</ul>
+</li>
+<li>Export added at line 69: <code>module.exports = { getCommitDetail };</code></li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a single public API for commit detail retrieval.  </li>
+<li>Throws an error if <code>repoRoot</code> or <code>hash</code> is missing (lines 12‑14).  </li>
+<li>Requires three Git commands per call; performance impact is unknown from the diff.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>runGit</code>/<code>tryRunGit</code> in <code>git-service.cjs</code> return the expected <code>stdout</code>/<code>ok</code> flags.  </li>
+<li>The regexes used to parse the stat summary may fail on edge cases (e.g., commits with no file changes).  </li>
+<li>Test with repositories containing non‑ASCII commit messages to confirm UTF‑8 handling (unknown from diff).  </li>
+<li>Monitor latency in CI pipelines; consider caching or batching if call frequency is high (unknown from diff).</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

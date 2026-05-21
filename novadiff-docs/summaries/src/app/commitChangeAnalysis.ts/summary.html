@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/commitChangeAnalysis.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/commitChangeAnalysis.ts</h1>
+    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:53:08.972Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>src/app/commitChangeAnalysis.ts</code> (lines 1–209) introduces browser‑safe utilities for classifying commit changes. It replaces external graph‑core types with local interfaces and removes <code>node:fs</code> dependencies.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Interfaces</strong> (<code>ChangeAnalysis</code>, <code>UpdateDecision</code>) defined at lines 4–19.  </li>
+<li><strong><code>topDirectory</code></strong> (lines 21–27) extracts the first path segment or returns <code>null</code>.  </li>
+<li><strong><code>detectDirectoryChanges</code></strong> (lines 29–49) flags structural changes when new or deleted files add previously unknown top‑level directories.  </li>
+<li><strong><code>summarizeChanges</code></strong> (lines 52–63) builds a concise string of new, deleted, and modified file counts.  </li>
+<li><strong><code>classifyUpdate</code></strong> (lines 67–129) implements decision logic:  <ul>
+<li><code>SKIP</code> if no structural changes.  </li>
+<li><code>FULL_UPDATE</code> when structural changes exceed 30 files or 50 % of the graph.  </li>
+<li><code>ARCHITECTURE_UPDATE</code> if directory changes or &gt;10 structural files.  </li>
+<li><code>PARTIAL_UPDATE</code> otherwise.</li>
+</ul>
+</li>
+<li><strong><code>buildChangeAnalysisFromRows</code></strong> (lines 132–152) converts <code>FileChange</code> rows into a <code>ChangeAnalysis</code>.  </li>
+<li><strong><code>classifyCompareRows</code></strong> (lines 155–163) wraps the above for direct use.  </li>
+<li><strong><code>districtBreakdown</code></strong> (lines 165–185) aggregates changes by top‑level directory and sorts by count.  </li>
+<li><strong><code>graphSymbolsContext</code></strong> (lines 188–209) lists affected functions/classes from a graph, limited to 12 entries.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>New public API: modules can import <code>classifyCompareRows</code> or <code>districtBreakdown</code> without pulling in Node‑specific code.  </li>
+<li>No existing code is altered; the file is entirely new.  </li>
+<li><code>detectDirectoryChanges</code> runs in O(n) over file lists, suitable for typical commit sizes.  </li>
+<li>Human‑readable summaries (<code>summarizeChanges</code>, <code>graphSymbolsContext</code>) aid UI or log output.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Threshold correctness</strong>: the &gt;30 and &gt;50 % rules are hard‑coded; verify they match project policy.  </li>
+<li><strong>Directory detection</strong>: <code>topDirectory</code> may mis‑handle paths with leading slashes or empty segments.  </li>
+<li><strong>Graph node filtering</strong>: <code>graphSymbolsContext</code> may miss symbols when <code>changedPaths</code> contains nested files.  </li>
+<li><strong>Test coverage</strong>: add unit tests for all decision branches and for <code>districtBreakdown</code> aggregation to guard against regressions.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

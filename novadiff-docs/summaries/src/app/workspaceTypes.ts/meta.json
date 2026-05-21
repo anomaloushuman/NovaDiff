@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/workspaceTypes.ts",
-  "kind": "added",
-  "leftTitle": "a9c34bfb03fe",
+  "kind": "modified",
+  "leftTitle": "f7c2bfd81af2",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-20T04:49:13.730Z",
+  "generatedAt": "2026-05-21T10:57:25.816Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,46 +11,24 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R1 added: export interface GitUserProfile {",
-      "R9 added: export interface WorkspaceCommitSnapshot {",
-      "R19 added: export interface NovaWorkspace {",
-      "R37 added: export interface WorkspaceUiState {",
-      "R44 added: export interface GitHistoryCompareOptions {",
-      "R49 added: export interface GhToolingStatus {"
-    ],
+    "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-67"
+      "L38 / R38"
     ],
     "cited_changed_lines": [
-      "R1 added: export interface GitUserProfile {",
-      "R2 added: login: string;",
-      "R3 added: name: string | null;",
-      "R4 added: avatarUrl: string | null;",
-      "R5 added: hostname: string;",
-      "R6 added: authenticatedAt: string;"
+      "L38 removed: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
+      "R38 added: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"docReports\" | \"prs\" | \"publish\";"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface NovaWorkspace (19-36)",
-      "right interface GhToolingStatus (49-61)",
-      "right interface WorkspaceCommitSnapshot (9-18)",
-      "right interface GitUserProfile (1-8)",
-      "right interface WorkspaceUiState (37-43)",
-      "right interface WorkspaceSessionState (62-67)",
-      "right interface GitHistoryCompareOptions (44-48)"
+      "left interface WorkspaceUiState (37-43)",
+      "right interface WorkspaceUiState (37-43)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

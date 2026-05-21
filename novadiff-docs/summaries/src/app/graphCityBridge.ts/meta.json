@@ -1,0 +1,64 @@
+{
+  "relPath": "src/app/graphCityBridge.ts",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T10:55:32.399Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R10 added: export interface CityEdgeOverlay {",
+      "R74 added: export function graphNodeToCityBuildingIds(",
+      "R117 added: export function cityBuildingToGraphNodeId(",
+      "R148 added: export function buildBuildingIdByGraphNode(",
+      "R167 added: export function graphEdgesToCityPairs(",
+      "R208 added: export function graphNeighborNodeIds("
+    ],
+    "changed_imports": [
+      "R1 added: import type { GraphEdge, KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R2 added: import type {",
+      "R6 added: import type { CodeCityRootSide } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-307"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GraphEdge, KnowledgeGraph } from \"@novadiff/graph-core/types\";",
+      "R2 added: import type {",
+      "R3 added: CodeCityLayoutResult,",
+      "R4 added: CodeCityRenderableBuilding,",
+      "R5 added: } from \"./codeCityLayout\";",
+      "R6 added: import type { CodeCityRootSide } from \"./types\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function cityBuildingIdsForHighlight (250-307)",
+      "right function graphNodeToCityBuildingIds (74-116)",
+      "right function graphEdgesToCityPairs (167-207)",
+      "right function parseGraphNodeId (16-50)",
+      "right function cityBuildingToGraphNodeId (117-147)",
+      "right function buildingMatchesSymbol (51-73)",
+      "right function filePathForLinkedSelection (229-249)",
+      "right function graphNeighborNodeIds (208-228)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

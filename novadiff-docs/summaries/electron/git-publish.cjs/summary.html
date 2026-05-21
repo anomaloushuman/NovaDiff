@@ -26,32 +26,31 @@
 <body>
   <header class="top">
     <h1>electron/git-publish.cjs</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:23:21.930Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:44:03.464Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>electron/git-publish.cjs</code> adds publish‑related utilities to the Electron app. It exports three functions—<code>buildFullCommitMessage</code>, <code>previewPublish</code>, and <code>executePublish</code>—and imports Git and GitHub helpers from <code>git-service.cjs</code> and <code>github-service.cjs</code> (see R3–R5).</p>
+<p><code>electron/git-publish.cjs</code> now stages a user‑supplied list of paths instead of always staging the entire repository. The change adds <code>stagePaths</code> to the import from <code>./git-service.cjs</code> (line 4) and rewrites the staging logic in <code>executePublish</code>.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R3–R5): <code>path</code>, <code>git-service</code> functions (<code>getRepoStatus</code>, <code>stageAll</code>, <code>commit</code>, <code>push</code>, <code>isGitRepo</code>), and <code>github-service</code> helpers (<code>createPullRequest</code>, <code>getAuthStatus</code>, <code>slugFromRepoRoot</code>).  </li>
-<li><strong><code>buildFullCommitMessage</code></strong> (R7–R13): Trims <code>subject</code> and <code>body</code>; returns <code>subject</code> alone if <code>body</code> is empty, otherwise inserts a blank line between them.  </li>
-<li><strong><code>previewPublish</code></strong> (R19–R42): Resolves <code>repoRoot</code>, verifies it is a Git repo, collects status, auth, and slug data, and returns a preview object containing repo details, branch, upstream, dirty files, remotes, GitHub auth status, and a flag indicating if a push is possible.  </li>
-<li><strong><code>executePublish</code></strong> (R48–R101): Validates inputs, stages all changes (<code>stageAll</code>), commits with the built message, optionally pushes to a remote, and optionally creates a PR via the GitHub CLI. The returned result includes <code>commitHash</code>, <code>branch</code>, <code>pushed</code>, <code>pushRemote</code>, and <code>prUrl</code>.  </li>
-<li><strong>Exports</strong> (R104–R108): All three functions are exported.</li>
+<li><strong>Import update</strong> – <code>stagePaths</code> is added to the destructured import from <code>./git-service.cjs</code> (line 4).  </li>
+<li><strong>Conditional staging</strong> – <code>stageAll(root)</code> is replaced by logic that builds <code>stagePathsList</code> from <code>opts.stagePaths</code> (lines 63‑70).  </li>
+<li><strong>Branching</strong> – If <code>stagePathsList</code> is non‑empty, <code>stagePaths(root, stagePathsList)</code> runs; otherwise the original <code>stageAll(root)</code> is executed.  </li>
+<li><strong>No other functional changes</strong> – commit, push, and PR creation remain unchanged.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Provides a clear commit‑message builder and a publish workflow that respects <code>.gitignore</code>.  </li>
-<li><strong>Maintainability</strong>: Centralizes publish logic; changes to Git or GitHub interactions can be made in the service modules.  </li>
-<li><strong>Performance</strong>: <code>stageAll</code> may be costly on large repos; caching or incremental staging could be considered.  </li>
-<li><strong>Compatibility</strong>: Requires a Git repo; PR creation requires a logged‑in <code>gh</code> CLI; errors are thrown explicitly.</li>
+<li><strong>Selective staging</strong> – allows committing only specified files, preventing accidental inclusion of unrelated changes.  </li>
+<li><strong>Maintainability</strong> – staging logic is now isolated; future extensions can modify <code>stagePaths</code> without touching <code>executePublish</code>.  </li>
+<li><strong>Performance</strong> – staging fewer files can reduce I/O when <code>opts.stagePaths</code> is small.  </li>
+<li><strong>Compatibility</strong> – callers that omit <code>stagePaths</code> continue to stage all files, preserving current behavior.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>buildFullCommitMessage</code> omits the newline when the body is empty (tests for empty body).  </li>
-<li>Ensure <code>previewPublish</code> throws the expected error for non‑Git directories.  </li>
-<li>Test <code>executePublish</code> with <code>push</code> and <code>createPullRequest</code> flags separately to confirm error handling for missing remotes or unauthenticated GitHub sessions.  </li>
-<li>Confirm that the returned <code>result</code> object contains accurate <code>branch</code>, <code>pushed</code>, and <code>prUrl</code> fields across different repo states.</li>
+<li><strong>Missing <code>stagePaths</code> export</strong> – verify that <code>./git-service.cjs</code> actually exports <code>stagePaths</code>; otherwise the import will fail at runtime.  </li>
+<li><strong>Invalid <code>opts.stagePaths</code> values</strong> – if callers pass a non‑array (e.g., a string), the code falls back to <code>stageAll</code>, which may be unintended. Add validation or document the expected type.  </li>
+<li><strong>Ignored paths</strong> – ensure <code>stagePaths</code> respects <code>.gitignore</code>; otherwise staged files might be ignored by Git, leading to silent failures.  </li>
+<li><strong>Test coverage</strong> – add unit tests for both branches (with and without <code>stagePaths</code>) to confirm behavior and guard against regressions.</li>
 </ul>
 </article>
   </main>

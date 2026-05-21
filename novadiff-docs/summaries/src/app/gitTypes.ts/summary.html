@@ -26,42 +26,39 @@
 <body>
   <header class="top">
     <h1>src/app/gitTypes.ts</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T04:43:27.664Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:55:17.352Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/gitTypes.ts</code> has been added. It declares a set of TypeScript interfaces that model Git tooling status, GitHub authentication, repository and pull‑request summaries, local repo matching, blame information, status files, and publish‑related payloads and results.</p>
+<p><code>src/app/gitTypes.ts</code> now includes a set of commit‑detail and GitHub‑context interfaces and adds an optional <code>stagePaths</code> flag to <code>PublishExecutePayload</code>. The changes span lines 125‑172 of the file.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>GitToolingStatus</strong> – lines 1‑6 (R1‑R6)```ts
-export interface GitToolingStatus {
-  git: { gitAvailable: boolean; gitVersion: string | null; gitError: string | null; };
-  gh: GithubAuthStatus;
-}</li>
+<li><strong><code>PublishExecutePayload</code></strong> (lines 125‑127) now accepts an optional <code>stagePaths?: string[]</code> to specify which paths to stage.  </li>
+<li><strong><code>GitCommitDetail</code></strong> (lines 129‑142) exposes commit metadata: <code>hash</code>, <code>shortHash</code>, <code>subject</code>, <code>body</code>, <code>authorName</code>, <code>authorEmail</code>, <code>authoredAt</code>, <code>parentHashes</code>, <code>filesChanged</code>, <code>insertions</code>, <code>deletions</code>.  </li>
+<li><strong><code>GithubCommitPullRequest</code></strong> (lines 143‑149) and **<code>GithubCommitIssue</code>*</li>
 </ul>
-<pre><code class="language--">- **GithubRepoSummary** – lines 19‑28 (R19‑R28)  
-- **GithubPullRequestSummary** – lines 30‑41 (R30‑R41)  
-- **LocalRepoMatch** – lines 43‑47 (R43‑R47)  
-- **GitBlameOwner** – lines 50‑54 (R50‑R54)  
-- **GitStatusFile** – lines 64‑68 (R64‑R68)  
-- **GitRepoStatus** – lines 71‑82 (R71‑R82)  
-- **PrCompareRoots** – lines 84‑89 (R84‑R89)  
-- **PublishPreview** – lines 91‑102 (R91‑R102)  
-- **PublishExecuteResult** – lines 104‑110 (R104‑R110)  
-- **PublishExecutePayload** – lines 113‑125 (R113‑R125)
-
-### Impact
-
-  
-- **Type safety** – modules that consume Git or GitHub data can import these interfaces, providing compile‑time guarantees about the shape of the data.  
-- **Documentation** – the interfaces serve as living documentation for the data structures used throughout the application.  
-- **Runtime** – the change adds only type declarations; no executable code is introduced, so existing JavaScript behavior is unaffected.
-
-### Risks &amp; follow‑ups  
-- **Import consistency** – verify that modules import the correct path (`src/app/gitTypes`) and that no duplicate definitions exist.  
-- **Build pipeline** – run `npm run lint`, `npm test`, and `npm run build` to ensure the new file does not introduce type errors.  
-- **Documentation** – update any README or developer docs that reference GitHub or Git data structures to point to these new interfaces.
-</code></pre>
+<ul>
+<li>(lines 150‑158) provide minimal PR/issue info (<code>number</code>, <code>title</code>, <code>state</code>, <code>url</code>).</li>
+</ul>
+<ul>
+<li><strong><code>GithubCommitThreadKind</code></strong> (line 157) is a union of <code>&quot;pr_review&quot; | &quot;pr_comment&quot; | &quot;issue_comment&quot;</code>.  </li>
+<li><strong><code>GithubCommitThread</code></strong> (lines 159‑166) records a thread’s <code>kind</code>, <code>number</code>, <code>author</code>, <code>body</code>, <code>createdAt</code>, and <code>url</code>.  </li>
+<li><strong><code>GithubCommitContext</code></strong> (lines 168‑172) aggregates arrays of pull requests, issues, threads, and an optional <code>error</code> string.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Modules importing <code>gitTypes</code> now have access to the new interfaces, enabling richer commit and GitHub context handling.  </li>
+<li>The <code>stagePaths</code> option gives callers finer control over staged files before publishing, potentially improving workflow flexibility.  </li>
+<li>No existing exports were removed, so backward compatibility is preserved.  </li>
+<li>TypeScript consumers may need to adjust type assertions if they previously relied on the exact shape of <code>PublishExecutePayload</code>.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that code constructing <code>PublishExecutePayload</code> still functions; the new optional field should not break existing logic.  </li>
+<li>Ensure downstream modules that consume <code>GitCommitDetail</code> or <code>GithubCommitContext</code> are updated to use the new interfaces.  </li>
+<li>Run the full test suite to catch any lint or type‑checking regressions introduced by the added types.  </li>
+<li>Confirm that documentation and generated type definitions include the new interfaces for developer visibility.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

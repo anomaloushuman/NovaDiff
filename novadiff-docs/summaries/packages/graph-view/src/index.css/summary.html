@@ -26,35 +26,39 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/index.css</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:20:03.959Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:12:49.973Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>packages/graph-view/src/index.css</code> (lines 1‑484) has been added.<br>It imports Tailwind, declares a <code>@theme</code> block with many CSS custom properties, and scopes a wide range of base, component, and utility styles for the Graph View UI.</p>
+<p>The <code>packages/graph-view/src/index.css</code> file was updated to modify the layout of React‑Flow controls when the CodeCity minimap is present. The changes add a grid‑based layout for the control panel, reposition the minimap and its button, and introduce light‑theme overrides. No JavaScript was touched.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>@import &quot;tailwindcss&quot;;</code> – pulls Tailwind utilities into the bundle. (R1)  </li>
-<li><code>@theme { … }</code> – defines ~70 CSS variables for colors, typography, glass effects, scrollbars, and node‑type hues. (R3‑89)  </li>
-<li>Global styles for <code>html</code>, <code>body</code>, <code>#root</code>, and the <code>.novadiff-graph-explorer-root/.novadiff-graph-theme-host</code> containers, isolating the graph view from the host app. (R93‑110)  </li>
-<li>Utility classes such as <code>.glass</code>, <code>.glass-heavy</code>, <code>.kbd</code>, and animation helpers (<code>.animate-fade-slide-in</code>, <code>.animate-slide-up</code>, <code>.animate-accent-pulse</code>). (R135‑217)  </li>
-<li>React‑Flow overrides (<code>.react-flow__background</code>, <code>.react-flow__edge-path</code>, etc.) to match the new theme. (R266‑290)  </li>
-<li>Light/dark theme overrides via <code>[data-theme=&quot;light&quot;]</code> and <code>[data-theme=&quot;dark&quot;]</code>. (R316‑337)  </li>
-<li>Modal and button styles for the “Explain Code” feature, including keyframes for a pulsing effect. (R339‑480)</li>
+<li><strong>Grid layout for controls</strong> – Lines 301‑340 add```css
+.novadiff-graph-embed .react-flow__controls.code-city-graph-dock-host { … }</li>
 </ul>
-<h3>Impact</h3>
-<ul>
-<li><strong>Styling scope</strong> – selectors are scoped to the graph view containers, so they should not repaint the entire NovaDiff app.  </li>
-<li><strong>Maintainability</strong> – centralizing theme variables in <code>@theme</code> simplifies future color or typography updates.  </li>
-<li><strong>Compatibility</strong> – the Tailwind import must resolve in the build pipeline; missing it will break the stylesheet.  </li>
-<li><strong>Performance</strong> – the stylesheet size increases with the added file; it is only loaded when the graph view is rendered. (unknown from the diff)</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>CSS conflicts</strong> – generic selectors such as <code>.novadiff-graph-embed</code> or <code>.react-flow__background</code> could clash with existing global styles.  </li>
-<li><strong>Build integration</strong> – verify that the Tailwind import resolves correctly in the current build config.  </li>
-<li><strong>Visual regressions</strong> – run graph‑view smoke tests to confirm node colors, borders, and glass effects render as intended. (unknown from the diff)  </li>
-<li><strong>Accessibility</strong> – contrast ratios for the new color variables, especially in light mode, are not verified. (unknown from the diff)</li>
-</ul>
+<pre><code class="language-turning">- **Minimap &amp; button positioning** – Lines 315‑329 set```css
+.react-flow__panel.bottom.left.react-flow__controls:has([data-code-city-minimap]) { … }
+```with `grid-column: 1 / -1` for the minimap and `grid-row: 2` for the button.  
+- **Control button styling** – Lines 341‑349 update```css
+.novadiff-graph-embed .react-flow__controls-button { … }
+```to match the new layout.  
+- **Minimap appearance** – Lines 351‑355 keep the border radius and subtle border.  
+- **Light‑theme overrides** – Lines 357‑364 adjust `.diff-faded`, scrollbar track, and `.warning-banner` for better contrast on light backgrounds.
+
+### Impact
+
+  
+- **UI** – The minimap docks beside the zoom controls instead of overlaying them, improving usability in the NovaDiff embed.  
+- **Scope** – All new selectors are prefixed with `.novadiff-graph-embed`, limiting side effects.  
+- **Performance** – Pure CSS changes; no runtime cost.  
+- **Compatibility** – Existing React‑Flow components render normally; only the control layout changes.
+
+### Risks &amp; follow‑ups  
+- **Layout regression** – Verify the grid layout on very small viewports or when the minimap is hidden.  
+- **Specificity conflicts** – Ensure the new rules override any global React‑Flow styles; a visual check is recommended.  
+- **Light‑theme consistency** – Test the overrides on both dark and light themes to confirm contrast and readability.  
+- **Documentation** – Update any style guides that reference the old control layout.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

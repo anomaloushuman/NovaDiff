@@ -1,0 +1,51 @@
+{
+  "relPath": "src/components/CodeCityMinimapSlot.tsx",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T11:00:26.472Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R14 added: export function CodeCityMinimapSlot({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\";",
+      "R2 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-94"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\";",
+      "R2 added: import {",
+      "R3 added: measureCodeCityChromeInsets,",
+      "R4 added: type CodeCityChromeInsets,",
+      "R5 added: } from \"../app/codeCityChromeInsets\";",
+      "R7 added: const DEFAULT_INSETS: CodeCityChromeInsets = {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function CodeCityMinimapSlot (14-94)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

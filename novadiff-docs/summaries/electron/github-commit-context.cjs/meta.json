@@ -1,0 +1,51 @@
+{
+  "relPath": "electron/github-commit-context.cjs",
+  "kind": "added",
+  "leftTitle": "f7c2bfd81af2",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-21T10:45:20.222Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const { tryRunGh, getAuthStatus } = require(\"./github-service.cjs\");"
+    ],
+    "changed_line_ranges": [
+      "R1-245"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const { tryRunGh, getAuthStatus } = require(\"./github-service.cjs\");",
+      "R5 added: function parseJsonSafe(raw, fallback) {",
+      "R6 added: try {",
+      "R7 added: return JSON.parse(raw || \"null\") ?? fallback;",
+      "R8 added: } catch {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function getGithubCommitContext (40-245)",
+      "right function normalizeThread (25-39)",
+      "right function shortGhError (13-24)",
+      "right function parseJsonSafe (5-12)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

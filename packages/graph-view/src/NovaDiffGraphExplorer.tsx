@@ -28,6 +28,13 @@ export interface NovaDiffGraphExplorerProps {
   ) => Promise<string>;
   outputLanguage?: string;
   embedMode?: boolean;
+  /** When set, graph selection follows this node id (Documentation ↔ City sync). */
+  controlledNodeId?: string | null;
+  /** When true with controlledNodeId, enables graph focus neighborhood mode. */
+  focusMode?: boolean;
+  /** When set, graph drills into this file path (city "enter building"). */
+  enteredFilePath?: string | null;
+  onSelectionChange?: (nodeId: string | null) => void;
 }
 
 /** NovaDiff-native graph explorer — no external server or token gate. */

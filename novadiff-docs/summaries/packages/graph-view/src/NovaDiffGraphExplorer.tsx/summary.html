@@ -26,37 +26,31 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/NovaDiffGraphExplorer.tsx</h1>
-    <div class="meta">Kind: added · Baseline: a9c34bfb03fe · Target: NovaDiff · Generated: 2026-05-20T05:18:23.750Z</div>
+    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:11:40.481Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>NovaDiffGraphExplorer.tsx</code> component is added to <code>packages/graph-view/src</code>. It exposes the public API <code>NovaDiffGraphExplorerProps</code> (lines 21‑33) and <code>NovaDiffGraphDiffOverlay</code> (lines 16‑20), and implements both an embedded and a full graph explorer mode.</p>
+<p>In <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code> the <code>NovaDiffGraphExplorerProps</code> interface was extended with four optional fields: <code>controlledNodeId</code>, <code>focusMode</code>, <code>enteredFilePath</code>, and <code>onSelectionChange</code>. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R6): added React hooks, <code>validateGraph</code>, type imports (<code>GraphIssue</code>, <code>KnowledgeGraph</code>), and the local <code>useDashboardStore</code>.  </li>
-<li><strong>Public interfaces</strong> (R16‑R21): declare the overlay and props shapes.  </li>
-<li><strong>Entry point</strong> (R34‑R42): <code>NovaDiffGraphExplorer</code> dispatches to <code>NovaDiffGraphExplorerEmbed</code> or <code>NovaDiffGraphExplorerFull</code> based on <code>embedMode</code>.  </li>
-<li><strong>Fingerprinting</strong> (R44‑R53): <code>graphFingerprint</code> builds a deterministic string to skip re‑validation when the graph hasn’t changed.  </li>
-<li><strong>Full explorer logic</strong> (R56‑R146):  <ul>
-<li>Validates the graph with <code>validateGraph</code>; updates the store (<code>setGraph</code>, <code>setDiffOverlay</code>) and view mode.  </li>
-<li>Handles diff overlay updates, load errors, hydration state, and skeleton UI.  </li>
-<li>Provides <code>NovaDiffEmbedContext</code> and <code>ThemeProvider</code> to child components.</li>
-</ul>
-</li>
+<li><strong>Interface augmentation</strong> – the new props are declared in lines 31‑37 of the interface.  </li>
+<li><strong>Documentation comments</strong> – JSDoc comments describe each prop’s intent.  </li>
+<li><strong>Prop propagation</strong> – the spread <code>...props</code> in the component’s signature passes the new fields unchanged to either <code>NovaDiffGraphExplorerEmbed</code> or <code>NovaDiffGraphExplorerFull</code>.  </li>
+<li><strong>No runtime changes</strong> – the component’s effect hooks, state handling, and JSX output are identical to the pre‑change version.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Immediate validation of incoming graphs; clear error messages for invalid data.  </li>
-<li>Centralizes graph handling; separates embed logic.  </li>
-<li>Fingerprint caching avoids redundant validation on unchanged graphs.  </li>
-<li>Skeleton UI and error paragraph give users feedback during loading or failure.</li>
+<li><strong>Non‑breaking</strong> – all existing consumers compile without modification because the new props are optional.  </li>
+<li><strong>Extensibility</strong> – downstream code can now supply node‑selection or focus‑mode hints without altering the explorer internals.  </li>
+<li><strong>No performance change</strong> – the diff adds only type information and comments.  </li>
+<li><strong>Documentation</strong> – the added comments improve developer understanding but require no code changes elsewhere.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Validation contract</strong>: ensure <code>validateGraph</code> returns the expected shape; otherwise store updates may fail.  </li>
-<li><strong>Store side‑effects</strong>: <code>useDashboardStore</code> mutations (<code>setGraph</code>, <code>setDiffOverlay</code>, view mode switches) must be idempotent; test repeated renders.  </li>
-<li><strong>Embed mode toggle</strong>: verify <code>embedMode</code> correctly routes to <code>NovaDiffGraphExplorerEmbed</code>; regression could break embedded deployments.  </li>
-<li><strong>Type safety</strong>: <code>Omit&lt;NovaDiffGraphExplorerProps, &quot;embedMode&quot;&gt;</code> assumes no other required props are omitted; future prop additions could break the signature.</li>
+<li><strong>Type‑checking regressions</strong> – any code that destructures <code>NovaDiffGraphExplorerProps</code> must still satisfy the updated type; run <code>tsc</code> to confirm.  </li>
+<li><strong>Test coverage</strong> – existing tests may need to be updated or new tests added to verify that the new props can be passed without breaking the component (unknown from the available diff).  </li>
+<li><strong>Build validation</strong> – run lint, <code>tsc</code>, and the production build to ensure no type errors.  </li>
+<li><strong>Documentation sync</strong> – update public API docs to reflect the new optional props.</li>
 </ul>
 </article>
   </main>

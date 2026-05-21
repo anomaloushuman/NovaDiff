@@ -1,28 +1,21 @@
 ### Overview  
-A new component, `CodeCityLegend`, has been added to `src/components`. It renders a sidebar that displays current view metrics, a legend, and details for a selected building.
+`CodeCityLegend` now accepts three optional props—`repoRoot?: string`, `onStageFile?: (path: string) => void`, and `onStageDistrict?: (topDir: string) => void`—and renders additional action buttons for the selected building. The component’s signature now spans lines 3‑147 instead of 3‑121 (see diff lines R11‑R13 and R22‑R24).
 
 ### Key changes  
-- **Import** – `import type { CodeCityRenderableBuilding } from "../app/codeCityLayout";` (R1).  
-- **Export** – `export function CodeCityLegend({ … })` (R3).  
-- **Props** –  
-  - `selected: CodeCityRenderableBuilding | null` (R12).  
-  - `blameOverlay: boolean` (R13).  
-  - `rootSide: "baseline" | "target"` (R14).  
-  - `visibleBuildingCount`, `districtCount`, `changedBuildingCount` (R15‑17).  
-  - Optional `onOpenDiff?: (path: string) => void` (R18).  
-- **UI** – Aside element containing:  
-  - A metrics grid (root side, building count, district count, changed count).  
-  - A legend list with swatches for added, modified, removed, kind, and blame overlay toggle.  
-  - A selected‑building card showing name, kind, path, tags, optional diff button, author info, and owners list (R20‑121).
+- **Props API** – new optional props added at the top of the function signature (diff lines R11‑R13, R22‑R24).  
+- **UI actions** – the former “Open diff” block (lines 89‑97) was removed and replaced by a `<div className="code-city-selected-actions">` (lines 95‑123). Inside this div:  
+  - “Open diff” button appears whenever `onOpenDiff` is supplied.  
+  - “Stage file” button appears when both `repoRoot` and `onStageFile` are present.  
+  - “Stage district” button appears when `repoRoot`, `onStageDistrict`, and `selected.topDirectory` are all defined.  
+  Each button’s `onClick` calls the corresponding callback with `selected.path` or `selected.topDirectory`.  
 
 ### Impact  
-- The component is self‑contained; no existing files are altered.  
-- It is a pure functional component, so it re‑renders only when its props change.  
-- No new runtime side effects or logs are introduced.  
-- It depends on the `CodeCityRenderableBuilding` type; the import path must resolve.
+- **Backward compatibility** – all new props are optional, so existing callers compile unchanged.  
+- **Type safety** – callers who wish to use staging features must provide the matching callbacks.  
+- **UI consistency** – the legend now offers staging actions, improving workflow for users working with a local repository.  
+- **Performance** – negligible; only a few conditional renders were added.  
 
 ### Risks & follow‑ups  
-- **Import resolution** – confirm that `../app/codeCityLayout` exports `CodeCityRenderableBuilding`.  
-- **Prop shape** – callers must supply a `selected` object that matches the expected structure; TypeScript will flag mismatches.  
-- **Optional callback** – consuming components should handle the absence of `onOpenDiff`.  
-- **Styling** – the new CSS classes (`code‑city‑legend`, `code‑city‑swatch‑–added`, etc.) could clash with existing styles; visual regression tests are advised.
+- **Missing callbacks** – if `repoRoot` is omitted, the “Stage file” and “Stage district” buttons will not appear, potentially confusing users who expect staging actions.  
+- **Test coverage** – unit tests should be updated to cover the new action buttons and verify that callbacks receive the correct arguments.  
+- **Accessibility** – no evidence in the diff indicates ARIA labels or keyboard focus handling; confirm that the added buttons are accessible.

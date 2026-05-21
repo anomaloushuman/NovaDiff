@@ -58,6 +58,7 @@ import { deriveContainers } from "../utils/containers";
 import type { DerivedContainer } from "../utils/containers";
 import { computeLayerStats } from "../utils/layerStats";
 import { resolveActiveLayer } from "../utils/activeLayer";
+import { graphSelectionCluster } from "../utils/selectionCluster";
 
 const nodeTypes = {
   custom: CustomNode,
@@ -486,13 +487,13 @@ function useLayerDetailTopology(): LayerDetailTopology & {
       (e) => filteredNodeIds.has(e.source) && filteredNodeIds.has(e.target),
     );
 
-    // Focus mode: 1-hop neighborhood within the layer
+    // Focus mode: same-file cluster + 1-hop neighbors
     if (focusNodeId && filteredNodeIds.has(focusNodeId)) {
-      const focusNeighborIds = new Set<string>([focusNodeId]);
-      for (const edge of filteredGraphEdges) {
-        if (edge.source === focusNodeId) focusNeighborIds.add(edge.target);
-        if (edge.target === focusNodeId) focusNeighborIds.add(edge.source);
-      }
+      const focusNeighborIds = graphSelectionCluster(
+        graph,
+        focusNodeId,
+        filteredGraphEdges,
+      );
       filteredGraphNodes = filteredGraphNodes.filter((n) =>
         focusNeighborIds.has(n.id),
       );
@@ -988,6 +989,7 @@ function buildCustomFlowNode(
  */
 function useLayerDetailGraph() {
   const { embedMode = false } = useNovaDiffEmbed();
+  const graph = useDashboardStore((s) => s.graph);
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
   const searchResults = useDashboardStore((s) => s.searchResults);
   const tourHighlightedNodeIds = useDashboardStore((s) => s.tourHighlightedNodeIds);
@@ -1077,45 +1079,32 @@ function useLayerDetailGraph() {
     return s;
   }, [diffMode, changedNodeIds, affectedNodeIds, topo.nodeToContainer]);
 
-  // O(filteredEdges) — focus node's container + 1-hop neighbor containers.
+  // O(filteredEdges) — focus cluster containers (file → all symbols in folder).
   const focusContainerIds = useMemo(() => {
     const s = new Set<string>();
-    if (!focusNodeId) return s;
-    const focusCid = topo.nodeToContainer.get(focusNodeId);
-    if (focusCid && focusCid !== focusNodeId) s.add(focusCid);
-    for (const e of topo.filteredEdges) {
-      if (e.source === focusNodeId) {
-        const cid = topo.nodeToContainer.get(e.target);
-        if (cid && cid !== e.target) s.add(cid);
-      } else if (e.target === focusNodeId) {
-        const cid = topo.nodeToContainer.get(e.source);
-        if (cid && cid !== e.source) s.add(cid);
+    if (!focusNodeId || !graph) return s;
+    const cluster = graphSelectionCluster(graph, focusNodeId, topo.filteredEdges);
+    for (const id of cluster) {
+      const cid = topo.nodeToContainer.get(id);
+      if (cid && cid !== id) {
+        s.add(cid);
       }
     }
     return s;
-  }, [focusNodeId, topo.filteredEdges, topo.nodeToContainer]);
+  }, [focusNodeId, graph, topo.filteredEdges, topo.nodeToContainer]);
 
-  // Selection neighbor highlighting for containers: when the selected node
-  // (or one of its neighbors) lives inside a container, that container atom
-  // should pop visually so the user can see where the relationship lives
-  // even when the container is collapsed. We piggyback on `isFocusedViaChild`
-  // since ContainerNode already styles that flag (gold border emphasis).
   const selectionContainerIds = useMemo(() => {
     const s = new Set<string>();
-    if (!selectedNodeId) return s;
-    const selCid = topo.nodeToContainer.get(selectedNodeId);
-    if (selCid && selCid !== selectedNodeId) s.add(selCid);
-    for (const e of topo.filteredEdges) {
-      if (e.source === selectedNodeId) {
-        const cid = topo.nodeToContainer.get(e.target);
-        if (cid && cid !== e.target) s.add(cid);
-      } else if (e.target === selectedNodeId) {
-        const cid = topo.nodeToContainer.get(e.source);
-        if (cid && cid !== e.source) s.add(cid);
+    if (!selectedNodeId || !graph) return s;
+    const cluster = graphSelectionCluster(graph, selectedNodeId, topo.filteredEdges);
+    for (const id of cluster) {
+      const cid = topo.nodeToContainer.get(id);
+      if (cid && cid !== id) {
+        s.add(cid);
       }
     }
     return s;
-  }, [selectedNodeId, topo.filteredEdges, topo.nodeToContainer]);
+  }, [selectedNodeId, graph, topo.filteredEdges, topo.nodeToContainer]);
 
   // Combine Stage 1 nodes with Stage 2 expanded children, then apply the
   // visual overlay (selection, search, tour) to every CustomFlowNode in
@@ -1126,15 +1115,12 @@ function useLayerDetailGraph() {
     const searchMap = new Map(searchResults.map((r) => [r.nodeId, r.score]));
     const tourSet = new Set(tourHighlightedNodeIds);
 
-    // Build neighbor set for selection highlighting
-    const neighborNodeIds = new Set<string>();
-    if (selectedNodeId) {
-      for (const edge of topo.filteredEdges) {
-        if (edge.source === selectedNodeId) neighborNodeIds.add(edge.target);
-        if (edge.target === selectedNodeId) neighborNodeIds.add(edge.source);
-      }
-      neighborNodeIds.add(selectedNodeId);
-    }
+    // Build neighbor set for selection highlighting (file → all symbols in file)
+    const neighborNodeIds = graphSelectionCluster(
+      graph,
+      selectedNodeId,
+      topo.filteredEdges,
+    );
 
     return combined.map((node) => {
       // Portal nodes have no overlay state.
@@ -1206,6 +1192,7 @@ function useLayerDetailGraph() {
       return { ...node, data: { ...data, isHighlighted, searchScore, isSelected, isTourHighlighted, isNeighbor, isSelectionFaded } };
     });
   }, [
+    graph,
     topo.nodes,
     expandedChildNodes,
     topo.filteredEdges,
@@ -1748,6 +1735,7 @@ export function GraphViewInner() {
         fitViewOptions={{ minZoom: 0.01, padding: 0.1 }}
         minZoom={0.01}
         maxZoom={2}
+        onlyRenderVisibleElements={embedMode}
         colorMode={preset.isDark ? "dark" : "light"}
       >
         <Background
@@ -1756,7 +1744,7 @@ export function GraphViewInner() {
           gap={embedMode ? 28 : 20}
           size={embedMode ? 0.4 : 1}
         />
-        <Controls />
+        <Controls orientation={embedMode ? "horizontal" : "vertical"} />
         <MiniMap
           nodeColor="var(--color-elevated)"
           maskColor="var(--glass-bg)"

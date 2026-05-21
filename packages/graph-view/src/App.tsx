@@ -376,8 +376,12 @@ export function DashboardContent({
     [t]
   );
 
-  // Register keyboard shortcuts (disabled in NovaDiff embed — avoids hijacking app shortcuts)
-  useKeyboardShortcuts(shortcuts, !embedMode);
+  const embedShortcuts = useMemo(
+    () =>
+      shortcuts.filter((s) => s.key === "f" || s.key === "Escape" || s.key === "0"),
+    [shortcuts],
+  );
+  useKeyboardShortcuts(embedMode ? embedShortcuts : shortcuts, true);
 
   // Determine sidebar content
   // NodeInfo always takes priority when a node is selected.
@@ -635,7 +639,10 @@ export function DashboardContent({
       )}
 
       {/* Main content: Graph + Sidebar */}
-      <div className="flex-1 flex min-h-0 relative">
+      <div
+        className="flex-1 flex min-h-0 relative"
+        data-novadiff-graph-layout-row={embedMode ? true : undefined}
+      >
         {/* Graph area */}
         <div className="flex-1 min-w-0 min-h-0 relative">
           {viewMode === "knowledge" ? (
@@ -683,7 +690,10 @@ export function DashboardContent({
 
         {/* Code viewer slide-up overlay (collapsed state) */}
         {codeViewerOpen && !codeViewerExpanded && (
-          <div className="absolute bottom-0 left-0 right-0 h-[40vh] bg-surface border-t border-border-subtle animate-slide-up z-30 overflow-hidden">
+          <div
+            className="absolute bottom-0 left-0 right-0 h-[40vh] bg-surface border-t border-border-subtle animate-slide-up z-30 overflow-hidden"
+            data-novadiff-code-viewer-sheet
+          >
             <Suspense fallback={null}>
               <CodeViewer accessToken={accessToken} onExpand={expandCodeViewer} />
             </Suspense>
@@ -695,6 +705,7 @@ export function DashboardContent({
       {codeViewerOpen && codeViewerExpanded && (
         <div
           className="fixed inset-0 z-[60001] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 sm:p-6"
+          data-novadiff-code-viewer-modal
           onMouseDown={collapseCodeViewer}
         >
           <div
