@@ -360,6 +360,31 @@ describe("GraphBuilder", () => {
       warnSpy.mockRestore();
     });
 
+    it("disambiguates duplicate function names in the same file by line number", () => {
+      const builder = new GraphBuilder("test", "abc123");
+      const analysis: StructuralAnalysis = {
+        functions: [
+          { name: "command", lineRange: [10, 20], params: [] },
+          { name: "command", lineRange: [30, 40], params: [] },
+        ],
+        classes: [],
+        imports: [],
+        exports: [],
+      };
+      builder.addFileWithAnalysis("click/decorators.py", analysis, {
+        summary: "",
+        tags: [],
+        complexity: "moderate",
+        fileSummary: "Decorators",
+        summaries: {},
+      });
+      const graph = builder.build();
+      const commands = graph.nodes.filter((n) => n.name === "command");
+      expect(commands).toHaveLength(2);
+      expect(commands[0].id).toBe("function:click/decorators.py:command");
+      expect(commands[1].id).toBe("function:click/decorators.py:command:30");
+    });
+
     it("skips duplicate node IDs in addNonCodeFileWithAnalysis and warns", () => {
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       const builder = new GraphBuilder("test", "abc123");

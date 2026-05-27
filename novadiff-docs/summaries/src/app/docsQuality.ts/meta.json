@@ -1,0 +1,47 @@
+{
+  "relPath": "src/app/docsQuality.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:30:02.054Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L111 / R111-113",
+      "L118 / R120",
+      "R128-135",
+      "R163",
+      "L245 / R256-258"
+    ],
+    "cited_changed_lines": [
+      "L111 removed: if (riskSignals.some((signal) => signal.severity === \"high\")) {",
+      "R111 added: const heuristicSignals = riskSignals.filter((signal) => signal.source === \"heuristic\");",
+      "R112 added: const advisorySignals = riskSignals.filter((signal) => signal.source === \"advisory\");",
+      "R113 added: if (heuristicSignals.some((signal) => signal.severity === \"high\")) {",
+      "L118 removed: } else if (riskSignals.length > 0) {",
+      "R120 added: } else if (heuristicSignals.length > 0) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function deriveConfidenceBadges (75-142)",
+      "left function buildReleaseOverviewMarkdown (143-247)",
+      "right function deriveConfidenceBadges (75-152)",
+      "right function buildReleaseOverviewMarkdown (153-260)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

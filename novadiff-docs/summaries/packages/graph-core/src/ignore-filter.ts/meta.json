@@ -1,0 +1,27 @@
+{
+  "relPath": "packages/graph-core/src/ignore-filter.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:41:17.002Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R16-17"
+    ],
+    "cited_changed_lines": [
+      "R16 added: \".venv-*/\",",
+      "R17 added: \"**/site-packages/\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/workspaceTypes.ts",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:57:25.816Z",
+  "generatedAt": "2026-05-26T19:34:19.920Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,11 +16,15 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L38 / R38"
+      "L38 / R38-45"
     ],
     "cited_changed_lines": [
-      "L38 removed: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
-      "R38 added: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"docReports\" | \"prs\" | \"publish\";"
+      "L38 removed: workspacePage?: \"compare\" | \"history\" | \"docs\" | \"docReports\" | \"prs\" | \"publish\";",
+      "R38 added: workspacePage?:",
+      "R39 added: | \"compare\"",
+      "R40 added: | \"history\"",
+      "R41 added: | \"docs\"",
+      "R42 added: | \"docReports\""
     ],
     "evidence_limits": [],
     "file_roles": [
@@ -28,7 +32,7 @@
     ],
     "touched_symbols": [
       "left interface WorkspaceUiState (37-43)",
-      "right interface WorkspaceUiState (37-43)"
+      "right interface WorkspaceUiState (37-50)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

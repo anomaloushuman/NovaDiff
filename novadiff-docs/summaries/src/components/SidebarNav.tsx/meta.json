@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/SidebarNav.tsx",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:08:07.935Z",
+  "generatedAt": "2026-05-26T19:40:58.501Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,39 +20,44 @@
       }
     ],
     "changed_exports": [
-      "L18 removed: export type WorkspacePage = \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
-      "R18 added: export type WorkspacePage ="
+      "R7 added: export type SidebarExpandProps = Pick<"
     ],
     "changed_imports": [
-      "R1 added: import type { ReactNode } from \"react\";"
+      "L1 removed: import type { ReactNode } from \"react\";",
+      "R1 added: import { useEffect, useRef, type ReactNode } from \"react\";",
+      "R5 added: import type { UseSidebarExpandResult } from \"./sidebar/useSidebarExpand\";",
+      "R17 added: import { usePrefersReducedMotion } from \"../app/usePrefersReducedMotion\";"
     ],
     "changed_line_ranges": [
-      "R1",
-      "L5",
-      "L18 / R18-24",
-      "R33",
-      "R41",
-      "R43-78",
-      "R86",
-      "L49 / R94-95"
+      "L1 / R1",
+      "R5-17",
+      "R36",
+      "L33",
+      "R51",
+      "L40-41 / R54-100",
+      "R102-119",
+      "L44 / R121-125"
     ],
     "cited_changed_lines": [
-      "R1 added: import type { ReactNode } from \"react\";",
-      "L5 removed: BookOpen,",
-      "L18 removed: export type WorkspacePage = \"compare\" | \"history\" | \"docs\" | \"prs\" | \"publish\";",
-      "R18 added: export type WorkspacePage =",
-      "R19 added: | \"compare\"",
-      "R20 added: | \"history\""
+      "L1 removed: import type { ReactNode } from \"react\";",
+      "R1 added: import { useEffect, useRef, type ReactNode } from \"react\";",
+      "R5 added: import type { UseSidebarExpandResult } from \"./sidebar/useSidebarExpand\";",
+      "R7 added: export type SidebarExpandProps = Pick<",
+      "R8 added: UseSidebarExpandResult,",
+      "R9 added: | \"panelExpanded\""
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function SidebarNav (35-238)",
-      "right function SidebarNav (79-318)",
-      "right function NavLink (43-78)",
-      "right interface SidebarNavProps (26-42)"
+      "left function SidebarNav (79-318)",
+      "left function NavLink (43-78)",
+      "left interface SidebarNavProps (26-42)",
+      "right function SidebarNav (172-581)",
+      "right function SidebarTypedLabel (58-119)",
+      "right function NavLink (120-171)",
+      "right interface SidebarNavProps (40-57)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

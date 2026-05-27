@@ -108,19 +108,29 @@ export function deriveConfidenceBadges(args: {
       "The narrative relies on metrics and risk signals without per-file summary support.",
     );
   }
-  if (riskSignals.some((signal) => signal.severity === "high")) {
+  const heuristicSignals = riskSignals.filter((signal) => signal.source === "heuristic");
+  const advisorySignals = riskSignals.filter((signal) => signal.source === "advisory");
+  if (heuristicSignals.some((signal) => signal.severity === "high")) {
     push(
       "high-risk-signals",
       "High-risk signals present",
       "warn",
       "At least one deterministic high-severity signal was detected in the compare.",
     );
-  } else if (riskSignals.length > 0) {
+  } else if (heuristicSignals.length > 0) {
     push(
       "risk-signals",
       "Deterministic risk signals available",
       "neutral",
       "Risk sections can reference offline heuristic signals instead of only free-form LLM claims.",
+    );
+  }
+  if (advisorySignals.length > 0) {
+    push(
+      "advisory-signals",
+      "Advisory findings available",
+      "neutral",
+      "Network-backed advisories are shown separately and do not change base heuristic confidence.",
     );
   }
   if (selections.length > 0) {
@@ -150,6 +160,7 @@ export function buildReleaseOverviewMarkdown(args: {
   confidenceBadges: EvidenceBadge[];
 }): string {
   const { leftTitle, rightTitle, rows, summaries, selections, riskSignals, confidenceBadges } = args;
+  const advisorySignals = riskSignals.filter((signal) => signal.source === "advisory");
   const bySeverity = {
     high: riskSignals.filter((signal) => signal.severity === "high"),
     medium: riskSignals.filter((signal) => signal.severity === "medium"),
@@ -242,6 +253,8 @@ export function buildReleaseOverviewMarkdown(args: {
     "",
     "## Advisory enrichment status",
     "",
-    "NovaDiff is currently using deterministic offline risk signals only. The risk schema already separates heuristic and advisory sources so future OSV or ecosystem audit enrichment can be added without mixing those results into the base confidence model.",
+    advisorySignals.length > 0
+      ? `Advisory scans produced ${advisorySignals.length} finding(s). These remain separated from deterministic confidence weighting.`
+      : "No advisory findings were attached. Baseline confidence remains derived from deterministic offline signals.",
   ].join("\n");
 }

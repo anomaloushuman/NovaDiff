@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>package.json · Code explanation (L46-63) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>package.json · Code explanation (L46-63)</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-26T07:06:12.032Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it doesThe snippet declares the <strong>devDependencies</strong> for the project. These are packages required only during development, building, testing, or packaging, not at runtime. It includes tooling for a Vite‑powered React app (<code>@vitejs/plugin-react</code>, <code>vite</code>, <code>typescript</code>, <code>vitest</code>), styling with Tailwind (<code>tailwindcss</code>, <code>@tailwindcss/vite</code>), type definitions (<code>@types/*</code>), and Electron packaging (<code>electron</code>, <code>electron-builder</code>). The <code>concurrently</code> and <code>wait-on</code> utilities help orchestrate parallel dev processes.</h3>
+<h3>How it worksWhen <code>npm install</code> or <code>yarn install</code> runs, npm resolves each package name and version range (e.g., <code>^4.0.0</code>, <code>~5.8.3</code>) against the npm registry, downloading the matching tarballs into <code>node_modules</code>. Build scripts (e.g., <code>vite build</code>, <code>electron-builder</code>) import these modules to compile TypeScript, bundle assets, run tests, or generate installers. The <code>^</code> and <code>~</code> prefixes allow patch or minor updates while keeping major versions fixed, ensuring compatibility across the dev stack.</h3>
+<h3>Notes for reviewers- Verify that the <code>^</code> ranges for <code>electron</code> and <code>electron-builder</code> are compatible with the target OS and architecture.- Ensure <code>typescript</code> <code>~5.8.3</code> aligns with the <code>@types/*</code> packages; mismatched major versions can cause type errors.- Check that <code>concurrently</code> and <code>wait-on</code> are used in <code>scripts</code> to avoid race conditions during dev server startup.- Confirm that <code>@tailwindcss/vite</code> and <code>tailwindcss</code> versions are mutually compatible; otherwise, Tailwind may not compile correctly.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

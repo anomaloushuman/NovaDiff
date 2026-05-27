@@ -6,23 +6,23 @@
 
 | Metric | Value |
 | --- | --- |
-| Indexed files | 463 |
+| Indexed files | 484 |
 | Symbol-bearing files | 80 |
-| Relative import edges | 43 |
-| Cross-file call edges (heuristic) | 228 |
+| Relative import edges | 45 |
+| Cross-file call edges (heuristic) | 220 |
 
 ## Top extensions
 
 | Extension | Count |
 | --- | --- |
-| `.ts` | 210 |
-| `.tsx` | 82 |
+| `.ts` | 226 |
+| `.tsx` | 85 |
 | `.pak` | 58 |
-| `.cjs` | 27 |
+| `.cjs` | 28 |
 | `(no ext)` | 20 |
 | `.json` | 14 |
 | `.plist` | 9 |
-| `.css` | 5 |
+| `.css` | 6 |
 | `.dylib` | 4 |
 | `.mjs` | 4 |
 | `.svg` | 4 |
@@ -40,15 +40,15 @@
 
 | Directory | Files |
 | --- | --- |
-| `packages` | 235 |
+| `packages` | 237 |
 | `release` | 103 |
-| `src` | 71 |
-| `electron` | 27 |
+| `src` | 84 |
+| `electron` | 28 |
 | `.` | 15 |
+| `tests` | 7 |
 | `.novadiff-graph` | 4 |
 | `cli` | 3 |
 | `public` | 2 |
-| `tests` | 2 |
 | `scripts` | 1 |
 
 ## Detected project stacks
@@ -94,6 +94,7 @@
 - `electron/prefetch-summaries.cjs`
 - `electron/preload.cjs`
 - `electron/repo-discovery.cjs`
+- `electron/security-scan-runner.cjs`
 - `electron/workspace-files.cjs`
 - `electron/workspace-history.cjs`
 - `electron/workspace-store.cjs`
@@ -136,4 +137,3 @@
 - `packages/graph-core/src/change-classifier.ts`
 - `packages/graph-core/src/embedding-search.ts`
 - `packages/graph-core/src/fingerprint.ts`
-- `packages/graph-core/src/ignore-filter.ts`

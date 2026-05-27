@@ -26,33 +26,32 @@
 <body>
   <header class="top">
     <h1>src/components/DocumentationWorkspaceLinked.tsx</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:03:08.220Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:37:45.207Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new <code>src/components/DocumentationWorkspaceLinked.tsx</code> file introduces a set of utilities that bind the documentation workspace to the Code City graph. It adds a sync root component, a bootstrap helper, a custom hook <code>useLinkedCityState</code>, and two toolbar components.</p>
+<p>In <code>src/components/DocumentationWorkspaceLinked.tsx</code>, the <code>useLinkedCityState</code> hook now treats <code>sync.cityBuildingId</code> as an additional source of selection. The hook’s public API now exposes <code>primaryBuildingId</code>, which falls back to <code>sync.cityBuildingId</code> when no primary building is found. This change expands the link between the graph and city views to include building‑level navigation.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>InitialDocsFocus</code> interface</strong> (lines 16‑22) defines optional props for initial focus state.  </li>
-<li><strong><code>DocumentationWorkspaceSyncRoot</code></strong> (lines 24‑37) wraps children in <code>DocsViewSyncProvider</code> and injects <code>DocsFocusBootstrap</code>.  </li>
-<li><strong><code>DocsFocusBootstrap</code></strong> (lines 39‑42) registers an external node with <code>useDocsViewSyncExternalNode</code>.  </li>
-<li><strong><code>useLinkedCityState</code></strong> (lines 44‑174) computes filtered layout, building mappings, highlights, and exposes callbacks for graph/city selection and entry/exit.  </li>
-<li><strong><code>CodeCityGraphToolbar</code></strong> (lines 176‑206) renders a toolbar that shows the current file context and an exit button.  </li>
-<li><strong><code>DocsLinkToolbar</code></strong> (lines 208‑215) displays a hint that the city and graph stay linked.</li>
+<li><strong>Selection logic</strong> – <code>selectionActive</code> is now <code>Boolean(sync.linkedNodeId) || Boolean(sync.cityBuildingId)</code> (L84 → R84).  </li>
+<li><strong>Highlight calculation</strong> – <code>cityBuildingIdsForHighlight</code> receives <code>sync.cityBuildingId</code> (R94, R101).  </li>
+<li><strong>Primary building fallback</strong> – <code>primaryBuildingId</code> is set to <code>primary ?? sync.cityBuildingId</code> (R166).  </li>
+<li><strong>Return shape</strong> – <code>primaryBuildingId</code> is added to the hook’s return object (L164 removed, R166 added).  </li>
+<li><strong>Sync usage</strong> – <code>sync.cityBuildingId</code> is read in several places, enabling building‑level sync.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: The hook centralizes sync logic; any misuse of <code>sync</code> or missing context will surface at runtime.  </li>
-<li><strong>Maintainability</strong>: New exports are self‑contained; future refactors can target this file without touching other modules.  </li>
-<li><strong>Performance</strong>: Heavy <code>useMemo</code> chains (e.g., <code>filteredLayout</code>, <code>buildingByNode</code>) may add overhead; monitor rendering times when the graph payload is large.  </li>
-<li><strong>Compatibility</strong>: As a new file, it does not break existing code but requires importing the new components where needed.</li>
+<li><strong>Correctness</strong> – Highlights and focus now work when the graph selection is cleared but a building ID remains, preventing stale highlights.  </li>
+<li><strong>Maintainability</strong> – Consumers that destructure the hook’s result must account for the new <code>primaryBuildingId</code> field.  </li>
+<li><strong>Performance</strong> – The added boolean check and argument to <code>cityBuildingIdsForHighlight</code> add negligible overhead.  </li>
+<li><strong>Observability</strong> – Toolbar and link hints now reflect building‑level navigation, improving UX consistency.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Context availability</strong>: Verify that <code>DocsViewSyncProvider</code> is rendered above any consumer of <code>useLinkedCityState</code>.  </li>
-<li><strong>Type safety</strong>: Ensure <code>GraphPayload</code> and <code>CodeCityLayoutResult</code> types align with actual payloads; mismatches will cause runtime errors.  </li>
-<li><strong>Performance regression</strong>: Benchmark <code>useLinkedCityState</code> with a large graph to confirm memoization thresholds are adequate.  </li>
-<li><strong>UI consistency</strong>: Confirm that <code>CodeCityGraphToolbar</code> and <code>DocsLinkToolbar</code> integrate visually with existing toolbars and do not duplicate functionality.</li>
+<li><strong>Consumer breakage</strong> – Code that previously ignored <code>primaryBuildingId</code> may now receive an unexpected value; run unit tests for all hook consumers.  </li>
+<li><strong>Sync consistency</strong> – Verify that <code>sync.cityBuildingId</code> is correctly set and cleared during graph selection changes to avoid orphaned highlights.  </li>
+<li><strong>Edge overlay regression</strong> – Ensure that <code>graphEdgesToCityPairs</code> still receives the correct <code>buildingByNode</code> mapping when <code>cityBuildingId</code> is used.  </li>
+<li><strong>Documentation</strong> – Update docs to explain the new <code>primaryBuildingId</code> fallback and the expanded selection logic.</li>
 </ul>
 </article>
   </main>

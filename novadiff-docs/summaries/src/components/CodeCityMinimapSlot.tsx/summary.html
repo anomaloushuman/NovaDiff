@@ -26,28 +26,31 @@
 <body>
   <header class="top">
     <h1>src/components/CodeCityMinimapSlot.tsx</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:00:26.472Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:34:32.775Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new component, <code>CodeCityMinimapSlot</code>, is added in <strong>src/components/CodeCityMinimapSlot.tsx</strong> (lines R1‑R94). It renders a minimap slot that measures Chrome insets and updates its layout in response to DOM changes.</p>
+<p><code>src/components/CodeCityMinimapSlot.tsx</code> now registers a listener for the global event <strong><code>novadiff-code-viewer-open-change</code></strong>. The handler (<code>update</code>) recalculates the minimap insets whenever the code‑viewer’s open state changes.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – React hooks (<code>useLayoutEffect</code>, <code>useRef</code>, <code>useState</code>) and types (<code>CSSProperties</code>, <code>ReactNode</code>) plus <code>measureCodeCityChromeInsets</code> and <code>CodeCityChromeInsets</code> from <code>../app/codeCityChromeInsets</code> (lines R1‑R5).  </li>
-<li><strong>DEFAULT_INSETS</strong> – a default <code>CodeCityChromeInsets</code> object (lines R7‑R12).  </li>
-<li><strong>Component export</strong> – <code>export function CodeCityMinimapSlot({ children, dockedControls = false }: { children: ReactNode; dockedControls?: boolean; })</code> (lines R14‑R20).  </li>
-<li><strong>Layout effect</strong> – <code>useLayoutEffect</code> locates the host element, then sets up a <code>ResizeObserver</code>, a <code>MutationObserver</code>, and a window resize listener to call <code>measureCodeCityChromeInsets(host, { dockedControls })</code> (lines R24‑R78).  </li>
-<li><strong>Styling</strong> – applies a CSS variable <code>--code-city-lift</code> from <code>insets.bottom</code> and conditionally adds classes for docked controls or hidden chrome (lines R80‑R88).  </li>
-<li><strong>Cleanup</strong> – cancels animation frames, disconnects observers, and removes the resize listener on unmount (lines R72‑R77).</li>
+<li><strong>Added listener</strong> (line 72):```ts
+window.addEventListener(&quot;novadiff-code-viewer-open-change&quot;, update);</li>
 </ul>
+<p><code>- **Removed listener** (line 78):</code>ts
+window.removeEventListener(&quot;novadiff-code-viewer-open-change&quot;, update);
+```- No other imports or logic were modified; the component still relies on <code>measureCodeCityChromeInsets</code>, <code>ResizeObserver</code>, and <code>MutationObserver</code> for layout changes.</p>
 <h3>Impact</h3>
-<p>The component now tracks layout changes and applies Chrome insets dynamically. It exposes <code>--code-city-lift</code> for styling and debugging. The implementation relies on <code>ResizeObserver</code> and <code>MutationObserver</code>; browsers without support may need polyfills.</p>
+<ul>
+<li>The component now reacts to the code‑viewer’s open/close state, which may prevent stale inset values when the viewer toggles.  </li>
+<li>The added listener is lightweight, merely scheduling a single <code>requestAnimationFrame</code> update.  </li>
+<li>Cleanup occurs in the same effect cleanup block, ensuring no lingering listeners after unmount.</li>
+</ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Export visibility</strong> – confirm <code>CodeCityMinimapSlot</code> is re‑exported from the component index if required.  </li>
-<li><strong>Observer cleanup</strong> – ensure <code>cancelAnimationFrame</code>, <code>ro.disconnect()</code>, and <code>mo.disconnect()</code> run on unmount to avoid leaks.  </li>
-<li><strong>Host element resolution</strong> – verify the logic for <code>host</code> (docked vs. non‑docked) correctly selects the intended element in both modes.  </li>
-<li><strong>CSS variable usage</strong> – consuming styles must reference <code>--code-city-lift</code> to apply the visual lift effect.</li>
+<li><strong>Event name mismatch</strong>: Verify that the code‑viewer dispatches <code>novadiff-code-viewer-open-change</code>.  </li>
+<li><strong>Duplicate listeners</strong>: Ensure that multiple mounts of <code>CodeCityMinimapSlot</code> do not accumulate listeners; the cleanup logic should prevent this.  </li>
+<li><strong>Update idempotency</strong>: Confirm that rapid open/close toggles do not cause race conditions or unnecessary re‑renders.  </li>
+<li><strong>Testing coverage</strong>: Add unit tests that simulate the event dispatch and assert that <code>measureCodeCityChromeInsets</code> is invoked with the correct host element.</li>
 </ul>
 </article>
   </main>

@@ -26,31 +26,31 @@
 <body>
   <header class="top">
     <h1>electron/preload.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:48:01.058Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:20:21.502Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The preload script now exposes five new IPC‑invoked methods via <code>contextBridge</code>. These extend the Git and GitHub tooling API surface.</p>
+<p>The preload script <code>electron/preload.cjs</code> now exposes four new IPC helpers. They are added at lines 45‑46 and 152‑155 and use the same <code>ipcRenderer.invoke</code> pattern as the existing API.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>gitStagePaths</code> (<code>ipcRenderer.invoke(&quot;git-stage-paths&quot;)</code>) added at line 129.  </li>
-<li><code>gitStageDistrict</code> (<code>ipcRenderer.invoke(&quot;git-stage-district&quot;)</code>) added at line 130.  </li>
-<li><code>exportProjectSnapshot</code> (<code>ipcRenderer.invoke(&quot;export-project-snapshot&quot;)</code>) added at line 131.  </li>
-<li><code>gitCommitDetail</code> (<code>ipcRenderer.invoke(&quot;git-commit-detail&quot;)</code>) added at line 146.  </li>
-<li><code>githubCommitContext</code> (<code>ipcRenderer.invoke(&quot;github-commit-context&quot;)</code>) added at line 147.</li>
+<li><code>scanSecurityInsights(payload)</code> – lines 45‑46 – invokes <code>&quot;security-insights-scan&quot;</code>.  </li>
+<li><code>gitListBranches(payload)</code> – lines 152‑152 – invokes <code>&quot;git-list-branches&quot;</code>.  </li>
+<li><code>gitListBranchCommits(payload)</code> – lines 153‑153 – invokes <code>&quot;git-list-branch-commits&quot;</code>.  </li>
+<li><code>workspaceMaterializeCommit(payload)</code> – lines 154‑155 – invokes <code>&quot;workspace-materialize-commit&quot;</code>.</li>
 </ul>
-<p>These entries appear in the <code>electronAPI</code> object immediately after the existing workspace‑related methods.</p>
+<p>All four helpers are simple wrappers that return the promise from <code>ipcRenderer.invoke</code>.</p>
 <h3>Impact</h3>
 <ul>
-<li>The API surface now includes calls for staging specific paths or districts, exporting project snapshots, and retrieving commit details from Git and GitHub.  </li>
-<li>No existing symbols were removed; the change is additive.  </li>
-<li>Consumers can invoke these methods via <code>window.electronAPI.&lt;method&gt;</code>.</li>
+<li><strong>Correctness</strong>: Calls will reject if the main process lacks a handler for the corresponding channel; this is standard IPC behavior.  </li>
+<li><strong>Maintainability</strong>: Adding helpers in this consistent style keeps the preload API cohesive.  </li>
+<li><strong>Performance</strong>: The wrappers add negligible overhead beyond normal IPC latency.  </li>
+<li><strong>Compatibility</strong>: Existing renderer code is unaffected; no breaking changes.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that the main process registers listeners for the channels <code>&quot;git-stage-paths&quot;</code>, <code>&quot;git-stage-district&quot;</code>, <code>&quot;export-project-snapshot&quot;</code>, <code>&quot;git-commit-detail&quot;</code>, and <code>&quot;github-commit-context&quot;</code>. Missing handlers will surface as IPC errors.  </li>
-<li>Add unit tests to confirm that the preload methods forward payloads correctly.  </li>
-<li>Run <code>npm run lint</code> and <code>npm run build</code> to ensure no syntax or type errors were introduced.</li>
+<li><strong>Missing main handlers</strong> – verify that <code>&quot;security-insights-scan&quot;</code>, <code>&quot;git-list-branches&quot;</code>, <code>&quot;git-list-branch-commits&quot;</code>, and <code>&quot;workspace-materialize-commit&quot;</code> are implemented in the main process.  </li>
+<li><strong>Type definitions</strong> – update TypeScript typings or add JSDoc comments for the new functions.  </li>
+<li><strong>Testing</strong> – add unit/integration tests that exercise these IPC calls to guard against regressions.</li>
 </ul>
 </article>
   </main>

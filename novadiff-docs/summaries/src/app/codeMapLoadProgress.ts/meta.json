@@ -1,0 +1,57 @@
+{
+  "relPath": "src/app/codeMapLoadProgress.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:28:33.655Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R1 added: export type CodeMapGraphProgress = {",
+      "R8 added: export interface CodeMapLoadState {",
+      "R18 added: export interface CodeMapLoadSnapshot {",
+      "R54 added: export function computeCodeMapLoadSnapshot(state: CodeMapLoadState): CodeMapLoadSnapshot {",
+      "R109 added: export function isCodeMapExperienceReady(state: {",
+      "R124 added: export const CODE_MAP_HANDOFF_MS = 520;"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-124"
+    ],
+    "cited_changed_lines": [
+      "R1 added: export type CodeMapGraphProgress = {",
+      "R2 added: message?: string;",
+      "R3 added: current?: number;",
+      "R4 added: total?: number;",
+      "R5 added: phase?: string;",
+      "R6 added: };"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function computeCodeMapLoadSnapshot (54-108)",
+      "right function graphPercent (30-53)",
+      "right function isCodeMapExperienceReady (109-124)",
+      "right interface CodeMapLoadSnapshot (18-29)",
+      "right interface CodeMapLoadState (8-17)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

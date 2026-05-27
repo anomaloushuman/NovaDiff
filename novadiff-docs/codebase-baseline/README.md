@@ -31,6 +31,6 @@ metrics so generated docs are not fed back into the model.
 
 **Target:** NovaDiff — `/Users/iamgroot/Documents/GitHub/NovaDiff`
 
-**Baseline:** f7c2bfd81af2 — `/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/f7c2bfd81af2`
+**Baseline:** 9aadd5eb5604 — `/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/9aadd5eb5604`
 
-**Generated:** 2026-05-21T11:30:16.806Z
+**Generated:** 2026-05-27T04:01:06.779Z

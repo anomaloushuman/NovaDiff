@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/CodeMapLoadingPreview.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/CodeMapLoadingPreview.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:36:27.613Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>CodeMapLoadingPreview</code> is added at <code>src/components/CodeMapLoadingPreview.tsx</code> (lines 1‑109). It renders a visual loading state for the code‑map feature, consuming a <code>CodeMapLoadSnapshot</code> and an optional <code>exiting</code> flag.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (R1‑R4): <code>useMemo</code> from React, <code>useBackgroundActivity</code> from <code>../app/BackgroundActivityContext</code>, the <code>CodeMapLoadSnapshot</code> type, and the local CSS file.  </li>
+<li><strong>Props interface</strong> (R6‑R9): <code>snapshot: CodeMapLoadSnapshot; exiting?: boolean</code>.  </li>
+<li><strong>Component logic</strong> (R18‑R50):  <ul>
+<li><code>useBackgroundActivity</code> supplies background tasks.  </li>
+<li><code>rows</code> is memoized (useMemo) to combine the snapshot phase with other activities, capped at three entries.  </li>
+<li><code>primaryPct</code> is clamped between 2 % and 100 % from <code>snapshot.percent</code>.</li>
+</ul>
+</li>
+<li><strong>Render output</strong> (R54‑R109): a viewport with stars, horizon, mesh, and a beam whose width reflects <code>primaryPct</code>; a console listing up to three status tracks, each showing label, percent, and detail. ARIA attributes (<code>role=&quot;status&quot;</code>, <code>aria-live=&quot;polite&quot;</code>, <code>aria-busy</code>) are present.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Adds a typed, isolated UI component; no existing code is modified.  </li>
+<li><strong>Maintainability</strong>: Loading logic is encapsulated; future UI changes can be made here.  </li>
+<li><strong>Performance</strong>: <code>useMemo</code> limits recomputation; rendering is lightweight.  </li>
+<li><strong>Compatibility</strong>: Requires <code>BackgroundActivityContext</code> to be provided; otherwise <code>useBackgroundActivity</code> will throw.  </li>
+<li><strong>Observability</strong>: Screen‑reader feedback is improved via <code>aria-live</code> and <code>aria-busy</code>.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Context availability</strong>: Verify that <code>BackgroundActivityContext</code> wraps the component tree where this preview is used.  </li>
+<li><strong>Snapshot shape</strong>: Callers must supply a valid <code>CodeMapLoadSnapshot</code> (fields <code>phase</code>, <code>detail</code>, <code>percent</code>).  </li>
+<li><strong>CSS dependency</strong>: Ensure <code>CodeMapLoadingPreview.css</code> exists and defines the referenced class names.  </li>
+<li><strong>Build &amp; lint</strong>: Run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to confirm TypeScript and style integration.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

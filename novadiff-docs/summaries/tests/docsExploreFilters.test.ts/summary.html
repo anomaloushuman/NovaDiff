@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>tests/docsExploreFilters.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>tests/docsExploreFilters.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:16:38.011Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>tests/docsExploreFilters.test.ts</code> was added to validate the three exported utilities from <code>../src/app/docsExploreFilters</code>. The file imports <code>vitest</code> helpers (<code>describe</code>, <code>expect</code>, <code>it</code>) and the functions <code>graphDetailFromSymbolKinds</code>, <code>symbolMatchesKindGroups</code>, and <code>toggleSymbolKindGroup</code>.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports added</strong> (lines 1‑6 of the test file):```ts
+import { describe, expect, it } from &quot;vitest&quot;;
+import {
+  graphDetailFromSymbolKinds,
+  symbolMatchesKindGroups,
+  toggleSymbolKindGroup,
+} from &quot;../src/app/docsExploreFilters&quot;;</li>
+</ul>
+<pre><code class="language--">  - Verify `graphDetailFromSymbolKinds` maps symbol kinds to the correct graph detail level and `showFunctionsInClassView` flag (lines 10‑25).
+  - Confirm `symbolMatchesKindGroups` matches a symbol kind against a list of structure groups (lines 29‑32).
+  - Ensure `toggleSymbolKindGroup` keeps at least one group enabled when toggling (lines 36‑40).
+
+### Impact
+
+- **Correctness**: Explicit assertions guard against silent regressions in the filtering logic.
+- **Coverage**: Adds dedicated tests for the docs‑explore filtering utilities, which previously had no tests.
+- **Maintainability**: The tests serve as documentation for expected behavior, aiding future refactors.
+- **Build/CI**: No changes to build scripts; the new file will be executed by the existing test runner.
+
+### Risks &amp; follow‑ups
+- **Implementation drift**: If the signatures or return shapes of the three functions change, the tests will fail. Verify that the implementation matches the expected contract.
+- **Path changes**: The import path `../src/app/docsExploreFilters` must remain valid; moving the module will require updating the test import.
+- **Test flakiness**: The tests are deterministic, but ensure that any global state or environment configuration does not affect the outcomes.
+- **CI performance**: Adding a few tests has negligible impact; run the full test suite to confirm no regressions.
+</code></pre>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

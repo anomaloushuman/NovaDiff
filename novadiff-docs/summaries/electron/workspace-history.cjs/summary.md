@@ -1,28 +1,17 @@
 ### Overview  
-The file `electron/workspace-history.cjs` was modified to change how workspace state is persisted during history indexing.  
-In both `indexWorkspaceHistory` (lines 100‑174) and `refreshWorkspaceHistory` (lines 188‑292) the unconditional `await upsertWorkspace(userData, workspace);` that previously ran on every commit was removed (diff lines 135 and 240).  
-Instead, a `persistSession` flag is computed:
-
-```js
-i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0
-```
-
-and passed to `upsertWorkspace` as `{ touchSession: persistSession }` (added lines 135‑136 and 241‑242).  
-This throttles session updates to the first, last, and every tenth commit.
+`electron/workspace-history.cjs` now imports two additional helpers from `git-service.cjs` (`listBranches`, `listCommitsForRef`) and introduces a new function, `materializeCommitForCompare`. This helper resolves a Git ref or hash to a snapshot path, creating the snapshot if it does not already exist. The module’s export list is updated to expose the new function and the two imported helpers.
 
 ### Key changes  
-- **Persist‑session logic** – `persistSession` is evaluated per commit and supplied to `upsertWorkspace`.  
-- **Removed redundant writes** – the earlier write at line 135 (and line 240) is deleted, reducing intermediate writes.  
-- **No API surface change** – function signatures, imports, and exports remain unchanged.  
-- **Documentation** – module comments still describe the same high‑level behavior; no new external API is introduced.
+- **Import expansion** – line 6 now pulls `listBranches` and `listCommitsForRef` from `git-service.cjs`.  
+- **New function** – `materializeCommitForCompare` (lines 295‑314) resolves a ref or hash, checks for an existing usable snapshot, and if missing, creates one via `snapshotCommit`.  
+- **Export list update** – lines 316‑324 add `listBranches`, `listCommitsForRef`, and `materializeCommitForCompare` to `module.exports`.
 
 ### Impact  
-- **Write reduction** – the number of calls to `upsertWorkspace` during a history build is lowered to roughly 10 % of the previous count.  
-- **Session persistence** – sessions are now updated only at key points, which may affect metrics that count session touches.  
-- **Test expectations** – any tests asserting a write per commit may need to be updated to account for the throttling.
+- Other modules can now call `materializeCommitForCompare` to obtain a snapshot path for any commit or branch reference, simplifying comparison workflows.  
+- The added imports make `listBranches` and `listCommitsForRef` available for use within this file or exported for external use.
 
 ### Risks & follow‑ups  
-- **Session handling regression** – verify that sessions still expire correctly after the new throttling logic.  
-- **Test failures** – adjust unit/integration tests that rely on a write per commit.  
-- **Concurrency** – ensure that reduced write frequency does not cause stale state when multiple indexing jobs run concurrently.  
-- **Documentation** – consider adding a note in the README or docs about the new session‑touching behavior for future maintainers.
+- **Missing helper definitions** – Ensure `git-service.cjs` actually exports `listBranches` and `listCommitsForRef`; otherwise imports will fail at runtime.  
+- **Error handling** – `materializeCommitForCompare` throws if the workspace is missing or the ref is empty; callers must handle these errors.  
+- **Snapshot creation side‑effects** – The function creates a snapshot directory if absent; verify that this behavior aligns with the intended workflow and that no unintended snapshots are produced.  
+- **Testing** – Add unit tests covering the new function’s success and failure paths, and confirm that the export list reflects the changes.

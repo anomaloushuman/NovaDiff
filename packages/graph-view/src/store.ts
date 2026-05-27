@@ -157,6 +157,10 @@ interface DashboardStore {
   showFunctionsInClassView: boolean;
   toggleShowFunctionsInClassView: () => void;
 
+  /** When set, embed graph only shows these node ids (synced from Code City filters). */
+  embedCityFilterNodeIds: Set<string> | null;
+  setEmbedCityFilterNodeIds: (ids: Set<string> | null) => void;
+
   setGraph: (graph: KnowledgeGraph) => void;
   selectNode: (nodeId: string | null) => void;
   navigateToNode: (nodeId: string) => void;
@@ -370,6 +374,34 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       expandedContainers: new Set(),
       pendingFocusContainer: null,
     })),
+
+  embedCityFilterNodeIds: null,
+  setEmbedCityFilterNodeIds: (ids) =>
+    set((state) => {
+      const prev = state.embedCityFilterNodeIds;
+      if (prev === ids) {
+        return {};
+      }
+      if (prev && ids && prev.size === ids.size) {
+        let same = true;
+        for (const id of prev) {
+          if (!ids.has(id)) {
+            same = false;
+            break;
+          }
+        }
+        if (same) {
+          return {};
+        }
+      }
+      return {
+        embedCityFilterNodeIds: ids,
+        containerLayoutCache: new Map(),
+        containerSizeMemory: new Map(),
+        expandedContainers: new Set(),
+        pendingFocusContainer: null,
+      };
+    }),
 
   setGraph: (graph) => {
     const searchEngine = new SearchEngine(graph.nodes);
@@ -649,6 +681,7 @@ export const useDashboardStore = create<DashboardStore>()((set, get) => ({
       codeViewerOpen: false,
       codeViewerNodeId: null,
       codeViewerExpanded: false,
+      embedCityFilterNodeIds: null,
     }),
 
   setReactFlowInstance: (instance) => set({ reactFlowInstance: instance }),

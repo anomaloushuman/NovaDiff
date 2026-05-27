@@ -4,6 +4,7 @@ import {
   cityBuildingIdsForHighlight,
   cityBuildingToGraphNodeId,
   graphEdgesToCityPairs,
+  graphNodeIdsForCityLayout,
   graphNodeToCityBuildingIds,
 } from "../src/app/graphCityBridge";
 import type { CodeCityLayoutResult, CodeCityRenderableBuilding } from "../src/app/codeCityLayout";
@@ -107,6 +108,50 @@ describe("graphCityBridge", () => {
     );
     expect(highlightIds).toContain("target:src/a.ts:function:foo:1");
     expect(highlightIds).toContain("target:src/a.ts:class:Bar:10");
+  });
+
+  it("maps disambiguated function node ids with line suffix", () => {
+    const graphWithLine: KnowledgeGraph = {
+      ...graph,
+      nodes: [
+        ...graph.nodes,
+        {
+          id: "function:src/a.ts:foo:42",
+          type: "function",
+          name: "foo",
+          filePath: "src/a.ts",
+          summary: "",
+          tags: [],
+          complexity: "simple",
+        },
+      ],
+    };
+    const ids = graphNodeToCityBuildingIds("function:src/a.ts:foo:42", graphWithLine, layout);
+    expect(ids).toContain("target:src/a.ts:function:foo:1");
+  });
+
+  it("highlights from city building id when graph node is missing", () => {
+    const { primary, highlightIds } = cityBuildingIdsForHighlight(
+      null,
+      layout,
+      "target",
+      null,
+      true,
+      "target:src/a.ts:function:foo:1",
+    );
+    expect(primary).toBe("target:src/a.ts:function:foo:1");
+    expect(highlightIds).toContain("target:src/a.ts:class:Bar:10");
+  });
+
+  it("collects graph node ids for visible city buildings", () => {
+    const onlyFn: CodeCityLayoutResult = {
+      ...layout,
+      buildings: [layout.buildings[0]],
+    };
+    const ids = graphNodeIdsForCityLayout(graph, onlyFn);
+    expect(ids.has("function:src/a.ts:foo")).toBe(true);
+    expect(ids.has("file:src/a.ts")).toBe(true);
+    expect(ids.has("class:src/a.ts:Bar")).toBe(false);
   });
 
   it("produces edge overlays for selected node", () => {

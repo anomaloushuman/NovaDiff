@@ -1,21 +1,21 @@
 ### Overview  
-The preload script now exposes five new IPC‑invoked methods via `contextBridge`. These extend the Git and GitHub tooling API surface.
+The preload script `electron/preload.cjs` now exposes four new IPC helpers. They are added at lines 45‑46 and 152‑155 and use the same `ipcRenderer.invoke` pattern as the existing API.
 
 ### Key changes  
-- `gitStagePaths` (`ipcRenderer.invoke("git-stage-paths")`) added at line 129.  
-- `gitStageDistrict` (`ipcRenderer.invoke("git-stage-district")`) added at line 130.  
-- `exportProjectSnapshot` (`ipcRenderer.invoke("export-project-snapshot")`) added at line 131.  
-- `gitCommitDetail` (`ipcRenderer.invoke("git-commit-detail")`) added at line 146.  
-- `githubCommitContext` (`ipcRenderer.invoke("github-commit-context")`) added at line 147.  
+- `scanSecurityInsights(payload)` – lines 45‑46 – invokes `"security-insights-scan"`.  
+- `gitListBranches(payload)` – lines 152‑152 – invokes `"git-list-branches"`.  
+- `gitListBranchCommits(payload)` – lines 153‑153 – invokes `"git-list-branch-commits"`.  
+- `workspaceMaterializeCommit(payload)` – lines 154‑155 – invokes `"workspace-materialize-commit"`.  
 
-These entries appear in the `electronAPI` object immediately after the existing workspace‑related methods.
+All four helpers are simple wrappers that return the promise from `ipcRenderer.invoke`.
 
 ### Impact  
-- The API surface now includes calls for staging specific paths or districts, exporting project snapshots, and retrieving commit details from Git and GitHub.  
-- No existing symbols were removed; the change is additive.  
-- Consumers can invoke these methods via `window.electronAPI.<method>`.
+- **Correctness**: Calls will reject if the main process lacks a handler for the corresponding channel; this is standard IPC behavior.  
+- **Maintainability**: Adding helpers in this consistent style keeps the preload API cohesive.  
+- **Performance**: The wrappers add negligible overhead beyond normal IPC latency.  
+- **Compatibility**: Existing renderer code is unaffected; no breaking changes.
 
 ### Risks & follow‑ups  
-- Verify that the main process registers listeners for the channels `"git-stage-paths"`, `"git-stage-district"`, `"export-project-snapshot"`, `"git-commit-detail"`, and `"github-commit-context"`. Missing handlers will surface as IPC errors.  
-- Add unit tests to confirm that the preload methods forward payloads correctly.  
-- Run `npm run lint` and `npm run build` to ensure no syntax or type errors were introduced.
+- **Missing main handlers** – verify that `"security-insights-scan"`, `"git-list-branches"`, `"git-list-branch-commits"`, and `"workspace-materialize-commit"` are implemented in the main process.  
+- **Type definitions** – update TypeScript typings or add JSDoc comments for the new functions.  
+- **Testing** – add unit/integration tests that exercise these IPC calls to guard against regressions.

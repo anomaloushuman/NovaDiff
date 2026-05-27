@@ -1,6 +1,21 @@
 [
   {
     "advisory": null,
+    "category": "memory-leak",
+    "confidence": "high",
+    "evidence": [
+      "R1313 added: let matches = text.contains(\"Box::leak(\")",
+      "R1314 added: || text.contains(\"mem::forget(\")",
+      "R1315 added: || text.contains(\"ManuallyDrop::new(\");"
+    ],
+    "id": "memory-leak:high:cli-src-main.rs",
+    "rel_path": "cli/src/main.rs",
+    "severity": "high",
+    "source": "heuristic",
+    "title": "Potential Rust lifetime leak pattern in `cli/src/main.rs`"
+  },
+  {
+    "advisory": null,
     "category": "config",
     "confidence": "medium",
     "evidence": [
@@ -11,5 +26,51 @@
     "severity": "medium",
     "source": "heuristic",
     "title": "Config-adjacent file touched: `vite.config.ts`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Dependency manifest files can change install/build behavior.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:package.json",
+    "rel_path": "package.json",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Dependency manifest modified in `package.json`"
+  },
+  {
+    "advisory": null,
+    "category": "dependency",
+    "confidence": "high",
+    "evidence": [
+      "Resolved dependency versions may have changed.",
+      "Change kind: modified"
+    ],
+    "id": "dependency:medium:package-lock.json",
+    "rel_path": "package-lock.json",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Lockfile modified in `package-lock.json`"
+  },
+  {
+    "advisory": null,
+    "category": "function-completeness",
+    "confidence": "medium",
+    "evidence": [
+      "R1334 incomplete stub: let looks_incomplete = low.contains(\"todo!\")",
+      "R1335 incomplete stub: || low.contains(\"todo(\")",
+      "R1336 incomplete stub: || low.contains(\"notimplemented\")",
+      "R1337 incomplete stub: || low.contains(\"unimplemented!\")",
+      "R1339 incomplete stub: || low.contains(\"throw new error('todo\")",
+      "R1340 incomplete stub: || low.contains(\"return null; // todo\")"
+    ],
+    "id": "function-completeness:medium:cli-src-main.rs",
+    "rel_path": "cli/src/main.rs",
+    "severity": "medium",
+    "source": "heuristic",
+    "title": "Potentially incomplete implementation in `cli/src/main.rs`"
   }
 ]

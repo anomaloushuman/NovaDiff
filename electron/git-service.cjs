@@ -234,6 +234,106 @@ function preparePrCompareRoots(repoRoot, baseRef, headRef) {
   return { leftRoot, rightRoot, baseRef: base, headRef: head };
 }
 
+function splitGitFormatLine(line) {
+  if (line.includes("\x1f")) {
+    return line.split("\x1f");
+  }
+  if (line.includes("\t")) {
+    return line.split("\t");
+  }
+  if (line.includes("%x1f")) {
+    return line.split(/%x1f/i);
+  }
+  return [line];
+}
+
+function parseLogLines(stdout) {
+  const commits = [];
+  for (const line of stdout.split("\n")) {
+    if (!line.trim()) {
+      continue;
+    }
+    const parts = splitGitFormatLine(line);
+    const hash = parts[0]?.trim();
+    if (!hash) {
+      continue;
+    }
+    commits.push({
+      hash,
+      shortHash: hash.slice(0, 12),
+      subject: parts[1] ?? "",
+      authoredAt: parts[2] ?? "",
+    });
+  }
+  return commits;
+}
+
+/** All local and remote branches, newest activity first. */
+function listBranches(repoRoot) {
+  const root = path.resolve(String(repoRoot ?? "").trim());
+  if (!isGitRepo(root)) {
+    throw new Error("Not a git repository");
+  }
+  const current = runGit(root, ["rev-parse", "--abbrev-ref", "HEAD"]);
+  // for-each-ref does not expand %x1f on all platforms; tab is reliable.
+  const out = runGit(root, [
+    "for-each-ref",
+    "--sort=-committerdate",
+    "refs/heads",
+    "refs/remotes",
+    "--format=%(refname:short)\t%(objectname)\t%(upstream:short)",
+  ]);
+  const seen = new Set();
+  const branches = [];
+  for (const line of out.split("\n")) {
+    if (!line.trim()) {
+      continue;
+    }
+    const parts = splitGitFormatLine(line);
+    const name = parts[0]?.trim();
+    const hash = parts[1]?.trim();
+    if (!name || !hash || name === "HEAD" || name.endsWith("/HEAD")) {
+      continue;
+    }
+    if (seen.has(name)) {
+      continue;
+    }
+    seen.add(name);
+    branches.push({
+      name,
+      hash,
+      shortHash: hash.slice(0, 12),
+      upstream: parts[2]?.trim() || null,
+      isCurrent: name === current,
+      isRemote: name.includes("/"),
+    });
+  }
+  return { currentBranch: current, branches };
+}
+
+/** Commits reachable from a branch or ref, oldest first. */
+function listCommitsForRef(repoRoot, ref, limit = 800) {
+  const root = path.resolve(String(repoRoot ?? "").trim());
+  const r = String(ref ?? "").trim();
+  if (!r) {
+    return [];
+  }
+  const max = Math.max(1, Math.min(5000, Number(limit) || 800));
+  const out = runGit(root, [
+    "log",
+    r,
+    "--reverse",
+    `--max-count=${max}`,
+    "--format=%H%x1f%s%x1f%aI",
+  ]);
+  return parseLogLines(out);
+}
+
+function resolveRefHash(repoRoot, ref) {
+  const root = path.resolve(String(repoRoot ?? "").trim());
+  return runGit(root, ["rev-parse", ref]);
+}
+
 function detectGitTooling() {
   const git = tryRunGit(process.cwd(), ["--version"]);
   return {
@@ -248,6 +348,9 @@ module.exports = {
   tryRunGit,
   isGitRepo,
   getRepoStatus,
+  listBranches,
+  listCommitsForRef,
+  resolveRefHash,
   parseGithubSlugFromUrl,
   stageAll,
   stagePaths,

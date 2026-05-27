@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../../app/usePrefersReducedMotion";
 
+export type TypewriterDirection = "forward" | "reverse";
+
 export interface TypewriterTextProps {
   text: string;
   active?: boolean;
-  /** Keep full text visible after typing finishes (default true). */
+  /** Keep full text visible after forward typing finishes (default true). */
   persist?: boolean;
+  direction?: TypewriterDirection;
   /** Milliseconds per character. */
   speed?: number;
   delay?: number;
@@ -18,6 +21,7 @@ export function TypewriterText({
   text,
   active = true,
   persist = true,
+  direction = "forward",
   speed = 22,
   delay = 0,
   className,
@@ -25,68 +29,83 @@ export function TypewriterText({
   onComplete,
 }: TypewriterTextProps) {
   const reduced = usePrefersReducedMotion();
-  const [visible, setVisible] = useState(0);
+  const [visible, setVisible] = useState(direction === "reverse" ? text.length : 0);
   const onCompleteRef = useRef(onComplete);
-  const completedRef = useRef(false);
-  const wasActiveRef = useRef(false);
+  const runIdRef = useRef(0);
 
   onCompleteRef.current = onComplete;
 
   useEffect(() => {
     if (!active) {
-      wasActiveRef.current = false;
-      if (persist && completedRef.current) {
+      if (direction === "forward" && persist) {
         return;
       }
-      completedRef.current = false;
-      setVisible(0);
+      setVisible(direction === "reverse" ? 0 : 0);
       return;
     }
 
-    if (wasActiveRef.current) {
-      return;
-    }
-    wasActiveRef.current = true;
-    completedRef.current = false;
-
-    if (reduced) {
-      setVisible(text.length);
-      completedRef.current = true;
-      onCompleteRef.current?.();
-      return;
-    }
-
-    setVisible(0);
+    const runId = ++runIdRef.current;
     let intervalId = 0;
+    let timeoutId = 0;
     let cancelled = false;
 
-    const timeoutId = window.setTimeout(() => {
-      let i = 0;
-      intervalId = window.setInterval(() => {
-        if (cancelled) {
-          return;
-        }
-        i += 1;
-        setVisible(i);
-        if (i >= text.length) {
-          window.clearInterval(intervalId);
-          if (!completedRef.current) {
-            completedRef.current = true;
+    const finish = (count: number) => {
+      if (cancelled || runId !== runIdRef.current) {
+        return;
+      }
+      setVisible(count);
+      onCompleteRef.current?.();
+    };
+
+    if (reduced) {
+      finish(direction === "forward" ? text.length : 0);
+      return;
+    }
+
+    if (direction === "forward") {
+      setVisible(0);
+      timeoutId = window.setTimeout(() => {
+        let i = 0;
+        intervalId = window.setInterval(() => {
+          if (cancelled || runId !== runIdRef.current) {
+            return;
+          }
+          i += 1;
+          setVisible(i);
+          if (i >= text.length) {
+            window.clearInterval(intervalId);
             onCompleteRef.current?.();
           }
-        }
-      }, speed);
-    }, delay);
+        }, speed);
+      }, delay);
+    } else {
+      setVisible(text.length);
+      timeoutId = window.setTimeout(() => {
+        let i = text.length;
+        intervalId = window.setInterval(() => {
+          if (cancelled || runId !== runIdRef.current) {
+            return;
+          }
+          i -= 1;
+          setVisible(Math.max(0, i));
+          if (i <= 0) {
+            window.clearInterval(intervalId);
+            onCompleteRef.current?.();
+          }
+        }, speed);
+      }, delay);
+    }
 
     return () => {
       cancelled = true;
       window.clearTimeout(timeoutId);
       window.clearInterval(intervalId);
-      wasActiveRef.current = false;
     };
-  }, [active, delay, persist, reduced, speed, text]);
+  }, [active, delay, direction, persist, reduced, speed, text]);
 
-  const done = visible >= text.length;
+  const len = text.length;
+  const done =
+    direction === "forward" ? visible >= len : visible <= 0;
 
   return (
     <span className={className} aria-label={text}>

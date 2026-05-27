@@ -21,19 +21,29 @@ function liftForObstruction(hostRect: DOMRect, obstruction: DOMRect, bottom: num
   return Math.max(bottom, hostRect.bottom - obstruction.top + BASE_INSET);
 }
 
-function isBlockingModalOpen(): boolean {
+function isCodeViewerOpen(): boolean {
   return Boolean(
     document.querySelector(
-      [
-        ".docs-explore-modal-backdrop.is-open",
-        ".docs-explore-modal-backdrop.ui-overlay.is-open",
-        ".code-city-explore-cover-backdrop.is-open",
-        ".code-city-explore-cover-backdrop.ui-overlay.is-open",
-        "[data-novadiff-code-viewer-modal]",
-        ".novadiff-explain-modal-backdrop",
-        ".novadiff-graph-shell.is-fullscreen .ui-overlay.is-open",
-      ].join(","),
+      "[data-novadiff-code-viewer-sheet], [data-novadiff-code-viewer-modal]",
     ),
+  );
+}
+
+function isBlockingModalOpen(): boolean {
+  return (
+    isCodeViewerOpen() ||
+    Boolean(
+      document.querySelector(
+        [
+          ".docs-explore-modal-backdrop.is-open",
+          ".docs-explore-modal-backdrop.ui-overlay.is-open",
+          ".code-city-explore-cover-backdrop.is-open",
+          ".code-city-explore-cover-backdrop.ui-overlay.is-open",
+          ".novadiff-explain-modal-backdrop",
+          ".novadiff-graph-shell.is-fullscreen .ui-overlay.is-open",
+        ].join(","),
+      ),
+    )
   );
 }
 
@@ -62,13 +72,15 @@ export function measureCodeCityChromeInsets(
 
   const obstructions: Element[] = [];
 
-  const layoutRow =
-    host.closest("[data-novadiff-graph-layout-row]") ??
-    host.closest(".novadiff-graph-embed")?.querySelector("[data-novadiff-graph-layout-row]");
-  if (layoutRow instanceof HTMLElement) {
-    const sheet = layoutRow.querySelector("[data-novadiff-code-viewer-sheet]");
-    if (sheet) {
-      obstructions.push(sheet);
+  if (!isCodeViewerOpen()) {
+    const layoutRow =
+      host.closest("[data-novadiff-graph-layout-row]") ??
+      host.closest(".novadiff-graph-embed")?.querySelector("[data-novadiff-graph-layout-row]");
+    if (layoutRow instanceof HTMLElement) {
+      const sheet = layoutRow.querySelector("[data-novadiff-code-viewer-sheet]");
+      if (sheet) {
+        obstructions.push(sheet);
+      }
     }
   }
 

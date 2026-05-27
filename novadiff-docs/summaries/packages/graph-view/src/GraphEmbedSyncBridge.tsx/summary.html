@@ -26,54 +26,32 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/GraphEmbedSyncBridge.tsx</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:11:26.867Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:46:06.041Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new React component <code>GraphEmbedSyncBridge</code> is added to <code>packages/graph-view/src/GraphEmbedSyncBridge.tsx</code> (lines 1‑71). It synchronizes embed‑graph selection and navigation state with the NovaDiff documentation workspace.</p>
+<p><code>GraphEmbedSyncBridge</code> now accepts optional props <code>detailLevel</code>, <code>showFunctionsInClassView</code>, and <code>cityFilterNodeIds</code>. These props are synced to the dashboard store via new <code>useEffect</code> hooks. The import statement was updated to expose the <code>DetailLevel</code> type.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> (R1‑R8):```ts
-import { useEffect, useRef } from &quot;react&quot;;
-import { useDashboardStore } from &quot;./store&quot;;
-import {
-  applyGraphCityRoot,
-  applyGraphEnterFile,
-  applyGraphFocusSelection,
-  type GraphCityNavStore,
-} from &quot;./utils/graphCityNavigation&quot;;</li>
-</ul>
-<p><code>- **Exported API** (R11‑R20):</code>ts
-export function GraphEmbedSyncBridge({
-    controlledNodeId,
-    enteredFilePath,
-    focusMode,
-    onSelectionChange,
-  }: {
-    controlledNodeId?: string | null;
-    enteredFilePath?: string | null;
-    focusMode?: boolean;
-    onSelectionChange?: (nodeId: string | null) =&gt; void;
-  }) { … }
-```- **State access** (R22‑R24): reads <code>selectedNodeId</code> and <code>graph</code> from <code>useDashboardStore</code>.</p>
-<ul>
-<li><strong>Store API helper</strong> (R27‑R36): <code>storeApi()</code> returns navigation functions from the global store state.</li>
-<li><strong>Navigation effect</strong> (R39‑R57): watches <code>enteredFilePath</code>, <code>controlledNodeId</code>, <code>focusMode</code>, and <code>graph</code>. Builds a <code>navKey</code> and calls the appropriate helper (<code>applyGraphEnterFile</code>, <code>applyGraphFocusSelection</code>, or <code>applyGraphCityRoot</code>).</li>
-<li><strong>Selection emission</strong> (R59‑R67): emits <code>selectedNodeId</code> changes via <code>onSelectionChange</code>, guarded by a <code>lastEmitted</code> ref.</li>
-<li><strong>Return value</strong> (R70‑R71): renders <code>null</code>.</li>
+<li><strong>Import</strong> (R2): <code>import { useDashboardStore, type DetailLevel } from &quot;./store&quot;;</code>  </li>
+<li><strong>Prop signature</strong> (R15‑17, R23‑26): added <code>detailLevel?: DetailLevel</code>, <code>showFunctionsInClassView?: boolean</code>, <code>cityFilterNodeIds?: string[] | null</code>.  </li>
+<li><strong>Detail level sync</strong> (R67‑74): effect updates <code>store.setDetailLevel</code> when <code>detailLevel</code> differs from the store.  </li>
+<li><strong>Function view toggle</strong> (R75‑84): effect updates <code>store.setState</code> with <code>showFunctionsInClassView</code> and resets layout caches when the flag changes.  </li>
+<li><strong>City filter sync</strong> (R88‑106): effect calls <code>store.setEmbedCityFilterNodeIds</code> and clears selection/focus if the active node is filtered out.  </li>
+<li><strong>Selection change</strong> (unchanged): still emits <code>onSelectionChange</code> when <code>selectedNodeId</code> changes.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>The component introduces a side‑effect path that depends on the presence of <code>useDashboardStore</code> in the component’s context.  </li>
-<li>Navigation helpers are invoked with <code>controlledNodeId ?? null</code>; callers must ensure these helpers handle <code>null</code> values.  </li>
-<li>The <code>navKey</code> logic prevents redundant navigation when props remain unchanged.</li>
+<li>The component now fully controls the dashboard’s detail level, function view, and city filter, keeping the UI in sync with embedded graph interactions.  </li>
+<li>Optional props preserve backward compatibility.  </li>
+<li>Each new effect guards against unnecessary store updates, minimizing runtime cost.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that <code>useDashboardStore</code> is available; otherwise the hook will throw.  </li>
-<li>Confirm that <code>applyGraphEnterFile</code>, <code>applyGraphFocusSelection</code>, and <code>applyGraphCityRoot</code> correctly handle <code>null</code>/<code>undefined</code> arguments.  </li>
-<li>Test the <code>navKey</code> logic with rapid prop changes to ensure no unnecessary navigation occurs.  </li>
-<li>Add unit tests for the two <code>useEffect</code> branches to guard against regressions in dependency arrays or ref updates.</li>
+<li>Verify that <code>useDashboardStore</code> exposes <code>setDetailLevel</code>, <code>setEmbedCityFilterNodeIds</code>, and the <code>showFunctionsInClassView</code> flag; otherwise TypeScript errors will surface.  </li>
+<li>Ensure existing tests that render <code>GraphEmbedSyncBridge</code> without the new props still pass.  </li>
+<li>Confirm that setting <code>cityFilterNodeIds</code> to <code>null</code> correctly resets the graph without leaving dangling selections.  </li>
+<li>Check that the new <code>useEffect</code> blocks do not trigger infinite loops when the store’s state changes in response to the same props.</li>
 </ul>
 </article>
   </main>

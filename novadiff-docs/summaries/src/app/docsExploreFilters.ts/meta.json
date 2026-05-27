@@ -1,0 +1,62 @@
+{
+  "relPath": "src/app/docsExploreFilters.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:29:46.750Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export type SymbolKindGroup = \"file\" | \"class\" | \"function\";",
+      "R6 added: export const ALL_SYMBOL_KIND_GROUPS: readonly SymbolKindGroup[] = [",
+      "R12 added: export const ALL_CHANGE_STATE_FILTERS: readonly CodeCityChangeState[] = [",
+      "R31 added: export function defaultSymbolKindGroups(): SymbolKindGroup[] {",
+      "R35 added: export function defaultChangeStateFilters(): CodeCityChangeState[] {",
+      "R39 added: export function symbolKindGroupForKind(kind: string): SymbolKindGroup | null {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { CodeCityChangeState } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-158"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { CodeCityChangeState } from \"./types\";",
+      "R3 added: /** Coarse structure filters shared by Code City and the knowledge graph. */",
+      "R4 added: export type SymbolKindGroup = \"file\" | \"class\" | \"function\";",
+      "R6 added: export const ALL_SYMBOL_KIND_GROUPS: readonly SymbolKindGroup[] = [",
+      "R7 added: \"file\",",
+      "R8 added: \"class\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function graphDetailFromSymbolKinds (127-152)",
+      "right function toggleChangeStateFilter (94-109)",
+      "right function toggleSymbolKindGroup (78-93)",
+      "right function symbolMatchesKindGroups (53-67)",
+      "right function symbolKindGroupForKind (39-52)",
+      "right function changeStateMatchesFilters (68-77)",
+      "right function changeStatesFilterActive (117-126)",
+      "right function symbolKindsFilterActive (110-116)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

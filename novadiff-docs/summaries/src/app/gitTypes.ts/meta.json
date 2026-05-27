@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/gitTypes.ts",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:55:17.352Z",
+  "generatedAt": "2026-05-26T19:31:15.677Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,36 +20,30 @@
       }
     ],
     "changed_exports": [
-      "R129 added: export interface GitCommitDetail {",
-      "R143 added: export interface GithubCommitPullRequest {",
-      "R150 added: export interface GithubCommitIssue {",
-      "R157 added: export type GithubCommitThreadKind = \"pr_review\" | \"pr_comment\" | \"issue_comment\";",
-      "R159 added: export interface GithubCommitThread {",
-      "R168 added: export interface GithubCommitContext {"
+      "R129 added: export interface GitBranchSummary {",
+      "R138 added: export interface GitBranchListResult {",
+      "R143 added: export interface GitLogCommitSummary {"
     ],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R125-172"
+      "R129-149"
     ],
     "cited_changed_lines": [
-      "R125 added: /** When set, only these paths are staged (instead of git add -A). */",
-      "R126 added: stagePaths?: string[];",
-      "R127 added: }",
-      "R129 added: export interface GitCommitDetail {",
-      "R130 added: hash: string;",
-      "R131 added: shortHash: string;"
+      "R129 added: export interface GitBranchSummary {",
+      "R130 added: name: string;",
+      "R131 added: hash: string;",
+      "R132 added: shortHash: string;",
+      "R133 added: upstream: string | null;",
+      "R134 added: isCurrent: boolean;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface GitCommitDetail (129-142)",
-      "right interface GithubCommitIssue (150-158)",
-      "right interface GithubCommitThread (159-167)",
-      "right interface GithubCommitPullRequest (143-149)",
-      "right interface GithubCommitContext (168-173)",
-      "right interface PublishExecutePayload (113-128)"
+      "right interface GitBranchSummary (129-137)",
+      "right interface GitLogCommitSummary (143-149)",
+      "right interface GitBranchListResult (138-142)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

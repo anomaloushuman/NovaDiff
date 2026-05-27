@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/HistoryCompareStrip.tsx",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:06:29.384Z",
+  "generatedAt": "2026-05-26T19:39:18.851Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,35 +11,49 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "L8 removed: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";",
+      "R8 added: import type { GitBranchSummary } from \"../app/gitTypes\";",
+      "R9 added: import { branchOptionLabel } from \"../app/gitHistoryBranches\";"
+    ],
     "changed_line_ranges": [
-      "L71 / R71-73",
-      "L77 / R79",
-      "L81 / R83",
-      "R85",
-      "L87 / R90",
-      "R92-96",
-      "L93 / R101",
-      "L129 / R137"
+      "L8 / R8-9",
+      "L12-14 / R13-17",
+      "L19-21 / R22-24",
+      "L23",
+      "L28-39",
+      "L43-45 / R33-37",
+      "L50-52 / R42-44",
+      "L54"
     ],
     "cited_changed_lines": [
-      "L71 removed: <h1 className=\"git-history-title\">Git history compare</h1>",
-      "R71 added: <h1 className=\"git-history-title\">",
-      "R72 added: Git history <span className=\"git-history-title-accent\">compare</span>",
-      "R73 added: </h1>",
-      "L77 removed: <div className=\"workspace-setup-strip git-history-setup-strip\">",
-      "R79 added: <div className=\"workspace-setup-strip git-history-setup-strip git-history-compare-card\">"
+      "L8 removed: import type { WorkspaceCommitSnapshot } from \"../app/workspaceTypes\";",
+      "R8 added: import type { GitBranchSummary } from \"../app/gitTypes\";",
+      "R9 added: import { branchOptionLabel } from \"../app/gitHistoryBranches\";",
+      "L12 removed: commits: WorkspaceCommitSnapshot[];",
+      "L13 removed: baseHash: string;",
+      "L14 removed: headHash: string;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function HistoryCompareStrip (42-212)",
-      "right function HistoryCompareStrip (42-220)"
+      "left function HistoryCompareStrip (42-220)",
+      "left interface HistoryCompareStripProps (11-29)",
+      "left function truncateSubject (30-37)",
+      "left function commitLabel (38-41)",
+      "right function HistoryCompareStrip (32-247)",
+      "right interface HistoryCompareStripProps (12-31)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

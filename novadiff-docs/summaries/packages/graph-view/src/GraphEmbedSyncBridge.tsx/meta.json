@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:11:26.867Z",
+  "generatedAt": "2026-05-26T19:46:06.041Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,31 +19,31 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R11 added: export function GraphEmbedSyncBridge({"
-    ],
+    "changed_exports": [],
     "changed_imports": [
-      "R1 added: import { useEffect, useRef } from \"react\";",
-      "R2 added: import { useDashboardStore } from \"./store\";",
-      "R3 added: import {"
+      "L2 removed: import { useDashboardStore } from \"./store\";",
+      "R2 added: import { useDashboardStore, type DetailLevel } from \"./store\";"
     ],
     "changed_line_ranges": [
-      "R1-71"
+      "L2 / R2",
+      "R15-17",
+      "R23-26",
+      "R67-108"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useEffect, useRef } from \"react\";",
-      "R2 added: import { useDashboardStore } from \"./store\";",
-      "R3 added: import {",
-      "R4 added: applyGraphCityRoot,",
-      "R5 added: applyGraphEnterFile,",
-      "R6 added: applyGraphFocusSelection,"
+      "L2 removed: import { useDashboardStore } from \"./store\";",
+      "R2 added: import { useDashboardStore, type DetailLevel } from \"./store\";",
+      "R15 added: detailLevel,",
+      "R16 added: showFunctionsInClassView,",
+      "R17 added: cityFilterNodeIds,",
+      "R23 added: detailLevel?: DetailLevel;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function GraphEmbedSyncBridge (11-71)"
+      "right function GraphEmbedSyncBridge (11-120)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { CityEdgeOverlay } from "../app/graphCityBridge";
@@ -7,12 +7,23 @@ import {
   type CodeCityRenderableBuilding,
   type CodeCityRenderableDistrict,
 } from "../app/codeCityLayout";
+import { createCityRenderer } from "../app/codeCityRenderer";
+import {
+  cityPixelRatio,
+  shouldOmitWindowDetail,
+} from "../app/graphicsPerformance";
 
 const FILE_GROUP_COLOR = 0x3dd6c6;
 const FILE_GROUP_EMISSIVE = 0x2a9d8f;
 const SELECTED_EMISSIVE = 0x7ee7ff;
 
 type BuildingVisualState = "idle" | "dimmed" | "highlighted" | "fileGroup" | "selected";
+
+interface ExitingBuilding {
+  group: THREE.Group;
+  t: number;
+  changeState: CodeCityRenderableBuilding["changeState"];
+}
 
 interface SceneContext {
   scene: THREE.Scene;
@@ -22,14 +33,62 @@ interface SceneContext {
   districtsGroup: THREE.Group;
   buildingsRoot: THREE.Group;
   buildingGroups: Map<string, THREE.Group>;
+  exitingBuildings: Map<string, ExitingBuilding>;
+  enteringProgress: Map<string, number>;
   edgeGroup: THREE.Group;
   districtMaterial: THREE.MeshStandardMaterial;
   centerX: number;
   centerZ: number;
   maxSpan: number;
   orbitTarget: THREE.Vector3;
+  orbitGoalTarget: THREE.Vector3;
   orbitDistance: number;
+  orbitGoalDistance: number;
   frame: number;
+  omitWindows: boolean;
+  cameraDirty: boolean;
+  /** While > 0, orbit all filtered buildings (ignore selection). */
+  filterReframeFrames: number;
+  disposeRenderer: () => void;
+  renderBackend: "webgpu" | "webgl";
+  raycaster: THREE.Raycaster;
+  pickTargets: THREE.Mesh[];
+}
+
+const BUILD_ENTER_SPEED = 0.14;
+const BUILD_EXIT_SPEED = 0.2;
+const FILTER_REFRAME_FRAMES = 120;
+const ORBIT_LERP_ALL = 0.11;
+const ORBIT_LERP_CLUSTER = 0.09;
+const ORBIT_CAMERA_LERP_ALL = 0.055;
+const ORBIT_CAMERA_LERP_CLUSTER = 0.042;
+
+function easeOutCubic(t: number): number {
+  return 1 - (1 - t) ** 3;
+}
+
+function transitionEmissiveForChange(
+  changeState: CodeCityRenderableBuilding["changeState"],
+  phase: "enter" | "exit",
+): number {
+  const base =
+    changeState === "added"
+      ? 0x3cf2aa
+      : changeState === "removed"
+        ? 0xff5f73
+        : changeState === "modified"
+          ? 0x7ee7ff
+          : 0x1e2f40;
+  return phase === "exit" ? base : base;
+}
+
+function applyTransitionEmissive(group: THREE.Group, emissive: number, intensity: number) {
+  const mesh = group.userData.pickMesh as THREE.Mesh | undefined;
+  if (!mesh?.material || !(mesh.material instanceof THREE.MeshStandardMaterial)) {
+    return;
+  }
+  mesh.material.emissive.setHex(emissive);
+  mesh.material.emissiveIntensity = intensity;
 }
 
 interface SelectionState {
@@ -51,25 +110,25 @@ function buildingCenter(building: CodeCityRenderableBuilding): THREE.Vector3 {
 }
 
 function computeLayoutBounds(layout: CodeCityLayoutResult) {
-  const districtBounds = layout.districts.length
+  const bounds = layout.buildings.length
     ? {
-        minX: Math.min(...layout.districts.map((d) => d.x - d.width / 2)),
-        maxX: Math.max(...layout.districts.map((d) => d.x + d.width / 2)),
-        minZ: Math.min(...layout.districts.map((d) => d.z - d.depth / 2)),
-        maxZ: Math.max(...layout.districts.map((d) => d.z + d.depth / 2)),
+        minX: Math.min(...layout.buildings.map((b) => b.x - b.width / 2)),
+        maxX: Math.max(...layout.buildings.map((b) => b.x + b.width / 2)),
+        minZ: Math.min(...layout.buildings.map((b) => b.z - b.depth / 2)),
+        maxZ: Math.max(...layout.buildings.map((b) => b.z + b.depth / 2)),
       }
-    : layout.buildings.length
+    : layout.districts.length
       ? {
-          minX: Math.min(...layout.buildings.map((b) => b.x - b.width / 2)),
-          maxX: Math.max(...layout.buildings.map((b) => b.x + b.width / 2)),
-          minZ: Math.min(...layout.buildings.map((b) => b.z - b.depth / 2)),
-          maxZ: Math.max(...layout.buildings.map((b) => b.z + b.depth / 2)),
+          minX: Math.min(...layout.districts.map((d) => d.x - d.width / 2)),
+          maxX: Math.max(...layout.districts.map((d) => d.x + d.width / 2)),
+          minZ: Math.min(...layout.districts.map((d) => d.z - d.depth / 2)),
+          maxZ: Math.max(...layout.districts.map((d) => d.z + d.depth / 2)),
         }
       : { minX: 0, maxX: 48, minZ: 0, maxZ: 48 };
-  const centerX = (districtBounds.minX + districtBounds.maxX) / 2;
-  const centerZ = (districtBounds.minZ + districtBounds.maxZ) / 2;
-  const spanX = districtBounds.maxX - districtBounds.minX;
-  const spanZ = districtBounds.maxZ - districtBounds.minZ;
+  const centerX = (bounds.minX + bounds.maxX) / 2;
+  const centerZ = (bounds.minZ + bounds.maxZ) / 2;
+  const spanX = bounds.maxX - bounds.minX;
+  const spanZ = bounds.maxZ - bounds.minZ;
   const maxSpan = Math.max(42, spanX, spanZ);
   return { centerX, centerZ, maxSpan };
 }
@@ -77,11 +136,12 @@ function computeLayoutBounds(layout: CodeCityLayoutResult) {
 const _fitBox = new THREE.Box3();
 const _fitSize = new THREE.Vector3();
 
-/** Frame every visible building in the camera view (used when nothing is selected). */
-function framingForAllBuildings(
+/** Frame a set of buildings in view (filtered city or file cluster). */
+function framingForBuildings(
   buildings: CodeCityRenderableBuilding[],
   camera: THREE.PerspectiveCamera,
   fallbackCenter: THREE.Vector3,
+  padding = 1.42,
 ): { target: THREE.Vector3; distance: number } {
   if (buildings.length === 0) {
     return { target: fallbackCenter.clone(), distance: 72 };
@@ -105,13 +165,16 @@ function framingForAllBuildings(
   const distY = (_fitSize.y / 2) / Math.tan(vFovRad / 2);
   const distX = (_fitSize.x / 2) / Math.tan(hFovRad / 2);
   const distZ = (_fitSize.z / 2) / Math.tan(hFovRad / 2);
-  const distance = Math.max(distX, distY, distZ) * 1.32;
+  const distance = Math.max(distX, distY, distZ) * padding;
 
   target.y = Math.max(_fitSize.y * 0.28, 4);
 
+  const minDist = buildings.length === 1 ? 22 : 28;
+  const maxDist = buildings.length === 1 ? 120 : 380;
+
   return {
     target,
-    distance: Math.max(28, Math.min(distance, 360)),
+    distance: Math.max(minDist, Math.min(distance, maxDist)),
   };
 }
 
@@ -120,34 +183,20 @@ function orbitFocusForBuildings(
   selectedBuildingId: string | null,
   cityCenter: THREE.Vector3,
   camera: THREE.PerspectiveCamera,
-): { target: THREE.Vector3; distance: number } {
+): { target: THREE.Vector3; distance: number; mode: "all" | "file-cluster" } {
   if (!selectedBuildingId || buildings.length === 0) {
-    return framingForAllBuildings(buildings, camera, cityCenter);
+    const focus = framingForBuildings(buildings, camera, cityCenter);
+    return { ...focus, mode: "all" };
   }
   const selected = buildings.find((b) => b.id === selectedBuildingId);
   if (!selected) {
-    return framingForAllBuildings(buildings, camera, cityCenter);
+    const focus = framingForBuildings(buildings, camera, cityCenter);
+    return { ...focus, mode: "all" };
   }
   const mates = buildings.filter((b) => b.path === selected.path);
-  const target = new THREE.Vector3();
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minZ = Infinity;
-  let maxZ = -Infinity;
-  let maxHeight = 8;
-  for (const mate of mates) {
-    const c = buildingCenter(mate);
-    target.add(c);
-    minX = Math.min(minX, mate.x - mate.width / 2);
-    maxX = Math.max(maxX, mate.x + mate.width / 2);
-    minZ = Math.min(minZ, mate.z - mate.depth / 2);
-    maxZ = Math.max(maxZ, mate.z + mate.depth / 2);
-    maxHeight = Math.max(maxHeight, mate.height);
-  }
-  target.divideScalar(mates.length);
-  const span = Math.max(maxX - minX, maxZ - minZ, 6);
-  const distance = Math.max(18, Math.min(96, span * 1.35 + maxHeight * 1.8));
-  return { target, distance };
+  const cluster = mates.length > 0 ? mates : [selected];
+  const focus = framingForBuildings(cluster, camera, cityCenter, 1.36);
+  return { ...focus, mode: "file-cluster" };
 }
 
 function visualStateForBuilding(
@@ -254,7 +303,10 @@ function disposeObject3D(object: THREE.Object3D) {
   });
 }
 
-function createBuildingGroup(building: CodeCityRenderableBuilding): THREE.Group {
+function createBuildingGroup(
+  building: CodeCityRenderableBuilding,
+  omitWindows: boolean,
+): THREE.Group {
   const buildingGroup = new THREE.Group();
   buildingGroup.userData.buildingId = building.id;
   const material = new THREE.MeshStandardMaterial({
@@ -272,7 +324,10 @@ function createBuildingGroup(building: CodeCityRenderableBuilding): THREE.Group 
   );
   mesh.position.set(0, building.height / 2, 0);
   mesh.frustumCulled = true;
+  mesh.userData.building = building;
+  mesh.userData.isPickTarget = true;
   buildingGroup.add(mesh);
+  buildingGroup.userData.pickMesh = mesh;
 
   const edge = new THREE.LineSegments(
     new THREE.EdgesGeometry(new THREE.BoxGeometry(building.width, building.height, building.depth)),
@@ -284,6 +339,12 @@ function createBuildingGroup(building: CodeCityRenderableBuilding): THREE.Group 
   );
   edge.position.copy(mesh.position);
   buildingGroup.add(edge);
+
+  if (omitWindows) {
+    buildingGroup.position.set(building.x, 0, building.z);
+    attachSelectable(buildingGroup, building);
+    return buildingGroup;
+  }
 
   const rows = Math.max(2, Math.min(6, Math.floor(building.height / 4)));
   const cols = building.kind === "class" || building.kind === "interface" ? 3 : 2;
@@ -345,6 +406,7 @@ function syncDistrictMeshes(
       );
       mesh.userData.districtName = district.name;
       mesh.frustumCulled = true;
+      mesh.raycast = () => {};
       ctx.districtsGroup.add(mesh);
     }
     mesh.position.set(district.x, -0.5, district.z);
@@ -352,37 +414,160 @@ function syncDistrictMeshes(
   }
 }
 
-function syncBuildingMeshes(
-  ctx: SceneContext,
-  buildings: CodeCityRenderableBuilding[],
-) {
-  const nextIds = new Set(buildings.map((b) => b.id));
-  for (const [id, group] of [...ctx.buildingGroups.entries()]) {
-    if (!nextIds.has(id)) {
-      ctx.buildingsRoot.remove(group);
-      disposeObject3D(group);
-      ctx.buildingGroups.delete(id);
-    }
-  }
-  for (const building of buildings) {
-    let group = ctx.buildingGroups.get(building.id);
-    if (!group) {
-      group = createBuildingGroup(building);
-      ctx.buildingGroups.set(building.id, group);
-      ctx.buildingsRoot.add(group);
-    } else {
-      group.position.set(building.x, 0, building.z);
-      attachSelectable(group, building);
-      const mesh = group.children.find((c) => c instanceof THREE.Mesh) as THREE.Mesh | undefined;
-      if (mesh) {
-        mesh.position.set(0, building.height / 2, 0);
-      }
+function rebuildPickTargets(ctx: SceneContext): void {
+  ctx.pickTargets = [];
+  for (const group of ctx.buildingGroups.values()) {
+    const mesh = group.userData.pickMesh as THREE.Mesh | undefined;
+    if (mesh) {
+      ctx.pickTargets.push(mesh);
     }
   }
 }
 
+function updateBuildingGroupGeometry(
+  group: THREE.Group,
+  building: CodeCityRenderableBuilding,
+) {
+  group.position.set(building.x, 0, building.z);
+  attachSelectable(group, building);
+  const mesh = group.userData.pickMesh as THREE.Mesh | undefined;
+  if (mesh) {
+    mesh.userData.building = building;
+    mesh.position.set(0, building.height / 2, 0);
+    mesh.scale.y = 1;
+    if (mesh.geometry instanceof THREE.BoxGeometry) {
+      mesh.geometry.dispose();
+      mesh.geometry = new THREE.BoxGeometry(building.width, building.height, building.depth);
+    }
+    if (mesh.material instanceof THREE.MeshStandardMaterial) {
+      mesh.material.color.setHex(building.color);
+      mesh.material.emissive.setHex(building.emissive);
+    }
+  }
+}
+
+function syncBuildingMeshes(
+  ctx: SceneContext,
+  buildings: CodeCityRenderableBuilding[],
+  omitWindows: boolean,
+) {
+  const nextById = new Map(buildings.map((b) => [b.id, b]));
+  const nextIds = new Set(nextById.keys());
+
+  for (const [id, group] of [...ctx.buildingGroups.entries()]) {
+    if (nextIds.has(id)) {
+      continue;
+    }
+    const building = group.userData.building as CodeCityRenderableBuilding | undefined;
+    ctx.buildingGroups.delete(id);
+    ctx.enteringProgress.delete(id);
+    ctx.exitingBuildings.set(id, {
+      group,
+      t: 0,
+      changeState: building?.changeState ?? "unchanged",
+    });
+  }
+
+  for (const [id, exiting] of [...ctx.exitingBuildings.entries()]) {
+    if (nextIds.has(id)) {
+      ctx.exitingBuildings.delete(id);
+      ctx.buildingGroups.set(id, exiting.group);
+      ctx.enteringProgress.set(id, 0);
+      exiting.group.scale.setScalar(0.05);
+      const building = nextById.get(id);
+      if (building) {
+        updateBuildingGroupGeometry(exiting.group, building);
+      }
+    }
+  }
+
+  for (const building of buildings) {
+    let group = ctx.buildingGroups.get(building.id);
+    if (!group) {
+      group = createBuildingGroup(building, omitWindows);
+      group.scale.setScalar(0.05);
+      ctx.buildingGroups.set(building.id, group);
+      ctx.buildingsRoot.add(group);
+      ctx.enteringProgress.set(building.id, 0);
+    } else {
+      updateBuildingGroupGeometry(group, building);
+      if (!ctx.enteringProgress.has(building.id)) {
+        group.scale.setScalar(1);
+      }
+    }
+  }
+
+  rebuildPickTargets(ctx);
+}
+
+function tickBuildingTransitions(ctx: SceneContext) {
+  for (const [id, progress] of [...ctx.enteringProgress.entries()]) {
+    const group = ctx.buildingGroups.get(id);
+    if (!group) {
+      ctx.enteringProgress.delete(id);
+      continue;
+    }
+    const next = Math.min(1, progress + BUILD_ENTER_SPEED);
+    const building = group.userData.building as CodeCityRenderableBuilding | undefined;
+    const eased = easeOutCubic(next);
+    group.scale.setScalar(Math.max(0.05, eased));
+    if (building) {
+      applyTransitionEmissive(
+        group,
+        transitionEmissiveForChange(building.changeState, "enter"),
+        building.isGhost ? 0.35 : 0.55 + eased * 0.45,
+      );
+    }
+    if (next >= 1) {
+      group.scale.setScalar(1);
+      ctx.enteringProgress.delete(id);
+    } else {
+      ctx.enteringProgress.set(id, next);
+    }
+  }
+
+  for (const [id, exiting] of [...ctx.exitingBuildings.entries()]) {
+    const next = Math.min(1, exiting.t + BUILD_EXIT_SPEED);
+    const eased = easeOutCubic(next);
+    const scale = Math.max(0.02, 1 - eased);
+    exiting.group.scale.setScalar(scale);
+    applyTransitionEmissive(
+      exiting.group,
+      transitionEmissiveForChange(exiting.changeState, "exit"),
+      0.35 + (1 - eased) * 0.85,
+    );
+    if (next >= 1) {
+      ctx.buildingsRoot.remove(exiting.group);
+      disposeObject3D(exiting.group);
+      ctx.exitingBuildings.delete(id);
+    } else {
+      ctx.exitingBuildings.set(id, { ...exiting, t: next });
+    }
+  }
+}
+
+function pickBuildingAt(
+  ctx: SceneContext,
+  event: PointerEvent,
+): CodeCityRenderableBuilding | null {
+  const dom = ctx.renderer.domElement;
+  const rect = dom.getBoundingClientRect();
+  if (rect.width < 1 || rect.height < 1) {
+    return null;
+  }
+  const pointer = new THREE.Vector2(
+    ((event.clientX - rect.left) / rect.width) * 2 - 1,
+    -((event.clientY - rect.top) / rect.height) * 2 + 1,
+  );
+  ctx.raycaster.setFromCamera(pointer, ctx.camera);
+  const hits = ctx.raycaster.intersectObjects(ctx.pickTargets, false);
+  const hit = hits[0];
+  return (hit?.object.userData?.building as CodeCityRenderableBuilding | undefined) ?? null;
+}
+
 export function CodeCityView({
   layout,
+  filterReframeKey,
   rootSide,
   compareOverlay,
   blameOverlay,
@@ -396,6 +581,8 @@ export function CodeCityView({
   floatChrome = false,
 }: {
   layout: CodeCityLayoutResult;
+  /** When filters change, orbit to frame all visible buildings (not selection). */
+  filterReframeKey?: string;
   rootSide: "baseline" | "target";
   compareOverlay: boolean;
   blameOverlay: boolean;
@@ -411,6 +598,10 @@ export function CodeCityView({
 }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const ctxRef = useRef<SceneContext | null>(null);
+  const canvasVisibleRef = useRef(true);
+  const prevVisualBuildingIdsRef = useRef<Set<string>>(new Set());
+  const [renderBackend, setRenderBackend] = useState<"webgpu" | "webgl" | null>(null);
+  const omitWindows = shouldOmitWindowDetail(layout.buildings.length);
   const layoutRef = useRef(layout);
   const onSelectRef = useRef(onSelect);
   const onEnterRef = useRef(onEnterBuilding);
@@ -469,40 +660,62 @@ export function CodeCityView({
       return;
     }
 
+    let disposed = false;
+    let teardown: (() => void) | null = null;
+
+    const canvas = document.createElement("canvas");
+    canvas.className = "code-city-canvas-gl";
+    canvas.style.display = "block";
+    canvas.style.width = "100%";
+    canvas.style.height = "100%";
+    mount.replaceChildren(canvas);
+
     const width = floatChrome
       ? Math.max(64, mount.clientWidth || 320)
       : Math.max(320, mount.clientWidth || 960);
     const height = floatChrome
       ? Math.max(48, mount.clientHeight || 240)
       : Math.max(420, mount.clientHeight || 560);
-    const bounds = computeLayoutBounds(layoutRef.current);
-    const cityCenter = new THREE.Vector3(bounds.centerX, Math.max(6, bounds.maxSpan * 0.06), bounds.centerZ);
 
-    const scene = new THREE.Scene();
-    if (floatChrome) {
-      scene.background = null;
-    } else {
-      scene.background = new THREE.Color(0x07101a);
-      scene.fog = new THREE.Fog(0x07101a, bounds.maxSpan * 1.5, bounds.maxSpan * 4.8);
-    }
+    void (async () => {
+      const cityRender = await createCityRenderer({
+        canvas,
+        width,
+        height,
+        alpha: Boolean(floatChrome),
+        antialias: true,
+        pixelRatio: cityPixelRatio(layoutRef.current.buildings.length),
+        preferWebGpu: !floatChrome,
+      });
+      if (disposed) {
+        cityRender.dispose();
+        return;
+      }
 
-    const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 2000);
-    camera.position.set(
-      bounds.centerX + bounds.maxSpan * 0.92,
-      Math.max(42, bounds.maxSpan * 0.95),
-      bounds.centerZ + bounds.maxSpan * 1.06,
-    );
+      const renderer = cityRender.renderer;
+      const bounds = computeLayoutBounds(layoutRef.current);
+      const cityCenter = new THREE.Vector3(
+        bounds.centerX,
+        Math.max(6, bounds.maxSpan * 0.06),
+        bounds.centerZ,
+      );
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: floatChrome });
-    if (floatChrome) {
-      renderer.setClearColor(0x000000, 0);
-    }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    mount.appendChild(renderer.domElement);
+      const scene = new THREE.Scene();
+      if (floatChrome) {
+        scene.background = null;
+      } else {
+        scene.background = new THREE.Color(0x07101a);
+        scene.fog = new THREE.Fog(0x07101a, bounds.maxSpan * 1.5, bounds.maxSpan * 4.8);
+      }
 
-    const controls = new OrbitControls(camera, renderer.domElement);
+      const camera = new THREE.PerspectiveCamera(55, width / height, 0.1, 2000);
+      camera.position.set(
+        bounds.centerX + bounds.maxSpan * 0.92,
+        Math.max(42, bounds.maxSpan * 0.95),
+        bounds.centerZ + bounds.maxSpan * 1.06,
+      );
+
+      const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
     controls.target.copy(cityCenter);
@@ -542,8 +755,15 @@ export function CodeCityView({
     const edgeGroup = new THREE.Group();
     scene.add(edgeGroup);
 
-    const orbitTarget = cityCenter.clone();
-    const orbitDistance = Math.max(48, bounds.maxSpan * 0.95);
+    const initialFocus = framingForBuildings(
+      layoutRef.current.buildings,
+      camera,
+      cityCenter,
+    );
+    const orbitTarget = initialFocus.target.clone();
+    const orbitGoalTarget = initialFocus.target.clone();
+    const orbitDistance = initialFocus.distance;
+    const orbitGoalDistance = initialFocus.distance;
 
     const ctx: SceneContext = {
       scene,
@@ -553,40 +773,67 @@ export function CodeCityView({
       districtsGroup,
       buildingsRoot,
       buildingGroups: new Map(),
+      exitingBuildings: new Map(),
+      enteringProgress: new Map(),
       edgeGroup,
       districtMaterial,
       centerX: bounds.centerX,
       centerZ: bounds.centerZ,
       maxSpan: bounds.maxSpan,
       orbitTarget,
+      orbitGoalTarget,
       orbitDistance,
+      orbitGoalDistance,
       frame: 0,
+      omitWindows,
+      cameraDirty: true,
+      filterReframeFrames: FILTER_REFRAME_FRAMES,
+      disposeRenderer: cityRender.dispose,
+      renderBackend: cityRender.backend,
+      raycaster: new THREE.Raycaster(),
+      pickTargets: [],
     };
+    ctx.raycaster.params.Mesh.threshold = 0.35;
     ctxRef.current = ctx;
+    setRenderBackend(cityRender.backend);
+
+    const visibilityObserver = new IntersectionObserver(
+      (entries) => {
+        canvasVisibleRef.current = entries.some((e) => e.isIntersecting);
+      },
+      { threshold: 0.02 },
+    );
+    visibilityObserver.observe(mount);
+    const onVisibilityChange = () => {
+      canvasVisibleRef.current = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     syncDistrictMeshes(ctx, layoutRef.current.districts);
-    syncBuildingMeshes(ctx, layoutRef.current.buildings);
+    syncBuildingMeshes(ctx, layoutRef.current.buildings, omitWindows);
 
-    const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2();
-    const pickBuilding = (event: PointerEvent): CodeCityRenderableBuilding | null => {
-      const rect = renderer.domElement.getBoundingClientRect();
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(pointer, camera);
-      const hit = raycaster
-        .intersectObjects(buildingsRoot.children, true)
-        .find((entry: THREE.Intersection<THREE.Object3D>) =>
-          Boolean(entry.object.userData?.building),
-        );
-      return (hit?.object.userData?.building as CodeCityRenderableBuilding | null) ?? null;
-    };
+    const pointerDown = { x: 0, y: 0 };
 
     const onPointerDown = (event: PointerEvent) => {
       if (event.button !== 0) {
         return;
       }
-      const building = pickBuilding(event);
+      pointerDown.x = event.clientX;
+      pointerDown.y = event.clientY;
+      controls.autoRotate = false;
+    };
+
+    const onPointerUp = (event: PointerEvent) => {
+      if (event.button !== 0) {
+        return;
+      }
+      controls.autoRotate = true;
+      const dx = event.clientX - pointerDown.x;
+      const dy = event.clientY - pointerDown.y;
+      if (dx * dx + dy * dy > 64) {
+        return;
+      }
+      const building = pickBuildingAt(ctx, event);
       if (event.detail >= 2) {
         if (building && onEnterRef.current) {
           onEnterRef.current(building);
@@ -595,32 +842,57 @@ export function CodeCityView({
       }
       onSelectRef.current(building);
     };
-    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+
+    const dom = renderer.domElement;
+    dom.style.touchAction = "none";
+    dom.addEventListener("pointerdown", onPointerDown);
+    dom.addEventListener("pointerup", onPointerUp);
+    dom.addEventListener("pointercancel", onPointerUp);
 
     const cityCenterVec = new THREE.Vector3();
-    const lodDistance = bounds.maxSpan * 1.35;
 
     const render = () => {
       ctx.frame = window.requestAnimationFrame(render);
+      if (!canvasVisibleRef.current || document.hidden) {
+        return;
+      }
+
       const layoutNow = layoutRef.current;
       const selection = selectionRef.current;
       const boundsNow = computeLayoutBounds(layoutNow);
-      ctx.centerX = boundsNow.centerX;
-      ctx.centerZ = boundsNow.centerZ;
-      ctx.maxSpan = boundsNow.maxSpan;
 
-      cityCenterVec.set(boundsNow.centerX, Math.max(6, boundsNow.maxSpan * 0.06), boundsNow.centerZ);
-      const hasSelection = Boolean(selection.selectedBuildingId);
+      cityCenterVec.set(
+        boundsNow.centerX,
+        Math.max(6, boundsNow.maxSpan * 0.06),
+        boundsNow.centerZ,
+      );
+
+      const reframeFromFilters = ctx.filterReframeFrames > 0;
+      if (reframeFromFilters) {
+        ctx.filterReframeFrames -= 1;
+      }
+
+      const orbitSelectionId =
+        reframeFromFilters || !selection.selectedBuildingId
+          ? null
+          : selection.selectedBuildingId;
+
       const focus = orbitFocusForBuildings(
         layoutNow.buildings,
-        selection.selectedBuildingId,
+        orbitSelectionId,
         cityCenterVec,
         camera,
       );
-      const distLerp = hasSelection ? 0.06 : 0.085;
-      ctx.orbitDistance += (focus.distance - ctx.orbitDistance) * distLerp;
-      const targetLerp = hasSelection ? 0.07 : 0.09;
-      ctx.orbitTarget.lerp(focus.target, targetLerp);
+      ctx.orbitGoalTarget.copy(focus.target);
+      ctx.orbitGoalDistance = focus.distance;
+
+      const hasSelection = focus.mode === "file-cluster";
+      const distLerp = hasSelection ? ORBIT_LERP_CLUSTER : ORBIT_LERP_ALL;
+      const targetLerp = hasSelection ? ORBIT_LERP_CLUSTER + 0.01 : ORBIT_LERP_ALL;
+      const cameraLerp = hasSelection ? ORBIT_CAMERA_LERP_CLUSTER : ORBIT_CAMERA_LERP_ALL;
+
+      ctx.orbitDistance += (ctx.orbitGoalDistance - ctx.orbitDistance) * distLerp;
+      ctx.orbitTarget.lerp(ctx.orbitGoalTarget, targetLerp);
       controls.target.lerp(ctx.orbitTarget, targetLerp + 0.01);
 
       controls.autoRotate = true;
@@ -628,27 +900,40 @@ export function CodeCityView({
 
       const distFromTarget = camera.position.distanceTo(controls.target);
       const desiredDist = ctx.orbitDistance;
-      const distEpsilon = hasSelection ? 1.5 : 0.8;
-      if (Math.abs(distFromTarget - desiredDist) > distEpsilon) {
-        const dir = camera.position.clone().sub(controls.target).normalize();
+      if (Math.abs(distFromTarget - desiredDist) > 0.5) {
+        const dir = camera.position.clone().sub(controls.target);
+        if (dir.lengthSq() < 1e-6) {
+          dir.set(0.35, 0.55, 0.75).normalize();
+        } else {
+          dir.normalize();
+        }
         const blended = controls.target.clone().add(dir.multiplyScalar(desiredDist));
-        camera.position.lerp(blended, hasSelection ? 0.035 : 0.05);
+        camera.position.lerp(blended, cameraLerp);
       }
 
       controls.minDistance = Math.max(
         12,
-        hasSelection ? boundsNow.maxSpan * 0.12 : focus.distance * 0.55,
+        hasSelection ? focus.distance * 0.45 : focus.distance * 0.5,
       );
       controls.maxDistance = Math.max(
         120,
-        hasSelection ? boundsNow.maxSpan * 4 : focus.distance * 1.85,
+        hasSelection ? focus.distance * 2.4 : focus.distance * 2,
       );
-      if (scene.fog instanceof THREE.Fog) {
-        scene.fog.far = boundsNow.maxSpan * 4.8;
-        scene.fog.near = boundsNow.maxSpan * 1.5;
+
+      if (ctx.cameraDirty) {
+        ctx.cameraDirty = false;
+        ctx.centerX = boundsNow.centerX;
+        ctx.centerZ = boundsNow.centerZ;
+        ctx.maxSpan = boundsNow.maxSpan;
+        if (scene.fog instanceof THREE.Fog) {
+          scene.fog.far = boundsNow.maxSpan * 4.8;
+          scene.fog.near = boundsNow.maxSpan * 1.5;
+        }
       }
 
-      if (ctx.frame % 10 === 0) {
+      if (!ctx.omitWindows && ctx.frame % 10 === 0) {
+        const boundsNow = computeLayoutBounds(layoutNow);
+        const lodDistance = boundsNow.maxSpan * 1.35;
         for (const group of ctx.buildingGroups.values()) {
           const dist = camera.position.distanceTo(
             new THREE.Vector3(group.position.x, group.position.y + 4, group.position.z),
@@ -662,39 +947,76 @@ export function CodeCityView({
         }
       }
 
+      tickBuildingTransitions(ctx);
       controls.update();
       renderer.render(scene, camera);
     };
-    render();
+      render();
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      const next = entries[0];
-      if (!next) {
-        return;
-      }
-      const nextWidth = Math.max(320, Math.floor(next.contentRect.width));
-      const nextHeight = Math.max(420, Math.floor(next.contentRect.height));
-      camera.aspect = nextWidth / nextHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(nextWidth, nextHeight);
-    });
-    resizeObserver.observe(mount);
+      const resizeObserver = new ResizeObserver((entries) => {
+        const next = entries[0];
+        if (!next) {
+          return;
+        }
+        const nextWidth = Math.max(
+          floatChrome ? 64 : 320,
+          Math.floor(next.contentRect.width),
+        );
+        const nextHeight = Math.max(
+          floatChrome ? 48 : 420,
+          Math.floor(next.contentRect.height),
+        );
+        camera.aspect = nextWidth / nextHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nextWidth, nextHeight);
+      });
+      resizeObserver.observe(mount);
+
+      teardown = () => {
+        visibilityObserver.disconnect();
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+        resizeObserver.disconnect();
+        window.cancelAnimationFrame(ctx.frame);
+        dom.removeEventListener("pointerdown", onPointerDown);
+        dom.removeEventListener("pointerup", onPointerUp);
+        dom.removeEventListener("pointercancel", onPointerUp);
+        for (const group of ctx.buildingGroups.values()) {
+          disposeObject3D(group);
+        }
+        ctx.districtsGroup.clear();
+        controls.dispose();
+        cityRender.dispose();
+        scene.clear();
+        ctxRef.current = null;
+        setRenderBackend(null);
+        mount.replaceChildren();
+      };
+    })();
 
     return () => {
-      resizeObserver.disconnect();
-      window.cancelAnimationFrame(ctx.frame);
-      renderer.domElement.removeEventListener("pointerdown", onPointerDown);
-      for (const group of ctx.buildingGroups.values()) {
-        disposeObject3D(group);
-      }
-      ctx.districtsGroup.clear();
-      controls.dispose();
-      renderer.dispose();
-      scene.clear();
-      ctxRef.current = null;
-      mount.replaceChildren();
+      disposed = true;
+      setRenderBackend(null);
+      teardown?.();
     };
   }, [floatChrome]);
+
+  useEffect(() => {
+    const ctx = ctxRef.current;
+    const mount = mountRef.current;
+    if (!ctx || !mount) {
+      return;
+    }
+    const w = Math.max(floatChrome ? 64 : 320, mount.clientWidth);
+    const h = Math.max(floatChrome ? 48 : 420, mount.clientHeight);
+    if (w < 8 || h < 8) {
+      return;
+    }
+    ctx.camera.aspect = w / h;
+    ctx.camera.updateProjectionMatrix();
+    ctx.renderer.setPixelRatio(cityPixelRatio(layout.buildings.length));
+    ctx.renderer.setSize(w, h);
+    ctx.cameraDirty = true;
+  }, [floatChrome, layout.buildings.length]);
 
   useEffect(() => {
     const ctx = ctxRef.current;
@@ -708,6 +1030,7 @@ export function CodeCityView({
     ctx.maxSpan = bounds.maxSpan;
     ctx.controls.minDistance = Math.max(14, bounds.maxSpan * 0.18);
     ctx.controls.maxDistance = Math.max(120, bounds.maxSpan * 4);
+    ctx.cameraDirty = true;
   }, [districtKey, layout.districts]);
 
   useEffect(() => {
@@ -715,12 +1038,45 @@ export function CodeCityView({
     if (!ctx) {
       return;
     }
-    syncBuildingMeshes(ctx, layout.buildings);
+    if (ctx.omitWindows !== omitWindows) {
+      for (const group of ctx.buildingGroups.values()) {
+        ctx.buildingsRoot.remove(group);
+        disposeObject3D(group);
+      }
+      for (const exiting of ctx.exitingBuildings.values()) {
+        ctx.buildingsRoot.remove(exiting.group);
+        disposeObject3D(exiting.group);
+      }
+      ctx.buildingGroups.clear();
+      ctx.exitingBuildings.clear();
+      ctx.enteringProgress.clear();
+      ctx.omitWindows = omitWindows;
+    }
+    syncBuildingMeshes(ctx, layout.buildings, omitWindows);
     const bounds = computeLayoutBounds(layout);
     ctx.centerX = bounds.centerX;
     ctx.centerZ = bounds.centerZ;
     ctx.maxSpan = bounds.maxSpan;
-  }, [buildingIdsKey, layout.buildings]);
+    ctx.cameraDirty = true;
+  }, [buildingIdsKey, layout.buildings, omitWindows]);
+
+  useEffect(() => {
+    const ctx = ctxRef.current;
+    if (!ctx || !filterReframeKey) {
+      return;
+    }
+    ctx.filterReframeFrames = FILTER_REFRAME_FRAMES;
+    ctx.cameraDirty = true;
+  }, [filterReframeKey]);
+
+  useEffect(() => {
+    const ctx = ctxRef.current;
+    if (!ctx) {
+      return;
+    }
+    ctx.filterReframeFrames = 0;
+    ctx.cameraDirty = true;
+  }, [selectedBuildingId, focusBuildingId]);
 
   useEffect(() => {
     const ctx = ctxRef.current;
@@ -729,14 +1085,25 @@ export function CodeCityView({
     }
     const buildingById = new Map(layout.buildings.map((b) => [b.id, b]));
     const selection = selectionRef.current;
-    for (const [id, group] of ctx.buildingGroups) {
+    const touchIds = new Set<string>([
+      ...prevVisualBuildingIdsRef.current,
+      ...selection.highlightIds,
+      ...selection.fileMateIds,
+    ]);
+    if (selection.selectedBuildingId) {
+      touchIds.add(selection.selectedBuildingId);
+    }
+    prevVisualBuildingIdsRef.current = touchIds;
+    for (const id of touchIds) {
+      const group = ctx.buildingGroups.get(id);
       const building = buildingById.get(id);
-      if (!building) {
+      if (!group || !building) {
         continue;
       }
       const visual = visualStateForBuilding(id, building, selection);
       applyBuildingVisual(group, building, visual);
     }
+    ctx.cameraDirty = true;
   }, [
     buildingIdsKey,
     selectedBuildingId,
@@ -814,6 +1181,9 @@ export function CodeCityView({
                 </div>
               </div>
               <div className="code-city-overlay-badges">
+                {renderBackend === "webgpu" ? (
+                  <span className="code-city-overlay-badge">WebGPU</span>
+                ) : null}
                 <span className="code-city-overlay-badge">
                   Compare {compareOverlay ? "on" : "off"}
                 </span>

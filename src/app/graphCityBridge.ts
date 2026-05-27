@@ -13,6 +13,26 @@ export interface CityEdgeOverlay {
   type: GraphEdge["type"];
 }
 
+function parseSymbolNodeRest(
+  rest: string,
+): { filePath: string | null; symbolName: string | null } {
+  const parts = rest.split(":");
+  if (parts.length < 2) {
+    return { filePath: rest || null, symbolName: null };
+  }
+  const last = parts[parts.length - 1];
+  if (/^\d+$/.test(last) && parts.length >= 3) {
+    return {
+      filePath: parts.slice(0, -2).join(":") || null,
+      symbolName: parts[parts.length - 2] ?? null,
+    };
+  }
+  return {
+    filePath: parts.slice(0, -1).join(":") || null,
+    symbolName: last ?? null,
+  };
+}
+
 function parseGraphNodeId(nodeId: string): {
   kind: "file" | "function" | "class" | "other";
   filePath: string | null;
@@ -22,28 +42,12 @@ function parseGraphNodeId(nodeId: string): {
     return { kind: "file", filePath: nodeId.slice(5), symbolName: null };
   }
   if (nodeId.startsWith("function:")) {
-    const rest = nodeId.slice("function:".length);
-    const lastColon = rest.lastIndexOf(":");
-    if (lastColon <= 0) {
-      return { kind: "function", filePath: rest, symbolName: null };
-    }
-    return {
-      kind: "function",
-      filePath: rest.slice(0, lastColon),
-      symbolName: rest.slice(lastColon + 1),
-    };
+    const parsed = parseSymbolNodeRest(nodeId.slice("function:".length));
+    return { kind: "function", ...parsed };
   }
   if (nodeId.startsWith("class:")) {
-    const rest = nodeId.slice("class:".length);
-    const lastColon = rest.lastIndexOf(":");
-    if (lastColon <= 0) {
-      return { kind: "class", filePath: rest, symbolName: null };
-    }
-    return {
-      kind: "class",
-      filePath: rest.slice(0, lastColon),
-      symbolName: rest.slice(lastColon + 1),
-    };
+    const parsed = parseSymbolNodeRest(nodeId.slice("class:".length));
+    return { kind: "class", ...parsed };
   }
   return { kind: "other", filePath: null, symbolName: null };
 }
@@ -75,7 +79,7 @@ export function graphNodeToCityBuildingIds(
   nodeId: string | null,
   graph: KnowledgeGraph | null,
   layout: CodeCityLayoutResult,
-  rootSide: CodeCityRootSide,
+  _rootSide?: CodeCityRootSide,
 ): string[] {
   if (!nodeId || !graph) {
     return [];
@@ -88,12 +92,17 @@ export function graphNodeToCityBuildingIds(
       return [];
     }
     parsed.filePath = filePath;
+    if (!parsed.symbolName && node?.name) {
+      parsed.symbolName = node.name;
+      if (node.type === "function" || node.type === "method") {
+        parsed.kind = "function";
+      } else if (node.type === "class") {
+        parsed.kind = "class";
+      }
+    }
   }
   const filePath = parsed.filePath;
   const matches = layout.buildings.filter((b) => {
-    if (b.rootSide !== rootSide) {
-      return false;
-    }
     if (parsed.kind === "file") {
       return b.path === filePath;
     }
@@ -108,9 +117,7 @@ export function graphNodeToCityBuildingIds(
   if (matches.length > 0) {
     return matches.map((m) => m.id);
   }
-  return layout.buildings
-    .filter((b) => b.rootSide === rootSide && b.path === filePath)
-    .map((b) => b.id);
+  return layout.buildings.filter((b) => b.path === filePath).map((b) => b.id);
 }
 
 /** Reverse: city building → best graph node id. */
@@ -129,9 +136,16 @@ export function cityBuildingToGraphNodeId(
     building.kind === "class" || building.kind === "interface" || building.kind === "struct"
       ? "class"
       : "function";
-  const exactId = `${symbolKind}:${building.path}:${building.name}`;
-  if (graph.nodes.some((n) => n.id === exactId)) {
-    return exactId;
+  const candidates = [
+    `${symbolKind}:${building.path}:${building.name}`,
+    building.startLine
+      ? `${symbolKind}:${building.path}:${building.name}:${building.startLine}`
+      : null,
+  ].filter(Boolean) as string[];
+  for (const id of candidates) {
+    if (graph.nodes.some((n) => n.id === id)) {
+      return id;
+    }
   }
   const byPath = graph.nodes.find(
     (n) =>
@@ -148,7 +162,7 @@ export function cityBuildingToGraphNodeId(
 export function buildBuildingIdByGraphNode(
   graph: KnowledgeGraph | null,
   layout: CodeCityLayoutResult,
-  rootSide: CodeCityRootSide,
+  rootSide?: CodeCityRootSide,
 ): Map<string, string[]> {
   const map = new Map<string, string[]>();
   if (!graph) {
@@ -230,7 +244,6 @@ function filePathForLinkedSelection(
   linkedNodeId: string,
   graph: KnowledgeGraph | null,
   layout: CodeCityLayoutResult,
-  _rootSide: CodeCityRootSide,
   primaryIds: string[],
 ): string | null {
   const primaryBuilding = primaryIds
@@ -247,31 +260,69 @@ function filePathForLinkedSelection(
   return node?.filePath ?? null;
 }
 
+/** Graph node ids that correspond to visible Code City buildings (includes parent files). */
+export function graphNodeIdsForCityLayout(
+  graph: KnowledgeGraph | null,
+  layout: CodeCityLayoutResult,
+): Set<string> {
+  const ids = new Set<string>();
+  if (!graph) {
+    return ids;
+  }
+  for (const building of layout.buildings) {
+    const nodeId = cityBuildingToGraphNodeId(building, graph);
+    if (nodeId) {
+      ids.add(nodeId);
+    }
+    if (building.kind !== "file") {
+      const fileId = `file:${building.path.replace(/\\/g, "/")}`;
+      if (graph.nodes.some((n) => n.id === fileId)) {
+        ids.add(fileId);
+      }
+    }
+  }
+  return ids;
+}
+
 export function cityBuildingIdsForHighlight(
   graph: KnowledgeGraph | null,
   layout: CodeCityLayoutResult,
   rootSide: CodeCityRootSide,
   linkedNodeId: string | null,
   focusMode: boolean,
+  cityBuildingId?: string | null,
 ): { primary: string | null; highlightIds: string[] } {
+  if (!linkedNodeId && cityBuildingId) {
+    const building = layout.buildings.find((b) => b.id === cityBuildingId);
+    if (!building) {
+      return { primary: cityBuildingId, highlightIds: [cityBuildingId] };
+    }
+    const highlightIds = new Set<string>([cityBuildingId]);
+    for (const mate of layout.buildings) {
+      if (mate.path === building.path) {
+        highlightIds.add(mate.id);
+      }
+    }
+    return { primary: cityBuildingId, highlightIds: [...highlightIds] };
+  }
+
   if (!linkedNodeId) {
     return { primary: null, highlightIds: [] };
   }
+
   const parsed = parseGraphNodeId(linkedNodeId);
   const primaryIds = graphNodeToCityBuildingIds(linkedNodeId, graph, layout, rootSide);
-  let primary = primaryIds[0] ?? null;
+  let primary = primaryIds[0] ?? cityBuildingId ?? null;
   const highlightIds = new Set<string>(primaryIds);
+  if (cityBuildingId) {
+    highlightIds.add(cityBuildingId);
+    primary = primary ?? cityBuildingId;
+  }
 
-  const filePath = filePathForLinkedSelection(
-    linkedNodeId,
-    graph,
-    layout,
-    rootSide,
-    primaryIds,
-  );
+  const filePath = filePathForLinkedSelection(linkedNodeId, graph, layout, primaryIds);
   if (parsed.kind === "file" && filePath) {
     const fileBuilding = layout.buildings.find(
-      (b) => b.rootSide === rootSide && b.path === filePath && b.kind === "file",
+      (b) => b.path === filePath && b.kind === "file",
     );
     if (fileBuilding) {
       primary = fileBuilding.id;
@@ -279,7 +330,7 @@ export function cityBuildingIdsForHighlight(
   }
   if (filePath) {
     for (const building of layout.buildings) {
-      if (building.rootSide === rootSide && building.path === filePath) {
+      if (building.path === filePath) {
         highlightIds.add(building.id);
       }
     }

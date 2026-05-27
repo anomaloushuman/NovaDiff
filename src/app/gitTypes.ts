@@ -126,6 +126,27 @@ export interface PublishExecutePayload {
   stagePaths?: string[];
 }
 
+export interface GitBranchSummary {
+  name: string;
+  hash: string;
+  shortHash: string;
+  upstream: string | null;
+  isCurrent: boolean;
+  isRemote: boolean;
+}
+
+export interface GitBranchListResult {
+  currentBranch: string;
+  branches: GitBranchSummary[];
+}
+
+export interface GitLogCommitSummary {
+  hash: string;
+  shortHash: string;
+  subject: string;
+  authoredAt: string;
+}
+
 export interface GitCommitDetail {
   hash: string;
   shortHash: string;

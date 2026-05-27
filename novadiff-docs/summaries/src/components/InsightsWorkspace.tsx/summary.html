@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/InsightsWorkspace.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/InsightsWorkspace.tsx</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:39:33.466Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new component <code>InsightsWorkspace</code> is added in <code>src/components</code>. It provides a security‑insights workspace that runs heuristic and advisory scans, stores the user’s advisory‑scan preference, and displays findings grouped by category.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑6): React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useMemo</code>, <code>useState</code>), types (<code>FileChange</code>, <code>RiskSignal</code>, <code>SecurityInsightReport</code>), and helpers <code>groupSecuritySignals</code>, <code>mergeRiskSignals</code> from <code>../app/securityInsights</code>.  </li>
+<li><strong><code>loadAdvisoryDefault</code></strong> (lines 10‑17): Reads the <code>novadiff_insights_advisory_enabled</code> flag from <code>localStorage</code>, defaulting to <code>false</code>.  </li>
+<li><strong><code>InsightsWorkspaceProps</code></strong> (lines 18‑24): Declares props for comparison status, root paths, change rows, and a jump callback.  </li>
+<li><strong><code>RiskSection</code></strong> (lines 26‑81): Renders a risk category with optional “Open diff” buttons.  </li>
+<li><strong>State &amp; effects</strong> (lines 90‑106): Manages heuristic/advisory signals, loading, errors, and persists <code>advisoryEnabled</code> to <code>localStorage</code>.  </li>
+<li><strong>Scan callbacks</strong> (<code>runHeuristicScan</code>, <code>runAdvisoryScan</code>, lines 108‑196): Call <code>window.electronAPI.scanRiskSignals</code> and <code>scanSecurityInsights</code>, handling cancellation, errors, and state updates.  </li>
+<li><strong>Signal merging &amp; grouping</strong> (lines 209‑213): Uses <code>mergeRiskSignals</code> and <code>groupSecuritySignals</code> to prepare data for rendering.  </li>
+<li><strong>UI rendering</strong> (lines 215‑319): Shows controls, loading states, error alerts, source lists, and four <code>RiskSection</code> instances for vulnerabilities, dependencies, memory leaks, and function completeness, plus an optional “Other” section.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Requires <code>window.electronAPI</code> to expose <code>scanRiskSignals</code> and <code>scanSecurityInsights</code>; otherwise scans fail.  </li>
+<li>Persists the advisory‑scan toggle in <code>localStorage</code>; failures are ignored silently.  </li>
+<li>Scans run asynchronously; UI may block while awaiting results, especially for large diffs.  </li>
+<li>Centralizes risk logic, simplifying future updates to signal handling.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Electron API availability</strong>: Verify that <code>window.electronAPI</code> implements the expected methods.  </li>
+<li><strong>LocalStorage errors</strong>: Ensure graceful degradation when storage access throws (e.g., in incognito).  </li>
+<li><strong>Signal merging logic</strong>: Confirm that <code>mergeRiskSignals</code> deduplicates and prioritizes findings; add tests for edge cases.  </li>
+<li><strong>UI rendering</strong>: Check that all risk categories render correctly, even when empty, and that the “Other” section appears only when needed.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

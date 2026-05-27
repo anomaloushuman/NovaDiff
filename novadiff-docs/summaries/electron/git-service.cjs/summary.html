@@ -26,64 +26,33 @@
 <body>
   <header class="top">
     <h1>electron/git-service.cjs</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:44:21.856Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:18:52.565Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>Three new helper functions were added to <code>electron/git-service.cjs</code> to give callers finer control over staging:</p>
-<ul>
-<li><p><code>stagePaths(repoRoot, paths)</code> – normalises a list of paths, runs <code>git add -- &lt;paths&gt;</code>, and returns <code>{ staged: N }</code>.  </p>
-</li>
-<li><p><code>unstagePaths(repoRoot, paths)</code> – runs <code>git reset HEAD -- &lt;paths&gt;</code> and returns <code>{ unstaged: N }</code>.  </p>
-</li>
-<li><p><code>stageDistrict(repoRoot, topDir, statusFiles?)</code> – filters the repository’s status files to those under <code>topDir</code> (or its sub‑directories) and delegates to <code>stagePaths</code>.</p>
-</li>
-</ul>
-<p>The module export list was extended (lines 253‑255) to expose these utilities.</p>
+<p>The <code>electron/git-service.cjs</code> file was extended with new Git‑output parsing helpers and tooling detection. The changes add several functions (see line ranges R237‑248, R250‑269, R271‑311, R314‑330, R332‑335, R337‑344) and expose them via <code>module.exports</code> (R346‑365).</p>
 <h3>Key changes</h3>
 <ul>
-<li><p>**<code>stagePaths</code>*</p>
-</li>
-<li><p>– added at lines 142‑149.  </p>
-</li>
-<li><p>**<code>unstagePaths</code>*</p>
-</li>
-<li><p>– added at lines 152‑159.  </p>
-</li>
-<li><p>**<code>stageDistrict</code>*</p>
-</li>
-<li><p>– added at lines 162‑169.  </p>
-</li>
-<li><p>Export list updated to include the three new functions (lines 253‑255).  </p>
-</li>
-<li><p>No other logic was modified.</p>
-</li>
+<li><strong><code>splitGitFormatLine</code></strong> (R237‑248): splits a string by <code>\x1f</code>, tab, or <code>%x1f</code>, falling back to the raw line.  </li>
+<li><strong><code>parseLogLines</code></strong> (R250‑269): uses <code>splitGitFormatLine</code> to turn <code>git log</code> output into <code>{hash, shortHash, subject, authoredAt}</code> objects.  </li>
+<li><strong><code>listBranches</code></strong> (R271‑311): parses <code>git for‑each‑ref</code> output, populating <code>upstream</code>, <code>isCurrent</code>, and <code>isRemote</code> flags.  </li>
+<li><strong><code>listCommitsForRef</code></strong> (R314‑330): returns commits reachable from a ref, leveraging <code>parseLogLines</code>.  </li>
+<li><strong><code>resolveRefHash</code></strong> (R332‑335): thin wrapper around <code>git rev‑parse</code>.  </li>
+<li><strong><code>detectGitTooling</code></strong> (R337‑344): reports whether Git is available, its version, and any error.  </li>
+<li><code>module.exports</code> (R346‑365) now includes the new helpers alongside existing ones.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><p>*<em>API surface</em></p>
-</li>
-<li><p>– callers can now stage or unstage specific files or a whole directory without affecting the rest of the working tree.  </p>
-</li>
-<li><p>*<em>Implementation</em></p>
-</li>
-<li><p>– each helper invokes a single <code>runGit</code> call, so the runtime cost is minimal compared to existing helpers.  </p>
-</li>
-<li><p>*<em>Compatibility</em></p>
-</li>
-<li><p>– existing consumers of <code>stageAll</code>, <code>commit</code>, <code>push</code>, etc. remain unchanged.</p>
-</li>
+<li>The new splitter centralizes line‑splitting logic, reducing duplication.  </li>
+<li>Branch and commit discovery now rely on a single, more robust parsing routine.  </li>
+<li><code>detectGitTooling</code> provides a single source of truth for Git presence, useful for diagnostics.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><p>The behavior of <code>stageDistrict</code> when <code>topDir</code> is empty or malformed is not documented; the current logic may match many files.  </p>
-</li>
-<li><p><code>unstagePaths</code> propagates any <code>git</code> error; tests should cover failure scenarios.  </p>
-</li>
-<li><p>Documentation or type definitions should be updated to expose the new helpers.  </p>
-</li>
-<li><p>Run the full lint, test, and build suite to confirm no regressions in the new code paths.</p>
-</li>
+<li><strong>Branch listing regression</strong>: verify that upstream names and remote flags match expectations on all supported Git versions.  </li>
+<li><strong>Log parsing edge cases</strong>: ensure commit messages containing <code>\x1f</code> or tabs are handled correctly; run tests against repositories with such messages.  </li>
+<li><strong>Performance</strong>: benchmark <code>listBranches</code> on large repositories to confirm no measurable slowdown.  </li>
+<li><strong>Tooling detection</strong>: confirm that <code>detectGitTooling</code> reports errors when Git is missing or misconfigured, and that callers handle the <code>gitError</code> field.</li>
 </ul>
 </article>
   </main>

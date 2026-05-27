@@ -1,0 +1,52 @@
+{
+  "relPath": "tests/gitHistoryBranches.test.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:16:55.335Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff directly touches test code or fixtures.",
+        "key": "tests",
+        "label": "Test-related file",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import { describe, expect, it } from \"vitest\";",
+      "R2 added: import {",
+      "R8 added: import type { GitBranchSummary } from \"../src/app/gitTypes\";"
+    ],
+    "changed_line_ranges": [
+      "R1-69"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { describe, expect, it } from \"vitest\";",
+      "R2 added: import {",
+      "R3 added: commitFromBranchTip,",
+      "R4 added: pickDefaultBaseBranch,",
+      "R5 added: pickDefaultHeadBranch,",
+      "R6 added: enrichBranchCommits,"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "tests",
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Re-run the affected tests and check whether fixtures or snapshots need refresh.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

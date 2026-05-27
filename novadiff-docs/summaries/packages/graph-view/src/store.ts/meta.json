@@ -1,0 +1,43 @@
+{
+  "relPath": "packages/graph-view/src/store.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:49:09.466Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R160-163",
+      "R378-405",
+      "R684"
+    ],
+    "cited_changed_lines": [
+      "R160 added: /** When set, embed graph only shows these node ids (synced from Code City filters). */",
+      "R161 added: embedCityFilterNodeIds: Set<string> | null;",
+      "R162 added: setEmbedCityFilterNodeIds: (ids: Set<string> | null) => void;",
+      "R378 added: embedCityFilterNodeIds: null,",
+      "R379 added: setEmbedCityFilterNodeIds: (ids) =>",
+      "R380 added: set((state) => {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function layerResetIfChanged (285-903)",
+      "right interface DashboardStore (103-254)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

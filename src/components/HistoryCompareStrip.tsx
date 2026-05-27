@@ -5,74 +5,71 @@ import {
   GitCompareArrows,
   Loader2,
 } from "lucide-react";
-import type { WorkspaceCommitSnapshot } from "../app/workspaceTypes";
+import type { GitBranchSummary } from "../app/gitTypes";
+import { branchOptionLabel } from "../app/gitHistoryBranches";
 import { pathDisplayLabel } from "../app/pathDisplay";
 
 export interface HistoryCompareStripProps {
-  commits: WorkspaceCommitSnapshot[];
-  baseHash: string;
-  headHash: string;
+  branches: GitBranchSummary[];
+  branchesLoading: boolean;
+  branchLoadError: string | null;
+  baseBranch: string;
+  headBranch: string;
   useLiveHead: boolean;
   liveRepoRoot: string;
   busy: boolean;
   error: string | null;
-  indexing: boolean;
-  onBaseHash: (hash: string) => void;
-  onHeadHash: (hash: string) => void;
+  loading: boolean;
+  onBaseBranch: (branch: string) => void;
+  onHeadBranch: (branch: string) => void;
   onUseLiveHead: (live: boolean) => void;
-  onLiveRepoRoot: (path: string) => void;
   onBrowseLiveRepo: () => void;
   onLiveRepoBlur?: () => void;
   onSwap: () => void;
   onCompare: () => void;
 }
 
-function truncateSubject(subject: string, max = 48): string {
-  const s = subject.trim();
-  if (s.length <= max) {
-    return s;
-  }
-  return `${s.slice(0, max - 1)}…`;
-}
-
-function commitLabel(c: WorkspaceCommitSnapshot): string {
-  return `${c.shortHash} · ${truncateSubject(c.subject)}`;
-}
-
 export function HistoryCompareStrip({
-  commits,
-  baseHash,
-  headHash,
+  branches,
+  branchesLoading,
+  branchLoadError,
+  baseBranch,
+  headBranch,
   useLiveHead,
   liveRepoRoot,
   busy,
   error,
-  indexing,
-  onBaseHash,
-  onHeadHash,
+  loading,
+  onBaseBranch,
+  onHeadBranch,
   onUseLiveHead,
-  onLiveRepoRoot: _onLiveRepoRoot,
   onBrowseLiveRepo,
   onLiveRepoBlur,
   onSwap,
   onCompare,
 }: HistoryCompareStripProps) {
-  const base = commits.find((c) => c.hash === baseHash) ?? null;
-  const head = commits.find((c) => c.hash === headHash) ?? null;
+  const baseMeta = branches.find((b) => b.name === baseBranch) ?? null;
+  const headMeta = branches.find((b) => b.name === headBranch) ?? null;
+  const branchSelectDisabled = loading || branchesLoading || branches.length === 0;
   const canCompare =
-    Boolean(base) &&
-    !indexing &&
+    Boolean(baseMeta) &&
+    !loading &&
     !busy &&
-    (useLiveHead ? Boolean(liveRepoRoot.trim()) : Boolean(head && base && base.hash !== head.hash));
+    !branchesLoading &&
+    (useLiveHead
+      ? Boolean(liveRepoRoot.trim())
+      : Boolean(headMeta && baseMeta && baseMeta.hash !== headMeta.hash));
 
   return (
     <header className="git-history-header">
       <div className="git-history-header-copy">
         <h1 className="git-history-title">
-          Git history <span className="git-history-title-accent">compare</span>
+          Change <span className="git-history-title-accent">history</span>
         </h1>
         <p className="git-history-lead">
-          Compare indexed commits semantically, or diff a commit against your live working tree.
+          Choose a <strong>base</strong> branch and a <strong>target</strong> branch to compare their
+          latest commits. Pick specific commits in the list below, or compare against your live dev
+          folder.
         </p>
       </div>
 
@@ -81,17 +78,19 @@ export function HistoryCompareStrip({
           <div className="path-selectors-group">
             <div className="path-selectors-labels" aria-hidden>
               <span className="path-field-label git-history-field-label">
-                Base <span className="path-field-hint">commit</span>
-                {base ? <span className="git-history-badge git-history-label-badge">Base</span> : null}
+                Base <span className="path-field-hint">branch</span>
+                {baseMeta ? (
+                  <span className="git-history-badge git-history-label-badge">Base</span>
+                ) : null}
               </span>
               <span className="path-field-label path-swap-label-filler" aria-hidden="true">
                 &nbsp;
               </span>
               <span className="path-field-label git-history-field-label">
-                Head <span className="path-field-hint">{useLiveHead ? "folder" : "commit"}</span>
-                {head && !useLiveHead ? (
+                Target <span className="path-field-hint">branch</span>
+                {headMeta && !useLiveHead ? (
                   <span className="git-history-badge git-history-badge--head git-history-label-badge">
-                    Head
+                    Target
                   </span>
                 ) : null}
               </span>
@@ -103,19 +102,29 @@ export function HistoryCompareStrip({
                   <GitBranch size={17} strokeWidth={2} />
                 </span>
                 <select
-                  id="git-history-base"
+                  id="git-history-base-branch"
                   className="path-selector-input path-selector-select"
-                  aria-label="Base commit"
-                  value={baseHash}
-                  onChange={(e) => onBaseHash(e.target.value)}
-                  disabled={indexing || commits.length === 0}
+                  aria-label="Base branch"
+                  value={baseBranch}
+                  onChange={(e) => onBaseBranch(e.target.value)}
+                  disabled={branchSelectDisabled}
                 >
-                  <option value="">Choose base…</option>
-                  {commits.map((c) => (
-                    <option key={c.hash} value={c.hash}>
-                      {commitLabel(c)}
-                    </option>
-                  ))}
+                  {branchesLoading ? (
+                    <option value="">Loading branches…</option>
+                  ) : branches.length === 0 ? (
+                    <option value="">No branches found</option>
+                  ) : (
+                    <>
+                      <option value="" disabled>
+                        Choose base branch…
+                      </option>
+                      {branches.map((b) => (
+                        <option key={b.name} value={b.name}>
+                          {branchOptionLabel(b)}
+                        </option>
+                      ))}
+                    </>
+                  )}
                 </select>
                 <span className="path-selector-chevron path-selector-chevron--static" aria-hidden>
                   <ChevronDown size={18} strokeWidth={2} />
@@ -126,9 +135,9 @@ export function HistoryCompareStrip({
                 type="button"
                 className="path-swap-btn path-swap-btn-joined"
                 onClick={onSwap}
-                disabled={busy || indexing}
-                title="Swap base and head"
-                aria-label="Swap base and head"
+                disabled={busy || loading || branchesLoading}
+                title="Swap base and target branches"
+                aria-label="Swap base and target branches"
               >
                 <ArrowLeftRight size={18} strokeWidth={2} aria-hidden />
               </button>
@@ -163,19 +172,29 @@ export function HistoryCompareStrip({
                 ) : (
                   <>
                     <select
-                      id="git-history-head"
+                      id="git-history-head-branch"
                       className="path-selector-input path-selector-select"
-                      aria-label="Head commit"
-                      value={headHash}
-                      onChange={(e) => onHeadHash(e.target.value)}
-                      disabled={indexing || commits.length === 0}
+                      aria-label="Target branch"
+                      value={headBranch}
+                      onChange={(e) => onHeadBranch(e.target.value)}
+                      disabled={branchSelectDisabled}
                     >
-                      <option value="">Choose head…</option>
-                      {commits.map((c) => (
-                        <option key={c.hash} value={c.hash}>
-                          {commitLabel(c)}
-                        </option>
-                      ))}
+                      {branchesLoading ? (
+                        <option value="">Loading branches…</option>
+                      ) : branches.length === 0 ? (
+                        <option value="">No branches found</option>
+                      ) : (
+                        <>
+                          <option value="" disabled>
+                            Choose target branch…
+                          </option>
+                          {branches.map((b) => (
+                            <option key={b.name} value={b.name}>
+                              {branchOptionLabel(b)}
+                            </option>
+                          ))}
+                        </>
+                      )}
                     </select>
                     <span className="path-selector-chevron path-selector-chevron--static" aria-hidden>
                       <ChevronDown size={18} strokeWidth={2} />
@@ -185,13 +204,20 @@ export function HistoryCompareStrip({
               </div>
             </div>
 
+            {baseMeta && !useLiveHead && headMeta ? (
+              <p className="git-history-branch-hint doc-workspace-muted">
+                Comparing <code>{baseMeta.shortHash}</code> on <strong>{baseBranch}</strong> →{" "}
+                <code>{headMeta.shortHash}</code> on <strong>{headBranch}</strong>
+              </p>
+            ) : null}
+
             <label className="git-history-live-toggle">
               <input
                 type="checkbox"
                 checked={useLiveHead}
                 onChange={(e) => onUseLiveHead(e.target.checked)}
               />
-              Compare base against <strong>live dev folder</strong> (uncommitted edits)
+              Compare base branch against <strong>live dev folder</strong> (uncommitted edits)
             </label>
           </div>
 
@@ -201,7 +227,7 @@ export function HistoryCompareStrip({
               className="btn-primary compare-fab"
               disabled={!canCompare}
               onClick={onCompare}
-              aria-label={busy ? "Comparing" : "Compare revisions"}
+              aria-label={busy ? "Comparing" : "Compare branches"}
               data-tooltip={busy ? "Comparing…" : "Compare"}
             >
               {busy ? (
@@ -212,6 +238,7 @@ export function HistoryCompareStrip({
             </button>
           </div>
 
+          {branchLoadError ? <p className="workspace-error">{branchLoadError}</p> : null}
           {error ? <p className="workspace-error">{error}</p> : null}
         </div>
       </div>

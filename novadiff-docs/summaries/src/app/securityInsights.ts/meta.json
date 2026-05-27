@@ -1,0 +1,56 @@
+{
+  "relPath": "src/app/securityInsights.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:33:16.839Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R9 added: export function sortRiskSignals(items: RiskSignal[]): RiskSignal[] {",
+      "R18 added: export function mergeRiskSignals(",
+      "R32 added: export interface SecurityInsightGroups {",
+      "R40 added: export function groupSecuritySignals(items: RiskSignal[]): SecurityInsightGroups {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { RiskSignal } from \"./types\";"
+    ],
+    "changed_line_ranges": [
+      "R1-79"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { RiskSignal } from \"./types\";",
+      "R3 added: const severityRank: Record<string, number> = {",
+      "R4 added: high: 0,",
+      "R5 added: medium: 1,",
+      "R6 added: low: 2,",
+      "R7 added: };"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function groupSecuritySignals (40-79)",
+      "right function mergeRiskSignals (18-31)",
+      "right function sortRiskSignals (9-17)",
+      "right interface SecurityInsightGroups (32-39)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

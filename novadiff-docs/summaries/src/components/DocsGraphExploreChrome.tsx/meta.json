@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/DocsGraphExploreChrome.tsx",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:01:39.505Z",
+  "generatedAt": "2026-05-26T07:57:42.733Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -19,43 +19,43 @@
         "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R18 added: export interface GraphBuildBarProps {",
-      "R33 added: export interface CityExploreBarProps {",
-      "R444 added: export function CodeCityExploreSettings({",
-      "R642 added: export function DocsGraphActionBar(props: {"
-    ],
+    "changed_exports": [],
     "changed_imports": [
-      "R1 added: import {",
-      "R13 added: import { createPortal } from \"react-dom\";",
-      "R14 added: import { AnimatedOverlay } from \"./ui/AnimatedOverlay\";",
-      "R15 added: import { CodeCityGraphToolbar, DocsLinkToolbar } from \"./DocumentationWorkspaceLinked\";",
-      "R16 added: import type { CodeCityLayoutResult } from \"../app/codeCityLayout\";"
+      "R15 added: import { CodeCityViewportProvider } from \"../app/CodeCityViewportContext\";",
+      "R18 added: import {",
+      "R27 added: import type { CodeCityChangeState } from \"../app/types\";"
     ],
     "changed_line_ranges": [
-      "R1-648"
+      "R15",
+      "R18-27",
+      "L47-48 / R58-61",
+      "L72 / R85-88",
+      "R172-220",
+      "L212-226",
+      "R537",
+      "R627"
     ],
     "cited_changed_lines": [
-      "R1 added: import {",
-      "R2 added: useCallback,",
-      "R3 added: useEffect,",
-      "R4 added: useLayoutEffect,",
-      "R5 added: useMemo,",
-      "R6 added: useRef,"
+      "R15 added: import { CodeCityViewportProvider } from \"../app/CodeCityViewportContext\";",
+      "R18 added: import {",
+      "R19 added: ALL_CHANGE_STATE_FILTERS,",
+      "R20 added: ALL_SYMBOL_KIND_GROUPS,",
+      "R21 added: changeStatesFilterActive,",
+      "R22 added: symbolKindsFilterActive,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function CodeCityExploreSettings (444-641)",
-      "right function CityFiltersPanel (122-268)",
-      "right function CodeCityFloatShell (376-443)",
-      "right function GraphBuildPanel (289-343)",
-      "right function ExpandCornerIcon (90-121)",
-      "right function GraphStatsPanel (344-375)",
-      "right function countActiveCityFilters (61-89)",
-      "right interface CityExploreBarProps (33-60)"
+      "left function CityFiltersPanel (122-268)",
+      "left function CodeCityExploreSettings (444-641)",
+      "left interface CityExploreBarProps (33-60)",
+      "left function countActiveCityFilters (61-89)",
+      "right function CityFiltersPanel (138-318)",
+      "right function CodeCityExploreSettings (494-696)",
+      "right interface CityExploreBarProps (44-73)",
+      "right function countActiveCityFilters (74-105)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

@@ -1,31 +1,33 @@
 ### Overview  
-`HistoryCompareStrip` was refactored to improve the Git history comparison panel.  
-Key UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.
+`src/components/HistoryCompareStrip.tsx` was refactored from a commit‑centric UI to a branch‑centric one. The component now receives branch metadata instead of commit snapshots, removes commit‑specific helpers, and updates the UI text and interaction patterns accordingly.
 
 ### Key changes  
-- **Title** – lines L71‑73 replaced plain text with  
-  ```tsx
-  <h1 className="git-history-title">
-    Git history <span className="git-history-title-accent">compare</span>
-  </h1>
-  ```  
-- **Wrapper** – line R79 added `git-history-compare-card` to the `workspace-setup-strip` container.  
-- **Labels** – lines R83 and R90 added `git-history-field-label` to the Base/Head labels.  
-- **Badges** – lines R85 and R92‑96 insert conditional `<span className="git-history-badge …">` elements next to the selectors.  
-- **Selector segment** – line R137 added `git-history-selector-segment` to the segment class list.  
-- **Live‑head input** – lines R145‑161 replace the head selector with an input + browse button when `useLiveHead` is true.  
-- **Live toggle** – lines R180‑185 introduce a checkbox labeled “Compare base against live dev folder”.  
-- **Compare button** – lines R190‑205 update the button’s classes, disabled state, and tooltip logic.
-
-The logic that determines `canCompare` (lines 62‑66) remains unchanged.
+- **Imports**  
+  - L8 removed: `import type { WorkspaceCommitSnapshot } …`  
+  - R8 added: `import type { GitBranchSummary } from "../app/gitTypes"`  
+  - R9 added: `import { branchOptionLabel } from "../app/gitHistoryBranches"`  
+- **Props (`HistoryCompareStripProps`)**  
+  - Removed: `commits`, `baseHash`, `headHash`, `indexing`, `onBaseHash`, `onHeadHash`, `onLiveRepoRoot`.  
+  - Added: `branches`, `branchesLoading`, `branchLoadError`, `baseBranch`, `headBranch`, `loading`, `onBaseBranch`, `onHeadBranch`.  
+- **Helper functions**  
+  - Lines 30‑37 (`truncateSubject`) and 38‑41 (`commitLabel`) were deleted.  
+- **UI updates**  
+  - Header text changed to “Change history” (L72‑73).  
+  - Labels now refer to *branches* (L81‑90).  
+  - Select elements use IDs `git-history-base-branch` / `git-history-head-branch` (L105‑106, L174‑175) and populate options via `branchOptionLabel` (L117‑124, L191‑194).  
+  - Swap button disabled logic now checks `loading`/`branchesLoading` (L138‑140).  
+  - Live toggle label updated to “Compare base branch against live dev folder” (R220).  
+  - Compare button `aria-label` changed to “Compare branches” (R230).  
+- **Logic changes**  
+  - `canCompare` now relies on branch metadata (`baseMeta`, `headMeta`) and loading flags (L62‑66, L58‑61).  
 
 ### Impact  
-- **UI consistency** – new class names (`git-history-compare-card`, `git-history-field-label`, etc.) match the existing design system.  
-- **Accessibility** – added `aria-label` attributes and descriptive labels for interactive elements.  
-- **No functional regression** – only presentation layers were altered.
+- **API**: Callers must switch from commit hashes to branch names; TypeScript errors will surface if unchanged.  
+- **Branch lookup**: Replaces commit lookup; the array size is typically smaller.  
+- **Error handling**: `branchLoadError` is displayed after the compare button (L241).  
 
 ### Risks & follow‑ups  
-- **Missing CSS** – verify that the new classes exist in the stylesheet.  
-- **Badge rendering** – ensure badges do not appear when `base` or `head` is null; run unit tests for edge cases.  
-- **Live‑head toggle** – confirm that toggling updates `useLiveHead` correctly and that the input behaves as expected.  
-- **Lint & build** – run `npm run lint`, `npm test`, and `npm run build` to catch any syntax or type errors introduced by the JSX changes.
+1. **API breakage** – Existing components that passed commit hashes will fail to compile.  
+2. **Missing branch metadata** – If `branches` lacks a matching `baseBranch`/`headBranch`, `canCompare` will be false; verify fallback UI.  
+3. **`branchOptionLabel` import** – Ensure the symbol is exported; otherwise the build fails.  
+4. **Accessibility** – Test the new `aria-label` values with screen readers.

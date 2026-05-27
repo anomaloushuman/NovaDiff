@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/types.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/types.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:33:30.146Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/app/types.ts</code> now exports three new security‑related types.<br>They are added at lines 173‑187 and do not modify any existing logic.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>SecurityScanSourceState</code></strong> (line 173) – a string literal union:<br><code>&quot;ok&quot; | &quot;warning&quot; | &quot;error&quot; | &quot;skipped&quot;</code>.  </li>
+<li><strong><code>SecurityScanSourceStatus</code></strong> (lines 175‑180) – an interface with:<br><code>source: string; state: SecurityScanSourceState; message: string;</code><br>and an optional <code>durationMs?: number</code>.  </li>
+<li><strong><code>SecurityInsightReport</code></strong> (lines 182‑186) – an interface that aggregates:<br><code>scannedAt: string; signals: RiskSignal[]; sources: SecurityScanSourceStatus[]</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>The public type surface now includes the three new exports.  </li>
+<li>No executable code is added, so existing runtime behavior is unchanged.  </li>
+<li>Compile‑time effects are unknown from the available diff.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Check for unused imports of the new types to avoid lint warnings.  </li>
+<li>Add unit tests that build <code>SecurityInsightReport</code> objects to confirm type safety.  </li>
+<li>Update any documentation or API references to include the new types.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

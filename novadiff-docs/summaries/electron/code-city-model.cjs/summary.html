@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/code-city-model.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/code-city-model.cjs</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:18:33.854Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>The <code>electron/code-city-model.cjs</code> module now imports Node’s <code>path</code> module (added at line 3) and extends <code>buildSideNodes</code> to emit a synthetic file‑level symbol when a file has no explicit symbols (added lines 113‑131). This ensures every file appears in the CodeCity model.</p>
+<h3>Key changes</h3>
+<ul>
+<li><code>const path = require(&quot;path&quot;);</code> added at the top of the file.  </li>
+<li>In <code>buildSideNodes</code>, after retrieving <code>symbolEntries</code>, a guard <code>if (symbolEntries.length === 0)</code> pushes a new symbol:  <ul>
+<li><code>id: </code>${rootSide}:${relPath}:file:${path.basename(relPath)}``  </li>
+<li><code>name: path.basename(relPath)</code>  </li>
+<li><code>kind: &quot;file&quot;</code>  </li>
+<li><code>startLine: 1</code>, <code>endLine: lineCount</code> (where <code>lineCount</code> is <code>Math.max(1, Number(file?.line_count ?? 0))</code>)  </li>
+<li><code>lineCount</code>, <code>changeState</code>, <code>dominantAuthor</code>, and <code>owners</code> are inherited from the file’s blame data.</li>
+</ul>
+</li>
+<li>The synthetic symbol is added only when no real symbols exist for the file.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Completeness</strong>: Guarantees a node for every file, preventing missing entries in visualizations.  </li>
+<li><strong>No API change</strong>: The payload shape returned by <code>buildCodeCityModelPayload</code> remains the same.  </li>
+<li><strong>Minimal runtime cost</strong>: Uses only Node’s core <code>path</code> module and a single <code>path.basename</code> call per file.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Duplicate symbols</strong>: Verify that the synthetic symbol does not collide with an existing symbol when a file actually contains symbols.  </li>
+<li><strong>Performance</strong>: The added <code>path.basename</code> call is trivial, but benchmark on large outlines if needed.  </li>
+<li><strong>Linting</strong>: Run <code>npm run lint</code> to confirm the new import satisfies style rules.  </li>
+<li><strong>Testing</strong>: Add unit tests for <code>buildSideNodes</code> covering the empty‑symbol case.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

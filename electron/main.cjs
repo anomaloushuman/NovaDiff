@@ -41,6 +41,7 @@ const {
 } = require("./file-summary-export.cjs");
 const { buildCodeCityModelPayload } = require("./code-city-model.cjs");
 const { buildKnowledgeGraph } = require("./knowledge-graph-runner.cjs");
+const { runSecurityInsightScan } = require("./security-scan-runner.cjs");
 const {
   detectGitTooling,
   getRepoStatus,
@@ -79,6 +80,9 @@ const {
   indexWorkspaceHistory,
   refreshWorkspaceHistory,
   ensureCommitSnapshot,
+  listBranches,
+  listCommitsForRef,
+  materializeCommitForCompare,
 } = require("./workspace-history.cjs");
 const {
   startGithubDeviceAuth,
@@ -474,6 +478,17 @@ ipcMain.handle("risk-signals", async (event, payload) => {
       app.isPackaged,
       (progress) => sendEngineProgress(event.sender, progress),
     );
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("security-insights-scan", async (_event, payload) => {
+  try {
+    return runSecurityInsightScan({
+      projectRoot: String(payload?.projectRoot ?? "").trim(),
+      advisoryEnabled: Boolean(payload?.advisoryEnabled),
+    });
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
   }
@@ -1100,6 +1115,36 @@ ipcMain.handle("workspace-ensure-commit-snapshot", async (_evt, payload) => {
     const hash = String(payload?.hash ?? "").trim();
     const snapshotPath = String(payload?.snapshotPath ?? "").trim();
     return await ensureCommitSnapshot(app.getPath("userData"), workspaceId, hash, snapshotPath);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-list-branches", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    return listBranches(repoRoot);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("git-list-branch-commits", async (_evt, payload) => {
+  try {
+    const repoRoot = String(payload?.repoRoot ?? "").trim();
+    const branch = String(payload?.branch ?? "").trim();
+    const limit = payload?.limit;
+    return listCommitsForRef(repoRoot, branch, limit);
+  } catch (e) {
+    throw new Error(e instanceof Error ? e.message : String(e));
+  }
+});
+
+ipcMain.handle("workspace-materialize-commit", async (_evt, payload) => {
+  try {
+    const workspaceId = String(payload?.workspaceId ?? "").trim();
+    const ref = String(payload?.ref ?? payload?.hash ?? "").trim();
+    return await materializeCommitForCompare(app.getPath("userData"), workspaceId, ref);
   } catch (e) {
     throw new Error(e instanceof Error ? e.message : String(e));
   }

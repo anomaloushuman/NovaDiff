@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Loader2, RefreshCw, Search } from "lucide-react";
+import type { GitBranchSummary } from "../app/gitTypes";
+import {
+  commitFromBranchTip,
+  enrichBranchCommits,
+  pickDefaultBaseBranch,
+  pickDefaultHeadBranch,
+  resolveGitRepoRoot,
+} from "../app/gitHistoryBranches";
 import type {
   GitHistoryCompareOptions,
   NovaWorkspace,
@@ -38,7 +46,7 @@ export function GitHistoryWorkspace({
   onReviewInCity,
 }: GitHistoryWorkspaceProps) {
   const api = window.electronAPI;
-  const commits = workspace.commits ?? [];
+  const indexedCommits = workspace.commits ?? [];
   const [baseHash, setBaseHash] = useState("");
   const [headHash, setHeadHash] = useState("");
   const [focusHash, setFocusHash] = useState("");
@@ -47,48 +55,142 @@ export function GitHistoryWorkspace({
     workspace.liveDevRepoRoot ?? workspace.repoRoot ?? "",
   );
   const [commitQuery, setCommitQuery] = useState("");
+  const [branches, setBranches] = useState<GitBranchSummary[]>([]);
+  const [branchesLoading, setBranchesLoading] = useState(false);
+  const [branchLoadError, setBranchLoadError] = useState<string | null>(null);
+  const [baseBranch, setBaseBranch] = useState("");
+  const [headBranch, setHeadBranch] = useState("");
+  const [branchCommits, setBranchCommits] = useState<WorkspaceCommitSnapshot[]>([]);
+  const [branchCommitsLoading, setBranchCommitsLoading] = useState(false);
+
+  const gitRepoRoot = useMemo(
+    () => resolveGitRepoRoot(workspace, liveRepoRoot),
+    [workspace, liveRepoRoot],
+  );
 
   useEffect(() => {
     setLiveRepoRoot(workspace.liveDevRepoRoot ?? workspace.repoRoot ?? "");
   }, [workspace.id, workspace.liveDevRepoRoot, workspace.repoRoot]);
 
-  const sorted = useMemo(
-    () => [...commits].sort((a, b) => a.authoredAt.localeCompare(b.authoredAt)),
-    [commits],
-  );
+  const loadBranches = useCallback(async () => {
+    if (!gitRepoRoot || !api?.gitListBranches) {
+      setBranches([]);
+      setBranchLoadError(
+        api?.gitListBranches
+          ? "No git repository path on this workspace."
+          : "Branch listing requires the NovaDiff desktop app.",
+      );
+      return;
+    }
+    setBranchesLoading(true);
+    setBranchLoadError(null);
+    try {
+      const result = await api.gitListBranches({ repoRoot: gitRepoRoot });
+      const list = result.branches ?? [];
+      setBranches(list);
+      if (list.length === 0) {
+        setBranchLoadError("No branches found in this repository.");
+        return;
+      }
+      setBaseBranch((prev) =>
+        prev && list.some((b) => b.name === prev) ? prev : pickDefaultBaseBranch(list),
+      );
+      setHeadBranch((prev) =>
+        prev && list.some((b) => b.name === prev)
+          ? prev
+          : pickDefaultHeadBranch(list, result.currentBranch),
+      );
+    } catch (e) {
+      setBranches([]);
+      setBranchLoadError(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBranchesLoading(false);
+    }
+  }, [api, gitRepoRoot]);
 
   useEffect(() => {
-    if (sorted.length >= 2 && !baseHash && !headHash) {
-      const b = sorted[sorted.length - 2].hash;
-      const h = sorted[sorted.length - 1].hash;
-      setBaseHash(b);
-      setHeadHash(h);
-      setFocusHash(h);
+    void loadBranches();
+  }, [loadBranches]);
+
+  const reloadBranchCommits = useCallback(async () => {
+    if (!gitRepoRoot || !api?.gitListBranchCommits || (!baseBranch && !headBranch)) {
+      setBranchCommits([]);
+      return;
     }
-  }, [sorted, baseHash, headHash]);
+    setBranchCommitsLoading(true);
+    try {
+      const [baseRaw, headRaw] = await Promise.all([
+        baseBranch ? api.gitListBranchCommits({ repoRoot: gitRepoRoot, branch: baseBranch }) : [],
+        headBranch && !useLiveHead
+          ? api.gitListBranchCommits({ repoRoot: gitRepoRoot, branch: headBranch })
+          : [],
+      ]);
+      const merged = enrichBranchCommits(
+        [...baseRaw, ...headRaw],
+        indexedCommits,
+      );
+      const byHash = new Map<string, WorkspaceCommitSnapshot>();
+      for (const c of merged) {
+        byHash.set(c.hash, c);
+      }
+      setBranchCommits([...byHash.values()].sort((a, b) => a.authoredAt.localeCompare(b.authoredAt)));
+
+      const baseTip = baseRaw.length > 0 ? baseRaw[baseRaw.length - 1].hash : "";
+      const headTip = headRaw.length > 0 ? headRaw[headRaw.length - 1].hash : "";
+      if (baseTip) {
+        setBaseHash((prev) => (prev && byHash.has(prev) ? prev : baseTip));
+      }
+      if (headTip && !useLiveHead) {
+        setHeadHash((prev) => (prev && byHash.has(prev) ? prev : headTip));
+        setFocusHash((prev) => (prev && byHash.has(prev) ? prev : headTip));
+      }
+    } catch {
+      setBranchCommits([]);
+    } finally {
+      setBranchCommitsLoading(false);
+    }
+  }, [api, baseBranch, headBranch, gitRepoRoot, indexedCommits, useLiveHead]);
+
+  useEffect(() => {
+    void reloadBranchCommits();
+  }, [reloadBranchCommits]);
+
+  const listCommits = useMemo(() => {
+    const byHash = new Map<string, WorkspaceCommitSnapshot>();
+    for (const c of [...branchCommits, ...indexedCommits]) {
+      byHash.set(c.hash, c);
+    }
+    return [...byHash.values()].sort((a, b) => a.authoredAt.localeCompare(b.authoredAt));
+  }, [branchCommits, indexedCommits]);
 
   const filteredCommits = useMemo(() => {
     const q = commitQuery.trim().toLowerCase();
+    const source = [...listCommits].reverse();
     if (!q) {
-      return [...sorted].reverse();
+      return source;
     }
-    return sorted
-      .filter(
-        (c) =>
-          c.shortHash.toLowerCase().includes(q) ||
-          c.subject.toLowerCase().includes(q),
-      )
-      .reverse();
-  }, [sorted, commitQuery]);
+    return source.filter(
+      (c) =>
+        c.shortHash.toLowerCase().includes(q) ||
+        c.subject.toLowerCase().includes(q),
+    );
+  }, [listCommits, commitQuery]);
 
-  const base = sorted.find((c) => c.hash === baseHash) ?? null;
-  const head = sorted.find((c) => c.hash === headHash) ?? null;
+  const baseBranchMeta = branches.find((b) => b.name === baseBranch) ?? null;
+  const headBranchMeta = branches.find((b) => b.name === headBranch) ?? null;
+
+  const base =
+    listCommits.find((c) => c.hash === baseHash) ??
+    (baseBranchMeta ? commitFromBranchTip(baseBranchMeta) : null);
+  const head =
+    listCommits.find((c) => c.hash === headHash) ??
+    (headBranchMeta && !useLiveHead ? commitFromBranchTip(headBranchMeta) : null);
   const focusCommit =
-    sorted.find((c) => c.hash === focusHash) ?? head ?? base ?? null;
+    listCommits.find((c) => c.hash === focusHash) ?? head ?? base ?? null;
 
-  const indexing =
+  const historyIndexing =
     workspace.historyStatus === "indexing" ||
-    (workspace.historyStatus === "idle" && commits.length === 0);
+    (workspace.historyStatus === "idle" && indexedCommits.length === 0);
 
   const browseLiveRepo = () => {
     void (async () => {
@@ -96,6 +198,7 @@ export function GitHistoryWorkspace({
       if (p) {
         setLiveRepoRoot(p);
         await onLiveRepoPersist(p);
+        void loadBranches();
       }
     })();
   };
@@ -104,17 +207,22 @@ export function GitHistoryWorkspace({
     const root = liveRepoRoot.trim();
     if (root) {
       await onLiveRepoPersist(root);
+      void loadBranches();
     }
-  }, [liveRepoRoot, onLiveRepoPersist]);
+  }, [liveRepoRoot, onLiveRepoPersist, loadBranches]);
 
-  const swapRevisions = () => {
-    const b = baseHash;
+  const swapBranches = () => {
+    setBaseBranch(headBranch);
+    setHeadBranch(baseBranch);
     setBaseHash(headHash);
-    setHeadHash(b);
+    setHeadHash(baseHash);
   };
 
   const runCompare = () => {
-    if (!base) {
+    const baseCommit =
+      listCommits.find((c) => c.hash === baseHash) ??
+      (baseBranchMeta ? commitFromBranchTip(baseBranchMeta) : null);
+    if (!baseCommit) {
       return;
     }
     if (useLiveHead) {
@@ -122,44 +230,55 @@ export function GitHistoryWorkspace({
       if (!root) {
         return;
       }
-      void onCompareCommits(base, null, { useLiveHead: true, liveRepoRoot: root });
+      void onCompareCommits(baseCommit, null, { useLiveHead: true, liveRepoRoot: root });
       return;
     }
-    if (head && base.hash !== head.hash) {
-      void onCompareCommits(base, head);
+    const headCommit =
+      listCommits.find((c) => c.hash === headHash) ??
+      (headBranchMeta ? commitFromBranchTip(headBranchMeta) : null);
+    if (headCommit && baseCommit.hash !== headCommit.hash) {
+      void onCompareCommits(baseCommit, headCommit);
     }
   };
 
   const canCompare =
-    Boolean(base) &&
-    !indexing &&
+    Boolean(baseBranchMeta) &&
+    !historyIndexing &&
     !busy &&
-    (useLiveHead ? Boolean(liveRepoRoot.trim()) : Boolean(head && base && base.hash !== head.hash));
+    !branchesLoading &&
+    (useLiveHead
+      ? Boolean(liveRepoRoot.trim())
+      : Boolean(
+          headBranchMeta &&
+            baseBranchMeta &&
+            baseBranchMeta.hash !== headBranchMeta.hash,
+        ));
 
   return (
     <main className="workspace git-history-workspace">
       <HistoryCompareStrip
-        commits={sorted}
-        baseHash={baseHash}
-        headHash={headHash}
+        branches={branches}
+        branchesLoading={branchesLoading}
+        branchLoadError={branchLoadError}
+        baseBranch={baseBranch}
+        headBranch={headBranch}
         useLiveHead={useLiveHead}
         liveRepoRoot={liveRepoRoot}
         busy={busy}
         error={error}
-        indexing={indexing}
-        onBaseHash={setBaseHash}
-        onHeadHash={setHeadHash}
+        loading={historyIndexing || branchCommitsLoading}
+        onBaseBranch={setBaseBranch}
+        onHeadBranch={setHeadBranch}
         onUseLiveHead={setUseLiveHead}
-        onLiveRepoRoot={setLiveRepoRoot}
         onBrowseLiveRepo={browseLiveRepo}
         onLiveRepoBlur={() => void persistLiveRepo()}
-        onSwap={swapRevisions}
+        onSwap={swapBranches}
         onCompare={runCompare}
       />
 
       <div className="git-history-main">
-        <section className="git-history-commits-panel insights" aria-label="Indexed commits">
-          {indexing ? (
+        <section className="git-history-commits-panel insights" aria-label="Commits on selected branches">
+          {historyIndexing ? (
             <p className="git-history-commits-alert doc-workspace-muted">
               <Loader2 size={16} className="spin-ic" aria-hidden />
               {workspace.historyProgress?.message ?? "Indexing commit history…"}
@@ -170,18 +289,33 @@ export function GitHistoryWorkspace({
           ) : null}
           <header className="git-history-commits-toolbar">
             <h2 className="git-history-commits-toolbar-title">
-              Indexed commits <span className="git-history-commits-count">({sorted.length})</span>
+              Commits on selected branches{" "}
+              <span className="git-history-commits-count">
+                ({listCommits.length}
+                {baseBranch || headBranch
+                  ? ` · ${baseBranch || "—"} → ${useLiveHead ? "live folder" : headBranch || "—"}`
+                  : ""}
+                )
+              </span>
             </h2>
             <div className="git-history-commits-toolbar-actions">
+              <button
+                type="button"
+                className="git-history-toolbar-btn"
+                disabled={branchesLoading}
+                onClick={() => void loadBranches()}
+              >
+                <RefreshCw size={14} aria-hidden />
+                Reload branches
+              </button>
               {onRefreshHistory ? (
                 <button
                   type="button"
                   className="git-history-toolbar-btn"
-                  disabled={indexing}
+                  disabled={historyIndexing}
                   onClick={() => void onRefreshHistory()}
                 >
-                  <RefreshCw size={14} aria-hidden />
-                  Sync from git
+                  Sync snapshots
                 </button>
               ) : null}
               <label className="git-history-commits-search">
@@ -196,16 +330,20 @@ export function GitHistoryWorkspace({
             </div>
           </header>
           <div className="git-history-commits-scroll insights-scroll">
-            {sorted.length === 0 ? (
+            {branchCommitsLoading ? (
               <p className="doc-workspace-muted git-history-commits-empty">
-                No snapshots yet — indexing runs when the workspace is created.
+                <Loader2 size={16} className="spin-ic" aria-hidden /> Loading commits…
+              </p>
+            ) : listCommits.length === 0 ? (
+              <p className="doc-workspace-muted git-history-commits-empty">
+                Select base and target branches above to list their commits.
               </p>
             ) : (
               <ul className="git-history-commit-list">
                 {filteredCommits.map((c) => {
                   const isBase = c.hash === baseHash;
                   const isHead = c.hash === headHash && !useLiveHead;
-                  const isFocus = c.hash === focusCommit?.hash;
+                  const isFocus = c.hash === focusHash;
                   return (
                     <li key={c.hash}>
                       <button
@@ -220,7 +358,7 @@ export function GitHistoryWorkspace({
                         <div className="git-history-commit-meta">
                           {isBase ? <span className="git-history-badge">Base</span> : null}
                           {isHead && !useLiveHead ? (
-                            <span className="git-history-badge git-history-badge--head">Head</span>
+                            <span className="git-history-badge git-history-badge--head">Target</span>
                           ) : null}
                           <time dateTime={c.authoredAt}>{c.authoredAt.slice(0, 10)}</time>
                         </div>

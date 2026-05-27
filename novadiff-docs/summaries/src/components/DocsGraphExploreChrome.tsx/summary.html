@@ -26,36 +26,23 @@
 <body>
   <header class="top">
     <h1>src/components/DocsGraphExploreChrome.tsx</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:01:39.505Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T07:57:42.733Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/components/DocsGraphExploreChrome.tsx</code> is a new component that renders a Code City settings UI in a portal and can be docked to the graph minimap. It introduces two prop interfaces (<code>GraphBuildBarProps</code> lines 18‑31, <code>CityExploreBarProps</code> lines 33‑59), helper logic (<code>countActiveCityFilters</code> lines 61‑87, <code>ExpandCornerIcon</code> lines 90‑120), and several UI panels (<code>CityFiltersPanel</code>, <code>CityLinkPanel</code>, <code>GraphBuildPanel</code>, <code>GraphStatsPanel</code> lines 122‑374).</p>
-<p>The floating shell (<code>CodeCityFloatShell</code> lines 376‑439) manages docked/expanded state with <code>useLayoutEffect</code>, <code>ResizeObserver</code>, and <code>MutationObserver</code>. The top‑level <code>CodeCityExploreSettings</code> component (lines 444‑639) mounts the shell into <code>document.body</code>, creates an overlay via <code>createPortal</code>, and exposes an <code>expanded</code> state.</p>
-<p>A deprecated wrapper <code>DocsGraphActionBar</code> (lines 641‑648) forwards props to <code>CodeCityExploreSettings</code>. New imports include <code>createPortal</code>, <code>AnimatedOverlay</code>, <code>CodeCityGraphToolbar</code>, <code>DocsLinkToolbar</code>, and <code>CodeCityLayoutResult</code>.</p>
+<ul>
+<li><code>src/components/DocsGraphExploreChrome.tsx</code> now uses typed arrays for filter props instead of single strings.  </li>
+<li>New imports were added at the top of the file:  <ul>
+<li><code>CodeCityViewportProvider</code> from <code>../app/CodeCityViewportContext</code> (R15).  </li>
+<li><code>ALL_CHANGE_STATE_FILTERS</code>, <code>ALL_SYMBOL_KIND_GROUPS</code>, <code>changeStatesFilterActive</code>, <code>symbolKindsFilterActive</code> from <code>../app/types</code> (R18‑R27).</li>
+</ul>
+</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li>Added interfaces <code>GraphBuildBarProps</code> and <code>CityExploreBarProps</code>.  </li>
-<li>Implemented <code>countActiveCityFilters</code> and <code>ExpandCornerIcon</code>.  </li>
-<li>Created panels for filters, linking, build controls, and statistics.  </li>
-<li>Built a dockable shell that updates position with <code>ResizeObserver</code> and <code>MutationObserver</code>.  </li>
-<li>Mounted the shell into <code>document.body</code> and added an overlay portal.  </li>
-<li>Provided a deprecated wrapper for backward compatibility.</li>
-</ul>
-<h3>Impact</h3>
-<ul>
-<li><strong>UI/UX</strong>: Offers filter, linking, and build controls that can be toggled and docked.  </li>
-<li><strong>Build size</strong>: Adds JSX and portal logic; bundle size increases modestly.  </li>
-<li><strong>Performance</strong>: Uses continuous <code>ResizeObserver</code>/<code>MutationObserver</code> callbacks; runtime overhead may be noticeable on large graphs.  </li>
-<li><strong>Compatibility</strong>: <code>DocsGraphActionBar</code> keeps older imports functional; migration to <code>CodeCityExploreSettings</code> is recommended.  </li>
-<li><strong>Observability</strong>: No console logs; layout issues would surface as CSS or positioning glitches.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Layout regressions</strong>: Verify CSS classes (<code>code-city-float</code>, <code>code-city-float--chrome</code>, etc.) and that the minimap slot receives <code>data-code-city-expanded</code>.  </li>
-<li><strong>Observer leaks</strong>: Ensure observers are disconnected on unmount; current cleanup paths cover most cases but should be validated in edge scenarios.  </li>
-<li><strong>Portal mounting</strong>: Confirm <code>document.body</code> is available in SSR or test environments; the <code>code-city-body-mount</code> div should be appended only once.  </li>
-<li><strong>Deprecated API</strong>: Update documentation and search for remaining <code>DocsGraphActionBar</code> imports to avoid accidental use.</li>
+<li><strong>Imports (R15‑R27)</strong> – added the imports above.  </li>
+<li><strong>Props interface (R44‑R73)</strong> – <code>CityExploreBarProps</code> now declares <code>citySymbolKinds: SymbolKindGroup[]</code>, <code>cityChangeStates: CodeCityChangeState[]</code>, and corresponding setter props.  </li>
+<li><strong>Filter counting (R61‑R105)</strong> – <code>countActiveCityFilters</code> now uses <code>symbolKindsFilterActive</code> and <code>changeStatesFilterActive</code> to compute the number of active filters.</li>
 </ul>
 </article>
   </main>

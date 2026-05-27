@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/codeCityLayout.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/codeCityLayout.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:27:39.712Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>The layout generator now supports richer filtering. The <code>CodeCityFilters</code> interface was extended to replace the single <code>symbolKind</code> string with a <code>symbolKinds: SymbolKindGroup[]</code> array and to add a <code>changeStates: CodeCityChangeState[]</code> array. New helper functions <code>normalizeRelPath</code> and <code>fileMatchesSubsystem</code> were added to centralise path handling. A <code>districtScoped</code> flag (lines 171‑175) short‑circuits subsystem/extension checks when the filters are all “all”.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong> (lines 1‑5): <code>changeStateMatchesFilters</code>, <code>symbolMatchesKindGroups</code>, and <code>SymbolKindGroup</code> from <code>./docsExploreFilters</code>.  </li>
+<li><strong>Interface update</strong> (lines 22‑25): <code>symbolKinds</code> and <code>changeStates</code> added; <code>symbolKind</code> removed (line 17).  </li>
+<li><strong>Path helpers</strong> (lines 120‑135): <code>normalizeRelPath</code> and <code>fileMatchesSubsystem</code>.  </li>
+<li><strong>Visibility logic</strong> (lines 178‑181): <code>fileMatchesSubsystem</code> replaces direct path checks.  </li>
+<li><strong>Symbol kind filtering</strong> (lines 193‑196): uses <code>symbolMatchesKindGroups</code>.  </li>
+<li><strong>Change‑state filtering</strong> (lines 196‑198): uses <code>changeStateMatchesFilters</code>.  </li>
+<li><strong>Author &amp; search</strong> (lines 199‑206, 210‑214): author match logic and a case‑insensitive search over file path, symbol name, and kind.  </li>
+<li><strong>Result shape</strong> (lines 317‑322): returns <code>districts</code>, <code>buildings</code>, <code>subsystems</code>, <code>extensions</code>, and <code>symbolKinds</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Correctness</strong>: Filters now honor grouped symbol kinds and change states; subsystem matching handles both relative and absolute paths.  </li>
+<li><strong>Maintainability</strong>: Centralised path logic reduces duplication; the filter interface more clearly expresses intent.  </li>
+<li><strong>Compatibility</strong>: Code that still references <code>symbolKind</code> will fail to compile; UI and tests must migrate to <code>symbolKinds</code>.  </li>
+<li><strong>Performance</strong>: Minor overhead from helper calls; <code>districtScoped</code> cuts unnecessary checks for large models.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>API breakage</strong>: Verify all callers update from <code>symbolKind</code> to <code>symbolKinds</code>.  </li>
+<li><strong>Subsystem logic</strong>: Test <code>fileMatchesSubsystem</code> on nested subsystems and mixed path separators.  </li>
+<li><strong>Empty filter arrays</strong>: Ensure <code>symbolMatchesKindGroups</code> and <code>changeStateMatchesFilters</code> treat empty arrays as “all”.  </li>
+<li><strong>Regression</strong>: Run existing layout unit tests to confirm visual and data integrity.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

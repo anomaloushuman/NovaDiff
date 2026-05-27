@@ -54,6 +54,7 @@ export default defineConfig(() => ({
       "@dagrejs/dagre",
       "graphology",
       "elkjs/lib/elk.bundled.js",
+      "three/webgpu",
     ],
     needsInterop: ["elkjs"],
   },

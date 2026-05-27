@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/App.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/App.tsx</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:46:55.027Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>DashboardContent</code> in <code>packages/graph-view/src/App.tsx</code> now includes a <code>useEffect</code> (added at R264‑R269) that synchronizes the global DOM state with the code‑viewer’s open/close status.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>DOM attribute sync</strong> – the effect toggles <code>data-code-viewer-open</code> on <code>&lt;html&gt;</code> whenever <code>codeViewerOpen</code> changes (R264‑R268).  </li>
+<li><strong>Global event dispatch</strong> – it emits a <code>novadiff-code-viewer-open-change</code> event with <code>{ open: codeViewerOpen }</code> (R266‑R267).  </li>
+<li><strong>Cleanup</strong> – on unmount or state change, the attribute is removed and a “closed” event (<code>open: false</code>) is fired (R269).  </li>
+<li><strong>Dependency</strong> – the effect depends only on <code>codeViewerOpen</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Enables CSS hooks (<code>[data-code-viewer-open]</code>) for styling based on the viewer’s state.  </li>
+<li>Provides a cross‑component notification mechanism via the custom event, allowing external modules to react to viewer transitions without tight coupling.  </li>
+<li>Keeps the component’s lifecycle clean by removing the attribute and firing a closed event on cleanup.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that the custom event name (<code>novadiff-code-viewer-open-change</code>) is unique and not colliding with other global events.  </li>
+<li>Ensure listeners for this event are properly cleaned up to avoid memory leaks.  </li>
+<li>Run lint, tests, and production build to confirm no unintended side‑effects.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

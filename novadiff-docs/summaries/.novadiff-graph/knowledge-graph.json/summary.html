@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>.novadiff-graph/knowledge-graph.json · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>.novadiff-graph/knowledge-graph.json</h1>
+    <div class="meta">Kind: removed · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T06:54:35.013Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>The file <code>.novadiff-graph/knowledge-graph.json</code> was deleted entirely (lines L1‑8000). All graph data—including metadata, node entries for files, functions, classes, and symbol spans—was removed. Consequently, any references to Electron modules, language‑lesson logic, extractor implementations, and persistence utilities that were stored in this file are no longer present.</p>
+<h3>Key changes</h3>
+<ul>
+<li>The entire knowledge‑graph file was removed.  </li>
+<li>All nodes stored in the graph (functions, files, classes, symbol spans) were deleted.  </li>
+<li>Electron‑specific data, language configuration, extractor logic, and persistence references that resided in the graph were eliminated.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Functionality that depends on the knowledge graph (e.g., visualizations, symbol lookup, diff overlays) will be affected.  </li>
+<li>Analysis tools that query the graph for summaries, complexity metrics, or change tracking will lose their data source.  </li>
+<li>Tests that rely on the graph may fail or be skipped.  </li>
+<li>Scripts that generate or consume the graph may error.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Users cannot view or interact with the knowledge graph until it is regenerated.  </li>
+<li>All historical graph snapshots and metadata are permanently removed.  </li>
+<li>Re‑generation of the graph is required (e.g., <code>nova diff --generate-graph</code>).  </li>
+<li>Code that imports or references the removed graph file should be cleaned or guarded.  </li>
+<li>After regeneration, re‑run relevant tests (e.g., <code>npm test --packages/graph-core</code>) to confirm functionality.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

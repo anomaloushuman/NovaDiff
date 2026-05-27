@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/launch/launch.css · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/launch/launch.css</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:43:13.463Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A single CSS rule was added to the launch panel layout: <code>min-width: 0;</code> was inserted for both the side and main panel containers.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong><code>.launch-panel--side</code></strong> – line 312: <code>min-width: 0;</code> was added.  </li>
+<li><strong><code>.launch-panel--main</code></strong> – line 316: <code>min-width: 0;</code> was added.<br>No other selectors or properties were modified.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Flexbox behavior</strong> – <code>min-width: 0</code> overrides the default <code>min-width: auto</code> in flex containers, allowing the panels to shrink to zero and reducing the risk of overflow in nested flex layouts.  </li>
+<li><strong>Layout stability</strong> – the panels will not be forced to a minimum width that could exceed the available space, which may help maintain the intended grid structure when the viewport narrows.  </li>
+<li><strong>Performance</strong> – the change is purely CSS; it does not introduce additional reflow or repaint costs beyond the normal layout pass.  </li>
+<li><strong>Compatibility</strong> – works in all modern browsers that support flexbox; no polyfills are required.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Overflow on very small viewports</strong> – verify that the panels still fit within the viewport and that no horizontal scroll appears.  </li>
+<li><strong>Interaction with media queries</strong> – ensure that existing <code>@media (prefers-reduced-motion)</code> rules do not override or conflict with the new <code>min-width</code>.  </li>
+<li><strong>Visual regression</strong> – run the launch sequence smoke test to confirm that the side and main panels display correctly during the animation sequence.  </li>
+<li><strong>Documentation</strong> – update any design docs that reference panel width constraints to reflect the new <code>min-width</code> behavior.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

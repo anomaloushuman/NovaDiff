@@ -1,9 +1,9 @@
 {
   "relPath": "src/components/CodeCityMinimapSlot.tsx",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:00:26.472Z",
+  "generatedAt": "2026-05-26T19:34:32.775Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,38 +11,24 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R14 added: export function CodeCityMinimapSlot({"
-    ],
-    "changed_imports": [
-      "R1 added: import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\";",
-      "R2 added: import {"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-94"
+      "R72",
+      "R78"
     ],
     "cited_changed_lines": [
-      "R1 added: import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from \"react\";",
-      "R2 added: import {",
-      "R3 added: measureCodeCityChromeInsets,",
-      "R4 added: type CodeCityChromeInsets,",
-      "R5 added: } from \"../app/codeCityChromeInsets\";",
-      "R7 added: const DEFAULT_INSETS: CodeCityChromeInsets = {"
+      "R72 added: window.addEventListener(\"novadiff-code-viewer-open-change\", update);",
+      "R78 added: window.removeEventListener(\"novadiff-code-viewer-open-change\", update);"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function CodeCityMinimapSlot (14-94)"
+      "right function CodeCityMinimapSlot (14-96)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

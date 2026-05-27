@@ -1,124 +1,136 @@
-### Repository overview  
-The repository contains a cross‑platform desktop application that analyzes codebases, builds a knowledge graph, and renders documentation.  
-Key directories:  
-- `electron/` – Electron runtime (renderer, main, IPC).  
-- `cli/` – Rust crate (`src/main.rs`) that implements the diff engine.  
-- `packages/graph-core/` – TypeScript core that builds the graph, runs LLM prompts, and generates docs.  
-The application uses Electron (JS/TS), Rust, Node/TS, and an LLM backend (Ollama or LM Studio).
+### Repository overview
+The repository is a monorepo that contains three main parts:
 
-### Architectural layout  
-```
-┌───────────────────────┐
-│ Electron (renderer)   │
-│ ├─ index.html         │
-│ ├─ preload.cjs        │
-│ └─ renderer modules   │
-└───────┬───────────────┘
-        │ IPC
-        ▼
-┌───────────────────────┐
-│ Electron (main)       │
-│ ├─ main.cjs           │
-│ ├─ menu.cjs           │
-│ └─ window‑state.cjs   │
-└───────┬───────────────┘
-        │
-        ▼
-┌───────────────────────┐
-│ Rust CLI (diff engine)│
-│ └─ src/main.rs        │
-└───────┬───────────────┘
-        │
-        ▼
-┌───────────────────────┐
-│ Node/TS core           │
-│ ├─ packages/graph-core│
-│ │  ├─ src/analyzer    │
-│ │  ├─ src/embedding   │
-│ │  └─ src/fingerprint │
-│ └─ electron/llm.cjs   │
-└───────────────────────┘
+* **packages/graph-core/** – a TypeScript library that builds and normalises a graph of a codebase.  
+* **electron/** – the Electron desktop application (main, preload, renderer, and many helper modules).  
+* **cli/** – a Rust binary (`compare`) that performs diff analysis and is invoked from Electron.
+
+The project is built with `npm`/`yarn` for the JavaScript parts and `cargo` for the Rust CLI.
+
+### Architectural layout
+```mermaid
+graph TD
+  subgraph Electron
+    A[main.cjs] --> B[preload.cjs]
+    B --> C[renderer (index.html)]
+    A --> D[git-service.cjs]
+    A --> E[github-service.cjs]
+    A --> F[llm.cjs]
+    A --> G[knowledge-graph-runner.cjs]
+    A --> H[compare-runner.cjs]
+    A --> I[export-snapshot.cjs]
+  end
+  subgraph Graph Core
+    J[packages/graph-core/src] --> K[GraphBuilder]
+    J --> L[normalize-graph.ts]
+    J --> M[change-classifier.ts]
+    J --> N[embedding-search.ts]
+    J --> O[fingerprint.ts]
+  end
+  subgraph CLI
+    P[cli/src/main.rs] --> Q[ChangeKind, path utilities]
+  end
+  A --> J
+  G --> J
+  H --> P
 ```
 
-### Key subsystems  
-| Subsystem | Location | Core functions / symbols |
-|-----------|----------|---------------------------|
-| Workspace & history | `electron/workspace-*` | `listSnapshotFiles`, `snapshotCommit`, `indexWorkspaceHistory` |
-| Git integration | `electron/git-service.cjs` | `gitExecutable`, `runGit`, `parsePorcelainStatus` |
-| GitHub integration | `electron/github-service.cjs` | `runGh`, `listRepos`, `createPullRequest` |
-| LLM orchestration | `electron/llm.cjs` | `normalizeBase`, `sendAccumulated`, `sanitizeModelResponse` |
-| Graph core | `packages/graph-core/src` | `GraphBuilder`, `normalizeNodeId`, `SemanticSearchEngine` |
-| Docs generation | `electron/novadiff-docs-*` | `markdownToHtml`, `renderSymbolsTable`, `mermaidBlock` |
-| Prefetch summaries | `electron/prefetch-summaries.cjs` | `runSummaryPrefetchLoop`, `getPrefetchedSummary` |
-| Diff engine | `cli/src/main.rs` | `ChangeKind`, `subtree_change_counts`, `try_build_gitignore_for_root` |
+* **Electron main** (`electron/main.cjs`) orchestrates windows, menus, and IPC.  
+* **Preload** (`electron/preload.cjs`) exposes safe APIs to the renderer.  
+* **Renderer** (`index.html` + bundled JS) displays the UI.  
+* **Graph Core** is a pure TS library that builds a graph of files, fingerprints, and LLM‑derived metadata.  
+* **CLI** (`cli/src/main.rs`) runs the compare engine and is called from Electron.
 
-The graph core contains a `__tests__` directory with many unit tests.
+### Key subsystems
+| Subsystem | Purpose | Main files | Notable symbols |
+|-----------|---------|------------|-----------------|
+| **Graph Core** | Build and normalise a project graph | `packages/graph-core/src/analyzer/*.ts` | `GraphBuilder`, `normalizeNodeId`, `classifyUpdate`, `SemanticSearchEngine` |
+| **Electron Main** | Application lifecycle, window management, progress reporting | `electron/main.cjs` | `createWindow`, `buildMenu`, `sendEngineProgress` |
+| **Electron Preload** | Secure IPC bridge | `electron/preload.cjs` | `contextBridge`, `ipcRenderer` |
+| **Git Service** | Git plumbing (status, blame, commit) | `electron/git-service.cjs` | `gitExecutable`, `runGit`, `parsePorcelainStatus` |
+| **GitHub Service** | GitHub API interactions | `electron/github-service.cjs` | `runGh`, `listRepos`, `createPullRequest` |
+| **LLM** | LLM request/response handling | `electron/llm.cjs` | `normalizeBase`, `sendAccumulated`, `ollamaGenerationOptions` |
+| **Knowledge Graph Runner** | Executes graph core in a child process | `electron/knowledge-graph-runner.cjs` | `runCommand`, `loadCore`, `detectLanguage` |
+| **Compare Runner** | Invokes the Rust compare engine | `electron/compare-runner.cjs` | `runCompareEngine`, `parseEngineStdout` |
+| **Export / Summary** | Snapshot export, summary rendering | `electron/export-snapshot.cjs`, `electron/file-summary-export.cjs` | `exportProjectSnapshotZip`, `markdownToHtml` |
+| **CLI** | Rust binary for compare engine | `cli/src/main.rs` | `ChangeKind`, `path_segments`, `subtree_change_counts` |
 
-### Dependency signals  
-- Resolved imports: 38 edges, mainly between `electron/*.cjs` and `packages/graph-core/src/*.ts`.  
-- Cross‑file calls: 225 heuristic edges; notable clusters include `electron/main.cjs ↔ electron/llm.cjs` and `electron/git-service.cjs ↔ electron/github-service.cjs`.  
-- External binaries: `git`, `gh`, `node`, `rustc`, `cargo`, `ollama` (or LM Studio).  
-- Rust ↔ Node: `electron/compare-runner.cjs` calls `resolveRustCli` to spawn the Rust diff engine.
+### Dependency signals
+* **Cross‑file call edges**: 228 edges indicate tight coupling between Electron modules and the graph core.  
+* **Resolved imports**: 43 edges, e.g.  
+  * `electron/knowledge-graph-runner.cjs` imports `packages/graph-core/src/analyzer/graph-builder.ts`.  
+  * `electron/compare-runner.cjs` calls the Rust binary via `resolveRustCli`.  
+  * `electron/git-service.cjs` imports `electron/git-blame.cjs`.  
+* **Symbol usage**:  
+  * `GraphBuilder` is instantiated in `electron/knowledge-graph-runner.cjs` and in tests under `packages/graph-core/src/__tests__`.  
+  * `classifyUpdate` is called by `electron/compare-runner.cjs`.  
+  * `SemanticSearchEngine` is used in `electron/llm.cjs`.
 
-### Operational considerations  
-| Area | Notes |
-|------|-------|
-| Build | `npm install` (Node deps) + `cargo build --release` (Rust CLI). The Rust binary is bundled into `electron/compare-runner.cjs`. |
-| Packaging | Electron packager (`electron-builder`) uses `main.cjs` as entry; the Rust binary is copied into the app bundle. |
-| LLM | Requires a local Ollama or LM Studio instance; `electron/llm.cjs` builds prompt strings. |
-| GitHub | Uses `gh` CLI for authentication; device flow handled by `electron/github-auth-flow.cjs`. |
-| Performance | Diff engine is Rust‑based; graph building is CPU‑bound TS; prefetch summaries run in a worker thread. |
-| Security | IPC channels are typed; GitHub tokens are stored via `gh`. |
+These signals show that the Electron UI consumes the graph core and that the CLI provides diff analysis.
 
-### Documentation gaps  
-- README lacks a step‑by‑step build guide and minimal system requirements.  
-- No JSDoc/TypeDoc output for the core TS modules.  
-- CLI usage (`cli/src/main.rs`) is not documented beyond symbol hints.  
-- LLM prompt templates are hard‑coded in `electron/llm.cjs`; no external config.  
-- Testing coverage is limited to the graph core; other subsystems lack unit tests.  
-- Error handling is not explicit; many functions return `any`.
+### Operational considerations
+| Task | Command / Script | Notes |
+|------|------------------|-------|
+| Install dependencies | `npm install` (or `yarn`) | Installs TS, Electron, Rust toolchain, and LLM dependencies. |
+| Build Electron app | `npm run build:electron` | Bundles main, preload, and renderer code. |
+| Run Electron app | `npm start` | Launches the desktop UI. |
+| Run CLI | `cargo run --bin compare` | Executes the compare engine; used by Electron. |
+| Run tests | `npm test` | Executes Jest tests for graph core. |
+| Generate alphabetical catalog | `node packages/graph-core/scripts/generate-alphabetical-catalog.mjs` | Produces a catalog of WASM modules. |
+| Export snapshot | `electron/export-snapshot.cjs` | Creates a ZIP of the current project snapshot. |
+| LLM integration | `electron/llm.cjs` | Requires an LLM backend (Ollama, LM Studio). |
+| GitHub authentication | `electron/github-auth-flow.cjs` | Uses GitHub device flow. |
 
-### Suggested onboarding and verification  
-1. **Prerequisites**  
-   - Node ≥ 20, npm ≥ 10  
-   - Rust ≥ 1.70, Cargo  
-   - Git, `gh` CLI  
-   - Ollama or LM Studio (for LLM)  
+* The Electron process spawns child processes for the graph core and the Rust CLI; ensure `node` and `cargo` are in `PATH`.  
+* LLM calls are optional; the app can operate with local analysis only.  
+* The `.novadiff-graph/` directory holds snapshot data; it is regenerated on each run.
 
-2. **Clone & install**  
+### Documentation gaps
+* **CLI API** – The Rust binary’s command‑line options are not documented; only the `ChangeKind` enum is exposed.  
+* **LLM configuration** – No README section explains how to set up Ollama or LM Studio endpoints.  
+* **Electron IPC contracts** – The preload exposes many APIs, but the contract definitions are missing.  
+* **Graph Core public API** – The exported functions (`GraphBuilder`, `normalizeNodeId`, etc.) lack usage examples.  
+* **Testing strategy** – The test suite covers core logic but does not explain integration tests for Electron or CLI.  
+* **Build scripts** – `package.json` scripts are present but not described in the README.
+
+Adding these details would improve onboarding and reduce friction for contributors.
+
+### Suggested onboarding and verification
+1. **Clone and install**  
    ```bash
    git clone <repo>
    cd <repo>
    npm install
-   cargo build --release
-   ```  
-
-3. **Run locally**  
+   cargo build
+   ```
+2. **Run the Electron app**  
    ```bash
-   npm run dev   # starts Electron in dev mode
+   npm start
    ```  
-
-4. **Verify core functionality**  
-   - Open the app, point it at a local Git repo.  
-   - Trigger a diff; confirm Rust CLI output is parsed.  
-   - Generate a docs bundle (`electron/novadiff-docs-html.cjs`) and inspect the HTML.  
-
-5. **Run tests**  
+   Verify that the window opens and the menu bar appears.
+3. **Execute a sample compare**  
    ```bash
-   npm test   # focuses on packages/graph-core/src/__tests__
+   npm run compare -- --repo <path>
    ```  
-
-6. **Lint & format**  
+   Check that the CLI outputs a diff summary.
+4. **Run tests**  
    ```bash
-   npm run lint
-   npm run format
+   npm test
    ```  
-
-7. **Explore LLM integration**  
-   - Start a local Ollama server (`ollama serve`).  
-   - In the app, request a summary; verify prompt construction and response sanitisation.  
-
-8. **Contribution checklist**  
-   - Add JSDoc comments to new TS functions.  
-   - Write unit tests for any new logic.  
-   - Update README with build instructions if new dependencies are added.
+   All Jest tests in `packages/graph-core/src/__tests__` should pass.
+5. **Generate catalog**  
+   ```bash
+   node packages/graph-core/scripts/generate-alphabetical-catalog.mjs
+   ```  
+   Confirm that `alphabetical-catalog.json` is created.
+6. **Verify LLM flow** (optional)  
+   * Start an Ollama server (`ollama serve`).  
+   * Set `LLM_ENDPOINT=localhost:11434` in `.env`.  
+   * Run the Electron app and trigger a LLM‑based analysis.
+7. **Inspect IPC**  
+   Open the renderer console (`Ctrl+Shift+I`) and check that IPC calls to `git-service`, `github-service`, and `llm` return expected data.
+8. **Review snapshot export**  
+   ```bash
+   electron/export-snapshot.cjs
+   ```  
+   Ensure a ZIP file is produced and contains the expected files.

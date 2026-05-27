@@ -1,9 +1,9 @@
 {
   "relPath": "electron/workspace-history.cjs",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:49:31.961Z",
+  "generatedAt": "2026-05-26T19:22:32.415Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,31 +11,39 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [],
+    "changed_imports": [
+      "L6 removed: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
+      "R6 added: const { runGit, tryRunGit, listBranches, listCommitsForRef } = require(\"./git-service.cjs\");"
+    ],
     "changed_line_ranges": [
-      "L135 / R135-136",
-      "L240 / R241-242"
+      "L6 / R6",
+      "R295-315",
+      "R318-319",
+      "R324"
     ],
     "cited_changed_lines": [
-      "L135 removed: await upsertWorkspace(userData, workspace);",
-      "R135 added: const persistSession = i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0;",
-      "R136 added: await upsertWorkspace(userData, workspace, { touchSession: persistSession });",
-      "L240 removed: await upsertWorkspace(userData, workspace);",
-      "R241 added: const persistSession = i === 0 || i === allCommits.length - 1 || (i + 1) % 10 === 0;",
-      "R242 added: await upsertWorkspace(userData, workspace, { touchSession: persistSession });"
+      "L6 removed: const { runGit, tryRunGit } = require(\"./git-service.cjs\");",
+      "R6 added: const { runGit, tryRunGit, listBranches, listCommitsForRef } = require(\"./git-service.cjs\");",
+      "R295 added: async function materializeCommitForCompare(userData, workspaceId, refOrHash) {",
+      "R296 added: const workspace = await getWorkspace(userData, workspaceId);",
+      "R297 added: if (!workspace) {",
+      "R298 added: throw new Error(\"Workspace not found\");"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function indexWorkspaceHistory (100-187)",
-      "left function refreshWorkspaceHistory (188-300)",
-      "right function indexWorkspaceHistory (100-188)",
-      "right function refreshWorkspaceHistory (189-302)"
+      "right function materializeCommitForCompare (295-326)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

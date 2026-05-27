@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/store.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/store.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:49:09.466Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/store.ts</code> now tracks an embedded‑graph filter that can be synced with Code City node selections. The store adds a new state field, an action to update it, and clears layout caches when the filter or active layer changes.</p>
+<h3>Key changes</h3>
+<ul>
+<li>Added <code>embedCityFilterNodeIds: Set&lt;string&gt; | null</code> to <code>DashboardStore</code> (R160‑163) and initialized it to <code>null</code> in the store (R378‑405).  </li>
+<li>Implemented <code>setEmbedCityFilterNodeIds(ids)</code> (R379‑380) to update the filter set, skip redundant updates, and clear layout caches (<code>containerLayoutCache</code>, <code>containerSizeMemory</code>, <code>expandedContainers</code>, <code>pendingFocusContainer</code>).  </li>
+<li>Introduced <code>layerResetIfChanged</code> helper (lines 285‑303) that clears container caches when the active layer changes.  </li>
+<li>Updated <code>resetEmbedOverlays</code> to set <code>embedCityFilterNodeIds</code> to <code>null</code> (R684).  </li>
+<li>Adjusted <code>setGraph</code> and navigation actions to reset caches when the graph or view mode changes.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>External components can now sync Code City filter selections to the embedded graph via <code>setEmbedCityFilterNodeIds</code>.  </li>
+<li>Layout caches are invalidated automatically on filter or layer changes, reducing stale visualizations.  </li>
+<li>Resetting overlays restores a clean state, including the filter set.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that <code>Set&lt;string&gt;</code> comparisons correctly detect changes; identical sets should not trigger unnecessary cache clears.  </li>
+<li>Monitor performance during rapid filter updates to ensure cache clearing does not cause regressions.  </li>
+<li>Run lint, tests, and production build to confirm integration stability.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

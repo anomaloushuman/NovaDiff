@@ -1,0 +1,61 @@
+{
+  "relPath": "packages/graph-view/src/utils/elk-layout.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:52:28.495Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R285 added: export function applyElkGridFallback(input: ElkInput): ElkInput {"
+    ],
+    "changed_imports": [
+      "R4 added: import {",
+      "R8 added: import type {"
+    ],
+    "changed_line_ranges": [
+      "R4-11",
+      "R231-302",
+      "R308",
+      "L229-230 / R310-312",
+      "L241 / R323-326"
+    ],
+    "cited_changed_lines": [
+      "R4 added: import {",
+      "R5 added: countElkLayoutNodes,",
+      "R6 added: shouldRunElkInWorker,",
+      "R7 added: } from \"./performance\";",
+      "R8 added: import type {",
+      "R9 added: ElkWorkerRequest,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function applyElkLayout (223-243)",
+      "right function ensureLayoutWorker (238-268)",
+      "right function applyElkGridFallback (285-302)",
+      "right function runElkLayoutInWorker (269-278)",
+      "right function applyElkLayout (303-328)",
+      "right interface ElkLayoutResult (226-237)",
+      "right function runElkLayoutOnMainThread (279-284)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

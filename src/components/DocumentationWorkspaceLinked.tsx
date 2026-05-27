@@ -81,7 +81,7 @@ export function useLinkedCityState(
 
   const inFileMode = Boolean(sync.enteredFilePath);
 
-  const selectionActive = Boolean(sync.linkedNodeId);
+  const selectionActive = Boolean(sync.linkedNodeId) || Boolean(sync.cityBuildingId);
 
   const { primary, highlightIds } = useMemo(
     () =>
@@ -91,12 +91,14 @@ export function useLinkedCityState(
         cityRootSide,
         sync.linkedNodeId,
         selectionActive,
+        sync.cityBuildingId,
       ),
     [
       graphPayload?.graph,
       filteredLayout,
       cityRootSide,
       sync.linkedNodeId,
+      sync.cityBuildingId,
       selectionActive,
     ],
   );
@@ -161,7 +163,7 @@ export function useLinkedCityState(
     sync,
     filteredLayout,
     selectedBuilding,
-    primaryBuildingId: primary,
+    primaryBuildingId: primary ?? sync.cityBuildingId,
     highlightBuildingIds: highlightIds,
     focusBuildingId: primary,
     edgeOverlays,

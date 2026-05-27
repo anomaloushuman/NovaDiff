@@ -26,29 +26,33 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/meta.json</h1>
-    <div class="meta">Kind: removed · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:41:14.448Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:14:40.347Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The file <code>.novadiff-graph/meta.json</code> was removed from the repository.<br>All six lines of JSON content—<code>lastAnalyzedAt</code>, <code>gitCommitHash</code>, <code>version</code>, and <code>analyzedFiles</code>—were deleted (lines 1‑6 in the diff).</p>
+<p>The file <code>.novadiff-graph/meta.json</code> was modified.  </p>
+<ul>
+<li>Line 2: <code>lastAnalyzedAt</code> was updated.  </li>
+<li>Line 5: <code>analyzedFiles</code> was updated.</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li><strong>File deletion</strong>: <code>.novadiff-graph/meta.json</code> no longer exists in the tree.  </li>
-<li><strong>Metadata loss</strong>: The six lines of JSON that tracked analysis timestamp, commit hash, version, and file count are gone.  </li>
-<li><strong>No other source changes</strong>: The diff shows only the removal of this file.</li>
+<li><code>lastAnalyzedAt</code> changed from <code>2026-05-26T01:49:38.223Z</code> to <code>2026-05-26T07:21:38.024Z</code> (diff: L2 → R2).  </li>
+<li><code>analyzedFiles</code> increased from <code>352</code> to <code>373</code> (diff: L5 → R5).  </li>
+<li>No other fields were altered.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Runtime behavior</strong>: Any code that attempts to read <code>.novadiff-graph/meta.json</code> will now encounter a missing‑file error unless it handles the absence.  </li>
-<li><strong>Build artifacts</strong>: The build pipeline no longer generates or consumes this metadata file.  </li>
-<li><strong>Documentation</strong>: References to the metadata file in docs or comments should be updated to avoid confusion.</li>
+<li>Any code that reads this JSON will now see the new timestamp and file count.  </li>
+<li>If consumers cache based on <code>lastAnalyzedAt</code>, earlier caches may be invalidated.  </li>
+<li>The JSON schema remains unchanged; existing parsers should continue to work.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Reference breakage</strong>: Search the codebase for <code>meta.json</code> or <code>analyzedFiles</code>; failing to update them could cause crashes.  </li>
-<li><strong>Test coverage</strong>: Run the nearest targeted tests (e.g., analysis pipeline tests) and a quick manual smoke test to confirm no runtime errors.  </li>
-<li><strong>CI pipeline</strong>: Verify that any CI steps that previously relied on the metadata file (e.g., publishing version info) are updated.  </li>
-<li><strong>Documentation audit</strong>: Remove or revise any README or internal docs mentioning the metadata file.</li>
+<li>Verify that components expecting the previous timestamp or file count do not fail.  </li>
+<li>Run unit tests that assert the values of <code>lastAnalyzedAt</code> and <code>analyzedFiles</code>.  </li>
+<li>Perform a manual smoke test: run an analysis and confirm the file count matches the actual number of processed files.  </li>
+<li>Update documentation that hard‑codes the old values, if any.</li>
 </ul>
 </article>
   </main>

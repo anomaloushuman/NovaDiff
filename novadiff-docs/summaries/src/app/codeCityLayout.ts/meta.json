@@ -1,0 +1,60 @@
+{
+  "relPath": "src/app/codeCityLayout.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:27:39.712Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R1 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-5",
+      "L17 / R22-25",
+      "R120-135",
+      "R171-175",
+      "L149 / R178-181",
+      "L155 / R187",
+      "L161 / R193",
+      "L164 / R196"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import {",
+      "R2 added: changeStateMatchesFilters,",
+      "R3 added: symbolMatchesKindGroups,",
+      "R4 added: type SymbolKindGroup,",
+      "R5 added: } from \"./docsExploreFilters\";",
+      "L17 removed: symbolKind: string;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function buildCodeCityLayout (129-283)",
+      "left interface CodeCityFilters (10-21)",
+      "right function buildCodeCityLayout (153-323)",
+      "right function fileMatchesSubsystem (124-135)",
+      "right function normalizeRelPath (120-123)",
+      "right interface CodeCityFilters (15-29)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

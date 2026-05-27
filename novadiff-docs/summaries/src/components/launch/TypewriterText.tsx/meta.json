@@ -1,0 +1,58 @@
+{
+  "relPath": "src/components/launch/TypewriterText.tsx",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:42:29.897Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export type TypewriterDirection = \"forward\" | \"reverse\";"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R4-5",
+      "L7 / R9",
+      "R11",
+      "R24",
+      "L28 / R32",
+      "L30-31 / R34",
+      "L37-38 / R40",
+      "L41-42 / R43"
+    ],
+    "cited_changed_lines": [
+      "R4 added: export type TypewriterDirection = \"forward\" | \"reverse\";",
+      "L7 removed: /** Keep full text visible after typing finishes (default true). */",
+      "R9 added: /** Keep full text visible after forward typing finishes (default true). */",
+      "R11 added: direction?: TypewriterDirection;",
+      "R24 added: direction = \"forward\",",
+      "L28 removed: const [visible, setVisible] = useState(0);"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function TypewriterText (17-99)",
+      "left interface TypewriterTextProps (4-16)",
+      "right function TypewriterText (20-118)",
+      "right interface TypewriterTextProps (6-19)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "relPath": "src/components/GitHistoryWorkspace.tsx",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:38:13.522Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: import type { GitBranchSummary } from \"../app/gitTypes\";",
+      "R4 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R3-10",
+      "L41 / R49",
+      "R58-69",
+      "L55-58 / R75-152",
+      "L61-66 / R155-161",
+      "L68 / R163-164",
+      "R168",
+      "L73 / R170"
+    ],
+    "cited_changed_lines": [
+      "R3 added: import type { GitBranchSummary } from \"../app/gitTypes\";",
+      "R4 added: import {",
+      "R5 added: commitFromBranchTip,",
+      "R6 added: enrichBranchCommits,",
+      "R7 added: pickDefaultBaseBranch,",
+      "R8 added: pickDefaultHeadBranch,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function GitHistoryWorkspace (28-258)",
+      "right function GitHistoryWorkspace (36-396)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

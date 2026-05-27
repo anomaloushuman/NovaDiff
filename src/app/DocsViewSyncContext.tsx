@@ -13,6 +13,8 @@ export interface DocsViewSyncState {
   linkViews: boolean;
   focusMode: boolean;
   linkedNodeId: string | null;
+  /** City building id when graph node id is unknown or not yet linked. */
+  cityBuildingId: string | null;
   enteredFilePath: string | null;
   enteredBuilding: CodeCityRenderableBuilding | null;
   setLinkViews: (on: boolean) => void;
@@ -38,6 +40,7 @@ export function DocsViewSyncProvider({
   const [linkViews, setLinkViews] = useState(defaultLinkViews);
   const [focusMode, setFocusMode] = useState(defaultFocusMode);
   const [linkedNodeId, setLinkedNodeId] = useState<string | null>(null);
+  const [cityBuildingId, setCityBuildingId] = useState<string | null>(null);
   const [enteredFilePath, setEnteredFilePath] = useState<string | null>(null);
   const [enteredBuilding, setEnteredBuilding] = useState<CodeCityRenderableBuilding | null>(
     null,
@@ -46,18 +49,28 @@ export function DocsViewSyncProvider({
   const setSelectionFromGraph = useCallback((nodeId: string | null) => {
     setLinkedNodeId(nodeId);
     setFocusMode(Boolean(nodeId));
-    if (!nodeId) {
-      setEnteredBuilding(null);
+    if (nodeId) {
+      setCityBuildingId(null);
+      return;
     }
+    setCityBuildingId(null);
+    setEnteredBuilding(null);
   }, []);
 
   const setSelectionFromCity = useCallback(
     (nodeId: string | null, building?: CodeCityRenderableBuilding | null) => {
-      setLinkedNodeId(nodeId);
-      setFocusMode(Boolean(nodeId));
-      if (building !== undefined) {
+      if (building) {
+        setCityBuildingId(building.id);
         setEnteredBuilding(building);
+        setFocusMode(true);
+        if (nodeId) {
+          setLinkedNodeId(nodeId);
+        }
+        return;
       }
+      setLinkedNodeId(nodeId);
+      setCityBuildingId(null);
+      setFocusMode(Boolean(nodeId));
     },
     [],
   );
@@ -68,6 +81,7 @@ export function DocsViewSyncProvider({
       setFocusMode(true);
       setEnteredFilePath(building.path);
       setEnteredBuilding(building);
+      setCityBuildingId(building.id);
       setLinkedNodeId(nodeId);
     },
     [],
@@ -77,11 +91,13 @@ export function DocsViewSyncProvider({
     setEnteredFilePath(null);
     setEnteredBuilding(null);
     setLinkedNodeId(null);
+    setCityBuildingId(null);
     setFocusMode(false);
   }, []);
 
   const clearSelection = useCallback(() => {
     setLinkedNodeId(null);
+    setCityBuildingId(null);
     setEnteredBuilding(null);
     setFocusMode(false);
     if (enteredFilePath) {
@@ -94,6 +110,7 @@ export function DocsViewSyncProvider({
       linkViews,
       focusMode,
       linkedNodeId,
+      cityBuildingId,
       enteredFilePath,
       enteredBuilding,
       setLinkViews,
@@ -108,6 +125,7 @@ export function DocsViewSyncProvider({
       linkViews,
       focusMode,
       linkedNodeId,
+      cityBuildingId,
       enteredFilePath,
       enteredBuilding,
       setSelectionFromGraph,

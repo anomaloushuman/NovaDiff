@@ -1,0 +1,40 @@
+{
+  "relPath": "packages/graph-view/src/App.tsx",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:46:55.028Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R264-276"
+    ],
+    "cited_changed_lines": [
+      "R264 added: useEffect(() => {",
+      "R265 added: document.documentElement.toggleAttribute(\"data-code-viewer-open\", codeViewerOpen);",
+      "R266 added: window.dispatchEvent(",
+      "R267 added: new CustomEvent(\"novadiff-code-viewer-open-change\", { detail: { open: codeViewerOpen } }),",
+      "R268 added: );",
+      "R269 added: return () => {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function DashboardContent (211-759)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

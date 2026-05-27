@@ -26,30 +26,28 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/diff-overlay.json</h1>
-    <div class="meta">Kind: removed · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:40:21.610Z</div>
+    <div class="meta">Kind: removed · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T06:49:32.092Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The file <code>.novadiff-graph/diff-overlay.json</code> has been deleted entirely (lines 1‑156). It previously stored metadata for the diff overlay, including the version, base branch, generation timestamp, lists of changed files, changed node IDs, and affected node IDs.</p>
+<p>The file <strong><code>.novadiff-graph/diff-overlay.json</code></strong> was deleted. It previously stored JSON metadata with keys <code>&quot;changedFiles&quot;</code>, <code>&quot;changedNodeIds&quot;</code>, <code>&quot;affectedNodeIds&quot;</code>, and a timestamp.</p>
 <h3>Key changes</h3>
 <ul>
-<li>Removal of the JSON file at <code>.novadiff-graph/diff-overlay.json</code>.  </li>
-<li>All persisted data (<code>&quot;changedFiles&quot;</code>, <code>&quot;changedNodeIds&quot;</code>, <code>&quot;affectedNodeIds&quot;</code>) is no longer available.  </li>
-<li>No new file or alternative storage was added in this commit.</li>
+<li>Entire file removed (lines 1‑430 deleted).  </li>
+<li>No other code changes appear in this diff.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Code that reads or writes this file (e.g., <code>fs.readFileSync(&#39;.novadiff-graph/diff-overlay.json&#39;)</code>) will now throw an <code>ENOENT</code> error.  </li>
-<li>Tests that depend on the presence of this file will fail unless updated.  </li>
-<li>The version (<code>&quot;version&quot;: &quot;1.0.0&quot;</code>) and timestamp (<code>&quot;generatedAt&quot;</code>) information are lost, reducing auditability of overlay generation.  </li>
-<li>Components that previously loaded this data for rendering (such as the graph view) must be updated to use an alternative source or handle the missing file gracefully.</li>
+<li>Any component or service that reads this file will throw a file‑not‑found error unless it is guarded.  </li>
+<li>Tests that assert the file’s existence or its contents will fail.  </li>
+<li>The removal eliminates the overhead of reading/parsing the JSON at startup, but the benefit is negligible.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression risk</strong>: Any path that assumes the file exists will crash. Run targeted tests that touch diff‑overlay logic.  </li>
-<li><strong>Compatibility risk</strong>: External tooling importing this JSON for configuration will break. Verify that no such imports remain.  </li>
-<li><strong>Observability risk</strong>: Loss of the <code>&quot;generatedAt&quot;</code> timestamp may hinder debugging of stale overlays. Consider adding a fallback logging mechanism.  </li>
-<li><strong>Documentation</strong>: Update any docs or README sections that reference the diff overlay file.</li>
+<li>Verify that any UI or logic that depended on the diff overlay data has been removed or protected against missing data.  </li>
+<li>Run the full test suite to catch residual references to the deleted file.  </li>
+<li>Update documentation or README sections that mention the diff overlay feature.  </li>
+<li>Ensure production builds do not expect this file; otherwise, the app may crash on launch.</li>
 </ul>
 </article>
   </main>

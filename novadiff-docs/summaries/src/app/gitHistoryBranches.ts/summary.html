@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/gitHistoryBranches.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/gitHistoryBranches.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:30:50.318Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new module <code>src/app/gitHistoryBranches.ts</code> is added, providing utilities for enriching branch commits, selecting default branches, creating synthetic tip commits, resolving repository roots, and formatting branch option labels.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: <code>GitBranchSummary</code>, <code>GitLogCommitSummary</code> from <code>./gitTypes</code> (R1) and <code>WorkspaceCommitSnapshot</code> from <code>./workspaceTypes</code> (R2).  </li>
+<li><strong><code>enrichBranchCommits</code></strong> (R4‑R20): maps <code>GitLogCommitSummary[]</code> to <code>WorkspaceCommitSnapshot[]</code>, using a <code>Map</code> for O(1) lookup; missing commits receive placeholder fields.  </li>
+<li><strong><code>pickDefaultBaseBranch</code></strong> (R25‑R38): selects a preferred base branch (<code>main</code>, <code>master</code>, <code>develop</code>) or falls back to the first local or any branch.  </li>
+<li><strong><code>pickDefaultHeadBranch</code></strong> (R40‑R53): prefers the current branch, then the active branch, then any local branch.  </li>
+<li><strong><code>commitFromBranchTip</code></strong> (R56‑R66): creates a synthetic <code>WorkspaceCommitSnapshot</code> for a branch tip.  </li>
+<li><strong><code>resolveGitRepoRoot</code></strong> (R68‑R77): resolves the repo root from an override, live‑dev root, or workspace root.  </li>
+<li><strong><code>branchOptionLabel</code></strong> (R79‑R89): formats a branch name with short hash and tags (<code>current</code>, <code>remote</code>).</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Centralizes branch‑related logic, reducing duplication across the codebase.  </li>
+<li>Exposes utilities for UI components and tests, simplifying future refactors.  </li>
+<li><code>enrichBranchCommits</code> builds a <code>Map</code> for efficient lookup, keeping enrichment linear in commit count.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Type safety</strong>: confirm that <code>GitBranchSummary</code> and <code>WorkspaceCommitSnapshot</code> definitions match usage in all consumers (unknown from the available diff).  </li>
+<li><strong>Branch selection logic</strong>: verify behavior when no local branches exist (unknown from the available diff).  </li>
+<li><strong>Synthetic commit timestamps</strong>: <code>new Date().toISOString()</code> may affect downstream code (unknown from the available diff).  </li>
+<li><strong>Build &amp; lint</strong>: run the repo’s lint, test, and production build scripts to catch integration issues introduced by the new file (unknown from the available diff).</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

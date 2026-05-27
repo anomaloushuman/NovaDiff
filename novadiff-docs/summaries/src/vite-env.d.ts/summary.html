@@ -26,34 +26,36 @@
 <body>
   <header class="top">
     <h1>src/vite-env.d.ts</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:51:47.483Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:24:38.755Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>ElectronAPI</code> interface in <code>src/vite-env.d.ts</code> has been extended with five new methods that expose additional Git and snapshot functionality to the renderer process. The changes are located in the file’s latter section (lines 293‑301 and 347‑354).</p>
+<p>The <code>src/vite-env.d.ts</code> file now imports <code>SecurityInsightReport</code> from <code>./app/types</code> (line 13) and extends the <code>ElectronAPI</code> interface with a new <code>scanSecurityInsights</code> method (lines 186‑190). This expands the renderer‑to‑main API surface to support security‑insight scanning.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>gitStagePaths</code></strong> (lines 293‑294) – stages a list of file paths in a repository and returns the number of files staged.  </li>
-<li><strong><code>gitStageDistrict</code></strong> (lines 295‑297) – stages all files under a specified directory subtree and reports the staged count.  </li>
-<li><strong><code>exportProjectSnapshot</code></strong> (lines 298‑301) – creates a ZIP archive of a project snapshot, returning the ZIP path and byte size.  </li>
-<li><strong><code>gitCommitDetail</code></strong> (lines 347‑350) – retrieves detailed commit information for a given hash.  </li>
-<li><strong><code>githubCommitContext</code></strong> (lines 351‑354) – fetches GitHub commit context data for a repository and SHA.</li>
+<li><strong>Import added</strong>: <code>SecurityInsightReport</code> from <code>./app/types</code> (line 13).  </li>
+<li><strong>API method added</strong>:```ts
+scanSecurityInsights: (payload: {
+  projectRoot: string;
+  changes: FileChange[];
+  advisoryEnabled?: boolean;
+}) =&gt; Promise<SecurityInsightReport>;</li>
 </ul>
-<h3>Impact</h3>
-<p>These additions give the renderer process direct access to:</p>
-<ul>
-<li>Programmatic staging of files or directories, enabling UI‑driven Git workflows.  </li>
-<li>Exporting a project snapshot for backup or sharing.  </li>
-<li>Inspecting commit metadata and GitHub context without additional API calls.<br>The interface changes are purely type declarations; actual implementation must exist in the main process to make the calls functional.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Implementation gap</strong> – the new methods are only declared; if the main process lacks corresponding handlers, calls will fail.  </li>
-<li><strong>Security</strong> – exposing Git staging and snapshot export may require permission checks; review access controls.  </li>
-<li><strong>Testing</strong> – add unit and integration tests to verify that the renderer can invoke these methods and that the returned data matches expectations.  </li>
-<li><strong>Documentation</strong> – update API docs and example usage to reflect the new capabilities.</li>
-</ul>
-<p>Unknown from the available diff/scan evidence: whether the main process has been updated to support these calls.</p>
+<pre><code class="language-(lines">- No other interface members were modified.
+
+### Impact
+
+- **Compile‑time**: Code that imports `ElectronAPI` will now require the new method; missing implementation will cause type errors.  
+- **Runtime**: The main process must expose `scanSecurityInsights` via the preload script; otherwise renderer calls will fail.  
+- **Testing**: Mocks of `ElectronAPI` need to include the new method to avoid undefined errors.  
+- **Documentation**: API docs and README snippets should be updated to reflect the new capability.
+
+### Risks &amp; follow‑ups
+- **Missing implementation**: If the main process or preload script does not expose `scanSecurityInsights`, renderer calls will throw at runtime.  
+- **Type leakage**: Ensure `SecurityInsightReport` is exported from its module; otherwise imports will fail.  
+- **Backward compatibility**: Existing code that accesses `electronAPI` without checking for the new method may compile but fail if the method is absent. Add optional chaining or guard checks where appropriate.  
+- **Test coverage**: Update unit tests that mock `ElectronAPI` to include the new method; otherwise tests may pass locally but fail in CI where the mock is stricter.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

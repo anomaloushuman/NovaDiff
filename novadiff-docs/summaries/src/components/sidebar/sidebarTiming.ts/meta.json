@@ -1,0 +1,45 @@
+{
+  "relPath": "src/components/sidebar/sidebarTiming.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:43:40.468Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R2 added: export const SIDEBAR_LEAVE_DELAY_MS = 160;",
+      "R5 added: export const SIDEBAR_ERASE_FALLBACK_MS = 580;",
+      "R8 added: export const SIDEBAR_WIDTH_TRANSITION_MS = 320;",
+      "R11 added: export const SIDEBAR_FORCE_COLLAPSE_MS ="
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-12"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /** Debounce before erase starts after pointer/focus leaves. */",
+      "R2 added: export const SIDEBAR_LEAVE_DELAY_MS = 160;",
+      "R4 added: /** Max wait for label erase before panel width closes. */",
+      "R5 added: export const SIDEBAR_ERASE_FALLBACK_MS = 580;",
+      "R7 added: /** CSS width transition on `.launch-panel--side` / `.sidebar`. */",
+      "R8 added: export const SIDEBAR_WIDTH_TRANSITION_MS = 320;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

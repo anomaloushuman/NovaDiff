@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/graphCityBridge.ts",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:55:32.399Z",
+  "generatedAt": "2026-05-26T19:32:14.058Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -20,42 +20,40 @@
       }
     ],
     "changed_exports": [
-      "R10 added: export interface CityEdgeOverlay {",
-      "R74 added: export function graphNodeToCityBuildingIds(",
-      "R117 added: export function cityBuildingToGraphNodeId(",
-      "R148 added: export function buildBuildingIdByGraphNode(",
-      "R167 added: export function graphEdgesToCityPairs(",
-      "R208 added: export function graphNeighborNodeIds("
+      "R264 added: export function graphNodeIdsForCityLayout("
     ],
-    "changed_imports": [
-      "R1 added: import type { GraphEdge, KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R2 added: import type {",
-      "R6 added: import type { CodeCityRootSide } from \"./types\";"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-307"
+      "R16-35",
+      "L25-34 / R45-46",
+      "L37-46 / R49-50",
+      "L78 / R82",
+      "R95-102",
+      "L94-96",
+      "L111-113 / R120",
+      "L132-134 / R139-148"
     ],
     "cited_changed_lines": [
-      "R1 added: import type { GraphEdge, KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R2 added: import type {",
-      "R3 added: CodeCityLayoutResult,",
-      "R4 added: CodeCityRenderableBuilding,",
-      "R5 added: } from \"./codeCityLayout\";",
-      "R6 added: import type { CodeCityRootSide } from \"./types\";"
+      "R16 added: function parseSymbolNodeRest(",
+      "R17 added: rest: string,",
+      "R18 added: ): { filePath: string | null; symbolName: string | null } {",
+      "R19 added: const parts = rest.split(\":\");",
+      "R20 added: if (parts.length < 2) {",
+      "R21 added: return { filePath: rest || null, symbolName: null };"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function cityBuildingIdsForHighlight (250-307)",
-      "right function graphNodeToCityBuildingIds (74-116)",
-      "right function graphEdgesToCityPairs (167-207)",
-      "right function parseGraphNodeId (16-50)",
-      "right function cityBuildingToGraphNodeId (117-147)",
-      "right function buildingMatchesSymbol (51-73)",
-      "right function filePathForLinkedSelection (229-249)",
-      "right function graphNeighborNodeIds (208-228)"
+      "left function parseGraphNodeId (16-50)",
+      "left function cityBuildingIdsForHighlight (250-307)",
+      "left function graphNodeToCityBuildingIds (74-116)",
+      "left function cityBuildingToGraphNodeId (117-147)",
+      "left function buildBuildingIdByGraphNode (148-166)",
+      "left function filePathForLinkedSelection (229-249)",
+      "right function cityBuildingIdsForHighlight (287-358)",
+      "right function graphNodeIdsForCityLayout (264-286)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

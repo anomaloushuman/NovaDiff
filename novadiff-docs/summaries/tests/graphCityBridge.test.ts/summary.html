@@ -26,38 +26,31 @@
 <body>
   <header class="top">
     <h1>tests/graphCityBridge.test.ts</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:39:08.656Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:17:34.324Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new test suite <code>tests/graphCityBridge.test.ts</code> has been added to validate the mapping utilities in <code>graphCityBridge</code>. The file imports Vitest, <code>KnowledgeGraph</code>, and several helper functions (<code>cityBuildingIdsForHighlight</code>, <code>cityBuildingToGraphNodeId</code>, <code>graphEdgesToCityPairs</code>, <code>graphNodeToCityBuildingIds</code>) along with CodeCity layout types.</p>
+<p>The <code>graphCityBridge</code> test suite was extended to cover additional edge‑case scenarios. New imports and tests validate line‑suffix handling, missing graph nodes, and graph‑node visibility logic.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Test file added</strong>: <code>tests/graphCityBridge.test.ts</code> (≈121 lines).  </li>
-<li><strong>Imports</strong>: <code>vitest</code> helpers, <code>KnowledgeGraph</code> type, and the four mapping functions from <code>../src/app/graphCityBridge</code>.  </li>
-<li><strong>Helper <code>building()</code></strong>: constructs <code>CodeCityRenderableBuilding</code> objects with default geometry and overrides.  </li>
-<li><strong>Sample layout &amp; graph</strong>: a minimal <code>CodeCityLayoutResult</code> with two buildings (function <code>foo</code> and class <code>Bar</code>) and a corresponding <code>KnowledgeGraph</code> containing nodes and a single <code>calls</code> edge.  </li>
-<li><strong>Four test cases</strong>:  <ol>
-<li><code>graphNodeToCityBuildingIds</code> maps a function node to its city building ID.  </li>
-<li><code>cityBuildingToGraphNodeId</code> reverses the mapping.  </li>
-<li><code>cityBuildingIdsForHighlight</code> returns all building IDs for a file node.  </li>
-<li><code>graphEdgesToCityPairs</code> produces overlay pairs for a selected node.</li>
-</ol>
-</li>
+<li><strong>Import added</strong>: <code>graphNodeIdsForCityLayout</code> is now imported at line 7.  </li>
+<li><strong>Test “maps disambiguated function node ids with line suffix”</strong> (lines 113‑131) checks that a node id such as <code>function:src/a.ts:foo:42</code> maps to the city building <code>target:src/a.ts:function:foo:1</code>.  </li>
+<li><strong>Test “highlights from city building id when graph node is missing”</strong> (lines 133‑141) verifies that <code>cityBuildingIdsForHighlight</code> returns a primary id and highlights related buildings even when the graph argument is <code>null</code>.  </li>
+<li><strong>Test “collects graph node ids for visible city buildings”</strong> (lines 146‑155) ensures <code>graphNodeIdsForCityLayout</code> returns a set containing the file and function nodes but excludes unrelated class nodes.  </li>
+<li>Minor formatting adjustments keep test imports consistent.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Correctness</strong>: Provides concrete assertions for the mapping logic, reducing silent regressions.  </li>
-<li><strong>Maintainability</strong>: Centralizes test data; future changes to node/building IDs must update this file.  </li>
-<li><strong>Observability</strong>: Test failures will surface mapping mismatches immediately during CI.  </li>
-<li><strong>Compatibility</strong>: No changes to production code; only test additions.</li>
+<li><strong>Correctness</strong>: The added tests confirm that line‑suffix node ids resolve correctly and that missing graph data is handled without errors.  </li>
+<li><strong>Maintainability</strong>: Centralizing node‑id collection in <code>graphNodeIdsForCityLayout</code> reduces duplication across tests.  </li>
+<li><strong>Observability</strong>: New tests surface regressions in mapping logic early in CI.  </li>
+<li><strong>Compatibility</strong>: No API changes; only test coverage expansion.</li>
 </ul>
-<h3>Risks &amp; follow-ups</h3>
+<h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Regression risk</strong>: If <code>graphCityBridge</code> functions change signatures or ID conventions, tests will fail; verify that the mapping logic remains stable.  </li>
-<li><strong>Snapshot drift</strong>: No snapshots used, but any change to default geometry in <code>building()</code> may require test updates.  </li>
-<li><strong>Linting</strong>: Ensure the new file passes the repo’s TS lint rules (<code>tsc</code>, <code>eslint</code>).  </li>
-<li><strong>Build impact</strong>: Run <code>npm run build</code> to confirm the added test does not introduce build-time errors.</li>
+<li>If <code>graphNodeToCityBuildingIds</code> or <code>cityBuildingIdsForHighlight</code> are modified elsewhere, the new tests may fail; run the full suite after such changes.  </li>
+<li>Ensure <code>graphNodeIdsForCityLayout</code> is exported correctly; otherwise the tests will error.  </li>
+<li>Verify that <code>cityBuildingIdsForHighlight</code> accepts a <code>null</code> graph without throwing; the test covers this but may require defensive coding.</li>
 </ul>
 </article>
   </main>

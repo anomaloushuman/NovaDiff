@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/securityInsights.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/securityInsights.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:33:16.839Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new file <code>src/app/securityInsights.ts</code> has been added. It introduces utilities for working with <code>RiskSignal</code> objects: sorting, merging, and grouping into semantic categories.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import</strong> – line 1: <code>import type { RiskSignal } from &quot;./types&quot;;</code> brings the <code>RiskSignal</code> type into scope.  </li>
+<li><strong>sortRiskSignals</strong> – lines 9‑16: sorts an array of <code>RiskSignal</code> by severity (<code>high</code> → <code>low</code>) using a rank map, then by category and title.  </li>
+<li><strong>mergeRiskSignals</strong> – lines 18‑30: combines two arrays (<code>heuristic</code>, <code>advisory</code>), removes duplicates by <code>id</code> (keeping the last occurrence), and returns the result sorted via <code>sortRiskSignals</code>.  </li>
+<li><strong>SecurityInsightGroups</strong> – lines 32‑38: interface defining five groups (<code>vulnerabilities</code>, <code>dependenciesConfig</code>, <code>memoryLeaks</code>, <code>functionCompleteness</code>, <code>others</code>).  </li>
+<li><strong>groupSecuritySignals</strong> – lines 40‑79: sorts the input, then assigns each signal to a group based on case‑insensitive string checks on <code>category</code> or <code>source</code>. Signals with <code>source === &quot;advisory&quot;</code> or categories containing <code>&quot;cve&quot;</code> or <code>&quot;vulner&quot;</code> go to <code>vulnerabilities</code>; <code>&quot;memory&quot;</code> → <code>memoryLeaks</code>; <code>&quot;completeness&quot;</code> or <code>&quot;coverage-gap&quot;</code> → <code>functionCompleteness</code>; <code>&quot;dependency&quot;</code>, <code>&quot;config&quot;</code>, <code>&quot;auth&quot;</code>, or <code>&quot;build&quot;</code> → <code>dependenciesConfig</code>; all others go to <code>others</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides deterministic ordering and de‑duplication of <code>RiskSignal</code> objects.  </li>
+<li>Centralizes signal handling logic in a single module, simplifying future extensions.  </li>
+<li>Sorting uses <code>Array.sort</code>, which is O(n log n); grouping is linear after sorting.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression</strong> – ensure existing consumers of <code>RiskSignal</code> data continue to work when the new grouping logic is applied.  </li>
+<li><strong>Edge cases</strong> – <code>mergeRiskSignals</code> skips items lacking an <code>id</code>; <code>sortRiskSignals</code> defaults unknown severities to rank 3.  </li>
+<li><strong>Category heuristics</strong> – the string‑matching logic is case‑insensitive but may misclassify custom categories; review thresholds if new categories appear.  </li>
+<li><strong>Testing</strong> – add unit tests covering sorting order, merge deduplication, and group assignment to guard against future changes.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

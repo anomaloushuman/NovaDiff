@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { GraphNode } from "@novadiff/graph-core/types";
 import { createPortal } from "react-dom";
 import { Highlight, themes } from "prism-react-renderer";
 import { useDashboardStore } from "../store";
@@ -59,6 +60,20 @@ function formatBytes(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+/** Line range from node metadata or disambiguated graph id (`function:path:name:42`). */
+function lineRangeForNode(node: GraphNode): [number, number] | null {
+  if (node.lineRange) {
+    return node.lineRange;
+  }
+  const parts = node.id.split(":");
+  const last = parts[parts.length - 1];
+  if (/^\d+$/.test(last) && parts.length >= 3) {
+    const line = Number.parseInt(last, 10);
+    return [line, line];
+  }
+  return null;
+}
+
 export default function CodeViewer({
   accessToken,
   presentation = "sidebar",
@@ -91,6 +106,8 @@ export default function CodeViewer({
   const [explainLoading, setExplainLoading] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
   const [explainSavedHint, setExplainSavedHint] = useState<string | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const scrollTargetLineRef = useRef<number | null>(null);
 
   const userSelection = useMemo(() => {
     if (selectAnchor == null || selectEnd == null) {
@@ -176,11 +193,48 @@ export default function CodeViewer({
     if (userSelection) {
       return userSelection;
     }
-    if (!node?.lineRange) {
+    if (!node) {
       return null;
     }
-    return { start: node.lineRange[0], end: node.lineRange[1] };
-  }, [node?.lineRange, userSelection]);
+    const range = lineRangeForNode(node);
+    if (!range) {
+      return null;
+    }
+    return { start: range[0], end: range[1] };
+  }, [node, userSelection]);
+
+  useEffect(() => {
+    scrollTargetLineRef.current = null;
+  }, [node?.id]);
+
+  useEffect(() => {
+    if (state.status !== "loaded" || !highlightedRange || userSelection) {
+      return;
+    }
+    const targetLine = highlightedRange.start;
+    if (scrollTargetLineRef.current === targetLine) {
+      return;
+    }
+    scrollTargetLineRef.current = targetLine;
+    const container = scrollContainerRef.current;
+    if (!container) {
+      return;
+    }
+    const scrollToLine = () => {
+      const row = container.querySelector<HTMLElement>(
+        `[data-code-line="${targetLine}"]`,
+      );
+      if (row) {
+        row.scrollIntoView({ block: "center", behavior: "smooth" });
+        return;
+      }
+      const lineHeight = 20;
+      container.scrollTop = Math.max(0, (targetLine - 4) * lineHeight);
+    };
+    requestAnimationFrame(() => {
+      requestAnimationFrame(scrollToLine);
+    });
+  }, [state.status, highlightedRange, userSelection, node?.id]);
 
   const handleLineClick = useCallback((lineNumber: number, shiftKey: boolean) => {
     if (shiftKey && selectAnchor != null) {
@@ -206,14 +260,16 @@ export default function CodeViewer({
     : t.codeViewer.fullFile;
   const isModal = presentation === "modal";
   const handleClose = onClose ?? closeCodeViewer;
+  const nodeRange = lineRangeForNode(node);
+  const explainRange = userSelection ?? (nodeRange ? { start: nodeRange[0], end: nodeRange[1] } : null);
 
   const runExplainCode = useCallback(async () => {
-    if (!embed.explainCode || !node?.filePath || !userSelection || state.status !== "loaded") {
+    if (!embed.explainCode || !node?.filePath || !explainRange || state.status !== "loaded") {
       return;
     }
     const fileSource = state.source;
     const lines = fileSource.content.split(/\r?\n/);
-    const snippet = lines.slice(userSelection.start - 1, userSelection.end).join("\n");
+    const snippet = lines.slice(explainRange.start - 1, explainRange.end).join("\n");
     if (!snippet.trim()) {
       return;
     }
@@ -226,8 +282,8 @@ export default function CodeViewer({
       const finalText = await embed.explainCode(
         {
           filePath: node.filePath,
-          startLine: userSelection.start,
-          endLine: userSelection.end,
+          startLine: explainRange.start,
+          endLine: explainRange.end,
           snippet,
           symbolName: node.name,
         },
@@ -235,14 +291,14 @@ export default function CodeViewer({
       );
       setExplainText(finalText);
       setExplainSavedHint(
-        `Saved to novadiff-docs/selections/${node.filePath}/lines-${userSelection.start}-${userSelection.end}/`,
+        `Saved to novadiff-docs/selections/${node.filePath}/lines-${explainRange.start}-${explainRange.end}/`,
       );
     } catch (e) {
       setExplainError(e instanceof Error ? e.message : String(e));
     } finally {
       setExplainLoading(false);
     }
-  }, [embed.explainCode, node?.filePath, node?.name, state, userSelection]);
+  }, [embed.explainCode, node?.filePath, node?.name, state, explainRange]);
 
   return (
     <div className="h-full w-full flex flex-col bg-surface overflow-hidden">
@@ -271,14 +327,14 @@ export default function CodeViewer({
           )}
         </div>
         <div className="flex items-center gap-2 shrink-0">
-          {embed.explainCode && userSelection && state.status === "loaded" ? (
+          {embed.explainCode && explainRange && state.status === "loaded" ? (
             <button
               type="button"
               onClick={() => void runExplainCode()}
               disabled={explainLoading}
               className={`novadiff-explain-code-btn${explainLoading ? " is-thinking" : ""}`}
             >
-              {explainLoading ? "Thinking" : "Explain code"}
+              {explainLoading ? "Thinking" : userSelection ? "Explain code" : "Explain function"}
             </button>
           ) : null}
           {onExpand && (
@@ -308,7 +364,7 @@ export default function CodeViewer({
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-auto bg-root">
+      <div ref={scrollContainerRef} className="flex-1 min-h-0 overflow-auto bg-root">
         {state.status === "loading" && (
           <div className="p-5 text-sm text-text-muted">{t.codeViewer.loading}</div>
         )}
@@ -358,6 +414,7 @@ export default function CodeViewer({
                     return (
                       <div
                         key={lineNumber}
+                        data-code-line={lineNumber}
                         {...lineProps}
                         className={`${lineProps.className} flex ${
                           isUserSelected
@@ -394,8 +451,8 @@ export default function CodeViewer({
             open={explainOpen}
             title="Explain code"
             subtitle={
-              node.filePath && userSelection
-                ? `${node.filePath} · lines ${userSelection.start}–${userSelection.end}`
+              node.filePath && explainRange
+                ? `${node.filePath} · lines ${explainRange.start}–${explainRange.end}`
                 : undefined
             }
             text={explainText}

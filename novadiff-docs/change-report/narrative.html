@@ -522,7 +522,7 @@
         <h1>AI project narrative</h1>
         <p class="top-subtitle">Readable long-form documentation for the compare, with section navigation and cleaner Markdown rendering.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: f7c2bfd81af2</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-21T11:28:43.155Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 9aadd5eb5604</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-27T03:53:47.876Z</span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -538,106 +538,122 @@
   </div>
   <main class="content">
     <div class="content-main">
-      <article class="content-card md"><h2 id="workspace-overview-roots-comparison-intent-scale-of-change"><a class="heading-anchor" href="#workspace-overview-roots-comparison-intent-scale-of-change" aria-label="Link to Workspace overview — roots, comparison intent, scale of change">#</a>Workspace overview — roots, comparison intent, scale of change</h2>
-<p>The diff compares a snapshot stored under<br><code>/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/f7c2bfd81af2</code><br>with the current repository at<br><code>/Users/iamgroot/Documents/GitHub/NovaDiff</code>.<br>A total of <strong>62</strong> paths were touched: <strong>35 modified</strong>, <strong>23 added</strong>, <strong>4 removed</strong>.<br>The majority of changes cluster in the <code>src/</code>, <code>electron/</code>, and <code>packages/graph-view/</code> directories, indicating a focus on UI, Electron integration, and graph‑view logic.</p>
-<h2 id="change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit"><a class="heading-anchor" href="#change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit" aria-label="Link to Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition">#</a>Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition</h2>
+      <article class="content-card md"><h3 id="workspace-overview-roots-comparison-intent-scale-of-change"><a class="heading-anchor" href="#workspace-overview-roots-comparison-intent-scale-of-change" aria-label="Link to Workspace overview — roots, comparison intent, scale of change">#</a>Workspace overview — roots, comparison intent, scale of change</h3>
+<p>The baseline snapshot lives in the hidden NovaDiff workspace directory (<code>/Users/iamgroot/Library/Application Support/novadiff/.../snapshots/9aadd5eb5604</code>), while the target is the active GitHub repository (<code>/Users/iamgroot/Documents/GitHub/NovaDiff</code>). The diff covers <strong>71 paths</strong>: <strong>21 additions</strong> and <strong>50 modifications</strong>; no deletions were reported.</p>
+<p>Depth analysis shows most changes at depth 3 (28 files), with 12 at depth 4 and 8 at depth 5. The change set is concentrated in three top‑level segments: <code>src/</code>, <code>packages/</code>, and <code>electron/</code>, indicating a focus on UI, core graph logic, and Electron services.</p>
+<h3 id="change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit"><a class="heading-anchor" href="#change-landscape-interpret-counts-dominant-extensions-depth-hotspots-risk-intuit" aria-label="Link to Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition">#</a>Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition</h3>
 <ul>
-<li><strong>File types</strong>  <ul>
-<li><code>.tsx</code> (24) and <code>.ts</code> (17) dominate, reflecting UI and core logic updates.  </li>
-<li><code>.cjs</code> (13) shows new CommonJS modules for Electron.  </li>
-<li><code>.json</code> and <code>.css</code> changes are minimal.</li>
+<li><strong>File types</strong>: 32 <code>.ts</code>, 22 <code>.tsx</code>, 8 <code>.cjs</code>, 5 <code>.json</code>, 3 <code>.css</code>, 1 <code>.rs</code>.  </li>
+<li><strong>Depth distribution</strong>: 28 files at depth 3, 12 at depth 4, 8 at depth 5.  </li>
+<li><strong>Hotspots</strong>:  <ul>
+<li><code>electron/</code> – 7 modified <code>.cjs</code> modules (e.g., <code>code-city-model.cjs</code>, <code>git-service.cjs</code>).  </li>
+<li><code>packages/</code> – 14 modified TypeScript files in <code>graph-core</code>.  </li>
+<li><code>src/</code> – 36 modified UI and glue code.</li>
 </ul>
 </li>
-<li><strong>Path depth</strong>  <ul>
-<li>27 paths at depth 3, 9 at depth 4, 4 at depth 5.  </li>
-<li>Depth‑4 changes are mainly in <code>electron/</code> and <code>packages/graph-view/</code>.</li>
-</ul>
-</li>
-<li><strong>Risk signals</strong>  <ul>
-<li><code>vite.config.ts</code> was modified (deterministic risk: medium).  </li>
-<li>Removal of <code>.novadiff-graph/config.json</code>, <code>diff-overlay.json</code>, and <code>meta.json</code> may break legacy graph‑generation workflows.  </li>
-<li>New Electron modules (<code>export-snapshot.cjs</code>, <code>git-commit.cjs</code>, <code>git-publish.cjs</code>) introduce runtime dependencies on Git and GitHub, raising security and authentication concerns.</li>
+<li><strong>Risk signals</strong>:  <ul>
+<li><strong>High‑severity</strong>: <code>cli/src/main.rs</code> contains patterns <code>Box::leak(</code>, <code>mem::forget(</code>, <code>ManuallyDrop::new(</code> (R1313‑R1315).  </li>
+<li><strong>Medium‑severity</strong>: <code>vite.config.ts</code> was touched; configuration changes may affect builds.  </li>
+<li><strong>Medium‑high</strong>: <code>package.json</code> and <code>package-lock.json</code> were modified; dependency versions may shift.  </li>
+<li><strong>Medium‑high</strong>: <code>electron/git-service.cjs</code> added parsing helpers (R237‑248, R250‑269, R271‑311, R314‑330, R332‑33) that could alter Git semantics.</li>
 </ul>
 </li>
 </ul>
-<h2 id="subsystem-map-group-paths-into-coherent-areas"><a class="heading-anchor" href="#subsystem-map-group-paths-into-coherent-areas" aria-label="Link to Subsystem map — group paths into coherent areas">#</a>Subsystem map — group paths into coherent areas</h2>
-<ul>
-<li><strong>Electron core</strong> (<code>electron/</code>)  <ul>
-<li>New modules: <code>export-snapshot.cjs</code>, <code>git-commit.cjs</code>, <code>git-publish.cjs</code>.  </li>
-<li>Updated <code>git-service.cjs</code> and <code>github-service.cjs</code> to support staged paths.</li>
-</ul>
-</li>
-<li><strong>Graph view UI</strong> (<code>packages/graph-view/src/</code>)  <ul>
-<li>Updated explorer components (<code>NovaDiffGraphExplorer.tsx</code>, <code>NovaDiffGraphExplorerEmbed.tsx</code>).  </li>
-<li>Added selection clustering utilities (<code>selectionCluster.ts</code>) and tests (<code>selectionCluster.test.ts</code>).</li>
-</ul>
-</li>
-<li><strong>Application logic</strong> (<code>src/</code>)  <ul>
-<li>Commit analysis (<code>commitChangeAnalysis.ts</code>), file tree (<code>fileTree.ts</code>), workspace storage (<code>workspaceStorage.ts</code>).  </li>
-<li>New UI helpers: <code>DocsViewSyncContext.tsx</code>, <code>DocumentationWorkspace.tsx</code>.</li>
-</ul>
-</li>
-<li><strong>Configuration &amp; tooling</strong>  <ul>
-<li><code>vite.config.ts</code> change.  </li>
-<li>Removal of legacy <code>.novadiff-graph</code> config files.  </li>
-<li>New <code>novadiff-docs-html.cjs</code> for HTML rendering of docs.</li>
-</ul>
-</li>
-<li><strong>Testing</strong>  <ul>
-<li>Single test file <code>graphCityBridge.test.ts</code> added.</li>
-</ul>
-</li>
-</ul>
-<h2 id="cross-cutting-concerns-security-build-release-migrations-observability"><a class="heading-anchor" href="#cross-cutting-concerns-security-build-release-migrations-observability" aria-label="Link to Cross-cutting concerns — security, build/release, migrations, observability">#</a>Cross-cutting concerns — security, build/release, migrations, observability</h2>
+<h3 id="subsystem-map-group-paths-into-coherent-areas-config-tests-app-infra-vendor-usin"><a class="heading-anchor" href="#subsystem-map-group-paths-into-coherent-areas-config-tests-app-infra-vendor-usin" aria-label="Link to Subsystem map — group paths into coherent areas (config, tests, app, infra, vendor…) using only evidence from the sample paths and top segments">#</a>Subsystem map — group paths into coherent areas (config, tests, app, infra, vendor…) using only evidence from the sample paths and top segments</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Representative paths</th>
+<th>Key changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Configuration</strong></td>
+<td><code>vite.config.ts</code>, <code>package.json</code>, <code>package-lock.json</code></td>
+<td>Updated build settings and dependencies</td>
+</tr>
+<tr>
+<td><strong>Electron services</strong></td>
+<td><code>electron/*.cjs</code> (e.g., <code>code-city-model.cjs</code>, <code>git-service.cjs</code>, <code>knowledge-graph-runner.cjs</code>)</td>
+<td>New imports, helper functions, traversal logic</td>
+</tr>
+<tr>
+<td><strong>Graph core</strong></td>
+<td><code>packages/graph-core/src/*</code> (analyzer, ignore‑filter, tests)</td>
+<td>Updated graph builder logic</td>
+</tr>
+<tr>
+<td><strong>UI / App</strong></td>
+<td><code>src/*</code> (components, contexts, styles)</td>
+<td>UI component updates</td>
+</tr>
+<tr>
+<td><strong>CLI tooling</strong></td>
+<td><code>cli/src/main.rs</code></td>
+<td>Rust lifetime patterns, new command logic</td>
+</tr>
+<tr>
+<td><strong>Testing</strong></td>
+<td><code>tests/*</code></td>
+<td>Unit tests for layout, git history, security insights</td>
+</tr>
+<tr>
+<td><strong>Documentation artifacts</strong></td>
+<td><code>.novadiff-graph/*</code></td>
+<td>Removal of legacy diff overlay and knowledge‑graph files</td>
+</tr>
+</tbody></table>
+<h3 id="cross-cutting-concerns-security-build-release-migrations-observability-flag-unkn"><a class="heading-anchor" href="#cross-cutting-concerns-security-build-release-migrations-observability-flag-unkn" aria-label="Link to Cross-cutting concerns — security, build/release, migrations, observability (flag unknowns honestly)">#</a>Cross-cutting concerns — security, build/release, migrations, observability (flag unknowns honestly)</h3>
 <ul>
 <li><strong>Security</strong>  <ul>
-<li>GitHub authentication flows (<code>github-auth-flow.cjs</code>, <code>github-commit-context.cjs</code>) now exposed in the main process; ensure tokens are not logged.  </li>
-<li>LLM module (<code>llm.cjs</code>) may send user code to external services; verify compliance with privacy policies.</li>
+<li><code>electron/code-city-model.cjs</code> now imports Node’s <code>path</code> module (line 3); path handling must be validated.  </li>
+<li>New Git parsing helpers in <code>electron/git-service.cjs</code> could misinterpret malformed output.</li>
 </ul>
 </li>
 <li><strong>Build/Release</strong>  <ul>
-<li><code>vite.config.ts</code> alteration could affect asset bundling; run a full build test.  </li>
-<li>Electron packaging must include new <code>.cjs</code> modules; update <code>package.json</code> scripts accordingly.</li>
+<li>Addition of <code>.cjs</code> modules and changes to <code>package.json</code> may raise the required Node runtime version.  </li>
+<li>Rust code in <code>cli/src/main.rs</code> references <code>Box::leak</code> and <code>mem::forget</code>; build flags and memory safety need review.</li>
 </ul>
 </li>
 <li><strong>Migrations</strong>  <ul>
-<li>Deletion of <code>.novadiff-graph/config.json</code> and related files requires updating any scripts that load graph configuration.  </li>
-<li>Existing snapshots may need regeneration to include new snapshot export format.</li>
+<li>Deletion of <code>.novadiff-graph/diff-overlay.json</code> and <code>.novadiff-graph/knowledge-graph.json</code> indicates a shift away from the legacy snapshot format.  </li>
+<li><code>electron/knowledge-graph-runner.cjs</code> added <code>SKIP_DIRS</code> entries (<code>&quot;venv&quot;</code>, <code>&quot;.venv&quot;</code>, <code>&quot;.venv-main&quot;</code>) at R32‑R34; existing analyses may need re‑run.</li>
 </ul>
 </li>
 <li><strong>Observability</strong>  <ul>
-<li>New modules lack explicit logging; consider adding console traces for debugging.  </li>
-<li>No new metrics are introduced, but the LLM module may benefit from response‑time monitoring.</li>
+<li>No new telemetry hooks were added, but the expanded test suite may surface performance regressions in graph layout (<code>packages/graph-view/src/utils/elk-layout.ts</code>).  </li>
+<li>Unknown: whether the new CLI memory‑leak patterns affect runtime metrics; requires profiling.</li>
 </ul>
 </li>
 </ul>
-<h2 id="documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-"><a class="heading-anchor" href="#documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-" aria-label="Link to Documentation &amp;amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate">#</a>Documentation &amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate</h2>
+<h3 id="documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-"><a class="heading-anchor" href="#documentation-amp-tooling-gaps-what-would-require-doxygen-clangd-tree-sitter-or-" aria-label="Link to Documentation &amp;amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate">#</a>Documentation &amp; tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate</h3>
 <ul>
-<li><strong>CJS modules</strong>: Added CommonJS files lack type declarations; static analysis tools (e.g., TypeScript’s <code>--allowJs</code>) could flag missing exports.  </li>
-<li><strong>LLM integration</strong>: Runtime profiling is needed to measure latency and token usage; no compile‑time checks exist.  </li>
-<li><strong>Graph view utilities</strong>: The selection clustering logic (<code>utils/selectionCluster.ts</code>) is complex; unit tests cover basic cases but deeper integration tests would confirm correctness.  </li>
-<li><strong>GitHub API usage</strong>: Mocking of GitHub responses is not present; integration tests should verify error handling for rate limits.</li>
+<li><strong>Rust lifetime safety</strong>: The high‑severity patterns in <code>cli/src/main.rs</code> cannot be fully verified without a Rust compiler lint run or a memory profiler.  </li>
+<li><strong>Git output parsing</strong>: The helpers added to <code>electron/git-service.cjs</code> need integration tests against diverse Git repositories to confirm correctness.  </li>
+<li><strong>Graph traversal correctness</strong>: The updated <code>SKIP_DIRS</code> logic in <code>electron/knowledge-graph-runner.cjs</code> should be exercised against projects containing virtual environments to ensure they are truly excluded.  </li>
+<li><strong>Electron security</strong>: Runtime checks for path traversal in the renderer should be validated with a sandboxed test harness.</li>
 </ul>
-<h2 id="suggested-verification-tests-manual-checks-staged-rollout"><a class="heading-anchor" href="#suggested-verification-tests-manual-checks-staged-rollout" aria-label="Link to Suggested verification — tests, manual checks, staged rollout">#</a>Suggested verification — tests, manual checks, staged rollout</h2>
+<h3 id="suggested-verification-tests-manual-checks-staged-rollout"><a class="heading-anchor" href="#suggested-verification-tests-manual-checks-staged-rollout" aria-label="Link to Suggested verification — tests, manual checks, staged rollout">#</a>Suggested verification — tests, manual checks, staged rollout</h3>
 <ul>
 <li><strong>Unit tests</strong>  <ul>
-<li>Run <code>npm test</code> to cover new <code>selectionCluster.test.ts</code> and existing tests.  </li>
-<li>Add tests for <code>git-publish.cjs</code> staged‑path logic.</li>
+<li>Expand tests for <code>electron/git-service.cjs</code> to cover edge‑case Git status outputs.  </li>
+<li>Add tests for <code>electron/knowledge-graph-runner.cjs</code> that simulate projects with nested virtual environments.</li>
 </ul>
 </li>
 <li><strong>Integration tests</strong>  <ul>
-<li>Spin up a local Electron instance to exercise snapshot export and commit detail retrieval.  </li>
-<li>Mock GitHub responses to validate authentication flows.</li>
+<li>Run the full graph generation pipeline on a representative set of repositories, comparing output to the previous snapshot format.  </li>
+<li>Verify that the CLI’s new memory‑leak patterns do not trigger actual leaks by running under <code>cargo test -- --nocapture</code> with <code>valgrind</code> or <code>miri</code>.</li>
 </ul>
 </li>
 <li><strong>Manual checks</strong>  <ul>
-<li>Verify that the UI still renders the graph view correctly after the component updates.  </li>
-<li>Confirm that the <code>vite</code> build produces the expected assets.</li>
+<li>Inspect the Electron renderer in a sandboxed environment to confirm that the new <code>path</code> import does not expose unintended filesystem access.  </li>
+<li>Review the updated <code>vite.config.ts</code> for any environment variable changes that could affect production builds.</li>
 </ul>
 </li>
 <li><strong>Staged rollout</strong>  <ul>
-<li>Deploy to a staging environment first; monitor LLM response times and GitHub API usage.  </li>
-<li>Use feature flags for the new snapshot export to enable rollback if issues arise.</li>
+<li>Deploy the changes to a staging branch and run the full test matrix.  </li>
+<li>Use feature flags to enable the new graph traversal logic in a subset of users before a full release.</li>
 </ul>
 </li>
 </ul>

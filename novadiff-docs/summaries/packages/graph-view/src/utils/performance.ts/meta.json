@@ -1,0 +1,54 @@
+{
+  "relPath": "packages/graph-view/src/utils/performance.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:54:04.090Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export const GRAPH_VISIBLE_ONLY_MIN_NODES = 100;",
+      "R10 added: export const GRAPH_ELK_WORKER_MIN_NODES = Number.POSITIVE_INFINITY;",
+      "R12 added: export function shouldOnlyRenderVisibleGraphElements(",
+      "R22 added: export function shouldRunElkInWorker(_nodeCount: number): boolean {",
+      "R27 added: export function countElkLayoutNodes(children: Array<{ children?: unknown[] }>): number {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-39"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /** Shared thresholds for graph / explore performance modes. */",
+      "R3 added: /** React Flow: skip off-screen node DOM when the graph is large. */",
+      "R4 added: export const GRAPH_VISIBLE_ONLY_MIN_NODES = 100;",
+      "R6 added: /**",
+      "R7 added: * ELK in a worker is disabled for now: Electron embed + large graphs can hang",
+      "R8 added: * without resolving, leaving the UI on \"Computing layout…\" with a blank graph."
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function countElkLayoutNodes (27-39)",
+      "right function shouldOnlyRenderVisibleGraphElements (12-21)",
+      "right function shouldRunElkInWorker (22-26)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

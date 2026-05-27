@@ -1,20 +1,19 @@
 ### Overview  
-In `packages/graph-view/src/NovaDiffGraphExplorer.tsx` the `NovaDiffGraphExplorerProps` interface was extended with four optional fields: `controlledNodeId`, `focusMode`, `enteredFilePath`, and `onSelectionChange`. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.
+The `NovaDiffGraphExplorerProps` interface in `packages/graph-view/src/NovaDiffGraphExplorer.tsx` was extended with three optional properties: `detailLevel`, `showFunctionsInClassView`, and `cityFilterNodeIds`. These additions appear in the diff at lines 38‑42 of the interface and are documented with comments that reference Code City structure filters.
 
 ### Key changes  
-- **Interface augmentation** – the new props are declared in lines 31‑37 of the interface.  
-- **Documentation comments** – JSDoc comments describe each prop’s intent.  
-- **Prop propagation** – the spread `...props` in the component’s signature passes the new fields unchanged to either `NovaDiffGraphExplorerEmbed` or `NovaDiffGraphExplorerFull`.  
-- **No runtime changes** – the component’s effect hooks, state handling, and JSX output are identical to the pre‑change version.
+- **New props** added in the interface (lines 38‑42).  
+- Each prop is preceded by a comment explaining its intended use.  
+- No other parts of the file were modified; the component’s implementation remains unchanged.
 
 ### Impact  
-- **Non‑breaking** – all existing consumers compile without modification because the new props are optional.  
-- **Extensibility** – downstream code can now supply node‑selection or focus‑mode hints without altering the explorer internals.  
-- **No performance change** – the diff adds only type information and comments.  
-- **Documentation** – the added comments improve developer understanding but require no code changes elsewhere.
+- **Type‑level**: Consumers now have additional optional configuration options. Existing code continues to compile because the new fields are optional.  
+- **Runtime**: The component does not read these props in the current implementation, so no new runtime behavior or performance impact is introduced.  
+- **Compatibility**: The change is non‑breaking; it only expands the public API.  
+- **Observability**: No new logs or metrics are emitted; the rendering path is unchanged.
 
 ### Risks & follow‑ups  
-- **Type‑checking regressions** – any code that destructures `NovaDiffGraphExplorerProps` must still satisfy the updated type; run `tsc` to confirm.  
-- **Test coverage** – existing tests may need to be updated or new tests added to verify that the new props can be passed without breaking the component (unknown from the available diff).  
-- **Build validation** – run lint, `tsc`, and the production build to ensure no type errors.  
-- **Documentation sync** – update public API docs to reflect the new optional props.
+- **Consumer migration**: Projects importing `NovaDiffGraphExplorerProps` may need to update documentation to reflect the new fields.  
+- **Documentation**: Ensure README and prop‑type docs mention the added options.  
+- **Unused props**: Verify that downstream code does not assume these props are present; they are currently ignored.  
+- **Future usage**: Plan for a future implementation that consumes these props while keeping the interface stable until then.

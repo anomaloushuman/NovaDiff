@@ -170,6 +170,21 @@ export interface RiskSignal {
   advisory?: RiskSignalAdvisoryMeta | null;
 }
 
+export type SecurityScanSourceState = "ok" | "warning" | "error" | "skipped";
+
+export interface SecurityScanSourceStatus {
+  source: string;
+  state: SecurityScanSourceState;
+  message: string;
+  durationMs?: number;
+}
+
+export interface SecurityInsightReport {
+  scannedAt: string;
+  signals: RiskSignal[];
+  sources: SecurityScanSourceStatus[];
+}
+
 export interface SummaryIndexEntry {
   relPath: string;
   kind: ChangeKind;

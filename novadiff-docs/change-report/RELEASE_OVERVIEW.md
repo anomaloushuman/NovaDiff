@@ -1,6 +1,6 @@
 # Release overview
 
-**Baseline:** f7c2bfd81af2
+**Baseline:** 9aadd5eb5604
 
 **Target:** NovaDiff
 
@@ -8,52 +8,66 @@
 
 | Signal | Count |
 | --- | --- |
-| Changed files | 62 |
-| Saved file summaries | 49 |
-| Saved selection docs | 0 |
-| High-risk signals | 0 |
-| Medium-risk signals | 1 |
+| Changed files | 71 |
+| Saved file summaries | 62 |
+| Saved selection docs | 3 |
+| High-risk signals | 1 |
+| Medium-risk signals | 4 |
 | Low-risk signals | 0 |
 
 ## Confidence badges
 
-- **Partial summary coverage**: Some file-level summaries are available, but the narrative still covers unsummarized paths.
-- **Deterministic risk signals available**: Risk sections can reference offline heuristic signals instead of only free-form LLM claims.
+- **Strong summary coverage**: Most changed files have saved summaries available for grounding the narrative.
+- **High-risk signals present**: At least one deterministic high-severity signal was detected in the compare.
+- **Focused selection docs available**: Reviewers saved line- or symbol-scoped documentation that can ground the broader report.
 - **Heuristic scan data**: Imports, calls, and symbol spans come from bounded heuristics rather than a full AST index.
 
 ## Top changed files
 
-- **removed** `.novadiff-graph/config.json`
-- **removed** `.novadiff-graph/diff-overlay.json`
-- **removed** `.novadiff-graph/knowledge-graph.json`
-- **removed** `.novadiff-graph/meta.json`
-- **added** `electron/export-snapshot.cjs`
-- **added** `electron/git-commit.cjs`
-- **modified** `electron/git-publish.cjs`
+- **modified** `.novadiff-graph/diff-overlay.json`
+- **modified** `.novadiff-graph/knowledge-graph.json`
+- **modified** `.novadiff-graph/meta.json`
+- **modified** `cli/src/main.rs`
+- **modified** `electron/code-city-model.cjs`
 - **modified** `electron/git-service.cjs`
-- **added** `electron/github-commit-context.cjs`
-- **modified** `electron/github-service.cjs`
-- **modified** `electron/llm.cjs`
+- **modified** `electron/knowledge-graph-runner.cjs`
 - **modified** `electron/main.cjs`
-- **modified** `electron/novadiff-docs-html.cjs`
-- **modified** `electron/prefetch-summaries.cjs`
 - **modified** `electron/preload.cjs`
+- **added** `electron/security-scan-runner.cjs`
 - **modified** `electron/workspace-history.cjs`
-- **modified** `electron/workspace-store.cjs`
+- **modified** `package-lock.json`
+- **modified** `package.json`
+- **modified** `packages/graph-core/src/analyzer/graph-builder.test.ts`
+- **modified** `packages/graph-core/src/analyzer/graph-builder.ts`
+- **modified** `packages/graph-core/src/ignore-filter.ts`
 - **modified** `packages/graph-view/src/App.tsx`
-- **added** `packages/graph-view/src/GraphEmbedSyncBridge.tsx`
+- **modified** `packages/graph-view/src/GraphEmbedSyncBridge.tsx`
 - **modified** `packages/graph-view/src/NovaDiffGraphExplorer.tsx`
+- **modified** `packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx`
 
 ## Deterministic risk review
 
 ### High severity
 
-_None detected._
+- **Potential Rust lifetime leak pattern in `cli/src/main.rs`** (`cli/src/main.rs`)
+  - R1313 added: let matches = text.contains("Box::leak(")
+  - R1314 added: || text.contains("mem::forget(")
+  - R1315 added: || text.contains("ManuallyDrop::new(");
 
 ### Medium severity
 
 - **Config-adjacent file touched: `vite.config.ts`** (`vite.config.ts`)
   - Configuration or environment behavior may change across deploy targets.
+- **Dependency manifest modified in `package.json`** (`package.json`)
+  - Dependency manifest files can change install/build behavior.
+  - Change kind: modified
+- **Lockfile modified in `package-lock.json`** (`package-lock.json`)
+  - Resolved dependency versions may have changed.
+  - Change kind: modified
+- **Potentially incomplete implementation in `cli/src/main.rs`** (`cli/src/main.rs`)
+  - R1334 incomplete stub: let looks_incomplete = low.contains("todo!")
+  - R1335 incomplete stub: || low.contains("todo(")
+  - R1336 incomplete stub: || low.contains("notimplemented")
 
 ### Low severity
 
@@ -61,74 +75,78 @@ _None detected._
 
 ## Summary rollup
 
-### `.novadiff-graph/config.json`
-
-### Overview The file `./.novadiff-graph/config.json` has been removed from the repository. It previously contained two configuration flags: `autoUpdate` and `outputLanguage`. ### Key changes - Entire file `./.novadiff-graph/config.json` deleted (lines 1‑4 removed). - The `autoUpdate` flag (`false`) and `outputLanguage` (`"en"`) are no longer persisted. ### Impact - Any code that previously parsed this JSON will no longer find the file, potentially causing a file‑not‑found error unless guarded. - Tests that mock o…
-
 ### `.novadiff-graph/diff-overlay.json`
 
-### Overview The file `.novadiff-graph/diff-overlay.json` has been deleted entirely (lines 1‑156). It previously stored metadata for the diff overlay, including the version, base branch, generation timestamp, lists of changed files, changed node IDs, and affected node IDs. ### Key changes - Removal of the JSON file at `.novadiff-graph/diff-overlay.json`. - All persisted data (`"changedFiles"`, `"changedNodeIds"`, `"affectedNodeIds"`) is no longer available. - No new file or alternative storage was added in this co…
+### Overview The file **`.novadiff-graph/diff-overlay.json`** was deleted. It previously stored JSON metadata with keys `"changedFiles"`, `"changedNodeIds"`, `"affectedNodeIds"`, and a timestamp. ### Key changes - Entire file removed (lines 1‑430 deleted). - No other code changes appear in this diff. ### Impact - Any component or service that reads this file will throw a file‑not‑found error unless it is guarded. - Tests that assert the file’s existence or its contents will fail. - The removal eliminates the overh…
+
+### `.novadiff-graph/knowledge-graph.json`
+
+_Truncated diff_
+
+### Overview The file `.novadiff-graph/knowledge-graph.json` was deleted entirely (lines L1‑8000). All graph data—including metadata, node entries for files, functions, classes, and symbol spans—was removed. Consequently, any references to Electron modules, language‑lesson logic, extractor implementations, and persistence utilities that were stored in this file are no longer present. ### Key changes - The entire knowledge‑graph file was removed. - All nodes stored in the graph (functions, files, classes, symbol sp…
 
 ### `.novadiff-graph/meta.json`
 
-### Overview The file `.novadiff-graph/meta.json` was removed from the repository. All six lines of JSON content—`lastAnalyzedAt`, `gitCommitHash`, `version`, and `analyzedFiles`—were deleted (lines 1‑6 in the diff). ### Key changes - **File deletion**: `.novadiff-graph/meta.json` no longer exists in the tree. - **Metadata loss**: The six lines of JSON that tracked analysis timestamp, commit hash, version, and file count are gone. - **No other source changes**: The diff shows only the removal of this file. ### Imp…
+### Overview The file `.novadiff-graph/meta.json` was modified. - Line 2: `lastAnalyzedAt` was updated. - Line 5: `analyzedFiles` was updated. ### Key changes - `lastAnalyzedAt` changed from `2026-05-26T01:49:38.223Z` to `2026-05-26T07:21:38.024Z` (diff: L2 → R2). - `analyzedFiles` increased from `352` to `373` (diff: L5 → R5). - No other fields were altered. ### Impact - Any code that reads this JSON will now see the new timestamp and file count. - If consumers cache based on `lastAnalyzedAt`, earlier caches may…
 
-### `electron/export-snapshot.cjs`
-
-_Touched symbols found · Import/export surface changed_
-
-### Overview A new CommonJS module `electron/export-snapshot.cjs` is added. It exposes a single function, `exportProjectSnapshotZip`, that zips a given bundle directory into a specified output path using the system `zip` utility. ### Key changes - **Imports added**: `node:fs`, `node:path`, and `node:child_process` (`spawnSync`). - **Function `exportProjectSnapshotZip(bundleDir, outZipPath)`**: - Resolves and validates `bundleDir`. - Ensures the output directory exists (`mkdirSync` with `recursive`). - Removes any…
-
-### `electron/git-commit.cjs`
+### `electron/code-city-model.cjs`
 
 _Touched symbols found · Import/export surface changed_
 
-### Overview A new module `electron/git-commit.cjs` is added. It exports a `getCommitDetail` helper that retrieves commit metadata and statistics by invoking Git commands. ### Key changes - Import added at line 3: `const { runGit, tryRunGit } = require("./git-service.cjs");` - Function `getCommitDetail(repoRoot, hash)` added (lines 1‑69): - Validates `repoRoot` and `hash` (lines 12‑14). - Runs `git log -1 <hash>` with a custom format to capture hash, short hash, subject, author, email, date, and parents (lines 16‑…
-
-### `electron/git-publish.cjs`
-
-_Touched symbols found · Import/export surface changed_
-
-### Overview `electron/git-publish.cjs` now stages a user‑supplied list of paths instead of always staging the entire repository. The change adds `stagePaths` to the import from `./git-service.cjs` (line 4) and rewrites the staging logic in `executePublish`. ### Key changes - **Import update** – `stagePaths` is added to the destructured import from `./git-service.cjs` (line 4). - **Conditional staging** – `stageAll(root)` is replaced by logic that builds `stagePathsList` from `opts.stagePaths` (lines 63‑70). - **B…
+### Overview The `electron/code-city-model.cjs` module now imports Node’s `path` module (added at line 3) and extends `buildSideNodes` to emit a synthetic file‑level symbol when a file has no explicit symbols (added lines 113‑131). This ensures every file appears in the CodeCity model. ### Key changes - `const path = require("path");` added at the top of the file. - In `buildSideNodes`, after retrieving `symbolEntries`, a guard `if (symbolEntries.length === 0)` pushes a new symbol: - `id: `${rootSide}:${relPath}:f…
 
 ### `electron/git-service.cjs`
 
 _Touched symbols found_
 
-### Overview Three new helper functions were added to `electron/git-service.cjs` to give callers finer control over staging: * `stagePaths(repoRoot, paths)` – normalises a list of paths, runs `git add -- <paths>`, and returns `{ staged: N }`. * `unstagePaths(repoRoot, paths)` – runs `git reset HEAD -- <paths>` and returns `{ unstaged: N }`. * `stageDistrict(repoRoot, topDir, statusFiles?)` – filters the repository’s status files to those under `topDir` (or its sub‑directories) and delegates to `stagePaths`. The mo…
+### Overview The `electron/git-service.cjs` file was extended with new Git‑output parsing helpers and tooling detection. The changes add several functions (see line ranges R237‑248, R250‑269, R271‑311, R314‑330, R332‑335, R337‑344) and expose them via `module.exports` (R346‑365). ### Key changes - **`splitGitFormatLine`** (R237‑248): splits a string by `\x1f`, tab, or `%x1f`, falling back to the raw line. - **`parseLogLines`** (R250‑269): uses `splitGitFormatLine` to turn `git log` output into `{hash, shortHash, s…
 
-### `electron/github-commit-context.cjs`
-
-_Touched symbols found · Import/export surface changed_
-
-### Overview Adds `electron/github-commit-context.cjs` exposing `getGithubCommitContext(fullName, sha)` to gather pull requests, issues, and comment threads for a commit using the GitHub CLI. ### Key changes - Added `parseJsonSafe(raw, fallback)` (lines 5‑12) to safely parse JSON, returning `fallback` on error. - Added `shortGhError(message)` (lines 13‑22) to normalize CLI error messages. - Added `normalizeThread(entry)` (lines 25‑33) to standardize thread objects with defaults. - Implemented `getGithubCommitConte…
-
-### `electron/github-service.cjs`
-
-_Touched symbols found · Import/export surface changed_
-
-### Overview A new export `getGithubCommitContext` has been added to `electron/github-service.cjs`. The export forwards all arguments to the helper defined in `./github-commit-context.cjs`: ```js getGithubCommitContext: (...args) => require("./github-commit-context.cjs").getGithubCommitContext(...args) ``` This change appears in the diff at lines 224‑225 of the file. ### Key changes - **Export addition** – `module.exports` now contains the `getGithubCommitContext` property (lines 224‑225). - **No other functional…
-
-### `electron/prefetch-summaries.cjs`
+### `electron/knowledge-graph-runner.cjs`
 
 _Touched symbols found_
 
-### Overview `electron/prefetch-summaries.cjs` now runs prefetch jobs with a configurable worker pool instead of a single sequential loop. The change replaces the old `for (let i = 0; i < jobs.length; i++)` block (lines 116‑120) with a concurrency‑controlled loop (lines 116‑122 and 214‑226). ### Key changes - **Concurrency calculation** – `concurrency` is set to `Math.min(3, Math.max(1, Number(process.env.NOVADIFF_PREFETCH_CONCURRENCY) || 2))` (added lines 116‑122). - **Worker pool** – an async `worker` pulls jobs…
+### Overview The `electron/knowledge-graph-runner.cjs` file was modified to refine project‑file traversal logic. ### Key changes - `SKIP_DIRS` now contains `"venv"`, `".venv"`, and `".venv-main"` (added at R32‑R34). - In `walkProjectFiles`, the guard was updated to skip any entry whose name starts with `".venv"` in addition to the existing `SKIP_DIRS` check (added at R162‑R165). - The previous isolated guard `if (SKIP_DIRS.has(entry.name))` was removed (L159). - Exclusion logic for `"site-packages"` remains unchan…
 
 ### `electron/preload.cjs`
 
-### Overview The preload script now exposes five new IPC‑invoked methods via `contextBridge`. These extend the Git and GitHub tooling API surface. ### Key changes - `gitStagePaths` (`ipcRenderer.invoke("git-stage-paths")`) added at line 129. - `gitStageDistrict` (`ipcRenderer.invoke("git-stage-district")`) added at line 130. - `exportProjectSnapshot` (`ipcRenderer.invoke("export-project-snapshot")`) added at line 131. - `gitCommitDetail` (`ipcRenderer.invoke("git-commit-detail")`) added at line 146. - `githubCommi…
+### Overview The preload script `electron/preload.cjs` now exposes four new IPC helpers. They are added at lines 45‑46 and 152‑155 and use the same `ipcRenderer.invoke` pattern as the existing API. ### Key changes - `scanSecurityInsights(payload)` – lines 45‑46 – invokes `"security-insights-scan"`. - `gitListBranches(payload)` – lines 152‑152 – invokes `"git-list-branches"`. - `gitListBranchCommits(payload)` – lines 153‑153 – invokes `"git-list-branch-commits"`. - `workspaceMaterializeCommit(payload)` – lines 154‑…
+
+### `electron/security-scan-runner.cjs`
+
+_Touched symbols found · Import/export surface changed_
+
+### Overview A new module `electron/security-scan-runner.cjs` is added, exposing `runSecurityInsightScan`. It orchestrates multi‑ecosystem vulnerability scans (OSV, npm, pip, cargo, govulncheck, bundle‑audit) and aggregates results into a unified signal list. ### Key changes - **Imports**: `fs`, `path`, `child_process.spawnSync`, `crypto` added at the top (lines 1‑6). - **Utility helpers**: `severityFromAdvisory`, `confidenceFromSeverity`, `hashId`, `relPathFromRoot` (lines 8‑26). - **Repository traversal**: `walk…
 
 ### `electron/workspace-history.cjs`
 
+_Touched symbols found · Import/export surface changed_
+
+### Overview `electron/workspace-history.cjs` now imports two additional helpers from `git-service.cjs` (`listBranches`, `listCommitsForRef`) and introduces a new function, `materializeCommitForCompare`. This helper resolves a Git ref or hash to a snapshot path, creating the snapshot if it does not already exist. The module’s export list is updated to expose the new function and the two imported helpers. ### Key changes - **Import expansion** – line 6 now pulls `listBranches` and `listCommitsForRef` from `git-serv…
+
+### `package.json`
+
+_Dependency manifest changed_
+
+### Overview The `package.json` in the `NovaDiff` branch updates the Electron runtime and its builder. Electron is bumped from `^34.2.0` (removed at L56) to `^42.2.0` (added at R56). Electron‑builder is bumped from `^25.1.8` (removed at L57) to `^26.8.1` (added at R57). No other dependencies were modified. ### Key changes - **Electron runtime** – line 56 now requires `electron@^42.2.0`. - **Electron‑builder** – line 57 now requires `electron-builder@^26.8.1`. - The `build` script (`"electron:build": "npm run rust:…
+
+### `packages/graph-core/src/analyzer/graph-builder.test.ts`
+
+_Test-related file_
+
+### Overview A new test in `packages/graph-core/src/analyzer/graph-builder.test.ts` (lines 363‑387) confirms that `GraphBuilder` now disambiguates duplicate function names within the same file by appending the function’s start line number to the node ID. ### Key changes - **Function ID generation** – When a file contains two functions with the same name, the second receives an ID suffix of its start line (`:30` in the test). - **Duplicate detection** – The builder tracks seen function names per file and applies th…
+
+### `packages/graph-core/src/analyzer/graph-builder.ts`
+
 _Touched symbols found_
 
-### Overview The file `electron/workspace-history.cjs` was modified to change how workspace state is persisted during history indexing. In both `indexWorkspaceHistory` (lines 100‑174) and `refreshWorkspaceHistory` (lines 188‑292) the unconditional `await upsertWorkspace(userData, workspace);` that previously ran on every commit was removed (diff lines 135 and 240). Instead, a `persistSession` flag is computed: ```js i === 0 || i === commits.length - 1 || (i + 1) % 10 === 0 ``` and passed to `upsertWorkspace` as `{…
+### Overview `GraphBuilder` now ensures every node has a unique identifier. A new helper `uniqueNodeId` (lines 84‑109) builds deterministic IDs that optionally include a line number and, if needed, a numeric suffix to avoid collisions. Node‑creation methods have been updated to use this helper, and file nodes are now added only if the ID is not already present (lines 146‑157). ### Key changes - **`uniqueNodeId`** – generates collision‑free IDs (lines 84‑109). - **`addFileWithAnalysis`** – checks `this.nodeIds.has(…
 
 ## Focused reviewer notes
 
-_No saved selection docs yet._
+- `electron/workspace-history.cjs` — Code explanation (L80-98)
+- `package.json` — Code explanation (L23-45)
+- `package.json` — Code explanation (L46-63)
 
 ## Advisory enrichment status
 
-NovaDiff is currently using deterministic offline risk signals only. The risk schema already separates heuristic and advisory sources so future OSV or ecosystem audit enrichment can be added without mixing those results into the base confidence model.
+No advisory findings were attached. Baseline confidence remains derived from deterministic offline signals.

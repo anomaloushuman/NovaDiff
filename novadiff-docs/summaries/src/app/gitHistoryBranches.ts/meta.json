@@ -1,0 +1,61 @@
+{
+  "relPath": "src/app/gitHistoryBranches.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:30:50.318Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export function enrichBranchCommits(",
+      "R25 added: export function pickDefaultBaseBranch(branches: GitBranchSummary[]): string {",
+      "R40 added: export function pickDefaultHeadBranch(",
+      "R56 added: export function commitFromBranchTip(branch: GitBranchSummary): WorkspaceCommitSnapshot {",
+      "R68 added: export function resolveGitRepoRoot(",
+      "R79 added: export function branchOptionLabel(branch: GitBranchSummary): string {"
+    ],
+    "changed_imports": [
+      "R1 added: import type { GitBranchSummary, GitLogCommitSummary } from \"./gitTypes\";",
+      "R2 added: import type { WorkspaceCommitSnapshot } from \"./workspaceTypes\";"
+    ],
+    "changed_line_ranges": [
+      "R1-89"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import type { GitBranchSummary, GitLogCommitSummary } from \"./gitTypes\";",
+      "R2 added: import type { WorkspaceCommitSnapshot } from \"./workspaceTypes\";",
+      "R4 added: export function enrichBranchCommits(",
+      "R5 added: branchCommits: GitLogCommitSummary[],",
+      "R6 added: indexed: WorkspaceCommitSnapshot[],",
+      "R7 added: ): WorkspaceCommitSnapshot[] {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function enrichBranchCommits (4-24)",
+      "right function pickDefaultHeadBranch (40-55)",
+      "right function pickDefaultBaseBranch (25-39)",
+      "right function commitFromBranchTip (56-67)",
+      "right function branchOptionLabel (79-89)",
+      "right function resolveGitRepoRoot (68-78)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

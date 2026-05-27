@@ -81,6 +81,32 @@ export class GraphBuilder {
     return filePath.split("/").pop() ?? filePath;
   }
 
+  private uniqueNodeId(baseId: string, lineStart?: number): string {
+    if (!this.nodeIds.has(baseId)) {
+      return baseId;
+    }
+    if (lineStart !== undefined) {
+      const withLine = `${baseId}:${lineStart}`;
+      if (!this.nodeIds.has(withLine)) {
+        return withLine;
+      }
+      let suffix = 2;
+      let candidate = `${withLine}#${suffix}`;
+      while (this.nodeIds.has(candidate)) {
+        suffix += 1;
+        candidate = `${withLine}#${suffix}`;
+      }
+      return candidate;
+    }
+    let suffix = 2;
+    let candidate = `${baseId}#${suffix}`;
+    while (this.nodeIds.has(candidate)) {
+      suffix += 1;
+      candidate = `${baseId}#${suffix}`;
+    }
+    return candidate;
+  }
+
   addFile(filePath: string, meta: FileMeta): void {
     const lang = this.detectLanguage(filePath);
     if (lang !== "unknown") {
@@ -90,6 +116,9 @@ export class GraphBuilder {
     const name = GraphBuilder.basename(filePath);
 
     const id = `file:${filePath}`;
+    if (this.nodeIds.has(id)) {
+      return;
+    }
     this.nodeIds.add(id);
     this.nodes.push({
       id,
@@ -114,22 +143,28 @@ export class GraphBuilder {
 
     const fileName = GraphBuilder.basename(filePath);
     const fileId = `file:${filePath}`;
-
-    // Create the file node
-    this.nodeIds.add(fileId);
-    this.nodes.push({
-      id: fileId,
-      type: "file",
-      name: fileName,
-      filePath,
-      summary: meta.fileSummary,
-      tags: meta.tags,
-      complexity: meta.complexity,
-    });
+    if (!this.nodeIds.has(fileId)) {
+      this.nodeIds.add(fileId);
+      this.nodes.push({
+        id: fileId,
+        type: "file",
+        name: fileName,
+        filePath,
+        summary: meta.fileSummary,
+        tags: meta.tags,
+        complexity: meta.complexity,
+      });
+    }
 
     // Create function nodes with "contains" edges
     for (const fn of analysis.functions) {
-      const funcId = `function:${filePath}:${fn.name}`;
+      const funcId = this.uniqueNodeId(
+        `function:${filePath}:${fn.name}`,
+        fn.lineRange[0],
+      );
+      if (this.nodeIds.has(funcId)) {
+        continue;
+      }
       this.nodeIds.add(funcId);
       this.nodes.push({
         id: funcId,
@@ -153,7 +188,13 @@ export class GraphBuilder {
 
     // Create class nodes with "contains" edges
     for (const cls of analysis.classes) {
-      const classId = `class:${filePath}:${cls.name}`;
+      const classId = this.uniqueNodeId(
+        `class:${filePath}:${cls.name}`,
+        cls.lineRange[0],
+      );
+      if (this.nodeIds.has(classId)) {
+        continue;
+      }
       this.nodeIds.add(classId);
       this.nodes.push({
         id: classId,
@@ -300,11 +341,14 @@ export class GraphBuilder {
   }
 
   private addChildNode(node: GraphNode, parentId: string): void {
-    if (this.nodeIds.has(node.id)) {
+    const lineStart = node.lineRange?.[0];
+    const id = this.uniqueNodeId(node.id, lineStart);
+    if (this.nodeIds.has(id)) {
       console.warn(`[GraphBuilder] Duplicate node ID "${node.id}" — skipping`);
       return;
     }
-    this.nodeIds.add(node.id);
+    this.nodeIds.add(id);
+    node = { ...node, id };
     this.nodes.push(node);
     this.edges.push({ source: parentId, target: node.id, type: "contains", direction: "forward", weight: 1 });
   }

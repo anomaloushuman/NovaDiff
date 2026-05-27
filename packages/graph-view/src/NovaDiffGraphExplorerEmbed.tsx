@@ -10,6 +10,7 @@ import {
 import { I18nProvider } from "./contexts/I18nContext";
 import { EmbedDashboardPanel } from "./EmbedDashboardPanel";
 import { GraphEmbedSyncBridge } from "./GraphEmbedSyncBridge";
+import type { DetailLevel } from "./store";
 
 export interface NovaDiffGraphExplorerEmbedProps {
   graph: KnowledgeGraph;
@@ -22,6 +23,9 @@ export interface NovaDiffGraphExplorerEmbedProps {
   controlledNodeId?: string | null;
   enteredFilePath?: string | null;
   focusMode?: boolean;
+  detailLevel?: DetailLevel;
+  showFunctionsInClassView?: boolean;
+  cityFilterNodeIds?: string[] | null;
   onSelectionChange?: (nodeId: string | null) => void;
 }
 
@@ -46,6 +50,9 @@ export function NovaDiffGraphExplorerEmbed({
   controlledNodeId,
   enteredFilePath,
   focusMode,
+  detailLevel,
+  showFunctionsInClassView,
+  cityFilterNodeIds,
   onSelectionChange,
 }: NovaDiffGraphExplorerEmbedProps) {
   const validation = useMemo(() => validateGraph(graph), [graph]);
@@ -119,6 +126,9 @@ export function NovaDiffGraphExplorerEmbed({
           controlledNodeId={controlledNodeId}
           enteredFilePath={enteredFilePath}
           focusMode={focusMode}
+          detailLevel={detailLevel}
+          showFunctionsInClassView={showFunctionsInClassView}
+          cityFilterNodeIds={cityFilterNodeIds}
           onSelectionChange={onSelectionChange}
         />
         <EmbedDashboardPanel graphIssues={validation.issues} />

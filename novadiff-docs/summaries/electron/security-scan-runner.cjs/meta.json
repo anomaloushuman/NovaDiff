@@ -1,0 +1,58 @@
+{
+  "relPath": "electron/security-scan-runner.cjs",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:22:17.811Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const fs = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { spawnSync } = require(\"node:child_process\");",
+      "R6 added: const crypto = require(\"node:crypto\");"
+    ],
+    "changed_line_ranges": [
+      "R1-611"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: const fs = require(\"node:fs\");",
+      "R4 added: const path = require(\"node:path\");",
+      "R5 added: const { spawnSync } = require(\"node:child_process\");",
+      "R6 added: const crypto = require(\"node:crypto\");",
+      "R8 added: function severityFromAdvisory(input) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function runSecurityInsightScan (332-611)",
+      "right function parseOsvScanner (275-331)",
+      "right function parseNpmAudit (127-181)",
+      "right function parsePipAudit (182-230)",
+      "right function walkRepoForMarkers (33-79)",
+      "right function parseCargoAudit (231-274)",
+      "right function detectEcosystems (80-113)",
+      "right function runCommand (114-126)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

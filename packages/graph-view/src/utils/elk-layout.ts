@@ -1,6 +1,14 @@
 import type { GraphIssue } from "@novadiff/graph-core/schema";
 import { loadElk } from "./elk-bundled";
 import { NODE_WIDTH, NODE_HEIGHT } from "./layout";
+import {
+  countElkLayoutNodes,
+  shouldRunElkInWorker,
+} from "./performance";
+import type {
+  ElkWorkerRequest,
+  ElkWorkerResponse,
+} from "./elk-layout.worker";
 
 export interface ElkChild {
   id: string;
@@ -220,14 +228,88 @@ export interface ElkLayoutResult {
   issues: GraphIssue[];
 }
 
+let layoutWorker: Worker | null = null;
+let layoutWorkerSeq = 0;
+const layoutWorkerPending = new Map<
+  number,
+  { resolve: (value: unknown) => void; reject: (reason: Error) => void }
+>();
+
+function ensureLayoutWorker(): Worker {
+  if (!layoutWorker) {
+    layoutWorker = new Worker(
+      new URL("./elk-layout.worker.ts", import.meta.url),
+      { type: "module" },
+    );
+    layoutWorker.onmessage = (event: MessageEvent<ElkWorkerResponse>) => {
+      const data = event.data;
+      const pending = layoutWorkerPending.get(data.requestId);
+      if (!pending) {
+        return;
+      }
+      layoutWorkerPending.delete(data.requestId);
+      if (data.ok) {
+        pending.resolve(data.positioned);
+      } else {
+        pending.reject(new Error(data.error));
+      }
+    };
+    layoutWorker.onerror = (event) => {
+      const err = new Error(event.message || "ELK layout worker failed");
+      for (const [, pending] of layoutWorkerPending) {
+        pending.reject(err);
+      }
+      layoutWorkerPending.clear();
+      layoutWorker = null;
+    };
+  }
+  return layoutWorker;
+}
+
+function runElkLayoutInWorker(input: ElkInput): Promise<unknown> {
+  const worker = ensureLayoutWorker();
+  const requestId = ++layoutWorkerSeq;
+  return new Promise((resolve, reject) => {
+    layoutWorkerPending.set(requestId, { resolve, reject });
+    const msg: ElkWorkerRequest = { requestId, input };
+    worker.postMessage(msg);
+  });
+}
+
+async function runElkLayoutOnMainThread(input: ElkInput): Promise<ElkInput> {
+  const elk = await loadElk();
+  return (await elk.layout(input as never)) as ElkInput;
+}
+
+/** Simple grid when ELK fails so nodes are not stacked at (0,0). */
+export function applyElkGridFallback(input: ElkInput): ElkInput {
+  const gapX = 72;
+  const gapY = 88;
+  const cols = Math.max(1, Math.ceil(Math.sqrt(input.children.length)));
+  const children = input.children.map((child, index) => {
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+    const w = child.width ?? DEFAULT_NODE_WIDTH;
+    const h = child.height ?? DEFAULT_NODE_HEIGHT;
+    return {
+      ...child,
+      x: col * (w + gapX),
+      y: row * (h + gapY),
+    };
+  });
+  return { ...input, children };
+}
+
 export async function applyElkLayout(
   input: ElkInput,
   opts: ElkLayoutOptions = {},
 ): Promise<ElkLayoutResult> {
   const { input: repaired, issues } = repairElkInput(input, opts);
+  const nodeCount = countElkLayoutNodes(repaired.children);
   try {
-    const elk = await loadElk();
-    const positioned = (await elk.layout(repaired as never)) as ElkInput;
+    const positioned = shouldRunElkInWorker(nodeCount)
+      ? ((await runElkLayoutInWorker(repaired)) as ElkInput)
+      : await runElkLayoutOnMainThread(repaired);
     return { positioned, issues };
   } catch (err) {
     const fatal: GraphIssue = {
@@ -238,6 +320,9 @@ export async function applyElkLayout(
         `This looks like a dashboard rendering bug — please file an issue with the copied error.`,
     };
     if (opts.strict) throw err;
-    return { positioned: { ...repaired, children: [], edges: [] }, issues: [...issues, fatal] };
+    return {
+      positioned: applyElkGridFallback(repaired),
+      issues: [...issues, fatal],
+    };
   }
 }

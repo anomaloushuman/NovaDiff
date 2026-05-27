@@ -1,0 +1,33 @@
+{
+  "relPath": "src/components/CodeMapLoadingPreview.css",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:35:38.161Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-267"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /* Hide duplicate global toast bars while the code-map loader owns the bottom HUD */",
+      "R2 added: body:has([data-code-map-loader]:not(.is-exiting)) .background-activity-bar {",
+      "R3 added: visibility: hidden;",
+      "R4 added: opacity: 0;",
+      "R5 added: pointer-events: none;",
+      "R6 added: }"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

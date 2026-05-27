@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>tests/codeCityLayout.test.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>tests/codeCityLayout.test.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:15:24.063Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new test file <code>tests/codeCityLayout.test.ts</code> was added. It imports <code>vitest</code> helpers, <code>buildCodeCityLayout</code>, and the <code>CodeCityModel</code> type. A helper function <code>modelWithSrcFilesOnly</code> (lines 5‑7) returns a minimal <code>CodeCityModel</code> containing two target‑side files (<code>src/App.tsx</code>, <code>src/util.ts</code>) and corresponding file‑level symbols (lines 11‑38, 40‑71).</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports added</strong> (R1‑3).  </li>
+<li><strong>Helper function</strong> <code>modelWithSrcFilesOnly</code> defined (R5‑7) with file and symbol data.  </li>
+<li><strong>Three test cases</strong>:  <ol>
+<li>Builds layout for subsystem <code>src</code> when only file symbols exist (lines 76‑92).  </li>
+<li>Handles subsystem paths containing backslashes (<code>src\\App.tsx</code>) (lines 94‑111).  </li>
+<li>Filters by symbol kind (<code>file</code>) and change state (<code>added</code>) (lines 113‑158).</li>
+</ol>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Provides a reusable minimal model for testing <code>buildCodeCityLayout</code>.  </li>
+<li>Adds a factory that can be reused by future tests.  </li>
+<li>Tests run locally with <code>vitest</code>; no new runtime flags are introduced.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression risk</strong>: any change to <code>buildCodeCityLayout</code> that alters symbol handling may break these tests; run the suite after refactors.  </li>
+<li><strong>Path normalization</strong>: ensure the implementation consistently normalizes backslashes; failing tests may surface this.  </li>
+<li><strong>Coverage gap</strong>: the helper covers only target‑side files; baseline‑side scenarios are not represented.  </li>
+<li><strong>Test isolation</strong>: the helper creates fresh objects each call, so shared state mutation is unlikely.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

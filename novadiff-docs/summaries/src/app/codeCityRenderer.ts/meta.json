@@ -1,0 +1,55 @@
+{
+  "relPath": "src/app/codeCityRenderer.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:28:20.117Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R3 added: export type CityRendererBackend = \"webgpu\" | \"webgl\";",
+      "R5 added: export interface CityRenderer {",
+      "R11 added: export interface CreateCityRendererOptions {",
+      "R26 added: export async function createCityRenderer("
+    ],
+    "changed_imports": [
+      "R1 added: import * as THREE from \"three\";"
+    ],
+    "changed_line_ranges": [
+      "R1-78"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import * as THREE from \"three\";",
+      "R3 added: export type CityRendererBackend = \"webgpu\" | \"webgl\";",
+      "R5 added: export interface CityRenderer {",
+      "R6 added: renderer: THREE.WebGLRenderer;",
+      "R7 added: backend: CityRendererBackend;",
+      "R8 added: dispose: () => void;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function createCityRenderer (26-78)",
+      "right interface CreateCityRendererOptions (11-25)",
+      "right interface CityRenderer (5-10)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

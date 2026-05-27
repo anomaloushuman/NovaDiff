@@ -1,23 +1,23 @@
 {
   "relPath": ".novadiff-graph/diff-overlay.json",
   "kind": "removed",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:40:21.610Z",
+  "generatedAt": "2026-05-26T06:49:32.092Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L1-156"
+      "L1-430"
     ],
     "cited_changed_lines": [
       "L1 removed: {",
       "L2 removed: \"version\": \"1.0.0\",",
       "L3 removed: \"baseBranch\": \"novadiff-compare\",",
-      "L4 removed: \"generatedAt\": \"2026-05-20T01:19:05.929Z\",",
+      "L4 removed: \"generatedAt\": \"2026-05-21T10:37:57.186Z\",",
       "L5 removed: \"changedFiles\": [",
-      "L6 removed: \".novadiff-graph/diff-overlay.json\","
+      "L6 removed: \".novadiff-graph/config.json\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

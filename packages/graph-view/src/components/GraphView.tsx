@@ -47,6 +47,7 @@ import {
   mergeElkPositions,
 } from "../utils/layout";
 import { applyElkLayout } from "../utils/elk-layout";
+import { shouldOnlyRenderVisibleGraphElements } from "../utils/performance";
 import type { ElkChild, ElkEdge, ElkInput } from "../utils/elk-layout";
 import {
   aggregateContainerEdges,
@@ -187,27 +188,98 @@ function TourFitView() {
 /** Centers the graph on the selected node (e.g. from search). */
 function SelectedNodeFitView() {
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
+  const focusNodeId = useDashboardStore((s) => s.focusNodeId);
   const { fitView } = useReactFlow();
-  const prevRef = useRef<string | null>(null);
+  const nodes = useNodes();
+  const prevRef = useRef<string>("");
 
   useEffect(() => {
-    if (selectedNodeId && selectedNodeId !== prevRef.current) {
-      // Delay slightly so this runs after any layer-level fitView triggered
-      // by navigateToNodeInLayer (which also changes activeLayerId).
-      const timer = setTimeout(() => {
+    const activeId = selectedNodeId ?? "";
+    const mode: "focus" | "selected" = focusNodeId ? "focus" : "selected";
+    const visibleCount = mode === "focus" ? nodes.filter((n) => !n.hidden).length : 0;
+    const key = `${mode}:${activeId}:${visibleCount}`;
+    if (!activeId || key === prevRef.current) {
+      prevRef.current = key;
+      return;
+    }
+    // Delay slightly so this runs after any layer-level fitView triggered
+    // by navigateToNodeInLayer (which also changes activeLayerId).
+    const timer = setTimeout(() => {
+      if (mode === "focus") {
+        // Focus mode renders the selected node neighborhood; fit all visible
+        // nodes so connected symbols don't overflow off-screen.
+        const visible = nodes.filter((n) => !n.hidden).map((n) => ({ id: n.id }));
+        if (visible.length > 0) {
+          fitView({
+            nodes: visible,
+            duration: 520,
+            padding: 0.34,
+            maxZoom: 1.1,
+            minZoom: 0.01,
+          });
+        }
+      } else {
         fitView({
-          nodes: [{ id: selectedNodeId }],
+          nodes: [{ id: activeId }],
           duration: 500,
           padding: 0.3,
           maxZoom: 1.2,
           minZoom: 0.01,
         });
-      }, 100);
-      prevRef.current = selectedNodeId;
-      return () => clearTimeout(timer);
+      }
+    }, 110);
+    prevRef.current = key;
+    return () => clearTimeout(timer);
+  }, [selectedNodeId, focusNodeId, fitView, nodes]);
+
+  return null;
+}
+
+/** In embed mode, fit the viewport to nodes visible after Code City filters change. */
+function EmbedCityFilterFitView() {
+  const embed = useNovaDiffEmbed();
+  const embedCityFilterNodeIds = useDashboardStore((s) => s.embedCityFilterNodeIds);
+  const { fitView } = useReactFlow();
+  const nodes = useNodes();
+  const prevKeyRef = useRef<string>("");
+
+  const filterKey = useMemo(() => {
+    if (!embedCityFilterNodeIds) {
+      return "";
     }
-    prevRef.current = selectedNodeId;
-  }, [selectedNodeId, fitView]);
+    return [...embedCityFilterNodeIds].sort().join("\n");
+  }, [embedCityFilterNodeIds]);
+
+  useEffect(() => {
+    if (!embed.embedMode || embedCityFilterNodeIds === null) {
+      return;
+    }
+    if (filterKey === prevKeyRef.current) {
+      return;
+    }
+    prevKeyRef.current = filterKey;
+
+    const timer = window.setTimeout(() => {
+      if (embedCityFilterNodeIds.size === 0) {
+        return;
+      }
+      const visible = nodes
+        .filter((n) => !n.hidden && embedCityFilterNodeIds.has(n.id))
+        .map((n) => ({ id: n.id }));
+      if (visible.length === 0) {
+        fitView({ duration: 420, padding: 0.3 });
+        return;
+      }
+      fitView({
+        nodes: visible,
+        duration: 480,
+        padding: 0.32,
+        maxZoom: 1.05,
+        minZoom: 0.01,
+      });
+    }, 160);
+    return () => window.clearTimeout(timer);
+  }, [embed.embedMode, embedCityFilterNodeIds, filterKey, fitView, nodes]);
 
   return null;
 }
@@ -406,6 +478,8 @@ function useLayerDetailTopology(): LayerDetailTopology & {
   const drillIntoLayer = useDashboardStore((s) => s.drillIntoLayer);
   const detailLevel = useDashboardStore((s) => s.detailLevel);
   const showFunctionsInClassView = useDashboardStore((s) => s.showFunctionsInClassView);
+  const embedCityFilterNodeIds = useDashboardStore((s) => s.embedCityFilterNodeIds);
+  const embed = useNovaDiffEmbed();
 
   const handleNodeSelect = useCallback(
     (nodeId: string) => {
@@ -480,6 +554,12 @@ function useLayerDetailTopology(): LayerDetailTopology & {
       const effectiveCategory = category ?? "code";
       return nodeTypeFilters[effectiveCategory] !== false;
     });
+
+    if (embed.embedMode && embedCityFilterNodeIds !== null) {
+      filteredGraphNodes = filteredGraphNodes.filter((n) =>
+        embedCityFilterNodeIds.has(n.id),
+      );
+    }
 
     let filteredNodeIds = new Set(filteredGraphNodes.map((n) => n.id));
 
@@ -680,6 +760,8 @@ function useLayerDetailTopology(): LayerDetailTopology & {
     drillIntoLayer,
     detailLevel,
     showFunctionsInClassView,
+    embedCityFilterNodeIds,
+    embed.embedMode,
     handleNodeSelect,
     handleContainerToggle,
   ]);
@@ -692,14 +774,17 @@ function useLayerDetailTopology(): LayerDetailTopology & {
   const stage1Tick = useDashboardStore((s) => s.stage1Tick);
   const [topology, setTopology] = useState<LayerDetailTopology>(EMPTY_TOPOLOGY);
   const [layoutStatus, setLayoutStatus] = useState<"computing" | "ready">("ready");
+  const stage1RelayoutsRef = useRef(0);
 
   useEffect(() => {
     if (!built) {
       setTopology(EMPTY_TOPOLOGY);
       setLayoutStatus("ready");
+      stage1RelayoutsRef.current = 0;
       return;
     }
     let cancelled = false;
+    stage1RelayoutsRef.current = 0;
     const {
       containers,
       nodeToContainer,
@@ -913,7 +998,10 @@ function useLayerDetailTopology(): LayerDetailTopology & {
       // Stage 1 → Stage 2 → bump → Stage 1 → ... With the >20% gate,
       // after the re-layout containerSizeMemory holds the actual size, so
       // the next Stage 2 sees a 0% deviation and the loop terminates.
-      if (anyDeviated) bumpStage1Tick();
+      if (anyDeviated && stage1RelayoutsRef.current < 2) {
+        stage1RelayoutsRef.current += 1;
+        bumpStage1Tick();
+      }
     });
 
     return () => {
@@ -1735,7 +1823,10 @@ export function GraphViewInner() {
         fitViewOptions={{ minZoom: 0.01, padding: 0.1 }}
         minZoom={0.01}
         maxZoom={2}
-        onlyRenderVisibleElements={embedMode}
+        onlyRenderVisibleElements={
+          embedMode ||
+          shouldOnlyRenderVisibleGraphElements(nodes.length, layoutReady)
+        }
         colorMode={preset.isDark ? "dark" : "light"}
       >
         <Background
@@ -1745,16 +1836,20 @@ export function GraphViewInner() {
           size={embedMode ? 0.4 : 1}
         />
         <Controls orientation={embedMode ? "horizontal" : "vertical"} />
-        <MiniMap
-          nodeColor="var(--color-elevated)"
-          maskColor="var(--glass-bg)"
-          className="!bg-surface !border !border-border-subtle"
-        />
-        {!embedMode ? <TourFitView /> : null}
-        {!embedMode ? <SelectedNodeFitView /> : null}
+        {nodes.length < 400 ? (
+          <MiniMap
+            nodeColor="var(--color-elevated)"
+            maskColor="var(--glass-bg)"
+            className="!bg-surface !border !border-border-subtle"
+          />
+        ) : null}
+        {!embedMode ? <TourFitView /> : <EmbedCityFilterFitView />}
+        <SelectedNodeFitView />
         <FlowFitOnResize padding={0.1} />
       </ReactFlow>
-      {(layoutStatus === "computing" || tourFitPending || embedAutoExpanding) && (
+      {(tourFitPending ||
+        embedAutoExpanding ||
+        (layoutStatus === "computing" && nodes.length === 0)) && (
         <div
           style={{
             position: "absolute",
@@ -1774,6 +1869,27 @@ export function GraphViewInner() {
                 ? "Locating tour highlight…"
                 : "Computing layout…"}
           </span>
+        </div>
+      )}
+      {layoutStatus === "computing" && nodes.length > 0 && (
+        <div
+          className="graph-layout-progress-pill"
+          style={{
+            position: "absolute",
+            top: 52,
+            left: "50%",
+            transform: "translateX(-50%)",
+            pointerEvents: "none",
+            zIndex: 10,
+            padding: "6px 14px",
+            borderRadius: 999,
+            fontSize: 12,
+            color: "var(--color-accent-bright)",
+            background: "color-mix(in srgb, var(--color-root) 72%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--color-accent-bright) 25%, transparent)",
+          }}
+        >
+          Reflowing layout…
         </div>
       )}
     </div>

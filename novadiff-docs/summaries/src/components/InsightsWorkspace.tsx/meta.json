@@ -1,0 +1,56 @@
+{
+  "relPath": "src/components/InsightsWorkspace.tsx",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:39:33.466Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R18 added: export interface InsightsWorkspaceProps {",
+      "R83 added: export function InsightsWorkspace({"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import type { FileChange, RiskSignal, SecurityInsightReport } from \"../app/types\";",
+      "R3 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-319"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useMemo, useState } from \"react\";",
+      "R2 added: import type { FileChange, RiskSignal, SecurityInsightReport } from \"../app/types\";",
+      "R3 added: import {",
+      "R4 added: groupSecuritySignals,",
+      "R5 added: mergeRiskSignals,",
+      "R6 added: } from \"../app/securityInsights\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function InsightsWorkspace (83-319)",
+      "right function RiskSection (26-82)",
+      "right function loadAdvisoryDefault (10-17)",
+      "right interface InsightsWorkspaceProps (18-25)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/DocsViewSyncContext.tsx",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:52:05.049Z",
+  "generatedAt": "2026-05-26T19:26:01.687Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,46 +11,36 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R12 added: export interface DocsViewSyncState {",
-      "R29 added: export function DocsViewSyncProvider({",
-      "R126 added: export function useDocsViewSync(): DocsViewSyncState {",
-      "R134 added: export function useDocsViewSyncOptional(): DocsViewSyncState | null {",
-      "R138 added: export function useDocsViewSyncExternalNode("
-    ],
-    "changed_imports": [
-      "R1 added: import {",
-      "R10 added: import type { CodeCityRenderableBuilding } from \"./codeCityLayout\";"
-    ],
+    "changed_exports": [],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-149"
+      "R16-17",
+      "R43",
+      "L49-50 / R52-54",
+      "R56-57",
+      "R62-70",
+      "R72",
+      "L58-60",
+      "R84"
     ],
     "cited_changed_lines": [
-      "R1 added: import {",
-      "R2 added: createContext,",
-      "R3 added: useCallback,",
-      "R4 added: useContext,",
-      "R5 added: useEffect,",
-      "R6 added: useMemo,"
+      "R16 added: /** City building id when graph node id is unknown or not yet linked. */",
+      "R17 added: cityBuildingId: string | null;",
+      "R43 added: const [cityBuildingId, setCityBuildingId] = useState<string | null>(null);",
+      "L49 removed: if (!nodeId) {",
+      "L50 removed: setEnteredBuilding(null);",
+      "R52 added: if (nodeId) {"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function DocsViewSyncProvider (29-125)",
-      "right interface DocsViewSyncState (12-28)",
-      "right function useDocsViewSyncExternalNode (138-149)",
-      "right function useDocsViewSync (126-133)",
-      "right function useDocsViewSyncOptional (134-137)"
+      "left function DocsViewSyncProvider (29-125)",
+      "right function DocsViewSyncProvider (31-143)",
+      "right interface DocsViewSyncState (12-30)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

@@ -26,34 +26,32 @@
 <body>
   <header class="top">
     <h1>src/app/workspaceTypes.ts</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:57:25.816Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:34:19.919Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>WorkspaceUiState</code> interface in <code>src/app/workspaceTypes.ts</code> now includes a new <code>workspacePage</code> option: <code>&quot;docReports&quot;</code>. This change is confined to line 38 of the file.</p>
+<p>In <code>src/app/workspaceTypes.ts</code> (lines 37‑45) the <code>WorkspaceUiState.workspacePage</code> union was expanded to include <code>&quot;insights&quot;</code>. The change is purely type‑level; no runtime code was added.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>WorkspaceUiState.workspacePage</code> union expanded from```ts
-&quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;prs&quot; | &quot;publish&quot;</li>
+<li><code>WorkspaceUiState</code> interface updated: <code>workspacePage?</code> now allows <code>&quot;insights&quot;</code>.  </li>
+<li>The union is split across several lines (R38‑R45) for readability.  </li>
+<li>No other fields in <code>WorkspaceUiState</code> or related interfaces were modified.  </li>
+<li>The diff shows the removal of the original single‑line union (L38) and its replacement with the multi‑line union (R38‑R45).</li>
 </ul>
-<p><code>to</code>ts
-&quot;compare&quot; | &quot;history&quot; | &quot;docs&quot; | &quot;docReports&quot; | &quot;prs&quot; | &quot;publish&quot;</p>
-<pre><code class="language-(diff:">- No other properties or interfaces were modified.
-
-### Impact
-
-  
-- Type safety: code that assigns or checks `workspacePage` must now consider `&quot;docReports&quot;`.  
-- UI routing: components that render based on `workspacePage` may need an additional case.  
-- Tests: assertions enumerating allowed values may need updating.  
-- Runtime behavior remains unchanged.
-
-### Risks &amp; follow‑ups  
-- Unhandled page value: components switching on `workspacePage` without a default or missing `&quot;docReports&quot;` could render incorrectly.  
-- Test failures: existing unit tests that validate the union type may fail.  
-- Documentation: any docs listing valid `workspacePage` options should be updated.  
-- Linting: custom rules or type guards enforcing the allowed set must include the new value.
-</code></pre>
+<h3>Impact</h3>
+<ul>
+<li>Code that assigns or checks <code>workspacePage</code> must now consider <code>&quot;insights&quot;</code>.  </li>
+<li>Because <code>workspacePage?</code> is optional, existing objects remain valid; no breaking changes.  </li>
+<li>Components rendering based on <code>workspacePage</code> should add a case for <code>&quot;insights&quot;</code> to avoid missing‑case warnings.  </li>
+<li>TypeScript compilation and linting should succeed unchanged.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Review all <code>switch</code> or <code>if</code> statements on <code>workspacePage</code> for exhaustiveness.  </li>
+<li>Update unit tests that assert allowed <code>workspacePage</code> values to include <code>&quot;insights&quot;</code> or ignore it.  </li>
+<li>Update any documentation or comments that list possible <code>workspacePage</code> values.  </li>
+<li>Verify that any serialization/deserialization logic handling <code>workspacePage</code> accepts the new value.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

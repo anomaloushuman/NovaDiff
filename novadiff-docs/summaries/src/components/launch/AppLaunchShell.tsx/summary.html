@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/launch/AppLaunchShell.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/launch/AppLaunchShell.tsx</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:42:14.453Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>AppLaunchShell</code> now accepts an optional <code>shellClassName</code> prop that appends custom CSS classes to the root <code>.app-shell</code> element. The public API and internal class composition have been updated accordingly.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Interface</strong> (<code>src/components/launch/AppLaunchShell.tsx</code>, lines 13‑20): added <code>shellClassName?: string</code> with a JSDoc comment (R17‑18).  </li>
+<li><strong>Function signature</strong> (<code>AppLaunchShell</code> lines 21‑26): now includes <code>shellClassName</code> in the destructured props.  </li>
+<li><strong>Class name construction</strong> (<code>shellClass</code> line 70): the array now contains <code>shellClassName</code> before joining, replacing the previous two‑line definition (L63).  </li>
+<li><strong>Export surface</strong>: the old export (<code>L19</code>) was removed; the new export (<code>R21</code>) reflects the updated signature.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Backward compatibility</strong>: <code>shellClassName</code> is optional, so existing callers remain unaffected.  </li>
+<li><strong>Styling flexibility</strong>: consumers can inject additional classes without modifying the component’s source.  </li>
+<li><strong>No runtime logic change</strong>: the launch sequence and phase handling remain identical; only the rendered class list differs.  </li>
+<li><strong>TypeScript enforcement</strong>: the new prop is now typed, and the JSDoc comment aids IDE tooling.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Regression in tests</strong>: snapshot or class‑name assertions may need updating.  </li>
+<li><strong>Documentation</strong>: update the component’s README/API docs to expose the new prop.  </li>
+<li><strong>Prop collision</strong>: callers should avoid passing a <code>shellClassName</code> that conflicts with internal classes.  </li>
+<li><strong>Lint rule</strong>: verify that the added JSDoc comment does not trigger any linting issues.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

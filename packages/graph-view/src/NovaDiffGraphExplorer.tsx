@@ -35,6 +35,11 @@ export interface NovaDiffGraphExplorerProps {
   /** When set, graph drills into this file path (city "enter building"). */
   enteredFilePath?: string | null;
   onSelectionChange?: (nodeId: string | null) => void;
+  /** Shared with Code City structure filters (files / classes / functions). */
+  detailLevel?: "file" | "class";
+  showFunctionsInClassView?: boolean;
+  /** Graph node ids matching visible Code City buildings after filters. */
+  cityFilterNodeIds?: string[] | null;
 }
 
 /** NovaDiff-native graph explorer — no external server or token gate. */

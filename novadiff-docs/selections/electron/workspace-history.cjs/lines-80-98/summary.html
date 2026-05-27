@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/workspace-history.cjs · Code explanation (L80-98) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/workspace-history.cjs · Code explanation (L80-98)</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-26T07:38:04.677Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>ensureCommitSnapshot</code> guarantees that a snapshot image exists for a specific commit hash in a workspace. It returns an object containing the snapshot path and a <code>ready</code> flag. If the workspace or snapshot path is missing, it throws an error.</h3>
+<h3>How it works1. <strong>Workspace lookup</strong> – Calls <code>getWorkspace(userData, workspaceId)</code> and aborts with <code>&quot;Workspace not found&quot;</code> if the result is falsy.2. *<em>Destination validation</em></h3>
+<ul>
+<li>– Resolves <code>snapshotPath</code> (or empty string) to an absolute path, trims it, and throws <code>&quot;Snapshot path is required&quot;</code> if the result is falsy.3. *<em>Snapshot creation</em></li>
+<li>– Invokes <code>snapshotCommit(workspace.repoRoot, hash, dest)</code> to generate the snapshot, storing the returned path in <code>snapPath</code>.4. *<em>Commit list handling</em></li>
+<li>– Normalises <code>workspace.commits</code> to an array, then finds the index of the commit whose <code>hash</code> matches the supplied <code>hash</code>.5. *<em>Update commit record</em></li>
+<li>– If found, sets that commit’s <code>snapshotPath</code> to <code>snapPath</code>, re‑assigns the updated array to <code>workspace.commits</code>, and persists the workspace via <code>upsertWorkspace(userData, workspace)</code>.6. *<em>Return value</em></li>
+<li>– Always returns <code>{ snapshotPath: snapPath, ready: true }</code> after the optional update.</li>
+</ul>
+<h3>Notes for reviewers- The function silently ignores commits that are not present in <code>workspace.commits</code>; no error is thrown in that case.- <code>snapshotCommit</code> and <code>upsertWorkspace</code> are external dependencies; their side effects (e.g., file I/O, database writes) are not visible in the snippet.- The function assumes <code>workspace.repoRoot</code> is a valid repository path; if it is invalid, <code>snapshotCommit</code> may fail, but that error is not caught here.- The returned <code>ready: true</code> flag is always true; the function never signals a pending state.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

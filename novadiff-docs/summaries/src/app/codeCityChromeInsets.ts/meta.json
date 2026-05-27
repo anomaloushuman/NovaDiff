@@ -1,9 +1,9 @@
 {
   "relPath": "src/app/codeCityChromeInsets.ts",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:52:53.459Z",
+  "generatedAt": "2026-05-26T19:27:21.806Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -11,42 +11,34 @@
         "key": "touched-symbols",
         "label": "Touched symbols found",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
-    "changed_exports": [
-      "R1 added: export interface CodeCityChromeInsets {",
-      "R40 added: export interface MeasureCodeCityChromeOptions {",
-      "R49 added: export function measureCodeCityChromeInsets("
-    ],
+    "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-92"
+      "L24 / R24",
+      "L27-35 / R27",
+      "R32-49",
+      "L65-71 / R75-83"
     ],
     "cited_changed_lines": [
-      "R1 added: export interface CodeCityChromeInsets {",
-      "R2 added: bottom: number;",
-      "R3 added: right: number;",
-      "R4 added: left: number;",
-      "R5 added: hidden: boolean;",
-      "R6 added: }"
+      "L24 removed: function isBlockingModalOpen(): boolean {",
+      "R24 added: function isCodeViewerOpen(): boolean {",
+      "L27 removed: [",
+      "L28 removed: \".docs-explore-modal-backdrop.is-open\",",
+      "L29 removed: \".docs-explore-modal-backdrop.ui-overlay.is-open\",",
+      "L30 removed: \".code-city-explore-cover-backdrop.is-open\","
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function measureCodeCityChromeInsets (49-92)",
-      "right function isBlockingModalOpen (24-39)",
-      "right function liftForObstruction (14-23)",
-      "right interface CodeCityChromeInsets (1-9)",
-      "right interface MeasureCodeCityChromeOptions (40-48)",
-      "right function rectsOverlap (10-13)"
+      "left function isBlockingModalOpen (24-39)",
+      "left function measureCodeCityChromeInsets (49-92)",
+      "right function isBlockingModalOpen (32-49)",
+      "right function measureCodeCityChromeInsets (59-104)",
+      "right function isCodeViewerOpen (24-31)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

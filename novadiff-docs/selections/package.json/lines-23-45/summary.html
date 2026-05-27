@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>package.json · Code explanation (L23-45) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>package.json · Code explanation (L23-45)</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-26T07:07:36.987Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it doesThe <code>dependencies</code> section declares the runtime libraries the project needs.- Core graph functionality is provided by <code>@novadiff/graph-core</code> and <code>@novadiff/graph-view</code> (local packages).- Layout engines such as <code>@dagrejs/dagre</code>, <code>elkjs</code>, and <code>d3-force</code> are included for graph drawing.- <code>graphology</code> and its community detection plugin <code>graphology-communities-louvain</code> supply graph data structures and analysis tools.- UI components come from <code>react</code>, <code>react-dom</code>, <code>@xyflow/react</code>, <code>react-window</code>, <code>lucide-react</code>, and <code>zustand</code> for state management.- Markdown rendering uses <code>react-markdown</code>, <code>marked</code>, <code>remark-gfm</code>, and <code>rehype-sanitize</code>.- <code>mermaid</code> and <code>three</code> add diagram and3‑D rendering capabilities.- <code>devlop</code> is a dev‑only helper for hot reloading.</h3>
+<h3>How it worksWhen <code>npm install</code> or <code>yarn install</code> runs, each listed package is fetched from npm (or the local file path for the <code>@novadiff/*</code> packages). The lockfile ensures the exact minor/patch versions (<code>^</code> ranges) are resolved. At runtime, the application imports these modules to build and render graphs, process markdown, and manage UI state. The <code>file:</code> entries allow local development of the graph core and view modules without publishing them.</h3>
+<h3>Notes for reviewers- The caret (<code>^</code>) ranges mean the build will accept any compatible minor/patch updates; confirm that this aligns with the team’s version‑stability policy.- The choice of both <code>@dagrejs/dagre</code> and <code>elkjs</code> suggests multiple layout strategies; verify that both are actively used.- <code>devlop</code> is a dev‑only dependency; ensure it is listed under <code>devDependencies</code> if not required at runtime.- Unknown from the snippet: why <code>graphology-communities-louvain</code> is included—check if community detection is a core feature.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

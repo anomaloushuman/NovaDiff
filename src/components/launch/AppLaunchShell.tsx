@@ -14,9 +14,16 @@ export interface AppLaunchShellProps {
   chrome?: React.ReactNode;
   children: React.ReactNode;
   onPhaseChange?: (phase: LaunchPhase) => void;
+  /** Extra classes on `.app-shell` (e.g. sidebar overlay mode). */
+  shellClassName?: string;
 }
 
-export function AppLaunchShell({ chrome, children, onPhaseChange }: AppLaunchShellProps) {
+export function AppLaunchShell({
+  chrome,
+  children,
+  onPhaseChange,
+  shellClassName,
+}: AppLaunchShellProps) {
   const reduced = usePrefersReducedMotion();
   const skipSequence = useMemo(
     () => reduced || readLaunchSkipped(),
@@ -60,7 +67,7 @@ export function AppLaunchShell({ chrome, children, onPhaseChange }: AppLaunchShe
     .filter(Boolean)
     .join(" ");
 
-  const shellClass = ["app-shell", motionClass].filter(Boolean).join(" ");
+  const shellClass = ["app-shell", motionClass, shellClassName].filter(Boolean).join(" ");
 
   return (
     <LaunchProvider value={contextValue}>

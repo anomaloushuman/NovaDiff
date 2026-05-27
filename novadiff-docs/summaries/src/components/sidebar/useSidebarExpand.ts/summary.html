@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/sidebar/useSidebarExpand.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/sidebar/useSidebarExpand.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:44:25.230Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/components/sidebar/useSidebarExpand.ts</code> was added.<br>It exports:</p>
+<ul>
+<li><code>SidebarTextPhase</code> (<code>&quot;hidden&quot; | &quot;typing&quot; | &quot;erasing&quot;</code>) – R8  </li>
+<li><code>UseSidebarExpandResult</code> interface – R10‑24  </li>
+<li><code>useSidebarExpand()</code> hook – R26‑211</li>
+</ul>
+<p>The hook manages sidebar expansion, text animation phases, and a promise‑based collapse API.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>State &amp; refs</strong> – <code>pointerInside</code>, <code>focusInside</code>, <code>panelExpanded</code>, <code>textPhase</code>; refs for timers (<code>leaveTimerRef</code>, <code>eraseTimerRef</code>, <code>widthTimerRef</code>) and flags (<code>forceCloseRef</code>, <code>wantOpenRef</code>) – R27‑38.  </li>
+<li><strong>Timer logic</strong> – uses constants from <code>./sidebarTiming</code> (<code>SIDEBAR_LEAVE_DELAY_MS</code>, <code>SIDEBAR_ERASE_FALLBACK_MS</code>, <code>SIDEBAR_WIDTH_TRANSITION_MS</code>) – R3‑6.  </li>
+<li><strong>Collapse flow</strong> – <code>requestCollapse</code> returns <code>Promise&lt;void&gt;</code> that resolves when the panel fully collapses, handling pending waiters and cleanup – R92‑122.  </li>
+<li><strong>Event handlers</strong> – <code>onPointerEnter/Leave</code>, <code>onFocusCapture/BlurCapture</code> guard against forced close and update internal state – R174‑194.  </li>
+<li><strong>Effect hooks</strong> – three <code>useEffect</code> blocks manage expansion, leave delay, and cleanup on unmount – R132‑172.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Components can now import <code>useSidebarExpand</code> to control sidebar visibility and text animation.  </li>
+<li>The hook introduces timer refs; the cleanup effect at R164‑172 clears timers on unmount, mitigating stray callbacks.  </li>
+<li>No existing component APIs are altered, but any component that previously managed sidebar state should migrate to this hook.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Timer cleanup</strong> – verified that timers are cleared on unmount (R164‑172).  </li>
+<li><strong>Race conditions</strong> – <code>requestCollapse</code> queues waiters; ensure concurrent calls resolve correctly.  </li>
+<li><strong>Focus handling</strong> – <code>onBlurCapture</code> uses <code>event.relatedTarget</code>; confirm cross‑browser behavior.  </li>
+<li><strong>Type safety</strong> – consuming components must match the <code>UseSidebarExpandResult</code> interface; run TypeScript checks to catch mismatches.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

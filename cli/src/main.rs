@@ -1256,6 +1256,150 @@ fn rust_added_unsafe_lines(payload: &FileDiffPayload) -> Vec<String> {
         .collect()
 }
 
+fn js_added_memory_leak_lines(payload: &FileDiffPayload) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    let mut saw_set_interval = false;
+    let mut saw_clear_interval = false;
+    let mut saw_add_event_listener = false;
+    let mut saw_remove_event_listener = false;
+    for row in payload
+        .rows
+        .iter()
+        .filter(|row| row.right_style == "added" && !row.is_truncation_marker)
+    {
+        let text = row.right.trim_start();
+        if text.contains("setInterval(") {
+            saw_set_interval = true;
+            if let Some(no) = row.right_no {
+                out.push(format!(
+                    "R{no} added interval allocation: {}",
+                    compact_snippet(text, 132)
+                ));
+            }
+        }
+        if text.contains("clearInterval(") {
+            saw_clear_interval = true;
+        }
+        if text.contains("addEventListener(") {
+            saw_add_event_listener = true;
+            if let Some(no) = row.right_no {
+                out.push(format!(
+                    "R{no} added event subscription: {}",
+                    compact_snippet(text, 132)
+                ));
+            }
+        }
+        if text.contains("removeEventListener(") {
+            saw_remove_event_listener = true;
+        }
+    }
+    if saw_set_interval && saw_clear_interval {
+        out.retain(|line| !line.contains("interval allocation"));
+    }
+    if saw_add_event_listener && saw_remove_event_listener {
+        out.retain(|line| !line.contains("event subscription"));
+    }
+    out.truncate(6);
+    out
+}
+
+fn rust_added_memory_leak_lines(payload: &FileDiffPayload) -> Vec<String> {
+    payload
+        .rows
+        .iter()
+        .filter(|row| row.right_style == "added" && !row.is_truncation_marker)
+        .filter_map(|row| {
+            let text = row.right.trim_start();
+            let matches = text.contains("Box::leak(")
+                || text.contains("mem::forget(")
+                || text.contains("ManuallyDrop::new(");
+            if !matches {
+                return None;
+            }
+            row.right_no
+                .map(|line_no| format!("R{line_no} added: {}", compact_snippet(text, 132)))
+        })
+        .take(6)
+        .collect()
+}
+
+fn added_incomplete_impl_lines(payload: &FileDiffPayload) -> Vec<String> {
+    payload
+        .rows
+        .iter()
+        .filter(|row| row.right_style == "added" && !row.is_truncation_marker)
+        .filter_map(|row| {
+            let text = row.right.trim_start();
+            let low = text.to_ascii_lowercase();
+            let looks_incomplete = low.contains("todo!")
+                || low.contains("todo(")
+                || low.contains("notimplemented")
+                || low.contains("unimplemented!")
+                || low.contains("throw new error(\"todo")
+                || low.contains("throw new error('todo")
+                || low.contains("return null; // todo")
+                || low.contains("fixme");
+            if !looks_incomplete {
+                return None;
+            }
+            row.right_no
+                .map(|line_no| format!("R{line_no} incomplete stub: {}", compact_snippet(text, 132)))
+        })
+        .take(6)
+        .collect()
+}
+
+fn added_export_surface_lines(rel: &str, payload: &FileDiffPayload) -> Vec<String> {
+    payload
+        .rows
+        .iter()
+        .filter(|row| row.right_style == "added" && !row.is_truncation_marker)
+        .filter_map(|row| {
+            let text = row.right.trim_start();
+            let looks_export = is_export_like_line(rel, text)
+                || text.starts_with("pub fn ")
+                || text.starts_with("pub async fn ")
+                || text.starts_with("pub(crate) fn ")
+                || text.starts_with("export function ")
+                || text.starts_with("export async function ");
+            if !looks_export {
+                return None;
+            }
+            row.right_no.map(|line_no| format!(
+                "R{line_no} export surface added: {}",
+                compact_snippet(text, 132)
+            ))
+        })
+        .take(6)
+        .collect()
+}
+
+fn config_security_hint_lines(payload: &FileDiffPayload) -> Vec<String> {
+    payload
+        .rows
+        .iter()
+        .filter(|row| row.right_style == "added" && !row.is_truncation_marker)
+        .filter_map(|row| {
+            let text = row.right.trim_start();
+            let low = text.to_ascii_lowercase();
+            let suspicious = low.contains("node_tls_reject_unauthorized=0")
+                || low.contains("disable_ssl")
+                || low.contains("allow_insecure")
+                || low.contains("allow-origin: *")
+                || low.contains("access-control-allow-origin: *")
+                || low.contains("cors=*")
+                || low.contains("debug=true")
+                || low.contains("allow_anonymous=true");
+            if !suspicious {
+                return None;
+            }
+            row.right_no
+                .map(|line_no| format!("R{line_no} security-sensitive config: {}", compact_snippet(text, 132)))
+        })
+        .take(6)
+        .collect()
+}
+
 fn risk_signals(
     left_root: &str,
     right_root: &str,
@@ -1264,6 +1408,9 @@ fn risk_signals(
     let mut out: Vec<RiskSignal> = Vec::new();
     let mut manifest_paths: Vec<String> = Vec::new();
     let mut lockfile_paths: Vec<String> = Vec::new();
+    let has_any_test_change = changes
+        .iter()
+        .any(|change| is_test_like_path(change.path.as_str()));
     let mut saw_test_change = false;
     let mut saw_non_test_change = false;
     for change in changes {
@@ -1358,7 +1505,69 @@ fn risk_signals(
                 vec!["Removed tests reduce regression coverage for nearby changes.".to_string()],
             );
         }
-        if rel.to_ascii_lowercase().ends_with(".rs") {
+        let rel_low = rel.to_ascii_lowercase();
+        let needs_payload = rel_low.ends_with(".rs") || is_jsish_source(rel) || is_config_like_path(rel);
+        if needs_payload {
+            let payload = get_file_diff(left_root, right_root, rel, change_kind_str(change.kind))?;
+            let incomplete_lines = added_incomplete_impl_lines(&payload);
+            if !incomplete_lines.is_empty() {
+                push_risk_signal(
+                    &mut out,
+                    "function-completeness",
+                    "medium",
+                    "medium",
+                    Some(rel.to_string()),
+                    format!("Potentially incomplete implementation in `{rel}`"),
+                    incomplete_lines,
+                );
+            }
+            let added_exports = added_export_surface_lines(rel, &payload);
+            if !added_exports.is_empty() && !has_any_test_change {
+                let mut evidence = added_exports;
+                evidence.push(
+                    "No changed test files were detected while new/changed exported surface was added."
+                        .to_string(),
+                );
+                push_risk_signal(
+                    &mut out,
+                    "function-completeness",
+                    "medium",
+                    "low",
+                    Some(rel.to_string()),
+                    format!("Exported surface changed without matching test updates in `{rel}`"),
+                    evidence,
+                );
+            }
+            if is_jsish_source(rel) {
+                let js_leaks = js_added_memory_leak_lines(&payload);
+                if !js_leaks.is_empty() {
+                    push_risk_signal(
+                        &mut out,
+                        "memory-leak",
+                        "medium",
+                        "medium",
+                        Some(rel.to_string()),
+                        format!("Potential event/timer cleanup gap in `{rel}`"),
+                        js_leaks,
+                    );
+                }
+            }
+            if is_config_like_path(rel) {
+                let config_hints = config_security_hint_lines(&payload);
+                if !config_hints.is_empty() {
+                    push_risk_signal(
+                        &mut out,
+                        "config",
+                        "high",
+                        "medium",
+                        Some(rel.to_string()),
+                        format!("Security-sensitive config defaults changed in `{rel}`"),
+                        config_hints,
+                    );
+                }
+            }
+        }
+        if rel_low.ends_with(".rs") {
             let payload = get_file_diff(left_root, right_root, rel, change_kind_str(change.kind))?;
             let unsafe_lines = rust_added_unsafe_lines(&payload);
             if !unsafe_lines.is_empty() {
@@ -1370,6 +1579,18 @@ fn risk_signals(
                     Some(rel.to_string()),
                     format!("Unsafe Rust detected in `{rel}`"),
                     unsafe_lines,
+                );
+            }
+            let leak_lines = rust_added_memory_leak_lines(&payload);
+            if !leak_lines.is_empty() {
+                push_risk_signal(
+                    &mut out,
+                    "memory-leak",
+                    "high",
+                    "high",
+                    Some(rel.to_string()),
+                    format!("Potential Rust lifetime leak pattern in `{rel}`"),
+                    leak_lines,
                 );
             }
         }
@@ -2353,6 +2574,14 @@ mod tests {
     use super::*;
     use std::path::PathBuf;
 
+    fn payload_from_new_text(new_text: &str) -> FileDiffPayload {
+        let mut payload = line_diff_to_rows("", new_text);
+        payload.left_symbols = Vec::new();
+        payload.right_symbols = Vec::new();
+        payload.summary_evidence = empty_summary_evidence();
+        payload
+    }
+
     #[test]
     fn prefetch_queue_roots_first_then_shallower_branches() {
         let changes = vec![
@@ -2533,6 +2762,25 @@ export function beta() {
         assert_eq!(spans[1].name, "beta");
         assert_eq!(spans[1].start_line, 5);
         assert!(spans[1].end_line >= spans[1].start_line);
+    }
+
+    #[test]
+    fn detects_js_memory_cleanup_gap() {
+        let payload = payload_from_new_text(
+            "export function mount(){\n  const id = setInterval(tick, 1000);\n  window.addEventListener('resize', onResize);\n}\n",
+        );
+        let lines = js_added_memory_leak_lines(&payload);
+        assert!(!lines.is_empty());
+        assert!(lines.iter().any(|line| line.contains("interval allocation")));
+    }
+
+    #[test]
+    fn detects_incomplete_impl_stub() {
+        let payload = payload_from_new_text(
+            "export function runTask(){\n  throw new Error(\"TODO: implement\");\n}\n",
+        );
+        let lines = added_incomplete_impl_lines(&payload);
+        assert!(!lines.is_empty());
     }
 
     #[test]

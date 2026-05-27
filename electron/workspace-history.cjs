@@ -3,7 +3,7 @@
 const fsp = require("node:fs/promises");
 const fssync = require("node:fs");
 const path = require("node:path");
-const { runGit, tryRunGit } = require("./git-service.cjs");
+const { runGit, tryRunGit, listBranches, listCommitsForRef } = require("./git-service.cjs");
 
 function removeDirSafe(dir) {
   try {
@@ -292,11 +292,35 @@ async function refreshWorkspaceHistory(userData, workspaceId, sendProgress, opts
   return workspace;
 }
 
+async function materializeCommitForCompare(userData, workspaceId, refOrHash) {
+  const workspace = await getWorkspace(userData, workspaceId);
+  if (!workspace) {
+    throw new Error("Workspace not found");
+  }
+  const ref = String(refOrHash ?? "").trim();
+  if (!ref) {
+    throw new Error("Commit or branch ref is required");
+  }
+  const hash = runGit(workspace.repoRoot, ["rev-parse", ref]);
+  const indexed = (Array.isArray(workspace.commits) ? workspace.commits : []).find(
+    (c) => c.hash === hash,
+  );
+  if (indexed?.snapshotPath && isUsableSnapshotDir(indexed.snapshotPath)) {
+    return { hash, snapshotPath: indexed.snapshotPath };
+  }
+  const dest = path.join(workspace.dataDir, "snapshots", "by-hash", hash.slice(0, 12));
+  const snapPath = await snapshotCommit(workspace.repoRoot, hash, dest);
+  return { hash, snapshotPath: snapPath };
+}
+
 module.exports = {
   listCommitsOldestFirst,
+  listBranches,
+  listCommitsForRef,
   indexWorkspaceHistory,
   refreshWorkspaceHistory,
   snapshotCommit,
   ensureCommitSnapshot,
+  materializeCommitForCompare,
   isUsableSnapshotDir,
 };

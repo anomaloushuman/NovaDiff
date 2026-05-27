@@ -1,9 +1,9 @@
 {
   "relPath": "src/vite-env.d.ts",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:51:47.483Z",
+  "generatedAt": "2026-05-26T19:24:38.755Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,23 +16,24 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R293-301",
-      "R347-354"
+      "R13",
+      "R186-190",
+      "R366-378"
     ],
     "cited_changed_lines": [
-      "R293 added: gitStagePaths?: (payload: { repoRoot: string; paths: string[] }) => Promise<{ staged: number }>;",
-      "R294 added: gitStageDistrict?: (payload: {",
-      "R295 added: repoRoot: string;",
-      "R296 added: topDir: string;",
-      "R297 added: }) => Promise<{ staged: number }>;",
-      "R298 added: exportProjectSnapshot?: (payload: {"
+      "R13 added: SecurityInsightReport,",
+      "R186 added: scanSecurityInsights?: (payload: {",
+      "R187 added: projectRoot: string;",
+      "R188 added: changes: FileChange[];",
+      "R189 added: advisoryEnabled?: boolean;",
+      "R190 added: }) => Promise<SecurityInsightReport>;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface ElectronAPI (104-408)"
+      "right interface ElectronAPI (105-427)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

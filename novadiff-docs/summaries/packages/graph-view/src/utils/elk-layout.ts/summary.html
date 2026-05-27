@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/utils/elk-layout.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/utils/elk-layout.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:52:28.495Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/utils/elk-layout.ts</code> now offloads ELK layout to a WebWorker when the node count exceeds a threshold, adds a lightweight grid fallback for worker failures, and improves error handling. The file also pulls in new performance helpers and worker‑specific types.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: added <code>countElkLayoutNodes</code> and <code>shouldRunElkInWorker</code> from <code>./performance</code>; added <code>ElkWorkerRequest/ElkWorkerResponse</code> types from <code>./elk-layout.worker</code>.  </li>
+<li><strong>Worker plumbing</strong>: introduced <code>ensureLayoutWorker</code>, <code>runElkLayoutInWorker</code>, and <code>runElkLayoutOnMainThread</code>. A <code>layoutWorkerPending</code> map tracks promises per request ID.  </li>
+<li><strong>Fallback logic</strong>: new <code>applyElkGridFallback</code> lays out nodes on a simple grid when ELK fails.  </li>
+<li><strong><code>applyElkLayout</code> refactor</strong> (lines 303‑328):  <ul>
+<li>Counts nodes (<code>countElkLayoutNodes</code>) and chooses worker or main‑thread execution via <code>shouldRunElkInWorker</code>.  </li>
+<li>On error, if <code>opts.strict</code> is true, re‑throws; otherwise returns the grid fallback and appends a fatal issue.  </li>
+<li>Removed the old “empty children” error return.</li>
+</ul>
+</li>
+<li><strong>Worker error handling</strong>: <code>layoutWorker.onerror</code> now rejects all pending promises and clears the worker.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Performance</strong>: Large graphs now run ELK in a worker, preventing UI blocking.  </li>
+<li><strong>Reliability</strong>: Grid fallback guarantees a non‑empty layout even if ELK crashes or the worker fails.  </li>
+<li><strong>Observability</strong>: Fatal issues are still surfaced, and the worker’s error path logs a clear message.  </li>
+<li><strong>Maintainability</strong>: Centralized worker logic and helper imports reduce duplication.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Worker creation</strong>: Verify that the worker URL resolves correctly in all bundlers; test in both dev and production builds.  </li>
+<li><strong>Threshold tuning</strong>: <code>shouldRunElkInWorker</code> may need adjustment for edge cases; monitor node‑count distributions.  </li>
+<li><strong>Fallback correctness</strong>: Ensure the grid layout does not introduce visual artifacts; run visual regression tests.  </li>
+<li><strong>Error propagation</strong>: Confirm that non‑strict mode still surfaces the fatal issue in logs and UI.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/components/sidebar/useWorkspacePageWithSidebar.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/components/sidebar/useWorkspacePageWithSidebar.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:44:50.476Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new hook <code>useWorkspacePageWithSidebar</code> is added to <code>src/components/sidebar/useWorkspacePageWithSidebar.ts</code> (lines R1‑62). It centralizes logic for switching workspace pages while coordinating with the sidebar’s collapse state.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>: Lines R1‑R3 add React hooks (<code>useCallback</code>, <code>useEffect</code>, <code>useRef</code>, <code>useState</code>) and type imports for <code>WorkspacePage</code> and <code>UseSidebarExpandResult</code>.  </li>
+<li><strong>Hook signature</strong>: <code>export function useWorkspacePageWithSidebar(sidebar: Pick&lt;UseSidebarExpandResult, &quot;panelExpanded&quot; | &quot;requestCollapse&quot;&gt;)</code> (R5‑R6). Only panel state and collapse request are required.  </li>
+<li><strong>State &amp; refs</strong>: <code>workspacePage</code> and <code>stagePage</code> (<code>useState&lt;WorkspacePage&gt;</code>), <code>pendingStageRef</code> (<code>useRef&lt;WorkspacePage | null&gt;</code>), <code>collapseGenerationRef</code> (<code>useRef(0)</code>).  </li>
+<li><strong>flushStage</strong> (R13‑R16): clears <code>pendingStageRef</code> and updates <code>stagePage</code>.  </li>
+<li><strong>scheduleStageLoad</strong> (R18‑R41): if the sidebar is collapsed, flushes immediately; otherwise queues the page, increments a generation counter, and waits for <code>sidebar.requestCollapse()</code> to resolve before flushing only if the generation and pending page match.  </li>
+<li><strong>setWorkspacePage</strong> (R43‑R49): updates <code>workspacePage</code> and triggers <code>scheduleStageLoad</code>.  </li>
+<li><strong>Effect</strong> (R51‑R55): on panel expansion, if a pending stage exists, it flushes it immediately.  </li>
+<li><strong>Return</strong> (R57‑R61): <code>{ workspacePage, stagePage, setWorkspacePage }</code>.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Coordinates page changes with sidebar collapse, reducing UI glitches.  </li>
+<li>Encapsulates sidebar‑aware logic in a single hook, simplifying component code.  </li>
+<li>Uses <code>useCallback</code> and refs to avoid unnecessary re‑renders and handle async collapse without race conditions.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Race condition</strong>: <code>collapseGenerationRef</code> prevents stale <code>requestCollapse</code> resolutions from flushing an outdated page; verify correctness.  </li>
+<li><strong>Panel state propagation</strong>: callers must pass the correct <code>panelExpanded</code> flag; otherwise pending stages may be lost.  </li>
+<li><strong>Cleanup</strong>: the hook does not clear pending stages on unmount; confirm this is acceptable.  </li>
+<li><strong>Testing</strong>: add unit tests for <code>scheduleStageLoad</code> and the effect to cover collapsed vs. expanded scenarios.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

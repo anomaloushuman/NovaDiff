@@ -16,7 +16,13 @@ import type { LlmSettings } from "../app/llmStorage";
 import type { DocWorkspaceMetrics } from "../app/docWorkspaceMetrics";
 import { isNovadiffDocsReservedPath } from "../app/novadiffPaths";
 import { useBackgroundActivityActionsOptional } from "../app/BackgroundActivityContext";
+import {
+  CODE_MAP_HANDOFF_MS,
+  computeCodeMapLoadSnapshot,
+  isCodeMapExperienceReady,
+} from "../app/codeMapLoadProgress";
 import { GraphMetricsStrip } from "./GraphMetricsStrip";
+import { CodeMapLoadingPreview } from "./CodeMapLoadingPreview";
 import { CodeCityMinimapPortal } from "./CodeCityMinimapPortal";
 import {
   CodeCityExploreSettings,
@@ -47,6 +53,9 @@ export interface KnowledgeGraphPanelProps {
   enteredFilePath?: string | null;
   focusMode?: boolean;
   onSelectionChange?: (nodeId: string | null) => void;
+  graphDetailLevel?: "file" | "class";
+  graphShowFunctionsInClassView?: boolean;
+  graphCityFilterNodeIds?: string[] | null;
   onGraphPayloadChange?: (payload: GraphPayload | null) => void;
   /** When true, explorer is rendered by parent in a combined city+graph layout. */
   combinedLayout?: boolean;
@@ -54,6 +63,11 @@ export interface KnowledgeGraphPanelProps {
   cityFloatingPane?: React.ReactNode;
   /** City filter/link state for the combined action bar. */
   cityExploreBar?: CityExploreBarProps;
+  /** Combined code-map layout: city model build state from parent. */
+  codeMapCityLoading?: boolean;
+  codeMapCityReady?: boolean;
+  /** Approximate file count for loading preview building spawns. */
+  codeMapSpawnTarget?: number;
 }
 
 type BuildSide = "target" | "baseline";
@@ -160,10 +174,16 @@ export function KnowledgeGraphPanel({
   enteredFilePath,
   focusMode,
   onSelectionChange,
+  graphDetailLevel,
+  graphShowFunctionsInClassView,
+  graphCityFilterNodeIds,
   onGraphPayloadChange,
   combinedLayout = false,
   cityFloatingPane = null,
   cityExploreBar,
+  codeMapCityLoading = false,
+  codeMapCityReady = true,
+  codeMapSpawnTarget = 32,
 }: KnowledgeGraphPanelProps) {
   const [buildSide, setBuildSide] = useState<BuildSide>("target");
   const [building, setBuilding] = useState(false);
@@ -183,7 +203,9 @@ export function KnowledgeGraphPanel({
   const [viewerOpen, setViewerOpen] = useState(combinedLayout);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [explorerMounted, setExplorerMounted] = useState(false);
+  const [loaderExiting, setLoaderExiting] = useState(false);
   const [statusLine, setStatusLine] = useState<string | null>(null);
+  const wasCodeMapLoadingRef = useRef(false);
   const buildGenerationRef = useRef(0);
   const lastAutoKeyRef = useRef<string | null>(null);
   const { upsertActivity, removeActivity } = useBackgroundActivityActionsOptional() ?? {};
@@ -349,7 +371,7 @@ export function KnowledgeGraphPanel({
       return;
     }
     lastAutoKeyRef.current = autoKey;
-    setViewerOpen(false);
+    setViewerOpen(combinedLayout);
 
     const start = () => {
       void (async () => {
@@ -370,7 +392,7 @@ export function KnowledgeGraphPanel({
       return () => window.clearTimeout(timer);
     }
     return () => window.cancelIdleCallback(idle);
-  }, [activeRoot, autoKey, loadGraphFromDisk, runBuild]);
+  }, [activeRoot, autoKey, combinedLayout, loadGraphFromDisk, runBuild]);
 
   useEffect(() => {
     if (!activeRoot) {
@@ -533,6 +555,9 @@ export function KnowledgeGraphPanel({
                 controlledNodeId={controlledNodeId}
                 enteredFilePath={enteredFilePath}
                 focusMode={focusMode}
+                detailLevel={graphDetailLevel}
+                showFunctionsInClassView={graphShowFunctionsInClassView}
+                cityFilterNodeIds={graphCityFilterNodeIds}
                 onSelectionChange={onSelectionChange}
               />
             </Suspense>
@@ -545,6 +570,66 @@ export function KnowledgeGraphPanel({
         </div>
       )
     ) : null;
+
+  const graphReady = Boolean(graphPayload && viewerOpen);
+  const codeMapReady = isCodeMapExperienceReady({
+    graphReady,
+    explorerMounted,
+    cityReady: codeMapCityReady,
+    graphBuilding: building,
+  });
+
+  const codeMapLoadSnapshot = useMemo(
+    () =>
+      computeCodeMapLoadSnapshot({
+        graphBuilding: building,
+        graphProgress: progress,
+        graphReady,
+        explorerMounted,
+        cityLoading: codeMapCityLoading,
+        cityReady: codeMapCityReady,
+        spawnTarget: codeMapSpawnTarget,
+      }),
+    [
+      building,
+      progress,
+      graphReady,
+      explorerMounted,
+      codeMapCityLoading,
+      codeMapCityReady,
+      codeMapSpawnTarget,
+    ],
+  );
+
+  useEffect(() => {
+    if (!combinedLayout) {
+      return;
+    }
+    if (!codeMapReady) {
+      wasCodeMapLoadingRef.current = true;
+      setLoaderExiting(false);
+      return;
+    }
+    if (!wasCodeMapLoadingRef.current) {
+      return;
+    }
+    setLoaderExiting(true);
+    const timer = window.setTimeout(() => {
+      setLoaderExiting(false);
+      wasCodeMapLoadingRef.current = false;
+    }, CODE_MAP_HANDOFF_MS);
+    return () => window.clearTimeout(timer);
+  }, [codeMapReady, combinedLayout]);
+
+  const codeMapLoadFailed = Boolean(error) && !graphPayload && !building;
+  const coverTransition = !codeMapReady
+    ? "loading"
+    : loaderExiting
+      ? "handoff"
+      : "ready";
+  const showCoverContent = codeMapReady && !codeMapLoadFailed;
+  const showCodeMapLoader =
+    combinedLayout && !codeMapLoadFailed && (!codeMapReady || loaderExiting);
 
   const viewerShell =
     explorerCore && graphPayload && viewerOpen ? (
@@ -727,10 +812,16 @@ export function KnowledgeGraphPanel({
         </div>
       ) : null}
 
-      {combinedLayout && viewerShell ? (
-        <div className="knowledge-graph-cover-stage doc-state-enter">
-          <div className="knowledge-graph-cover-graph">{viewerShell}</div>
-          {cityFloatingPane || cityExploreBar ? (
+      {combinedLayout ? (
+        <div
+          className={`knowledge-graph-cover-stage knowledge-graph-cover-stage--${coverTransition}`}
+        >
+          {showCoverContent ? (
+            <div className="knowledge-graph-cover-graph">
+              {viewerShell}
+            </div>
+          ) : null}
+          {showCoverContent && (cityFloatingPane || cityExploreBar) ? (
             <CodeCityMinimapPortal>
               {cityExploreBar ? (
                 <CodeCityExploreSettings
@@ -754,13 +845,11 @@ export function KnowledgeGraphPanel({
               )}
             </CodeCityMinimapPortal>
           ) : null}
-          {(building || progress) ? (
-            <div className="knowledge-graph-cover-progress" aria-live="polite">
-              <span>{progress?.message ?? "Building graph…"}</span>
-              {progressPercent != null ? (
-                <span className="knowledge-graph-progress-pct">{progressPercent}%</span>
-              ) : null}
-            </div>
+          {showCodeMapLoader ? (
+            <CodeMapLoadingPreview
+              snapshot={codeMapLoadSnapshot}
+              exiting={coverTransition === "handoff"}
+            />
           ) : null}
           {error ? <p className="knowledge-graph-cover-error doc-workspace-alert">{error}</p> : null}
         </div>

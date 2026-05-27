@@ -1,24 +1,24 @@
-### Overview  
-`src/app/graphCityBridge.ts` adds utilities that translate between the knowledge‑graph model and the CodeCity layout. It parses graph node IDs, maps them to city building IDs, and generates edge overlays and highlight sets for linked selections.
+### Overview
+`graphCityBridge.ts` was refactored to centralize node‑id parsing and simplify several helper signatures. The new `parseSymbolNodeRest` (added at R16) extracts `filePath` and `symbolName` from a node‑id suffix, handling numeric suffixes and colon‑separated paths. `parseGraphNodeId` now delegates function and class parsing to this helper (R45‑50).  
 
-### Key changes  
-- **Imports** – pulls `GraphEdge`, `KnowledgeGraph` from `@novadiff/graph-core/types` and local layout types (`CodeCityLayoutResult`, `CodeCityRenderableBuilding`, `CodeCityRootSide`) (lines 1‑6).  
-- **`CityEdgeOverlay` interface** – defines overlay payload (lines 10‑14).  
-- **Node‑to‑building mapping** – `graphNodeToCityBuildingIds` parses node IDs, matches buildings by kind and symbol, and falls back to file‑level matches (lines 74‑114).  
-- **Reverse mapping** – `cityBuildingToGraphNodeId` resolves a building back to the best graph node ID, handling file, function, and class kinds (lines 117‑146).  
-- **Batch mapping** – `buildBuildingIdByGraphNode` pre‑computes a map of node IDs to building ID arrays (lines 148‑164).  
-- **Edge overlay generation** – `graphEdgesToCityPairs` filters link‑relevant edges, caps results, and deduplicates by source/target pair (lines 167‑205).  
-- **Neighbor discovery** – `graphNeighborNodeIds` returns one‑hop neighbors via link edges (lines 208‑226).  
-- **Highlight logic** – `cityBuildingIdsForHighlight` combines node mapping, file‑path resolution, and focus‑mode neighbor expansion to produce a primary building and a set of highlight IDs (lines 250‑307).
+### Key changes
+- **`parseSymbolNodeRest`** – new helper (R16‑34).  
+- **`parseGraphNodeId`** – updated to use `parseSymbolNodeRest` (R45‑50).  
+- **`graphNodeToCityBuildingIds`** – signature changed to `(_rootSide?: CodeCityRootSide)` (R78‑82). Added logic (R95‑102) to infer missing `symbolName`/`kind` from the graph node.  
+- **`filePathForLinkedSelection`** – removed `rootSide` parameter (R229‑233) and simplified to use the parsed node ID or graph node file path.  
+- **`cityBuildingIdsForHighlight`** – added optional `cityBuildingId` (R287‑358). Logic now prefers this ID when supplied and updates the highlight set accordingly.  
+- **`cityBuildingToGraphNodeId`** – uses a candidate list of possible IDs (R139‑148) to improve robustness.  
+- **`buildBuildingIdByGraphNode`** – `rootSide` made optional (R165).  
+- **`graphNodeIdsForCityLayout`** – new export (R264‑285) that collects all graph node IDs corresponding to visible Code City buildings, including parent file nodes for non‑file buildings.
 
-### Impact  
-- **Correctness** – new mapping logic aligns graph nodes with city buildings, reducing visual mismatches.  
-- **Maintainability** – centralizes graph‑city translation; future changes to node ID formats or building kinds can be localized.  
-- **Performance** – pre‑computing `buildBuildingIdByGraphNode` and caching neighbor sets keeps per‑render overhead low.  
-- **Compatibility** – no API changes to existing modules; the new file is purely additive.
+### Impact
+- **Correctness** – Centralized parsing reduces duplicate logic; missing symbol names are now inferred from the graph node.  
+- **Maintainability** – Optional parameters reduce coupling to `rootSide`.  
+- **Compatibility** – Call sites must be updated to match the new optional arguments.  
+- **Performance** – Minor overhead from the candidate list lookup in `cityBuildingToGraphNodeId`; overall impact negligible.
 
-### Risks & follow‑ups  
-- **Edge‑case mapping** – verify that `parseGraphNodeId` handles malformed IDs; unit tests should cover all prefixes.  
-- **Duplicate overlays** – ensure `graphEdgesToCityPairs`’ deduplication logic (`seen` set) behaves as intended when multiple edges share the same source/target pair.  
-- **Focus mode expansion** – confirm that neighbor traversal does not introduce cycles or excessive highlight sets in dense graphs.  
-- **Type safety** – the new imports rely on `@novadiff/graph-core/types`; ensure those types are exported correctly and that future version changes do not break the bridge.
+### Risks & follow‑ups
+- **API breakage** – Verify all imports of the affected functions; update call sites to use the new optional parameters.  
+- **Parsing edge cases** – Ensure `parseSymbolNodeRest` correctly handles paths containing colons or numeric suffixes; run unit tests covering such cases.  
+- **Highlight logic** – Confirm that the new `cityBuildingIdsForHighlight` still produces the expected primary/secondary highlights in focus mode.  
+- **Graph node ID collection** – Validate that `graphNodeIdsForCityLayout` does not miss or duplicate IDs, especially for non‑file buildings.

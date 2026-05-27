@@ -1,0 +1,42 @@
+{
+  "relPath": "electron/knowledge-graph-runner.cjs",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:20:31.665Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R32-34",
+      "L159 / R162-165"
+    ],
+    "cited_changed_lines": [
+      "R32 added: \"venv\",",
+      "R33 added: \".venv\",",
+      "R34 added: \".venv-main\",",
+      "L159 removed: if (SKIP_DIRS.has(entry.name)) {",
+      "R162 added: if (SKIP_DIRS.has(entry.name) || entry.name.startsWith(\".venv\")) {",
+      "R163 added: continue;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function walkProjectFiles (147-186)",
+      "right function walkProjectFiles (150-192)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

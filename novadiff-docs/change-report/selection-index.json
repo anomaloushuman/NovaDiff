@@ -1,1 +1,68 @@
-[]
+[
+  {
+    "relPath": "electron/workspace-history.cjs",
+    "kind": "modified",
+    "label": "Code explanation (L80-98)",
+    "selectionKey": "lines-80-98",
+    "requestedMode": "exact",
+    "effectiveMode": "exact",
+    "lineRanges": [
+      {
+        "startRow": 0,
+        "endRow": 0,
+        "leftStart": null,
+        "leftEnd": null,
+        "rightStart": 80,
+        "rightEnd": 98
+      }
+    ],
+    "symbol": null,
+    "generatedAt": "2026-05-26T07:38:04.677Z",
+    "markdown": "### What it does`ensureCommitSnapshot` guarantees that a snapshot image exists for a specific commit hash in a workspace. It returns an object containing the snapshot path and a `ready` flag. If the workspace or snapshot path is missing, it throws an error.### How it works1. **Workspace lookup** – Calls `getWorkspace(userData, workspaceId)` and aborts with `\"Workspace not found\"` if the result is falsy.2. **Destination validation** – Resolves `snapshotPath` (or empty string) to an absolute path, trims it, and throws `\"Snapshot path is required\"` if the result is falsy.3. **Snapshot creation** – Invokes `snapshotCommit(workspace.repoRoot, hash, dest)` to generate the snapshot, storing the returned path in `snapPath`.4. **Commit list handling** – Normalises `workspace.commits` to an array, then finds the index of the commit whose `hash` matches the supplied `hash`.5. **Update commit record** – If found, sets that commit’s `snapshotPath` to `snapPath`, re‑assigns the updated array to `workspace.commits`, and persists the workspace via `upsertWorkspace(userData, workspace)`.6. **Return value** – Always returns `{ snapshotPath: snapPath, ready: true }` after the optional update.### Notes for reviewers- The function silently ignores commits that are not present in `workspace.commits`; no error is thrown in that case.- `snapshotCommit` and `upsertWorkspace` are external dependencies; their side effects (e.g., file I/O, database writes) are not visible in the snippet.- The function assumes `workspace.repoRoot` is a valid repository path; if it is invalid, `snapshotCommit` may fail, but that error is not caught here.- The returned `ready: true` flag is always true; the function never signals a pending state.\n",
+    "htmlRelPath": "novadiff-docs/selections/electron/workspace-history.cjs/lines-80-98/summary.html"
+  },
+  {
+    "relPath": "package.json",
+    "kind": "modified",
+    "label": "Code explanation (L23-45)",
+    "selectionKey": "lines-23-45",
+    "requestedMode": "exact",
+    "effectiveMode": "exact",
+    "lineRanges": [
+      {
+        "startRow": 0,
+        "endRow": 0,
+        "leftStart": null,
+        "leftEnd": null,
+        "rightStart": 23,
+        "rightEnd": 45
+      }
+    ],
+    "symbol": null,
+    "generatedAt": "2026-05-26T07:07:36.987Z",
+    "markdown": "### What it doesThe `dependencies` section declares the runtime libraries the project needs.- Core graph functionality is provided by `@novadiff/graph-core` and `@novadiff/graph-view` (local packages).- Layout engines such as `@dagrejs/dagre`, `elkjs`, and `d3-force` are included for graph drawing.- `graphology` and its community detection plugin `graphology-communities-louvain` supply graph data structures and analysis tools.- UI components come from `react`, `react-dom`, `@xyflow/react`, `react-window`, `lucide-react`, and `zustand` for state management.- Markdown rendering uses `react-markdown`, `marked`, `remark-gfm`, and `rehype-sanitize`.- `mermaid` and `three` add diagram and3‑D rendering capabilities.- `devlop` is a dev‑only helper for hot reloading.### How it worksWhen `npm install` or `yarn install` runs, each listed package is fetched from npm (or the local file path for the `@novadiff/*` packages). The lockfile ensures the exact minor/patch versions (`^` ranges) are resolved. At runtime, the application imports these modules to build and render graphs, process markdown, and manage UI state. The `file:` entries allow local development of the graph core and view modules without publishing them.### Notes for reviewers- The caret (`^`) ranges mean the build will accept any compatible minor/patch updates; confirm that this aligns with the team’s version‑stability policy.- The choice of both `@dagrejs/dagre` and `elkjs` suggests multiple layout strategies; verify that both are actively used.- `devlop` is a dev‑only dependency; ensure it is listed under `devDependencies` if not required at runtime.- Unknown from the snippet: why `graphology-communities-louvain` is included—check if community detection is a core feature.\n",
+    "htmlRelPath": "novadiff-docs/selections/package.json/lines-23-45/summary.html"
+  },
+  {
+    "relPath": "package.json",
+    "kind": "modified",
+    "label": "Code explanation (L46-63)",
+    "selectionKey": "lines-46-63",
+    "requestedMode": "exact",
+    "effectiveMode": "exact",
+    "lineRanges": [
+      {
+        "startRow": 0,
+        "endRow": 0,
+        "leftStart": null,
+        "leftEnd": null,
+        "rightStart": 46,
+        "rightEnd": 63
+      }
+    ],
+    "symbol": null,
+    "generatedAt": "2026-05-26T07:06:12.032Z",
+    "markdown": "### What it doesThe snippet declares the **devDependencies** for the project. These are packages required only during development, building, testing, or packaging, not at runtime. It includes tooling for a Vite‑powered React app (`@vitejs/plugin-react`, `vite`, `typescript`, `vitest`), styling with Tailwind (`tailwindcss`, `@tailwindcss/vite`), type definitions (`@types/*`), and Electron packaging (`electron`, `electron-builder`). The `concurrently` and `wait-on` utilities help orchestrate parallel dev processes.### How it worksWhen `npm install` or `yarn install` runs, npm resolves each package name and version range (e.g., `^4.0.0`, `~5.8.3`) against the npm registry, downloading the matching tarballs into `node_modules`. Build scripts (e.g., `vite build`, `electron-builder`) import these modules to compile TypeScript, bundle assets, run tests, or generate installers. The `^` and `~` prefixes allow patch or minor updates while keeping major versions fixed, ensuring compatibility across the dev stack.### Notes for reviewers- Verify that the `^` ranges for `electron` and `electron-builder` are compatible with the target OS and architecture.- Ensure `typescript` `~5.8.3` aligns with the `@types/*` packages; mismatched major versions can cause type errors.- Check that `concurrently` and `wait-on` are used in `scripts` to avoid race conditions during dev server startup.- Confirm that `@tailwindcss/vite` and `tailwindcss` versions are mutually compatible; otherwise, Tailwind may not compile correctly.\n",
+    "htmlRelPath": "novadiff-docs/selections/package.json/lines-46-63/summary.html"
+  }
+]

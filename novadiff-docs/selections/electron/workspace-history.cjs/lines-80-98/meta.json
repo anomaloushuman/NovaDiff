@@ -1,0 +1,22 @@
+{
+  "relPath": "electron/workspace-history.cjs",
+  "kind": "modified",
+  "label": "Code explanation (L80-98)",
+  "selectionKey": "lines-80-98",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 80,
+      "rightEnd": 98
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T07:38:04.677Z"
+}

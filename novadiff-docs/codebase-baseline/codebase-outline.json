@@ -1,15 +1,15 @@
 {
   "by_extension": [
     {
-      "count": 200,
+      "count": 210,
       "ext": ".ts"
     },
     {
-      "count": 72,
+      "count": 82,
       "ext": ".tsx"
     },
     {
-      "count": 24,
+      "count": 27,
       "ext": ".cjs"
     },
     {
@@ -112,6 +112,16 @@
       "via": "clearGhCache"
     },
     {
+      "from_file": "electron/git-commit.cjs",
+      "to_file": "electron/git-service.cjs",
+      "via": "runGit"
+    },
+    {
+      "from_file": "electron/git-commit.cjs",
+      "to_file": "electron/git-service.cjs",
+      "via": "tryRunGit"
+    },
+    {
       "from_file": "electron/git-publish.cjs",
       "to_file": "electron/git-service.cjs",
       "via": "isGitRepo"
@@ -130,6 +140,11 @@
       "from_file": "electron/git-publish.cjs",
       "to_file": "electron/github-service.cjs",
       "via": "slugFromRepoRoot"
+    },
+    {
+      "from_file": "electron/git-publish.cjs",
+      "to_file": "electron/git-service.cjs",
+      "via": "stagePaths"
     },
     {
       "from_file": "electron/git-publish.cjs",
@@ -172,6 +187,16 @@
       "via": "augmentPathForCli"
     },
     {
+      "from_file": "electron/github-commit-context.cjs",
+      "to_file": "electron/github-service.cjs",
+      "via": "getAuthStatus"
+    },
+    {
+      "from_file": "electron/github-commit-context.cjs",
+      "to_file": "electron/github-service.cjs",
+      "via": "tryRunGh"
+    },
+    {
       "from_file": "electron/github-service.cjs",
       "to_file": "electron/gh-path.cjs",
       "via": "resolveGhExecutable"
@@ -190,11 +215,6 @@
       "from_file": "electron/github-service.cjs",
       "to_file": "electron/git-service.cjs",
       "via": "parseGithubSlugFromUrl"
-    },
-    {
-      "from_file": "electron/graph/extract-structure.mjs",
-      "to_file": "packages/graph-core/src/plugins/registry.ts",
-      "via": "PluginRegistry"
     },
     {
       "from_file": "electron/graph/extract-structure.mjs",
@@ -383,6 +403,21 @@
     },
     {
       "from_file": "electron/main.cjs",
+      "to_file": "electron/git-service.cjs",
+      "via": "stagePaths"
+    },
+    {
+      "from_file": "electron/main.cjs",
+      "to_file": "electron/export-snapshot.cjs",
+      "via": "exportProjectSnapshotZip"
+    },
+    {
+      "from_file": "electron/main.cjs",
+      "to_file": "electron/git-service.cjs",
+      "via": "stageDistrict"
+    },
+    {
+      "from_file": "electron/main.cjs",
       "to_file": "electron/workspace-store.cjs",
       "via": "loadSession"
     },
@@ -475,6 +510,16 @@
       "from_file": "electron/main.cjs",
       "to_file": "electron/git-blame.cjs",
       "via": "blameFileAtRef"
+    },
+    {
+      "from_file": "electron/main.cjs",
+      "to_file": "electron/git-commit.cjs",
+      "via": "getCommitDetail"
+    },
+    {
+      "from_file": "electron/main.cjs",
+      "to_file": "electron/github-commit-context.cjs",
+      "via": "getGithubCommitContext"
     },
     {
       "from_file": "electron/main.cjs",
@@ -688,18 +733,8 @@
     },
     {
       "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
-      "to_file": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-      "via": "YAMLConfigParser"
-    },
-    {
-      "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
       "to_file": "packages/graph-core/src/plugins/parsers/json-parser.ts",
       "via": "JSONConfigParser"
-    },
-    {
-      "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
-      "to_file": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-      "via": "TOMLParser"
     },
     {
       "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
@@ -748,11 +783,6 @@
     },
     {
       "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
-      "to_file": "packages/graph-core/src/plugins/registry.ts",
-      "via": "PluginRegistry"
-    },
-    {
-      "from_file": "packages/graph-core/src/__tests__/parsers.test.ts",
       "to_file": "packages/graph-core/src/plugins/parsers/index.ts",
       "via": "registerAllParsers"
     },
@@ -765,11 +795,6 @@
       "from_file": "packages/graph-core/src/__tests__/plugin-discovery.test.ts",
       "to_file": "packages/graph-core/src/plugins/discovery.ts",
       "via": "serializePluginConfig"
-    },
-    {
-      "from_file": "packages/graph-core/src/__tests__/plugin-registry.test.ts",
-      "to_file": "packages/graph-core/src/plugins/registry.ts",
-      "via": "PluginRegistry"
     },
     {
       "from_file": "packages/graph-core/src/__tests__/plugin-registry.test.ts",
@@ -1143,18 +1168,8 @@
     },
     {
       "from_file": "packages/graph-core/src/plugins/parsers/index.ts",
-      "to_file": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-      "via": "YAMLConfigParser"
-    },
-    {
-      "from_file": "packages/graph-core/src/plugins/parsers/index.ts",
       "to_file": "packages/graph-core/src/plugins/parsers/json-parser.ts",
       "via": "JSONConfigParser"
-    },
-    {
-      "from_file": "packages/graph-core/src/plugins/parsers/index.ts",
-      "to_file": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-      "via": "TOMLParser"
     },
     {
       "from_file": "packages/graph-core/src/plugins/parsers/index.ts",
@@ -1197,7 +1212,7 @@
       "via": "ShellParser"
     }
   ],
-  "cross_file_call_graph_mermaid": "flowchart LR\n  cli_src_main_rs[\"cli/src/main.rs\"] -->|push| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_code_city_model_cjs[\"electron/code-city-model.cjs\"] -->|blameFileOwnership| electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] -->|normalizeMarkdownDocument| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] -->|htmlToPdfFile| electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|isGhInstalled| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|clearGhCache| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|isGitRepo| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|getRepoStatus| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|getAuthStatus| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|slugFromRepoRoot| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|stageAll| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|commit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|push| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|createPullRequest| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|isGhInstalled| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|ghNotFoundError| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|ghNotFoundError| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|parseGithubSlugFromUrl| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_graph_extract_structure_mjs[\"electron/graph/extract-structure.mjs\"] -->|PluginRegistry| packages_graph_core_src_plugins_registry_ts[\"packages/graph-core/src/plugins/registry.ts\"]\n  electron_graph_extract_structure_mjs[\"electron/graph/extract-structure.mjs\"] -->|registerAllParsers| packages_graph_core_src_plugins_parsers_index_ts[\"packages/graph-core/src/plugins/parsers/index.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|GraphBuilder| packages_graph_core_src_analyzer_graph_builder_ts[\"packages/graph-core/src/analyzer/graph-builder.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|saveGraph| packages_graph_core_src_persistence_index_ts[\"packages/graph-core/src/persistence/index.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|saveMeta| packages_graph_core_src_persistence_index_ts[\"packages/graph-core/src/persistence/index.ts\"]\n  electron_llm_cjs[\"electron/llm.cjs\"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts[\"packages/graph-core/src/plugins/extractors/__tests__\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|runCompareEngineAsync| electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|runCompareEngine| electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|summarizeChange| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|summarizeChangeStream| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|probeProvider| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|stopSummaryPrefetchWorker| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|clearSummaryPrefetchCache| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|startSummaryPrefetchWorker| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getPrefetchedSummary| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|exportSelectionSummaryArtifacts| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|buildCodeCityModelPayload| electron_code_city_model_cjs[\"electron/code-city-model.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|writeNovadiffDocsBundle| electron_novadiff_docs_writer_cjs[\"electron/novadiff-docs-writer.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|writeNovadiffDocsHtml| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|generateNovadiffDocsPdf| electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|refreshNovadiffDocsHtmlFromDisk| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|buildKnowledgeGraph| electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|detectGitTooling| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getAuthStatus| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getRepoStatus| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|discoverRepos| electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|matchRepoForGithubRepo| electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listRepos| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listPullRequests| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|isGitRepo| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|preparePrCompareRoots| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|viewPullRequest| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|previewPublish| electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|executePublish| electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|loadSession| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listDetectedAccounts| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getUserProfile| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getGhToolingStatus| electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|installGh| electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setLocalOnlyMode| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|startGithubDeviceAuth| electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|cancelGithubDeviceAuth| electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setGitUser| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|workspacesRoot| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|parseGithubSlugFromUrl| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|createWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|indexWorkspaceHistory| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setActiveWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listWorkspaces| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|updateWorkspaceLiveRepo| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|updateWorkspaceUiState| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|blameFileAtRef| electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listSnapshotFiles| electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|ensureCommitSnapshot| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readSnapshotTextFile| electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|refreshWorkspaceHistory| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|cleanupNovadiffWorktrees| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts[\"packages/graph-core/src/plugins/extractors/__tests__\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|runCompareEngine| electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|buildDiffExcerptChunks| electron_diff_excerpt_cjs[\"electron/diff-excerpt.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|buildDiffExcerpt| electron_diff_excerpt_cjs[\"electron/diff-excerpt.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|summarizeChange| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"] -->|tryRunGit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"] -->|parseGithubSlugFromUrl| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] -->|runGit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] -->|getWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]",
+  "cross_file_call_graph_mermaid": "flowchart LR\n  cli_src_main_rs[\"cli/src/main.rs\"] -->|push| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_code_city_model_cjs[\"electron/code-city-model.cjs\"] -->|blameFileOwnership| electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] -->|normalizeMarkdownDocument| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] -->|htmlToPdfFile| electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|isGhInstalled| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] -->|clearGhCache| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_git_commit_cjs[\"electron/git-commit.cjs\"] -->|runGit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_commit_cjs[\"electron/git-commit.cjs\"] -->|tryRunGit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|isGitRepo| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|getRepoStatus| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|getAuthStatus| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|slugFromRepoRoot| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|stagePaths| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|stageAll| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|commit| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|push| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] -->|createPullRequest| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|isGhInstalled| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|ghNotFoundError| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_commit_context_cjs[\"electron/github-commit-context.cjs\"] -->|getAuthStatus| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_commit_context_cjs[\"electron/github-commit-context.cjs\"] -->|tryRunGh| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|resolveGhExecutable| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|ghNotFoundError| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] -->|parseGithubSlugFromUrl| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_graph_extract_structure_mjs[\"electron/graph/extract-structure.mjs\"] -->|registerAllParsers| packages_graph_core_src_plugins_parsers_index_ts[\"packages/graph-core/src/plugins/parsers/index.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|GraphBuilder| packages_graph_core_src_analyzer_graph_builder_ts[\"packages/graph-core/src/analyzer/graph-builder.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|saveGraph| packages_graph_core_src_persistence_index_ts[\"packages/graph-core/src/persistence/index.ts\"]\n  electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"] -->|saveMeta| packages_graph_core_src_persistence_index_ts[\"packages/graph-core/src/persistence/index.ts\"]\n  electron_llm_cjs[\"electron/llm.cjs\"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts[\"packages/graph-core/src/plugins/extractors/__tests__\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|augmentPathForCli| electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|runCompareEngineAsync| electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|runCompareEngine| electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|summarizeChange| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|summarizeChangeStream| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|probeProvider| electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|stopSummaryPrefetchWorker| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|clearSummaryPrefetchCache| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|startSummaryPrefetchWorker| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getPrefetchedSummary| electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|exportSelectionSummaryArtifacts| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|buildCodeCityModelPayload| electron_code_city_model_cjs[\"electron/code-city-model.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|writeNovadiffDocsBundle| electron_novadiff_docs_writer_cjs[\"electron/novadiff-docs-writer.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|writeNovadiffDocsHtml| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|generateNovadiffDocsPdf| electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|refreshNovadiffDocsHtmlFromDisk| electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|buildKnowledgeGraph| electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|detectGitTooling| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getAuthStatus| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getRepoStatus| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|discoverRepos| electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|matchRepoForGithubRepo| electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listRepos| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listPullRequests| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|isGitRepo| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|preparePrCompareRoots| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|viewPullRequest| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|previewPublish| electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|executePublish| electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|stagePaths| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|exportProjectSnapshotZip| electron_export_snapshot_cjs[\"electron/export-snapshot.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|stageDistrict| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|loadSession| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listDetectedAccounts| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getUserProfile| electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getGhToolingStatus| electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|installGh| electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setLocalOnlyMode| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|startGithubDeviceAuth| electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|cancelGithubDeviceAuth| electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setGitUser| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|workspacesRoot| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|parseGithubSlugFromUrl| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|createWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|indexWorkspaceHistory| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|setActiveWorkspace| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listWorkspaces| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|updateWorkspaceLiveRepo| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|updateWorkspaceUiState| electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|blameFileAtRef| electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getCommitDetail| electron_git_commit_cjs[\"electron/git-commit.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|getGithubCommitContext| electron_github_commit_context_cjs[\"electron/github-commit-context.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|listSnapshotFiles| electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|ensureCommitSnapshot| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|readSnapshotTextFile| electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|refreshWorkspaceHistory| electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] -->|cleanupNovadiffWorktrees| electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts[\"packages/graph-core/src/plugins/extractors/__tests__\"]",
   "detected_projects": [
     {
       "kind": "node",
@@ -1330,6 +1345,14 @@
     {
       "depth": 2,
       "ext": ".cjs",
+      "line_count": 24,
+      "path": "electron/export-snapshot.cjs",
+      "symbol_count": 1,
+      "top_directory": "electron"
+    },
+    {
+      "depth": 2,
+      "ext": ".cjs",
       "line_count": 580,
       "path": "electron/file-summary-export.cjs",
       "symbol_count": 16,
@@ -1362,7 +1385,15 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 108,
+      "line_count": 69,
+      "path": "electron/git-commit.cjs",
+      "symbol_count": 1,
+      "top_directory": "electron"
+    },
+    {
+      "depth": 2,
+      "ext": ".cjs",
+      "line_count": 115,
       "path": "electron/git-publish.cjs",
       "symbol_count": 3,
       "top_directory": "electron"
@@ -1370,9 +1401,9 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 229,
+      "line_count": 262,
       "path": "electron/git-service.cjs",
-      "symbol_count": 16,
+      "symbol_count": 19,
       "top_directory": "electron"
     },
     {
@@ -1386,7 +1417,15 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 224,
+      "line_count": 245,
+      "path": "electron/github-commit-context.cjs",
+      "symbol_count": 4,
+      "top_directory": "electron"
+    },
+    {
+      "depth": 2,
+      "ext": ".cjs",
+      "line_count": 226,
       "path": "electron/github-service.cjs",
       "symbol_count": 11,
       "top_directory": "electron"
@@ -1410,7 +1449,7 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 1180,
+      "line_count": 1182,
       "path": "electron/llm.cjs",
       "symbol_count": 34,
       "top_directory": "electron"
@@ -1418,7 +1457,7 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 1090,
+      "line_count": 1150,
       "path": "electron/main.cjs",
       "symbol_count": 10,
       "top_directory": "electron"
@@ -1426,9 +1465,9 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 1309,
+      "line_count": 1461,
       "path": "electron/novadiff-docs-html.cjs",
-      "symbol_count": 32,
+      "symbol_count": 35,
       "top_directory": "electron"
     },
     {
@@ -1450,7 +1489,7 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 241,
+      "line_count": 256,
       "path": "electron/prefetch-summaries.cjs",
       "symbol_count": 6,
       "top_directory": "electron"
@@ -1458,7 +1497,7 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 183,
+      "line_count": 188,
       "path": "electron/preload.cjs",
       "symbol_count": 0,
       "top_directory": "electron"
@@ -1482,7 +1521,7 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 300,
+      "line_count": 302,
       "path": "electron/workspace-history.cjs",
       "symbol_count": 7,
       "top_directory": "electron"
@@ -1490,9 +1529,9 @@
     {
       "depth": 2,
       "ext": ".cjs",
-      "line_count": 193,
+      "line_count": 236,
       "path": "electron/workspace-store.cjs",
-      "symbol_count": 15,
+      "symbol_count": 17,
       "top_directory": "electron"
     },
     {
@@ -2610,25 +2649,25 @@
     {
       "depth": 6,
       "ext": ".ts",
-      "line_count": 46,
+      "line_count": 0,
       "path": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-      "symbol_count": 1,
+      "symbol_count": 0,
       "top_directory": "packages"
     },
     {
       "depth": 6,
       "ext": ".ts",
-      "line_count": 106,
+      "line_count": 0,
       "path": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-      "symbol_count": 1,
+      "symbol_count": 0,
       "top_directory": "packages"
     },
     {
       "depth": 5,
       "ext": ".ts",
-      "line_count": 81,
+      "line_count": 0,
       "path": "packages/graph-core/src/plugins/registry.ts",
-      "symbol_count": 1,
+      "symbol_count": 0,
       "top_directory": "packages"
     },
     {
@@ -2771,6 +2810,14 @@
       "depth": 4,
       "ext": ".tsx",
       "line_count": 0,
+      "path": "packages/graph-view/src/GraphEmbedSyncBridge.tsx",
+      "symbol_count": 0,
+      "top_directory": "packages"
+    },
+    {
+      "depth": 4,
+      "ext": ".tsx",
+      "line_count": 0,
       "path": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
       "symbol_count": 0,
       "top_directory": "packages"
@@ -2780,6 +2827,14 @@
       "ext": ".tsx",
       "line_count": 0,
       "path": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
+      "symbol_count": 0,
+      "top_directory": "packages"
+    },
+    {
+      "depth": 5,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "packages/graph-view/src/__tests__/selectionCluster.test.ts",
       "symbol_count": 0,
       "top_directory": "packages"
     },
@@ -3315,6 +3370,14 @@
       "depth": 5,
       "ext": ".ts",
       "line_count": 0,
+      "path": "packages/graph-view/src/utils/graphCityNavigation.ts",
+      "symbol_count": 0,
+      "top_directory": "packages"
+    },
+    {
+      "depth": 5,
+      "ext": ".ts",
+      "line_count": 0,
       "path": "packages/graph-view/src/utils/layerStats.ts",
       "symbol_count": 0,
       "top_directory": "packages"
@@ -3340,6 +3403,14 @@
       "ext": ".ts",
       "line_count": 0,
       "path": "packages/graph-view/src/utils/louvain.ts",
+      "symbol_count": 0,
+      "top_directory": "packages"
+    },
+    {
+      "depth": 5,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "packages/graph-view/src/utils/selectionCluster.ts",
       "symbol_count": 0,
       "top_directory": "packages"
     },
@@ -3433,9 +3504,25 @@
     },
     {
       "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
+      "path": "src/app/DocsViewSyncContext.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
       "ext": ".ts",
       "line_count": 0,
       "path": "src/app/changedFilesTree.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "src/app/codeCityChromeInsets.ts",
       "symbol_count": 0,
       "top_directory": "src"
     },
@@ -3452,6 +3539,14 @@
       "ext": ".ts",
       "line_count": 0,
       "path": "src/app/codebaseDocs.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "src/app/commitChangeAnalysis.ts",
       "symbol_count": 0,
       "top_directory": "src"
     },
@@ -3491,6 +3586,14 @@
       "depth": 3,
       "ext": ".ts",
       "line_count": 0,
+      "path": "src/app/fileTree.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
       "path": "src/app/generatedMarkdown.ts",
       "symbol_count": 0,
       "top_directory": "src"
@@ -3500,6 +3603,30 @@
       "ext": ".ts",
       "line_count": 0,
       "path": "src/app/gitTypes.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "src/app/graphCityBridge.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "src/app/helpCopy.ts",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".ts",
+      "line_count": 0,
+      "path": "src/app/impactHeatmap.ts",
       "symbol_count": 0,
       "top_directory": "src"
     },
@@ -3635,6 +3762,22 @@
       "depth": 3,
       "ext": ".tsx",
       "line_count": 0,
+      "path": "src/components/CodeCityMinimapPortal.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
+      "path": "src/components/CodeCityMinimapSlot.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
       "path": "src/components/CodeCityView.tsx",
       "symbol_count": 0,
       "top_directory": "src"
@@ -3659,6 +3802,14 @@
       "depth": 3,
       "ext": ".tsx",
       "line_count": 0,
+      "path": "src/components/DocsGraphExploreChrome.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
       "path": "src/components/DocumentationWorkspace.tsx",
       "symbol_count": 0,
       "top_directory": "src"
@@ -3667,7 +3818,31 @@
       "depth": 3,
       "ext": ".tsx",
       "line_count": 0,
+      "path": "src/components/DocumentationWorkspaceLinked.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
+      "path": "src/components/GitBlameLineModal.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
       "path": "src/components/GitBlamePanel.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
+      "path": "src/components/GitHistoryContextPanel.tsx",
       "symbol_count": 0,
       "top_directory": "src"
     },
@@ -3700,6 +3875,14 @@
       "ext": ".tsx",
       "line_count": 0,
       "path": "src/components/InsightsColumn.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 3,
+      "ext": ".tsx",
+      "line_count": 0,
+      "path": "src/components/KeyboardShortcutsHelp.tsx",
       "symbol_count": 0,
       "top_directory": "src"
     },
@@ -3795,6 +3978,14 @@
       "depth": 4,
       "ext": ".tsx",
       "line_count": 0,
+      "path": "src/components/onboarding/ProductTour.tsx",
+      "symbol_count": 0,
+      "top_directory": "src"
+    },
+    {
+      "depth": 4,
+      "ext": ".tsx",
+      "line_count": 0,
       "path": "src/components/onboarding/WelcomeScreen.tsx",
       "symbol_count": 0,
       "top_directory": "src"
@@ -3859,6 +4050,14 @@
       "depth": 2,
       "ext": ".ts",
       "line_count": 0,
+      "path": "tests/graphCityBridge.test.ts",
+      "symbol_count": 0,
+      "top_directory": "tests"
+    },
+    {
+      "depth": 2,
+      "ext": ".ts",
+      "line_count": 0,
       "path": "tests/smoke.test.ts",
       "symbol_count": 0,
       "top_directory": "tests"
@@ -3914,6 +4113,10 @@
       "to": "electron/gh-path.cjs"
     },
     {
+      "from": "electron/git-commit.cjs",
+      "to": "electron/git-service.cjs"
+    },
+    {
       "from": "electron/git-publish.cjs",
       "to": "electron/git-service.cjs"
     },
@@ -3926,12 +4129,20 @@
       "to": "electron/gh-path.cjs"
     },
     {
+      "from": "electron/github-commit-context.cjs",
+      "to": "electron/github-service.cjs"
+    },
+    {
       "from": "electron/github-service.cjs",
       "to": "electron/git-service.cjs"
     },
     {
       "from": "electron/github-service.cjs",
       "to": "electron/gh-path.cjs"
+    },
+    {
+      "from": "electron/github-service.cjs",
+      "to": "electron/github-commit-context.cjs"
     },
     {
       "from": "electron/main.cjs",
@@ -3979,6 +4190,10 @@
     },
     {
       "from": "electron/main.cjs",
+      "to": "electron/git-commit.cjs"
+    },
+    {
+      "from": "electron/main.cjs",
       "to": "electron/repo-discovery.cjs"
     },
     {
@@ -4012,6 +4227,10 @@
     {
       "from": "electron/main.cjs",
       "to": "electron/gh-install.cjs"
+    },
+    {
+      "from": "electron/main.cjs",
+      "to": "electron/export-snapshot.cjs"
     },
     {
       "from": "electron/prefetch-summaries.cjs",
@@ -4050,8 +4269,8 @@
       "to": "packages/graph-core/src/ignore-generator.ts"
     }
   ],
-  "import_graph_mermaid": "flowchart LR\n  electron_code_city_model_cjs[\"electron/code-city-model.cjs\"] --> electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] --> electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] --> electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] --> electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_writer_cjs[\"electron/novadiff-docs-writer.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_code_city_model_cjs[\"electron/code-city-model.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_diff_excerpt_cjs[\"electron/diff-excerpt.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] --> electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  packages_graph_core_src___tests___ignore_filter_test_ts[\"packages/graph-core/src/__tests__/ignore-filter.test\"] --> packages_graph_core_src_ignore_filter_ts[\"packages/graph-core/src/ignore-filter.ts\"]\n  packages_graph_core_src___tests___ignore_generator_test_ts[\"packages/graph-core/src/__tests__/ignore-generator.t\"] --> packages_graph_core_src_ignore_generator_ts[\"packages/graph-core/src/ignore-generator.ts\"]",
-  "prompt_appendix": "=== Target codebase outline (heuristic scan; not a full AST) ===\nTotal source files indexed: 336\nTop extensions:\n- .ts: 200\n- .tsx: 72\n- .cjs: 24\n- .json: 13\n- .css: 5\n- .mjs: 4\n- .svg: 4\n- .md: 3\n- (no ext): 2\n- .html: 2\n- .ico: 1\n- .jpg: 1\n- .lock: 1\n- .png: 1\nTop first-level segments:\n- packages/: 231\n- src/: 56\n- electron/: 24\n- ./: 14\n- .novadiff-graph/: 4\n- cli/: 3\n- public/: 2\n- scripts/: 1\n- tests/: 1\nRelative import edges (JS/TS, resolved): 38\nCross-file call edges (regex; unique symbol → single definition): 225\nDetected project kinds (marker files):\n- node: package.json\nSample symbols (functions/types) by file:\n- cli/src/main.rs: ChangeKind, path_segments, path_depth, parent_dir, subtree_change_counts, try_build_gitignore_for_root, is_novadiff_docs_reserved_rel, filter_out_novadiff_docs_changes, walk_path_allowed, filter_changes_for_prefetch_gitignore, is_utf8_text_file, is_change_text_eligible\n- electron/code-city-model.cjs: normalizeSide, dominantAuthor, ownershipForRange, selectBlamePaths, buildBlameMap, buildSymbolFileIndex, buildSideNodes, buildCodeCityModelPayload\n- electron/compare-runner.cjs: cliExecutableName, resolveRustCli, cleanEnv, runCompareEngine, parseEngineStdout, runCompareEngineAsync\n- electron/diff-excerpt.cjs: buildDiffExcerpt, buildDiffExcerptChunks\n- electron/file-summary-export.cjs: escapeHtml, escapeMermaidForHtml, injectMermaidFences, markdownToHtml, isReservedNovadiffRel, safeSummarySegments, resolveSummaryDirAbs, safeArtifactSegment, resolveSelectionBaseDirAbs, resolveSelectionDirAbs, buildFileSummaryDocument, buildSelectionSummaryDocument\n- electron/gh-install.cjs: resolveBrew, getInstallPlan, readGhVersion, getGhToolingStatus, runInstallCommand, installGh\n- electron/gh-path.cjs: homeDir, extraPathDirs, augmentPathForCli, ghCandidatePaths, resolveViaLoginShell, verifyGh, resolveGhExecutable, clearGhCache, isGhInstalled, ghInstallHint, ghNotFoundError\n- electron/git-blame.cjs: parseBlamePorcelain, blameFileAtRef, blameFileOwnership\n- electron/git-publish.cjs: buildFullCommitMessage, previewPublish, executePublish\n- electron/git-service.cjs: gitExecutable, runGit, tryRunGit, isGitRepo, parsePorcelainStatus, getRepoStatus, parseGithubSlugFromUrl, stageAll, commit, push, ensureWorktreeBase, removeDirSafe\n- electron/github-auth-flow.cjs: stripAnsi, cancelGithubDeviceAuth, startGithubDeviceAuth\n- electron/github-service.cjs: runGh, tryRunGh, isGhAvailable, getAuthStatus, listRepos, listPullRequests, viewPullRequest, createPullRequest, getUserProfile, listDetectedAccounts, slugFromRepoRoot\n- electron/graph/extract-structure.mjs: main, buildResult\n- electron/knowledge-graph-runner.cjs: resolveRepoRoot, resolveNodeExecutable, nodeChildEnv, runCommand, ensureGraphCoreBuilt, loadCore, isTextCandidate, walkProjectFiles, detectLanguage, fileCategory, resolveRelativeImport, buildBatchImportData\n- electron/llm.cjs: normalizeBase, sendAccumulated, normalizeRepeatUnit, arraysEqual, trimRepeatedParagraphSuffix, trimRepeatedLineSuffix, sanitizeModelResponse, ollamaGenerationOptions, lmStudioGenerationOptions, ollamaNumPredict, streamOllamaChat, lmStudioMaxTokens\n- electron/main.cjs: sendEngineProgress, getTargetWindow, windowStatePayload, emitWindowState, iconPath, buildMenu, createWindow, sendKnowledgeGraphProgress, sendWorkspaceHistoryProgress, sendGithubAuthProgress\n- electron/novadiff-docs-html.cjs: bundleKeyOf, bundleBaseDir, bundleModeMeta, escapeHtml, escapeMermaidForHtml, escapeRegex, countMatches, normalizeMalformedCodeFences, looksLikeRawDiffDump, normalizeFenceChunk, normalizeCompactListMarkers, injectMermaidFences\n- electron/novadiff-docs-pdf.cjs: bundleKeyOf, bundleBaseDir, bundleModeMeta, escapeHtml, escapeMermaidForHtml, renderSymbolsTable, renderImportEdgesTable, renderDetectedProjects, renderCrossFileCallEdges, mermaidBlock, buildMainPdfHtml, buildDiagramsPdfHtml\n",
+  "import_graph_mermaid": "flowchart LR\n  electron_code_city_model_cjs[\"electron/code-city-model.cjs\"] --> electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] --> electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"] --> electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_gh_install_cjs[\"electron/gh-install.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_git_commit_cjs[\"electron/git-commit.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_git_publish_cjs[\"electron/git-publish.cjs\"] --> electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_commit_context_cjs[\"electron/github-commit-context.cjs\"] --> electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_github_service_cjs[\"electron/github-service.cjs\"] --> electron_github_commit_context_cjs[\"electron/github-commit-context.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_writer_cjs[\"electron/novadiff-docs-writer.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_pdf_cjs[\"electron/novadiff-docs-pdf.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_novadiff_docs_html_cjs[\"electron/novadiff-docs-html.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_code_city_model_cjs[\"electron/code-city-model.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_knowledge_graph_runner_cjs[\"electron/knowledge-graph-runner.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_github_service_cjs[\"electron/github-service.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_commit_cjs[\"electron/git-commit.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_publish_cjs[\"electron/git-publish.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_git_blame_cjs[\"electron/git-blame.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_files_cjs[\"electron/workspace-files.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_workspace_history_cjs[\"electron/workspace-history.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_github_auth_flow_cjs[\"electron/github-auth-flow.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_gh_path_cjs[\"electron/gh-path.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_gh_install_cjs[\"electron/gh-install.cjs\"]\n  electron_main_cjs[\"electron/main.cjs\"] --> electron_export_snapshot_cjs[\"electron/export-snapshot.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_compare_runner_cjs[\"electron/compare-runner.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_llm_cjs[\"electron/llm.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_diff_excerpt_cjs[\"electron/diff-excerpt.cjs\"]\n  electron_prefetch_summaries_cjs[\"electron/prefetch-summaries.cjs\"] --> electron_file_summary_export_cjs[\"electron/file-summary-export.cjs\"]\n  electron_repo_discovery_cjs[\"electron/repo-discovery.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] --> electron_git_service_cjs[\"electron/git-service.cjs\"]\n  electron_workspace_history_cjs[\"electron/workspace-history.cjs\"] --> electron_workspace_store_cjs[\"electron/workspace-store.cjs\"]\n  packages_graph_core_src___tests___ignore_filter_test_ts[\"packages/graph-core/src/__tests__/ignore-filter.test\"] --> packages_graph_core_src_ignore_filter_ts[\"packages/graph-core/src/ignore-filter.ts\"]\n  packages_graph_core_src___tests___ignore_generator_test_ts[\"packages/graph-core/src/__tests__/ignore-generator.t\"] --> packages_graph_core_src_ignore_generator_ts[\"packages/graph-core/src/ignore-generator.ts\"]",
+  "prompt_appendix": "=== Target codebase outline (heuristic scan; not a full AST) ===\nTotal source files indexed: 359\nTop extensions:\n- .ts: 210\n- .tsx: 82\n- .cjs: 27\n- .json: 13\n- .css: 5\n- .mjs: 4\n- .svg: 4\n- .md: 3\n- (no ext): 2\n- .html: 2\n- .ico: 1\n- .jpg: 1\n- .lock: 1\n- .png: 1\nTop first-level segments:\n- packages/: 235\n- src/: 71\n- electron/: 27\n- ./: 14\n- .novadiff-graph/: 4\n- cli/: 3\n- public/: 2\n- tests/: 2\n- scripts/: 1\nRelative import edges (JS/TS, resolved): 43\nCross-file call edges (regex; unique symbol → single definition): 228\nDetected project kinds (marker files):\n- node: package.json\nSample symbols (functions/types) by file:\n- cli/src/main.rs: ChangeKind, path_segments, path_depth, parent_dir, subtree_change_counts, try_build_gitignore_for_root, is_novadiff_docs_reserved_rel, filter_out_novadiff_docs_changes, walk_path_allowed, filter_changes_for_prefetch_gitignore, is_utf8_text_file, is_change_text_eligible\n- electron/code-city-model.cjs: normalizeSide, dominantAuthor, ownershipForRange, selectBlamePaths, buildBlameMap, buildSymbolFileIndex, buildSideNodes, buildCodeCityModelPayload\n- electron/compare-runner.cjs: cliExecutableName, resolveRustCli, cleanEnv, runCompareEngine, parseEngineStdout, runCompareEngineAsync\n- electron/diff-excerpt.cjs: buildDiffExcerpt, buildDiffExcerptChunks\n- electron/export-snapshot.cjs: exportProjectSnapshotZip\n- electron/file-summary-export.cjs: escapeHtml, escapeMermaidForHtml, injectMermaidFences, markdownToHtml, isReservedNovadiffRel, safeSummarySegments, resolveSummaryDirAbs, safeArtifactSegment, resolveSelectionBaseDirAbs, resolveSelectionDirAbs, buildFileSummaryDocument, buildSelectionSummaryDocument\n- electron/gh-install.cjs: resolveBrew, getInstallPlan, readGhVersion, getGhToolingStatus, runInstallCommand, installGh\n- electron/gh-path.cjs: homeDir, extraPathDirs, augmentPathForCli, ghCandidatePaths, resolveViaLoginShell, verifyGh, resolveGhExecutable, clearGhCache, isGhInstalled, ghInstallHint, ghNotFoundError\n- electron/git-blame.cjs: parseBlamePorcelain, blameFileAtRef, blameFileOwnership\n- electron/git-commit.cjs: getCommitDetail\n- electron/git-publish.cjs: buildFullCommitMessage, previewPublish, executePublish\n- electron/git-service.cjs: gitExecutable, runGit, tryRunGit, isGitRepo, parsePorcelainStatus, getRepoStatus, parseGithubSlugFromUrl, stageAll, stagePaths, unstagePaths, stageDistrict, commit\n- electron/github-auth-flow.cjs: stripAnsi, cancelGithubDeviceAuth, startGithubDeviceAuth\n- electron/github-commit-context.cjs: parseJsonSafe, shortGhError, normalizeThread, getGithubCommitContext\n- electron/github-service.cjs: runGh, tryRunGh, isGhAvailable, getAuthStatus, listRepos, listPullRequests, viewPullRequest, createPullRequest, getUserProfile, listDetectedAccounts, slugFromRepoRoot\n- electron/graph/extract-structure.mjs: main, buildResult\n- electron/knowledge-graph-runner.cjs: resolveRepoRoot, resolveNodeExecutable, nodeChildEnv, runCommand, ensureGraphCoreBuilt, loadCore, isTextCandidate, walkProjectFiles, detectLanguage, fileCategory, resolveRelativeImport, buildBatchImportData\n- electron/llm.cjs: normalizeBase, sendAccumulated, normalizeRepeatUnit, arraysEqual, trimRepeatedParagraphSuffix, trimRepeatedLineSuffix, sanitizeModelResponse, ollamaGenerationOptions, lmStudioGenerationOptions, ollamaNumPredict, streamOllamaChat, lmStudioMaxTokens\n",
   "symbol_spans_by_file": [
     {
       "line_count": 1751,
@@ -4903,6 +5122,23 @@
       ]
     },
     {
+      "line_count": 24,
+      "path": "electron/export-snapshot.cjs",
+      "symbols": [
+        {
+          "container_kind": "file",
+          "end_line": 24,
+          "kind": "function",
+          "line_count": 18,
+          "name": "exportProjectSnapshotZip",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/export-snapshot.cjs",
+          "start_line": 7
+        }
+      ]
+    },
+    {
       "line_count": 580,
       "path": "electron/file-summary-export.cjs",
       "symbols": [
@@ -5323,7 +5559,24 @@
       ]
     },
     {
-      "line_count": 108,
+      "line_count": 69,
+      "path": "electron/git-commit.cjs",
+      "symbols": [
+        {
+          "container_kind": "file",
+          "end_line": 69,
+          "kind": "function",
+          "line_count": 61,
+          "name": "getCommitDetail",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/git-commit.cjs",
+          "start_line": 9
+        }
+      ]
+    },
+    {
+      "line_count": 115,
       "path": "electron/git-publish.cjs",
       "symbols": [
         {
@@ -5350,9 +5603,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 108,
+          "end_line": 115,
           "kind": "function",
-          "line_count": 61,
+          "line_count": 68,
           "name": "executePublish",
           "parent_kind": null,
           "parent_name": null,
@@ -5362,7 +5615,7 @@
       ]
     },
     {
-      "line_count": 229,
+      "line_count": 262,
       "path": "electron/git-service.cjs",
       "symbols": [
         {
@@ -5455,10 +5708,10 @@
         },
         {
           "container_kind": "file",
-          "end_line": 147,
+          "end_line": 151,
           "kind": "function",
-          "line_count": 6,
-          "name": "commit",
+          "line_count": 10,
+          "name": "stagePaths",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
@@ -5466,32 +5719,21 @@
         },
         {
           "container_kind": "file",
-          "end_line": 155,
-          "kind": "function",
-          "line_count": 8,
-          "name": "push",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "electron/git-service.cjs",
-          "start_line": 148
-        },
-        {
-          "container_kind": "file",
           "end_line": 161,
           "kind": "function",
-          "line_count": 6,
-          "name": "ensureWorktreeBase",
+          "line_count": 10,
+          "name": "unstagePaths",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
-          "start_line": 156
+          "start_line": 152
         },
         {
           "container_kind": "file",
-          "end_line": 173,
+          "end_line": 171,
           "kind": "function",
-          "line_count": 12,
-          "name": "removeDirSafe",
+          "line_count": 10,
+          "name": "stageDistrict",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
@@ -5499,47 +5741,91 @@
         },
         {
           "container_kind": "file",
-          "end_line": 183,
+          "end_line": 177,
+          "kind": "function",
+          "line_count": 6,
+          "name": "commit",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/git-service.cjs",
+          "start_line": 172
+        },
+        {
+          "container_kind": "file",
+          "end_line": 185,
+          "kind": "function",
+          "line_count": 8,
+          "name": "push",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/git-service.cjs",
+          "start_line": 178
+        },
+        {
+          "container_kind": "file",
+          "end_line": 191,
+          "kind": "function",
+          "line_count": 6,
+          "name": "ensureWorktreeBase",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/git-service.cjs",
+          "start_line": 186
+        },
+        {
+          "container_kind": "file",
+          "end_line": 203,
+          "kind": "function",
+          "line_count": 12,
+          "name": "removeDirSafe",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/git-service.cjs",
+          "start_line": 192
+        },
+        {
+          "container_kind": "file",
+          "end_line": 213,
           "kind": "function",
           "line_count": 10,
           "name": "checkoutRefWorktree",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
-          "start_line": 174
+          "start_line": 204
         },
         {
           "container_kind": "file",
-          "end_line": 190,
+          "end_line": 220,
           "kind": "function",
           "line_count": 7,
           "name": "cleanupNovadiffWorktrees",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
-          "start_line": 184
+          "start_line": 214
         },
         {
           "container_kind": "file",
-          "end_line": 206,
+          "end_line": 236,
           "kind": "function",
           "line_count": 16,
           "name": "preparePrCompareRoots",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
-          "start_line": 191
+          "start_line": 221
         },
         {
           "container_kind": "file",
-          "end_line": 229,
+          "end_line": 262,
           "kind": "function",
-          "line_count": 23,
+          "line_count": 26,
           "name": "detectGitTooling",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/git-service.cjs",
-          "start_line": 207
+          "start_line": 237
         }
       ]
     },
@@ -5583,7 +5869,57 @@
       ]
     },
     {
-      "line_count": 224,
+      "line_count": 245,
+      "path": "electron/github-commit-context.cjs",
+      "symbols": [
+        {
+          "container_kind": "file",
+          "end_line": 12,
+          "kind": "function",
+          "line_count": 8,
+          "name": "parseJsonSafe",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/github-commit-context.cjs",
+          "start_line": 5
+        },
+        {
+          "container_kind": "file",
+          "end_line": 24,
+          "kind": "function",
+          "line_count": 12,
+          "name": "shortGhError",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/github-commit-context.cjs",
+          "start_line": 13
+        },
+        {
+          "container_kind": "file",
+          "end_line": 39,
+          "kind": "function",
+          "line_count": 15,
+          "name": "normalizeThread",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/github-commit-context.cjs",
+          "start_line": 25
+        },
+        {
+          "container_kind": "file",
+          "end_line": 245,
+          "kind": "function",
+          "line_count": 206,
+          "name": "getGithubCommitContext",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/github-commit-context.cjs",
+          "start_line": 40
+        }
+      ]
+    },
+    {
+      "line_count": 226,
       "path": "electron/github-service.cjs",
       "symbols": [
         {
@@ -5698,9 +6034,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 224,
+          "end_line": 226,
           "kind": "function",
-          "line_count": 22,
+          "line_count": 24,
           "name": "slugFromRepoRoot",
           "parent_kind": null,
           "parent_name": null,
@@ -5986,7 +6322,7 @@
       ]
     },
     {
-      "line_count": 1180,
+      "line_count": 1182,
       "path": "electron/llm.cjs",
       "symbols": [
         {
@@ -6156,9 +6492,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 478,
+          "end_line": 480,
           "kind": "function",
-          "line_count": 30,
+          "line_count": 32,
           "name": "buildCommitMessagePrompt",
           "parent_kind": null,
           "parent_name": null,
@@ -6167,213 +6503,213 @@
         },
         {
           "container_kind": "file",
-          "end_line": 562,
+          "end_line": 564,
           "kind": "function",
           "line_count": 84,
           "name": "buildSelectionDocPrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 479
+          "start_line": 481
         },
         {
           "container_kind": "file",
-          "end_line": 575,
+          "end_line": 577,
           "kind": "function",
           "line_count": 13,
           "name": "bulletBlock",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 563
+          "start_line": 565
         },
         {
           "container_kind": "file",
-          "end_line": 596,
+          "end_line": 598,
           "kind": "function",
           "line_count": 21,
           "name": "renderSummaryEvidenceBlock",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 576
+          "start_line": 578
         },
         {
           "container_kind": "file",
-          "end_line": 624,
+          "end_line": 626,
           "kind": "function",
           "line_count": 28,
           "name": "buildExplainCodePrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 597
+          "start_line": 599
         },
         {
           "container_kind": "file",
-          "end_line": 671,
+          "end_line": 673,
           "kind": "function",
           "line_count": 47,
           "name": "buildGroundingContext",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 625
+          "start_line": 627
         },
         {
           "container_kind": "file",
-          "end_line": 683,
+          "end_line": 685,
           "kind": "function",
           "line_count": 12,
           "name": "verifierWordLimit",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 672
+          "start_line": 674
         },
         {
           "container_kind": "file",
-          "end_line": 746,
+          "end_line": 748,
           "kind": "function",
           "line_count": 63,
           "name": "buildGroundedRevisionPrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 684
+          "start_line": 686
         },
         {
           "container_kind": "file",
-          "end_line": 759,
+          "end_line": 761,
           "kind": "function",
           "line_count": 13,
           "name": "shouldRunVerifier",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 747
+          "start_line": 749
         },
         {
           "container_kind": "file",
-          "end_line": 779,
+          "end_line": 781,
           "kind": "function",
           "line_count": 20,
           "name": "reviseGroundedMarkdown",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 760
+          "start_line": 762
         },
         {
           "container_kind": "file",
-          "end_line": 839,
+          "end_line": 841,
           "kind": "function",
           "line_count": 60,
           "name": "buildPerFileSummarizePrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 780
+          "start_line": 782
         },
         {
           "container_kind": "file",
-          "end_line": 882,
+          "end_line": 884,
           "kind": "function",
           "line_count": 43,
           "name": "buildChunkExtractionPrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 840
+          "start_line": 842
         },
         {
           "container_kind": "file",
-          "end_line": 926,
+          "end_line": 928,
           "kind": "function",
           "line_count": 44,
           "name": "buildChunkSynthesisPrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 883
+          "start_line": 885
         },
         {
           "container_kind": "file",
-          "end_line": 945,
+          "end_line": 947,
           "kind": "function",
           "line_count": 19,
           "name": "buildSummarizePrompt",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 927
+          "start_line": 929
         },
         {
           "container_kind": "file",
-          "end_line": 985,
+          "end_line": 987,
           "kind": "function",
           "line_count": 40,
           "name": "summarizeFileChangeChunked",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 946
+          "start_line": 948
         },
         {
           "container_kind": "file",
-          "end_line": 1034,
+          "end_line": 1036,
           "kind": "function",
           "line_count": 49,
           "name": "summarizeChangeStream",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 986
+          "start_line": 988
         },
         {
           "container_kind": "file",
-          "end_line": 1106,
+          "end_line": 1108,
           "kind": "function",
           "line_count": 72,
           "name": "completeChat",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 1035
+          "start_line": 1037
         },
         {
           "container_kind": "file",
-          "end_line": 1159,
+          "end_line": 1161,
           "kind": "function",
           "line_count": 53,
           "name": "summarizeChange",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 1107
+          "start_line": 1109
         },
         {
           "container_kind": "file",
-          "end_line": 1180,
+          "end_line": 1182,
           "kind": "function",
           "line_count": 21,
           "name": "probeProvider",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/llm.cjs",
-          "start_line": 1160
+          "start_line": 1162
         }
       ]
     },
     {
-      "line_count": 1090,
+      "line_count": 1150,
       "path": "electron/main.cjs",
       "symbols": [
         {
           "container_kind": "file",
-          "end_line": 107,
+          "end_line": 109,
           "kind": "function",
-          "line_count": 90,
+          "line_count": 92,
           "name": "sendEngineProgress",
           "parent_kind": null,
           "parent_name": null,
@@ -6382,107 +6718,107 @@
         },
         {
           "container_kind": "file",
-          "end_line": 117,
+          "end_line": 119,
           "kind": "function",
           "line_count": 10,
           "name": "getTargetWindow",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 108
+          "start_line": 110
         },
         {
           "container_kind": "file",
-          "end_line": 128,
+          "end_line": 130,
           "kind": "function",
           "line_count": 11,
           "name": "windowStatePayload",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 118
+          "start_line": 120
         },
         {
           "container_kind": "file",
-          "end_line": 135,
+          "end_line": 137,
           "kind": "function",
           "line_count": 7,
           "name": "emitWindowState",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 129
+          "start_line": 131
         },
         {
           "container_kind": "file",
-          "end_line": 143,
+          "end_line": 145,
           "kind": "function",
           "line_count": 8,
           "name": "iconPath",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 136
+          "start_line": 138
         },
         {
           "container_kind": "file",
-          "end_line": 163,
+          "end_line": 165,
           "kind": "function",
           "line_count": 20,
           "name": "buildMenu",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 144
+          "start_line": 146
         },
         {
           "container_kind": "file",
-          "end_line": 570,
+          "end_line": 572,
           "kind": "function",
           "line_count": 407,
           "name": "createWindow",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 164
+          "start_line": 166
         },
         {
           "container_kind": "file",
-          "end_line": 805,
+          "end_line": 842,
           "kind": "function",
-          "line_count": 235,
+          "line_count": 270,
           "name": "sendKnowledgeGraphProgress",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 571
+          "start_line": 573
         },
         {
           "container_kind": "file",
-          "end_line": 837,
+          "end_line": 874,
           "kind": "function",
           "line_count": 32,
           "name": "sendWorkspaceHistoryProgress",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 806
+          "start_line": 843
         },
         {
           "container_kind": "file",
-          "end_line": 1090,
+          "end_line": 1150,
           "kind": "function",
-          "line_count": 253,
+          "line_count": 276,
           "name": "sendGithubAuthProgress",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/main.cjs",
-          "start_line": 838
+          "start_line": 875
         }
       ]
     },
     {
-      "line_count": 1309,
+      "line_count": 1461,
       "path": "electron/novadiff-docs-html.cjs",
       "symbols": [
         {
@@ -6674,9 +7010,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 780,
+          "end_line": 824,
           "kind": "function",
-          "line_count": 474,
+          "line_count": 518,
           "name": "mermaidSection",
           "parent_kind": null,
           "parent_name": null,
@@ -6685,157 +7021,190 @@
         },
         {
           "container_kind": "file",
-          "end_line": 796,
+          "end_line": 840,
           "kind": "function",
           "line_count": 16,
           "name": "navHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 781
+          "start_line": 825
         },
         {
           "container_kind": "file",
-          "end_line": 848,
+          "end_line": 847,
           "kind": "function",
-          "line_count": 52,
+          "line_count": 7,
+          "name": "topDirectory",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/novadiff-docs-html.cjs",
+          "start_line": 841
+        },
+        {
+          "container_kind": "file",
+          "end_line": 884,
+          "kind": "function",
+          "line_count": 37,
+          "name": "buildImpactHeatmapHtml",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/novadiff-docs-html.cjs",
+          "start_line": 848
+        },
+        {
+          "container_kind": "file",
+          "end_line": 908,
+          "kind": "function",
+          "line_count": 24,
+          "name": "buildSearchIndex",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/novadiff-docs-html.cjs",
+          "start_line": 885
+        },
+        {
+          "container_kind": "file",
+          "end_line": 990,
+          "kind": "function",
+          "line_count": 82,
           "name": "buildEnhancementScript",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 797
+          "start_line": 909
         },
         {
           "container_kind": "file",
-          "end_line": 900,
+          "end_line": 1046,
           "kind": "function",
-          "line_count": 52,
+          "line_count": 56,
           "name": "wrapPage",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 849
+          "start_line": 991
         },
         {
           "container_kind": "file",
-          "end_line": 907,
+          "end_line": 1053,
           "kind": "function",
           "line_count": 7,
           "name": "bundleMetaLine",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 901
+          "start_line": 1047
         },
         {
           "container_kind": "file",
-          "end_line": 957,
+          "end_line": 1103,
           "kind": "function",
           "line_count": 50,
           "name": "buildIndexHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 908
+          "start_line": 1054
         },
         {
           "container_kind": "file",
-          "end_line": 976,
+          "end_line": 1122,
           "kind": "function",
           "line_count": 19,
           "name": "buildNarrativeHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 958
+          "start_line": 1104
         },
         {
           "container_kind": "file",
-          "end_line": 995,
+          "end_line": 1141,
           "kind": "function",
           "line_count": 19,
           "name": "buildMetricsHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 977
+          "start_line": 1123
         },
         {
           "container_kind": "file",
-          "end_line": 1023,
+          "end_line": 1169,
           "kind": "function",
           "line_count": 28,
           "name": "buildDiagramsHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 996
+          "start_line": 1142
         },
         {
           "container_kind": "file",
-          "end_line": 1171,
+          "end_line": 1318,
           "kind": "function",
-          "line_count": 148,
+          "line_count": 149,
           "name": "buildReleaseHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1024
+          "start_line": 1170
         },
         {
           "container_kind": "file",
-          "end_line": 1182,
+          "end_line": 1329,
           "kind": "function",
           "line_count": 11,
           "name": "readIfExists",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1172
+          "start_line": 1319
         },
         {
           "container_kind": "file",
-          "end_line": 1196,
+          "end_line": 1343,
           "kind": "function",
           "line_count": 14,
           "name": "readBundleMetaFromReadme",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1183
+          "start_line": 1330
         },
         {
           "container_kind": "file",
-          "end_line": 1274,
+          "end_line": 1421,
           "kind": "function",
           "line_count": 78,
           "name": "readNovadiffDocsBundle",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1197
+          "start_line": 1344
         },
         {
           "container_kind": "file",
-          "end_line": 1283,
+          "end_line": 1430,
           "kind": "function",
           "line_count": 9,
           "name": "refreshNovadiffDocsHtmlFromDisk",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1275
+          "start_line": 1422
         },
         {
           "container_kind": "file",
-          "end_line": 1309,
+          "end_line": 1461,
           "kind": "function",
-          "line_count": 26,
+          "line_count": 31,
           "name": "writeNovadiffDocsHtml",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/novadiff-docs-html.cjs",
-          "start_line": 1284
+          "start_line": 1431
         }
       ]
     },
@@ -7072,7 +7441,7 @@
       ]
     },
     {
-      "line_count": 241,
+      "line_count": 256,
       "path": "electron/prefetch-summaries.cjs",
       "symbols": [
         {
@@ -7121,9 +7490,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 221,
+          "end_line": 236,
           "kind": "function",
-          "line_count": 158,
+          "line_count": 173,
           "name": "runSummaryPrefetchLoop",
           "parent_kind": null,
           "parent_name": null,
@@ -7132,14 +7501,14 @@
         },
         {
           "container_kind": "file",
-          "end_line": 241,
+          "end_line": 256,
           "kind": "function",
           "line_count": 20,
           "name": "startSummaryPrefetchWorker",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/prefetch-summaries.cjs",
-          "start_line": 222
+          "start_line": 237
         }
       ]
     },
@@ -7233,7 +7602,7 @@
       ]
     },
     {
-      "line_count": 300,
+      "line_count": 302,
       "path": "electron/workspace-history.cjs",
       "symbols": [
         {
@@ -7293,9 +7662,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 187,
+          "end_line": 188,
           "kind": "function",
-          "line_count": 88,
+          "line_count": 89,
           "name": "indexWorkspaceHistory",
           "parent_kind": null,
           "parent_name": null,
@@ -7304,19 +7673,19 @@
         },
         {
           "container_kind": "file",
-          "end_line": 300,
+          "end_line": 302,
           "kind": "function",
-          "line_count": 113,
+          "line_count": 114,
           "name": "refreshWorkspaceHistory",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-history.cjs",
-          "start_line": 188
+          "start_line": 189
         }
       ]
     },
     {
-      "line_count": 193,
+      "line_count": 236,
       "path": "electron/workspace-store.cjs",
       "symbols": [
         {
@@ -7343,9 +7712,9 @@
         },
         {
           "container_kind": "file",
-          "end_line": 24,
+          "end_line": 26,
           "kind": "function",
-          "line_count": 9,
+          "line_count": 11,
           "name": "readJson",
           "parent_kind": null,
           "parent_name": null,
@@ -7356,19 +7725,19 @@
           "container_kind": "file",
           "end_line": 32,
           "kind": "function",
-          "line_count": 8,
-          "name": "writeJson",
+          "line_count": 6,
+          "name": "withSessionWriteLock",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 25
+          "start_line": 27
         },
         {
           "container_kind": "file",
-          "end_line": 53,
+          "end_line": 63,
           "kind": "function",
-          "line_count": 21,
-          "name": "loadSession",
+          "line_count": 31,
+          "name": "writeJsonAtomic",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
@@ -7376,54 +7745,32 @@
         },
         {
           "container_kind": "file",
-          "end_line": 64,
-          "kind": "function",
-          "line_count": 11,
-          "name": "setLocalOnlyMode",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "electron/workspace-store.cjs",
-          "start_line": 54
-        },
-        {
-          "container_kind": "file",
-          "end_line": 68,
+          "end_line": 67,
           "kind": "function",
           "line_count": 4,
-          "name": "saveSession",
+          "name": "writeJson",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 65
-        },
-        {
-          "container_kind": "file",
-          "end_line": 73,
-          "kind": "function",
-          "line_count": 5,
-          "name": "listWorkspaces",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "electron/workspace-store.cjs",
-          "start_line": 69
+          "start_line": 64
         },
         {
           "container_kind": "file",
           "end_line": 88,
           "kind": "function",
-          "line_count": 15,
-          "name": "upsertWorkspace",
+          "line_count": 21,
+          "name": "loadSession",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 74
+          "start_line": 68
         },
         {
           "container_kind": "file",
-          "end_line": 95,
+          "end_line": 99,
           "kind": "function",
-          "line_count": 7,
-          "name": "setActiveWorkspace",
+          "line_count": 11,
+          "name": "setLocalOnlyMode",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
@@ -7431,58 +7778,102 @@
         },
         {
           "container_kind": "file",
-          "end_line": 102,
+          "end_line": 104,
+          "kind": "function",
+          "line_count": 5,
+          "name": "saveSession",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/workspace-store.cjs",
+          "start_line": 100
+        },
+        {
+          "container_kind": "file",
+          "end_line": 109,
+          "kind": "function",
+          "line_count": 5,
+          "name": "listWorkspaces",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/workspace-store.cjs",
+          "start_line": 105
+        },
+        {
+          "container_kind": "file",
+          "end_line": 131,
+          "kind": "function",
+          "line_count": 22,
+          "name": "upsertWorkspace",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/workspace-store.cjs",
+          "start_line": 110
+        },
+        {
+          "container_kind": "file",
+          "end_line": 138,
+          "kind": "function",
+          "line_count": 7,
+          "name": "setActiveWorkspace",
+          "parent_kind": null,
+          "parent_name": null,
+          "path": "electron/workspace-store.cjs",
+          "start_line": 132
+        },
+        {
+          "container_kind": "file",
+          "end_line": 145,
           "kind": "function",
           "line_count": 7,
           "name": "setGitUser",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 96
+          "start_line": 139
         },
         {
           "container_kind": "file",
-          "end_line": 107,
+          "end_line": 150,
           "kind": "function",
           "line_count": 5,
           "name": "getWorkspace",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 103
+          "start_line": 146
         },
         {
           "container_kind": "file",
-          "end_line": 126,
+          "end_line": 169,
           "kind": "function",
           "line_count": 19,
           "name": "updateWorkspaceUiState",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 108
+          "start_line": 151
         },
         {
           "container_kind": "file",
-          "end_line": 146,
+          "end_line": 189,
           "kind": "function",
           "line_count": 20,
           "name": "updateWorkspaceLiveRepo",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 127
+          "start_line": 170
         },
         {
           "container_kind": "file",
-          "end_line": 193,
+          "end_line": 236,
           "kind": "function",
           "line_count": 47,
           "name": "createWorkspace",
           "parent_kind": null,
           "parent_name": null,
           "path": "electron/workspace-store.cjs",
-          "start_line": 147
+          "start_line": 190
         }
       ]
     },
@@ -9838,57 +10229,6 @@
           "start_line": 8
         }
       ]
-    },
-    {
-      "line_count": 46,
-      "path": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-      "symbols": [
-        {
-          "container_kind": "file",
-          "end_line": 46,
-          "kind": "class",
-          "line_count": 39,
-          "name": "TOMLParser",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-          "start_line": 8
-        }
-      ]
-    },
-    {
-      "line_count": 106,
-      "path": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-      "symbols": [
-        {
-          "container_kind": "file",
-          "end_line": 106,
-          "kind": "class",
-          "line_count": 93,
-          "name": "YAMLConfigParser",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-          "start_line": 14
-        }
-      ]
-    },
-    {
-      "line_count": 81,
-      "path": "packages/graph-core/src/plugins/registry.ts",
-      "symbols": [
-        {
-          "container_kind": "file",
-          "end_line": 81,
-          "kind": "class",
-          "line_count": 71,
-          "name": "PluginRegistry",
-          "parent_kind": null,
-          "parent_name": null,
-          "path": "packages/graph-core/src/plugins/registry.ts",
-          "start_line": 11
-        }
-      ]
     }
   ],
   "symbols_by_file": [
@@ -9957,6 +10297,12 @@
       ]
     },
     {
+      "path": "electron/export-snapshot.cjs",
+      "symbols": [
+        "exportProjectSnapshotZip"
+      ]
+    },
+    {
       "path": "electron/file-summary-export.cjs",
       "symbols": [
         "escapeHtml",
@@ -10013,6 +10359,12 @@
       ]
     },
     {
+      "path": "electron/git-commit.cjs",
+      "symbols": [
+        "getCommitDetail"
+      ]
+    },
+    {
       "path": "electron/git-publish.cjs",
       "symbols": [
         "buildFullCommitMessage",
@@ -10031,6 +10383,9 @@
         "getRepoStatus",
         "parseGithubSlugFromUrl",
         "stageAll",
+        "stagePaths",
+        "unstagePaths",
+        "stageDistrict",
         "commit",
         "push",
         "ensureWorktreeBase",
@@ -10047,6 +10402,15 @@
         "stripAnsi",
         "cancelGithubDeviceAuth",
         "startGithubDeviceAuth"
+      ]
+    },
+    {
+      "path": "electron/github-commit-context.cjs",
+      "symbols": [
+        "parseJsonSafe",
+        "shortGhError",
+        "normalizeThread",
+        "getGithubCommitContext"
       ]
     },
     {
@@ -10169,15 +10533,15 @@
         "markdownToHtml",
         "mermaidSection",
         "navHtml",
+        "topDirectory",
+        "buildImpactHeatmapHtml",
+        "buildSearchIndex",
         "buildEnhancementScript",
         "wrapPage",
         "bundleMetaLine",
         "buildIndexHtml",
         "buildNarrativeHtml",
-        "buildMetricsHtml",
-        "buildDiagramsHtml",
-        "buildReleaseHtml",
-        "readIfExists"
+        "buildMetricsHtml"
       ]
     },
     {
@@ -10256,6 +10620,8 @@
         "sessionPath",
         "workspacesRoot",
         "readJson",
+        "withSessionWriteLock",
+        "writeJsonAtomic",
         "writeJson",
         "loadSession",
         "setLocalOnlyMode",
@@ -10719,37 +11085,19 @@
       "symbols": [
         "TerraformParser"
       ]
-    },
-    {
-      "path": "packages/graph-core/src/plugins/parsers/toml-parser.ts",
-      "symbols": [
-        "TOMLParser"
-      ]
-    },
-    {
-      "path": "packages/graph-core/src/plugins/parsers/yaml-parser.ts",
-      "symbols": [
-        "YAMLConfigParser"
-      ]
-    },
-    {
-      "path": "packages/graph-core/src/plugins/registry.ts",
-      "symbols": [
-        "PluginRegistry"
-      ]
     }
   ],
   "top_directories": [
     {
-      "count": 231,
+      "count": 235,
       "name": "packages"
     },
     {
-      "count": 56,
+      "count": 71,
       "name": "src"
     },
     {
-      "count": 24,
+      "count": 27,
       "name": "electron"
     },
     {
@@ -10769,13 +11117,13 @@
       "name": "public"
     },
     {
-      "count": 1,
-      "name": "scripts"
+      "count": 2,
+      "name": "tests"
     },
     {
       "count": 1,
-      "name": "tests"
+      "name": "scripts"
     }
   ],
-  "total_files": 336
+  "total_files": 359
 }

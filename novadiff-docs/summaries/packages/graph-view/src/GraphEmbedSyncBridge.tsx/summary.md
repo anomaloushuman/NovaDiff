@@ -1,45 +1,21 @@
 ### Overview  
-A new React component `GraphEmbedSyncBridge` is added to `packages/graph-view/src/GraphEmbedSyncBridge.tsx` (lines 1‑71). It synchronizes embed‑graph selection and navigation state with the NovaDiff documentation workspace.
+`GraphEmbedSyncBridge` now accepts optional props `detailLevel`, `showFunctionsInClassView`, and `cityFilterNodeIds`. These props are synced to the dashboard store via new `useEffect` hooks. The import statement was updated to expose the `DetailLevel` type.
 
 ### Key changes  
-- **Imports** (R1‑R8):  
-  ```ts
-  import { useEffect, useRef } from "react";
-  import { useDashboardStore } from "./store";
-  import {
-    applyGraphCityRoot,
-    applyGraphEnterFile,
-    applyGraphFocusSelection,
-    type GraphCityNavStore,
-  } from "./utils/graphCityNavigation";
-  ```
-- **Exported API** (R11‑R20):  
-  ```ts
-  export function GraphEmbedSyncBridge({
-    controlledNodeId,
-    enteredFilePath,
-    focusMode,
-    onSelectionChange,
-  }: {
-    controlledNodeId?: string | null;
-    enteredFilePath?: string | null;
-    focusMode?: boolean;
-    onSelectionChange?: (nodeId: string | null) => void;
-  }) { … }
-  ```
-- **State access** (R22‑R24): reads `selectedNodeId` and `graph` from `useDashboardStore`.
-- **Store API helper** (R27‑R36): `storeApi()` returns navigation functions from the global store state.
-- **Navigation effect** (R39‑R57): watches `enteredFilePath`, `controlledNodeId`, `focusMode`, and `graph`. Builds a `navKey` and calls the appropriate helper (`applyGraphEnterFile`, `applyGraphFocusSelection`, or `applyGraphCityRoot`).
-- **Selection emission** (R59‑R67): emits `selectedNodeId` changes via `onSelectionChange`, guarded by a `lastEmitted` ref.
-- **Return value** (R70‑R71): renders `null`.
+- **Import** (R2): `import { useDashboardStore, type DetailLevel } from "./store";`  
+- **Prop signature** (R15‑17, R23‑26): added `detailLevel?: DetailLevel`, `showFunctionsInClassView?: boolean`, `cityFilterNodeIds?: string[] | null`.  
+- **Detail level sync** (R67‑74): effect updates `store.setDetailLevel` when `detailLevel` differs from the store.  
+- **Function view toggle** (R75‑84): effect updates `store.setState` with `showFunctionsInClassView` and resets layout caches when the flag changes.  
+- **City filter sync** (R88‑106): effect calls `store.setEmbedCityFilterNodeIds` and clears selection/focus if the active node is filtered out.  
+- **Selection change** (unchanged): still emits `onSelectionChange` when `selectedNodeId` changes.
 
 ### Impact  
-- The component introduces a side‑effect path that depends on the presence of `useDashboardStore` in the component’s context.  
-- Navigation helpers are invoked with `controlledNodeId ?? null`; callers must ensure these helpers handle `null` values.  
-- The `navKey` logic prevents redundant navigation when props remain unchanged.
+- The component now fully controls the dashboard’s detail level, function view, and city filter, keeping the UI in sync with embedded graph interactions.  
+- Optional props preserve backward compatibility.  
+- Each new effect guards against unnecessary store updates, minimizing runtime cost.
 
 ### Risks & follow‑ups  
-- Verify that `useDashboardStore` is available; otherwise the hook will throw.  
-- Confirm that `applyGraphEnterFile`, `applyGraphFocusSelection`, and `applyGraphCityRoot` correctly handle `null`/`undefined` arguments.  
-- Test the `navKey` logic with rapid prop changes to ensure no unnecessary navigation occurs.  
-- Add unit tests for the two `useEffect` branches to guard against regressions in dependency arrays or ref updates.
+- Verify that `useDashboardStore` exposes `setDetailLevel`, `setEmbedCityFilterNodeIds`, and the `showFunctionsInClassView` flag; otherwise TypeScript errors will surface.  
+- Ensure existing tests that render `GraphEmbedSyncBridge` without the new props still pass.  
+- Confirm that setting `cityFilterNodeIds` to `null` correctly resets the graph without leaving dangling selections.  
+- Check that the new `useEffect` blocks do not trigger infinite loops when the store’s state changes in response to the same props.

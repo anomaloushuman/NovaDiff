@@ -2,75 +2,84 @@
 
 | Metric | Count |
 | --- | --- |
-| Added | 23 |
-| Removed | 4 |
-| Modified | 35 |
+| Added | 21 |
+| Removed | 0 |
+| Modified | 50 |
 
-**Baseline:** f7c2bfd81af2
+**Baseline:** 9aadd5eb5604
 
 **Target:** NovaDiff
 
 ## Changed paths (sample, up to 80)
 
-- **removed** `.novadiff-graph/config.json`
-- **removed** `.novadiff-graph/diff-overlay.json`
-- **removed** `.novadiff-graph/knowledge-graph.json`
-- **removed** `.novadiff-graph/meta.json`
-- **added** `electron/export-snapshot.cjs`
-- **added** `electron/git-commit.cjs`
-- **modified** `electron/git-publish.cjs`
+- **modified** `.novadiff-graph/diff-overlay.json`
+- **modified** `.novadiff-graph/knowledge-graph.json`
+- **modified** `.novadiff-graph/meta.json`
+- **modified** `cli/src/main.rs`
+- **modified** `electron/code-city-model.cjs`
 - **modified** `electron/git-service.cjs`
-- **added** `electron/github-commit-context.cjs`
-- **modified** `electron/github-service.cjs`
-- **modified** `electron/llm.cjs`
+- **modified** `electron/knowledge-graph-runner.cjs`
 - **modified** `electron/main.cjs`
-- **modified** `electron/novadiff-docs-html.cjs`
-- **modified** `electron/prefetch-summaries.cjs`
 - **modified** `electron/preload.cjs`
+- **added** `electron/security-scan-runner.cjs`
 - **modified** `electron/workspace-history.cjs`
-- **modified** `electron/workspace-store.cjs`
+- **modified** `package-lock.json`
+- **modified** `package.json`
+- **modified** `packages/graph-core/src/analyzer/graph-builder.test.ts`
+- **modified** `packages/graph-core/src/analyzer/graph-builder.ts`
+- **modified** `packages/graph-core/src/ignore-filter.ts`
 - **modified** `packages/graph-view/src/App.tsx`
-- **added** `packages/graph-view/src/GraphEmbedSyncBridge.tsx`
+- **modified** `packages/graph-view/src/GraphEmbedSyncBridge.tsx`
 - **modified** `packages/graph-view/src/NovaDiffGraphExplorer.tsx`
 - **modified** `packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx`
-- **added** `packages/graph-view/src/__tests__/selectionCluster.test.ts`
+- **modified** `packages/graph-view/src/components/CodeViewer.tsx`
 - **modified** `packages/graph-view/src/components/GraphView.tsx`
-- **modified** `packages/graph-view/src/index.css`
 - **modified** `packages/graph-view/src/store.ts`
-- **added** `packages/graph-view/src/utils/graphCityNavigation.ts`
-- **added** `packages/graph-view/src/utils/selectionCluster.ts`
+- **modified** `packages/graph-view/src/utils/elk-layout.ts`
+- **added** `packages/graph-view/src/utils/elk-layout.worker.ts`
+- **modified** `packages/graph-view/src/utils/louvain.ts`
+- **added** `packages/graph-view/src/utils/performance.ts`
+- **modified** `scripts/run-electron.cjs`
 - **modified** `src/App.css`
 - **modified** `src/App.tsx`
-- **added** `src/app/DocsViewSyncContext.tsx`
-- **added** `src/app/codeCityChromeInsets.ts`
-- **added** `src/app/commitChangeAnalysis.ts`
-- **modified** `src/app/commitMessage.ts`
-- **added** `src/app/fileTree.ts`
+- **added** `src/app/CodeCityViewportContext.tsx`
+- **modified** `src/app/DocsViewSyncContext.tsx`
+- **modified** `src/app/codeCityChromeInsets.ts`
+- **modified** `src/app/codeCityLayout.ts`
+- **added** `src/app/codeCityRenderer.ts`
+- **added** `src/app/codeMapLoadProgress.ts`
+- **added** `src/app/docsExploreFilters.ts`
+- **modified** `src/app/docsQuality.ts`
+- **added** `src/app/gitHistoryBranches.ts`
 - **modified** `src/app/gitTypes.ts`
-- **added** `src/app/graphCityBridge.ts`
-- **added** `src/app/helpCopy.ts`
-- **added** `src/app/impactHeatmap.ts`
-- **modified** `src/app/workspaceStorage.ts`
+- **modified** `src/app/graphCityBridge.ts`
+- **added** `src/app/graphicsPerformance.ts`
+- **added** `src/app/securityInsights.ts`
+- **modified** `src/app/types.ts`
 - **modified** `src/app/workspaceTypes.ts`
-- **modified** `src/components/AutoCommitWorkspace.tsx`
-- **modified** `src/components/CodeCityLegend.tsx`
-- **added** `src/components/CodeCityMinimapPortal.tsx`
-- **added** `src/components/CodeCityMinimapSlot.tsx`
+- **modified** `src/components/CodeCityMinimapSlot.tsx`
 - **modified** `src/components/CodeCityView.tsx`
-- **added** `src/components/DocsGraphExploreChrome.tsx`
+- **added** `src/components/CodeMapLoadingPreview.css`
+- **added** `src/components/CodeMapLoadingPreview.tsx`
+- **modified** `src/components/DocsGraphExploreChrome.tsx`
 - **modified** `src/components/DocumentationWorkspace.tsx`
-- **added** `src/components/DocumentationWorkspaceLinked.tsx`
-- **added** `src/components/GitBlameLineModal.tsx`
-- **modified** `src/components/GitBlamePanel.tsx`
-- **added** `src/components/GitHistoryContextPanel.tsx`
+- **modified** `src/components/DocumentationWorkspaceLinked.tsx`
 - **modified** `src/components/GitHistoryWorkspace.tsx`
 - **modified** `src/components/HistoryCompareStrip.tsx`
-- **added** `src/components/KeyboardShortcutsHelp.tsx`
+- **added** `src/components/InsightsWorkspace.tsx`
 - **modified** `src/components/KnowledgeGraphPanel.tsx`
 - **modified** `src/components/SidebarNav.tsx`
-- **added** `src/components/onboarding/ProductTour.tsx`
-- **modified** `src/components/onboarding/onboarding.css`
-- **modified** `src/components/ui/ui-transitions.css`
+- **modified** `src/components/launch/AppLaunchShell.tsx`
+- **modified** `src/components/launch/TypewriterText.tsx`
+- **modified** `src/components/launch/launch.css`
+- **added** `src/components/sidebar/sidebarTiming.ts`
+- **added** `src/components/sidebar/useSidebarExpand.ts`
+- **added** `src/components/sidebar/useWorkspacePageWithSidebar.ts`
 - **modified** `src/vite-env.d.ts`
-- **added** `tests/graphCityBridge.test.ts`
+- **added** `tests/codeCityLayout.test.ts`
+- **added** `tests/codeMapLoadProgress.test.ts`
+- **added** `tests/docsExploreFilters.test.ts`
+- **added** `tests/gitHistoryBranches.test.ts`
+- **modified** `tests/graphCityBridge.test.ts`
+- **added** `tests/securityInsights.test.ts`
 - **modified** `vite.config.ts`

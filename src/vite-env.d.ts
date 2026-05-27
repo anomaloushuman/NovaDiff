@@ -10,6 +10,7 @@ import type {
   NovadiffDocsPage,
   NovadiffDocsBundleKey,
   RiskSignal,
+  SecurityInsightReport,
   SelectionIndexEntry,
   SelectionDocArtifactMeta,
   SummaryIndexEntry,
@@ -182,6 +183,11 @@ export interface ElectronAPI {
     rightRoot: string;
     changes: FileChange[];
   }) => Promise<RiskSignal[]>;
+  scanSecurityInsights?: (payload: {
+    projectRoot: string;
+    changes: FileChange[];
+    advisoryEnabled?: boolean;
+  }) => Promise<SecurityInsightReport>;
   buildCodeCityModel?: (payload: {
     leftRoot: string;
     rightRoot: string;
@@ -357,6 +363,19 @@ export interface ElectronAPI {
     hash: string;
     snapshotPath: string;
   }) => Promise<{ snapshotPath: string; ready: boolean }>;
+  gitListBranches?: (payload: {
+    repoRoot: string;
+  }) => Promise<import("./app/gitTypes").GitBranchListResult>;
+  gitListBranchCommits?: (payload: {
+    repoRoot: string;
+    branch: string;
+    limit?: number;
+  }) => Promise<import("./app/gitTypes").GitLogCommitSummary[]>;
+  workspaceMaterializeCommit?: (payload: {
+    workspaceId: string;
+    ref?: string;
+    hash?: string;
+  }) => Promise<{ hash: string; snapshotPath: string }>;
   workspaceSnapshotListFiles?: (payload: {
     snapshotPath: string;
     maxFiles?: number;

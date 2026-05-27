@@ -45,12 +45,15 @@ import {
 import { AutoCommitWorkspace } from "./components/AutoCommitWorkspace";
 import { GitHistoryWorkspace } from "./components/GitHistoryWorkspace";
 import { PullRequestsWorkspace } from "./components/PullRequestsWorkspace";
+import { InsightsWorkspace } from "./components/InsightsWorkspace";
 import { WelcomeScreen } from "./components/onboarding/WelcomeScreen";
 import { ProductTour } from "./components/onboarding/ProductTour";
 import { KeyboardShortcutsHelp } from "./components/KeyboardShortcutsHelp";
 import { loadProductTourCompleted } from "./app/workspaceStorage";
 import { WorkspaceHub } from "./components/onboarding/WorkspaceHub";
-import { SidebarNav, type WorkspacePage } from "./components/SidebarNav";
+import { SidebarNav } from "./components/SidebarNav";
+import { useSidebarExpand } from "./components/sidebar/useSidebarExpand";
+import { useWorkspacePageWithSidebar } from "./components/sidebar/useWorkspacePageWithSidebar";
 import { isNovadiffDocsReservedPath } from "./app/novadiffPaths";
 import "./App.css";
 import "./components/onboarding/onboarding.css";
@@ -163,7 +166,9 @@ function AppMain() {
     total: number;
   } | null>(null);
   const [compareEngineMessage, setCompareEngineMessage] = useState<string | null>(null);
-  const [workspacePage, setWorkspacePage] = useState<WorkspacePage>("compare");
+  const sidebarExpand = useSidebarExpand();
+  const { workspacePage, stagePage, setWorkspacePage } =
+    useWorkspacePageWithSidebar(sidebarExpand);
   const [docsInsightsOpen, setDocsInsightsOpen] = useState(false);
   const [workspaceDocAuto, setWorkspaceDocAuto] = useState(() => {
     try {
@@ -233,6 +238,7 @@ function AppMain() {
 
   const selectedPathRef = useRef<string | null>(null);
   const fileSummaryLoadingRef = useRef(false);
+  const restoredWorkspacePageRef = useRef<string | null>(null);
   selectedPathRef.current = selectedPath;
   fileSummaryLoadingRef.current = fileSummaryLoading;
 
@@ -656,9 +662,16 @@ function AppMain() {
   ]);
 
   const showMainApp = onboardingGate === "app";
-  const sideNavCompact =
-    workspacePage === "history" || workspacePage === "docs" || workspacePage === "docReports";
   const localOnlyMode = Boolean(session?.localOnlyMode);
+
+  useEffect(() => {
+    const expanded =
+      showMainApp && stagePage === "docs" && sidebarExpand.panelExpanded;
+    document.documentElement.classList.toggle("app-sidebar-expanded", expanded);
+    return () => {
+      document.documentElement.classList.remove("app-sidebar-expanded");
+    };
+  }, [showMainApp, stagePage, sidebarExpand.panelExpanded]);
 
   useEffect(() => {
     if (!localOnlyMode) {
@@ -722,7 +735,13 @@ function AppMain() {
           return { ...base, activeWorkspaceId: ws.id, workspaces, localOnlyMode: false };
         });
       }
+      restoredWorkspacePageRef.current = null;
       applyWorkspacePaths(ws);
+      if (!ws.uiState?.workspacePage) {
+        setWorkspacePage("history");
+      } else {
+        setWorkspacePage(ws.uiState.workspacePage);
+      }
       setLaunchWorkspaceConfirmed(true);
     },
     [applyWorkspacePaths],
@@ -743,6 +762,7 @@ function AppMain() {
   const handleLocalOnly = useCallback(async () => {
     setLaunchAuthConfirmed(true);
     setLaunchWorkspaceConfirmed(true);
+    setWorkspacePage("compare");
     saveCachedLocalOnly(true);
     if (window.electronAPI?.workspaceSetLocalOnly) {
       const s = await window.electronAPI.workspaceSetLocalOnly({ enabled: true });
@@ -841,6 +861,22 @@ function AppMain() {
   ]);
 
   useEffect(() => {
+    if (!showMainApp || !activeWorkspace) {
+      return;
+    }
+    if (restoredWorkspacePageRef.current === activeWorkspace.id) {
+      return;
+    }
+    restoredWorkspacePageRef.current = activeWorkspace.id;
+    const savedPage = activeWorkspace.uiState?.workspacePage;
+    if (savedPage) {
+      setWorkspacePage(savedPage);
+    } else if (!localOnlyMode) {
+      setWorkspacePage("history");
+    }
+  }, [showMainApp, activeWorkspace, localOnlyMode]);
+
+  useEffect(() => {
     if (!sessionReady || onboardingGate !== "app" || !activeWorkspace) {
       return;
     }
@@ -858,15 +894,26 @@ function AppMain() {
 
   const ensureSnapshot = useCallback(
     async (commit: WorkspaceCommitSnapshot) => {
-      if (!activeWorkspace?.id || !window.electronAPI?.workspaceEnsureCommitSnapshot) {
+      if (!activeWorkspace?.id) {
         return commit.snapshotPath;
       }
-      const result = await window.electronAPI.workspaceEnsureCommitSnapshot({
-        workspaceId: activeWorkspace.id,
-        hash: commit.hash,
-        snapshotPath: commit.snapshotPath,
-      });
-      return result.snapshotPath;
+      const api = window.electronAPI;
+      if (commit.snapshotPath?.trim() && api?.workspaceEnsureCommitSnapshot) {
+        const result = await api.workspaceEnsureCommitSnapshot({
+          workspaceId: activeWorkspace.id,
+          hash: commit.hash,
+          snapshotPath: commit.snapshotPath,
+        });
+        return result.snapshotPath;
+      }
+      if (api?.workspaceMaterializeCommit) {
+        const result = await api.workspaceMaterializeCommit({
+          workspaceId: activeWorkspace.id,
+          ref: commit.hash,
+        });
+        return result.snapshotPath;
+      }
+      return commit.snapshotPath;
     },
     [activeWorkspace?.id],
   );
@@ -1348,10 +1395,21 @@ function AppMain() {
     };
   }, [selectedPath, diffPayload, diffLoading, fileSummaryLoading]);
 
+  const appShellClassName =
+    showMainApp && stagePage === "docs"
+      ? [
+          "app-shell--sidebar-overlay",
+          sidebarExpand.panelExpanded ? "is-sidebar-expanded" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")
+      : undefined;
+
   return (
     <div className="app-root">
       <AppLaunchShell
         onPhaseChange={setLaunchPhase}
+        shellClassName={appShellClassName}
         chrome={
           isElectron() ? (
             <WindowChrome
@@ -1409,10 +1467,10 @@ function AppMain() {
         onSaved={(s) => setLlmSettings(s)}
       />
       <div
-        className={`launch-panel launch-panel--side${sideNavCompact ? " launch-panel--side-compact" : ""}`}
+        className={`launch-panel launch-panel--side${sidebarExpand.panelExpanded ? " is-expanded" : ""}`}
       >
         <SidebarNav
-          compact={sideNavCompact}
+          expand={sidebarExpand}
           active={compared && rows.length > 0}
           workspacePage={workspacePage}
           onWorkspacePage={setWorkspacePage}
@@ -1421,7 +1479,7 @@ function AppMain() {
           localOnlyMode={Boolean(session?.localOnlyMode)}
           gitUser={session?.localOnlyMode ? null : session?.gitUser ?? null}
           workspaceName={
-            session?.localOnlyMode ? "Folder compare" : activeWorkspace?.name ?? null
+            session?.localOnlyMode ? "Code compare" : activeWorkspace?.name ?? null
           }
           workspaceRepoLabel={
             session?.localOnlyMode
@@ -1434,8 +1492,8 @@ function AppMain() {
         />
       </div>
       <div className="launch-panel launch-panel--main">
-        <WorkspaceStage pageKey={workspacePage}>
-      {workspacePage === "compare" ? (
+        <WorkspaceStage pageKey={stagePage}>
+      {stagePage === "compare" ? (
         <DiffWorkspace
           leftRoot={left}
           rightRoot={right}
@@ -1488,7 +1546,7 @@ function AppMain() {
           selectedDiffSummaryModalOpen={selectedDiffSummaryModalOpen}
           onCloseSelectedDiffSummaryModal={() => setSelectedDiffSummaryModalOpen(false)}
         />
-      ) : workspacePage === "history" && activeWorkspace ? (
+      ) : stagePage === "history" && activeWorkspace ? (
         <GitHistoryWorkspace
           workspace={activeWorkspace}
           busy={busy}
@@ -1501,7 +1559,7 @@ function AppMain() {
           onRefreshHistory={refreshWorkspaceHistory}
           onReviewInCity={reviewInCityFromHistory}
         />
-      ) : workspacePage === "docs" ? (
+      ) : stagePage === "docs" ? (
         <DocumentationWorkspace
           view="explore"
           compared={compared}
@@ -1521,7 +1579,7 @@ function AppMain() {
           initialDocsFocus={initialDocsFocus}
           onOpenReports={() => setWorkspacePage("docReports")}
         />
-      ) : workspacePage === "docReports" ? (
+      ) : stagePage === "docReports" ? (
         <DocumentationWorkspace
           view="reports"
           compared={compared}
@@ -1540,7 +1598,15 @@ function AppMain() {
           insightsDockOpen={docsInsightsOpen}
           initialDocsFocus={initialDocsFocus}
         />
-      ) : workspacePage === "prs" ? (
+      ) : stagePage === "insights" ? (
+        <InsightsWorkspace
+          compared={compared}
+          leftRoot={left}
+          rightRoot={right}
+          rows={rows}
+          onJumpToCompare={jumpToComparePath}
+        />
+      ) : stagePage === "prs" ? (
         <PullRequestsWorkspace
           suggestedRepoPath={right.trim() || left.trim()}
           onOpenCompare={openPrCompare}
@@ -1561,8 +1627,9 @@ function AppMain() {
       )}
         </WorkspaceStage>
       </div>
-      {workspacePage !== "history" &&
-      ((workspacePage !== "docs" && workspacePage !== "docReports") || docsInsightsOpen) ? (
+      {stagePage !== "history" &&
+      stagePage !== "insights" &&
+      ((stagePage !== "docs" && stagePage !== "docReports") || docsInsightsOpen) ? (
       <div className="launch-panel launch-panel--insights">
       <div className="insights-dock" style={{ width: insightsWidth }}>
         <div

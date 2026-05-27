@@ -42,6 +42,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("filter-changes-gitignore", payload),
   scanCodebaseOutline: (root) => ipcRenderer.invoke("codebase-outline", root),
   scanRiskSignals: (payload) => ipcRenderer.invoke("risk-signals", payload),
+  scanSecurityInsights: (payload) =>
+    ipcRenderer.invoke("security-insights-scan", payload),
   buildCodeCityModel: (payload) => ipcRenderer.invoke("build-code-city-model", payload),
   writeNovadiffDocs: (bundle) => ipcRenderer.invoke("write-novadiff-docs", bundle),
   readNovadiffDocsFile: (payload) =>
@@ -147,6 +149,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   githubCommitContext: (payload) => ipcRenderer.invoke("github-commit-context", payload),
   workspaceEnsureCommitSnapshot: (payload) =>
     ipcRenderer.invoke("workspace-ensure-commit-snapshot", payload),
+  gitListBranches: (payload) => ipcRenderer.invoke("git-list-branches", payload),
+  gitListBranchCommits: (payload) => ipcRenderer.invoke("git-list-branch-commits", payload),
+  workspaceMaterializeCommit: (payload) =>
+    ipcRenderer.invoke("workspace-materialize-commit", payload),
   workspaceSnapshotListFiles: (payload) =>
     ipcRenderer.invoke("workspace-snapshot-list-files", payload),
   workspaceSnapshotReadFile: (payload) =>

@@ -1,26 +1,20 @@
 ### Overview  
-The `WorkspaceUiState` interface in `src/app/workspaceTypes.ts` now includes a new `workspacePage` option: `"docReports"`. This change is confined to line 38 of the file.
+In `src/app/workspaceTypes.ts` (lines 37‑45) the `WorkspaceUiState.workspacePage` union was expanded to include `"insights"`. The change is purely type‑level; no runtime code was added.
 
 ### Key changes  
-- `WorkspaceUiState.workspacePage` union expanded from  
-  ```ts
-  "compare" | "history" | "docs" | "prs" | "publish"
-  ```  
-  to  
-  ```ts
-  "compare" | "history" | "docs" | "docReports" | "prs" | "publish"
-  ```  
-  (diff: L38 removed, R38 added).  
-- No other properties or interfaces were modified.
+- `WorkspaceUiState` interface updated: `workspacePage?` now allows `"insights"`.  
+- The union is split across several lines (R38‑R45) for readability.  
+- No other fields in `WorkspaceUiState` or related interfaces were modified.  
+- The diff shows the removal of the original single‑line union (L38) and its replacement with the multi‑line union (R38‑R45).
 
 ### Impact  
-- Type safety: code that assigns or checks `workspacePage` must now consider `"docReports"`.  
-- UI routing: components that render based on `workspacePage` may need an additional case.  
-- Tests: assertions enumerating allowed values may need updating.  
-- Runtime behavior remains unchanged.
+- Code that assigns or checks `workspacePage` must now consider `"insights"`.  
+- Because `workspacePage?` is optional, existing objects remain valid; no breaking changes.  
+- Components rendering based on `workspacePage` should add a case for `"insights"` to avoid missing‑case warnings.  
+- TypeScript compilation and linting should succeed unchanged.
 
 ### Risks & follow‑ups  
-- Unhandled page value: components switching on `workspacePage` without a default or missing `"docReports"` could render incorrectly.  
-- Test failures: existing unit tests that validate the union type may fail.  
-- Documentation: any docs listing valid `workspacePage` options should be updated.  
-- Linting: custom rules or type guards enforcing the allowed set must include the new value.
+- Review all `switch` or `if` statements on `workspacePage` for exhaustiveness.  
+- Update unit tests that assert allowed `workspacePage` values to include `"insights"` or ignore it.  
+- Update any documentation or comments that list possible `workspacePage` values.  
+- Verify that any serialization/deserialization logic handling `workspacePage` accepts the new value.

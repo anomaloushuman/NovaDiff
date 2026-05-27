@@ -1,5 +1,6 @@
 "use strict";
 
+const path = require("path");
 const { blameFileOwnership } = require("./git-blame.cjs");
 
 function normalizeSide(side) {
@@ -109,6 +110,25 @@ function buildSideNodes(side, outline, changeMap, blameMap) {
     });
     const symbolFile = symbolFileIndex.get(relPath);
     const symbolEntries = Array.isArray(symbolFile?.symbols) ? symbolFile.symbols : [];
+    if (symbolEntries.length === 0) {
+      const lineCount = Math.max(1, Number(file?.line_count ?? 0));
+      symbols.push({
+        id: `${rootSide}:${relPath}:file:${path.basename(relPath)}`,
+        fileId,
+        rootSide,
+        path: relPath,
+        name: path.basename(relPath),
+        kind: "file",
+        startLine: 1,
+        endLine: lineCount,
+        lineCount,
+        parentName: null,
+        parentKind: null,
+        changeState,
+        dominantAuthor: dominantAuthor(blame.owners),
+        owners: blame.owners,
+      });
+    }
     for (const symbol of symbolEntries) {
       const startLine = Number(symbol?.start_line ?? 1);
       const endLine = Number(symbol?.end_line ?? startLine);

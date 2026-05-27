@@ -8,7 +8,7 @@
  */
 const fs = require("node:fs");
 const path = require("node:path");
-const { spawn } = require("node:child_process");
+const { spawn, spawnSync } = require("node:child_process");
 
 const root = path.resolve(__dirname, "..");
 const electronPkg = path.join(root, "node_modules", "electron");
@@ -23,9 +23,22 @@ function cleanEnv() {
 
 function resolveElectronBinary() {
   if (!fs.existsSync(pathFile)) {
-    throw new Error(
-      `Missing ${pathFile}. Run npm install in ${root} so the electron package downloads its binary.`,
-    );
+    const installer = path.join(electronPkg, "install.js");
+    if (!fs.existsSync(installer)) {
+      throw new Error(
+        `Missing ${pathFile}. Run npm install in ${root} so the electron package downloads its binary.`,
+      );
+    }
+    const installRun = spawnSync(process.execPath, [installer], {
+      cwd: root,
+      stdio: "inherit",
+      env: cleanEnv(),
+    });
+    if (installRun.error || installRun.status !== 0 || !fs.existsSync(pathFile)) {
+      throw new Error(
+        `Missing ${pathFile}. Auto-install failed; run npm install in ${root} to restore electron binary metadata.`,
+      );
+    }
   }
   const rel = fs.readFileSync(pathFile, "utf8").trim();
   if (!rel) {

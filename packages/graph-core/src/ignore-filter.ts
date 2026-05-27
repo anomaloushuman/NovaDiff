@@ -13,6 +13,8 @@ export const DEFAULT_IGNORE_PATTERNS: string[] = [
   "vendor/",
   "venv/",
   ".venv/",
+  ".venv-*/",
+  "**/site-packages/",
   "__pycache__/",
 
   // Build output

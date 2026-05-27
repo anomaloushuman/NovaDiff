@@ -1,23 +1,24 @@
 {
   "relPath": "electron/preload.cjs",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:48:01.058Z",
+  "generatedAt": "2026-05-26T19:20:21.502Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R129-131",
-      "R146-147"
+      "R45-46",
+      "R152-155"
     ],
     "cited_changed_lines": [
-      "R129 added: gitStagePaths: (payload) => ipcRenderer.invoke(\"git-stage-paths\", payload),",
-      "R130 added: gitStageDistrict: (payload) => ipcRenderer.invoke(\"git-stage-district\", payload),",
-      "R131 added: exportProjectSnapshot: (payload) => ipcRenderer.invoke(\"export-project-snapshot\", payload),",
-      "R146 added: gitCommitDetail: (payload) => ipcRenderer.invoke(\"git-commit-detail\", payload),",
-      "R147 added: githubCommitContext: (payload) => ipcRenderer.invoke(\"github-commit-context\", payload),"
+      "R45 added: scanSecurityInsights: (payload) =>",
+      "R46 added: ipcRenderer.invoke(\"security-insights-scan\", payload),",
+      "R152 added: gitListBranches: (payload) => ipcRenderer.invoke(\"git-list-branches\", payload),",
+      "R153 added: gitListBranchCommits: (payload) => ipcRenderer.invoke(\"git-list-branch-commits\", payload),",
+      "R154 added: workspaceMaterializeCommit: (payload) =>",
+      "R155 added: ipcRenderer.invoke(\"workspace-materialize-commit\", payload),"
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

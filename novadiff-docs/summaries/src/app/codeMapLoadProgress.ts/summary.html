@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>src/app/codeMapLoadProgress.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>src/app/codeMapLoadProgress.ts</h1>
+    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:28:33.655Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>src/app/codeMapLoadProgress.ts</code> adds a public API for tracking the Code Map loading progress.<br>It declares the types <code>CodeMapGraphProgress</code>, <code>CodeMapLoadState</code>, and <code>CodeMapLoadSnapshot</code>, and exports the helpers <code>computeCodeMapLoadSnapshot</code>, <code>isCodeMapExperienceReady</code>, and the constant <code>CODE_MAP_HANDOFF_MS</code> (line 124).</p>
+<h3>Key changes</h3>
+<ul>
+<li><p>*<em>Exports</em></p>
+</li>
+<li><p>– new symbols added at the top of the file (lines 1‑6, 8‑16, 18‑24).  </p>
+</li>
+<li><p>*<em>Progress calculation</em></p>
+</li>
+<li><p>– <code>graphPercent</code> (lines 30‑53) maps graph phases and progress ratios to a 0‑100 scale using the constants <code>GRAPH_END</code> (52), <code>CITY_END</code> (88), and <code>MOUNT_END</code> (100).  </p>
+</li>
+<li><p>*<em>Snapshot logic</em></p>
+</li>
+<li><p>– <code>computeCodeMapLoadSnapshot</code> (lines 54‑107) returns a <code>CodeMapLoadSnapshot</code> that reflects the current phase (“Knowledge graph”, “Code city”, “Explorer”, or “Ready”) and computes <code>percent</code>, <code>spawnCount</code>, and <code>spawnTarget</code>.  </p>
+</li>
+<li><p>*<em>Readiness check</em></p>
+</li>
+<li><p>– <code>isCodeMapExperienceReady</code> (lines 109‑121) evaluates <code>graphReady</code>, <code>explorerMounted</code>, <code>cityReady</code>, and <code>graphBuilding</code> to determine if the experience is ready.  </p>
+</li>
+<li><p>*<em>Timing constant</em></p>
+</li>
+<li><p>– <code>CODE_MAP_HANDOFF_MS</code> (line 124) defines the cross‑fade duration from preview to live view.</p>
+</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><p>Centralizes progress metrics, reducing duplicated logic across the UI.  </p>
+</li>
+<li><p>Provides a single source of truth for progress percentages and readiness flags.  </p>
+</li>
+<li><p>Snapshot data can be logged or sent to analytics for monitoring user experience.  </p>
+</li>
+<li><p>As a new file, it introduces no breaking changes; existing imports remain unaffected.</p>
+</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><p>Verify that <code>graphPercent</code> handles edge cases such as <code>total = 0</code> or <code>current &gt; total</code>.  </p>
+</li>
+<li><p>Ensure <code>computeCodeMapLoadSnapshot</code> aligns with UI expectations for each phase; unit tests should cover all branches.  </p>
+</li>
+<li><p>Confirm that <code>isCodeMapExperienceReady</code> logic matches the intended semantics, especially when <code>graphBuilding</code> toggles.  </p>
+</li>
+<li><p>Update any documentation or type references that now depend on the new <code>CodeMapLoadState</code> interface.</p>
+</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

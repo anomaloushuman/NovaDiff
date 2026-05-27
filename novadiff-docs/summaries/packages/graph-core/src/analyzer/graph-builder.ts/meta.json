@@ -1,0 +1,47 @@
+{
+  "relPath": "packages/graph-core/src/analyzer/graph-builder.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:50:37.136Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R84-109",
+      "R119-121",
+      "L117-128 / R146-157",
+      "L132 / R161-167",
+      "L156 / R191-197",
+      "L303 / R344-346",
+      "L307 / R350-351"
+    ],
+    "cited_changed_lines": [
+      "R84 added: private uniqueNodeId(baseId: string, lineStart?: number): string {",
+      "R85 added: if (!this.nodeIds.has(baseId)) {",
+      "R86 added: return baseId;",
+      "R87 added: }",
+      "R88 added: if (lineStart !== undefined) {",
+      "R89 added: const withLine = `${baseId}:${lineStart}`;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left class GraphBuilder (60-337)",
+      "right class GraphBuilder (60-381)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

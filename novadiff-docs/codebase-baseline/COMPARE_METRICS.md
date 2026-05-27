@@ -1,23 +1,23 @@
 # Baseline codebase metrics
 
-**Repository:** f7c2bfd81af2
+**Repository:** 9aadd5eb5604
 
-**Path:** `/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/f7c2bfd81af2`
+**Path:** `/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/9aadd5eb5604`
 
 | Metric | Value |
 | --- | --- |
-| Indexed files | 336 |
+| Indexed files | 359 |
 | Symbol-bearing files | 80 |
-| Relative import edges | 38 |
-| Cross-file call edges (heuristic) | 225 |
+| Relative import edges | 43 |
+| Cross-file call edges (heuristic) | 228 |
 
 ## Top extensions
 
 | Extension | Count |
 | --- | --- |
-| `.ts` | 200 |
-| `.tsx` | 72 |
-| `.cjs` | 24 |
+| `.ts` | 210 |
+| `.tsx` | 82 |
+| `.cjs` | 27 |
 | `.json` | 13 |
 | `.css` | 5 |
 | `.mjs` | 4 |
@@ -37,15 +37,15 @@
 
 | Directory | Files |
 | --- | --- |
-| `packages` | 231 |
-| `src` | 56 |
-| `electron` | 24 |
+| `packages` | 235 |
+| `src` | 71 |
+| `electron` | 27 |
 | `.` | 14 |
 | `.novadiff-graph` | 4 |
 | `cli` | 3 |
 | `public` | 2 |
+| `tests` | 2 |
 | `scripts` | 1 |
-| `tests` | 1 |
 
 ## Detected project stacks
 
@@ -68,13 +68,16 @@
 - `electron/code-city-model.cjs`
 - `electron/compare-runner.cjs`
 - `electron/diff-excerpt.cjs`
+- `electron/export-snapshot.cjs`
 - `electron/file-summary-export.cjs`
 - `electron/gh-install.cjs`
 - `electron/gh-path.cjs`
 - `electron/git-blame.cjs`
+- `electron/git-commit.cjs`
 - `electron/git-publish.cjs`
 - `electron/git-service.cjs`
 - `electron/github-auth-flow.cjs`
+- `electron/github-commit-context.cjs`
 - `electron/github-service.cjs`
 - `electron/graph/extract-structure.mjs`
 - `electron/knowledge-graph-runner.cjs`
@@ -130,6 +133,3 @@
 - `packages/graph-core/src/fingerprint.ts`
 - `packages/graph-core/src/ignore-filter.ts`
 - `packages/graph-core/src/ignore-generator.ts`
-- `packages/graph-core/src/index.ts`
-- `packages/graph-core/src/languages/alphabetical-catalog.generated.ts`
-- `packages/graph-core/src/languages/catalog-builder.ts`

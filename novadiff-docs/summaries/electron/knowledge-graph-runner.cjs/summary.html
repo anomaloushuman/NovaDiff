@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/knowledge-graph-runner.cjs · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/knowledge-graph-runner.cjs</h1>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:20:31.665Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>The <code>electron/knowledge-graph-runner.cjs</code> file was modified to refine project‑file traversal logic.</p>
+<h3>Key changes</h3>
+<ul>
+<li><code>SKIP_DIRS</code> now contains <code>&quot;venv&quot;</code>, <code>&quot;.venv&quot;</code>, and <code>&quot;.venv-main&quot;</code> (added at R32‑R34).  </li>
+<li>In <code>walkProjectFiles</code>, the guard was updated to skip any entry whose name starts with <code>&quot;.venv&quot;</code> in addition to the existing <code>SKIP_DIRS</code> check (added at R162‑R165).  </li>
+<li>The previous isolated guard <code>if (SKIP_DIRS.has(entry.name))</code> was removed (L159).  </li>
+<li>Exclusion logic for <code>&quot;site-packages&quot;</code> remains unchanged.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li>Virtual‑environment directories are no longer traversed, reducing unnecessary file processing during knowledge‑graph generation.  </li>
+<li>Existing exclusion logic for Python package directories is preserved.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Verify that legitimate directories named <code>&quot;.venv&quot;</code> are not unintentionally skipped.  </li>
+<li>Run the repository’s lint, test, and production build commands to confirm no regressions.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

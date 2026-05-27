@@ -1,9 +1,9 @@
 {
   "relPath": "tests/graphCityBridge.test.ts",
-  "kind": "added",
-  "leftTitle": "f7c2bfd81af2",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:39:08.656Z",
+  "generatedAt": "2026-05-26T19:17:34.324Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -17,31 +17,21 @@
         "key": "tests",
         "label": "Test-related file",
         "tone": "good"
-      },
-      {
-        "description": "Module wiring or public surface hints changed in the diff.",
-        "key": "surface-change",
-        "label": "Import/export surface changed",
-        "tone": "neutral"
       }
     ],
     "changed_exports": [],
-    "changed_imports": [
-      "R1 added: import { describe, expect, it } from \"vitest\";",
-      "R2 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R3 added: import {",
-      "R9 added: import type { CodeCityLayoutResult, CodeCityRenderableBuilding } from \"../src/app/codeCityLayout\";"
-    ],
+    "changed_imports": [],
     "changed_line_ranges": [
-      "R1-121"
+      "R7",
+      "R113-156"
     ],
     "cited_changed_lines": [
-      "R1 added: import { describe, expect, it } from \"vitest\";",
-      "R2 added: import type { KnowledgeGraph } from \"@novadiff/graph-core/types\";",
-      "R3 added: import {",
-      "R4 added: cityBuildingIdsForHighlight,",
-      "R5 added: cityBuildingToGraphNodeId,",
-      "R6 added: graphEdgesToCityPairs,"
+      "R7 added: graphNodeIdsForCityLayout,",
+      "R113 added: it(\"maps disambiguated function node ids with line suffix\", () => {",
+      "R114 added: const graphWithLine: KnowledgeGraph = {",
+      "R115 added: ...graph,",
+      "R116 added: nodes: [",
+      "R117 added: ...graph.nodes,"
     ],
     "evidence_limits": [],
     "file_roles": [
@@ -49,7 +39,7 @@
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function building (11-121)"
+      "right function building (12-166)"
     ],
     "verification_hints": [
       "Re-run the affected tests and check whether fixtures or snapshots need refresh.",

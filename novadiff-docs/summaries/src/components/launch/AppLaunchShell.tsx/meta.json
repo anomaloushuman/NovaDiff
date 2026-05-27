@@ -1,0 +1,53 @@
+{
+  "relPath": "src/components/launch/AppLaunchShell.tsx",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:42:14.453Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "L19 removed: export function AppLaunchShell({ chrome, children, onPhaseChange }: AppLaunchShellProps) {",
+      "R21 added: export function AppLaunchShell({"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R17-18",
+      "L19 / R21-26",
+      "L63 / R70"
+    ],
+    "cited_changed_lines": [
+      "R17 added: /** Extra classes on `.app-shell` (e.g. sidebar overlay mode). */",
+      "R18 added: shellClassName?: string;",
+      "L19 removed: export function AppLaunchShell({ chrome, children, onPhaseChange }: AppLaunchShellProps) {",
+      "R21 added: export function AppLaunchShell({",
+      "R22 added: chrome,",
+      "R23 added: children,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function AppLaunchShell (19-76)",
+      "right function AppLaunchShell (21-83)",
+      "right interface AppLaunchShellProps (13-20)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

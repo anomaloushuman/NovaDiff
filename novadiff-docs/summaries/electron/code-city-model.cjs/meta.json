@@ -1,0 +1,49 @@
+{
+  "relPath": "electron/code-city-model.cjs",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:18:33.854Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R3 added: const path = require(\"path\");"
+    ],
+    "changed_line_ranges": [
+      "R3",
+      "R113-131"
+    ],
+    "cited_changed_lines": [
+      "R3 added: const path = require(\"path\");",
+      "R113 added: if (symbolEntries.length === 0) {",
+      "R114 added: const lineCount = Math.max(1, Number(file?.line_count ?? 0));",
+      "R115 added: symbols.push({",
+      "R116 added: id: `${rootSide}:${relPath}:file:${path.basename(relPath)}`,",
+      "R117 added: fileId,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function buildSideNodes (80-161)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "relPath": "package.json",
+  "kind": "modified",
+  "label": "Code explanation (L23-45)",
+  "selectionKey": "lines-23-45",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 23,
+      "rightEnd": 45
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T07:07:36.987Z"
+}

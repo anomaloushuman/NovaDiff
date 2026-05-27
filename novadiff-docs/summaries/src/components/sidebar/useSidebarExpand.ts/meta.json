@@ -1,0 +1,54 @@
+{
+  "relPath": "src/components/sidebar/useSidebarExpand.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:44:25.230Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R8 added: export type SidebarTextPhase = \"hidden\" | \"typing\" | \"erasing\";",
+      "R10 added: export interface UseSidebarExpandResult {",
+      "R26 added: export function useSidebarExpand(): UseSidebarExpandResult {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useCallback, useEffect, useRef, useState, type FocusEvent } from \"react\";",
+      "R2 added: import {"
+    ],
+    "changed_line_ranges": [
+      "R1-211"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useCallback, useEffect, useRef, useState, type FocusEvent } from \"react\";",
+      "R2 added: import {",
+      "R3 added: SIDEBAR_ERASE_FALLBACK_MS,",
+      "R4 added: SIDEBAR_LEAVE_DELAY_MS,",
+      "R5 added: SIDEBAR_WIDTH_TRANSITION_MS,",
+      "R6 added: } from \"./sidebarTiming\";"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useSidebarExpand (26-211)",
+      "right interface UseSidebarExpandResult (10-25)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

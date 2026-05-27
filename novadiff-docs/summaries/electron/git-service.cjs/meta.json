@@ -1,9 +1,9 @@
 {
   "relPath": "electron/git-service.cjs",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:44:21.856Z",
+  "generatedAt": "2026-05-26T19:18:52.565Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,26 +16,28 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R142-171",
-      "R253-255"
+      "R237-336",
+      "R351-353"
     ],
     "cited_changed_lines": [
-      "R142 added: function stagePaths(repoRoot, paths) {",
-      "R143 added: const root = path.resolve(repoRoot);",
-      "R144 added: const list = Array.isArray(paths) ? paths.map((p) => String(p ?? \"\").trim()).filter(Boolean) : [];",
-      "R145 added: if (list.length === 0) {",
-      "R146 added: return { staged: 0 };",
-      "R147 added: }"
+      "R237 added: function splitGitFormatLine(line) {",
+      "R238 added: if (line.includes(\"\\x1f\")) {",
+      "R239 added: return line.split(\"\\x1f\");",
+      "R240 added: }",
+      "R241 added: if (line.includes(\"\\t\")) {",
+      "R242 added: return line.split(\"\\t\");"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function stageDistrict (162-171)",
-      "right function stagePaths (142-151)",
-      "right function unstagePaths (152-161)",
-      "right function detectGitTooling (237-262)"
+      "right function listBranches (272-314)",
+      "right function parseLogLines (250-271)",
+      "right function listCommitsForRef (315-331)",
+      "right function splitGitFormatLine (237-249)",
+      "right function resolveRefHash (332-336)",
+      "right function detectGitTooling (337-365)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

@@ -1,0 +1,56 @@
+{
+  "relPath": "packages/graph-view/src/utils/elk-layout.worker.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:52:50.941Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R6 added: export interface ElkWorkerRequest {",
+      "R11 added: export interface ElkWorkerSuccess {",
+      "R17 added: export interface ElkWorkerFailure {",
+      "R23 added: export type ElkWorkerResponse = ElkWorkerSuccess | ElkWorkerFailure;"
+    ],
+    "changed_imports": [
+      "R4 added: import { loadElkConstructor, type ElkLayoutInstance } from \"./elk-bundled\";"
+    ],
+    "changed_line_ranges": [
+      "R1-51"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /**",
+      "R2 added: * Off-main-thread ELK layout. Keeps the UI responsive on large knowledge graphs.",
+      "R3 added: */",
+      "R4 added: import { loadElkConstructor, type ElkLayoutInstance } from \"./elk-bundled\";",
+      "R6 added: export interface ElkWorkerRequest {",
+      "R7 added: requestId: number;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function getElk (27-51)",
+      "right interface ElkWorkerFailure (17-26)",
+      "right interface ElkWorkerSuccess (11-16)",
+      "right interface ElkWorkerRequest (6-10)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

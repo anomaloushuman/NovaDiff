@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/NovaDiffGraphExplorer.tsx",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:11:40.481Z",
+  "generatedAt": "2026-05-26T19:47:06.703Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,22 +16,21 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R31-37"
+      "R38-42"
     ],
     "cited_changed_lines": [
-      "R31 added: /** When set, graph selection follows this node id (Documentation ↔ City sync). */",
-      "R32 added: controlledNodeId?: string | null;",
-      "R33 added: /** When true with controlledNodeId, enables graph focus neighborhood mode. */",
-      "R34 added: focusMode?: boolean;",
-      "R35 added: /** When set, graph drills into this file path (city \"enter building\"). */",
-      "R36 added: enteredFilePath?: string | null;"
+      "R38 added: /** Shared with Code City structure filters (files / classes / functions). */",
+      "R39 added: detailLevel?: \"file\" | \"class\";",
+      "R40 added: showFunctionsInClassView?: boolean;",
+      "R41 added: /** Graph node ids matching visible Code City buildings after filters. */",
+      "R42 added: cityFilterNodeIds?: string[] | null;"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right interface NovaDiffGraphExplorerProps (21-40)"
+      "right interface NovaDiffGraphExplorerProps (21-45)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

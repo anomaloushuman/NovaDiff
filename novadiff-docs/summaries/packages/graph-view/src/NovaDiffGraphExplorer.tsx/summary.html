@@ -26,31 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/NovaDiffGraphExplorer.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:11:40.481Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:47:06.703Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>In <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code> the <code>NovaDiffGraphExplorerProps</code> interface was extended with four optional fields: <code>controlledNodeId</code>, <code>focusMode</code>, <code>enteredFilePath</code>, and <code>onSelectionChange</code>. These additions appear in the diff at lines 31‑37 and are purely declarative; the component’s rendering logic remains unchanged.</p>
+<p>The <code>NovaDiffGraphExplorerProps</code> interface in <code>packages/graph-view/src/NovaDiffGraphExplorer.tsx</code> was extended with three optional properties: <code>detailLevel</code>, <code>showFunctionsInClassView</code>, and <code>cityFilterNodeIds</code>. These additions appear in the diff at lines 38‑42 of the interface and are documented with comments that reference Code City structure filters.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Interface augmentation</strong> – the new props are declared in lines 31‑37 of the interface.  </li>
-<li><strong>Documentation comments</strong> – JSDoc comments describe each prop’s intent.  </li>
-<li><strong>Prop propagation</strong> – the spread <code>...props</code> in the component’s signature passes the new fields unchanged to either <code>NovaDiffGraphExplorerEmbed</code> or <code>NovaDiffGraphExplorerFull</code>.  </li>
-<li><strong>No runtime changes</strong> – the component’s effect hooks, state handling, and JSX output are identical to the pre‑change version.</li>
+<li><strong>New props</strong> added in the interface (lines 38‑42).  </li>
+<li>Each prop is preceded by a comment explaining its intended use.  </li>
+<li>No other parts of the file were modified; the component’s implementation remains unchanged.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Non‑breaking</strong> – all existing consumers compile without modification because the new props are optional.  </li>
-<li><strong>Extensibility</strong> – downstream code can now supply node‑selection or focus‑mode hints without altering the explorer internals.  </li>
-<li><strong>No performance change</strong> – the diff adds only type information and comments.  </li>
-<li><strong>Documentation</strong> – the added comments improve developer understanding but require no code changes elsewhere.</li>
+<li><strong>Type‑level</strong>: Consumers now have additional optional configuration options. Existing code continues to compile because the new fields are optional.  </li>
+<li><strong>Runtime</strong>: The component does not read these props in the current implementation, so no new runtime behavior or performance impact is introduced.  </li>
+<li><strong>Compatibility</strong>: The change is non‑breaking; it only expands the public API.  </li>
+<li><strong>Observability</strong>: No new logs or metrics are emitted; the rendering path is unchanged.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Type‑checking regressions</strong> – any code that destructures <code>NovaDiffGraphExplorerProps</code> must still satisfy the updated type; run <code>tsc</code> to confirm.  </li>
-<li><strong>Test coverage</strong> – existing tests may need to be updated or new tests added to verify that the new props can be passed without breaking the component (unknown from the available diff).  </li>
-<li><strong>Build validation</strong> – run lint, <code>tsc</code>, and the production build to ensure no type errors.  </li>
-<li><strong>Documentation sync</strong> – update public API docs to reflect the new optional props.</li>
+<li><strong>Consumer migration</strong>: Projects importing <code>NovaDiffGraphExplorerProps</code> may need to update documentation to reflect the new fields.  </li>
+<li><strong>Documentation</strong>: Ensure README and prop‑type docs mention the added options.  </li>
+<li><strong>Unused props</strong>: Verify that downstream code does not assume these props are present; they are currently ignored.  </li>
+<li><strong>Future usage</strong>: Plan for a future implementation that consumes these props while keeping the interface stable until then.</li>
 </ul>
 </article>
   </main>

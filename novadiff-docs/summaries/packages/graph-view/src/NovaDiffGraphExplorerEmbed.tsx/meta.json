@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/NovaDiffGraphExplorerEmbed.tsx",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T11:12:29.390Z",
+  "generatedAt": "2026-05-26T19:48:00.178Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,29 +21,29 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "R12 added: import { GraphEmbedSyncBridge } from \"./GraphEmbedSyncBridge\";"
+      "R13 added: import type { DetailLevel } from \"./store\";"
     ],
     "changed_line_ranges": [
-      "R12",
-      "R22-25",
-      "R46-49",
-      "R118-123"
+      "R13",
+      "R26-28",
+      "R53-55",
+      "R129-131"
     ],
     "cited_changed_lines": [
-      "R12 added: import { GraphEmbedSyncBridge } from \"./GraphEmbedSyncBridge\";",
-      "R22 added: controlledNodeId?: string | null;",
-      "R23 added: enteredFilePath?: string | null;",
-      "R24 added: focusMode?: boolean;",
-      "R25 added: onSelectionChange?: (nodeId: string | null) => void;",
-      "R46 added: controlledNodeId,"
+      "R13 added: import type { DetailLevel } from \"./store\";",
+      "R26 added: detailLevel?: DetailLevel;",
+      "R27 added: showFunctionsInClassView?: boolean;",
+      "R28 added: cityFilterNodeIds?: string[] | null;",
+      "R53 added: detailLevel,",
+      "R54 added: showFunctionsInClassView,"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "right function NovaDiffGraphExplorerEmbed (41-128)",
-      "right interface NovaDiffGraphExplorerEmbedProps (14-27)"
+      "right function NovaDiffGraphExplorerEmbed (45-138)",
+      "right interface NovaDiffGraphExplorerEmbedProps (15-31)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

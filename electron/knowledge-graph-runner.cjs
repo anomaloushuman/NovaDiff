@@ -29,6 +29,9 @@ const SKIP_DIRS = new Set([
   ".cursor",
   "vendor",
   "__pycache__",
+  "venv",
+  ".venv",
+  ".venv-main",
 ]);
 
 function resolveRepoRoot(appPath) {
@@ -156,7 +159,10 @@ async function walkProjectFiles(projectRoot) {
     for (const entry of entries) {
       const rel = relPrefix ? `${relPrefix}/${entry.name}` : entry.name;
       if (entry.isDirectory()) {
-        if (SKIP_DIRS.has(entry.name)) {
+        if (SKIP_DIRS.has(entry.name) || entry.name.startsWith(".venv")) {
+          continue;
+        }
+        if (entry.name === "site-packages") {
           continue;
         }
         await walk(path.join(absDir, entry.name), rel);

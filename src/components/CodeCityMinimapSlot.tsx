@@ -69,11 +69,13 @@ export function CodeCityMinimapSlot({
     });
 
     window.addEventListener("resize", update);
+    window.addEventListener("novadiff-code-viewer-open-change", update);
     return () => {
       cancelAnimationFrame(rafId);
       ro.disconnect();
       mo.disconnect();
       window.removeEventListener("resize", update);
+      window.removeEventListener("novadiff-code-viewer-open-change", update);
     };
   }, [dockedControls]);
 

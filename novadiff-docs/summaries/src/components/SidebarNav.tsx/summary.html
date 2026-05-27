@@ -26,40 +26,44 @@
 <body>
   <header class="top">
     <h1>src/components/SidebarNav.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:08:07.935Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:40:58.501Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/components/SidebarNav.tsx</code> was refactored to add a compact UI mode, a new <code>NavLink</code> helper component, and an expanded <code>WorkspacePage</code> enum. The brand‑reveal animation logic was removed, and the feature list and navigation links were reorganized.</p>
+<p><code>src/components/SidebarNav.tsx</code> was refactored to replace the legacy <em>compact</em> mode with a new <code>expand</code> prop that drives panel state.  </p>
+<ul>
+<li>The file now imports <code>useEffect</code>, <code>useRef</code>, <code>UseSidebarExpandResult</code>, and <code>usePrefersReducedMotion</code> (lines R1‑R17).  </li>
+<li>A new <code>SidebarTypedLabel</code> component (lines 58‑119) replaces inline typewriter logic and respects reduced‑motion settings.  </li>
+<li><code>SidebarExpandProps</code> is exported as a <code>Pick</code> of <code>UseSidebarExpandResult</code> fields (lines R7‑R16).  </li>
+<li><code>SidebarNavProps</code> no longer accepts <code>compact</code>; it now requires <code>expand: SidebarExpandProps</code> (lines 40‑57).  </li>
+<li><code>NavLink</code> props were updated: <code>compact</code> removed, <code>collapsed</code>, <code>showSlot</code>, <code>typingActive</code>, <code>erasingActive</code>, and <code>labelDelay</code> added (lines 120‑139).  </li>
+<li>Icon handling was unified: <code>iconProps</code> removed; <code>navIcon</code> (size 18) and <code>featureIcon</code> (size 16) constants introduced (lines 54‑56).  </li>
+<li>All compact‑specific class names and markup blocks were removed (e.g., <code>sidebar--compact</code>, <code>sidebar-brand--compact</code>, <code>sidebar-feature--compact</code>, etc., lines 40‑41, 55‑56, 58‑59).  </li>
+<li>Launch‑brand logic now uses <code>useLaunch</code>’s <code>skipSequence</code> and <code>panelExpanded</code> from <code>expand</code>, with a <code>useRef</code>/<code>useEffect</code> timeout of 4 s (lines 186‑210).</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li>Added <code>import type { ReactNode } from &quot;react&quot;;</code> (line 1).  </li>
-<li>Removed <code>BookOpen</code> icon import (line 5).  </li>
-<li>Expanded <code>WorkspacePage</code> enum to include <code>&quot;docReports&quot;</code> (lines 18‑24).  </li>
-<li>Added <code>compact?: boolean</code> to <code>SidebarNavProps</code> (line 33).  </li>
-<li>Added <code>icCompact</code> constant for compact icon sizing (line 41).  </li>
-<li>Created <code>NavLink</code> helper component (lines 43‑77) replacing inline button markup.  </li>
-<li>Updated <code>&lt;aside&gt;</code> and <code>&lt;nav&gt;</code> to be compact‑aware (lines 86‑140).  </li>
-<li>Updated <code>showLaunchBrand</code> to <code>brandReveal &amp;&amp; !skipSequence &amp;&amp; !compact</code> (lines 94‑95).  </li>
-<li>Rewrote feature list and navigation links to use <code>NavLink</code> and new icon props (lines 142‑260).  </li>
-<li>Conditionally rendered compact avatar and text in user section (lines 287‑312).  </li>
-<li>Updated <code>onOpenSettings</code> button to disable when absent (lines 276‑280).</li>
+<li><strong>Imports &amp; exports</strong>: added <code>useEffect</code>, <code>useRef</code>, <code>UseSidebarExpandResult</code>, <code>usePrefersReducedMotion</code>; exported <code>SidebarExpandProps</code>.  </li>
+<li><strong>Props</strong>: <code>SidebarNavProps</code> now requires <code>expand</code>; <code>NavLink</code> uses <code>collapsed</code>, <code>showSlot</code>, <code>typingActive</code>, <code>erasingActive</code>, <code>labelDelay</code>.  </li>
+<li><strong>State handling</strong>: panel state derived from <code>expand</code>; launch‑brand animation controlled via <code>useRef</code>/<code>useEffect</code>.  </li>
+<li><strong>Icon logic</strong>: replaced <code>iconProps</code> with <code>navIcon</code>/<code>featureIcon</code>.  </li>
+<li><strong>UI</strong>: all compact‑specific markup replaced with <code>collapsed</code>/<code>showSlot</code> and <code>SidebarTypedLabel</code>.  </li>
+<li><strong>Accessibility</strong>: <code>SidebarTypedLabel</code> falls back to plain text when <code>usePrefersReducedMotion</code> is true.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><code>NavLink</code> centralizes link styling, reducing duplication.  </li>
-<li>Compact mode changes layout; tests should cover both modes.  </li>
-<li>Expanded <code>WorkspacePage</code> requires callers to handle <code>&quot;docReports&quot;</code>.  </li>
-<li>Removing the brand‑reveal animation may slightly improve initial render time.  </li>
-<li>No other modules reference <code>BookOpen</code>, so its removal is safe.</li>
+<li>Callers must supply the new <code>expand</code> prop; otherwise the component will error.  </li>
+<li>Removed duplicated compact logic reduces future maintenance.  </li>
+<li><code>SidebarTypedLabel</code> may instantiate many <code>TypewriterText</code> components; keep the number of labels reasonable.  </li>
+<li>The 4 s launch‑brand timeout is now managed by a ref; verify its behavior.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li>Verify all <code>NavLink</code> instances forward props correctly and that the <code>&quot;docReports&quot;</code> route is wired.  </li>
-<li>Run visual regression tests for <code>compact</code> true/false.  </li>
-<li>Ensure any tests or analytics tied to the removed brand‑reveal animation are updated.  </li>
-<li>Confirm avatar fallback and compact text render correctly when <code>compact</code> is true.</li>
-</ul>
+<ol>
+<li><strong>Missing <code>expand</code> prop</strong> – ensure all usages of <code>SidebarNav</code> pass it.  </li>
+<li><strong>Icon rendering</strong> – confirm <code>navIcon</code>/<code>featureIcon</code> sizes match design expectations.  </li>
+<li><strong>Reduced motion fallback</strong> – test with OS reduced‑motion settings to verify static text rendering.  </li>
+<li><strong>Brand animation</strong> – validate the 4 s timeout and <code>launchBrandPendingRef</code> logic still shows the brand correctly after launch.</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

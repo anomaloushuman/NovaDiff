@@ -39,6 +39,14 @@ import { DocMermaidMount } from "./DocMermaidMount";
 import type { LlmSettings } from "../app/llmStorage";
 import { buildCodeCityLayout } from "../app/codeCityLayout";
 import {
+  defaultChangeStateFilters,
+  defaultSymbolKindGroups,
+  exploreFilterKey,
+  graphDetailFromSymbolKinds,
+} from "../app/docsExploreFilters";
+import type { CodeCityChangeState } from "../app/types";
+import type { SymbolKindGroup } from "../app/docsExploreFilters";
+import {
   buildReleaseOverviewMarkdown,
   buildRiskPromptContext,
   buildSummaryPromptContext,
@@ -48,6 +56,7 @@ import {
 import { CodeCityView } from "./CodeCityView";
 import { KnowledgeGraphPanel, type GraphPayload } from "./KnowledgeGraphPanel";
 import type { CityExploreBarProps } from "./DocsGraphExploreChrome";
+import { graphNodeIdsForCityLayout } from "../app/graphCityBridge";
 import {
   DocumentationWorkspaceSyncRoot,
   useLinkedCityState,
@@ -671,7 +680,12 @@ function DocumentationWorkspaceBody({
   );
   const [citySubsystem, setCitySubsystem] = useState("all");
   const [cityExtension, setCityExtension] = useState("all");
-  const [citySymbolKind, setCitySymbolKind] = useState("all");
+  const [citySymbolKinds, setCitySymbolKinds] = useState<SymbolKindGroup[]>(
+    defaultSymbolKindGroups,
+  );
+  const [cityChangeStates, setCityChangeStates] = useState<CodeCityChangeState[]>(
+    defaultChangeStateFilters,
+  );
   const [cityAuthor, setCityAuthor] = useState("all");
   const [citySearch, setCitySearch] = useState("");
   useEffect(() => {
@@ -751,13 +765,15 @@ function DocumentationWorkspaceBody({
         changedOnly: cityChangedOnly,
         subsystem: citySubsystem,
         extension: cityExtension,
-        symbolKind: citySymbolKind,
+        symbolKinds: citySymbolKinds,
+        changeStates: cityChangeStates,
         author: cityAuthor,
         search: citySearch,
       }),
     [
       cityBlameOverlay,
       cityChangedOnly,
+      cityChangeStates,
       cityCompareOverlay,
       cityExtension,
       cityModel,
@@ -765,11 +781,64 @@ function DocumentationWorkspaceBody({
       citySearch,
       citySubsystem,
       cityAuthor,
-      citySymbolKind,
+      citySymbolKinds,
+    ],
+  );
+
+  const graphStructure = useMemo(
+    () => graphDetailFromSymbolKinds(citySymbolKinds),
+    [citySymbolKinds],
+  );
+
+  const cityFilterReframeKey = useMemo(
+    () =>
+      exploreFilterKey({
+        root: cityRootSide,
+        compare: cityCompareOverlay,
+        changed: cityChangedOnly,
+        subsystem: citySubsystem,
+        extension: cityExtension,
+        kinds: citySymbolKinds.join(","),
+        changes: cityChangeStates.join(","),
+        author: cityAuthor,
+        search: citySearch.trim(),
+      }),
+    [
+      cityRootSide,
+      cityCompareOverlay,
+      cityChangedOnly,
+      citySubsystem,
+      cityExtension,
+      citySymbolKinds,
+      cityChangeStates,
+      cityAuthor,
+      citySearch,
     ],
   );
 
   const linkedCity = useLinkedCityState(graphPayload, cityLayout, cityRootSide);
+
+  const graphCityFilterNodeIds = useMemo(() => {
+    if (!graphPayload?.graph) {
+      return null;
+    }
+    return [...graphNodeIdsForCityLayout(graphPayload.graph, linkedCity.filteredLayout)];
+  }, [graphPayload?.graph, linkedCity.filteredLayout]);
+
+  useEffect(() => {
+    const entered = linkedCity.sync.enteredFilePath;
+    if (!entered || citySubsystem === "all") {
+      return;
+    }
+    const rel = entered.replace(/\\/g, "/");
+    const inDistrict =
+      rel === citySubsystem ||
+      rel.startsWith(`${citySubsystem}/`) ||
+      rel.split("/")[0] === citySubsystem;
+    if (!inDistrict) {
+      linkedCity.onCityExit();
+    }
+  }, [citySubsystem, linkedCity.sync.enteredFilePath, linkedCity.onCityExit]);
 
   useEffect(() => {
     if (!initialDocsFocus?.openCity) {
@@ -789,7 +858,8 @@ function DocumentationWorkspaceBody({
     setCityChangedOnly(false);
     setCitySubsystem("all");
     setCityExtension("all");
-    setCitySymbolKind("all");
+    setCitySymbolKinds(defaultSymbolKindGroups());
+    setCityChangeStates(defaultChangeStateFilters());
     setCityAuthor("all");
     setCitySearch("");
     linkedCity.sync.clearSelection();
@@ -812,8 +882,10 @@ function DocumentationWorkspaceBody({
       setCitySubsystem,
       cityExtension,
       setCityExtension,
-      citySymbolKind,
-      setCitySymbolKind,
+      citySymbolKinds,
+      setCitySymbolKinds,
+      cityChangeStates,
+      setCityChangeStates,
       cityAuthor,
       setCityAuthor,
       citySearch,
@@ -833,7 +905,8 @@ function DocumentationWorkspaceBody({
       cityChangedOnly,
       citySubsystem,
       cityExtension,
-      citySymbolKind,
+      citySymbolKinds,
+      cityChangeStates,
       cityAuthor,
       citySearch,
       cityModel?.authors,
@@ -858,6 +931,7 @@ function DocumentationWorkspaceBody({
         {!cityError && cityModel ? (
           <CodeCityView
             layout={linkedCity.filteredLayout}
+            filterReframeKey={cityFilterReframeKey}
             rootSide={cityRootSide}
             compareOverlay={cityCompareOverlay}
             blameOverlay={cityBlameOverlay}
@@ -865,7 +939,11 @@ function DocumentationWorkspaceBody({
             highlightBuildingIds={linkedCity.highlightBuildingIds}
             focusBuildingId={linkedCity.focusBuildingId}
             edgeOverlays={linkedCity.edgeOverlays}
-            focusMode={Boolean(linkedCity.sync.linkedNodeId) || linkedCity.inFileMode}
+            focusMode={
+              Boolean(linkedCity.sync.linkedNodeId) ||
+              Boolean(linkedCity.sync.cityBuildingId) ||
+              linkedCity.inFileMode
+            }
             onSelect={linkedCity.onCitySelect}
             onEnterBuilding={linkedCity.onCityEnter}
             floatChrome
@@ -1533,7 +1611,13 @@ function DocumentationWorkspaceBody({
           enteredFilePath={linkedCity.sync.enteredFilePath}
           focusMode={Boolean(linkedCity.sync.linkedNodeId) || linkedCity.inFileMode}
           onSelectionChange={linkedCity.onGraphSelectionChange}
+          graphDetailLevel={graphStructure.detailLevel}
+          graphShowFunctionsInClassView={graphStructure.showFunctionsInClassView}
+          graphCityFilterNodeIds={graphCityFilterNodeIds}
           onGraphPayloadChange={setGraphPayload}
+          codeMapCityLoading={cityLoading}
+          codeMapCityReady={!cityLoading && (Boolean(cityModel) || Boolean(cityError))}
+          codeMapSpawnTarget={Math.min(72, Math.max(12, docRows.length))}
         />
       </section>
   );

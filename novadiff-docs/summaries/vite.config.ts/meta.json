@@ -1,9 +1,9 @@
 {
   "relPath": "vite.config.ts",
   "kind": "modified",
-  "leftTitle": "f7c2bfd81af2",
+  "leftTitle": "9aadd5eb5604",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-21T10:38:14.511Z",
+  "generatedAt": "2026-05-26T19:13:17.715Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,15 +16,10 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L15 / R15-26"
+      "R57"
     ],
     "cited_changed_lines": [
-      "L15 removed: \"@novadiff/graph-core\": path.resolve(__dirname, \"packages/graph-core/src\"),",
-      "R15 added: \"@novadiff/graph-core/types\": path.resolve(",
-      "R16 added: __dirname,",
-      "R17 added: \"packages/graph-core/src/types.ts\",",
-      "R18 added: ),",
-      "R19 added: \"@novadiff/graph-core/schema\": path.resolve("
+      "R57 added: \"three/webgpu\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

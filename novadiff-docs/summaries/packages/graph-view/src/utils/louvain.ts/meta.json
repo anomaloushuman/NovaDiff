@@ -1,0 +1,43 @@
+{
+  "relPath": "packages/graph-view/src/utils/louvain.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:53:45.698Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L21 / R21-22",
+      "L23 / R24",
+      "L34 / R35-37"
+    ],
+    "cited_changed_lines": [
+      "L21 removed: const ids = new Set(nodeIds);",
+      "R21 added: const uniqueIds = [...new Set(nodeIds)];",
+      "R22 added: const ids = new Set(uniqueIds);",
+      "L23 removed: for (const id of nodeIds) g.addNode(id);",
+      "R24 added: for (const id of uniqueIds) g.addNode(id);",
+      "L34 removed: map.set(id, result[id] ?? -1);"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function detectCommunities (17-47)",
+      "right function detectCommunities (17-50)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

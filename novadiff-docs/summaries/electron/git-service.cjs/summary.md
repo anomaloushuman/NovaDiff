@@ -1,26 +1,22 @@
 ### Overview  
-Three new helper functions were added to `electron/git-service.cjs` to give callers finer control over staging:
-
-* `stagePaths(repoRoot, paths)` – normalises a list of paths, runs `git add -- <paths>`, and returns `{ staged: N }`.  
-* `unstagePaths(repoRoot, paths)` – runs `git reset HEAD -- <paths>` and returns `{ unstaged: N }`.  
-* `stageDistrict(repoRoot, topDir, statusFiles?)` – filters the repository’s status files to those under `topDir` (or its sub‑directories) and delegates to `stagePaths`.  
-
-The module export list was extended (lines 253‑255) to expose these utilities.
+The `electron/git-service.cjs` file was extended with new Git‑output parsing helpers and tooling detection. The changes add several functions (see line ranges R237‑248, R250‑269, R271‑311, R314‑330, R332‑335, R337‑344) and expose them via `module.exports` (R346‑365).
 
 ### Key changes  
-* **`stagePaths`** – added at lines 142‑149.  
-* **`unstagePaths`** – added at lines 152‑159.  
-* **`stageDistrict`** – added at lines 162‑169.  
-* Export list updated to include the three new functions (lines 253‑255).  
-* No other logic was modified.
+- **`splitGitFormatLine`** (R237‑248): splits a string by `\x1f`, tab, or `%x1f`, falling back to the raw line.  
+- **`parseLogLines`** (R250‑269): uses `splitGitFormatLine` to turn `git log` output into `{hash, shortHash, subject, authoredAt}` objects.  
+- **`listBranches`** (R271‑311): parses `git for‑each‑ref` output, populating `upstream`, `isCurrent`, and `isRemote` flags.  
+- **`listCommitsForRef`** (R314‑330): returns commits reachable from a ref, leveraging `parseLogLines`.  
+- **`resolveRefHash`** (R332‑335): thin wrapper around `git rev‑parse`.  
+- **`detectGitTooling`** (R337‑344): reports whether Git is available, its version, and any error.  
+- `module.exports` (R346‑365) now includes the new helpers alongside existing ones.
 
 ### Impact  
-* **API surface** – callers can now stage or unstage specific files or a whole directory without affecting the rest of the working tree.  
-* **Implementation** – each helper invokes a single `runGit` call, so the runtime cost is minimal compared to existing helpers.  
-* **Compatibility** – existing consumers of `stageAll`, `commit`, `push`, etc. remain unchanged.
+- The new splitter centralizes line‑splitting logic, reducing duplication.  
+- Branch and commit discovery now rely on a single, more robust parsing routine.  
+- `detectGitTooling` provides a single source of truth for Git presence, useful for diagnostics.
 
 ### Risks & follow‑ups  
-* The behavior of `stageDistrict` when `topDir` is empty or malformed is not documented; the current logic may match many files.  
-* `unstagePaths` propagates any `git` error; tests should cover failure scenarios.  
-* Documentation or type definitions should be updated to expose the new helpers.  
-* Run the full lint, test, and build suite to confirm no regressions in the new code paths.
+- **Branch listing regression**: verify that upstream names and remote flags match expectations on all supported Git versions.  
+- **Log parsing edge cases**: ensure commit messages containing `\x1f` or tabs are handled correctly; run tests against repositories with such messages.  
+- **Performance**: benchmark `listBranches` on large repositories to confirm no measurable slowdown.  
+- **Tooling detection**: confirm that `detectGitTooling` reports errors when Git is missing or misconfigured, and that callers handle the `gitError` field.

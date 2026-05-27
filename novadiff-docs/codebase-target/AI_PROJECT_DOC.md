@@ -1,133 +1,200 @@
-### Repository overview  
-NovaDiff is a cross‑platform code‑diff analysis tool.  
-* **Electron UI** – `electron/main.cjs` bootstraps the application and manages windows.  
-* **Rust CLI** – `cli/src/main.rs` orchestrates Git, GitHub, and LLM calls.  
-* **Graph‑core library** – `packages/graph-core/src` builds and normalises a knowledge graph from repository metadata.  
+### Repository overview
 
-The tool extracts semantic information from a Git repository, builds a graph, and renders visual summaries and documentation.
+NovaDiff is a cross‑platform desktop tool that visualises and analyses changes in a codebase.  
+Key parts of the repository are:
 
-### Architectural layout  
+| Layer | Purpose | Main entry points |
+|-------|---------|-------------------|
+| **Electron** | UI and orchestration | `electron/main.cjs`, `electron/preload.cjs` |
+| **Rust CLI** | Diff engine and Git helpers | `cli/src/main.rs` |
+| **Graph‑Core** | Graph building, LLM analysis, embeddings | `packages/graph-core/src` |
+| **LLM integration** | Prompt generation & response parsing | `electron/llm.cjs` |
+| **Git / GitHub** | Repository discovery, PR handling | `electron/git-service.cjs`, `electron/github-service.cjs` |
+| **Security scan** | Vulnerability detection | `electron/security-scan-runner.cjs` |
+| **Workspace store/history** | Snapshotting & navigation | `electron/workspace-store.cjs`, `electron/workspace-history.cjs` |
+
+The repository is organised as a monorepo under `packages/` (primarily `graph-core`) and an Electron bundle that consumes those packages.
+
+### Architectural layout
+
+```mermaid
+graph TD
+  subgraph Electron
+    A[main.cjs] --> B[preload.cjs]
+    B --> C[renderer]   %% renderer code not in scan
+    A --> D[git-service.cjs]
+    A --> E[github-service.cjs]
+    A --> F[security-scan-runner.cjs]
+    A --> G[knowledge-graph-runner.cjs]
+    A --> H[workspace-store.cjs]
+    A --> I[workspace-history.cjs]
+    A --> J[prefetch-summaries.cjs]
+    A --> K[export-snapshot.cjs]
+    A --> L[diff-excerpt.cjs]
+  end
+  subgraph Rust CLI
+    M[cli/src/main.rs] --> N[diff engine]
+  end
+  subgraph Graph‑Core
+    O[packages/graph-core/src] --> P[LLM analyzer]
+    O --> Q[Embedding search]
+    O --> R[Change classifier]
+    O --> S[Layer detector]
+  end
+  D --> M
+  E --> M
+  G --> O
+  P --> O
+  Q --> O
+  R --> O
+  S --> O
 ```
-┌───────────────────────┐
-│ Electron UI (main)    │
-│ ├─ renderer (preload) │
-│ └─ services (cjs)     │
-└───────┬────────────────┘
-        │
-┌───────▼────────────────┐
-│ Graph‑Core Library     │
-│ ├─ analyzer            │
-│ ├─ embedding‑search    │
-│ └─ fingerprint         │
-└───────┬────────────────┘
-        │
-┌───────▼────────────────┐
-│ Rust CLI (cli)          │
-│ ├─ git helpers          │
-│ ├─ github helpers       │
-│ └─ LLM integration      │
-└─────────────────────────┘
-```
 
-*Electron services* (e.g. `git-service.cjs`, `github-service.cjs`, `llm.cjs`) expose async APIs to the renderer via `preload.cjs`.  
-The graph‑core library is pure TypeScript and is bundled into Electron; the CLI also invokes it through a Node child process.
+* The Electron **main** process exposes APIs to the renderer via the **preload** script.  
+* Diff requests are forwarded to the **Rust CLI** (`cli/src/main.rs`).  
+* The **Graph‑Core** library is imported by the Electron renderer and by the Rust CLI (via a Node bridge).  
+* LLM prompts are generated in `electron/llm.cjs` and sent to external providers (Ollama, LM Studio).  
+* GitHub authentication flows use the `gh` CLI (`electron/github-auth-flow.cjs`).  
+* Security scans are launched from the main process and parse audit outputs from npm, pip, and cargo.
 
-### Key subsystems  
+### Key subsystems
 
-**Graph‑Core (`packages/graph-core`)**  
-- **Analyzer** – builds a node graph from file metadata, detects layers, languages, and semantic concepts.  
-- **LLM‑Analyzer** – crafts prompts, sends them to an LLM backend (Ollama or LM Studio), and parses JSON responses.  
-- **Fingerprint** – generates content hashes and fingerprints for files, classes, and functions.  
-- **Embedding‑Search** – provides a cosine‑similarity engine for semantic search over embeddings.  
-- **Normalization** – cleans node IDs, infers types, and removes duplicate edges.  
+* **Electron UI & orchestration**  
+  * `electron/main.cjs` – window creation, menu, IPC handlers.  
+  * `electron/preload.cjs` – safe API surface for the renderer.  
+  * `electron/diff-excerpt.cjs` – builds diff snippets for the UI.  
+  * `electron/export-snapshot.cjs` – zips workspace snapshots.  
+  * `electron/prefetch-summaries.cjs` – background worker that pre‑loads LLM summaries.
 
-**Electron UI**  
-- **Main process** (`electron/main.cjs`) – window lifecycle, menu, and IPC handlers.  
-- **Preload** (`electron/preload.cjs`) – exposes safe APIs to the renderer.  
-- **Services** (`*.cjs`) – thin wrappers around Git, GitHub, LLM, and graph‑core logic.  
-- **Docs generators** (`novadiff-docs-*.cjs`) – convert graph data into Markdown/HTML/PDF bundles.  
-- **Prefetch** (`electron/prefetch-summaries.cjs`) – background worker that caches LLM summaries for quick UI display.  
+* **Rust CLI** (`cli/src/main.rs`)  
+  * `ChangeKind` enum – classifies file changes.  
+  * `walk_path_allowed`, `filter_changes_for_prefetch_gitignore` – path filtering logic.  
+  * `try_build_gitignore_for_root` – generates a `.gitignore` for the workspace root.  
+  * Exposed via `electron/compare-runner.cjs` (`runCompareEngine`, `parseEngineStdout`).
 
-**CLI (`cli/src/main.rs`)**  
-- Implements `ChangeKind` enum, path utilities, and change filtering logic.  
-- Uses `git-service` and `github-service` to gather repository state.  
-- Calls the graph‑core library via a Node child process to build the graph.  
-- Provides commands for diff comparison, snapshot export, and publishing.  
+* **Graph‑Core** (`packages/graph-core/src`)  
+  * **Analyzer** – builds a graph of files, functions, and calls.  
+    * `GraphBuilder` (`src/analyzer/graph-builder.ts`) – core graph construction.  
+    * `normalize-graph.ts` – node/edge normalisation.  
+    * `change-classifier.ts` – determines update decisions.  
+    * `layer-detector.ts` – assigns LLM‑derived layers.  
+  * **LLM integration** – prompts and response parsing (`llm-analyzer.ts`).  
+  * **Embedding search** – semantic search over file embeddings (`embedding-search.ts`).  
+  * Tests live under `packages/graph-core/src/__tests__`.
 
-**Workspace & Snapshot**  
-- **Workspace‑Store** (`electron/workspace-store.cjs`) – persists session state and snapshot metadata.  
-- **Workspace‑History** (`electron/workspace-history.cjs`) – indexes Git commits into snapshot directories.  
-- **Snapshot‑Export** (`electron/export-snapshot.cjs`) – zips a snapshot for sharing or archival.  
+* **Git & GitHub**  
+  * `electron/git-service.cjs` – thin wrapper around `git` CLI.  
+  * `electron/github-service.cjs` – uses `gh` CLI for PRs, repos, auth.  
+  * `electron/gh-install.cjs` / `electron/gh-path.cjs` – install & path resolution helpers.
 
-### Dependency signals  
-- Cross‑file calls: ~228 edges, mainly between Electron services and the graph‑core library.  
-- Resolved relative imports: 43 edges, indicating a modular structure.  
-- External tools: Git, GitHub CLI (`gh`), Node, Rust compiler, LLM backends (Ollama, LM Studio).  
-- `package.json` lists dependencies such as `electron`, `typescript`, `ts-node`, `@types/node`, `@types/electron`, `rustc`, `cargo`, `gh`, `ollama`, `lm-studio`.  
+* **Security scanning** (`electron/security-scan-runner.cjs`) – orchestrates `npm audit`, `pip audit`, `cargo audit`, parses advisories, maps severity to confidence, and emits markers.
 
-### Operational considerations  
+* **Workspace persistence** (`electron/workspace-store.cjs`, `electron/workspace-history.cjs`) – JSON‑based session store and commit‑based snapshot indexing.
 
-| Area | Notes |
-|------|-------|
-| **Build** | `npm run build` compiles TypeScript, bundles Electron, and builds the Rust CLI (`cargo build --release`). |
-| **Runtime** | Requires Node ≥ 18, Git, and `gh`. An LLM backend must be running locally (Ollama or LM Studio). |
-| **Packaging** | `electron-builder` or `pkg` are used to create platform binaries. |
-| **Testing** | Jest tests in `packages/graph-core/src/__tests__`. Rust tests in `cli/src`. |
-| **Performance** | Graph building is CPU‑bound; LLM calls are async. Prefetch worker mitigates UI lag. |
-| **Security** | Electron context isolation is enabled; preload exposes only whitelisted APIs. |
-| **Extensibility** | New language lessons or LLM providers can be added via the analyzer plugin system. |
+### Dependency signals
 
-### Documentation gaps  
-- No high‑level README for the Electron services; developers must read individual `*.cjs` files.  
-- CLI documentation is minimal; only the `ChangeKind` enum is described.  
-- LLM prompt templates are embedded in code; no external docs.  
-- No diagram of the snapshot directory layout or the workspace history indexing algorithm.  
-- TypeScript type definitions for the graph‑core public API are sparse; consumers rely on inferred types.  
-- No CI configuration is visible; build scripts are present but not documented.  
+| Source | Target | Edge type | Notes |
+|--------|--------|-----------|-------|
+| electron/main.cjs | electron/preload.cjs | IPC | Exposes APIs |
+| electron/main.cjs | electron/git-service.cjs | import | Git helper |
+| electron/main.cjs | electron/github-service.cjs | import | GitHub helper |
+| electron/main.cjs | electron/security-scan-runner.cjs | import | Security scans |
+| electron/main.cjs | electron/knowledge-graph-runner.cjs | import | Graph building |
+| electron/main.cjs | electron/llm.cjs | import | LLM prompts |
+| electron/knowledge-graph-runner.cjs | packages/graph-core/src | import | Graph‑Core library |
+| electron/llm.cjs | electron/llm.cjs | internal | LLM config |
+| electron/compare-runner.cjs | cli/src/main.rs | spawn | Rust diff engine |
+| electron/compare-runner.cjs | electron/git-service.cjs | import | Repo context |
+| electron/compare-runner.cjs | electron/github-service.cjs | import | PR context |
+| packages/graph-core/src | packages/graph-core/src/analyzer | import | Analyzer modules |
+| packages/graph-core/src | packages/graph-core/src/embedding-search | import | Embedding engine |
+| packages/graph-core/src | packages/graph-core/src/language-lesson | import | Language detection |
+| packages/graph-core/src | packages/graph-core/src/layer-detector | import | Layer assignment |
 
-### Suggested onboarding and verification  
+### Operational considerations
+
+* **Build**  
+  * Rust CLI: `cargo build --release` → `cli/target/release/cli`.  
+  * Electron: `npm run build` (uses `electron-builder`).  
+  * Graph‑Core: TypeScript compiled via `tsc` (part of Electron build).
+
+* **Runtime**  
+  * Requires `git`; `gh` (GitHub CLI) is optional.  
+  * LLM provider: Ollama or LM Studio; configured in `electron/llm.cjs`.  
+  * Security scans run asynchronously; results are cached in workspace snapshots.
+
+* **Packaging**  
+  * `electron-builder` produces platform‑specific installers.  
+  * The Rust binary is bundled under `resources/cli`.
+
+* **Testing**  
+  * Unit tests: `packages/graph-core/src/__tests__`.  
+  * Integration tests: `tests/` (not fully scanned).  
+  * LLM tests use mock responses (`packages/graph-core/src/__tests__/...`).
+
+* **Performance**  
+  * Diff engine is CPU‑bound; runs in a child process.  
+  * Embedding search uses `SemanticSearchEngine` (cosine similarity).  
+  * Prefetch summaries run in a worker thread to avoid UI blocking.
+
+### Documentation gaps
+
+* Electron renderer API surface – no explicit README or API surface description.  
+* CLI usage guide – `cli/src/main.rs` is documented in code, but no high‑level CLI guide.  
+* Graph‑Core public API – no generated docs or example usage.  
+* LLM configuration – environment variables or config files are not described.  
+* Security scan output – format and interpretation are not documented.  
+* Workspace store schema – JSON structure is inferred but not formally described.  
+* Testing strategy – coverage metrics and test harness details are missing.
+
+### Suggested onboarding and verification
 
 1. **Clone & install**  
    ```bash
    git clone https://github.com/yourorg/NovaDiff
    cd NovaDiff
    npm ci
+   cargo fetch
+   ```
+
+2. **Build Rust CLI**  
+   ```bash
    cargo build --release
-   ```  
+   ```
 
-2. **Verify core library**  
+3. **Run Electron in dev mode**  
    ```bash
-   npm run test:graph-core
-   ```  
+   npm run dev
+   ```
 
-3. **Run Electron**  
+4. **Verify core functionality**  
+   * Open a sample repo in the UI.  
+   * Trigger a diff and inspect the graph.  
+   * Check that LLM prompts appear in the console.
+
+5. **Run unit tests**  
    ```bash
-   npm start
-   ```  
-   Check that the window opens and the menu appears.  
+   npm test
+   ```
 
-4. **Test CLI**  
+6. **Run integration tests** (if available)  
    ```bash
-   ./target/release/nova-diff --help
-   ```  
-   Run a sample diff command against a local repo.  
+   npm run test:integration
+   ```
 
-5. **Generate docs**  
+7. **Validate security scans**  
    ```bash
-   npm run docs:generate
-   ```  
-   Inspect the output in `docs/`.  
+   npm run security:scan
+   ```
 
-6. **Run snapshot export**  
+8. **Build installers**  
    ```bash
-   npm run export-snapshot
-   ```  
-   Verify the ZIP contains expected files.  
+   npm run build
+   ```
 
-7. **Lint & format**  
-   ```bash
-   npm run lint
-   npm run format
-   ```  
+9. **Review generated docs** (if any)  
+   * Check `packages/graph-core/docs` or similar.
 
-8. **Explore tests** – Graph‑core tests in `packages/graph-core/src/__tests__`; Rust tests in `cli/src`. Run them to confirm no regressions.
+10. **Cross‑check API surface**  
+    * Inspect `electron/preload.cjs` for exposed functions.  
+    * Verify that renderer code imports these correctly.

@@ -1,0 +1,52 @@
+{
+  "relPath": "src/app/types.ts",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:33:30.146Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R173 added: export type SecurityScanSourceState = \"ok\" | \"warning\" | \"error\" | \"skipped\";",
+      "R175 added: export interface SecurityScanSourceStatus {",
+      "R182 added: export interface SecurityInsightReport {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R173-187"
+    ],
+    "cited_changed_lines": [
+      "R173 added: export type SecurityScanSourceState = \"ok\" | \"warning\" | \"error\" | \"skipped\";",
+      "R175 added: export interface SecurityScanSourceStatus {",
+      "R176 added: source: string;",
+      "R177 added: state: SecurityScanSourceState;",
+      "R178 added: message: string;",
+      "R179 added: durationMs?: number;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right interface SecurityScanSourceStatus (175-181)",
+      "right interface SecurityInsightReport (182-187)",
+      "right interface RiskSignal (161-174)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

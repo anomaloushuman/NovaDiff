@@ -26,41 +26,55 @@
 <body>
   <header class="top">
     <h1>src/components/HistoryCompareStrip.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T11:06:29.384Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:39:18.851Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>HistoryCompareStrip</code> was refactored to improve the Git history comparison panel.<br>Key UI changes include a new title markup, additional badges, a live‑head toggle, and updated class names that align with the design system.</p>
+<p><code>src/components/HistoryCompareStrip.tsx</code> was refactored from a commit‑centric UI to a branch‑centric one. The component now receives branch metadata instead of commit snapshots, removes commit‑specific helpers, and updates the UI text and interaction patterns accordingly.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Title</strong> – lines L71‑73 replaced plain text with```tsx</li>
+<li><strong>Imports</strong>  <ul>
+<li>L8 removed: <code>import type { WorkspaceCommitSnapshot } …</code>  </li>
+<li>R8 added: <code>import type { GitBranchSummary } from &quot;../app/gitTypes&quot;</code>  </li>
+<li>R9 added: <code>import { branchOptionLabel } from &quot;../app/gitHistoryBranches&quot;</code></li>
 </ul>
-<h1 className="git-history-title">
-    Git history <span className="git-history-title-accent">compare</span>
-  </h1>
-```- **Wrapper** – line R79 added `git-history-compare-card` to the `workspace-setup-strip` container.  
-- **Labels** – lines R83 and R90 added `git-history-field-label` to the Base/Head labels.  
-- **Badges** – lines R85 and R92‑96 insert conditional `<span className="git-history-badge …">` elements next to the selectors.  
-- **Selector segment** – line R137 added `git-history-selector-segment` to the segment class list.  
-- **Live‑head input** – lines R145‑161 replace the head selector with an input 
-+ browse button when `useLiveHead` is true.  
-- **Live toggle** – lines R180‑185 introduce a checkbox labeled “Compare base against live dev folder”.  
-- **Compare button** – lines R190‑205 update the button’s classes, disabled state, and tooltip logic.
-
-<p>The logic that determines <code>canCompare</code> (lines 62‑66) remains unchanged.</p>
+</li>
+<li><strong>Props (<code>HistoryCompareStripProps</code>)</strong>  <ul>
+<li>Removed: <code>commits</code>, <code>baseHash</code>, <code>headHash</code>, <code>indexing</code>, <code>onBaseHash</code>, <code>onHeadHash</code>, <code>onLiveRepoRoot</code>.  </li>
+<li>Added: <code>branches</code>, <code>branchesLoading</code>, <code>branchLoadError</code>, <code>baseBranch</code>, <code>headBranch</code>, <code>loading</code>, <code>onBaseBranch</code>, <code>onHeadBranch</code>.</li>
+</ul>
+</li>
+<li><strong>Helper functions</strong>  <ul>
+<li>Lines 30‑37 (<code>truncateSubject</code>) and 38‑41 (<code>commitLabel</code>) were deleted.</li>
+</ul>
+</li>
+<li><strong>UI updates</strong>  <ul>
+<li>Header text changed to “Change history” (L72‑73).  </li>
+<li>Labels now refer to <em>branches</em> (L81‑90).  </li>
+<li>Select elements use IDs <code>git-history-base-branch</code> / <code>git-history-head-branch</code> (L105‑106, L174‑175) and populate options via <code>branchOptionLabel</code> (L117‑124, L191‑194).  </li>
+<li>Swap button disabled logic now checks <code>loading</code>/<code>branchesLoading</code> (L138‑140).  </li>
+<li>Live toggle label updated to “Compare base branch against live dev folder” (R220).  </li>
+<li>Compare button <code>aria-label</code> changed to “Compare branches” (R230).</li>
+</ul>
+</li>
+<li><strong>Logic changes</strong>  <ul>
+<li><code>canCompare</code> now relies on branch metadata (<code>baseMeta</code>, <code>headMeta</code>) and loading flags (L62‑66, L58‑61).</li>
+</ul>
+</li>
+</ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>UI consistency</strong> – new class names (<code>git-history-compare-card</code>, <code>git-history-field-label</code>, etc.) match the existing design system.  </li>
-<li><strong>Accessibility</strong> – added <code>aria-label</code> attributes and descriptive labels for interactive elements.  </li>
-<li><strong>No functional regression</strong> – only presentation layers were altered.</li>
+<li><strong>API</strong>: Callers must switch from commit hashes to branch names; TypeScript errors will surface if unchanged.  </li>
+<li><strong>Branch lookup</strong>: Replaces commit lookup; the array size is typically smaller.  </li>
+<li><strong>Error handling</strong>: <code>branchLoadError</code> is displayed after the compare button (L241).</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Missing CSS</strong> – verify that the new classes exist in the stylesheet.  </li>
-<li><strong>Badge rendering</strong> – ensure badges do not appear when <code>base</code> or <code>head</code> is null; run unit tests for edge cases.  </li>
-<li><strong>Live‑head toggle</strong> – confirm that toggling updates <code>useLiveHead</code> correctly and that the input behaves as expected.  </li>
-<li><strong>Lint &amp; build</strong> – run <code>npm run lint</code>, <code>npm test</code>, and <code>npm run build</code> to catch any syntax or type errors introduced by the JSX changes.</li>
-</ul>
+<ol>
+<li><strong>API breakage</strong> – Existing components that passed commit hashes will fail to compile.  </li>
+<li><strong>Missing branch metadata</strong> – If <code>branches</code> lacks a matching <code>baseBranch</code>/<code>headBranch</code>, <code>canCompare</code> will be false; verify fallback UI.  </li>
+<li><strong><code>branchOptionLabel</code> import</strong> – Ensure the symbol is exported; otherwise the build fails.  </li>
+<li><strong>Accessibility</strong> – Test the new <code>aria-label</code> values with screen readers.</li>
+</ol>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

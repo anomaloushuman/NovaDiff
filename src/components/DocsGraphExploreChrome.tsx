@@ -12,8 +12,19 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { AnimatedOverlay } from "./ui/AnimatedOverlay";
+import { CodeCityViewportProvider } from "../app/CodeCityViewportContext";
 import { CodeCityGraphToolbar, DocsLinkToolbar } from "./DocumentationWorkspaceLinked";
 import type { CodeCityLayoutResult } from "../app/codeCityLayout";
+import {
+  ALL_CHANGE_STATE_FILTERS,
+  ALL_SYMBOL_KIND_GROUPS,
+  changeStatesFilterActive,
+  symbolKindsFilterActive,
+  toggleChangeStateFilter,
+  toggleSymbolKindGroup,
+  type SymbolKindGroup,
+} from "../app/docsExploreFilters";
+import type { CodeCityChangeState } from "../app/types";
 
 export interface GraphBuildBarProps {
   buildSide: "target" | "baseline";
@@ -44,8 +55,10 @@ export interface CityExploreBarProps {
   setCitySubsystem: (v: string) => void;
   cityExtension: string;
   setCityExtension: (v: string) => void;
-  citySymbolKind: string;
-  setCitySymbolKind: (v: string) => void;
+  citySymbolKinds: SymbolKindGroup[];
+  setCitySymbolKinds: (v: SymbolKindGroup[]) => void;
+  cityChangeStates: CodeCityChangeState[];
+  setCityChangeStates: (v: CodeCityChangeState[]) => void;
   cityAuthor: string;
   setCityAuthor: (v: string) => void;
   citySearch: string;
@@ -69,7 +82,10 @@ function countActiveCityFilters(props: CityExploreBarProps): number {
   if (props.cityExtension !== "all") {
     n += 1;
   }
-  if (props.citySymbolKind !== "all") {
+  if (symbolKindsFilterActive(props.citySymbolKinds)) {
+    n += 1;
+  }
+  if (changeStatesFilterActive(props.cityChangeStates)) {
     n += 1;
   }
   if (props.cityAuthor !== "all") {
@@ -153,6 +169,55 @@ function CityFiltersPanel({ city }: { city: CityExploreBarProps }) {
         </div>
       </div>
       <div className="docs-explore-field">
+        <span className="docs-explore-label">Structure (city + graph)</span>
+        <div className="code-city-toggle-row" role="group" aria-label="Symbol structure filters">
+          {ALL_SYMBOL_KIND_GROUPS.map((group) => {
+            const active =
+              city.citySymbolKinds.length === 0 ||
+              city.citySymbolKinds.includes(group);
+            return (
+              <button
+                key={group}
+                type="button"
+                className={active ? "code-city-control-btn active" : "code-city-control-btn"}
+                onClick={() =>
+                  city.setCitySymbolKinds(toggleSymbolKindGroup(city.citySymbolKinds, group))
+                }
+              >
+                {group === "file" ? "Files" : group === "class" ? "Classes" : "Functions"}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="docs-explore-field">
+        <span className="docs-explore-label">Git change (blame)</span>
+        <div className="code-city-toggle-row" role="group" aria-label="Change state filters">
+          {ALL_CHANGE_STATE_FILTERS.map((state) => {
+            const active =
+              city.cityChangeStates.length === 0 || city.cityChangeStates.includes(state);
+            const label =
+              state === "unchanged"
+                ? "Unchanged"
+                : state.charAt(0).toUpperCase() + state.slice(1);
+            return (
+              <button
+                key={state}
+                type="button"
+                className={active ? "code-city-control-btn active" : "code-city-control-btn"}
+                onClick={() =>
+                  city.setCityChangeStates(
+                    toggleChangeStateFilter(city.cityChangeStates, state),
+                  )
+                }
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      <div className="docs-explore-field">
         <span className="docs-explore-label">Overlays</span>
         <div className="code-city-toggle-row">
           <button
@@ -209,21 +274,6 @@ function CityFiltersPanel({ city }: { city: CityExploreBarProps }) {
           >
             <option value="all">All extensions</option>
             {city.cityLayout.extensions.map((value) => (
-              <option key={value} value={value}>
-                {value}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="docs-explore-label">
-          Symbol kind
-          <select
-            className="doc-workspace-select"
-            value={city.citySymbolKind}
-            onChange={(e) => city.setCitySymbolKind(e.target.value)}
-          >
-            <option value="all">All symbol kinds</option>
-            {city.cityLayout.symbolKinds.map((value) => (
               <option key={value} value={value}>
                 {value}
               </option>
@@ -484,6 +534,7 @@ export function CodeCityExploreSettings({
     }
     const slot = anchor.closest("[data-code-city-minimap]");
     if (
+      document.documentElement.hasAttribute("data-code-viewer-open") ||
       !(slot instanceof HTMLElement) ||
       slot.classList.contains("code-city-minimap-slot--chrome-hidden")
     ) {
@@ -573,6 +624,7 @@ export function CodeCityExploreSettings({
     window.addEventListener("code-city-dock-host-ready", onDockReady);
     window.addEventListener("resize", syncDockedPosition);
     window.addEventListener("scroll", syncDockedPosition, true);
+    window.addEventListener("novadiff-code-viewer-open-change", onDockReady);
     const intervalId = window.setInterval(syncDockedPosition, 200);
     return () => {
       ro.disconnect();
@@ -580,6 +632,7 @@ export function CodeCityExploreSettings({
       window.removeEventListener("code-city-dock-host-ready", onDockReady);
       window.removeEventListener("resize", syncDockedPosition);
       window.removeEventListener("scroll", syncDockedPosition, true);
+      window.removeEventListener("novadiff-code-viewer-open-change", onDockReady);
       window.clearInterval(intervalId);
     };
   }, [expanded, syncDockedPosition]);
@@ -598,17 +651,19 @@ export function CodeCityExploreSettings({
   }, [expanded]);
 
   const shell = (
-    <CodeCityFloatShell
-      shellRef={shellRef}
-      expanded={expanded}
-      settingsActive={settingsActive}
-      filterCount={filterCount}
-      city={city}
-      graph={graph}
-      onToggleExpand={() => setExpanded((v) => !v)}
-    >
-      {children}
-    </CodeCityFloatShell>
+    <CodeCityViewportProvider expanded={expanded}>
+      <CodeCityFloatShell
+        shellRef={shellRef}
+        expanded={expanded}
+        settingsActive={settingsActive}
+        filterCount={filterCount}
+        city={city}
+        graph={graph}
+        onToggleExpand={() => setExpanded((v) => !v)}
+      >
+        {children}
+      </CodeCityFloatShell>
+    </CodeCityViewportProvider>
   );
 
   const coverBackdrop =

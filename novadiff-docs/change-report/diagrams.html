@@ -522,7 +522,7 @@
         <h1>Diagrams</h1>
         <p class="top-subtitle">Interactive diagrams generated from the compare and the target-tree heuristic scan.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: f7c2bfd81af2</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-21T11:28:43.155Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 9aadd5eb5604</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-27T03:53:47.876Z</span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -540,14 +540,14 @@
     <div class="content-main">
       <section class="viz-card"><h2 id="change-mix">Change mix</h2><pre class="mermaid">pie showData
     title Change kinds
-    "Added" : 23
-    "Removed" : 4
-    "Modified" : 35</pre></section>
+    "Added" : 21
+    "Removed" : 0
+    "Modified" : 50</pre></section>
 <section class="viz-card"><h2 id="path-depth">Path depth</h2><pre class="mermaid">xychart-beta
     title "Path depth (segments)"
     x-axis ["d1", "d2", "d3", "d4", "d5"]
-    y-axis "paths" 0 --> 32
-    bar [1, 21, 27, 9, 4]</pre></section>
+    y-axis "paths" 0 --> 33
+    bar [3, 20, 28, 12, 8]</pre></section>
 <section class="viz-card"><h2 id="module-import-graph-relative-imports">Module import graph (relative imports)</h2><pre class="mermaid">flowchart LR
   electron_code_city_model_cjs["electron/code-city-model.cjs"] --> electron_git_blame_cjs["electron/git-blame.cjs"]
   electron_file_summary_export_cjs["electron/file-summary-export.cjs"] --> electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
@@ -570,6 +570,7 @@
   electron_main_cjs["electron/main.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
   electron_main_cjs["electron/main.cjs"] --> electron_code_city_model_cjs["electron/code-city-model.cjs"]
   electron_main_cjs["electron/main.cjs"] --> electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"]
+  electron_main_cjs["electron/main.cjs"] --> electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"]
   electron_main_cjs["electron/main.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
   electron_main_cjs["electron/main.cjs"] --> electron_github_service_cjs["electron/github-service.cjs"]
   electron_main_cjs["electron/main.cjs"] --> electron_git_commit_cjs["electron/git-commit.cjs"]
@@ -588,6 +589,7 @@
   electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_diff_excerpt_cjs["electron/diff-excerpt.cjs"]
   electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
   electron_repo_discovery_cjs["electron/repo-discovery.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
+  electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"] --> src_app_types_ts["src/app/types.ts"]
   electron_workspace_history_cjs["electron/workspace-history.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
   electron_workspace_history_cjs["electron/workspace-history.cjs"] --> electron_workspace_store_cjs["electron/workspace-store.cjs"]
   packages_graph_core_src___tests___ignore_filter_test_ts["packages/graph-core/src/__tests__/ignore-filter.test"] --> packages_graph_core_src_ignore_filter_ts["packages/graph-core/src/ignore-filter.ts"]
@@ -641,6 +643,7 @@
   electron_main_cjs["electron/main.cjs"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|exportSelectionSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
+  electron_main_cjs["electron/main.cjs"] -->|runSecurityInsightScan| electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|buildCodeCityModelPayload| electron_code_city_model_cjs["electron/code-city-model.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsBundle| electron_novadiff_docs_writer_cjs["electron/novadiff-docs-writer.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsHtml| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
@@ -685,10 +688,9 @@
   electron_main_cjs["electron/main.cjs"] -->|getGithubCommitContext| electron_github_commit_context_cjs["electron/github-commit-context.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|listSnapshotFiles| electron_workspace_files_cjs["electron/workspace-files.cjs"]
   electron_main_cjs["electron/main.cjs"] -->|ensureCommitSnapshot| electron_workspace_history_cjs["electron/workspace-history.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|readSnapshotTextFile| electron_workspace_files_cjs["electron/workspace-files.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|refreshWorkspaceHistory| electron_workspace_history_cjs["electron/workspace-history.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|cleanupNovadiffWorktrees| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts["packages/graph-core/src/plugins/extractors/__tests__"]</pre></section>
+  electron_main_cjs["electron/main.cjs"] -->|listBranches| electron_git_service_cjs["electron/git-service.cjs"]
+  electron_main_cjs["electron/main.cjs"] -->|listCommitsForRef| electron_git_service_cjs["electron/git-service.cjs"]
+  electron_main_cjs["electron/main.cjs"] -->|materializeCommitForCompare| electron_workspace_history_cjs["electron/workspace-history.cjs"]</pre></section>
 <section class="viz-card"><h2 id="types-classes-regex-sketch">Types / classes (regex sketch)</h2><pre class="mermaid">classDiagram
   class CSharpExtractor
   class ChangeAnalysis

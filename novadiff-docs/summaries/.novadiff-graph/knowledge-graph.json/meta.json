@@ -1,0 +1,41 @@
+{
+  "relPath": ".novadiff-graph/knowledge-graph.json",
+  "kind": "removed",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T06:54:35.013Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The diff rows were capped, so review conclusions should be treated as partial.",
+        "key": "truncated-diff",
+        "label": "Truncated diff",
+        "tone": "warn"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L1-8000"
+    ],
+    "cited_changed_lines": [
+      "L1 removed: {",
+      "L2 removed: \"version\": \"1.0.0\",",
+      "L3 removed: \"project\": {",
+      "L4 removed: \"name\": \"9aadd5eb5604\",",
+      "L5 removed: \"languages\": [",
+      "L6 removed: \"css\","
+    ],
+    "evidence_limits": [
+      "Diff rows were truncated before the full file could be represented.",
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useDashboardStore } from "./store";
+import { useDashboardStore, type DetailLevel } from "./store";
 import {
   applyGraphCityRoot,
   applyGraphEnterFile,
@@ -12,11 +12,18 @@ export function GraphEmbedSyncBridge({
   controlledNodeId,
   enteredFilePath,
   focusMode,
+  detailLevel,
+  showFunctionsInClassView,
+  cityFilterNodeIds,
   onSelectionChange,
 }: {
   controlledNodeId?: string | null;
   enteredFilePath?: string | null;
   focusMode?: boolean;
+  detailLevel?: DetailLevel;
+  showFunctionsInClassView?: boolean;
+  /** Node ids visible in Code City after filters; graph topology mirrors this set. */
+  cityFilterNodeIds?: string[] | null;
   onSelectionChange?: (nodeId: string | null) => void;
 }) {
   const selectedNodeId = useDashboardStore((s) => s.selectedNodeId);
@@ -55,6 +62,48 @@ export function GraphEmbedSyncBridge({
       applyGraphCityRoot(store);
     }
   }, [enteredFilePath, controlledNodeId, focusMode, graph]);
+
+  useEffect(() => {
+    if (detailLevel === undefined && showFunctionsInClassView === undefined) {
+      return;
+    }
+    const store = useDashboardStore.getState();
+    if (detailLevel !== undefined && store.detailLevel !== detailLevel) {
+      store.setDetailLevel(detailLevel);
+    }
+    if (showFunctionsInClassView !== undefined) {
+      const current = useDashboardStore.getState().showFunctionsInClassView;
+      if (current !== showFunctionsInClassView) {
+        useDashboardStore.setState({
+          showFunctionsInClassView,
+          containerLayoutCache: new Map(),
+          containerSizeMemory: new Map(),
+          expandedContainers: new Set(),
+          pendingFocusContainer: null,
+        });
+      }
+    }
+  }, [detailLevel, showFunctionsInClassView]);
+
+  useEffect(() => {
+    if (cityFilterNodeIds === undefined) {
+      return;
+    }
+    const next =
+      cityFilterNodeIds === null ? null : new Set(cityFilterNodeIds);
+    useDashboardStore.getState().setEmbedCityFilterNodeIds(next);
+
+    if (!next) {
+      return;
+    }
+    const store = useDashboardStore.getState();
+    const { selectedNodeId, focusNodeId } = store;
+    const activeId = focusNodeId ?? selectedNodeId;
+    if (activeId && !next.has(activeId)) {
+      store.selectNode(null);
+      store.setFocusNode(null);
+    }
+  }, [cityFilterNodeIds]);
 
   useEffect(() => {
     if (!onSelectionChange) {

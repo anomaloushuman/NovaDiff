@@ -1,71 +1,63 @@
-## Workspace overview — roots, comparison intent, scale of change
-The diff compares a snapshot stored under  
-`/Users/iamgroot/Library/Application Support/novadiff/novadiff-workspaces/7d1b19ef-9547-48e8-92d5-c8beabe3849c/snapshots/f7c2bfd81af2`  
-with the current repository at  
-`/Users/iamgroot/Documents/GitHub/NovaDiff`.  
-A total of **62** paths were touched: **35 modified**, **23 added**, **4 removed**.  
-The majority of changes cluster in the `src/`, `electron/`, and `packages/graph-view/` directories, indicating a focus on UI, Electron integration, and graph‑view logic.
+### Workspace overview — roots, comparison intent, scale of change  
+The baseline snapshot lives in the hidden NovaDiff workspace directory (`/Users/iamgroot/Library/Application Support/novadiff/.../snapshots/9aadd5eb5604`), while the target is the active GitHub repository (`/Users/iamgroot/Documents/GitHub/NovaDiff`).  
+The diff covers **71 paths**: **21 additions** and **50 modifications**; no deletions were reported.  
+Depth analysis shows most changes at depth 3 (28 files), with 12 at depth 4 and 8 at depth 5.  
+The change set is concentrated in three top‑level segments: `src/`, `packages/`, and `electron/`, indicating a focus on UI, core graph logic, and Electron services.
 
-## Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition
-- **File types**  
-  - `.tsx` (24) and `.ts` (17) dominate, reflecting UI and core logic updates.  
-  - `.cjs` (13) shows new CommonJS modules for Electron.  
-  - `.json` and `.css` changes are minimal.  
-- **Path depth**  
-  - 27 paths at depth 3, 9 at depth 4, 4 at depth 5.  
-  - Depth‑4 changes are mainly in `electron/` and `packages/graph-view/`.  
-- **Risk signals**  
-  - `vite.config.ts` was modified (deterministic risk: medium).  
-  - Removal of `.novadiff-graph/config.json`, `diff-overlay.json`, and `meta.json` may break legacy graph‑generation workflows.  
-  - New Electron modules (`export-snapshot.cjs`, `git-commit.cjs`, `git-publish.cjs`) introduce runtime dependencies on Git and GitHub, raising security and authentication concerns.
+### Change landscape — interpret counts, dominant extensions, depth hotspots, risk intuition  
+- **File types**: 32 `.ts`, 22 `.tsx`, 8 `.cjs`, 5 `.json`, 3 `.css`, 1 `.rs`.  
+- **Depth distribution**: 28 files at depth 3, 12 at depth 4, 8 at depth 5.  
+- **Hotspots**:  
+  - `electron/` – 7 modified `.cjs` modules (e.g., `code-city-model.cjs`, `git-service.cjs`).  
+  - `packages/` – 14 modified TypeScript files in `graph-core`.  
+  - `src/` – 36 modified UI and glue code.  
+- **Risk signals**:  
+  - **High‑severity**: `cli/src/main.rs` contains patterns `Box::leak(`, `mem::forget(`, `ManuallyDrop::new(` (R1313‑R1315).  
+  - **Medium‑severity**: `vite.config.ts` was touched; configuration changes may affect builds.  
+  - **Medium‑high**: `package.json` and `package-lock.json` were modified; dependency versions may shift.  
+  - **Medium‑high**: `electron/git-service.cjs` added parsing helpers (R237‑248, R250‑269, R271‑311, R314‑330, R332‑33) that could alter Git semantics.
 
-## Subsystem map — group paths into coherent areas
-- **Electron core** (`electron/`)  
-  - New modules: `export-snapshot.cjs`, `git-commit.cjs`, `git-publish.cjs`.  
-  - Updated `git-service.cjs` and `github-service.cjs` to support staged paths.  
-- **Graph view UI** (`packages/graph-view/src/`)  
-  - Updated explorer components (`NovaDiffGraphExplorer.tsx`, `NovaDiffGraphExplorerEmbed.tsx`).  
-  - Added selection clustering utilities (`selectionCluster.ts`) and tests (`selectionCluster.test.ts`).  
-- **Application logic** (`src/`)  
-  - Commit analysis (`commitChangeAnalysis.ts`), file tree (`fileTree.ts`), workspace storage (`workspaceStorage.ts`).  
-  - New UI helpers: `DocsViewSyncContext.tsx`, `DocumentationWorkspace.tsx`.  
-- **Configuration & tooling**  
-  - `vite.config.ts` change.  
-  - Removal of legacy `.novadiff-graph` config files.  
-  - New `novadiff-docs-html.cjs` for HTML rendering of docs.  
-- **Testing**  
-  - Single test file `graphCityBridge.test.ts` added.  
+### Subsystem map — group paths into coherent areas (config, tests, app, infra, vendor…) using only evidence from the sample paths and top segments  
+| Area | Representative paths | Key changes |
+|------|----------------------|-------------|
+| **Configuration** | `vite.config.ts`, `package.json`, `package-lock.json` | Updated build settings and dependencies |
+| **Electron services** | `electron/*.cjs` (e.g., `code-city-model.cjs`, `git-service.cjs`, `knowledge-graph-runner.cjs`) | New imports, helper functions, traversal logic |
+| **Graph core** | `packages/graph-core/src/*` (analyzer, ignore‑filter, tests) | Updated graph builder logic |
+| **UI / App** | `src/*` (components, contexts, styles) | UI component updates |
+| **CLI tooling** | `cli/src/main.rs` | Rust lifetime patterns, new command logic |
+| **Testing** | `tests/*` | Unit tests for layout, git history, security insights |
+| **Documentation artifacts** | `.novadiff-graph/*` | Removal of legacy diff overlay and knowledge‑graph files |
 
-## Cross-cutting concerns — security, build/release, migrations, observability
+### Cross-cutting concerns — security, build/release, migrations, observability (flag unknowns honestly)  
 - **Security**  
-  - GitHub authentication flows (`github-auth-flow.cjs`, `github-commit-context.cjs`) now exposed in the main process; ensure tokens are not logged.  
-  - LLM module (`llm.cjs`) may send user code to external services; verify compliance with privacy policies.  
+  - `electron/code-city-model.cjs` now imports Node’s `path` module (line 3); path handling must be validated.  
+  - New Git parsing helpers in `electron/git-service.cjs` could misinterpret malformed output.  
 - **Build/Release**  
-  - `vite.config.ts` alteration could affect asset bundling; run a full build test.  
-  - Electron packaging must include new `.cjs` modules; update `package.json` scripts accordingly.  
+  - Addition of `.cjs` modules and changes to `package.json` may raise the required Node runtime version.  
+  - Rust code in `cli/src/main.rs` references `Box::leak` and `mem::forget`; build flags and memory safety need review.  
 - **Migrations**  
-  - Deletion of `.novadiff-graph/config.json` and related files requires updating any scripts that load graph configuration.  
-  - Existing snapshots may need regeneration to include new snapshot export format.  
+  - Deletion of `.novadiff-graph/diff-overlay.json` and `.novadiff-graph/knowledge-graph.json` indicates a shift away from the legacy snapshot format.  
+  - `electron/knowledge-graph-runner.cjs` added `SKIP_DIRS` entries (`"venv"`, `".venv"`, `".venv-main"`) at R32‑R34; existing analyses may need re‑run.  
 - **Observability**  
-  - New modules lack explicit logging; consider adding console traces for debugging.  
-  - No new metrics are introduced, but the LLM module may benefit from response‑time monitoring.  
+  - No new telemetry hooks were added, but the expanded test suite may surface performance regressions in graph layout (`packages/graph-view/src/utils/elk-layout.ts`).  
+  - Unknown: whether the new CLI memory‑leak patterns affect runtime metrics; requires profiling.
 
-## Documentation & tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate
-- **CJS modules**: Added CommonJS files lack type declarations; static analysis tools (e.g., TypeScript’s `--allowJs`) could flag missing exports.  
-- **LLM integration**: Runtime profiling is needed to measure latency and token usage; no compile‑time checks exist.  
-- **Graph view utilities**: The selection clustering logic (`utils/selectionCluster.ts`) is complex; unit tests cover basic cases but deeper integration tests would confirm correctness.  
-- **GitHub API usage**: Mocking of GitHub responses is not present; integration tests should verify error handling for rate limits.  
+### Documentation & tooling gaps — what would require Doxygen/clangd/tree‑sitter or runtime profiling to validate  
+- **Rust lifetime safety**: The high‑severity patterns in `cli/src/main.rs` cannot be fully verified without a Rust compiler lint run or a memory profiler.  
+- **Git output parsing**: The helpers added to `electron/git-service.cjs` need integration tests against diverse Git repositories to confirm correctness.  
+- **Graph traversal correctness**: The updated `SKIP_DIRS` logic in `electron/knowledge-graph-runner.cjs` should be exercised against projects containing virtual environments to ensure they are truly excluded.  
+- **Electron security**: Runtime checks for path traversal in the renderer should be validated with a sandboxed test harness.
 
-## Suggested verification — tests, manual checks, staged rollout
+### Suggested verification — tests, manual checks, staged rollout  
 - **Unit tests**  
-  - Run `npm test` to cover new `selectionCluster.test.ts` and existing tests.  
-  - Add tests for `git-publish.cjs` staged‑path logic.  
+  - Expand tests for `electron/git-service.cjs` to cover edge‑case Git status outputs.  
+  - Add tests for `electron/knowledge-graph-runner.cjs` that simulate projects with nested virtual environments.  
 - **Integration tests**  
-  - Spin up a local Electron instance to exercise snapshot export and commit detail retrieval.  
-  - Mock GitHub responses to validate authentication flows.  
+  - Run the full graph generation pipeline on a representative set of repositories, comparing output to the previous snapshot format.  
+  - Verify that the CLI’s new memory‑leak patterns do not trigger actual leaks by running under `cargo test -- --nocapture` with `valgrind` or `miri`.  
 - **Manual checks**  
-  - Verify that the UI still renders the graph view correctly after the component updates.  
-  - Confirm that the `vite` build produces the expected assets.  
+  - Inspect the Electron renderer in a sandboxed environment to confirm that the new `path` import does not expose unintended filesystem access.  
+  - Review the updated `vite.config.ts` for any environment variable changes that could affect production builds.  
 - **Staged rollout**  
-  - Deploy to a staging environment first; monitor LLM response times and GitHub API usage.  
-  - Use feature flags for the new snapshot export to enable rollback if issues arise.
+  - Deploy the changes to a staging branch and run the full test matrix.  
+  - Use feature flags to enable the new graph traversal logic in a subset of users before a full release.

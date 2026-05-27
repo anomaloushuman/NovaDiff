@@ -1,0 +1,51 @@
+{
+  "relPath": "src/app/graphicsPerformance.ts",
+  "kind": "added",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:32:31.029Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R4 added: export const CITY_OMIT_WINDOWS_BUILDINGS = 900;",
+      "R6 added: export function cityPixelRatio(buildingCount: number): number {",
+      "R14 added: export function shouldOmitWindowDetail(buildingCount: number): boolean {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R1-16"
+    ],
+    "cited_changed_lines": [
+      "R1 added: /** Single quality profile for docked + expanded code city (no remount on expand). */",
+      "R3 added: /** Omit decorative window meshes above this count (box + edges stay). */",
+      "R4 added: export const CITY_OMIT_WINDOWS_BUILDINGS = 900;",
+      "R6 added: export function cityPixelRatio(buildingCount: number): number {",
+      "R7 added: const dpr = typeof window !== \"undefined\" ? window.devicePixelRatio : 1;",
+      "R8 added: if (buildingCount >= 2000) {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function cityPixelRatio (6-13)",
+      "right function shouldOmitWindowDetail (14-16)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

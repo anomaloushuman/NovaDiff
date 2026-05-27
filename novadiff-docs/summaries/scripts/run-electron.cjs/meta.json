@@ -1,0 +1,51 @@
+{
+  "relPath": "scripts/run-electron.cjs",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T07:30:03.859Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "L11 removed: const { spawn } = require(\"node:child_process\");",
+      "R11 added: const { spawn, spawnSync } = require(\"node:child_process\");"
+    ],
+    "changed_line_ranges": [
+      "L11 / R11",
+      "L26-28 / R26-41"
+    ],
+    "cited_changed_lines": [
+      "L11 removed: const { spawn } = require(\"node:child_process\");",
+      "R11 added: const { spawn, spawnSync } = require(\"node:child_process\");",
+      "L26 removed: throw new Error(",
+      "L27 removed: `Missing ${pathFile}. Run npm install in ${root} so the electron package downloads its binary.`,",
+      "L28 removed: );",
+      "R26 added: const installer = path.join(electronPkg, \"install.js\");"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function resolveElectronBinary (24-66)",
+      "right function resolveElectronBinary (24-79)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

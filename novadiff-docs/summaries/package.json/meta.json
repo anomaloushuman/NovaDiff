@@ -1,0 +1,39 @@
+{
+  "relPath": "package.json",
+  "kind": "modified",
+  "leftTitle": "9aadd5eb5604",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-26T19:12:05.712Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "Dependency surface or package metadata changed.",
+        "key": "dependency-manifest",
+        "label": "Dependency manifest changed",
+        "tone": "warn"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L56-57 / R56-57"
+    ],
+    "cited_changed_lines": [
+      "L56 removed: \"electron\": \"^34.2.0\",",
+      "L57 removed: \"electron-builder\": \"^25.1.8\",",
+      "R56 added: \"electron\": \"^42.2.0\",",
+      "R57 added: \"electron-builder\": \"^26.8.1\","
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "dependency-manifest"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Reinstall or refresh dependencies, then run the primary build/test pipeline.",
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

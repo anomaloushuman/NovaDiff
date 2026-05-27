@@ -26,38 +26,29 @@
 <body>
   <header class="top">
     <h1>src/app/gitTypes.ts</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:55:17.352Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:31:15.677Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>src/app/gitTypes.ts</code> now includes a set of commit‑detail and GitHub‑context interfaces and adds an optional <code>stagePaths</code> flag to <code>PublishExecutePayload</code>. The changes span lines 125‑172 of the file.</p>
+<p>The file <code>src/app/gitTypes.ts</code> now declares three new exported interfaces: <code>GitBranchSummary</code>, <code>GitBranchListResult</code>, and <code>GitLogCommitSummary</code>. These additions appear at lines 129‑136, 138‑141, and 143‑148 respectively.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>PublishExecutePayload</code></strong> (lines 125‑127) now accepts an optional <code>stagePaths?: string[]</code> to specify which paths to stage.  </li>
-<li><strong><code>GitCommitDetail</code></strong> (lines 129‑142) exposes commit metadata: <code>hash</code>, <code>shortHash</code>, <code>subject</code>, <code>body</code>, <code>authorName</code>, <code>authorEmail</code>, <code>authoredAt</code>, <code>parentHashes</code>, <code>filesChanged</code>, <code>insertions</code>, <code>deletions</code>.  </li>
-<li><strong><code>GithubCommitPullRequest</code></strong> (lines 143‑149) and **<code>GithubCommitIssue</code>*</li>
-</ul>
-<ul>
-<li>(lines 150‑158) provide minimal PR/issue info (<code>number</code>, <code>title</code>, <code>state</code>, <code>url</code>).</li>
-</ul>
-<ul>
-<li><strong><code>GithubCommitThreadKind</code></strong> (line 157) is a union of <code>&quot;pr_review&quot; | &quot;pr_comment&quot; | &quot;issue_comment&quot;</code>.  </li>
-<li><strong><code>GithubCommitThread</code></strong> (lines 159‑166) records a thread’s <code>kind</code>, <code>number</code>, <code>author</code>, <code>body</code>, <code>createdAt</code>, and <code>url</code>.  </li>
-<li><strong><code>GithubCommitContext</code></strong> (lines 168‑172) aggregates arrays of pull requests, issues, threads, and an optional <code>error</code> string.</li>
+<li><strong><code>GitBranchSummary</code></strong> (lines 129‑136) adds the required property <code>isRemote: boolean</code> to the existing branch descriptor (<code>name</code>, <code>hash</code>, <code>shortHash</code>, <code>upstream</code>, <code>isCurrent</code>).  </li>
+<li><strong><code>GitBranchListResult</code></strong> (lines 138‑141) introduces a container type exposing <code>currentBranch: string</code> and <code>branches: GitBranchSummary[]</code>.  </li>
+<li><strong><code>GitLogCommitSummary</code></strong> (lines 143‑148) defines a lightweight commit view with <code>hash</code>, <code>shortHash</code>, <code>subject</code>, and <code>authoredAt</code>.<br>All three interfaces are exported, expanding the public type surface without removing any existing symbols.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Modules importing <code>gitTypes</code> now have access to the new interfaces, enabling richer commit and GitHub context handling.  </li>
-<li>The <code>stagePaths</code> option gives callers finer control over staged files before publishing, potentially improving workflow flexibility.  </li>
-<li>No existing exports were removed, so backward compatibility is preserved.  </li>
-<li>TypeScript consumers may need to adjust type assertions if they previously relied on the exact shape of <code>PublishExecutePayload</code>.</li>
+<li>Code that constructs a <code>GitBranchSummary</code> must now provide <code>isRemote</code>; otherwise TypeScript will report a missing property.  </li>
+<li>The new interfaces give a consistent shape for branch and commit metadata, which can reduce duplication in the codebase.  </li>
+<li>No existing public APIs are altered; the changes are additive and should not break consumers that rely on the old types.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that code constructing <code>PublishExecutePayload</code> still functions; the new optional field should not break existing logic.  </li>
-<li>Ensure downstream modules that consume <code>GitCommitDetail</code> or <code>GithubCommitContext</code> are updated to use the new interfaces.  </li>
-<li>Run the full test suite to catch any lint or type‑checking regressions introduced by the added types.  </li>
-<li>Confirm that documentation and generated type definitions include the new interfaces for developer visibility.</li>
+<li>Verify that all branch‑listing functions populate <code>isRemote</code>; missing values will cause compile‑time errors.  </li>
+<li>Ensure any serialization/deserialization logic for branch data includes the new <code>isRemote</code> field.  </li>
+<li>Check components that render commit summaries to use <code>GitLogCommitSummary</code> instead of ad‑hoc shapes.  </li>
+<li>Run the full test suite to confirm that no tests fail due to the new required property.</li>
 </ul>
 </article>
   </main>

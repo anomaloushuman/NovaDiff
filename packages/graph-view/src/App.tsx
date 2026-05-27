@@ -261,6 +261,19 @@ export function DashboardContent({
     if (selectedNodeId) setSidebarTab("info");
   }, [selectedNodeId]);
 
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-code-viewer-open", codeViewerOpen);
+    window.dispatchEvent(
+      new CustomEvent("novadiff-code-viewer-open-change", { detail: { open: codeViewerOpen } }),
+    );
+    return () => {
+      document.documentElement.removeAttribute("data-code-viewer-open");
+      window.dispatchEvent(
+        new CustomEvent("novadiff-code-viewer-open-change", { detail: { open: false } }),
+      );
+    };
+  }, [codeViewerOpen]);
+
   // Define keyboard shortcuts
   const shortcuts = useMemo<KeyboardShortcut[]>(
     () => [

@@ -26,32 +26,40 @@
 <body>
   <header class="top">
     <h1>src/app/codeCityChromeInsets.ts</h1>
-    <div class="meta">Kind: added · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:52:53.459Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:27:21.806Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new file <code>src/app/codeCityChromeInsets.ts</code> (added, change kind: added, line range R1‑92) introduces utilities for computing the insets required by the CodeCity UI.</p>
+<p><code>src/app/codeCityChromeInsets.ts</code> was modified.  </p>
+<ul>
+<li>Added <code>isCodeViewerOpen()</code> (lines 24‑31) that checks for <code>[data-novadiff-code-viewer-sheet]</code> or <code>[data-novadiff-code-viewer-modal]</code>.  </li>
+<li>Refactored <code>isBlockingModalOpen()</code> (lines 32‑48) to combine the new helper with the previous backdrop selectors and removed the obsolete <code>.novadiff-graph-shell.is-fullscreen .ui-overlay.is-open</code> selector.  </li>
+<li>Updated <code>measureCodeCityChromeInsets()</code> (lines 59‑104) to skip adding the sheet obstruction when the viewer is open and removed the earlier <code>layoutRow</code>‑based obstruction logic.</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li><strong><code>export interface CodeCityChromeInsets</code></strong> (lines 1‑6) defines <code>bottom</code>, <code>right</code>, <code>left</code>, and <code>hidden</code>.  </li>
-<li><strong><code>export interface MeasureCodeCityChromeOptions</code></strong> (lines 40‑43) adds an optional <code>dockedControls</code> flag.  </li>
-<li><strong><code>rectsOverlap(a, b)</code></strong> (lines 10‑12) checks whether two <code>DOMRect</code>s overlap.  </li>
-<li><strong><code>liftForObstruction(hostRect, obstruction, bottom)</code></strong> (lines 14‑22) returns a new bottom inset when an obstruction overlaps the host.  </li>
-<li><strong><code>isBlockingModalOpen()</code></strong> (lines 24‑38) scans for several modal/backdrop selectors to short‑circuit inset calculation.  </li>
-<li><strong><code>measureCodeCityChromeInsets(host, options)</code></strong> (lines 49‑92) orchestrates the logic: early exit on blocking modal, gathers obstructions (sheet, activity bar), lifts the bottom inset, caps it, and returns a <code>CodeCityChromeInsets</code> object.</li>
+<li><strong><code>isCodeViewerOpen()</code></strong>: new helper returning a boolean based on two selectors.  </li>
+<li><strong><code>isBlockingModalOpen()</code></strong>: now returns true if <code>isCodeViewerOpen()</code> is true or any of the backdrop selectors match; the selector list no longer contains <code>.novadiff-graph-shell.is-fullscreen .ui-overlay.is-open</code>.  </li>
+<li><strong><code>measureCodeCityChromeInsets()</code></strong>:  <ul>
+<li>Skips adding the sheet obstruction when <code>isCodeViewerOpen()</code> is true (lines 75‑83).  </li>
+<li>Removed the <code>layoutRow</code> traversal that previously added the sheet obstruction (lines 65‑71).  </li>
+<li>Keeps activity‑bar obstruction logic unchanged (lines 87‑90).  </li>
+<li>Bottom inset calculation remains the same.</li>
+</ul>
+</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Provides a typed contract for inset values.  </li>
-<li>Early exit on modal sets <code>hidden: true</code>, allowing callers to suppress the UI when a modal is open.  </li>
-<li>Obstruction handling lifts the bottom inset based on overlapping elements.  </li>
-<li>The module is additive; existing exports remain unchanged.</li>
+<li>The obstruction list is shorter when the code‑viewer sheet is already open, reducing potential double‑lifting of the chrome.  </li>
+<li>Modal detection logic is clearer, separating viewer state from other backdrops.  </li>
+<li>No exported API changes; callers of <code>measureCodeCityChromeInsets</code> receive the same <code>CodeCityChromeInsets</code> shape.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Modal detection</strong> – verify that all selectors in <code>isBlockingModalOpen</code> still match the current DOM; a missing selector could cause the UI to render while a modal is open.  </li>
-<li><strong>Layout row query</strong> – the fallback to <code>.novadiff-graph-embed</code> may fail if the layout changes; test both paths.  </li>
-<li><strong>Hidden flag usage</strong> – callers must interpret <code>hidden: true</code> correctly to avoid rendering the UI when a modal is open.</li>
+<li>Verify that all modal backdrops still trigger <code>isBlockingModalOpen()</code> by running UI tests.  </li>
+<li>Ensure <code>isCodeViewerOpen()</code> covers all identifiers used for the code‑viewer sheet/modal.  </li>
+<li>Confirm that removing the <code>layoutRow</code> check does not affect scenarios where the sheet is positioned outside the current row.  </li>
+<li>Run <code>npm run lint</code>, <code>npm test</code>, and the production build to catch any TypeScript or runtime errors introduced by the refactor.</li>
 </ul>
 </article>
   </main>

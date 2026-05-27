@@ -26,36 +26,29 @@
 <body>
   <header class="top">
     <h1>vite.config.ts</h1>
-    <div class="meta">Kind: modified · Baseline: f7c2bfd81af2 · Target: NovaDiff · Generated: 2026-05-21T10:38:14.511Z</div>
+    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:13:17.715Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The Vite configuration now replaces the single <code>@novadiff/graph-core</code> alias with three granular aliases for the core package’s types, schema, and search modules.<br>The change occurs in the <code>resolve.alias</code> section (lines 15‑26 of <code>vite.config.ts</code>).</p>
+<p>A single line was added to <code>vite.config.ts</code> (line 57) to include the <code>three/webgpu</code> package in Vite’s <code>optimizeDeps.include</code> array.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Removed</strong> the old alias <code>@novadiff/graph-core</code> that pointed to <code>packages/graph-core/src</code>.  </li>
-<li><strong>Added</strong>  <ul>
-<li><code>@novadiff/graph-core/types</code> → <code>packages/graph-core/src/types.ts</code>  </li>
-<li><code>@novadiff/graph-core/schema</code> → <code>packages/graph-core/src/schema.ts</code>  </li>
-<li><code>@novadiff/graph-core/search</code> → <code>packages/graph-core/src/search.ts</code></li>
-</ul>
-</li>
-<li>The <code>@novadiff/graph-view</code> alias remains unchanged.  </li>
-<li>No other configuration sections were modified.</li>
+<li><code>optimizeDeps.include</code> now contains <code>&quot;three/webgpu&quot;</code> (added at line 57).  </li>
+<li>No other configuration values were altered.</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li><strong>Module resolution</strong>: Imports that previously used <code>@novadiff/graph-core</code> must now target the specific sub‑modules (<code>types</code>, <code>schema</code>, <code>search</code>).  </li>
-<li><strong>Build correctness</strong>: The new aliases point to individual source files, which is likely to reduce bundle size and avoid accidental exposure of internal files.  </li>
-<li><strong>Maintainability</strong>: Explicit aliases clarify intent and make refactoring of the core package easier.  </li>
-<li><strong>Compatibility</strong>: Existing code that imports <code>@novadiff/graph-core</code> will break unless updated; this change is a breaking API shift for consumers of the Vite config.</li>
+<li><strong>Development mode</strong>: Vite will pre‑bundle <code>three/webgpu</code>, ensuring the module is available during hot‑reload and potentially reducing import resolution time.  </li>
+<li><strong>Dev bundle size</strong>: The module will be part of the dev bundle, increasing its size slightly.  </li>
+<li><strong>Production build</strong>: unknown from the available diff/scan evidence.  </li>
+<li><strong>Runtime behavior</strong>: no new flags or environment variables were introduced, so existing logs and metrics remain unchanged.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li><strong>Import regressions</strong>: Verify that all internal imports now reference the new aliases; run <code>npm run lint</code> and <code>npm test</code> to catch unresolved imports.  </li>
-<li><strong>Build failures</strong>: Ensure the TypeScript compiler resolves the new paths; run <code>npm run build</code> to confirm.  </li>
-<li><strong>Documentation</strong>: Update any README or docs that mention the old alias.  </li>
-<li><strong>CI pipelines</strong>: Confirm that the updated config does not affect server watch ignore patterns or dev server behavior.</li>
+<li>Verify that <code>three/webgpu</code> is listed in <code>package.json</code> and installed; otherwise Vite will fail to resolve it during dev.  </li>
+<li>Run <code>vite build</code> to confirm the module does not unintentionally appear in the production bundle.  </li>
+<li>Measure dev server start‑up time to detect any marginal performance regression.  </li>
+<li>Ensure <code>three/webgpu</code> does not conflict with other optimizations such as <code>needsInterop: [&quot;elkjs&quot;]</code>.</li>
 </ul>
 </article>
   </main>

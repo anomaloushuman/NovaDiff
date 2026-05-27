@@ -1,3 +1,8 @@
+import {
+  changeStateMatchesFilters,
+  symbolMatchesKindGroups,
+  type SymbolKindGroup,
+} from "./docsExploreFilters";
 import type {
   CodeCityChangeState,
   CodeCityFileNode,
@@ -14,7 +19,10 @@ export interface CodeCityFilters {
   changedOnly: boolean;
   subsystem: string;
   extension: string;
-  symbolKind: string;
+  /** Empty = all structure groups (files, classes, functions). */
+  symbolKinds: SymbolKindGroup[];
+  /** Empty = all git change states. */
+  changeStates: CodeCityChangeState[];
   author: string;
   search: string;
 }
@@ -109,6 +117,22 @@ function buildingHeight(symbol: CodeCitySymbolNode): number {
   return 4 + Math.min(38, Math.log2(base + 1) * 5.6);
 }
 
+function normalizeRelPath(filePath: string): string {
+  return filePath.replace(/\\/g, "/");
+}
+
+function fileMatchesSubsystem(file: CodeCityFileNode, subsystem: string): boolean {
+  if (subsystem === "all") {
+    return true;
+  }
+  const rel = normalizeRelPath(file.path);
+  const top = normalizeRelPath(file.topDirectory);
+  if (top === subsystem || top === subsystem.replace(/\\/g, "/")) {
+    return true;
+  }
+  return rel === subsystem || rel.startsWith(`${subsystem}/`);
+}
+
 function visibleForRoot(
   symbol: CodeCitySymbolNode,
   selectedRoot: "baseline" | "target",
@@ -144,25 +168,41 @@ export function buildCodeCityLayout(
     fileMap.set(file.id, file);
   }
   const search = filters.search.trim().toLowerCase();
+  const districtScoped =
+    filters.subsystem !== "all" ||
+    filters.extension !== "all" ||
+    Boolean(search);
+
   const visibleSymbols = model.symbols.filter((symbol) => {
     const file = fileMap.get(symbol.fileId);
-    if (!file || !visibleForRoot(symbol, filters.rootSide, filters.compareOverlay)) {
+    if (!file) {
+      return false;
+    }
+    if (!districtScoped && !visibleForRoot(symbol, filters.rootSide, filters.compareOverlay)) {
       return false;
     }
     if (filters.changedOnly && symbol.changeState === "unchanged") {
       return false;
     }
-    if (filters.subsystem !== "all" && file.topDirectory !== filters.subsystem) {
+    if (!fileMatchesSubsystem(file, filters.subsystem)) {
       return false;
     }
     if (filters.extension !== "all" && file.ext !== filters.extension) {
       return false;
     }
-    if (filters.symbolKind !== "all" && symbol.kind !== filters.symbolKind) {
+    if (!symbolMatchesKindGroups(symbol.kind, filters.symbolKinds)) {
       return false;
     }
-    if (filters.author !== "all" && symbol.dominantAuthor !== filters.author) {
+    if (!changeStateMatchesFilters(symbol.changeState, filters.changeStates)) {
       return false;
+    }
+    if (filters.author !== "all") {
+      const authorMatch =
+        symbol.dominantAuthor === filters.author ||
+        symbol.owners.some((owner) => owner.author === filters.author);
+      if (!authorMatch) {
+        return false;
+      }
     }
     if (!search) {
       return true;

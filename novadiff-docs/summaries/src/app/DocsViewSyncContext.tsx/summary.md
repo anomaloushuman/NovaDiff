@@ -1,25 +1,23 @@
 ### Overview  
-`src/app/DocsViewSyncContext.tsx` adds a React context that synchronizes documentation view state with the CodeCity graph. It exports an interface, a provider component, and three hooks for consuming the context.
+In `src/app/DocsViewSyncContext.tsx` a new state `cityBuildingId` was added to the `DocsViewSyncState` interface (R16‑17) and initialized to `null` (R43). The provider now tracks this ID when a graph node id is unknown or not yet linked.
 
 ### Key changes  
-- **Imports** (`R1‑R10`): React hooks and `CodeCityRenderableBuilding`.  
-- **`DocsViewSyncState` interface** (`R12‑R25`): flags for linking and focus, selected node/building, and mutation callbacks.  
-- **Context creation** (`R27`): `createContext<DocsViewSyncState | null>(null)`.  
-- **`DocsViewSyncProvider`** (`R29‑R124`): initializes state with `useState`, exposes setters, and memoizes the value (`R92‑R118`).  
-- **`useDocsViewSync`** (`R126‑R131`): throws if the provider is missing (`R128‑R130`).  
-- **`useDocsViewSyncOptional`** (`R134‑R136`): returns the context or `null`.  
-- **`useDocsViewSyncExternalNode`** (`R138‑R149`): when `enabled` and `linkViews` are true, calls `sync.setSelectionFromGraph(nodeId)` inside a `useEffect` (`R143‑R148`).  
-
-No existing files are modified; the module is entirely new.
+- **Interface** – `cityBuildingId: string | null` (R16‑17).  
+- **State** – `const [cityBuildingId, setCityBuildingId] = useState<string | null>(null);` (R43).  
+- **Selection logic** –  
+  - `setSelectionFromGraph` now clears `cityBuildingId` when a node id is present and no longer resets `enteredBuilding` on falsy ids (L49‑50 removed, R52‑57 added).  
+  - `setSelectionFromCity` assigns `cityBuildingId = building.id` when a building is supplied and removes the old `building !== undefined` guard (R62‑70, R72).  
+- **Enter/exit/clear helpers** – update `cityBuildingId` (R84, R94, R100).  
+- **Context value** – includes `cityBuildingId` and its dependency array is updated (R113‑128).
 
 ### Impact  
-- **Correctness**: state mutations are confined to the provider; consumers must be wrapped.  
-- **Maintainability**: all sync logic resides in one place, easing future updates.  
-- **Performance**: `useMemo` and `useCallback` keep the context value stable, reducing unnecessary re‑renders.  
-- **Compatibility**: components that previously relied on implicit sync must now import and use the new hooks.
+- **Consistency** – a single source of truth for the building id when the graph node is missing.  
+- **Maintainability** – consumers can rely on `cityBuildingId` without extra logic.  
+- **Compatibility** – TypeScript will enforce handling of the new field; existing consumers receive an additional property.  
+- **Performance** – negligible overhead from an extra state setter.
 
 ### Risks & follow‑ups  
-- **Provider omission**: `useDocsViewSync` throws if used outside the provider (`R128‑R130`). Verify all consumers are wrapped.  
-- **Null context**: `useDocsViewSyncOptional` may return `null` (`R134‑R136`); callers must handle this case.  
-- **Effect dependencies**: `useDocsViewSyncExternalNode` depends on `sync` (`R143‑R148`); ensure the context reference does not change unexpectedly.  
-- **Lint & build**: run `npm run lint`, `npm test`, and `npm run build` to confirm no TypeScript or ESLint errors.
+- **Regression** – components that previously cleared `enteredBuilding` on falsy `nodeId` may behave differently; review related logic.  
+- **Type safety** – ensure all destructurings import the updated `DocsViewSyncState`.  
+- **Dependency array** – confirm `cityBuildingId` is listed in `useMemo` dependencies to avoid stale closures.  
+- **Testing** – add unit tests for `setSelectionFromGraph` and `setSelectionFromCity` to assert the new `cityBuildingId` handling.
