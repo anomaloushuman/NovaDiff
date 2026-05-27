@@ -1,9 +1,9 @@
 {
   "relPath": ".novadiff-graph/knowledge-graph.json",
-  "kind": "removed",
-  "leftTitle": "9aadd5eb5604",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T06:54:35.013Z",
+  "generatedAt": "2026-05-27T05:20:17.652Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,15 +16,13 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L1-8000"
+      "L19-20 / R19-20"
     ],
     "cited_changed_lines": [
-      "L1 removed: {",
-      "L2 removed: \"version\": \"1.0.0\",",
-      "L3 removed: \"project\": {",
-      "L4 removed: \"name\": \"9aadd5eb5604\",",
-      "L5 removed: \"languages\": [",
-      "L6 removed: \"css\","
+      "L19 removed: \"analyzedAt\": \"2026-05-26T07:21:38.017Z\",",
+      "L20 removed: \"gitCommitHash\": \"9aadd5eb56044d13c225925fc1e3ca8478099233\"",
+      "R19 added: \"analyzedAt\": \"2026-05-27T04:48:24.774Z\",",
+      "R20 added: \"gitCommitHash\": \"984f0748954ae0907a2c9505b578119841d7fc2d\""
     ],
     "evidence_limits": [
       "Diff rows were truncated before the full file could be represented.",

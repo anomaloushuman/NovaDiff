@@ -1,0 +1,49 @@
+{
+  "relPath": "electron/liquid-glass.cjs",
+  "kind": "added",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:47:39.272Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "R13 added: liquidGlassModule = require(\"electron-liquid-glass\");"
+    ],
+    "changed_line_ranges": [
+      "R1-60"
+    ],
+    "cited_changed_lines": [
+      "R1 added: \"use strict\";",
+      "R3 added: let liquidGlassModule = null;",
+      "R4 added: let liquidGlassLoadAttempted = false;",
+      "R6 added: function loadLiquidGlass() {",
+      "R7 added: if (liquidGlassLoadAttempted) {",
+      "R8 added: return liquidGlassModule;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function applyLiquidGlassToWindow (29-60)",
+      "right function loadLiquidGlass (6-28)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

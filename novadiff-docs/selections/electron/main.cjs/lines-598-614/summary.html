@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/main.cjs · Code explanation (L598-614) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/main.cjs · Code explanation (L598-614)</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-27T06:22:29.052Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>sendKnowledgeGraphProgress</code> forwards progress updates from the main process to a renderer window. It accepts an <code>event</code> (typically an IPC event) and a <code>payload</code>. If the payload is a string, it parses a “current/total” pattern and sends a structured message; otherwise it forwards the payload unchanged, defaulting to an empty message when <code>payload</code> is <code>null</code> or <code>undefined</code>.</h3>
+<h3>How it works1. <code>const wc = event?.sender;</code> grabs the <code>webContents</code> that emitted the event.2. <code>if (!wc || wc.isDestroyed()) { return; }</code> exits early if the target window is missing or already closed.3. When <code>payload</code> is a string, it runs <code>payload.match(/(\d+)\s*\/\s*(\d+)/)</code> to extract two numbers.4. It then calls <code>wc.send(&quot;knowledge-graph-progress&quot;, { … })</code> with:</h3>
+<ul>
+<li><p><code>message</code>: the original string, </p>
+</li>
+<li><p><code>phase</code>: hard‑coded <code>&quot;extract&quot;</code>, </p>
+</li>
+<li><p><code>current</code> and <code>total</code>: parsed numbers or <code>undefined</code> if the regex fails.5. If <code>payload</code> is not a string, it sends it directly (or <code>{ message: &quot;&quot; }</code> if falsy) via the same channel.</p>
+</li>
+</ul>
+<h3>Notes for reviewers</h3>
+<ul>
+<li><p>The function assumes <code>event.sender</code> is a <code>webContents</code> instance; the snippet does not verify its type.</p>
+</li>
+<li><p>The regex only captures digits; non‑numeric progress strings will result in <code>current</code>/<code>total</code> being <code>undefined</code>.</p>
+</li>
+<li><p>The hard‑coded <code>&quot;extract&quot;</code> phase suggests this helper is tied to a specific workflow; consider parameterizing it if reuse is needed.</p>
+</li>
+<li><p>No error handling is present for malformed payloads beyond the regex check.</p>
+</li>
+<li><p>Unknown from the snippet: the broader context of how <code>sendKnowledgeGraphProgress</code> is invoked and what the renderer expects.</p>
+</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

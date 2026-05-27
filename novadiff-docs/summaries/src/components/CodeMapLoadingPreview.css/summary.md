@@ -1,28 +1,22 @@
 ### Overview  
-A new stylesheet `src/components/CodeMapLoadingPreview.css` (267 lines added) introduces the visual scaffolding for the Code‑Map loading preview. The file defines the `.code-map-loading-preview` component and its sub‑elements (`__viewport`, `__stars`, `__horizon`, `__mesh`, `__beam`, `__console`, `__title`, `__tracks`, etc.).
+A new light‑mode media query was added to `src/components/CodeMapLoadingPreview.css` (lines 269‑371). It replaces the dark‑theme palette with lighter colors and adjusts gradients, shadows, and borders for the code‑map loading preview.
 
 ### Key changes  
-- **Toast‑bar suppression** – the rule  
-  ```css
-  body:has([data-code-map-loader]:not(.is-exiting)) .background-activity-bar {
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-  ```  
-  (added at lines 1‑6) hides the global toast bar while the loader is active.  
-- **Component styles** – the new CSS defines layout, colors, and animations for the loader UI.  
-- **Animations** – keyframes `code‑map‑mesh‑sweep`, `code‑map‑track‑indeterminate`, `code‑map‑viewport‑exit`, and `code‑map‑console‑exit` drive the loader’s transitions.  
-- **Reduced‑motion media query** – disables the mesh animation and shortens exit animations for users who prefer reduced motion (lines 258‑267).  
-- **Modern CSS features** – the file uses `:has()`, `color‑mix`, radial gradients, and mask images.
+- **Media query**: `@media (prefers-color-scheme: light)` (lines 269‑371).  
+- `.code-map-loading-preview` background changed from `#04080e` to `#edf4fd`.  
+- Gradient backgrounds for `__viewport::after`, `__stars`, `__horizon`, `__mesh`, and `__console` updated to use lighter accent colors (`#0da7d7`, `#00b9db`, `#edf4fd`).  
+- Shadows and opacities adjusted: e.g., `__horizon` opacity set to `0.72`; `__mesh` box‑shadow reduced.  
+- Text colors for `__title`, `__track-label`, `__track-pct`, and `__track-detail` changed to lighter hues (`#10233a`, `#12314a`, `#47647f`).  
+- Special handling for macOS liquid‑glass hosts (lines 355‑371): hides backdrop plates/gradients and sets transparent backgrounds for the preview and its subcomponents.
 
 ### Impact  
-- The loader now overlays the bottom HUD and suppresses duplicate toast bars, preventing visual duplication.  
-- All styles are scoped to the `.code-map-loading-preview` namespace, reducing the risk of leaking into unrelated components.  
-- The added CSS is lightweight; GPU‑accelerated animations are used where supported.
+- **Visual**: The loader preview now displays with a light‑mode palette; contrast ratios may differ from the dark theme.  
+- **Testing**: Any tests that assert specific color values or background images will need updates to match the new light‑mode styles.  
+- **Maintainability**: The new media query block keeps dark‑theme logic untouched while adding a dedicated light‑mode override.  
+- **Runtime**: No JavaScript changes; purely CSS, so no impact on other components.
 
 ### Risks & follow‑ups  
-- **Toast bar visibility** – it is unknown from the diff whether the suppression rule might hide essential notifications in edge cases.  
-- **Browser support** – the use of `:has()` and `color‑mix` requires modern browsers; confirm compatibility in the target environment.  
-- **Animation timing** – ensure the exit animations do not interfere with other page transitions.  
-- **Test coverage** – add tests to verify that the CSS classes are applied and that the toast bar is hidden during loading.
+- **Dark‑mode leakage**: Verify that the new styles do not affect dark‑theme contexts.  
+- **Accessibility**: Run a WCAG audit to confirm that the new colors meet contrast requirements.  
+- **Liquid‑glass interaction**: Ensure that the `html.app-liquid-glass` overrides do not unintentionally affect unrelated components.  
+- **Test failures**: Update any snapshot or color‑assertion tests that reference the old dark‑theme values.

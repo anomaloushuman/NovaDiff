@@ -1,9 +1,9 @@
 {
   "relPath": "packages/graph-view/src/components/CodeViewer.tsx",
   "kind": "modified",
-  "leftTitle": "9aadd5eb5604",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T19:50:52.515Z",
+  "generatedAt": "2026-05-27T05:58:19.502Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -21,36 +21,28 @@
     ],
     "changed_exports": [],
     "changed_imports": [
-      "L1 removed: import { useCallback, useEffect, useMemo, useState } from \"react\";",
-      "R1 added: import { useCallback, useEffect, useMemo, useRef, useState } from \"react\";",
-      "R2 added: import type { GraphNode } from \"@novadiff/graph-core/types\";"
+      "R8 added: import { useTheme } from \"../themes/index\";"
     ],
     "changed_line_ranges": [
-      "L1 / R1-2",
-      "R63-76",
-      "R109-110",
-      "L179 / R196-200",
-      "L182-183 / R203-208",
-      "R210-238",
-      "R263-264",
-      "L211 / R267"
+      "R8",
+      "R103",
+      "R259",
+      "L394 / R397"
     ],
     "cited_changed_lines": [
-      "L1 removed: import { useCallback, useEffect, useMemo, useState } from \"react\";",
-      "R1 added: import { useCallback, useEffect, useMemo, useRef, useState } from \"react\";",
-      "R2 added: import type { GraphNode } from \"@novadiff/graph-core/types\";",
-      "R63 added: /** Line range from node metadata or disambiguated graph id (`function:path:name:42`). */",
-      "R64 added: function lineRangeForNode(node: GraphNode): [number, number] | null {",
-      "R65 added: if (node.lineRange) {"
+      "R8 added: import { useTheme } from \"../themes/index\";",
+      "R103 added: const { preset } = useTheme();",
+      "R259 added: const prismTheme = preset.isDark ? themes.vsDark : themes.vsLight;",
+      "L394 removed: <Highlight code={source.content} language={language} theme={themes.vsDark}>",
+      "R397 added: <Highlight code={source.content} language={language} theme={prismTheme}>"
     ],
     "evidence_limits": [],
     "file_roles": [
       "js-ts-source"
     ],
     "touched_symbols": [
-      "left function formatBytes (56-415)",
-      "right function lineRangeForNode (64-472)",
-      "right function formatBytes (57-63)"
+      "left function lineRangeForNode (64-472)",
+      "right function lineRangeForNode (65-475)"
     ],
     "verification_hints": [
       "Run the JS/TS lint, test, and production build commands used by this repo."

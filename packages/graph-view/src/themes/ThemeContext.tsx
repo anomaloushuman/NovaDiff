@@ -10,7 +10,13 @@ import {
 import type { HeadingFont, PresetId, ThemeConfig, ThemePreset } from "./types.ts";
 import { DEFAULT_THEME_CONFIG } from "./types.ts";
 import { getPreset } from "./presets.ts";
-import { applyTheme, clearTheme } from "./theme-engine.ts";
+import {
+  applyLiquidGlassEmbedTheme,
+  applyTheme,
+  clearLiquidGlassEmbedTheme,
+  clearTheme,
+  isLiquidGlassHost,
+} from "./theme-engine.ts";
 
 const STORAGE_KEY = "ua-theme";
 
@@ -71,6 +77,16 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
   const hostRef = useRef<HTMLDivElement>(null);
   const configRef = useRef(config);
   configRef.current = config;
+  const [liquidGlassHost, setLiquidGlassHost] = useState(isLiquidGlassHost);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => setLiquidGlassHost(isLiquidGlassHost());
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   // Apply theme on mount and config changes (no clearTheme on re-apply — avoids embed layout thrash).
   useEffect(() => {
@@ -79,7 +95,12 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
       if (!host) {
         return;
       }
-      applyTheme(config, host);
+      if (liquidGlassHost) {
+        applyLiquidGlassEmbedTheme(config, host);
+      } else {
+        clearLiquidGlassEmbedTheme(host);
+        applyTheme(config, host);
+      }
     } else {
       applyTheme(config);
     }
@@ -87,7 +108,7 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
       saveToLocalStorage(config);
     }
     initialized.current = true;
-  }, [config, scopeToHost]);
+  }, [config, scopeToHost, liquidGlassHost]);
 
   useEffect(() => {
     if (!scopeToHost) {
@@ -96,6 +117,7 @@ export function ThemeProvider({ metaTheme, scopeToHost = false, children }: Them
     return () => {
       const host = hostRef.current;
       if (host) {
+        clearLiquidGlassEmbedTheme(host);
         clearTheme(host, configRef.current);
       }
     };

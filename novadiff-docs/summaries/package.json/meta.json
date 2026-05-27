@@ -1,9 +1,9 @@
 {
   "relPath": "package.json",
   "kind": "modified",
-  "leftTitle": "9aadd5eb5604",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T19:12:05.712Z",
+  "generatedAt": "2026-05-27T05:45:59.128Z",
   "summaryEvidence": {
     "badges": [
       {
@@ -16,13 +16,10 @@
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L56-57 / R56-57"
+      "R30"
     ],
     "cited_changed_lines": [
-      "L56 removed: \"electron\": \"^34.2.0\",",
-      "L57 removed: \"electron-builder\": \"^25.1.8\",",
-      "R56 added: \"electron\": \"^42.2.0\",",
-      "R57 added: \"electron-builder\": \"^26.8.1\","
+      "R30 added: \"electron-liquid-glass\": \"^1.1.1\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

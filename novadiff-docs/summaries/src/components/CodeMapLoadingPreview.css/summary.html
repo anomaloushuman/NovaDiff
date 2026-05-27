@@ -26,38 +26,34 @@
 <body>
   <header class="top">
     <h1>src/components/CodeMapLoadingPreview.css</h1>
-    <div class="meta">Kind: added · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:35:38.161Z</div>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:54:03.044Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>A new stylesheet <code>src/components/CodeMapLoadingPreview.css</code> (267 lines added) introduces the visual scaffolding for the Code‑Map loading preview. The file defines the <code>.code-map-loading-preview</code> component and its sub‑elements (<code>__viewport</code>, <code>__stars</code>, <code>__horizon</code>, <code>__mesh</code>, <code>__beam</code>, <code>__console</code>, <code>__title</code>, <code>__tracks</code>, etc.).</p>
+<p>A new light‑mode media query was added to <code>src/components/CodeMapLoadingPreview.css</code> (lines 269‑371). It replaces the dark‑theme palette with lighter colors and adjusts gradients, shadows, and borders for the code‑map loading preview.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Toast‑bar suppression</strong> – the rule```css
-body:has([data-code-map-loader]:not(.is-exiting)) .background-activity-bar {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-}</li>
+<li><strong>Media query</strong>: <code>@media (prefers-color-scheme: light)</code> (lines 269‑371).  </li>
+<li><code>.code-map-loading-preview</code> background changed from <code>#04080e</code> to <code>#edf4fd</code>.  </li>
+<li>Gradient backgrounds for <code>__viewport::after</code>, <code>__stars</code>, <code>__horizon</code>, <code>__mesh</code>, and <code>__console</code> updated to use lighter accent colors (<code>#0da7d7</code>, <code>#00b9db</code>, <code>#edf4fd</code>).  </li>
+<li>Shadows and opacities adjusted: e.g., <code>__horizon</code> opacity set to <code>0.72</code>; <code>__mesh</code> box‑shadow reduced.  </li>
+<li>Text colors for <code>__title</code>, <code>__track-label</code>, <code>__track-pct</code>, and <code>__track-detail</code> changed to lighter hues (<code>#10233a</code>, <code>#12314a</code>, <code>#47647f</code>).  </li>
+<li>Special handling for macOS liquid‑glass hosts (lines 355‑371): hides backdrop plates/gradients and sets transparent backgrounds for the preview and its subcomponents.</li>
 </ul>
-<pre><code class="language-(added">- **Component styles** – the new CSS defines layout, colors, and animations for the loader UI.  
-- **Animations** – keyframes `code‑map‑mesh‑sweep`, `code‑map‑track‑indeterminate`, `code‑map‑viewport‑exit`, and `code‑map‑console‑exit` drive the loader’s transitions.  
-- **Reduced‑motion media query** – disables the mesh animation and shortens exit animations for users who prefer reduced motion (lines 258‑267).  
-- **Modern CSS features** – the file uses `:has()`, `color‑mix`, radial gradients, and mask images.
-
-### Impact
-
-  
-- The loader now overlays the bottom HUD and suppresses duplicate toast bars, preventing visual duplication.  
-- All styles are scoped to the `.code-map-loading-preview` namespace, reducing the risk of leaking into unrelated components.  
-- The added CSS is lightweight; GPU‑accelerated animations are used where supported.
-
-### Risks &amp; follow‑ups  
-- **Toast bar visibility** – it is unknown from the diff whether the suppression rule might hide essential notifications in edge cases.  
-- **Browser support** – the use of `:has()` and `color‑mix` requires modern browsers; confirm compatibility in the target environment.  
-- **Animation timing** – ensure the exit animations do not interfere with other page transitions.  
-- **Test coverage** – add tests to verify that the CSS classes are applied and that the toast bar is hidden during loading.
-</code></pre>
+<h3>Impact</h3>
+<ul>
+<li><strong>Visual</strong>: The loader preview now displays with a light‑mode palette; contrast ratios may differ from the dark theme.  </li>
+<li><strong>Testing</strong>: Any tests that assert specific color values or background images will need updates to match the new light‑mode styles.  </li>
+<li><strong>Maintainability</strong>: The new media query block keeps dark‑theme logic untouched while adding a dedicated light‑mode override.  </li>
+<li><strong>Runtime</strong>: No JavaScript changes; purely CSS, so no impact on other components.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Dark‑mode leakage</strong>: Verify that the new styles do not affect dark‑theme contexts.  </li>
+<li><strong>Accessibility</strong>: Run a WCAG audit to confirm that the new colors meet contrast requirements.  </li>
+<li><strong>Liquid‑glass interaction</strong>: Ensure that the <code>html.app-liquid-glass</code> overrides do not unintentionally affect unrelated components.  </li>
+<li><strong>Test failures</strong>: Update any snapshot or color‑assertion tests that reference the old dark‑theme values.</li>
+</ul>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

@@ -1,0 +1,51 @@
+{
+  "relPath": "packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+  "kind": "added",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:57:55.270Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R5 added: export function useLiquidGlassHost(): boolean {"
+    ],
+    "changed_imports": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import { isLiquidGlassHost } from \"../themes/theme-engine.ts\";"
+    ],
+    "changed_line_ranges": [
+      "R1-16"
+    ],
+    "cited_changed_lines": [
+      "R1 added: import { useEffect, useState } from \"react\";",
+      "R2 added: import { isLiquidGlassHost } from \"../themes/theme-engine.ts\";",
+      "R4 added: /** Re-render when NovaDiff macOS liquid-glass mode toggles on documentElement. */",
+      "R5 added: export function useLiquidGlassHost(): boolean {",
+      "R6 added: const [active, setActive] = useState(isLiquidGlassHost);",
+      "R7 added: useEffect(() => {"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function useLiquidGlassHost (5-16)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

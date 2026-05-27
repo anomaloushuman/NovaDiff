@@ -265,3 +265,107 @@ body:has([data-code-map-loader]:not(.is-exiting)) .background-activity-bar {
     animation-duration: 0.12s;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .code-map-loading-preview {
+    background: #edf4fd;
+  }
+
+  .code-map-loading-preview__viewport::after {
+    background: linear-gradient(
+      to top,
+      rgba(237, 244, 253, 0.94) 0%,
+      rgba(237, 244, 253, 0.56) 42%,
+      transparent 100%
+    );
+  }
+
+  .code-map-loading-preview__stars {
+    background:
+      radial-gradient(
+        ellipse 90% 55% at 50% 8%,
+        color-mix(in srgb, var(--accent-2, #0da7d7) 16%, transparent) 0%,
+        transparent 52%
+      ),
+      radial-gradient(
+        ellipse 120% 90% at 50% 100%,
+        color-mix(in srgb, var(--neon-cyan, #00b9db) 7%, #edf4fd) 0%,
+        #e7f0fb 78%
+      );
+  }
+
+  .code-map-loading-preview__horizon {
+    box-shadow:
+      0 0 16px color-mix(in srgb, var(--accent-2, #0da7d7) 45%, transparent),
+      0 0 56px color-mix(in srgb, var(--neon-cyan, #00b9db) 20%, transparent);
+    opacity: 0.72;
+  }
+
+  .code-map-loading-preview__mesh {
+    background-color: color-mix(in srgb, #eaf2fb 94%, var(--accent-2, #0da7d7) 6%);
+    background-image:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--accent-2, #0da7d7) 30%, transparent) 50%,
+        transparent 100%
+      ),
+      repeating-linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--neon-cyan, #00b9db) 20%, transparent) 0 1px,
+        transparent 1px 56px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--neon-cyan, #00b9db) 18%, transparent) 0 1px,
+        transparent 1px 56px
+      );
+  }
+
+  .code-map-loading-preview__console {
+    border: 1px solid color-mix(in srgb, var(--accent-2, #0da7d7) 28%, var(--border, #cad5e5));
+    background: color-mix(in srgb, #ffffff 86%, transparent);
+    box-shadow:
+      0 8px 28px rgba(20, 32, 51, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .code-map-loading-preview__title {
+    color: color-mix(in srgb, var(--neon-cyan, #00b9db) 84%, #10233a);
+  }
+
+  .code-map-loading-preview__track-label {
+    color: #12314a;
+  }
+
+  .code-map-loading-preview__track-pct,
+  .code-map-loading-preview__track-detail {
+    color: #47647f;
+  }
+
+  .code-map-loading-preview__track-bar {
+    background: color-mix(in srgb, #cad5e5 70%, transparent);
+  }
+
+  .code-map-loading-preview__track-fill {
+    box-shadow: 0 0 8px color-mix(in srgb, var(--accent-2, #0da7d7) 36%, transparent);
+  }
+}
+
+/* macOS liquid-glass host: remove loader backdrop plates/gradients. */
+html.app-liquid-glass .code-map-loading-preview,
+html.app-liquid-glass .code-map-loading-preview__viewport,
+html.app-liquid-glass .code-map-loading-preview__viewport::after {
+  background: transparent !important;
+}
+
+html.app-liquid-glass .code-map-loading-preview__stars,
+html.app-liquid-glass .code-map-loading-preview__mesh {
+  display: none !important;
+}
+
+html.app-liquid-glass .code-map-loading-preview__console {
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}

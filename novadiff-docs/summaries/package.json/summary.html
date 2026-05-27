@@ -26,29 +26,33 @@
 <body>
   <header class="top">
     <h1>package.json</h1>
-    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:12:05.712Z</div>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:45:59.128Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The <code>package.json</code> in the <code>NovaDiff</code> branch updates the Electron runtime and its builder. Electron is bumped from <code>^34.2.0</code> (removed at L56) to <code>^42.2.0</code> (added at R56). Electron‑builder is bumped from <code>^25.1.8</code> (removed at L57) to <code>^26.8.1</code> (added at R57). No other dependencies were modified.</p>
-<h3>Key changes</h3>
-<ul>
-<li><strong>Electron runtime</strong> – line 56 now requires <code>electron@^42.2.0</code>.  </li>
-<li><strong>Electron‑builder</strong> – line 57 now requires <code>electron-builder@^26.8.1</code>.  </li>
-<li>The <code>build</code> script (<code>&quot;electron:build&quot;: &quot;npm run rust:build &amp;&amp; npm run build &amp;&amp; electron-builder&quot;</code>) remains unchanged.</li>
-</ul>
-<h3>Impact</h3>
-<ul>
-<li>The new Electron version may introduce API changes that affect renderer code.  </li>
-<li>Native modules (if any) must be rebuilt against the new Electron headers.  </li>
-<li>Packaging behavior could change with the newer electron‑builder defaults.</li>
-</ul>
-<h3>Risks &amp; follow‑ups</h3>
-<ul>
-<li><strong>Build failures</strong> – Run <code>npm ci &amp;&amp; npm run build &amp;&amp; npm run electron:build</code> on all target platforms to catch native module errors.  </li>
-<li><strong>CI pipeline</strong> – Update any Docker/VM images to match the new Electron version; ensure <code>node-gyp</code> uses the correct headers.  </li>
-<li><strong>Release artifacts</strong> – Verify generated installers for missing resources or signing issues.</li>
-</ul>
+<p>The <code>package.json</code> of the NovaDiff monorepo now contains a new top‑level dependency:```json
+&quot;electron-liquid-glass&quot;: &quot;^1.1.1&quot;</p>
+<pre><code class="language-This">
+### Key changes
+
+  
+- Line 30 of `package.json` was inserted with the dependency above.  
+- No other fields or scripts were modified; the rest of the file remains unchanged.
+
+### Impact
+
+  
+- **Dependency resolution** – running `npm install` (or `yarn install`) will fetch `electron-liquid-glass`, adding its files to `node_modules`.  
+- **Electron build** – the package will be bundled by `electron-builder` as part of the normal build process, but the diff shows no code imports it, so the build should succeed unchanged unless other parts of the repo reference it.  
+- **Testing** – tests that mock or stub `electron-liquid-glass` may need updating; otherwise existing tests should continue to run.  
+- **Bundle size** – the new dependency increases the node_modules size; the final Electron bundle will include it automatically.
+
+### Risks &amp; follow‑ups  
+- **Peer dependencies** – verify that `electron-liquid-glass` does not require additional peer packages not present in the current manifest.  
+- **Build integrity** – run `npm run build` and `npm run electron:build` to confirm that the added dependency does not break TypeScript compilation or Vite bundling.  
+- **Test stability** – execute `vitest run` to ensure existing tests still pass.  
+- **Bundle size** – check the final Electron artifact; if it grows noticeably, consider pruning unused exports from the new package.
+</code></pre>
 </article>
   </main>
 <script>window.__PDF_READY = true;</script>

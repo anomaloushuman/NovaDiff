@@ -1,22 +1,21 @@
 {
   "relPath": ".novadiff-graph/meta.json",
   "kind": "modified",
-  "leftTitle": "9aadd5eb5604",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T19:14:40.347Z",
+  "generatedAt": "2026-05-27T05:51:26.994Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L2 / R2",
-      "L5 / R5"
+      "L2-3 / R2-3"
     ],
     "cited_changed_lines": [
-      "L2 removed: \"lastAnalyzedAt\": \"2026-05-26T01:49:38.223Z\",",
-      "R2 added: \"lastAnalyzedAt\": \"2026-05-26T07:21:38.024Z\",",
-      "L5 removed: \"analyzedFiles\": 352",
-      "R5 added: \"analyzedFiles\": 373"
+      "L2 removed: \"lastAnalyzedAt\": \"2026-05-26T07:21:38.024Z\",",
+      "L3 removed: \"gitCommitHash\": \"9aadd5eb56044d13c225925fc1e3ca8478099233\",",
+      "R2 added: \"lastAnalyzedAt\": \"2026-05-27T04:48:24.798Z\",",
+      "R3 added: \"gitCommitHash\": \"984f0748954ae0907a2c9505b578119841d7fc2d\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

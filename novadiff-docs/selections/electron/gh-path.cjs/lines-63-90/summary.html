@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/gh-path.cjs · Code explanation (L63-90) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/gh-path.cjs · Code explanation (L63-90)</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-27T05:41:35.662Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>resolveViaLoginShell</code> attempts to locate the <code>gh</code> executable by invoking a login shell and asking it to resolve the command path. It returns the absolute path to <code>gh</code> if found, or <code>null</code> if it cannot determine the location or if the platform is Windows.</h3>
+<h3>How it works1. <strong>Platform guard</strong> – If <code>process.platform === &quot;win32&quot;</code>, the function immediately returns <code>null</code> because the login‑shell strategy is not applicable on Windows.2. *<em>Shell candidates</em></h3>
+<ul>
+<li><p>– It defines an array <code>shells</code> containing two tuples: <code>[&quot;/bin/zsh&quot;, [&quot;-ilc&quot;, &quot;command -v gh&quot;]]</code> and <code>[&quot;/bin/bash&quot;, [&quot;-lc&quot;, &quot;command -v gh&quot;]]</code>.3. *<em>Iterate over shells</em></p>
+</li>
+<li><p>– For each <code>[shell, args]</code> pair: </p>
+</li>
+<li><p>Skip the shell if <code>fssync.existsSync(shell)</code> is <code>false</code>. </p>
+</li>
+<li><p>Run the shell with <code>spawnSync</code>, passing <code>args</code>, <code>env</code>, <code>encoding: &quot;utf8&quot;</code>, and a <code>timeout</code> of8000ms. </p>
+</li>
+<li><p>Capture the first line of <code>stdout</code>, trim it, and store it in <code>found</code>. </p>
+</li>
+<li><p>If <code>found</code> is non‑empty and <code>fssync.existsSync(found)</code> is <code>true</code>, return <code>found</code>.4. *<em>Fallback</em></p>
+</li>
+<li><p>– If none of the shells yield a valid path, the function returns <code>null</code>.</p>
+</li>
+</ul>
+<h3>Notes for reviewers- The function relies on <code>spawnSync</code>’s synchronous behavior; any error during execution is silently ignored (<code>catch {}</code>), so the next shell is tried.- The timeout of8000ms may be too short for very slow shells; consider making it configurable.- The function only checks <code>/bin/zsh</code> and <code>/bin/bash</code>; other shells (e.g., <code>fish</code>, <code>tcsh</code>) are not considered.- The returned path is verified with <code>fssync.existsSync</code>, ensuring the file actually exists before returning it.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

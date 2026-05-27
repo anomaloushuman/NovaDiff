@@ -16,8 +16,8 @@
     ],
     "frameworks": [],
     "description": "Deterministic NovaDiff knowledge graph (Tree-sitter structure, imports, and compare overlay).",
-    "analyzedAt": "2026-05-26T07:21:38.017Z",
-    "gitCommitHash": "9aadd5eb56044d13c225925fc1e3ca8478099233"
+    "analyzedAt": "2026-05-27T06:21:31.065Z",
+    "gitCommitHash": "984f0748954ae0907a2c9505b578119841d7fc2d"
   },
   "nodes": [
     {
@@ -3136,6 +3136,47 @@
       "layerId": "layer:electron"
     },
     {
+      "id": "file:electron/liquid-glass.cjs",
+      "type": "file",
+      "name": "liquid-glass.cjs",
+      "filePath": "electron/liquid-glass.cjs",
+      "summary": "liquid-glass.cjs — 2 functions, 0 classes, 60 lines",
+      "tags": [
+        "javascript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/liquid-glass.cjs:loadLiquidGlass",
+      "type": "function",
+      "name": "loadLiquidGlass",
+      "filePath": "electron/liquid-glass.cjs",
+      "lineRange": [
+        6,
+        20
+      ],
+      "summary": "Function loadLiquidGlass (L6-20)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
+      "id": "function:electron/liquid-glass.cjs:applyLiquidGlassToWindow",
+      "type": "function",
+      "name": "applyLiquidGlassToWindow",
+      "filePath": "electron/liquid-glass.cjs",
+      "lineRange": [
+        29,
+        56
+      ],
+      "summary": "Function applyLiquidGlassToWindow (L29-56)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:electron"
+    },
+    {
       "id": "file:electron/llm.cjs",
       "type": "file",
       "name": "llm.cjs",
@@ -3629,7 +3670,7 @@
       "type": "file",
       "name": "main.cjs",
       "filePath": "electron/main.cjs",
-      "summary": "main.cjs — 10 functions, 0 classes, 1195 lines",
+      "summary": "main.cjs — 10 functions, 0 classes, 1205 lines",
       "tags": [
         "javascript",
         "code"
@@ -3657,10 +3698,10 @@
       "name": "getTargetWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        114,
-        119
+        115,
+        120
       ],
-      "summary": "Function getTargetWindow (L114-119)",
+      "summary": "Function getTargetWindow (L115-120)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3671,10 +3712,10 @@
       "name": "windowStatePayload",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        124,
-        130
+        125,
+        131
       ],
-      "summary": "Function windowStatePayload (L124-130)",
+      "summary": "Function windowStatePayload (L125-131)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3685,10 +3726,10 @@
       "name": "emitWindowState",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        135,
-        140
+        136,
+        141
       ],
-      "summary": "Function emitWindowState (L135-140)",
+      "summary": "Function emitWindowState (L136-141)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3699,10 +3740,10 @@
       "name": "iconPath",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        142,
-        148
+        143,
+        149
       ],
-      "summary": "Function iconPath (L142-148)",
+      "summary": "Function iconPath (L143-149)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3713,10 +3754,10 @@
       "name": "buildMenu",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        150,
-        168
+        151,
+        169
       ],
-      "summary": "Function buildMenu (L150-168)",
+      "summary": "Function buildMenu (L151-169)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3727,10 +3768,10 @@
       "name": "createWindow",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        170,
-        209
+        171,
+        219
       ],
-      "summary": "Function createWindow (L170-209)",
+      "summary": "Function createWindow (L171-219)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3741,10 +3782,10 @@
       "name": "sendKnowledgeGraphProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        588,
-        604
+        598,
+        614
       ],
-      "summary": "Function sendKnowledgeGraphProgress (L588-604)",
+      "summary": "Function sendKnowledgeGraphProgress (L598-614)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3755,10 +3796,10 @@
       "name": "sendWorkspaceHistoryProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        858,
-        864
+        868,
+        874
       ],
-      "summary": "Function sendWorkspaceHistoryProgress (L858-864)",
+      "summary": "Function sendWorkspaceHistoryProgress (L868-874)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -3769,10 +3810,10 @@
       "name": "sendGithubAuthProgress",
       "filePath": "electron/main.cjs",
       "lineRange": [
-        890,
-        896
+        900,
+        906
       ],
-      "summary": "Function sendGithubAuthProgress (L890-896)",
+      "summary": "Function sendGithubAuthProgress (L900-906)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:electron"
@@ -5408,7 +5449,7 @@
       "type": "config",
       "name": "package-lock.json",
       "filePath": "package-lock.json",
-      "summary": "package-lock.json — 0 functions, 0 classes, 11267 lines",
+      "summary": "package-lock.json — 0 functions, 0 classes, 11311 lines",
       "tags": [
         "json",
         "config"
@@ -5421,7 +5462,7 @@
       "type": "config",
       "name": "package.json",
       "filePath": "package.json",
-      "summary": "package.json — 0 functions, 0 classes, 100 lines",
+      "summary": "package.json — 0 functions, 0 classes, 101 lines",
       "tags": [
         "json",
         "config"
@@ -9915,7 +9956,7 @@
       "type": "file",
       "name": "CodeViewer.tsx",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
-      "summary": "CodeViewer.tsx — 5 functions, 0 classes, 472 lines",
+      "summary": "CodeViewer.tsx — 5 functions, 0 classes, 475 lines",
       "tags": [
         "typescript",
         "code"
@@ -9929,10 +9970,10 @@
       "name": "fileContentUrl",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
       "lineRange": [
-        30,
-        33
+        31,
+        34
       ],
-      "summary": "Function fileContentUrl (L30-33)",
+      "summary": "Function fileContentUrl (L31-34)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9943,10 +9984,10 @@
       "name": "fallbackLanguage",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
       "lineRange": [
-        35,
-        55
+        36,
+        56
       ],
-      "summary": "Function fallbackLanguage (L35-55)",
+      "summary": "Function fallbackLanguage (L36-56)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9957,10 +9998,10 @@
       "name": "formatBytes",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
       "lineRange": [
-        57,
-        61
+        58,
+        62
       ],
-      "summary": "Function formatBytes (L57-61)",
+      "summary": "Function formatBytes (L58-62)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9971,10 +10012,10 @@
       "name": "lineRangeForNode",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
       "lineRange": [
-        64,
-        75
+        65,
+        76
       ],
-      "summary": "Function lineRangeForNode (L64-75)",
+      "summary": "Function lineRangeForNode (L65-76)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -9985,10 +10026,10 @@
       "name": "CodeViewer",
       "filePath": "packages/graph-view/src/components/CodeViewer.tsx",
       "lineRange": [
-        77,
-        472
+        78,
+        475
       ],
-      "summary": "Function CodeViewer (L77-472)",
+      "summary": "Function CodeViewer (L78-475)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10435,7 +10476,7 @@
       "type": "file",
       "name": "GraphView.tsx",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
-      "summary": "GraphView.tsx — 9 functions, 0 classes, 1909 lines",
+      "summary": "GraphView.tsx — 9 functions, 0 classes, 1931 lines",
       "tags": [
         "typescript",
         "code"
@@ -10449,10 +10490,10 @@
       "name": "TourFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        102,
-        186
+        103,
+        187
       ],
-      "summary": "Function TourFitView (L102-186)",
+      "summary": "Function TourFitView (L103-187)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10463,10 +10504,10 @@
       "name": "SelectedNodeFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        189,
-        236
+        190,
+        237
       ],
-      "summary": "Function SelectedNodeFitView (L189-236)",
+      "summary": "Function SelectedNodeFitView (L190-237)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10477,10 +10518,10 @@
       "name": "EmbedCityFilterFitView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        239,
-        285
+        240,
+        286
       ],
-      "summary": "Function EmbedCityFilterFitView (L239-285)",
+      "summary": "Function EmbedCityFilterFitView (L240-286)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10491,10 +10532,10 @@
       "name": "useOverviewGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        291,
-        429
+        292,
+        430
       ],
-      "summary": "Function useOverviewGraph (L291-429)",
+      "summary": "Function useOverviewGraph (L292-430)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10505,10 +10546,10 @@
       "name": "useLayerDetailTopology",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        465,
-        1020
+        466,
+        1023
       ],
-      "summary": "Function useLayerDetailTopology (L465-1020)",
+      "summary": "Function useLayerDetailTopology (L466-1023)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10519,10 +10560,10 @@
       "name": "buildCustomFlowNode",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1028,
-        1062
+        1031,
+        1065
       ],
-      "summary": "Function buildCustomFlowNode (L1028-1062)",
+      "summary": "Function buildCustomFlowNode (L1031-1065)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10533,10 +10574,10 @@
       "name": "useLayerDetailGraph",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1078,
-        1504
+        1081,
+        1510
       ],
-      "summary": "Function useLayerDetailGraph (L1078-1504)",
+      "summary": "Function useLayerDetailGraph (L1081-1510)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10547,10 +10588,10 @@
       "name": "GraphViewInner",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1508,
-        1897
+        1514,
+        1919
       ],
-      "summary": "Function GraphViewInner (L1508-1897)",
+      "summary": "Function GraphViewInner (L1514-1919)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -10561,10 +10602,10 @@
       "name": "GraphView",
       "filePath": "packages/graph-view/src/components/GraphView.tsx",
       "lineRange": [
-        1899,
-        1909
+        1921,
+        1931
       ],
-      "summary": "Function GraphView (L1899-1909)",
+      "summary": "Function GraphView (L1921-1931)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:packages"
@@ -11281,7 +11322,7 @@
       "type": "file",
       "name": "EmbedDashboardPanel.tsx",
       "filePath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
-      "summary": "EmbedDashboardPanel.tsx — 2 functions, 0 classes, 95 lines",
+      "summary": "EmbedDashboardPanel.tsx — 2 functions, 0 classes, 107 lines",
       "tags": [
         "typescript",
         "code"
@@ -11310,9 +11351,9 @@
       "filePath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
       "lineRange": [
         69,
-        95
+        107
       ],
-      "summary": "Function EmbedDashboardPanel (L69-95)",
+      "summary": "Function EmbedDashboardPanel (L69-107)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -11322,7 +11363,7 @@
       "type": "file",
       "name": "EmbedGraphPanel.tsx",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
-      "summary": "EmbedGraphPanel.tsx — 3 functions, 0 classes, 97 lines",
+      "summary": "EmbedGraphPanel.tsx — 3 functions, 0 classes, 110 lines",
       "tags": [
         "typescript",
         "code"
@@ -11336,10 +11377,10 @@
       "name": "EmbedEscapeToOverview",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        15,
-        30
+        16,
+        31
       ],
-      "summary": "Function EmbedEscapeToOverview (L15-30)",
+      "summary": "Function EmbedEscapeToOverview (L16-31)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -11350,10 +11391,10 @@
       "name": "EmbedSizedInteractiveGraph",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        32,
-        79
+        33,
+        80
       ],
-      "summary": "Function EmbedSizedInteractiveGraph (L32-79)",
+      "summary": "Function EmbedSizedInteractiveGraph (L33-80)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -11364,10 +11405,10 @@
       "name": "EmbedGraphPanel",
       "filePath": "packages/graph-view/src/EmbedGraphPanel.tsx",
       "lineRange": [
-        81,
-        97
+        82,
+        110
       ],
-      "summary": "Function EmbedGraphPanel (L81-97)",
+      "summary": "Function EmbedGraphPanel (L82-110)",
       "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
@@ -11523,11 +11564,38 @@
       "layerId": "layer:packages"
     },
     {
+      "id": "file:packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+      "type": "file",
+      "name": "useLiquidGlassHost.ts",
+      "filePath": "packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+      "summary": "useLiquidGlassHost.ts — 1 functions, 0 classes, 16 lines",
+      "tags": [
+        "typescript",
+        "code"
+      ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/hooks/useLiquidGlassHost.ts:useLiquidGlassHost",
+      "type": "function",
+      "name": "useLiquidGlassHost",
+      "filePath": "packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+      "lineRange": [
+        5,
+        16
+      ],
+      "summary": "Function useLiquidGlassHost (L5-16)",
+      "tags": [],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
       "id": "file:packages/graph-view/src/index.css",
       "type": "file",
       "name": "index.css",
       "filePath": "packages/graph-view/src/index.css",
-      "summary": "index.css — 0 functions, 0 classes, 525 lines",
+      "summary": "index.css — 0 functions, 0 classes, 584 lines",
       "tags": [
         "css",
         "code"
@@ -11850,11 +11918,25 @@
       "type": "file",
       "name": "novadiffEmbed.ts",
       "filePath": "packages/graph-view/src/themes/novadiffEmbed.ts",
-      "summary": "novadiffEmbed.ts — 0 functions, 0 classes, 8 lines",
+      "summary": "novadiffEmbed.ts — 1 functions, 0 classes, 26 lines",
       "tags": [
         "typescript",
         "code"
       ],
+      "complexity": "simple",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/themes/novadiffEmbed.ts:resolveNovaDiffEmbedTheme",
+      "type": "function",
+      "name": "resolveNovaDiffEmbedTheme",
+      "filePath": "packages/graph-view/src/themes/novadiffEmbed.ts",
+      "lineRange": [
+        19,
+        26
+      ],
+      "summary": "Function resolveNovaDiffEmbedTheme (L19-26)",
+      "tags": [],
       "complexity": "simple",
       "layerId": "layer:packages"
     },
@@ -11904,12 +11986,12 @@
       "type": "file",
       "name": "theme-engine.ts",
       "filePath": "packages/graph-view/src/themes/theme-engine.ts",
-      "summary": "theme-engine.ts — 4 functions, 0 classes, 90 lines",
+      "summary": "theme-engine.ts — 7 functions, 0 classes, 141 lines",
       "tags": [
         "typescript",
         "code"
       ],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11923,7 +12005,7 @@
       ],
       "summary": "Function hexToRgb (L4-8)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11937,7 +12019,7 @@
       ],
       "summary": "Function deriveFromAccent (L10-31)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11951,7 +12033,49 @@
       ],
       "summary": "Function applyTheme (L34-69)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/themes/theme-engine.ts:applyLiquidGlassEmbedTheme",
+      "type": "function",
+      "name": "applyLiquidGlassEmbedTheme",
+      "filePath": "packages/graph-view/src/themes/theme-engine.ts",
+      "lineRange": [
+        86,
+        101
+      ],
+      "summary": "Function applyLiquidGlassEmbedTheme (L86-101)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/themes/theme-engine.ts:clearLiquidGlassEmbedTheme",
+      "type": "function",
+      "name": "clearLiquidGlassEmbedTheme",
+      "filePath": "packages/graph-view/src/themes/theme-engine.ts",
+      "lineRange": [
+        103,
+        113
+      ],
+      "summary": "Function clearLiquidGlassEmbedTheme (L103-113)",
+      "tags": [],
+      "complexity": "moderate",
+      "layerId": "layer:packages"
+    },
+    {
+      "id": "function:packages/graph-view/src/themes/theme-engine.ts:isLiquidGlassHost",
+      "type": "function",
+      "name": "isLiquidGlassHost",
+      "filePath": "packages/graph-view/src/themes/theme-engine.ts",
+      "lineRange": [
+        115,
+        120
+      ],
+      "summary": "Function isLiquidGlassHost (L115-120)",
+      "tags": [],
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11960,12 +12084,12 @@
       "name": "clearTheme",
       "filePath": "packages/graph-view/src/themes/theme-engine.ts",
       "lineRange": [
-        72,
-        90
+        123,
+        141
       ],
-      "summary": "Function clearTheme (L72-90)",
+      "summary": "Function clearTheme (L123-141)",
       "tags": [],
-      "complexity": "simple",
+      "complexity": "moderate",
       "layerId": "layer:packages"
     },
     {
@@ -11973,7 +12097,7 @@
       "type": "file",
       "name": "ThemeContext.tsx",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
-      "summary": "ThemeContext.tsx — 5 functions, 0 classes, 152 lines",
+      "summary": "ThemeContext.tsx — 5 functions, 0 classes, 174 lines",
       "tags": [
         "typescript",
         "code"
@@ -11987,10 +12111,10 @@
       "name": "loadFromLocalStorage",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        27,
-        39
+        33,
+        45
       ],
-      "summary": "Function loadFromLocalStorage (L27-39)",
+      "summary": "Function loadFromLocalStorage (L33-45)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -12001,10 +12125,10 @@
       "name": "saveToLocalStorage",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        41,
-        47
+        47,
+        53
       ],
-      "summary": "Function saveToLocalStorage (L41-47)",
+      "summary": "Function saveToLocalStorage (L47-53)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -12015,10 +12139,10 @@
       "name": "resolveInitialTheme",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        49,
-        57
+        55,
+        63
       ],
-      "summary": "Function resolveInitialTheme (L49-57)",
+      "summary": "Function resolveInitialTheme (L55-63)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -12029,10 +12153,10 @@
       "name": "ThemeProvider",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        66,
-        146
+        72,
+        168
       ],
-      "summary": "Function ThemeProvider (L66-146)",
+      "summary": "Function ThemeProvider (L72-168)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -12043,10 +12167,10 @@
       "name": "useTheme",
       "filePath": "packages/graph-view/src/themes/ThemeContext.tsx",
       "lineRange": [
-        148,
-        152
+        170,
+        174
       ],
-      "summary": "Function useTheme (L148-152)",
+      "summary": "Function useTheme (L170-174)",
       "tags": [],
       "complexity": "moderate",
       "layerId": "layer:packages"
@@ -13328,7 +13452,7 @@
       "type": "file",
       "name": "App.css",
       "filePath": "src/App.css",
-      "summary": "App.css — 0 functions, 0 classes, 6247 lines",
+      "summary": "App.css — 0 functions, 0 classes, 6483 lines",
       "tags": [
         "css",
         "code"
@@ -13341,7 +13465,7 @@
       "type": "file",
       "name": "App.tsx",
       "filePath": "src/App.tsx",
-      "summary": "App.tsx — 9 functions, 0 classes, 1819 lines",
+      "summary": "App.tsx — 9 functions, 0 classes, 1835 lines",
       "tags": [
         "typescript",
         "code"
@@ -13440,9 +13564,9 @@
       "filePath": "src/App.tsx",
       "lineRange": [
         130,
-        1717
+        1733
       ],
-      "summary": "Function AppMain (L130-1717)",
+      "summary": "Function AppMain (L130-1733)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -13453,10 +13577,10 @@
       "name": "WindowChrome",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1719,
-        1810
+        1735,
+        1826
       ],
-      "summary": "Function WindowChrome (L1719-1810)",
+      "summary": "Function WindowChrome (L1735-1826)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -13467,10 +13591,10 @@
       "name": "App",
       "filePath": "src/App.tsx",
       "lineRange": [
-        1812,
-        1819
+        1828,
+        1835
       ],
-      "summary": "Function App (L1812-1819)",
+      "summary": "Function App (L1828-1835)",
       "tags": [],
       "complexity": "complex",
       "layerId": "layer:src"
@@ -16825,7 +16949,7 @@
       "type": "file",
       "name": "CodeMapLoadingPreview.css",
       "filePath": "src/components/CodeMapLoadingPreview.css",
-      "summary": "CodeMapLoadingPreview.css — 0 functions, 0 classes, 267 lines",
+      "summary": "CodeMapLoadingPreview.css — 0 functions, 0 classes, 371 lines",
       "tags": [
         "css",
         "code"
@@ -19859,6 +19983,20 @@
       "weight": 1
     },
     {
+      "source": "file:electron/liquid-glass.cjs",
+      "target": "function:electron/liquid-glass.cjs:loadLiquidGlass",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:electron/liquid-glass.cjs",
+      "target": "function:electron/liquid-glass.cjs:applyLiquidGlassToWindow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:electron/llm.cjs",
       "target": "function:electron/llm.cjs:normalizeBase",
       "type": "contains",
@@ -22694,6 +22832,13 @@
       "weight": 1
     },
     {
+      "source": "file:packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+      "target": "function:packages/graph-view/src/hooks/useLiquidGlassHost.ts:useLiquidGlassHost",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:packages/graph-view/src/locales/index.ts",
       "target": "function:packages/graph-view/src/locales/index.ts:getLocale",
       "type": "contains",
@@ -22771,6 +22916,13 @@
       "weight": 1
     },
     {
+      "source": "file:packages/graph-view/src/themes/novadiffEmbed.ts",
+      "target": "function:packages/graph-view/src/themes/novadiffEmbed.ts:resolveNovaDiffEmbedTheme",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
       "source": "file:packages/graph-view/src/themes/presets.ts",
       "target": "function:packages/graph-view/src/themes/presets.ts:getPreset",
       "type": "contains",
@@ -22801,6 +22953,27 @@
     {
       "source": "file:packages/graph-view/src/themes/theme-engine.ts",
       "target": "function:packages/graph-view/src/themes/theme-engine.ts:applyTheme",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/themes/theme-engine.ts",
+      "target": "function:packages/graph-view/src/themes/theme-engine.ts:applyLiquidGlassEmbedTheme",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/themes/theme-engine.ts",
+      "target": "function:packages/graph-view/src/themes/theme-engine.ts:clearLiquidGlassEmbedTheme",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:packages/graph-view/src/themes/theme-engine.ts",
+      "target": "function:packages/graph-view/src/themes/theme-engine.ts:isLiquidGlassHost",
       "type": "contains",
       "direction": "forward",
       "weight": 1
@@ -25225,7 +25398,7 @@
     {
       "id": "layer:packages",
       "name": "packages",
-      "description": "236 files in this area",
+      "description": "237 files in this area",
       "order": 0,
       "color": null,
       "nodeIds": [
@@ -25678,6 +25851,8 @@
         "file:packages/graph-view/src/hooks/useKeyboardShortcuts.ts",
         "function:packages/graph-view/src/hooks/useKeyboardShortcuts.ts:useKeyboardShortcuts",
         "function:packages/graph-view/src/hooks/useKeyboardShortcuts.ts:formatShortcutKey",
+        "file:packages/graph-view/src/hooks/useLiquidGlassHost.ts",
+        "function:packages/graph-view/src/hooks/useLiquidGlassHost.ts:useLiquidGlassHost",
         "file:packages/graph-view/src/index.css",
         "file:packages/graph-view/src/index.ts",
         "file:packages/graph-view/src/locales/en.ts",
@@ -25703,6 +25878,7 @@
         "function:packages/graph-view/src/store.ts:layerResetIfChanged",
         "file:packages/graph-view/src/themes/index.ts",
         "file:packages/graph-view/src/themes/novadiffEmbed.ts",
+        "function:packages/graph-view/src/themes/novadiffEmbed.ts:resolveNovaDiffEmbedTheme",
         "file:packages/graph-view/src/themes/presets.ts",
         "function:packages/graph-view/src/themes/presets.ts:getPreset",
         "function:packages/graph-view/src/themes/presets.ts:getAccent",
@@ -25710,6 +25886,9 @@
         "function:packages/graph-view/src/themes/theme-engine.ts:hexToRgb",
         "function:packages/graph-view/src/themes/theme-engine.ts:deriveFromAccent",
         "function:packages/graph-view/src/themes/theme-engine.ts:applyTheme",
+        "function:packages/graph-view/src/themes/theme-engine.ts:applyLiquidGlassEmbedTheme",
+        "function:packages/graph-view/src/themes/theme-engine.ts:clearLiquidGlassEmbedTheme",
+        "function:packages/graph-view/src/themes/theme-engine.ts:isLiquidGlassHost",
         "function:packages/graph-view/src/themes/theme-engine.ts:clearTheme",
         "file:packages/graph-view/src/themes/ThemeContext.tsx",
         "function:packages/graph-view/src/themes/ThemeContext.tsx:loadFromLocalStorage",
@@ -26175,7 +26354,7 @@
     {
       "id": "layer:electron",
       "name": "electron",
-      "description": "28 files in this area",
+      "description": "29 files in this area",
       "order": 2,
       "color": null,
       "nodeIds": [
@@ -26318,6 +26497,9 @@
         "function:electron/knowledge-graph-runner.cjs:buildDiffOverlay",
         "function:electron/knowledge-graph-runner.cjs:getGitHash",
         "function:electron/knowledge-graph-runner.cjs:buildKnowledgeGraph",
+        "file:electron/liquid-glass.cjs",
+        "function:electron/liquid-glass.cjs:loadLiquidGlass",
+        "function:electron/liquid-glass.cjs:applyLiquidGlassToWindow",
         "file:electron/llm.cjs",
         "function:electron/llm.cjs:normalizeBase",
         "function:electron/llm.cjs:sendAccumulated",

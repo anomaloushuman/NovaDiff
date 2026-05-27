@@ -1,0 +1,54 @@
+{
+  "relPath": "packages/graph-view/src/themes/ThemeContext.tsx",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:59:52.519Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "L13 removed: import { applyTheme, clearTheme } from \"./theme-engine.ts\";",
+      "R13 added: import {"
+    ],
+    "changed_line_ranges": [
+      "L13 / R13-19",
+      "R80-89",
+      "L82 / R98-103",
+      "L90 / R111",
+      "R120"
+    ],
+    "cited_changed_lines": [
+      "L13 removed: import { applyTheme, clearTheme } from \"./theme-engine.ts\";",
+      "R13 added: import {",
+      "R14 added: applyLiquidGlassEmbedTheme,",
+      "R15 added: applyTheme,",
+      "R16 added: clearLiquidGlassEmbedTheme,",
+      "R17 added: clearTheme,"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function ThemeProvider (66-147)",
+      "right function ThemeProvider (72-169)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

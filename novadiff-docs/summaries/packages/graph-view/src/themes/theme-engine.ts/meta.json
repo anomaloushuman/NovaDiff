@@ -1,0 +1,53 @@
+{
+  "relPath": "packages/graph-view/src/themes/theme-engine.ts",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T06:01:48.512Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [
+      "R86 added: export function applyLiquidGlassEmbedTheme(",
+      "R103 added: export function clearLiquidGlassEmbedTheme(target: HTMLElement): void {",
+      "R115 added: export function isLiquidGlassHost(): boolean {"
+    ],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R71-121"
+    ],
+    "cited_changed_lines": [
+      "R71 added: const LIQUID_GLASS_TRANSPARENT_SURFACE_KEYS = [",
+      "R72 added: \"root\",",
+      "R73 added: \"surface\",",
+      "R74 added: \"elevated\",",
+      "R75 added: \"panel\",",
+      "R76 added: ] as const;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "right function applyLiquidGlassEmbedTheme (86-102)",
+      "right function applyTheme (34-85)",
+      "right function clearLiquidGlassEmbedTheme (103-114)",
+      "right function isLiquidGlassHost (115-122)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

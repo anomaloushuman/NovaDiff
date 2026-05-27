@@ -68,6 +68,57 @@ export function applyTheme(
   style.setProperty("--font-heading", fontMap[headingFont] ?? fontMap.serif);
 }
 
+const LIQUID_GLASS_TRANSPARENT_SURFACE_KEYS = [
+  "root",
+  "surface",
+  "elevated",
+  "panel",
+] as const;
+
+const LIQUID_GLASS_TRANSPARENT_DERIVED_KEYS = [
+  "glass-bg",
+  "glass-bg-heavy",
+  "color-accent-overlay-bg",
+  "kbd-bg",
+] as const;
+
+/** Embed on macOS liquid-glass host: keep text/accent tokens, strip painted surfaces. */
+export function applyLiquidGlassEmbedTheme(
+  config: ThemeConfig,
+  target: HTMLElement,
+): void {
+  applyTheme(config, target);
+  const style = target.style;
+  for (const key of LIQUID_GLASS_TRANSPARENT_SURFACE_KEYS) {
+    style.setProperty(`--color-${key}`, "transparent");
+  }
+  for (const key of LIQUID_GLASS_TRANSPARENT_DERIVED_KEYS) {
+    style.setProperty(`--${key}`, "transparent");
+  }
+  style.setProperty("--xy-background-color", "transparent");
+  style.setProperty("--xy-background-color-default", "transparent");
+  target.setAttribute("data-liquid-glass", "true");
+}
+
+export function clearLiquidGlassEmbedTheme(target: HTMLElement): void {
+  for (const key of LIQUID_GLASS_TRANSPARENT_SURFACE_KEYS) {
+    target.style.removeProperty(`--color-${key}`);
+  }
+  for (const key of LIQUID_GLASS_TRANSPARENT_DERIVED_KEYS) {
+    target.style.removeProperty(`--${key}`);
+  }
+  target.style.removeProperty("--xy-background-color");
+  target.style.removeProperty("--xy-background-color-default");
+  target.removeAttribute("data-liquid-glass");
+}
+
+export function isLiquidGlassHost(): boolean {
+  return (
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("app-liquid-glass")
+  );
+}
+
 /** Remove inline theme variables from a host (embed teardown). */
 export function clearTheme(target: HTMLElement, config: ThemeConfig): void {
   const preset = getPreset(config.presetId);

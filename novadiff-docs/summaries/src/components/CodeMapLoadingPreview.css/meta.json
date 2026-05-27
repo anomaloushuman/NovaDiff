@@ -1,23 +1,23 @@
 {
   "relPath": "src/components/CodeMapLoadingPreview.css",
-  "kind": "added",
-  "leftTitle": "9aadd5eb5604",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T19:35:38.161Z",
+  "generatedAt": "2026-05-27T05:54:03.044Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "R1-267"
+      "R268-371"
     ],
     "cited_changed_lines": [
-      "R1 added: /* Hide duplicate global toast bars while the code-map loader owns the bottom HUD */",
-      "R2 added: body:has([data-code-map-loader]:not(.is-exiting)) .background-activity-bar {",
-      "R3 added: visibility: hidden;",
-      "R4 added: opacity: 0;",
-      "R5 added: pointer-events: none;",
-      "R6 added: }"
+      "R269 added: @media (prefers-color-scheme: light) {",
+      "R270 added: .code-map-loading-preview {",
+      "R271 added: background: #edf4fd;",
+      "R272 added: }",
+      "R274 added: .code-map-loading-preview__viewport::after {",
+      "R275 added: background: linear-gradient("
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

@@ -26,33 +26,35 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/meta.json</h1>
-    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:14:40.347Z</div>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:51:26.994Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
 <p>The file <code>.novadiff-graph/meta.json</code> was modified.  </p>
 <ul>
-<li>Line 2: <code>lastAnalyzedAt</code> was updated.  </li>
-<li>Line 5: <code>analyzedFiles</code> was updated.</li>
+<li>Lines 2‑3 were removed:```json
+&quot;lastAnalyzedAt&quot;: &quot;2026-05-26T07:21:38.024Z&quot;,
+&quot;gitCommitHash&quot;: &quot;9aadd5eb56044d13c225925fc1e3ca8478099233&quot;,</li>
 </ul>
+<p><code>- Lines 2‑3 were added:</code>json
+&quot;lastAnalyzedAt&quot;: &quot;2026-05-27T04:48:24.798Z&quot;,
+  &quot;gitCommitHash&quot;: &quot;984f0748954ae0907a2c9505b578119841d7fc2d&quot;,
+```All other fields (<code>version</code>, <code>analyzedFiles</code>) remain unchanged.</p>
 <h3>Key changes</h3>
 <ul>
-<li><code>lastAnalyzedAt</code> changed from <code>2026-05-26T01:49:38.223Z</code> to <code>2026-05-26T07:21:38.024Z</code> (diff: L2 → R2).  </li>
-<li><code>analyzedFiles</code> increased from <code>352</code> to <code>373</code> (diff: L5 → R5).  </li>
-<li>No other fields were altered.</li>
+<li><strong><code>lastAnalyzedAt</code></strong> updated to <code>2026-05-27T04:48:24.798Z</code> (previously <code>2026-05-26T07:21:38.024Z</code>).  </li>
+<li><strong><code>gitCommitHash</code></strong> updated to <code>984f0748954ae0907a2c9505b578119841d7fc2d</code> (previously <code>9aadd5eb56044d13c225925fc1e3ca8478099233</code>).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Any code that reads this JSON will now see the new timestamp and file count.  </li>
-<li>If consumers cache based on <code>lastAnalyzedAt</code>, earlier caches may be invalidated.  </li>
-<li>The JSON schema remains unchanged; existing parsers should continue to work.</li>
+<li>The metadata now reflects the most recent analysis run.  </li>
+<li>No schema changes were made; consumers of <code>meta.json</code> that rely on these fields should continue to work.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that components expecting the previous timestamp or file count do not fail.  </li>
-<li>Run unit tests that assert the values of <code>lastAnalyzedAt</code> and <code>analyzedFiles</code>.  </li>
-<li>Perform a manual smoke test: run an analysis and confirm the file count matches the actual number of processed files.  </li>
-<li>Update documentation that hard‑codes the old values, if any.</li>
+<li><strong>Regression risk</strong>: If any logic hard‑codes the old timestamp or commit hash, it may misbehave.  </li>
+<li><strong>Test coverage</strong>: Run the targeted unit tests that assert on <code>meta.json</code> contents and perform a quick smoke test of the analysis pipeline to confirm acceptance of the new values.  </li>
+<li><strong>Documentation</strong>: If the commit hash is referenced elsewhere, verify that references are updated accordingly.</li>
 </ul>
 </article>
   </main>

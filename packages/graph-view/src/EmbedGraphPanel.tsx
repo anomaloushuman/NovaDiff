@@ -9,6 +9,7 @@ import "@xyflow/react/dist/style.css";
 import { GraphViewInner } from "./components/GraphView";
 import { useDashboardStore } from "./store";
 import { ThemeProvider } from "./themes/index";
+import { resolveNovaDiffEmbedTheme } from "./themes/novadiffEmbed";
 
 type FlowDimensions = { width: number; height: number };
 
@@ -80,9 +81,21 @@ function EmbedSizedInteractiveGraph() {
 
 export function EmbedGraphPanel() {
   const graph = useDashboardStore((s) => s.graph);
+  const [embedTheme, setEmbedTheme] = useState(resolveNovaDiffEmbedTheme);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+    const updateTheme = () => setEmbedTheme(resolveNovaDiffEmbedTheme());
+    updateTheme();
+    mediaQuery.addEventListener("change", updateTheme);
+    return () => mediaQuery.removeEventListener("change", updateTheme);
+  }, []);
 
   return (
-    <ThemeProvider metaTheme={null} scopeToHost>
+    <ThemeProvider metaTheme={embedTheme} scopeToHost>
       <div className="novadiff-graph-explorer-root novadiff-graph-embed">
         {graph ? (
           <EmbedSizedInteractiveGraph />

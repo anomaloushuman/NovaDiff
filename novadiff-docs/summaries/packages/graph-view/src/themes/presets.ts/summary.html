@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/themes/presets.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/themes/presets.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T06:01:21.651Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>In <code>packages/graph-view/src/themes/presets.ts</code> the <strong><code>light-minimal</code></strong> preset’s color palette was replaced.  </p>
+<ul>
+<li>Lines 149‑160 were removed: the old hex values for <code>root</code>, <code>surface</code>, <code>elevated</code>, <code>panel</code>, <code>text-primary</code>, <code>text-secondary</code>, <code>text-muted</code>, and all <code>node‑*</code> colors.  </li>
+<li>The same lines now contain new hex codes (e.g., <code>root: &quot;#eaf1fb&quot;</code>, <code>surface: &quot;#ffffff&quot;</code>, <code>node-file: &quot;#2f6283&quot;</code>).  </li>
+<li>No other presets, imports, or helper functions were altered.</li>
+</ul>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Preset update</strong> – <code>colors</code> for <code>id: &quot;light-minimal&quot;</code> now uses the new values shown in the diff.  </li>
+<li><strong>Removed lines</strong> – the previous palette (e.g., <code>root: &quot;#f5f3f0&quot;</code>, <code>node-file: &quot;#3a6a87&quot;</code>) is deleted.  </li>
+<li><strong>Added lines</strong> – new palette values are inserted at the same location.  </li>
+<li><strong>Scope</strong> – only the <code>light-minimal</code> preset is affected; all other code remains unchanged.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>UI appearance</strong> – the visual style of the light‑minimal theme will change wherever <code>PRESETS</code> is used.  </li>
+<li><strong>Tests</strong> – any assertions or snapshots that reference the old color values must be updated.  </li>
+<li><strong>Functionality</strong> – the change is purely cosmetic; API behavior and logic are unaffected.  </li>
+<li><strong>Contrast</strong> – unknown from the available diff/scan evidence; a review may be needed.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Visual regression</strong> – verify that snapshot or visual tests reflect the new colors.  </li>
+<li><strong>Contrast compliance</strong> – run automated audits to ensure text and node colors meet WCAG 2.1 AA.  </li>
+<li><strong>Documentation</strong> – update any docs or design tokens that mention the old <code>light-minimal</code> palette.  </li>
+<li><strong>Component usage</strong> – confirm that components consuming <code>PRESETS</code> correctly pick up the updated palette without caching stale values.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

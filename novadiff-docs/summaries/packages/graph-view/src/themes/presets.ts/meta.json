@@ -1,0 +1,32 @@
+{
+  "relPath": "packages/graph-view/src/themes/presets.ts",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T06:01:21.651Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "L149-160 / R149-160",
+      "L162-168 / R162-168"
+    ],
+    "cited_changed_lines": [
+      "L149 removed: root: \"#f5f3f0\",",
+      "L150 removed: surface: \"#eae7e3\",",
+      "L151 removed: elevated: \"#ffffff\",",
+      "L152 removed: panel: \"#f0ede9\",",
+      "L153 removed: \"text-primary\": \"#1a1a1a\",",
+      "L154 removed: \"text-secondary\": \"#6b6b6b\","
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

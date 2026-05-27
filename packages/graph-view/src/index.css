@@ -267,6 +267,22 @@ html {
   background-color: var(--color-root) !important;
 }
 
+/* React Flow dark mode paints .react-flow + __background with #141414 — strip on liquid glass */
+html.app-liquid-glass .react-flow,
+html.app-liquid-glass .react-flow.dark,
+html.app-liquid-glass [data-liquid-glass="true"] .react-flow,
+html.app-liquid-glass [data-liquid-glass="true"] .react-flow.dark {
+  --xy-background-color: transparent !important;
+  --xy-background-color-default: transparent !important;
+  background-color: transparent !important;
+}
+
+html.app-liquid-glass .react-flow__background,
+html.app-liquid-glass [data-liquid-glass="true"] .react-flow__background {
+  --xy-background-color-props: transparent !important;
+  background-color: transparent !important;
+}
+
 .novadiff-graph-embed .react-flow__background pattern circle,
 .novadiff-graph-embed .react-flow__background pattern line {
   opacity: 0.55;
@@ -522,4 +538,47 @@ html {
   color: #f87171;
   font-size: 0.85rem;
   margin-bottom: 8px;
+}
+
+/* macOS host liquid-glass mode: remove graph-view painted backgrounds entirely. */
+html.app-liquid-glass .novadiff-graph-explorer-root,
+html.app-liquid-glass .novadiff-graph-theme-host,
+html.app-liquid-glass .embed-graph-flow-host,
+html.app-liquid-glass .embed-graph-flow-pane,
+html.app-liquid-glass .novadiff-graph-embed,
+html.app-liquid-glass .novadiff-graph-embed header,
+html.app-liquid-glass .novadiff-graph-embed aside,
+html.app-liquid-glass .novadiff-graph-embed [class*="bg-root"],
+html.app-liquid-glass .novadiff-graph-embed [class*="bg-surface"],
+html.app-liquid-glass .novadiff-graph-embed [class*="bg-elevated"],
+html.app-liquid-glass .novadiff-graph-embed [class*="bg-panel"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.app-liquid-glass .react-flow__background,
+html.app-liquid-glass .react-flow__pane,
+html.app-liquid-glass .react-flow__viewport,
+html.app-liquid-glass .react-flow__minimap,
+html.app-liquid-glass [data-liquid-glass="true"] .react-flow__pane,
+html.app-liquid-glass [data-liquid-glass="true"] .react-flow__viewport {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html.app-liquid-glass .bg-root,
+html.app-liquid-glass .bg-surface,
+html.app-liquid-glass .bg-elevated,
+html.app-liquid-glass .bg-panel,
+html.app-liquid-glass [class*="bg-root/"],
+html.app-liquid-glass [class*="bg-surface/"] {
+  background-color: transparent !important;
+}
+
+html.app-liquid-glass .glass,
+html.app-liquid-glass .glass-heavy {
+  background: transparent !important;
+  backdrop-filter: none !important;
 }

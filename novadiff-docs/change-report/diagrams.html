@@ -522,7 +522,7 @@
         <h1>Diagrams</h1>
         <p class="top-subtitle">Interactive diagrams generated from the compare and the target-tree heuristic scan.</p>
       </div>
-      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 9aadd5eb5604</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: 2026-05-27T03:53:47.876Z</span></div>
+      <div class="meta"><span class="meta-chip">Bundle: Change report</span><span class="meta-chip">Baseline: 984f0748954a</span><span class="meta-chip">Target: NovaDiff</span><span class="meta-chip">Generated: </span></div>
     </div>
   </header>
   <nav class="page-nav">
@@ -538,184 +538,11 @@
   </div>
   <main class="content">
     <div class="content-main">
-      <section class="viz-card"><h2 id="change-mix">Change mix</h2><pre class="mermaid">pie showData
-    title Change kinds
-    "Added" : 21
-    "Removed" : 0
-    "Modified" : 50</pre></section>
-<section class="viz-card"><h2 id="path-depth">Path depth</h2><pre class="mermaid">xychart-beta
-    title "Path depth (segments)"
-    x-axis ["d1", "d2", "d3", "d4", "d5"]
-    y-axis "paths" 0 --> 33
-    bar [3, 20, 28, 12, 8]</pre></section>
-<section class="viz-card"><h2 id="module-import-graph-relative-imports">Module import graph (relative imports)</h2><pre class="mermaid">flowchart LR
-  electron_code_city_model_cjs["electron/code-city-model.cjs"] --> electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] --> electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] --> electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_gh_install_cjs["electron/gh-install.cjs"] --> electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_git_commit_cjs["electron/git-commit.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] --> electron_github_service_cjs["electron/github-service.cjs"]
-  electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"] --> electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_commit_context_cjs["electron/github-commit-context.cjs"] --> electron_github_service_cjs["electron/github-service.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] --> electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] --> electron_github_commit_context_cjs["electron/github-commit-context.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_writer_cjs["electron/novadiff-docs-writer.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_code_city_model_cjs["electron/code-city-model.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_git_commit_cjs["electron/git-commit.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_repo_discovery_cjs["electron/repo-discovery.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_git_publish_cjs["electron/git-publish.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_workspace_files_cjs["electron/workspace-files.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_workspace_history_cjs["electron/workspace-history.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_gh_install_cjs["electron/gh-install.cjs"]
-  electron_main_cjs["electron/main.cjs"] --> electron_export_snapshot_cjs["electron/export-snapshot.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_llm_cjs["electron/llm.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_diff_excerpt_cjs["electron/diff-excerpt.cjs"]
-  electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"] --> electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_repo_discovery_cjs["electron/repo-discovery.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"] --> src_app_types_ts["src/app/types.ts"]
-  electron_workspace_history_cjs["electron/workspace-history.cjs"] --> electron_git_service_cjs["electron/git-service.cjs"]
-  electron_workspace_history_cjs["electron/workspace-history.cjs"] --> electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  packages_graph_core_src___tests___ignore_filter_test_ts["packages/graph-core/src/__tests__/ignore-filter.test"] --> packages_graph_core_src_ignore_filter_ts["packages/graph-core/src/ignore-filter.ts"]
-  packages_graph_core_src___tests___ignore_generator_test_ts["packages/graph-core/src/__tests__/ignore-generator.t"] --> packages_graph_core_src_ignore_generator_ts["packages/graph-core/src/ignore-generator.ts"]</pre></section>
-<section class="viz-card"><h2 id="cross-file-calls-heuristic">Cross-file calls (heuristic)</h2><pre class="mermaid">flowchart LR
-  cli_src_main_rs["cli/src/main.rs"] -->|push| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_code_city_model_cjs["electron/code-city-model.cjs"] -->|blameFileOwnership| electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] -->|normalizeMarkdownDocument| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_file_summary_export_cjs["electron/file-summary-export.cjs"] -->|htmlToPdfFile| electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_gh_install_cjs["electron/gh-install.cjs"] -->|augmentPathForCli| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_gh_install_cjs["electron/gh-install.cjs"] -->|isGhInstalled| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_gh_install_cjs["electron/gh-install.cjs"] -->|resolveGhExecutable| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_gh_install_cjs["electron/gh-install.cjs"] -->|clearGhCache| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_git_commit_cjs["electron/git-commit.cjs"] -->|runGit| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_commit_cjs["electron/git-commit.cjs"] -->|tryRunGit| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|isGitRepo| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|getRepoStatus| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|getAuthStatus| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|slugFromRepoRoot| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|stagePaths| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|stageAll| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|commit| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|push| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_git_publish_cjs["electron/git-publish.cjs"] -->|createPullRequest| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"] -->|isGhInstalled| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"] -->|ghNotFoundError| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"] -->|resolveGhExecutable| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"] -->|augmentPathForCli| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_commit_context_cjs["electron/github-commit-context.cjs"] -->|getAuthStatus| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_github_commit_context_cjs["electron/github-commit-context.cjs"] -->|tryRunGh| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] -->|resolveGhExecutable| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] -->|augmentPathForCli| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] -->|ghNotFoundError| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_github_service_cjs["electron/github-service.cjs"] -->|parseGithubSlugFromUrl| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_graph_extract_structure_mjs["electron/graph/extract-structure.mjs"] -->|registerAllParsers| packages_graph_core_src_plugins_parsers_index_ts["packages/graph-core/src/plugins/parsers/index.ts"]
-  electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"] -->|GraphBuilder| packages_graph_core_src_analyzer_graph_builder_ts["packages/graph-core/src/analyzer/graph-builder.ts"]
-  electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"] -->|saveGraph| packages_graph_core_src_persistence_index_ts["packages/graph-core/src/persistence/index.ts"]
-  electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"] -->|saveMeta| packages_graph_core_src_persistence_index_ts["packages/graph-core/src/persistence/index.ts"]
-  electron_llm_cjs["electron/llm.cjs"] -->|process| packages_graph_core_src_plugins_extractors___tests___php_extractor_test_ts["packages/graph-core/src/plugins/extractors/__tests__"]
-  electron_main_cjs["electron/main.cjs"] -->|augmentPathForCli| electron_gh_path_cjs["electron/gh-path.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|runCompareEngineAsync| electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|runCompareEngine| electron_compare_runner_cjs["electron/compare-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|summarizeChange| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|summarizeChangeStream| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|probeProvider| electron_llm_cjs["electron/llm.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|stopSummaryPrefetchWorker| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|clearSummaryPrefetchCache| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|startSummaryPrefetchWorker| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getPrefetchedSummary| electron_prefetch_summaries_cjs["electron/prefetch-summaries.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|exportFileSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|readFileSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|exportSelectionSummaryArtifacts| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|readSelectionSummaryMarkdowns| electron_file_summary_export_cjs["electron/file-summary-export.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|runSecurityInsightScan| electron_security_scan_runner_cjs["electron/security-scan-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|buildCodeCityModelPayload| electron_code_city_model_cjs["electron/code-city-model.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsBundle| electron_novadiff_docs_writer_cjs["electron/novadiff-docs-writer.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|writeNovadiffDocsHtml| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|generateNovadiffDocsPdf| electron_novadiff_docs_pdf_cjs["electron/novadiff-docs-pdf.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|refreshNovadiffDocsHtmlFromDisk| electron_novadiff_docs_html_cjs["electron/novadiff-docs-html.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|buildKnowledgeGraph| electron_knowledge_graph_runner_cjs["electron/knowledge-graph-runner.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|detectGitTooling| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getAuthStatus| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getRepoStatus| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|discoverRepos| electron_repo_discovery_cjs["electron/repo-discovery.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|matchRepoForGithubRepo| electron_repo_discovery_cjs["electron/repo-discovery.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listRepos| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listPullRequests| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|isGitRepo| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|preparePrCompareRoots| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|viewPullRequest| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|previewPublish| electron_git_publish_cjs["electron/git-publish.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|executePublish| electron_git_publish_cjs["electron/git-publish.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|stagePaths| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|exportProjectSnapshotZip| electron_export_snapshot_cjs["electron/export-snapshot.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|stageDistrict| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|loadSession| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listDetectedAccounts| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getUserProfile| electron_github_service_cjs["electron/github-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getGhToolingStatus| electron_gh_install_cjs["electron/gh-install.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|installGh| electron_gh_install_cjs["electron/gh-install.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|setLocalOnlyMode| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|startGithubDeviceAuth| electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|cancelGithubDeviceAuth| electron_github_auth_flow_cjs["electron/github-auth-flow.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|setGitUser| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|workspacesRoot| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|parseGithubSlugFromUrl| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|createWorkspace| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|indexWorkspaceHistory| electron_workspace_history_cjs["electron/workspace-history.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getWorkspace| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|setActiveWorkspace| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listWorkspaces| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|updateWorkspaceLiveRepo| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|updateWorkspaceUiState| electron_workspace_store_cjs["electron/workspace-store.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|blameFileAtRef| electron_git_blame_cjs["electron/git-blame.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getCommitDetail| electron_git_commit_cjs["electron/git-commit.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|getGithubCommitContext| electron_github_commit_context_cjs["electron/github-commit-context.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listSnapshotFiles| electron_workspace_files_cjs["electron/workspace-files.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|ensureCommitSnapshot| electron_workspace_history_cjs["electron/workspace-history.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listBranches| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|listCommitsForRef| electron_git_service_cjs["electron/git-service.cjs"]
-  electron_main_cjs["electron/main.cjs"] -->|materializeCommitForCompare| electron_workspace_history_cjs["electron/workspace-history.cjs"]</pre></section>
-<section class="viz-card"><h2 id="types-classes-regex-sketch">Types / classes (regex sketch)</h2><pre class="mermaid">classDiagram
-  class CSharpExtractor
-  class ChangeAnalysis
-  class ChangeKind
-  class ClassFingerprint
-  class CppExtractor
-  class DockerfileParser
-  class DroppedEdge
-  class EnvParser
-  class FileAnalysisMeta
-  class FileChangeResult
-  class FileFingerprint
-  class FileMeta
-  class FingerprintStore
-  class FrameworkRegistry
-  class FunctionFingerprint
-  class GenericExtractor
-  class GoExtractor
-  class GraphBuilder
-  class GraphQLParser
-  class IgnoreFilter
-  class ImportFingerprint
-  class JSONConfigParser
-  class JavaExtractor
-  class LLMFileAnalysis</pre></section>
+      <section class="viz-card"><h2 id="change-mix">Change mix</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="path-depth">Path depth</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="module-import-graph-relative-imports">Module import graph (relative imports)</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="cross-file-calls-heuristic">Cross-file calls (heuristic)</h2><p><em>(empty)</em></p></section>
+<section class="viz-card"><h2 id="types-classes-regex-sketch">Types / classes (regex sketch)</h2><p><em>(empty)</em></p></section>
     </div>
     <aside class="content-side"><section class="toc-card"><div class="toc-title">On this page</div><nav class="toc" data-toc></nav></section></aside>
   </main>

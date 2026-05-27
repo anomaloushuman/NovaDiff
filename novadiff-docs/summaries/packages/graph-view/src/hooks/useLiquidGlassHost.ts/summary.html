@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/hooks/useLiquidGlassHost.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/hooks/useLiquidGlassHost.ts</h1>
+    <div class="meta">Kind: added · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:57:55.270Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p>A new hook <code>useLiquidGlassHost</code> is added to <code>packages/graph-view/src/hooks/useLiquidGlassHost.ts</code> (lines 1‑16). It tracks whether the document is in macOS liquid‑glass mode and triggers a re‑render when the mode toggles.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Imports</strong>```ts
+import { useEffect, useState } from &quot;react&quot;;
+import { isLiquidGlassHost } from &quot;../themes/theme-engine.ts&quot;;</li>
+</ul>
+<p><code>- **Hook export**</code>ts
+export function useLiquidGlassHost(): boolean
+<code>- **State initialization** – the initial value reflects the current mode:</code>ts
+const [active, setActive] = useState(isLiquidGlassHost);
+<code>- **Effect** – a `MutationObserver` watches `document.documentElement` for changes to the `class` attribute and updates `active`:</code>ts
+useEffect(() =&gt; {
+    const root = document.documentElement;
+    const sync = () =&gt; setActive(isLiquidGlassHost());
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(root, { attributes: true, attributeFilter: [&quot;class&quot;] });
+    return () =&gt; observer.disconnect();
+  }, []);
+```- **Return value** – the hook returns the current <code>active</code> boolean.</p>
+<h3>Impact</h3>
+<ul>
+<li><strong>Re‑rendering</strong> – components using the hook re‑render only when liquid‑glass mode changes.  </li>
+<li><strong>Centralization</strong> – mode detection logic is encapsulated in one place; changes to <code>isLiquidGlassHost</code> automatically propagate.  </li>
+<li><strong>Efficiency</strong> – the observer monitors only the <code>class</code> attribute, limiting DOM traversal.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>Dependency array</strong> – the <code>useEffect</code> has an empty array; if <code>isLiquidGlassHost</code> changes implementation, the hook may not react.  </li>
+<li><strong>Observer overhead</strong> – observing <code>document.documentElement</code> could be costly on very large DOM trees; benchmark on target devices.  </li>
+<li><strong>Cleanup</strong> – ensure <code>observer.disconnect()</code> runs on component unmount; test unmount scenarios.  </li>
+<li><strong>Cross‑browser support</strong> – verify <code>MutationObserver</code> behaves consistently in all target browsers, especially Safari on macOS.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

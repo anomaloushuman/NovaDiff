@@ -1,0 +1,22 @@
+{
+  "relPath": "electron/gh-path.cjs",
+  "kind": "modified",
+  "label": "Code explanation (L63-90)",
+  "selectionKey": "lines-63-90",
+  "requestedMode": "exact",
+  "effectiveMode": "exact",
+  "lineRanges": [
+    {
+      "startRow": 0,
+      "endRow": 0,
+      "leftStart": null,
+      "leftEnd": null,
+      "rightStart": 63,
+      "rightEnd": 90
+    }
+  ],
+  "symbol": null,
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:41:35.662Z"
+}

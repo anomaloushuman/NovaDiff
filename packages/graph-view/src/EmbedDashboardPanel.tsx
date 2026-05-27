@@ -9,7 +9,7 @@ import type { GraphIssue } from "@novadiff/graph-core/schema";
 import { DashboardContent } from "./App";
 import { useDashboardStore } from "./store";
 import { ThemeProvider } from "./themes/index";
-import { NOVADIFF_EMBED_THEME } from "./themes/novadiffEmbed";
+import { resolveNovaDiffEmbedTheme } from "./themes/novadiffEmbed";
 
 type FlowDimensions = { width: number; height: number };
 
@@ -71,9 +71,21 @@ export function EmbedDashboardPanel({
   graphIssues = [],
 }: EmbedDashboardPanelProps) {
   const graph = useDashboardStore((s) => s.graph);
+  const [embedTheme, setEmbedTheme] = useState(resolveNovaDiffEmbedTheme);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
+    const updateTheme = () => setEmbedTheme(resolveNovaDiffEmbedTheme());
+    updateTheme();
+    mediaQuery.addEventListener("change", updateTheme);
+    return () => mediaQuery.removeEventListener("change", updateTheme);
+  }, []);
 
   return (
-    <ThemeProvider metaTheme={NOVADIFF_EMBED_THEME} scopeToHost>
+    <ThemeProvider metaTheme={embedTheme} scopeToHost>
       <div className="novadiff-graph-explorer-root novadiff-graph-embed flex flex-col min-h-0">
         {graph ? (
           <EmbedSizedDashboard>

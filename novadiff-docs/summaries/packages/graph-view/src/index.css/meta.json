@@ -1,0 +1,34 @@
+{
+  "relPath": "packages/graph-view/src/index.css",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:56:51.766Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R270-285",
+      "R542-584"
+    ],
+    "cited_changed_lines": [
+      "R270 added: /* React Flow dark mode paints .react-flow + __background with #141414 — strip on liquid glass */",
+      "R271 added: html.app-liquid-glass .react-flow,",
+      "R272 added: html.app-liquid-glass .react-flow.dark,",
+      "R273 added: html.app-liquid-glass [data-liquid-glass=\"true\"] .react-flow,",
+      "R274 added: html.app-liquid-glass [data-liquid-glass=\"true\"] .react-flow.dark {",
+      "R275 added: --xy-background-color: transparent !important;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

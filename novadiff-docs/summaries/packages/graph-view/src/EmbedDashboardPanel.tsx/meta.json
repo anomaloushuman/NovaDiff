@@ -1,0 +1,52 @@
+{
+  "relPath": "packages/graph-view/src/EmbedDashboardPanel.tsx",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:54:25.613Z",
+  "summaryEvidence": {
+    "badges": [
+      {
+        "description": "The summary can anchor to named symbols instead of only raw lines.",
+        "key": "touched-symbols",
+        "label": "Touched symbols found",
+        "tone": "good"
+      },
+      {
+        "description": "Module wiring or public surface hints changed in the diff.",
+        "key": "surface-change",
+        "label": "Import/export surface changed",
+        "tone": "neutral"
+      }
+    ],
+    "changed_exports": [],
+    "changed_imports": [
+      "L12 removed: import { NOVADIFF_EMBED_THEME } from \"./themes/novadiffEmbed\";",
+      "R12 added: import { resolveNovaDiffEmbedTheme } from \"./themes/novadiffEmbed\";"
+    ],
+    "changed_line_ranges": [
+      "L12 / R12",
+      "R74-85",
+      "L76 / R88"
+    ],
+    "cited_changed_lines": [
+      "L12 removed: import { NOVADIFF_EMBED_THEME } from \"./themes/novadiffEmbed\";",
+      "R12 added: import { resolveNovaDiffEmbedTheme } from \"./themes/novadiffEmbed\";",
+      "R74 added: const [embedTheme, setEmbedTheme] = useState(resolveNovaDiffEmbedTheme);",
+      "R76 added: useEffect(() => {",
+      "R77 added: if (typeof window === \"undefined\" || typeof window.matchMedia !== \"function\") {",
+      "R78 added: return;"
+    ],
+    "evidence_limits": [],
+    "file_roles": [
+      "js-ts-source"
+    ],
+    "touched_symbols": [
+      "left function EmbedDashboardPanel (69-95)",
+      "right function EmbedDashboardPanel (69-107)"
+    ],
+    "verification_hints": [
+      "Run the JS/TS lint, test, and production build commands used by this repo."
+    ]
+  }
+}

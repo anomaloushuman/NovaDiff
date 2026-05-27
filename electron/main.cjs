@@ -91,6 +91,7 @@ const {
 const { spawn } = require("node:child_process");
 const { augmentPathForCli } = require("./gh-path.cjs");
 const { getGhToolingStatus, installGh } = require("./gh-install.cjs");
+const { applyLiquidGlassToWindow } = require("./liquid-glass.cjs");
 
 Object.assign(process.env, augmentPathForCli(process.env));
 
@@ -169,14 +170,17 @@ function buildMenu() {
 
 function createWindow() {
   const icon = iconPath();
+  const isMac = process.platform === "darwin";
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     minWidth: 900,
     minHeight: 560,
     show: false,
-    frame: false,
-    backgroundColor: "#05070c",
+    frame: isMac,
+    ...(isMac ? { titleBarStyle: "hiddenInset" } : {}),
+    transparent: isMac,
+    backgroundColor: isMac ? "#00000000" : "#05070c",
     ...(icon ? { icon: nativeImage.createFromPath(icon) } : {}),
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
@@ -197,6 +201,12 @@ function createWindow() {
   });
 
   mainWindow.webContents.once("did-finish-load", () => {
+    if (isMac) {
+      const result = applyLiquidGlassToWindow(mainWindow);
+      if (!result.enabled && result.reason) {
+        console.warn(`[liquid-glass] disabled: ${result.reason}`);
+      }
+    }
     emitWindowState(mainWindow);
   });
 

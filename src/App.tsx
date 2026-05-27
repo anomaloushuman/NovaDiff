@@ -674,6 +674,14 @@ function AppMain() {
   }, [showMainApp, stagePage, sidebarExpand.panelExpanded]);
 
   useEffect(() => {
+    const liquidGlass = isElectron() && windowChrome.platform === "darwin";
+    document.documentElement.classList.toggle("app-liquid-glass", liquidGlass);
+    return () => {
+      document.documentElement.classList.remove("app-liquid-glass");
+    };
+  }, [windowChrome.platform]);
+
+  useEffect(() => {
     if (!localOnlyMode) {
       return;
     }
@@ -1404,14 +1412,22 @@ function AppMain() {
           .filter(Boolean)
           .join(" ")
       : undefined;
+  const rootClassName = [
+    "app-root",
+    isElectron() && windowChrome.platform === "darwin" ? "app-root--liquid-glass" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const showMacLiquidGlass = isElectron() && windowChrome.platform === "darwin";
 
   return (
-    <div className="app-root">
+    <div className={rootClassName}>
+      {showMacLiquidGlass ? <div className="mac-liquid-drag-region" aria-hidden /> : null}
       <AppLaunchShell
         onPhaseChange={setLaunchPhase}
         shellClassName={appShellClassName}
         chrome={
-          isElectron() ? (
+          isElectron() && windowChrome.platform !== "darwin" ? (
             <WindowChrome
               state={windowChrome}
               onMinimize={() => void window.electronAPI?.minimizeWindow?.()}

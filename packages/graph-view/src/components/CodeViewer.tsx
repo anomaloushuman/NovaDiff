@@ -5,6 +5,7 @@ import { Highlight, themes } from "prism-react-renderer";
 import { useDashboardStore } from "../store";
 import { useI18n } from "../contexts/I18nContext";
 import { useNovaDiffEmbed } from "../contexts/NovaDiffEmbedContext";
+import { useTheme } from "../themes/index";
 import { ExplainCodeModal } from "./ExplainCodeModal";
 
 interface CodeViewerProps {
@@ -99,6 +100,7 @@ export default function CodeViewer({
   });
   const { t } = useI18n();
   const embed = useNovaDiffEmbed();
+  const { preset } = useTheme();
   const [selectAnchor, setSelectAnchor] = useState<number | null>(null);
   const [selectEnd, setSelectEnd] = useState<number | null>(null);
   const [explainOpen, setExplainOpen] = useState(false);
@@ -254,6 +256,7 @@ export default function CodeViewer({
   }
 
   const source = state.source;
+  const prismTheme = preset.isDark ? themes.vsDark : themes.vsLight;
   const language = source?.language ?? fallbackLanguage(node.filePath);
   const lineInfo = highlightedRange
     ? `${t.codeViewer.lines} ${highlightedRange.start}-${highlightedRange.end}`
@@ -391,7 +394,7 @@ export default function CodeViewer({
               </span>
               <span>{formatBytes(source.sizeBytes)}</span>
             </div>
-            <Highlight code={source.content} language={language} theme={themes.vsDark}>
+            <Highlight code={source.content} language={language} theme={prismTheme}>
               {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <pre
                   className={`${className} min-w-max p-0 m-0 ${

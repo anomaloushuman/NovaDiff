@@ -22,6 +22,7 @@ import type { LayerClusterFlowNode } from "./LayerClusterNode";
 import PortalNode from "./PortalNode";
 import type { PortalFlowNode } from "./PortalNode";
 import ContainerNode from "./ContainerNode";
+import { useLiquidGlassHost } from "../hooks/useLiquidGlassHost.ts";
 import type { ContainerFlowNode, ContainerNodeData } from "./ContainerNode";
 import Breadcrumb from "./Breadcrumb";
 import { FlowFitOnResize } from "./FlowFitOnResize";
@@ -373,10 +374,10 @@ function useOverviewGraph() {
       target: agg.targetLayerId,
       label: `${agg.count}`,
       style: {
-        stroke: "rgba(212,165,116,0.4)",
+        stroke: "var(--color-edge)",
         strokeWidth: Math.min(1 + Math.log2(agg.count + 1), 5),
       },
-      labelStyle: { fill: "#a39787", fontSize: 11, fontWeight: 600 },
+      labelStyle: { fill: "var(--color-text-secondary)", fontSize: 11, fontWeight: 600 },
     }));
 
     const dims = new Map<string, { width: number; height: number }>();
@@ -676,9 +677,9 @@ function useLayerDetailTopology(): LayerDetailTopology & {
     // container, so just fade everything in diff mode at this stage).
     const aggEdges: Edge[] = interContainerAggregated.map((agg, i) => {
       const baseStyle = diffMode
-        ? { stroke: "rgba(212,165,116,0.08)", strokeWidth: 1 }
+        ? { stroke: "var(--color-edge-dim)", strokeWidth: 1 }
         : {
-            stroke: "rgba(212,165,116,0.4)",
+            stroke: "var(--color-edge)",
             strokeWidth: Math.min(1 + Math.log2(agg.count + 1), 5),
           };
       return {
@@ -688,7 +689,9 @@ function useLayerDetailTopology(): LayerDetailTopology & {
         label: String(agg.count),
         style: baseStyle,
         labelStyle: {
-          fill: diffMode ? "rgba(163,151,135,0.3)" : "#a39787",
+          fill: diffMode
+            ? "color-mix(in srgb, var(--color-text-secondary) 38%, transparent)"
+            : "var(--color-text-secondary)",
           fontSize: 11,
         },
       };
@@ -728,7 +731,7 @@ function useLayerDetailTopology(): LayerDetailTopology & {
           id: `e-${portalEdgeIdx++}`,
           source: atomId,
           target: `portal:${portal.layerId}`,
-          style: { stroke: "rgba(212,165,116,0.2)", strokeWidth: 1, strokeDasharray: "4 4" },
+          style: { stroke: "var(--color-edge-dim)", strokeWidth: 1, strokeDasharray: "4 4" },
           animated: false,
         });
       }
@@ -1350,13 +1353,13 @@ function useLayerDetailGraph() {
                 strokeDasharray: "3 4",
               }
             : {
-                stroke: "rgba(212, 165, 116, 0.55)",
+                stroke: "var(--color-edge)",
                 strokeWidth: fe.type === "calls" ? 1.25 : 1.5,
               },
           labelStyle: isContains
             ? undefined
             : {
-                fill: "#a39787",
+                fill: "var(--color-text-secondary)",
                 fontSize: 9,
               },
         });
@@ -1397,8 +1400,8 @@ function useLayerDetailGraph() {
           source: realSrc,
           target: realTgt,
           label: m.type,
-          style: { stroke: "rgba(212,165,116,0.5)", strokeWidth: 1.5 },
-          labelStyle: { fill: "#a39787", fontSize: 10 },
+          style: { stroke: "var(--color-edge)", strokeWidth: 1.5 },
+          labelStyle: { fill: "var(--color-text-secondary)", fontSize: 10 },
         });
       }
       if (inflated === 0) {
@@ -1417,8 +1420,8 @@ function useLayerDetailGraph() {
         source: e.source,
         target: e.target,
         label: e.type,
-        style: { stroke: "rgba(212,165,116,0.5)", strokeWidth: 1.5 },
-        labelStyle: { fill: "#a39787", fontSize: 10 },
+        style: { stroke: "var(--color-edge)", strokeWidth: 1.5 },
+        labelStyle: { fill: "var(--color-text-secondary)", fontSize: 10 },
       });
     }
     return out;
@@ -1465,7 +1468,7 @@ function useLayerDetailGraph() {
             strokeDasharray: undefined,
           },
           labelStyle: {
-            fill: embedMode ? "#7ee8ff" : "#d4a574",
+            fill: embedMode ? "var(--color-accent-bright)" : "var(--color-accent)",
             fontSize: 11,
             fontWeight: 600,
           },
@@ -1482,7 +1485,10 @@ function useLayerDetailGraph() {
           strokeWidth: 1,
           strokeDasharray: dashPattern ?? "3 4",
         },
-        labelStyle: { fill: "rgba(163,151,135,0.2)", fontSize: 10 },
+        labelStyle: {
+          fill: "color-mix(in srgb, var(--color-text-secondary) 30%, transparent)",
+          fontSize: 10,
+        },
       };
     });
   }, [expandedEdges, topo.portalEdges, selectedNodeId, embedMode]);
@@ -1524,6 +1530,15 @@ export function GraphViewInner() {
   const tourFitPending = useDashboardStore((s) => s.tourFitPending);
   const { preset } = useTheme();
   const { embedMode = false } = useNovaDiffEmbed();
+  const liquidGlass = useLiquidGlassHost();
+  const flowSurfaceStyle = liquidGlass
+    ? ({
+        backgroundColor: "transparent",
+        // React Flow dark mode default plate (#141414)
+        ["--xy-background-color" as string]: "transparent",
+        ["--xy-background-color-default" as string]: "transparent",
+      } as React.CSSProperties)
+    : undefined;
 
   const graphFingerprint = useMemo(() => {
     if (!graph) {
@@ -1801,6 +1816,7 @@ export function GraphViewInner() {
       <ReactFlow
         nodes={nodes}
         edges={flowEdges}
+        style={flowSurfaceStyle}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeClick={onNodeClick}
@@ -1829,12 +1845,14 @@ export function GraphViewInner() {
         }
         colorMode={preset.isDark ? "dark" : "light"}
       >
-        <Background
-          variant={embedMode ? BackgroundVariant.Lines : BackgroundVariant.Dots}
-          color="var(--color-edge-dot)"
-          gap={embedMode ? 28 : 20}
-          size={embedMode ? 0.4 : 1}
-        />
+        {!liquidGlass ? (
+          <Background
+            variant={embedMode ? BackgroundVariant.Lines : BackgroundVariant.Dots}
+            color="var(--color-edge-dot)"
+            gap={embedMode ? 28 : 20}
+            size={embedMode ? 0.4 : 1}
+          />
+        ) : null}
         <Controls orientation={embedMode ? "horizontal" : "vertical"} />
         {nodes.length < 400 ? (
           <MiniMap
@@ -1857,7 +1875,9 @@ export function GraphViewInner() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "color-mix(in srgb, var(--color-root) 55%, transparent)",
+            background: liquidGlass
+              ? "transparent"
+              : "color-mix(in srgb, var(--color-root) 55%, transparent)",
             pointerEvents: "none",
             zIndex: 10,
           }}
@@ -1885,7 +1905,9 @@ export function GraphViewInner() {
             borderRadius: 999,
             fontSize: 12,
             color: "var(--color-accent-bright)",
-            background: "color-mix(in srgb, var(--color-root) 72%, transparent)",
+            background: liquidGlass
+              ? "transparent"
+              : "color-mix(in srgb, var(--color-root) 72%, transparent)",
             border: "1px solid color-mix(in srgb, var(--color-accent-bright) 25%, transparent)",
           }}
         >

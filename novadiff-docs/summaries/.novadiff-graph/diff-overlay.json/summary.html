@@ -26,28 +26,34 @@
 <body>
   <header class="top">
     <h1>.novadiff-graph/diff-overlay.json</h1>
-    <div class="meta">Kind: removed · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T06:49:32.092Z</div>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:50:22.095Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p>The file <strong><code>.novadiff-graph/diff-overlay.json</code></strong> was deleted. It previously stored JSON metadata with keys <code>&quot;changedFiles&quot;</code>, <code>&quot;changedNodeIds&quot;</code>, <code>&quot;affectedNodeIds&quot;</code>, and a timestamp.</p>
+<p>The <code>diff-overlay.json</code> file was updated: the <code>generatedAt</code> timestamp changed from <code>2026‑05‑26T07:21:38.024Z</code> to <code>2026‑05‑27T04:48:24.800Z</code> (L4).<br>The <code>changedFiles</code> array was trimmed to only four entries:  </p>
+<ul>
+<li><code>.novadiff-graph/diff-overlay.json</code> (L5)  </li>
+<li><code>.novadiff-graph/knowledge-graph.json</code> (L6)  </li>
+<li><code>.novadiff-graph/meta.json</code> (L7)  </li>
+<li><code>src/App.css</code> (L27)<br>All other file paths were removed.<br>The <code>changedNodeIds</code> array was cleared (L28).</li>
+</ul>
 <h3>Key changes</h3>
 <ul>
-<li>Entire file removed (lines 1‑430 deleted).  </li>
-<li>No other code changes appear in this diff.</li>
+<li>Timestamp update – <code>generatedAt</code> changed (L4).  </li>
+<li><code>changedFiles</code> now contains only the four files listed above (L5‑L8, L27).  </li>
+<li><code>changedNodeIds</code> is an empty array (L28).</li>
 </ul>
 <h3>Impact</h3>
 <ul>
-<li>Any component or service that reads this file will throw a file‑not‑found error unless it is guarded.  </li>
-<li>Tests that assert the file’s existence or its contents will fail.  </li>
-<li>The removal eliminates the overhead of reading/parsing the JSON at startup, but the benefit is negligible.</li>
+<li>Downstream consumers will no longer receive change notifications for the removed files; if those files are required, updates will be missed.  </li>
+<li>The JSON payload is smaller, reducing parsing and transmission overhead.  </li>
+<li>Tools that previously expected the larger <code>changedFiles</code> list may need to be updated.</li>
 </ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>Verify that any UI or logic that depended on the diff overlay data has been removed or protected against missing data.  </li>
-<li>Run the full test suite to catch residual references to the deleted file.  </li>
-<li>Update documentation or README sections that mention the diff overlay feature.  </li>
-<li>Ensure production builds do not expect this file; otherwise, the app may crash on launch.</li>
+<li>Verify that UI diff viewers and CI checks still function with the reduced file list.  </li>
+<li>Confirm that clearing <code>changedNodeIds</code> was intentional; run a smoke test to ensure no node‑level changes are omitted.  </li>
+<li>Ensure the new <code>generatedAt</code> value is produced by the build pipeline, not hard‑coded.</li>
 </ul>
 </article>
   </main>

@@ -1,0 +1,34 @@
+{
+  "relPath": "src/App.css",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
+  "rightTitle": "NovaDiff",
+  "generatedAt": "2026-05-27T05:21:55.186Z",
+  "summaryEvidence": {
+    "badges": [],
+    "changed_exports": [],
+    "changed_imports": [],
+    "changed_line_ranges": [
+      "R130-195",
+      "R2929-2966"
+    ],
+    "cited_changed_lines": [
+      "R130 added: html.app-liquid-glass,",
+      "R131 added: html.app-liquid-glass body {",
+      "R132 added: background: transparent;",
+      "R133 added: }",
+      "R135 added: .app-root--liquid-glass {",
+      "R136 added: --mac-liquid-drag-height: 34px;"
+    ],
+    "evidence_limits": [
+      "No named symbol spans were detected for this file with the current heuristic scanner."
+    ],
+    "file_roles": [
+      "source"
+    ],
+    "touched_symbols": [],
+    "verification_hints": [
+      "Run the nearest targeted tests and a quick manual smoke test for the touched area."
+    ]
+  }
+}

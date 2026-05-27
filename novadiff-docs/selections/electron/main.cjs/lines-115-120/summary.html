@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>electron/main.cjs · Code explanation (L115-120) · NovaDiff selection</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>electron/main.cjs · Code explanation (L115-120)</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Requested mode: exact · Effective mode: exact · Generated: 2026-05-27T06:24:48.674Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>What it does<code>getTargetWindow</code> determines the <code>BrowserWindow</code> instance that should receive an action.It accepts an <code>event</code> (typically an IPC event) and returns either the window that sent the event, the currently focused window, or falls back to a global <code>mainWindow</code> if neither is available.</h3>
+<h3>How it works1. <strong>Check for a sender</strong> – <code>if (event?.sender)</code> uses optional chaining to see if the event carries a <code>sender</code>.2. *<em>Return the sender’s window</em></h3>
+<ul>
+<li>– <code>BrowserWindow.fromWebContents(event.sender)</code> converts the <code>WebContents</code> of the sender into its owning <code>BrowserWindow</code>.3. *<em>Fallback to <code>mainWindow</code></em></li>
+<li>– If the conversion yields <code>null</code> or <code>undefined</code>, the nullish coalescing operator (<code>??</code>) returns <code>mainWindow</code>.4. *<em>No sender case</em></li>
+<li>– If <code>event?.sender</code> is falsy, the function calls <code>BrowserWindow.getFocusedWindow()</code> to get the window currently in focus.5. *<em>Final fallback</em></li>
+<li>– Again, <code>?? mainWindow</code> ensures a window is always returned, even if no window is focused.</li>
+</ul>
+<h3>Notes for reviewers- <code>mainWindow</code> is referenced but not defined in the snippet; confirm it is a valid global <code>BrowserWindow</code> elsewhere.- The function guarantees a non‑null return, which is useful for IPC handlers that need a target window.- Consider whether the fallback to <code>mainWindow</code> is appropriate in all contexts (e.g., when no window should be targeted).- Ensure that <code>BrowserWindow.fromWebContents</code> and <code>getFocusedWindow</code> are imported from Electron; otherwise the code will fail at runtime.</h3>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

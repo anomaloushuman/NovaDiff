@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/EmbedDashboardPanel.tsx · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/EmbedDashboardPanel.tsx</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:54:25.613Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/EmbedDashboardPanel.tsx</code> now resolves the embed theme at runtime instead of using a static constant. The component tracks the user’s preferred color scheme and updates the theme accordingly.</p>
+<h3>Key changes</h3>
+<ul>
+<li><strong>Import swap</strong> – <code>NOVADIFF_EMBED_THEME</code> removed (L12); <code>resolveNovaDiffEmbedTheme</code> added (R12).  </li>
+<li><strong>State added</strong> – <code>const [embedTheme, setEmbedTheme] = useState(resolveNovaDiffEmbedTheme);</code> (R74).  </li>
+<li><strong>Effect added</strong> – <code>useEffect</code> listens to <code>prefers-color-scheme</code> changes and updates <code>embedTheme</code> (R76‑R85).  </li>
+<li><strong>ThemeProvider updated</strong> – <code>metaTheme={embedTheme}</code> replaces the static theme (R88).  </li>
+<li>Minor spacing and unused‑import cleanup.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>UX</strong> – The panel now reflects system dark/light mode.  </li>
+<li><strong>Maintainability</strong> – Theme logic is centralized in <code>resolveNovaDiffEmbedTheme</code>.  </li>
+<li><strong>Performance</strong> – The effect runs only on mount and when the media query changes; negligible cost.  </li>
+<li><strong>API</strong> – No changes to props or rendering logic.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li><strong>SSR</strong> – The effect checks <code>typeof window</code>; confirm a fallback theme renders correctly on the server.  </li>
+<li><strong>Browser support</strong> – Verify graceful fallback when <code>matchMedia</code> or its event API is unavailable.  </li>
+<li><strong>Theme resolution</strong> – Ensure <code>resolveNovaDiffEmbedTheme</code> returns the expected theme object; run unit tests for this helper.  </li>
+<li><strong>Visual regression</strong> – Capture screenshots of the embed panel in both light and dark modes to detect unintended styling changes.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

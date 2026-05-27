@@ -26,29 +26,30 @@
 <body>
   <header class="top">
     <h1>packages/graph-view/src/components/CodeViewer.tsx</h1>
-    <div class="meta">Kind: modified · Baseline: 9aadd5eb5604 · Target: NovaDiff · Generated: 2026-05-26T19:50:52.515Z</div>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T05:58:19.502Z</div>
   </header>
   <main>
     <article class="md"><h3>Overview</h3>
-<p><code>packages/graph-view/src/components/CodeViewer.tsx</code> was refactored to improve line‑range handling, scrolling, and the explain‑code workflow. The component now imports <code>useRef</code> and the <code>GraphNode</code> type from <code>@novadiff/graph-core/types</code> (see R1‑R2). A new helper <code>lineRangeForNode</code> (R63‑R76) extracts a <code>[start, end]</code> pair from a node’s <code>lineRange</code> or from the numeric suffix of its ID.  </p>
+<p>The <code>CodeViewer</code> component in <code>packages/graph-view/src/components/CodeViewer.tsx</code> now obtains the current theme via the <code>useTheme</code> hook and applies it to the Prism‑React‑Renderer theme instead of the hard‑coded <code>vsDark</code>. This change is reflected in the import, state extraction, and the <code>Highlight</code> component.</p>
 <h3>Key changes</h3>
 <ul>
-<li><strong>Imports</strong> – added <code>useRef</code> and <code>GraphNode</code> (R1‑R2).  </li>
-<li><strong><code>lineRangeForNode</code></strong> – parses <code>node.lineRange</code> or the ID suffix to return a <code>[number, number]</code> or <code>null</code> (R63‑R76).  </li>
-<li><strong>Highlighting logic</strong> – <code>highlightedRange</code> now uses <code>lineRangeForNode</code> when <code>node.lineRange</code> is absent (R196‑R204).  </li>
-<li><strong>Explain‑code range</strong> – <code>explainRange</code> is derived from <code>userSelection</code> or the node’s range (R263‑R264).  </li>
-<li><strong>Explain‑code call</strong> – passes <code>explainRange.start</code>/<code>end</code> instead of <code>userSelection</code> (R285‑R286).  </li>
-<li><strong>Scroll target</strong> – <code>scrollTargetLineRef</code> tracks the line to scroll to, updated in a <code>useEffect</code> (R206‑R238).  </li>
-<li><strong>UI</strong> – button text now shows “Explain code” or “Explain function” based on selection (R337).  </li>
-<li><strong>Modal subtitle</strong> – displays the node’s file path and the selected line range (R454‑R455).</li>
+<li>Added import: <code>import { useTheme } from &quot;../themes/index&quot;;</code> (line 8).  </li>
+<li>Extracted theme preset: <code>const { preset } = useTheme();</code> (line 103).  </li>
+<li>Introduced <code>prismTheme</code> selector: <code>const prismTheme = preset.isDark ? themes.vsDark : themes.vsLight;</code> (line 259).  </li>
+<li>Updated <code>Highlight</code> usage: <code>theme={prismTheme}</code> replaces <code>theme={themes.vsDark}</code> (lines 394‑397).  </li>
+<li><code>lineRangeForNode</code> logic unchanged; only line numbers shifted (original lines 64‑472 → 65‑475).</li>
 </ul>
 <h3>Impact</h3>
-<p>The viewer now correctly highlights node ranges even when <code>lineRange</code> is missing, and the explain‑code feature uses the accurate range. Scrolling to the highlighted line is smoother and avoids redundant scrolls. UI changes improve clarity for users selecting lines or functions.</p>
+<ul>
+<li>The component now reflects the global dark/light mode, improving visual consistency.  </li>
+<li>Centralizes theme logic, reducing duplication across the codebase.  </li>
+<li>Requires that <code>CodeViewer</code> be rendered within a <code>useTheme</code> provider; otherwise <code>preset</code> will be undefined.</li>
+</ul>
 <h3>Risks &amp; follow‑ups</h3>
 <ul>
-<li>The new <code>lineRangeForNode</code> assumes numeric ID suffixes; if node IDs change format, the helper may return <code>null</code>.  </li>
-<li>The refactor removes the old <code>node.lineRange</code> check; ensure downstream consumers do not rely on the previous logic.  </li>
-<li>No tests were updated in the diff; run the existing test suite to confirm behavior.</li>
+<li><strong>Missing provider</strong> – Verify all mounts of <code>CodeViewer</code> are wrapped in the theme context.  </li>
+<li><strong>Theme switch latency</strong> – Ensure that toggling the theme updates <code>prismTheme</code> immediately; test that highlight colors change on mode switch.  </li>
+<li><strong>Legacy hard‑coded theme</strong> – Search for remaining <code>themes.vsDark</code> imports in other components and update them to use <code>useTheme</code> if necessary.</li>
 </ul>
 </article>
   </main>

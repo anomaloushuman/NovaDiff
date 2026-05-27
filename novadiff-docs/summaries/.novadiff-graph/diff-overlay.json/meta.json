@@ -1,23 +1,27 @@
 {
   "relPath": ".novadiff-graph/diff-overlay.json",
-  "kind": "removed",
-  "leftTitle": "9aadd5eb5604",
+  "kind": "modified",
+  "leftTitle": "984f0748954a",
   "rightTitle": "NovaDiff",
-  "generatedAt": "2026-05-26T06:49:32.092Z",
+  "generatedAt": "2026-05-27T05:50:22.095Z",
   "summaryEvidence": {
     "badges": [],
     "changed_exports": [],
     "changed_imports": [],
     "changed_line_ranges": [
-      "L1-430"
+      "L4 / R4",
+      "L9-33 / R9-11",
+      "L35-76 / R13",
+      "L79-313 / R16-24",
+      "L315-488 / R26"
     ],
     "cited_changed_lines": [
-      "L1 removed: {",
-      "L2 removed: \"version\": \"1.0.0\",",
-      "L3 removed: \"baseBranch\": \"novadiff-compare\",",
-      "L4 removed: \"generatedAt\": \"2026-05-21T10:37:57.186Z\",",
-      "L5 removed: \"changedFiles\": [",
-      "L6 removed: \".novadiff-graph/config.json\","
+      "L4 removed: \"generatedAt\": \"2026-05-26T07:21:38.024Z\",",
+      "R4 added: \"generatedAt\": \"2026-05-27T04:48:24.800Z\",",
+      "L9 removed: \"cli/src/main.rs\",",
+      "L10 removed: \"electron/code-city-model.cjs\",",
+      "L11 removed: \"electron/git-service.cjs\",",
+      "L12 removed: \"electron/knowledge-graph-runner.cjs\","
     ],
     "evidence_limits": [
       "No named symbol spans were detected for this file with the current heuristic scanner."

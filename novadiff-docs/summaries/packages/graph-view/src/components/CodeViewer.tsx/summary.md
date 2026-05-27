@@ -1,20 +1,19 @@
 ### Overview
-`packages/graph-view/src/components/CodeViewer.tsx` was refactored to improve line‑range handling, scrolling, and the explain‑code workflow. The component now imports `useRef` and the `GraphNode` type from `@novadiff/graph-core/types` (see R1‑R2). A new helper `lineRangeForNode` (R63‑R76) extracts a `[start, end]` pair from a node’s `lineRange` or from the numeric suffix of its ID.  
+The `CodeViewer` component in `packages/graph-view/src/components/CodeViewer.tsx` now obtains the current theme via the `useTheme` hook and applies it to the Prism‑React‑Renderer theme instead of the hard‑coded `vsDark`. This change is reflected in the import, state extraction, and the `Highlight` component.
 
 ### Key changes
-- **Imports** – added `useRef` and `GraphNode` (R1‑R2).  
-- **`lineRangeForNode`** – parses `node.lineRange` or the ID suffix to return a `[number, number]` or `null` (R63‑R76).  
-- **Highlighting logic** – `highlightedRange` now uses `lineRangeForNode` when `node.lineRange` is absent (R196‑R204).  
-- **Explain‑code range** – `explainRange` is derived from `userSelection` or the node’s range (R263‑R264).  
-- **Explain‑code call** – passes `explainRange.start`/`end` instead of `userSelection` (R285‑R286).  
-- **Scroll target** – `scrollTargetLineRef` tracks the line to scroll to, updated in a `useEffect` (R206‑R238).  
-- **UI** – button text now shows “Explain code” or “Explain function” based on selection (R337).  
-- **Modal subtitle** – displays the node’s file path and the selected line range (R454‑R455).  
+- Added import: `import { useTheme } from "../themes/index";` (line 8).  
+- Extracted theme preset: `const { preset } = useTheme();` (line 103).  
+- Introduced `prismTheme` selector: `const prismTheme = preset.isDark ? themes.vsDark : themes.vsLight;` (line 259).  
+- Updated `Highlight` usage: `theme={prismTheme}` replaces `theme={themes.vsDark}` (lines 394‑397).  
+- `lineRangeForNode` logic unchanged; only line numbers shifted (original lines 64‑472 → 65‑475).
 
 ### Impact
-The viewer now correctly highlights node ranges even when `lineRange` is missing, and the explain‑code feature uses the accurate range. Scrolling to the highlighted line is smoother and avoids redundant scrolls. UI changes improve clarity for users selecting lines or functions.
+- The component now reflects the global dark/light mode, improving visual consistency.  
+- Centralizes theme logic, reducing duplication across the codebase.  
+- Requires that `CodeViewer` be rendered within a `useTheme` provider; otherwise `preset` will be undefined.
 
 ### Risks & follow‑ups
-- The new `lineRangeForNode` assumes numeric ID suffixes; if node IDs change format, the helper may return `null`.  
-- The refactor removes the old `node.lineRange` check; ensure downstream consumers do not rely on the previous logic.  
-- No tests were updated in the diff; run the existing test suite to confirm behavior.
+- **Missing provider** – Verify all mounts of `CodeViewer` are wrapped in the theme context.  
+- **Theme switch latency** – Ensure that toggling the theme updates `prismTheme` immediately; test that highlight colors change on mode switch.  
+- **Legacy hard‑coded theme** – Search for remaining `themes.vsDark` imports in other components and update them to use `useTheme` if necessary.

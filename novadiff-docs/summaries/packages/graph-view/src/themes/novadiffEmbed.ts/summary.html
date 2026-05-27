@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>packages/graph-view/src/themes/novadiffEmbed.ts · NovaDiff summary</title>
+  <style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif;
+    background: #0d1117; color: #e6edf3; line-height: 1.55; font-size: 14px; }
+  .top { padding: 16px 20px; border-bottom: 1px solid #30363d; background: #161b22; }
+  .top h1 { margin: 0 0 6px; font-size: 1.05rem; font-weight: 600; word-break: break-all; }
+  .meta { font-size: 0.82rem; color: #8b949e; }
+  main { padding: 18px 22px; max-width: 900px; }
+  .md { font-size: 0.92rem; }
+  .md h1, .md h2, .md h3 { margin-top: 1.1em; margin-bottom: 0.45em; color: #f0f6fc; }
+  .md pre { background: #161b22; padding: 12px; border-radius: 8px; overflow: auto;
+    border: 1px solid #30363d; font-size: 0.8rem; white-space: pre-wrap; }
+  .md code { background: #21262d; padding: 2px 5px; border-radius: 4px; font-size: 0.85em; }
+  .md pre code { background: none; padding: 0; }
+  .md table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.86rem; }
+  .md th, .md td { border: 1px solid #30363d; padding: 6px 8px; text-align: left; }
+  .mermaid { margin: 14px 0; overflow-x: auto; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <h1>packages/graph-view/src/themes/novadiffEmbed.ts</h1>
+    <div class="meta">Kind: modified · Baseline: 984f0748954a · Target: NovaDiff · Generated: 2026-05-27T06:00:24.606Z</div>
+  </header>
+  <main>
+    <article class="md"><h3>Overview</h3>
+<p><code>packages/graph-view/src/themes/novadiffEmbed.ts</code> replaces the static export <code>NOVADIFF_EMBED_THEME</code> (lines 3‑4) with a runtime resolver <code>resolveNovaDiffEmbedTheme</code>. The resolver selects a dark or light theme based on the browser’s <code>prefers-color-scheme</code> media query, defaulting to the dark theme when the query is unavailable.</p>
+<h3>Key changes</h3>
+<ul>
+<li>Removed the exported constant <code>NOVADIFF_EMBED_THEME</code>.  </li>
+<li>Added <code>EMBED_DARK_THEME</code> (lines 3‑7) and <code>EMBED_LIGHT_THEME</code> (lines 9‑13).  <ul>
+<li>Dark theme: <code>presetId: &quot;dark-ocean&quot;</code>, <code>accentId: &quot;purple&quot;</code>, <code>headingFont: &quot;sans&quot;</code>.  </li>
+<li>Light theme: <code>presetId: &quot;light-minimal&quot;</code>, <code>accentId: &quot;ocean&quot;</code>, <code>headingFont: &quot;sans&quot;</code>.</li>
+</ul>
+</li>
+<li>Introduced <code>export function resolveNovaDiffEmbedTheme(): ThemeConfig</code> (lines 19‑26) that returns the appropriate theme.  </li>
+<li>Updated the comment block (lines 15‑18) to describe dynamic resolution.  </li>
+<li>The file now exposes only the resolver function.</li>
+</ul>
+<h3>Impact</h3>
+<ul>
+<li><strong>Breaking change</strong>: Imports of <code>NOVADIFF_EMBED_THEME</code> will fail; callers must use <code>resolveNovaDiffEmbedTheme()</code>.  </li>
+<li><strong>Runtime behavior</strong>: Theme selection adapts to the user’s OS/browser color scheme via <code>window.matchMedia(&quot;(prefers-color-scheme: light)&quot;)</code>.  </li>
+<li><strong>Fallback</strong>: If <code>window.matchMedia</code> is unavailable, the function returns the dark theme.  </li>
+<li><strong>Performance</strong>: A single <code>matchMedia</code> call per resolution; negligible overhead.  </li>
+<li><strong>Testing</strong>: Tests that relied on the static theme may need to be updated to account for the dynamic resolver.</li>
+</ul>
+<h3>Risks &amp; follow‑ups</h3>
+<ul>
+<li>Search the codebase for <code>NOVADIFF_EMBED_THEME</code> imports and replace them with calls to <code>resolveNovaDiffEmbedTheme()</code>.  </li>
+<li>Verify that any documentation or README references to the old constant are updated.  </li>
+<li>Ensure target browsers support <code>window.matchMedia</code>; the fallback covers missing support.</li>
+</ul>
+</article>
+  </main>
+<script>window.__PDF_READY = true;</script>
+</body>
+</html>

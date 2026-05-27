@@ -127,6 +127,204 @@ body {
   min-height: 0;
 }
 
+html.app-liquid-glass,
+html.app-liquid-glass body {
+  background: transparent;
+}
+
+.app-root--liquid-glass {
+  --mac-liquid-drag-height: 34px;
+  background: transparent;
+}
+
+.app-root--liquid-glass .app-shell {
+  background: transparent;
+  padding-top: var(--mac-liquid-drag-height);
+}
+
+.app-root--liquid-glass .mac-liquid-drag-region {
+  position: fixed;
+  top: 0;
+  left: 78px;
+  right: 0;
+  height: var(--mac-liquid-drag-height);
+  z-index: 9000;
+  background: transparent;
+  -webkit-app-region: drag;
+  pointer-events: auto;
+}
+
+.app-root--liquid-glass .window-chrome {
+  display: none;
+}
+
+.app-root--liquid-glass .sidebar,
+.app-root--liquid-glass .workspace,
+.app-root--liquid-glass .launch-panel--side,
+.app-root--liquid-glass .launch-panel--main,
+.app-root--liquid-glass .launch-panel--insights,
+.app-root--liquid-glass .doc-workspace-panel,
+.app-root--liquid-glass .insights-workspace-panel,
+.app-root--liquid-glass .novadiff-graph-shell {
+  background: transparent !important;
+  background-image: none !important;
+  border-color: color-mix(in srgb, var(--border) 55%, transparent);
+  box-shadow: none !important;
+}
+
+.app-root--liquid-glass .sidebar::before {
+  display: none;
+}
+
+.app-root--liquid-glass .workspace,
+.app-root--liquid-glass .workspace > *,
+.app-root--liquid-glass .doc-workspace,
+.app-root--liquid-glass .doc-workspace > *,
+.app-root--liquid-glass .insights-workspace,
+.app-root--liquid-glass .insights-workspace > * {
+  background: transparent;
+}
+
+/* Sidebar-over-content mode on macOS: blur workspace only, no dark scrim overlay. */
+.app-root--liquid-glass .app-shell--sidebar-overlay .launch-panel--main::before {
+  /* Backdrop-filter needs at least a tiny alpha fill to be noticeable (on macOS Safari/Chromium). */
+  background: rgba(0, 0, 0, 0.02) !important;
+  z-index: 60000;
+  backdrop-filter: blur(50px) saturate(120%) contrast(90%);
+  -webkit-backdrop-filter: blur(50px) saturate(120%) contrast(90%);
+}
+
+/* Animate page-content de-emphasis when sidebar overlays on macOS. */
+html.app-liquid-glass .launch-panel--main .workspace-stage,
+html.app-liquid-glass .launch-panel--main .workspace-stage-inner,
+html.app-liquid-glass .code-city-body-mount:not([data-code-city-expanded]) {
+  transition:
+    filter 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.24s ease;
+}
+
+/* Expanded sidebar: make page content unreadable and dimmed (knowledge graph + other pages). */
+html.app-liquid-glass.app-sidebar-expanded .launch-panel--main .workspace-stage,
+html.app-liquid-glass.app-sidebar-expanded .launch-panel--main .workspace-stage-inner {
+  filter: blur(50px);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Code City / graph canvas can be body-portaled; blur it too while sidebar overlays on macOS. */
+html.app-liquid-glass.app-sidebar-expanded .code-city-body-mount:not([data-code-city-expanded]) {
+  filter: blur(50px);
+  opacity: 0.2;
+}
+
+.app-root--liquid-glass .novadiff-graph-shell .novadiff-graph-explorer-root,
+.app-root--liquid-glass .novadiff-graph-shell .novadiff-graph-embed,
+.app-root--liquid-glass .novadiff-graph-shell .novadiff-graph-theme-host,
+.app-root--liquid-glass .novadiff-graph-shell .novadiff-graph-inspector,
+.app-root--liquid-glass .novadiff-graph-shell .novadiff-graph-inspector-head,
+.app-root--liquid-glass .novadiff-graph-shell header,
+.app-root--liquid-glass .novadiff-graph-shell aside,
+.app-root--liquid-glass .novadiff-graph-shell [class*="bg-root"],
+.app-root--liquid-glass .novadiff-graph-shell [class*="bg-surface"],
+.app-root--liquid-glass .novadiff-graph-shell [class*="bg-elevated"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.app-root--liquid-glass .novadiff-graph-shell .react-flow__background,
+.app-root--liquid-glass .novadiff-graph-shell .react-flow__pane {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.app-root--liquid-glass button,
+.app-root--liquid-glass .btn-primary,
+.app-root--liquid-glass .btn-secondary,
+.app-root--liquid-glass .doc-workspace-btn,
+.app-root--liquid-glass .doc-workspace-copy-btn,
+.app-root--liquid-glass .code-city-control-btn,
+.app-root--liquid-glass .workspace-setup .compare-fab {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border-color: color-mix(in srgb, var(--border) 70%, transparent);
+}
+
+/* Knowledge graph embed — strip host + theme plates so native glass shows through */
+html.app-liquid-glass .novadiff-graph-shell {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  --color-root: transparent !important;
+  --color-surface: transparent !important;
+  --color-elevated: transparent !important;
+  --color-panel: transparent !important;
+  --glass-bg: transparent !important;
+  --glass-bg-heavy: transparent !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-theme-host,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-theme-host[data-liquid-glass="true"] {
+  --color-root: transparent !important;
+  --color-surface: transparent !important;
+  --color-elevated: transparent !important;
+  --color-panel: transparent !important;
+  --glass-bg: transparent !important;
+  --glass-bg-heavy: transparent !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed > header,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed header,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .bg-elevated.rounded-lg,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .bg-accent\/20,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .bg-gold\/20,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed input[type="search"],
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed input[type="text"],
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .embed-graph-layout-overlay,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow.dark,
+html.app-liquid-glass .novadiff-graph-shell .embed-graph-flow-host,
+html.app-liquid-glass .novadiff-graph-shell .embed-graph-flow-pane,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-explorer-root,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow__pane,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow__background,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow__viewport,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow__minimap,
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-inspector-head,
+html.app-liquid-glass .kg-metrics-strip,
+html.app-liquid-glass .knowledge-graph-fullscreen-bar,
+html.app-liquid-glass .knowledge-graph-cover-stage,
+html.app-liquid-glass .knowledge-graph-progress-card,
+html.app-liquid-glass .knowledge-graph-status {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .novadiff-graph-embed .react-flow__node .bg-elevated,
+html.app-liquid-glass .novadiff-graph-shell .react-flow__node [class*="bg-elevated"] {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .react-flow,
+html.app-liquid-glass .novadiff-graph-shell .react-flow.dark {
+  --xy-background-color: transparent !important;
+  --xy-background-color-default: transparent !important;
+  background-color: transparent !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .react-flow__background {
+  --xy-background-color-props: transparent !important;
+}
+
+html.app-liquid-glass .novadiff-graph-shell .react-flow__node.container > div {
+  background: transparent !important;
+}
+
 .window-chrome {
   position: relative;
   height: 42px;
@@ -2858,6 +3056,44 @@ html.app-sidebar-expanded .code-city-body-mount:not([data-code-city-expanded]) {
   --color-accent-overlay-bg: color-mix(in srgb, var(--accent-2) 8%, transparent);
   --color-accent-overlay-border: color-mix(in srgb, var(--accent-2) 28%, var(--border));
   --kbd-bg: color-mix(in srgb, var(--accent-2) 12%, var(--surface-2));
+}
+
+@media (prefers-color-scheme: light) {
+  /* Match graph explorer with NovaDiff light theme. */
+  .novadiff-graph-shell {
+    --color-root: #ecf3fc;
+    --color-surface: #ffffff;
+    --color-elevated: #f4f8ff;
+    --color-panel: #eef5ff;
+    --color-text-primary: #10233a;
+    --color-text-secondary: #3b546f;
+    --color-text-muted: #58718d;
+    --color-border-subtle: rgba(18, 66, 102, 0.14);
+    --color-border-medium: rgba(18, 66, 102, 0.24);
+    --glass-bg: rgba(255, 255, 255, 0.86);
+    --glass-bg-heavy: rgba(246, 250, 255, 0.96);
+    --scrollbar-thumb: rgba(18, 66, 102, 0.2);
+    --scrollbar-thumb-hover: rgba(18, 66, 102, 0.32);
+    --glow-accent: rgba(13, 167, 215, 0.16);
+    --glow-accent-strong: rgba(13, 167, 215, 0.24);
+    --glow-accent-pulse: rgba(13, 167, 215, 0.4);
+    --color-edge: rgba(20, 80, 126, 0.42);
+    --color-edge-dim: rgba(20, 80, 126, 0.16);
+    --color-edge-dot: rgba(20, 80, 126, 0.24);
+    --color-accent-overlay-bg: rgba(13, 167, 215, 0.08);
+    --color-accent-overlay-border: rgba(13, 167, 215, 0.28);
+    --kbd-bg: rgba(13, 167, 215, 0.12);
+  }
+
+  .novadiff-graph-embed .react-flow__edge-path {
+    stroke: rgba(20, 80, 126, 0.58);
+    stroke-width: 1.35;
+  }
+
+  .novadiff-graph-embed .react-flow__background pattern circle,
+  .novadiff-graph-embed .react-flow__background pattern line {
+    opacity: 0.72;
+  }
 }
 
 .novadiff-graph-shell .novadiff-graph-explorer-slot {
